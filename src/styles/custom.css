@@ -1,0 +1,281 @@
+/* Course Crud  */
+
+.courseAdd .circle {
+  width: 40px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  background-color: #f8f9fa;
+}
+
+.inputGroup {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.courseAdd .circle::-webkit-color-swatch {
+  border-radius: 50%;
+}
+
+.courseEdit .circle {
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.courseEdit .circle::-webkit-color-swatch {
+  border-radius: 50%;
+}
+
+.staffAccountAdd .circle {
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.staffAccountAdd .circle::-webkit-color-swatch {
+  border-radius: 50%;
+}
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root {
+  color: #f3c8a2;
+}
+
+.accordion-button {
+  font-size: 15px !important;
+}
+
+.stdViewBtn {
+  color: white;
+  background-color: #fa994af5;
+  border: 1px solid #fa994af5;
+}
+.stdViewBtn:hover {
+  color: white;
+  background-color: #fa994af5;
+  border: 1px solid #fa994af5;
+}
+
+/* / / checkbox role / / */
+
+.toggleInput .form-check-input:checked {
+  background-color: #94c85f;
+  border-color: #94c85f;
+}
+
+.toggleInput .form-check-input {
+  background-color: #db4f68;
+  border-color: #db4f68;
+}
+
+.toggleInput .form-check-input:focus:checked {
+  border-color: #94c85f;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgb(55 253 13 / 25%);
+}
+.toggleInput .form-check-input:focus {
+  border-color: #db4f68;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(253, 13, 13, 0.25);
+}
+
+.toggleInput .form-switch-input:focus {
+  border-color: #fe8686;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(253, 13, 13, 0.25);
+}
+
+.form-switch .form-check-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
+
+.iconInput {
+  border-left: none;
+}
+
+.iconInputBackground {
+  background-color: transparent;
+}
+
+/* student edit  */
+
+.radio-buttons {
+  display: flex;
+}
+
+.radio-button {
+  margin-right: 20px;
+}
+
+.radio-button input[type="radio"] {
+  display: none;
+}
+
+.radio-button input[type="radio"] + .radio-button-text {
+  display: inline-block;
+  width: 100px;
+  height: 30px;
+  line-height: 28px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.radio-button
+  input[type="radio"]:checked[value="present"]
+  + .radio-button-text {
+  background-color: green;
+  color: white;
+}
+
+.radio-button input[type="radio"]:checked[value="absent"] + .radio-button-text {
+  background-color: red;
+  color: white;
+}
+
+.btn-btn {
+  color: black;
+  background-color: #fce6cf;
+  border: 1px solid #fce6cf;
+}
+.btn-btn:hover {
+  color: black;
+  background-color: #fce6cf;
+  border: 1px solid #fce6cf;
+}
+
+.btn-btn.show {
+  color: black;
+  background-color: #fce6cf;
+  border: 1px solid #fce6cf;
+}
+
+.notLink {
+  text-decoration: none;
+  color: black;
+}
+
+/* / / Campaign / / */
+
+.campaignStudentAdd .bg-body {
+  background-color: #fff;
+}
+
+.campaignStudentAdd .bg-head {
+  background-color: #fce6cf;
+}
+
+.campaignStudentAdd .card-text {
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 20px;
+}
+
+.campaignStudentAdd .option {
+  background-color: #fce6cf;
+  color: #000;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 15px;
+  margin: 5px;
+  transition-duration: 300ms;
+  display: flex;
+  align-items: center;
+}
+
+.campaignStudentAdd .icon {
+  margin-right: 15px;
+}
+
+.campaignStudentAdd .item-name {
+  margin-right: 15px;
+}
+
+.campaignStudentAdd .form-check-input:checked {
+  background-color: #d86300;
+  border-color: #d86300;
+}
+
+/* Loader Css  */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 55vh;
+}
+.loading {
+  --speed-of-animation: 0.9s;
+  --gap: 6px;
+  --first-color: #4c86f9;
+  --second-color: #49a84c;
+  --third-color: #f6bb02;
+  --fourth-color: #f6bb02;
+  --fifth-color: #2196f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  gap: 6px;
+  height: 100px;
+}
+
+.loading span {
+  width: 4px;
+  height: 50px;
+  background: var(--first-color);
+  animation: scale var(--speed-of-animation) ease-in-out infinite;
+}
+
+.loading span:nth-child(2) {
+  background: var(--second-color);
+  animation-delay: -0.8s;
+}
+
+.loading span:nth-child(3) {
+  background: var(--third-color);
+  animation-delay: -0.7s;
+}
+
+.loading span:nth-child(4) {
+  background: var(--fourth-color);
+  animation-delay: -0.6s;
+}
+
+.loading span:nth-child(5) {
+  background: var(--fifth-color);
+  animation-delay: -0.5s;
+}
+
+@keyframes scale {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.05);
+  }
+
+  20% {
+    transform: scaleY(1);
+  }
+}
+
+.circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}

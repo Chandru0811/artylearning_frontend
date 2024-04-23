@@ -1,0 +1,45 @@
+import React from "react";
+import Hero_Img from "../../../assets/clientimage/Hero_Img.jpg";
+
+function Hero() {
+  return (
+    <section className="heroSection">
+      <div className="container-fluid p-0">
+        <div style={{ position: "relative" }} className="heroPicture">
+          <img
+            src={Hero_Img}
+            alt="home-img"
+            style={{
+              width: "100%",
+              height: "auto",
+              maxHeight: "120vh",
+              opacity: "0.3",
+            }}
+          />
+          <h1
+            className="text-center d-flex flex-column justify-content-center align-items-center position-absolute fw-bold"
+            style={{
+              top: "60%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              maxWidth: "90%",
+              fontSize: "clamp(16px, 4vw, 46px)",
+            }}
+          >
+            <span>
+              We Help Children Build a <br /> Strong Language Foundation
+            </span>
+            <span className="mt-lg-3">
+              <span>With </span>
+              <span style={{ backgroundColor: "#eb0505", color: "#fff" }}>
+                Our Creative Touch.
+              </span>
+            </span>
+          </h1>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default Hero;
