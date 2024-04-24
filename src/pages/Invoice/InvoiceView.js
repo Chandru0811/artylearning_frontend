@@ -9,13 +9,17 @@ import { BsFillSendFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import SendAndPublish from "../../components/SendAndPublish";
 
 function InvoiceView() {
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+   console.log("data", data);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+
 
   const fetchData = async () => {
     try {
@@ -35,6 +39,9 @@ function InvoiceView() {
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+      }
+      finally {
+        setLoading(false);
       }
     };
 
@@ -60,40 +67,34 @@ function InvoiceView() {
     doc.setFontSize(11);
     // Add invoice data
     doc.text(`Invoice Number: ${data.invoiceNumber}`, 14, 80);
-    doc.text(
-      `Studen Name :${data.studentName}`,
-      14,
-      90
-    );
+    doc.text(`Studen Name :${data.studentName}`, 14, 90);
     doc.text(`Student Id: ${data.studentUniqueId}`, 14, 100);
     doc.text(
       `Due Date: ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
       140,
       80
     );
-    doc.text(
-      `Course Name :${data.courseName}`,
-      140,
-      90
-    );
+    doc.text(`Course Name :${data.courseName}`, 140, 90);
 
     // Add the table
-    const tableData = data.invoiceItemsDtoList && data.invoiceItemsDtoList.map((invoiceItem, index) => [
-      index + 1,
-      invoiceItem.item,
-      invoiceItem.itemAmount,
-      invoiceItem.taxType,
-      invoiceItem.gstAmount,
-      invoiceItem.totalAmount,
-  ]);
-  doc.autoTable({
-    startY: 120,
-    head: [
-      ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
-    ],
-    body: tableData,
-    foot: [["", "", "", "", "Total", `${data.totalAmount || "--"}`]],
-  });
+    const tableData =
+      data.invoiceItemsDtoList &&
+      data.invoiceItemsDtoList.map((invoiceItem, index) => [
+        index + 1,
+        invoiceItem.item,
+        invoiceItem.itemAmount,
+        invoiceItem.taxType,
+        invoiceItem.gstAmount,
+        invoiceItem.totalAmount,
+      ]);
+    doc.autoTable({
+      startY: 120,
+      head: [
+        ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
+      ],
+      body: tableData,
+      foot: [["", "", "", "", "Total", `${data.totalAmount || "--"}`]],
+    });
 
     // Add Credit Advice Offset, GST, Total Amount
     doc.text(
@@ -129,6 +130,39 @@ function InvoiceView() {
     // Save the PDF
     doc.save("invoice.pdf");
   };
+  // const SendMail = async () => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("from", "keerthickvasan08@gmail.com");
+  //     formData.append("to", "keerthickvasan08@gmail.com");
+  //     formData.append("from", "keerthickvasan08@gmail.com");
+  //     formData.append("from", "keerthickvasan08@gmail.com");
+      
+  //     const payload = {
+  //       from: "keerthickvasan08@gmail.com",
+  //       to: "premvp24@gmail.com",
+  //       subject: "string",
+  //       body: "string"
+  //       // files: []
+  //     };
+  //     const response = await api.post("/sendMailWithAttachment",  {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     if (response.status === 201) {
+  //       toast.success(response.data.message);
+  //       // navigate("/invoice");
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     toast.error(
+  //       error.message || "An error occurred while submitting the form"
+  //     );
+  //   }
+  // };
 
   return (
     <div className="container-fluid mb-2 minHeight">
@@ -142,9 +176,9 @@ function InvoiceView() {
               Void Invoice
             </button>
           </Link>
-          <button className="btn btn-border btn-sm me-1 ">
-            Send and Publish <BsFillSendFill />
-          </button>
+          {/* <Link to="/sendAndPublish"> */}
+          <SendAndPublish data={data} id={id} />  
+          {/* </Link> */}
           <button className="btn btn-border btn-sm me-1 " onClick={generatePDF}>
             Generate Pdf
           </button>
