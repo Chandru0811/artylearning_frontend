@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -8,9 +8,9 @@ import { FaEdit } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 
-function SendNotificationEdit({ onSuccess }) {
+function SendNotificationEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
-
+  console.log(id);
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
@@ -19,34 +19,62 @@ function SendNotificationEdit({ onSuccess }) {
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({
-    title: Yup.string().required("*Title is required"),
-    message: Yup.string().required("*Message is required"),
+    messageTitle: Yup.string().required("*messageTitle is required"),
+    messageDescription: Yup.string().required(
+      "*messageDescription is required"
+    ),
   });
 
   const formik = useFormik({
     initialValues: {
-      title: "Test 1",
-      message: "Test 1",
+      messageTitle: "",
+      messageDescription: "",
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
-      if(values !== ""){
-        handleClose();
-        console.log("Response Data",values);
-      }else{
-        console.log("Response Data",values);
+      try {
+        const response = await api.put(
+          `/updateSmsPushNotifications/${id}`,
+          values,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 200) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
       }
     },
   });
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllSmsPushNotificationsById/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
+  useEffect(() => {
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
-       <button className="btn btn-sm" onClick={handleShow}>
+      <button className="btn btn-sm" onClick={handleShow}>
         <FaEdit />
       </button>
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add Notification</Modal.Title>
+          <Modal.Title className="headColor">Edit Notification</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
@@ -58,19 +86,19 @@ function SendNotificationEdit({ onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    name="title"
                     className={`form-control  ${
-                      formik.touched.title && formik.errors.title
+                      formik.touched.messageTitle && formik.errors.messageTitle
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("title")}
+                    {...formik.getFieldProps("messageTitle")}
                   />
-                  {formik.touched.title && formik.errors.title && (
-                    <div className="invalid-feedback">
-                      {formik.errors.title}
-                    </div>
-                  )}
+                  {formik.touched.messageTitle &&
+                    formik.errors.messageTitle && (
+                      <div className="invalid-feedback">
+                        {formik.errors.messageTitle}
+                      </div>
+                    )}
                 </div>
                 <div className="col-md-12 col-12 mb-2">
                   <label className="form-label">
@@ -78,20 +106,21 @@ function SendNotificationEdit({ onSuccess }) {
                   </label>
                   <textarea
                     type="text"
-                    name="message"
                     rows={5}
                     className={`form-control  ${
-                      formik.touched.message && formik.errors.message
+                      formik.touched.messageDescription &&
+                      formik.errors.messageDescription
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("message")}
+                    {...formik.getFieldProps("messageDescription")}
                   />
-                  {formik.touched.message && formik.errors.message && (
-                    <div className="invalid-feedback">
-                      {formik.errors.message}
-                    </div>
-                  )}
+                  {formik.touched.messageDescription &&
+                    formik.errors.messageDescription && (
+                      <div className="invalid-feedback">
+                        {formik.errors.messageDescription}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

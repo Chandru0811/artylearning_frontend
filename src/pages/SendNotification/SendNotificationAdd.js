@@ -6,8 +6,10 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+// import { useNavigate } from "react-router-dom";
 
 function SendNotificationAdd({ onSuccess }) {
+  // const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
@@ -18,22 +20,38 @@ function SendNotificationAdd({ onSuccess }) {
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({
-    title: Yup.string().required("*Title is required"),
-    message: Yup.string().required("*Message is required"),
+    messageTitle: Yup.string().required("*messageTitle is required"),
+    messageDescription: Yup.string().required("*messageDescription is required"),
+
   });
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      message: "",
+      messageTitle: "",
+      messageDescription: ""
+    
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
-      if(values !== ""){
-        handleClose();
-        console.log("Response Data",values);
-      }else{
-        console.log("Response Data",values);
+      console.log("pushNotification:", values);
+      try {
+        const response = await api.post(`/sendSmsPushNotifications`, values, {
+          headers: {
+            "Content-Type": "application/json",
+            //Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.status === 201) {
+      
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Failed: " + error.message);
       }
     },
   });
@@ -65,15 +83,15 @@ function SendNotificationAdd({ onSuccess }) {
                     type="text"
                     name="title"
                     className={`form-control  ${
-                      formik.touched.title && formik.errors.title
+                      formik.touched.messageTitle && formik.errors.messageTitle
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("title")}
+                    {...formik.getFieldProps("messageTitle")}
                   />
-                  {formik.touched.title && formik.errors.title && (
+                  {formik.touched.messageTitle && formik.errors.messageTitle && (
                     <div className="invalid-feedback">
-                      {formik.errors.title}
+                      {formik.errors.messageTitle}
                     </div>
                   )}
                 </div>
@@ -86,15 +104,15 @@ function SendNotificationAdd({ onSuccess }) {
                     name="message"
                     rows={5}
                     className={`form-control  ${
-                      formik.touched.message && formik.errors.message
+                      formik.touched.messageDescription && formik.errors.messageDescription
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("message")}
+                    {...formik.getFieldProps("messageDescription")}
                   />
-                  {formik.touched.message && formik.errors.message && (
+                  {formik.touched.messageDescription && formik.errors.messageDescription && (
                     <div className="invalid-feedback">
-                      {formik.errors.message}
+                      {formik.errors.messageDescription}
                     </div>
                   )}
                 </div>
