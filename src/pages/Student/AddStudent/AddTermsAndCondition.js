@@ -9,6 +9,7 @@ const validationSchema = Yup.object().shape({
   termsAndConditionSignatureDate: Yup.string().required(
     "*Signature Date is required!"
   ),
+  agree: Yup.string().required("*Agree Terms and conditions is required!")
 });
 
 const AddTermsAndCondition = forwardRef(
@@ -135,6 +136,14 @@ const AddTermsAndCondition = forwardRef(
                         Terms & Conditions.
                       </span>
                     </small>
+                    {formik.touched.agree &&
+                          formik.errors.agree && (
+                            <div className="text-danger">
+                              <small>
+                                {formik.errors.agree}
+                              </small>
+                            </div>
+                          )}
                   </div>
                 </div>
               </div>

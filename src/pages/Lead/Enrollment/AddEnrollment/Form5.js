@@ -29,6 +29,7 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       enquiryDate: formData.enquiryDate || "",
       marketingSource: formData.marketingSource || "",
       referBy: formData.referBy || "",
+      referStudentcenter: formData.referStudentcenter || "",
       remark: formData.remark || "",
       preferredTimeSlot: formData.preferredTimeSlot || "",
     },
@@ -396,9 +397,11 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                   onBlur={formik.handleBlur}
                   value={formik.values.marketingSource}
                 >
-                  <option value=""></option>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
+                  <option selected>--Select--</option>
+                  <option value="Friends or Relatives">Friends or Relatives</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="Google">Google</option>
+                  <option value="Others">Others</option>
                 </select>
               </div>
               {formik.touched.marketingSource &&
@@ -412,18 +415,13 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <div className="col-md-6 col-12 mb-3">
               <label>Refer By</label>
               <div className="input-group ">
-                <select
-                  className="form-select"
+                <input
+                  className="form-control"
                   name="referBy"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.referBy}
-                >
-                  <option value=""></option>
-                  <option value="Parent">Parent</option>
-                  <option value="Student">Student</option>
-                  <option value="Guardian">Guardian</option>
-                </select>
+                />
               </div>
               {formik.touched.referBy && formik.errors.referBy && (
                 <div className="error text-danger">
@@ -452,6 +450,33 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 </div>
               )}
             </div>
+
+            <div className="col-md-6 col-12 mb-3">
+              <label>Refer Student Center</label>
+              <div className="input-group ">
+              <select
+                className="form-select"
+                name="referStudentcenter"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.referStudentcenter}
+              >
+                <option selected></option>
+                {centerData &&
+                  centerData.map((referStudentcenter) => (
+                    <option key={referStudentcenter.id} value={referStudentcenter.id}>
+                      {referStudentcenter.centerNames}
+                    </option>
+                  ))}
+              </select>
+              </div>
+              {formik.touched.referStudentcenter && formik.errors.referStudentcenter && (
+                <div className="error text-danger">
+                  <small>{formik.errors.referStudentcenter}</small>
+                </div>
+              )}
+            </div>
+           
 
             <div className="col-md-6 col-12">
               <label className="form-label">Remarks</label>
