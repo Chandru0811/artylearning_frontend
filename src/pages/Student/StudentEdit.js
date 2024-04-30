@@ -6,14 +6,16 @@ import StepLabel from "@mui/material/StepLabel";
 import EditRegistration from "./EditStudent/EditRegistration";
 import EditDetails from "./EditStudent/EditDetails";
 import { useParams } from "react-router-dom";
+import Tooltip from "react-bootstrap/Tooltip";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = ["", ""];
+const steps = [{ tooltip: "Student Details" }, { tooltip: "Emergency Contact" }];
 
 export default function StudentAdd() {
-  const {id} = useParams();
+  const { id } = useParams();
   const [activeStep, setActiveStep] = useState(0);
 
-  const [formData, setFormData] = useState({id});
+  const [formData, setFormData] = useState({ id });
 
   const childRef = React.useRef();
   // console.log("Form Data:", formData);
@@ -48,13 +50,35 @@ export default function StudentAdd() {
 
   return (
     <div className="container-fluid minHeight">
+      {/* <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((label,index) => (
+          <Step key={label} onClick={() => setActiveStep(index)}>
+            
+            <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip id={`tooltip-${index}`}>{label.tooltip}</Tooltip>}
+              >
+                <StepLabel>{label}</StepLabel>
+              </OverlayTrigger>
+          </Step>
+        ))}
+      </Stepper> */}
+
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+        {steps.map((step, index) => (
+          <Step key={index} onClick={() => setActiveStep(index)}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+              }
+            >
+              <StepLabel></StepLabel>
+            </OverlayTrigger>
           </Step>
         ))}
       </Stepper>
+
       <div className="container-fluid card shadow border-0 mb-4">
         <React.Fragment>
           {activeStep === 0 && (

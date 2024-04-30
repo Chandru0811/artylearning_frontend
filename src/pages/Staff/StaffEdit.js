@@ -97,7 +97,7 @@ function StaffEdit() {
             stepProps.completed = false;
           }
           return (
-            <Step key={index} {...stepProps}>
+            <Step key={index} {...stepProps} onClick={() => setActiveStep(index)}>
               <StepLabel {...labelProps}>{label}</StepLabel>
             </Step>
           );

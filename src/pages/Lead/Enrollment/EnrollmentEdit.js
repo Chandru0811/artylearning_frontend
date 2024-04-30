@@ -69,8 +69,8 @@ export default function EnrollmentEdit() {
   return (
     <div className="container-fluid minHeight">
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
+        {steps.map((label, index) => (
+          <Step key={label} onClick={() => setActiveStep(index)}>
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}

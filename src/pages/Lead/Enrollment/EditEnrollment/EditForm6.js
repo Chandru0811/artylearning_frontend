@@ -96,7 +96,7 @@ const EditForm6 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 onChange={formik.handleChange}
               />
               <label className="form-check-label" htmlFor="consentScrapbook">
-                I hereby provide my consent to arty learning pte ltd for the
+                I hereby provide my consent to Arty Learning Pte Ltd for the
                 display my child’s name, limited to first names and potentially
                 last initials (in cases where there are multiple children with
                 the same first name), in the facility’s scrapbook and bulletin
@@ -117,11 +117,11 @@ const EditForm6 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 onChange={formik.handleChange}
               />
               <label className="form-check-label" htmlFor="consentPhotos">
-                I hereby provide my consent to arty learning pte ltd for the
+                I hereby provide my consent to Arty Learning Pte Ltd for the
                 display my child’s name, limited to first names and potentially
                 last initials (in cases where there are multiple children with
                 the same first name), in photos and videos on arty learning
-                social media pages to arty learning pte ltd, which will be shown
+                social media pages to Arty Learning Pte Ltd, which will be shown
                 to the public.
               </label>
             </div>
