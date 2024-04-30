@@ -52,18 +52,19 @@ function InvoiceView() {
   const generatePDF = () => {
     const doc = new jsPDF();
 
+    doc.addImage(Logo, "Logo", 10, 30, 50, 20);
+
     // Set font sizes
-    doc.setFontSize(18);
-    doc.text("INVOICE", 90, 20);
-    doc.setFontSize(12);
+    // doc.setFontSize(18);
+    // doc.text("INVOICE", 90, 20);
+    // doc.setFontSize(12);
 
     // Add address content
-    doc.text("Arty Learning @HG", 140, 40);
-    doc.text("Tel No:87270752", 140, 50);
-    doc.text("Email:Artylearning@gmail.com", 140, 60);
+    doc.text("Arty Learning @HG", 90, 30,{bold:true});
+    doc.text("Tel No:87270752", 90, 40);
+    doc.text("Email:Artylearning@gmail.com", 90, 45);
 
-    doc.setFontSize(14);
-    doc.text(`Voided Invoice`, 14, 70);
+    doc.text(`Voided Invoice`, 14, 80,{bold:true});
     doc.setFontSize(11);
     // Add invoice data
     doc.text(`Invoice Number: ${data.invoiceNumber}`, 14, 80);
