@@ -9,8 +9,11 @@ import EditForm4 from "./EditEnrollment/EditForm4";
 import EditForm5 from "./EditEnrollment/EditForm5";
 import EditForm6 from "./EditEnrollment/EditForm6";
 import { useParams } from "react-router-dom";
+import Tooltip from "react-bootstrap/Tooltip";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = ["", "", "", "", "", ""];
+const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },{ tooltip: "Parent Information" },{ tooltip: "Address" },{ tooltip: "Account Information" },{ tooltip: "Authorised Person Address" }];
+
 
 export default function EnrollmentEdit() {
   const { id } = useParams();
@@ -68,10 +71,17 @@ export default function EnrollmentEdit() {
 
   return (
     <div className="container-fluid minHeight">
-      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((label, index) => (
-          <Step key={label} onClick={() => setActiveStep(index)}>
-            <StepLabel>{label}</StepLabel>
+     <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index} onClick={() => setActiveStep(index)}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+              }
+            >
+              <StepLabel></StepLabel>
+            </OverlayTrigger>
           </Step>
         ))}
       </Stepper>
