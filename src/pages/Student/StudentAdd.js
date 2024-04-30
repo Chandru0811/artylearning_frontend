@@ -9,9 +9,10 @@ import AddStudentDetails from "./AddStudent/AddStudentDetails";
 import AddEmergencyContact from "./AddStudent/AddEmergencyContact";
 import AddStudentRelation from "./AddStudent/AddStudentRelation";
 import AddTermsAndCondition from "./AddStudent/AddTermsAndCondition";
+import Tooltip from "react-bootstrap/Tooltip";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = ["", "", "", "", "", ""];
-
+const steps = [{ tooltip: "Student Details" }, { tooltip: "Parents/Guardian" },{ tooltip: "Emergency Contact" },{ tooltip: "Course Details" },{ tooltip: "Student Relation" },{ tooltip: "Terms and Conditions" }];
 export default function StudentAdd() {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({});
@@ -69,16 +70,19 @@ export default function StudentAdd() {
 
   return (
     <div class="container-fluid minHeight">
-      <Stepper className="my-5" activeStep={activeStep}>
-        {steps.map((label) => {
-          const stepProps = {};
-          const labelProps = {};
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
+      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+              }
+            >
+              <StepLabel></StepLabel>
+            </OverlayTrigger>
+          </Step>
+        ))}
       </Stepper>
       <div class="container-fluid py-3 mb-5 card shadow border-0 mb-7">
              <React.Fragment>

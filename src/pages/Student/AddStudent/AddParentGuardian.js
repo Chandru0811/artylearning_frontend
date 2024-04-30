@@ -29,25 +29,28 @@ const validationSchema = Yup.object().shape({
 
 const AddParentGuardian = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
-    const [rows, setRows] = useState([{}]); // Initially one row for one parent
+    const [rows, setRows] = useState(
+      formData.parentInformation ? formData.parentInformation.length : 1
+    ); // Initially one row for one parent
     const formik = useFormik({
       initialValues: {
-        parentInformation: [
-          {
-            parentName: formData.parentName || "",
-            parentDateOfBirth: formData.parentDateOfBirth || "",
-            email: formData.email || "",
-            relation: formData.relation || "",
-            occupation: formData.occupation || "",
-            file: null || "",
-            mobileNumber: formData.mobileNumber || "",
-            postalCode: formData.postalCode || "",
-            address: formData.address || "",
-          },
-        ],
+        parentInformation: formData.parentInformation
+          ? formData.parentInformation.map((parent) => ({
+              parentName: parent.parentName || "",
+              parentDateOfBirth: parent.parentDateOfBirth || "",
+              email: parent.email || "",
+              relation: parent.relation || "",
+              occupation: parent.occupation || "",
+              file: null || "",
+              mobileNumber: parent.mobileNumber || "",
+              postalCode: parent.postalCode || "",
+              address: parent.address || "",
+            }))
+          : [],
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        console.log(data);
         try {
           const payload = data.parentInformation.map((parent) => ({
             parentName: parent.parentName,
@@ -87,7 +90,7 @@ const AddParentGuardian = forwardRef(
 
     return (
       <div className="container-fluid">
-        {rows.map((row, index) => (
+        {[...Array(rows)].map((_, index) => (
           <div className="border-0 mb-5" key={index}>
             <div>
               <div className=" border-0 my-2">
@@ -387,18 +390,16 @@ const AddParentGuardian = forwardRef(
           <div className="col-12 mb-4">
             <button
               type="button"
-              onClick={() => {
-                setRows((prev) => [...prev, {}]); // Add a new row for each parent
-              }}
+              onClick={() => setRows((prevRows) => prevRows + 1)}
               className="btn btn-border btn-sm"
             >
               <i className="bx bx-plus"></i> Add More
             </button>{" "}
             &nbsp;&nbsp;
-            {rows.length > 1 && (
+            {rows > 1 && (
               <button
                 type="button"
-                onClick={() => setRows((prev) => prev.slice(0, -1))}
+                onClick={() => setRows((prevRows) => prevRows - 1)}
                 className="btn btn-outline-danger"
               >
                 Delete

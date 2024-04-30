@@ -83,7 +83,6 @@ function Attendances() {
     const subscription = WebSocketService.subscribeToAttendanceUpdates(
       (data) => {
         if (data === true) {
-        
           setCount((prevCount) => prevCount + 1);
         }
       }
@@ -357,13 +356,6 @@ function Attendances() {
                                 attendanceData.map(
                                   (attendanceItem, attendanceIndex) => (
                                     <React.Fragment key={attendanceIndex}>
-                                      <tr>
-                                        <td colSpan="5">
-                                          {attendanceItem.students.length === 0
-                                            ? "No records found"
-                                            : ""}
-                                        </td>
-                                      </tr>
                                       {attendanceItem.students.map(
                                         (student, studentIndex) => (
                                           <tr key={studentIndex}>
