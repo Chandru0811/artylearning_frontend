@@ -26,12 +26,12 @@ const AddEmergencyContact = forwardRef(
 
     const formik = useFormik({
       initialValues: {
+        emergencyContactName: formData.emergencyContactName || "",
+        authorizedRelation: formData.authorizedRelation || "",
+        emergencyContactNo: formData.emergencyContactNo || "",
         emergencyContactInformation: [
           {
-            emergencyContactName: formData.emergencyContactName || "",
-            authorizedRelation: formData.authorizedRelation || "",
-            emergencyContactNo: formData.emergencyContactNo || "",
-            // name: formData.name || "",
+            name: formData.name || "",
             emergencyRelation: formData.emergencyRelation || "",
             contactNo: formData.contactNo || "",
             studentEmergencyContactPostalCode:
@@ -42,9 +42,9 @@ const AddEmergencyContact = forwardRef(
           },
         ],
       },
-      validationSchema: validationSchema,    
+      validationSchema: validationSchema,
       onSubmit: async (data) => {
-        console.log("Add Rows Datas",data);
+        console.log("Add Rows Datas", data);
         try {
           const response = await api.post(
             `/createStudentEmergencyContacts/${formData.student_id}`,

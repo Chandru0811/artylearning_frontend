@@ -15,11 +15,10 @@ function InvoiceView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-   console.log("data", data);
+  console.log("data", data);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-
 
   const fetchData = async () => {
     try {
@@ -39,8 +38,7 @@ function InvoiceView() {
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-      }
-      finally {
+      } finally {
         setLoading(false);
       }
     };
@@ -51,82 +49,113 @@ function InvoiceView() {
 
   const generatePDF = () => {
     const doc = new jsPDF();
+    doc.addImage(Logo, "Logo", 13, 25, 40, 25); // x, y, width, height
 
-    doc.addImage(Logo, "Logo", 10, 30, 50, 20);
+    doc.setFontSize(15);
+    doc.text("Arty Learning @HG", 60, 25, { bold: true }); // Incorrect formatting, bold should be part of the options object
 
-    // Set font sizes
-    // doc.setFontSize(18);
-    // doc.text("INVOICE", 90, 20);
-    // doc.setFontSize(12);
+    doc.text("Tel No:87270752", 60, 40);
+    doc.text("Email:Artylearning@gmail.com", 60, 50);
 
-    // Add address content
-    doc.text("Arty Learning @HG", 90, 30,{bold:true});
-    doc.text("Tel No:87270752", 90, 40);
-    doc.text("Email:Artylearning@gmail.com", 90, 45);
+   
+    doc.text(`Official Receipt`, 14, 70, { bold: true }); // Incorrect formatting, bold should be part of the options object
+    doc.line(16, 70, 45, 70); // x, y, width, height
 
-    doc.text(`Voided Invoice`, 14, 80,{bold:true});
-    doc.setFontSize(11);
+     doc.setFontSize(13);
     // Add invoice data
-    doc.text(`Invoice Number: ${data.invoiceNumber}`, 14, 80);
-    doc.text(`Studen Name :${data.studentName}`, 14, 90);
-    doc.text(`Student Id: ${data.studentUniqueId}`, 14, 100);
+    doc.text(`Received From : ${data.invoiceNumber}`, 14, 80);
+    doc.text(`Amount :${data.studentName}`, 14, 90);
+    doc.text(`Payment Method : ${data.studentUniqueId}`, 14, 100);
+    doc.text(`Being Payment Of : ${data.studentUniqueId}`, 14, 110);
+    doc.text(`Receipt No : ${data.courseName}`, 135, 80);
     doc.text(
-      `Due Date: ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
+      `Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
       140,
-      80
+      90
     );
-    doc.text(`Course Name :${data.courseName}`, 140, 90);
+
+    doc.line(10, 150, 200, 150);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11)
+    doc.text(`Payment Amount Specification`, 10, 126); // Add x, y coordinates for this line
+    doc.text(`NO`, 10, 140);
+    // doc.text(`Date`, 10, 145);
+    doc.text(`27-01-2024`, 10, 155);
+
+    doc.text(`Item`, 35, 140);
+    // doc.text(`Type`, 35, 145);
+    doc.text(`27-01-2024`, 35, 155);
+
+    doc.text(`Item Amount`, 60, 140);
+    // doc.text(` No`, 60, 145);
+    doc.text(`27-01-2024`, 60, 155);
+
+    doc.text(`Tax Type`, 87, 140);
+    doc.text(`27-01-2024`, 87, 155);
+
+    doc.text(`GST Amount`, 148, 140);
+    // doc.text(` Amount`, 150, 145);
+    doc.text(`27-01-2024`, 148, 155);
+
+    doc.text(`Total Amount`, 175, 140);
+    // doc.text(` Amount`, 175, 145);
+    doc.text(`27-01-2024`, 175, 155);
+
+    doc.line(10, 120, 200, 120); // x1, y1, x2, y2
+    
+    
+   
 
     // Add the table
-    const tableData =
-      data.invoiceItemsDtoList &&
-      data.invoiceItemsDtoList.map((invoiceItem, index) => [
-        index + 1,
-        invoiceItem.item,
-        invoiceItem.itemAmount,
-        invoiceItem.taxType,
-        invoiceItem.gstAmount,
-        invoiceItem.totalAmount,
-      ]);
-    doc.autoTable({
-      startY: 120,
-      head: [
-        ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
-      ],
-      body: tableData,
-      foot: [["", "", "", "", "Total", `${data.totalAmount || "--"}`]],
-    });
+    // const tableData =
+    //   data.invoiceItemsDtoList &&
+    //   data.invoiceItemsDtoList.map((invoiceItem, index) => [
+    //     index + 1,
+    //     invoiceItem.item,
+    //     invoiceItem.itemAmount,
+    //     invoiceItem.taxType,
+    //     invoiceItem.gstAmount,
+    //     invoiceItem.totalAmount,
+    //   ]);
+    // doc.autoTable({
+    //   startY: 120,
+    //   head: [
+    //     ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
+    //   ],
+    //   body: tableData,
+    //   foot: [["", "", "", "", "Total", `${data.totalAmount || "--"}`]],
+    // });
 
-    // Add Credit Advice Offset, GST, Total Amount
-    doc.text(
-      `Credit Advice Offset: ${data.creditAdviceOffset || "--"}`,
-      145,
-      doc.autoTable.previous.finalY + 10
-    );
-    doc.text(
-      `GST: ${data.gst || "--"}`,
-      145,
-      doc.autoTable.previous.finalY + 20
-    );
-    doc.text(
-      `Total Amount: ${data.totalAmount || "--"}`,
-      145,
-      doc.autoTable.previous.finalY + 30
-    );
+    // // Add Credit Advice Offset, GST, Total Amount
+    // doc.text(
+    //   `Credit Advice Offset: ${data.creditAdviceOffset || "--"}`,
+    //   145,
+    //   doc.autoTable.previous.finalY + 10
+    // );
+    // doc.text(
+    //   `GST: ${data.gst || "--"}`,
+    //   145,
+    //   doc.autoTable.previous.finalY + 20
+    // );
+    // doc.text(
+    //   `Total Amount: ${data.totalAmount || "--"}`,
+    //   145,
+    //   doc.autoTable.previous.finalY + 30
+    // );
 
-    // Add Remark
-    doc.text(
-      `Remark: ${data.remark || "--"}`,
-      14,
-      doc.autoTable.previous.finalY + 10
-    );
+    // // Add Remark
+    // doc.text(
+    //   `Remark: ${data.remark || "--"}`,
+    //   14,
+    //   doc.autoTable.previous.finalY + 10
+    // );
 
-    // Add QR code
-    doc.addImage(QR, "PNG", 160, doc.autoTable.previous.finalY + 40, 40, 40);
-    doc.text(`Send To Pay`, 190, doc.autoTable.previous.finalY + 85, {
-      align: "right",
-      fontWeight: "bold",
-    });
+    // // Add QR code
+    // doc.addImage(QR, "PNG", 160, doc.autoTable.previous.finalY + 40, 40, 40);
+    // doc.text(`Send To Pay`, 190, doc.autoTable.previous.finalY + 85, {
+    //   align: "right",
+    //   fontWeight: "bold",
+    // });
 
     // Save the PDF
     doc.save("invoice.pdf");
@@ -138,7 +167,7 @@ function InvoiceView() {
   //     formData.append("to", "keerthickvasan08@gmail.com");
   //     formData.append("from", "keerthickvasan08@gmail.com");
   //     formData.append("from", "keerthickvasan08@gmail.com");
-      
+
   //     const payload = {
   //       from: "keerthickvasan08@gmail.com",
   //       to: "premvp24@gmail.com",
@@ -178,7 +207,7 @@ function InvoiceView() {
             </button>
           </Link>
           {/* <Link to="/sendAndPublish"> */}
-          <SendAndPublish data={data} id={id} />  
+          <SendAndPublish data={data} id={id} />
           {/* </Link> */}
           <button className="btn btn-border btn-sm me-1 " onClick={generatePDF}>
             Generate Pdf
