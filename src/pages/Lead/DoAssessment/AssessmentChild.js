@@ -31,7 +31,7 @@ const AssessmentChild = forwardRef(
         whereFrom: formData.whereFrom || "",
         remark: formData.remark || "",
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (data) => {
         data.leadId = leadId;
         try {
@@ -79,6 +79,7 @@ const AssessmentChild = forwardRef(
         formik.setValues({
           ...response.data,
           dateOfBirth: dateOfBirth,
+          name:response.data.studentName,
         });
       };
       getData();
@@ -101,15 +102,15 @@ const AssessmentChild = forwardRef(
                 </lable>
                 <input
                   type="text"
-                  name="studentName"
+                  name="name"
                   className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.studentName}
+                  value={formik.values.name}
                 />
-                {formik.touched.studentName && formik.errors.studentName && (
+                {formik.touched.name && formik.errors.name && (
                   <div className="error text-danger ">
-                    <small>{formik.errors.studentName}</small>
+                    <small>{formik.errors.name}</small>
                   </div>
                 )}
               </div>
@@ -351,7 +352,7 @@ const AssessmentChild = forwardRef(
                   )}
               </div>
               <div className="col-md-6 col-12 mb-4">
-                <lable>sibling(s)</lable>
+                <lable>Sibling(s)</lable>
                 <input
                   type="text"
                   name="sibling"
