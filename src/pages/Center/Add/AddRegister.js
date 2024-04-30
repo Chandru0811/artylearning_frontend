@@ -15,7 +15,7 @@ function AddRegister({ id, onSuccess }) {
   const validationSchema = yup.object().shape({
     registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
-    amount: yup.string().required("*Amount is required"),
+    amount: yup.string().typeError("Amount must be a number").required("*Amount is required"),
     taxType: yup.string().required("*Tax Type is required"),
   });
   const formik = useFormik({
