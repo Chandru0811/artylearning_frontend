@@ -11,8 +11,11 @@ import Form3 from "./AddEnrollment/Form3";
 import Form4 from "./AddEnrollment/Form4";
 import Form5 from "./AddEnrollment/Form5";
 import Form6 from "./AddEnrollment/Form6";
+import Tooltip from "react-bootstrap/Tooltip";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = ["", "", "", "", "", ""];
+const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },{ tooltip: "Parent Information" },{ tooltip: "Address" },{ tooltip: "Account Information" },{ tooltip: "Authorised Person Address" }];
+
 
 export default function EnrollmentAdd() {
   const [activeStep, setActiveStep] = useState(0);
@@ -70,10 +73,17 @@ export default function EnrollmentAdd() {
 
   return (
     <div className="container-fluid minHeight">
-      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+     <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+              }
+            >
+              <StepLabel></StepLabel>
+            </OverlayTrigger>
           </Step>
         ))}
       </Stepper>
