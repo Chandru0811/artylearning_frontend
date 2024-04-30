@@ -63,16 +63,28 @@ function LeadForm() {
       remark: ""
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log(values)
+    onSubmit: async (data) => {
+      console.log(data);
+      const uppercase = data.writeUpperAToZ === "Yes" ? true : false;
+      const lowercase = data.writeLowerAToZ === "Yes" ? true : false;
+      const sound = data.soundOfAToZ === "Yes" ? true : false;
+      const readSentence = data.canReadSimpleSentence === "Yes" ? true : false;
+      const createData = {
+        ...data,
+        writeUpperAToZ: uppercase,
+        writeLowerAToZ: lowercase,
+        soundOfAToZ: sound,
+        canReadSimpleSentence: readSentence,
+      };
       try {
-        const response = await api.post("/createLeadInfo", values, {
+        const response = await api.post("/createLeadInfo", createData, {
           headers: {
             "Content-Type": "application/json",
           },
         });
         if (response.status === 201) {
           toast.success(response.data.message);
+          formik.resetForm();
         } else {
           toast.error(response.data.message);
         }
@@ -577,7 +589,7 @@ function LeadForm() {
                 <option value="Uppercase">Uppercase</option>
                 <option value="Lowercase">Lowercase</option>
                 <option value="Both">Both</option>
-                <option value="Same">Same</option>
+                <option value="Some">Some</option>
                 <option value="None">None</option>
               </select>
               {formik.touched.recognizeAToZ && formik.errors.recognizeAToZ && (
@@ -594,12 +606,12 @@ function LeadForm() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="Tuesday"
+                  id="TUESDAY"
                   name="preferredDay"
-                  value="Tuesday"
+                  value="TUESDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('Tuesday')}
+                  checked={formik.values.preferredDay.includes('TUESDAY')}
                 />
                 <label className="form-check-label">
                   Tuesday
@@ -609,12 +621,12 @@ function LeadForm() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="Wednesday"
+                  id="WEDNESDAY"
                   name="preferredDay"
-                  value="Wednesday"
+                  value="WEDNESDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('Wednesday')}
+                  checked={formik.values.preferredDay.includes('WEDNESDAY')}
                 />
                 <label className="form-check-label">
                   Wednesday
@@ -624,12 +636,12 @@ function LeadForm() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="Thursday"
+                  id="THURSDAY"
                   name="preferredDay"
-                  value="Thursday"
+                  value="THURSDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('Thursday')}
+                  checked={formik.values.preferredDay.includes('THURSDAY')}
                 />
                 <label className="form-check-label">
                   Thursday
@@ -639,12 +651,12 @@ function LeadForm() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="Friday"
+                  id="FRIDAY"
                   name="preferredDay"
-                  value="Friday"
+                  value="FRIDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('Friday')}
+                  checked={formik.values.preferredDay.includes('FRIDAY')}
                 />
                 <label className="form-check-label">
                   Friday
@@ -709,12 +721,12 @@ function LeadForm() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="Saturday"
+                  id="SATURADAY"
                   name="preferredDay"
-                  value="Saturday"
+                  value="SATURADAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('Saturday')}
+                  checked={formik.values.preferredDay.includes('SATURADAY')}
                 />
                 <label className="form-check-label">
                   Saturday
@@ -724,12 +736,12 @@ function LeadForm() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="Sunday"
+                  id="SUNDAY"
                   name="preferredDay"
-                  value="Sunday"
+                  value="SUNDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('Sunday')}
+                  checked={formik.values.preferredDay.includes('SUNDAY')}
                 />
                 <label className="form-check-label">
                   Sunday
