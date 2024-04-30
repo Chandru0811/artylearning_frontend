@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required("*Name is required"),
+  studentName: Yup.string().required("*Name is required"),
   assessmentDate: Yup.date().required("*Assessment Date is required"),
-  levelAssessed : Yup.string().required("*Level Assessed is required"),
+  levelAssessed: Yup.string().required("*Level Assessed is required"),
 });
 
 const AssessmentChild = forwardRef(
@@ -16,10 +16,10 @@ const AssessmentChild = forwardRef(
     const { leadId } = useParams();
     const formik = useFormik({
       initialValues: {
-        name: formData.name || "",
+        studentName: formData.studentName || "",
         assessmentDate: formData.assessmentDate || "",
         age: formData.age || "",
-        year: formData.year || "",
+        dateOfBirth: formData.dateOfBirth || "",
         pictureToken: formData.pictureToken || "",
         paymentMode: formData.paymentMode || "",
         timeSlotOffered: formData.timeSlotOffered || "",
@@ -28,7 +28,7 @@ const AssessmentChild = forwardRef(
         levelAssessed: formData.levelAssessed || "",
         sibling: formData.sibling || "",
         whereFrom: formData.whereFrom || "",
-        remarks: formData.remarks || "",
+        remark: formData.remark || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -69,6 +69,15 @@ const AssessmentChild = forwardRef(
     //   });
     // };
 
+    useEffect(() => {
+      const getData = async () => {
+        const response = await api.get(`/getAllLeadInfoById/${leadId}`);
+        formik.setValues(response.data);
+      };
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useImperativeHandle(ref, () => ({
       AssessmentChild: formik.handleSubmit,
     }));
@@ -85,15 +94,15 @@ const AssessmentChild = forwardRef(
                 </lable>
                 <input
                   type="text"
-                  name="name"
+                  name="studentName"
                   className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.name}
+                  value={formik.values.studentName}
                 />
-                {formik.touched.name && formik.errors.name && (
+                {formik.touched.studentName && formik.errors.studentName && (
                   <div className="error text-danger ">
-                    <small>{formik.errors.name}</small>
+                    <small>{formik.errors.studentName}</small>
                   </div>
                 )}
               </div>
@@ -128,16 +137,16 @@ const AssessmentChild = forwardRef(
                 />
               </div>
               <div className="col-md-6 col-12 mb-4">
-                <label>Year</label>
+                <label>Date Of Birth</label>
                 <br />
                 <input
                   className="form-control  "
                   aria-label="Default form-control example"
                   type="date"
-                  name="year"
+                  name="dateOfBirth"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.year}
+                  value={formik.values.dateOfBirth}
                 />
               </div>
               <div className="col-md-6 col-12 mb-4">
@@ -274,7 +283,9 @@ const AssessmentChild = forwardRef(
               </div>
 
               <div className="col-md-6 col-12 mb-4">
-                <p>Level Assessed<span className="text-danger">*</span></p>
+                <p>
+                  Level Assessed<span className="text-danger">*</span>
+                </p>
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
@@ -320,11 +331,12 @@ const AssessmentChild = forwardRef(
                     Arty Pursuer
                   </label>
                 </div>
-                {formik.touched.levelAssessed && formik.errors.levelAssessed && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.levelAssessed}</small>
-                  </div>
-                )}
+                {formik.touched.levelAssessed &&
+                  formik.errors.levelAssessed && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.levelAssessed}</small>
+                    </div>
+                  )}
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <lable>sibling(s)</lable>
@@ -353,11 +365,11 @@ const AssessmentChild = forwardRef(
                 <div className="">
                   <textarea
                     type="text"
-                    name="remarks"
+                    name="remark"
                     className="form-control"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.remarks}
+                    value={formik.values.remark}
                     id="floatingTextarea2"
                   ></textarea>
                 </div>

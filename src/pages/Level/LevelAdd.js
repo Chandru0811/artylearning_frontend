@@ -123,7 +123,7 @@ function LevelAdd({ onSuccess }) {
                   >
                     <option selected></option>
                     <option value="Active">Active</option>
-                    <option value="In Active">In Active</option>
+                    <option value="Inactive">Inactive</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">

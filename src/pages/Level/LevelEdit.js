@@ -145,10 +145,10 @@ function Edit({ id, onSuccess }) {
                       Active
                     </option>
                     <option
-                      value="In Active"
+                      value="Inactive"
                       // defaultValue={data.status === "Inactive"}
                     >
-                      In Active
+                      Inactive
                     </option>
                   </select>
                   {formik.touched.status && formik.errors.status && (

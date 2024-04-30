@@ -129,8 +129,8 @@ export default function InvoiceAdd() {
 
   const fetchCourses = async (centerId) => {
     try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courses);
+      const courseData = await fetchAllCoursesWithIdsC(centerId);
+      setCourseData(courseData);
     } catch (error) {
       toast.error(error);
     }
@@ -138,8 +138,8 @@ export default function InvoiceAdd() {
 
   const fetchPackage = async (centerId) => {
     try {
-      const courses = await fetchAllPackageListByCenter(centerId);
-      setPackageData(courses);
+      const packageData = await fetchAllPackageListByCenter(centerId);
+      setPackageData(packageData);
     } catch (error) {
       toast.error(error);
     }
