@@ -9,8 +9,12 @@ import AssessmentChildPencil from "./DoAssessment/AssessmentChildPencil";
 import AssessmentBeliever from "./DoAssessment/AssessmentBeliever";
 import AssessmentAlphabets from "./DoAssessment/AssessmentAlphabets";
 import AssessmentPursuers from "./DoAssessment/AssessmentPursuers";
+import Tooltip from "react-bootstrap/Tooltip";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = ["", "", "", "", ""];
+const steps = [{ tooltip: "Child Particulars" }, { tooltip: "Child Pencil Grip" },{ tooltip: "Arty Beliver & Arty Dreamers" },{ tooltip: "Alphabet" },{ tooltip: "Arty Pursuers" }];
+
+
 
 export default function LeadAssessment() {
   const [activeStep, setActiveStep] = useState(0);
@@ -62,10 +66,17 @@ export default function LeadAssessment() {
 
   return (
     <div className="container-fluid minHeight">
-      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+     <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+              }
+            >
+              <StepLabel></StepLabel>
+            </OverlayTrigger>
           </Step>
         ))}
       </Stepper>

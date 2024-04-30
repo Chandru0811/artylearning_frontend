@@ -86,13 +86,10 @@ const Form2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                   onBlur={formik.handleBlur}
                   value={formik.values.pencilGrip}
                 >
-                  <option value=""></option>
-                  <option value="Fisted">Fisted</option>
-                  <option value="Palmer Grasp">Palmer Grasp</option>
-                  <option value="Tripod">Tripod</option>
-                  <option value="Four Finger and Thumb">
-                    Four Finger and Thumb
-                  </option>
+                  <option selected>--Select--</option>
+                  <option value="Steady">Steady</option>
+                  <option value="Loose">Loose</option>
+                  {/* <option value="Unable">Unable</option> */}
                 </select>
               </div>
               {formik.touched.pencilGrip && formik.errors.pencilGrip && (
@@ -115,9 +112,10 @@ const Form2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                     onBlur={formik.handleBlur}
                     value={formik.values.writing}
                   >
-                    <option value=""></option>
-                    <option value="Steady">Steady</option>
-                    <option value="Loose">Loose</option>
+                    <option selected>--Select--</option>
+                    <option value="Straight & Firm Lines">Straight & Firm Lines</option>
+                    <option value="Crooked & Light Lines">Crooked & Light Lines</option>
+                    <option value="Scribbles">Scribbles</option>
                   </select>
                 </div>
               </div>
@@ -141,9 +139,9 @@ const Form2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                     onBlur={formik.handleBlur}
                     value={formik.values.recognizeAToZ}
                   >
-                    <option value=""></option>
-                    <option value="Upper Case">Upper Case</option>
-                    <option value="Lower Case">Lower Case</option>
+                    <option selected>--Select--</option>
+                    <option value="Uppercase">Uppercase</option>
+                    <option value="Lowercase">Lowercase</option>
                     <option value="Both">Both</option>
                     <option value="Some">Some</option>
                     <option value="None">None</option>
@@ -191,7 +189,7 @@ const Form2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                     </div>
                   </div>
                   {formik.touched.writeUpperAToZ &&
-                  formik.errors.writeUpperAToZ ? (
+                    formik.errors.writeUpperAToZ ? (
                     <div className="text-danger">
                       <small>{formik.errors.writeUpperAToZ}</small>
                     </div>
@@ -228,7 +226,7 @@ const Form2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                     </div>
                   </div>
                   {formik.touched.writeLowerAToZ &&
-                  formik.errors.writeLowerAToZ ? (
+                    formik.errors.writeLowerAToZ ? (
                     <div className="text-danger">
                       <small>{formik.errors.writeLowerAToZ}</small>
                     </div>
@@ -308,7 +306,7 @@ const Form2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                     </div>
                   </div>
                   {formik.touched.canReadSimpleSentence &&
-                  formik.errors.canReadSimpleSentence ? (
+                    formik.errors.canReadSimpleSentence ? (
                     <div className="text-danger">
                       <small>{formik.errors.canReadSimpleSentence}</small>
                     </div>
