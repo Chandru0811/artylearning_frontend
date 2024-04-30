@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  studentName: Yup.string().required("*Name is required"),
+  name: Yup.string().required("*Name is required"),
   assessmentDate: Yup.date().required("*Assessment Date is required"),
   levelAssessed: Yup.string().required("*Level Assessed is required"),
 });
@@ -14,10 +14,11 @@ const validationSchema = Yup.object().shape({
 const AssessmentChild = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
     const { leadId } = useParams();
+    const currentDate = new Date().toISOString().split("T")[0];
     const formik = useFormik({
       initialValues: {
-        studentName: formData.studentName || "",
-        assessmentDate: formData.assessmentDate || "",
+        name: formData.name || "",
+        assessmentDate: formData.assessmentDate || currentDate,
         age: formData.age || "",
         dateOfBirth: formData.dateOfBirth || "",
         pictureToken: formData.pictureToken || "",
@@ -72,7 +73,13 @@ const AssessmentChild = forwardRef(
     useEffect(() => {
       const getData = async () => {
         const response = await api.get(`/getAllLeadInfoById/${leadId}`);
-        formik.setValues(response.data);
+        const dateOfBirth =
+          response.data.dateOfBirth &&
+          response.data.dateOfBirth.substring(0, 10);
+        formik.setValues({
+          ...response.data,
+          dateOfBirth: dateOfBirth,
+        });
       };
       getData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,21 +114,26 @@ const AssessmentChild = forwardRef(
                 )}
               </div>
               <div className="col-md-6 col-12 mb-4">
-                <lable>
+                <label>
                   Assessment Date <span className="text-danger">*</span>
-                </lable>
+                </label>
                 <input
                   type="date"
                   name="assessmentDate"
                   className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.assessmentDate}
+                  value={
+                    formik.values.assessmentDate && formik.values.currentDate
+                  }
                 />
                 {formik.touched.assessmentDate &&
                   formik.errors.assessmentDate && (
                     <div className="error text-danger ">
-                      <small>{formik.errors.assessmentDate}</small>
+                      <small>
+                        {formik.errors.assessmentDate &&
+                          formik.errors.currentDate}
+                      </small>
                     </div>
                   )}
               </div>
