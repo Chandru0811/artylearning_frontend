@@ -19,11 +19,11 @@ const validationSchema = Yup.object().shape({
   writeLowerAToZ: Yup.string().required("*LowerCase is required"),
   soundOfAToZ: Yup.string().required("*Sounds is required"),
   canReadSimpleSentence: Yup.string().required("*Simple Sentence is required"),
-  parentName: Yup.string().required("*Parent Name is required"),
-  parentEmail: Yup.string()
+  fathersFullName: Yup.string().required("*Parent Name is required"),
+  fathersEmailAddress: Yup.string()
     .email("*Enter valid email")
     .required("*Email is required"),
-  parentMobileNumber: Yup.string()
+  fathersMobileNumber: Yup.string()
     .typeError("Contact Number must be a number")
     .required("Contact Number is required")
     .test("is-number", "Please enter a valid number", (value) => !isNaN(value))
@@ -50,17 +50,17 @@ function LeadForm() {
       writeLowerAToZ: "",
       soundOfAToZ: "",
       canReadSimpleSentence: "",
-      parentEmail: "",
-      parentName: "",
+      fathersEmailAddress: "",
+      fathersFullName: "",
       relation: "",
       parentMobileNumberPrefix: "",
-      parentMobileNumber: "",
+      fathersMobileNumber: "",
       writing: "",
       recognizeAToZ: "",
       preferredDay: [],
       preferredTime: [],
       preferredTimeSlot: [],
-      remark: ""
+      remark: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -105,10 +105,11 @@ function LeadForm() {
             </label>
             <select
               {...formik.getFieldProps("center")}
-              className={`form-select    ${formik.touched.center && formik.errors.center
-                ? "is-invalid"
-                : ""
-                }`}
+              className={`form-select    ${
+                formik.touched.center && formik.errors.center
+                  ? "is-invalid"
+                  : ""
+              }`}
               aria-label="Default select example"
             >
               <option selected>--Select--</option>
@@ -126,10 +127,11 @@ function LeadForm() {
                 Child's Name / 孩子名字 <span className="text-danger">*</span>
               </label>
               <input
-                className={`form-control  ${formik.touched.studentName && formik.errors.studentName
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control  ${
+                  formik.touched.studentName && formik.errors.studentName
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Username"
                 aria-describedby="basic-addon1"
                 {...formik.getFieldProps("studentName")}
@@ -158,9 +160,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.gender === "Male"}
               />
-              <label className="form-check-label">
-                Male
-              </label>
+              <label className="form-check-label">Male</label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -172,9 +172,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.gender === "Female"}
               />
-              <label className="form-check-label">
-                Female
-              </label>
+              <label className="form-check-label">Female</label>
             </div>
             {formik.errors.gender && formik.touched.gender && (
               <div className="text-danger  " style={{ fontSize: ".875em" }}>
@@ -191,13 +189,18 @@ function LeadForm() {
                 {...formik.getFieldProps("dateOfBirth")}
                 name="dateOfBirth"
                 type="date"
-                className={`form-control   ${formik.touched.dateOfBirth && formik.errors.dateOfBirth ? "is-invalid" : ""
-                  }`}
+                className={`form-control   ${
+                  formik.touched.dateOfBirth && formik.errors.dateOfBirth
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Username"
                 aria-describedby="basic-addon1"
               />
               {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
-                <div className="invalid-feedback">{formik.errors.dateOfBirth}</div>
+                <div className="invalid-feedback">
+                  {formik.errors.dateOfBirth}
+                </div>
               )}
             </div>
           </div>
@@ -208,10 +211,11 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("pencilGrip")}
-                className={`form-select    ${formik.touched.pencilGrip && formik.errors.pencilGrip
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select    ${
+                  formik.touched.pencilGrip && formik.errors.pencilGrip
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
@@ -233,10 +237,11 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("subject")}
-                className={`form-select    ${formik.touched.subject && formik.errors.subject
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select    ${
+                  formik.touched.subject && formik.errors.subject
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
@@ -256,23 +261,28 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("marketingSource")}
-                className={`form-select    ${formik.touched.marketingSource && formik.errors.marketingSource
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select    ${
+                  formik.touched.marketingSource &&
+                  formik.errors.marketingSource
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
-                <option value="Friends or Relatives">Friends or Relatives</option>
+                <option value="Friends or Relatives">
+                  Friends or Relatives
+                </option>
                 <option value="Facebook">Facebook</option>
                 <option value="Google">Google</option>
                 <option value="Others">Others</option>
               </select>
-              {formik.touched.marketingSource && formik.errors.marketingSource && (
-                <div className="invalid-feedback">
-                  {formik.errors.marketingSource}
-                </div>
-              )}
+              {formik.touched.marketingSource &&
+                formik.errors.marketingSource && (
+                  <div className="invalid-feedback">
+                    {formik.errors.marketingSource}
+                  </div>
+                )}
             </div>
           </div>
           <div className="col-md-6 col-12 mb-3">
@@ -281,10 +291,11 @@ function LeadForm() {
                 Referred by / 介绍人 <span className="text-danger">*</span>
               </label>
               <input
-                className={`form-control  ${formik.touched.referBy && formik.errors.referBy
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control  ${
+                  formik.touched.referBy && formik.errors.referBy
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Username"
                 aria-describedby="basic-addon1"
                 {...formik.getFieldProps("referBy")}
@@ -311,9 +322,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.writeUpperAToZ === "Yes"}
               />
-              <label className="form-check-label">
-                Yes
-              </label>
+              <label className="form-check-label">Yes</label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -325,9 +334,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.writeUpperAToZ === "No"}
               />
-              <label className="form-check-label">
-                No
-              </label>
+              <label className="form-check-label">No</label>
             </div>
             {formik.errors.writeUpperAToZ && formik.touched.writeUpperAToZ && (
               <div className="text-danger  " style={{ fontSize: ".875em" }}>
@@ -351,9 +358,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.writeLowerAToZ === "Yes"}
               />
-              <label className="form-check-label">
-                Yes
-              </label>
+              <label className="form-check-label">Yes</label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -365,9 +370,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.writeLowerAToZ === "No"}
               />
-              <label className="form-check-label">
-                No
-              </label>
+              <label className="form-check-label">No</label>
             </div>
             {formik.errors.writeLowerAToZ && formik.touched.writeLowerAToZ && (
               <div className="text-danger  " style={{ fontSize: ".875em" }}>
@@ -391,9 +394,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.soundOfAToZ === "Yes"}
               />
-              <label className="form-check-label">
-                Yes
-              </label>
+              <label className="form-check-label">Yes</label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -405,9 +406,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.soundOfAToZ === "No"}
               />
-              <label className="form-check-label">
-                No
-              </label>
+              <label className="form-check-label">No</label>
             </div>
             {formik.errors.soundOfAToZ && formik.touched.soundOfAToZ && (
               <div className="text-danger" style={{ fontSize: ".875em" }}>
@@ -432,9 +431,7 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.canReadSimpleSentence === "Yes"}
               />
-              <label className="form-check-label">
-                Yes
-              </label>
+              <label className="form-check-label">Yes</label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -446,58 +443,71 @@ function LeadForm() {
                 onChange={formik.handleChange}
                 checked={formik.values.canReadSimpleSentence === "No"}
               />
-              <label className="form-check-label">
-                No
-              </label>
+              <label className="form-check-label">No</label>
             </div>
-            {formik.errors.canReadSimpleSentence && formik.touched.canReadSimpleSentence && (
-              <div className="text-danger  " style={{ fontSize: ".875em" }}>
-                {formik.errors.canReadSimpleSentence}
-              </div>
-            )}
+            {formik.errors.canReadSimpleSentence &&
+              formik.touched.canReadSimpleSentence && (
+                <div className="text-danger  " style={{ fontSize: ".875em" }}>
+                  {formik.errors.canReadSimpleSentence}
+                </div>
+              )}
           </div>
           <div className="col-md-6 col-12 mb-3">
             <label className="form-label">
               Parent Name / 父母姓名 <span className="text-danger">*</span>
             </label>
             <input
-              className={`form-control  ${formik.touched.parentName && formik.errors.parentName
-                ? "is-invalid"
-                : ""
-                }`}
-              name="parentName"
+              className={`form-control  ${
+                formik.touched.fathersFullName && formik.errors.fathersFullName
+                  ? "is-invalid"
+                  : ""
+              }`}
+              name="fathersFullName"
               aria-label="Username"
               aria-describedby="basic-addon1"
-              {...formik.getFieldProps("parentName")}
+              {...formik.getFieldProps("fathersFullName")}
               type="text"
             ></input>
-            {formik.touched.parentName && formik.errors.parentName && (
-              <div className="invalid-feedback">{formik.errors.parentName}</div>
-            )}
+            {formik.touched.fathersFullName &&
+              formik.errors.fathersFullName && (
+                <div className="invalid-feedback">
+                  {formik.errors.fathersFullName}
+                </div>
+              )}
           </div>
           <div className="col-md-6 col-12 mb-3">
             <label className="form-label">
               Email / 邮箱地址 <span className="text-danger">*</span>
             </label>
             <input
-              {...formik.getFieldProps("parentEmail")}
+              {...formik.getFieldProps("fathersEmailAddress")}
               type="email"
-              className={`form-control   ${formik.touched.parentEmail && formik.errors.parentEmail ? "is-invalid" : ""
-                }`}
-              name="parentEmail"
+              className={`form-control   ${
+                formik.touched.fathersEmailAddress &&
+                formik.errors.fathersEmailAddress
+                  ? "is-invalid"
+                  : ""
+              }`}
+              name="fathersEmailAddress"
               aria-label="Username"
               aria-describedby="basic-addon1"
             ></input>
-            {formik.touched.parentEmail && formik.errors.parentEmail && (
-              <div className="invalid-feedback">{formik.errors.parentEmail}</div>
-            )}
+            {formik.touched.fathersEmailAddress &&
+              formik.errors.fathersEmailAddress && (
+                <div className="invalid-feedback">
+                  {formik.errors.fathersEmailAddress}
+                </div>
+              )}
           </div>
           <div className="col-md-6 col-12 mb-3">
             <label className="form-label">
               Contact Number / 联络号 <span className="text-danger">*</span>
             </label>
             <div className="input-group mb-3">
-              <div className="input-group-text bg-white">
+              <div
+                className="input-group-text bg-white"
+                style={{ padding: "0px" }}
+              >
                 <select
                   {...formik.getFieldProps("parentMobileNumberPrefix")}
                   name="parentMobileNumberPrefix"
@@ -513,19 +523,22 @@ function LeadForm() {
               </div>
               <input
                 type="text"
-                name="parentMobileNumber"
-                className={`form-control ${formik.touched.parentMobileNumber && formik.errors.parentMobileNumber
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                name="fathersMobileNumber"
+                className={`form-control ${
+                  formik.touched.fathersMobileNumber &&
+                  formik.errors.fathersMobileNumber
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Text input with checkbox"
-                {...formik.getFieldProps("parentMobileNumber")}
+                {...formik.getFieldProps("fathersMobileNumber")}
               />
-              {formik.touched.parentMobileNumber && formik.errors.parentMobileNumber && (
-                <div className="invalid-feedback">
-                  {formik.errors.parentMobileNumber}
-                </div>
-              )}
+              {formik.touched.fathersMobileNumber &&
+                formik.errors.fathersMobileNumber && (
+                  <div className="invalid-feedback">
+                    {formik.errors.fathersMobileNumber}
+                  </div>
+                )}
             </div>
           </div>
           <div className="col-md-6 col-12 mb-3">
@@ -533,10 +546,11 @@ function LeadForm() {
               Relation / 关系 <span className="text-danger">*</span>
             </label>
             <input
-              className={`form-control  ${formik.touched.relation && formik.errors.relation
-                ? "is-invalid"
-                : ""
-                }`}
+              className={`form-control  ${
+                formik.touched.relation && formik.errors.relation
+                  ? "is-invalid"
+                  : ""
+              }`}
               name="relation"
               aria-label="Username"
               aria-describedby="basic-addon1"
@@ -554,16 +568,21 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("writing")}
-                className={`form-select    ${formik.touched.writing && formik.errors.writing
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select    ${
+                  formik.touched.writing && formik.errors.writing
+                    ? "is-invalid"
+                    : ""
+                }`}
                 name="writing"
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
-                <option value="Straight & Firm Lines">Straight & Firm Lines / 书写工整</option>
-                <option value="Crooked & Light Lines">Crooked & Light Lines / 书写扭曲或轻盈</option>
+                <option value="Straight & Firm Lines">
+                  Straight & Firm Lines / 书写工整
+                </option>
+                <option value="Crooked & Light Lines">
+                  Crooked & Light Lines / 书写扭曲或轻盈
+                </option>
                 <option value="Scribbles">Scribbles / 涂鸦</option>
               </select>
               {formik.touched.writing && formik.errors.writing && (
@@ -578,10 +597,11 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("recognizeAToZ")}
-                className={`form-select    ${formik.touched.recognizeAToZ && formik.errors.recognizeAToZ
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select    ${
+                  formik.touched.recognizeAToZ && formik.errors.recognizeAToZ
+                    ? "is-invalid"
+                    : ""
+                }`}
                 name="recognizeAToZ"
                 aria-label="Default select example"
               >
@@ -611,11 +631,9 @@ function LeadForm() {
                   value="TUESDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('TUESDAY')}
+                  checked={formik.values.preferredDay.includes("TUESDAY")}
                 />
-                <label className="form-check-label">
-                  Tuesday
-                </label>
+                <label className="form-check-label">Tuesday</label>
               </div>
               <div className="form-check form-check-inline">
                 <input
@@ -626,11 +644,9 @@ function LeadForm() {
                   value="WEDNESDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('WEDNESDAY')}
+                  checked={formik.values.preferredDay.includes("WEDNESDAY")}
                 />
-                <label className="form-check-label">
-                  Wednesday
-                </label>
+                <label className="form-check-label">Wednesday</label>
               </div>
               <div className="form-check form-check-inline">
                 <input
@@ -641,11 +657,9 @@ function LeadForm() {
                   value="THURSDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('THURSDAY')}
+                  checked={formik.values.preferredDay.includes("THURSDAY")}
                 />
-                <label className="form-check-label">
-                  Thursday
-                </label>
+                <label className="form-check-label">Thursday</label>
               </div>
               <div className="form-check form-check-inline">
                 <input
@@ -656,11 +670,9 @@ function LeadForm() {
                   value="FRIDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('FRIDAY')}
+                  checked={formik.values.preferredDay.includes("FRIDAY")}
                 />
-                <label className="form-check-label">
-                  Friday
-                </label>
+                <label className="form-check-label">Friday</label>
               </div>
             </div>
           </div>
@@ -673,14 +685,12 @@ function LeadForm() {
                   type="checkbox"
                   value="3.30PM"
                   id="3.30PM"
-                  name="preferredTime"
+                  name="preferredTimeSlot"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredTime.includes('3.30PM')}
+                  checked={formik.values.preferredTimeSlot.includes("3.30PM")}
                 />
-                <label className="form-check-label">
-                  3.30PM
-                </label>
+                <label className="form-check-label">3.30PM</label>
               </div>
               <div className="form-check form-check-inline">
                 <input
@@ -688,14 +698,12 @@ function LeadForm() {
                   type="checkbox"
                   value="5.00PM"
                   id="5.00PM"
-                  name="preferredTime"
+                  name="preferredTimeSlot"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredTime.includes('5.00PM')}
+                  checked={formik.values.preferredTimeSlot.includes("5.00PM")}
                 />
-                <label className="form-check-label">
-                  5.00PM
-                </label>
+                <label className="form-check-label">5.00PM</label>
               </div>
               <div className="form-check form-check-inline">
                 <input
@@ -703,14 +711,12 @@ function LeadForm() {
                   type="checkbox"
                   value="7.00PM"
                   id="7.00PM"
-                  name="preferredTime"
+                  name="preferredTimeSlot"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredTime.includes('7.00PM')}
+                  checked={formik.values.preferredTimeSlot.includes("7.00PM")}
                 />
-                <label className="form-check-label">
-                  7.00PM
-                </label>
+                <label className="form-check-label">7.00PM</label>
               </div>
             </div>
           </div>
@@ -726,11 +732,9 @@ function LeadForm() {
                   value="SATURADAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('SATURADAY')}
+                  checked={formik.values.preferredDay.includes("SATURADAY")}
                 />
-                <label className="form-check-label">
-                  Saturday
-                </label>
+                <label className="form-check-label">Saturday</label>
               </div>
               <div className="form-check form-check-inline">
                 <input
@@ -741,11 +745,9 @@ function LeadForm() {
                   value="SUNDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes('SUNDAY')}
+                  checked={formik.values.preferredDay.includes("SUNDAY")}
                 />
-                <label className="form-check-label">
-                  Sunday
-                </label>
+                <label className="form-check-label">Sunday</label>
               </div>
             </div>
           </div>
@@ -761,11 +763,11 @@ function LeadForm() {
                   name="preferredTimeSlot"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredTimeSlot.includes('9AM - 12NN')}
+                  checked={formik.values.preferredTimeSlot.includes(
+                    "9AM - 12NN"
+                  )}
                 />
-                <label className="form-check-label">
-                  9AM - 12NN
-                </label>
+                <label className="form-check-label">9AM - 12NN</label>
               </div>
               <div className="form-check form-check-inline">
                 <input
@@ -776,11 +778,11 @@ function LeadForm() {
                   name="preferredTimeSlot"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredTimeSlot.includes('12NN - 3PM')}
+                  checked={formik.values.preferredTimeSlot.includes(
+                    "12NN - 3PM"
+                  )}
                 />
-                <label className="form-check-label">
-                  12NN - 3PM
-                </label>
+                <label className="form-check-label">12NN - 3PM</label>
               </div>
               <div className="form-check form-check-inline">
                 <input
@@ -791,11 +793,11 @@ function LeadForm() {
                   name="preferredTimeSlot"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredTimeSlot.includes('3PM - 6PM')}
+                  checked={formik.values.preferredTimeSlot.includes(
+                    "3PM - 6PM"
+                  )}
                 />
-                <label className="form-check-label">
-                  3PM - 6PM
-                </label>
+                <label className="form-check-label">3PM - 6PM</label>
               </div>
             </div>
           </div>

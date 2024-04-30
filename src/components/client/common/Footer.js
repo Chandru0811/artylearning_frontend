@@ -67,16 +67,26 @@ function Footer() {
             <p>© 2017 ~ 2024 ArtyLearning. All rights reserved.</p>
           </div>
           <div className="col-md-4 col-12 mt-3">
-            <Link to="/privacypolicy" style={{ color: "#000" }}>
+            <a
+              href="https://hrisasia.com/privacypolicy/index.html"
+              style={{ color: "#000" }}
+              target="_blank"
+              rel="noreferrer"
+            >
               <p className="text-center">Privacy Policy</p>
-            </Link>
+            </a>
           </div>
           <div className="col-md-4 col-12 mt-3">
             <div className="d-flex align-items-center justify-content-between">
               <span>
-                <Link to="/terms&conditions" style={{ color: "#000" }}>
+                <a
+                  href="https://hrisasia.com/termsandconditions/index.html"
+                  style={{ color: "#000" }}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <p>Terms & Condition </p>
-                </Link>
+                </a>
               </span>
               <span className="d-flex">
                 <Link to="#" className="mx-2" style={{ color: "red" }}>
