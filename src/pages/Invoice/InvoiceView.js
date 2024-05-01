@@ -15,6 +15,7 @@ function InvoiceView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [invoiceItem, setInvoiceItem] = useState([]);
   console.log("data", data);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
@@ -52,81 +53,121 @@ function InvoiceView() {
     doc.addImage(Logo, "Logo", 13, 25, 40, 25); // x, y, width, height
 
     doc.setFontSize(15);
-    doc.text("Arty Learning @HG", 60, 25, { bold: true }); // Incorrect formatting, bold should be part of the options object
+    doc.setFont("helvetica", "bold");
+    doc.text("Arty Learning @HG", 60, 25,);
 
-    doc.text("Tel No:87270752", 60, 40);
-    doc.text("Email:Artylearning@gmail.com", 60, 50);
+    doc.setFont("helvetica", "normal");
+    doc.text("Tel No:87270752", 60, 35);
+    doc.text("Email:Artylearning@gmail.com", 60, 45);
 
    
-    doc.text(`Official Receipt`, 14, 70, { bold: true }); // Incorrect formatting, bold should be part of the options object
-    doc.line(16, 70, 45, 70); // x, y, width, height
+    doc.line(16, 70, 50, 70); // x, y, width, height
 
-     doc.setFontSize(13);
+    doc.setFontSize(13);
     // Add invoice data
-    doc.text(`Received From : ${data.invoiceNumber}`, 14, 80);
-    doc.text(`Amount :${data.studentName}`, 14, 90);
-    doc.text(`Payment Method : ${data.studentUniqueId}`, 14, 100);
-    doc.text(`Being Payment Of : ${data.studentUniqueId}`, 14, 110);
-    doc.text(`Receipt No : ${data.courseName}`, 135, 80);
+    doc.text(`Invoice Number : ${data.invoiceNumber}`, 14, 80);
+    doc.text(`Student Name :${data.studentName}`, 14, 90);
+    doc.text(`Student Id : ${data.studentUniqueId}`, 14, 100);
+    // doc.text(`Being Payment Of : ${data.studentUniqueId}`, 14, 110);
+    doc.text(`Course Name : ${data.courseName}`, 135, 80);
     doc.text(
-      `Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
+      `Due Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
       140,
       90
     );
 
-    doc.line(10, 150, 200, 150);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(11)
+    doc.setFontSize(11);
     doc.text(`Payment Amount Specification`, 10, 126); // Add x, y coordinates for this line
-    doc.text(`NO`, 10, 140);
-    // doc.text(`Date`, 10, 145);
-    doc.text(`27-01-2024`, 10, 155);
 
-    doc.text(`Item`, 35, 140);
-    // doc.text(`Type`, 35, 145);
-    doc.text(`27-01-2024`, 35, 155);
+      doc.line(10, 120, 200, 120); // x1, y1, x2, y2
+      // doc.line(10, 145, 200, 145); // x1, y1, x2, y2
 
-    doc.text(`Item Amount`, 60, 140);
-    // doc.text(` No`, 60, 145);
-    doc.text(`27-01-2024`, 60, 155);
+      // doc.text(`NO`, 20, 140);
+      // doc.text(`${invoiceItem + 1 || "-"}`, 20, 155);
 
-    doc.text(`Tax Type`, 87, 140);
-    doc.text(`27-01-2024`, 87, 155);
+      // doc.text(`Item`, 40, 140);
+      // doc.text(`${data.item || "-"}`, 40, 155);
 
-    doc.text(`GST Amount`, 148, 140);
-    // doc.text(` Amount`, 150, 145);
-    doc.text(`27-01-2024`, 148, 155);
+      // doc.text(`Item Amount`, 60, 140);
 
-    doc.text(`Total Amount`, 175, 140);
-    // doc.text(` Amount`, 175, 145);
-    doc.text(`27-01-2024`, 175, 155);
+      // doc.text(`${invoiceItem.itemAmount || "-"}`, 65, 155);
 
-    doc.line(10, 120, 200, 120); // x1, y1, x2, y2
-    
-    
-   
+      // doc.text(`Tax Type`, 90, 140);
+      // doc.text(`${invoiceItem.taxType || "-"}`, 90, 155);
 
+      // doc.text(`GST Amount`, 148, 140);
+
+      // doc.text(`${invoiceItem.gstAmount || "-"}`, 148, 155);
+
+      // doc.text(`Total Amount`, 175, 140);
+
+      // doc.text(`${invoiceItem.totalAmount || "-"}`, 175, 155);
+
+       doc.setFont("helvetica", "bold");
+       doc.setFontSize(14);
+       doc.text(`Official Receipt`, 14, 70);
+      
     // Add the table
-    // const tableData =
-    //   data.invoiceItemsDtoList &&
-    //   data.invoiceItemsDtoList.map((invoiceItem, index) => [
-    //     index + 1,
-    //     invoiceItem.item,
-    //     invoiceItem.itemAmount,
-    //     invoiceItem.taxType,
-    //     invoiceItem.gstAmount,
-    //     invoiceItem.totalAmount,
-    //   ]);
-    // doc.autoTable({
-    //   startY: 120,
-    //   head: [
-    //     ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
-    //   ],
-    //   body: tableData,
-    //   foot: [["", "", "", "", "Total", `${data.totalAmount || "--"}`]],
-    // });
+    const tableData =
+      data.invoiceItemsDtoList &&
+      data.invoiceItemsDtoList.map((invoiceItem, index) => [
+        index + 1,
+        invoiceItem.item,
+        invoiceItem.itemAmount,
+        invoiceItem.taxType,
+        invoiceItem.gstAmount,
+        invoiceItem.totalAmount,
+      ]);
+      doc.autoTable({
+        startY: 130,
+        headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'underline' },
+        bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+        head: [["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"]],
+        body: tableData,
+        footStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+        body: tableData,
+        foot: [
+          [
+            "",
+            "",
+            "",
+            "",
+            "Creadit Advice Offset",
+            `${data.creditAdviceOffset || "--"}`,
+            "GST",
+            `${data.gst || "--"}`,
+            "Total",
+            `${data.totalAmount || "--"}`,
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "GST",
+            `${data.gst || "--"}`,
+            "",
+            "",
+            "",
+            "",
+          ],
+          [
+            "",
+            "",
+            "",
+            "",
+            "Total",
+            `${data.totalAmount || "--"}`,
+            "",
+            "",
+            "",
+            "",
+          ],
+        ],
+      });
 
-    // // Add Credit Advice Offset, GST, Total Amount
+   // Add Credit Advice Offset, GST, Total Amount
     // doc.text(
     //   `Credit Advice Offset: ${data.creditAdviceOffset || "--"}`,
     //   145,
@@ -143,19 +184,20 @@ function InvoiceView() {
     //   doc.autoTable.previous.finalY + 30
     // );
 
-    // // Add Remark
-    // doc.text(
-    //   `Remark: ${data.remark || "--"}`,
-    //   14,
-    //   doc.autoTable.previous.finalY + 10
-    // );
+  //   Add Remark
+  doc.setFontSize(11);
+    doc.text(
+      `Remark: ${data.remark || "--"}`,
+      14,
+      doc.autoTable.previous.finalY + 10
+    );
 
-    // // Add QR code
-    // doc.addImage(QR, "PNG", 160, doc.autoTable.previous.finalY + 40, 40, 40);
-    // doc.text(`Send To Pay`, 190, doc.autoTable.previous.finalY + 85, {
-    //   align: "right",
-    //   fontWeight: "bold",
-    // });
+    //Add QR code
+    doc.addImage(QR, "PNG", 145, doc.autoTable.previous.finalY + 10, 40, 40);
+    doc.text(`Send To Pay`, 175, doc.autoTable.previous.finalY + 55, {
+      align: "right",
+      fontWeight: "bold",
+    });
 
     // Save the PDF
     doc.save("invoice.pdf");
