@@ -12,6 +12,7 @@ import fetchAllSubjectsWithIds from "../List/SubjectList";
 function CourseAdd({ onSuccess }) {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
+  console.log("Center Data", centerData);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
 
@@ -46,7 +47,6 @@ function CourseAdd({ onSuccess }) {
       "*Select the Class Replacement Allowed"
     ),
     replacementLessonStudentBuffer: Yup.number().notRequired(""),
-
   });
 
   const formik = useFormik({
@@ -69,7 +69,7 @@ function CourseAdd({ onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values)
+      console.log(values);
       try {
         const classReplacementAllowed =
           values.classReplacementAllowed === "Yes" ? true : false;
@@ -115,7 +115,7 @@ function CourseAdd({ onSuccess }) {
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                Centre Name<span className="text-danger">*</span>
+                  Centre Name<span className="text-danger">*</span>
                 </lable>
                 <div className="input-group mb-3">
                   <select
@@ -285,7 +285,8 @@ function CourseAdd({ onSuccess }) {
                 <input
                   type="text"
                   className={`form-control  ${
-                    formik.touched.replacementLessonStudentBuffer && formik.errors.replacementLessonStudentBuffer
+                    formik.touched.replacementLessonStudentBuffer &&
+                    formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
                       : ""
                   }`}
@@ -446,12 +447,11 @@ function CourseAdd({ onSuccess }) {
               <div className="col-12 my-3">
                 <lable className="">Description</lable>
                 <textarea
-                 type="text"
-                 className={`form-control pb-5`}
-                 {...formik.getFieldProps("description")}
-                 placeholder="">
-
-                </textarea>
+                  type="text"
+                  className={`form-control pb-5`}
+                  {...formik.getFieldProps("description")}
+                  placeholder=""
+                ></textarea>
               </div>
             </div>
           </div>
