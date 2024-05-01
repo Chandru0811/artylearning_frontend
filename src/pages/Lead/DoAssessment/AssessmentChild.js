@@ -20,7 +20,7 @@ const AssessmentChild = forwardRef(
         name: formData.name || "",
         assessmentDate: formData.assessmentDate || currentDate,
         age: formData.age || "",
-        dateOfBirth: formData.dateOfBirth || "",
+        year: formData.year || "",
         pictureToken: formData.pictureToken || "",
         paymentMode: formData.paymentMode || "",
         timeSlotOffered: formData.timeSlotOffered || "",
@@ -29,10 +29,11 @@ const AssessmentChild = forwardRef(
         levelAssessed: formData.levelAssessed || "",
         sibling: formData.sibling || "",
         whereFrom: formData.whereFrom || "",
-        remark: formData.remark || "",
+        remarks: formData.remarks || "",
       },
       // validationSchema: validationSchema,
       onSubmit: async (data) => {
+        // console.log("Doassesment data", data);
         data.leadId = leadId;
         try {
           const response = await api.post("/createLeadDoAssessment", data, {
@@ -69,17 +70,20 @@ const AssessmentChild = forwardRef(
     //     }
     //   });
     // };
+    // console.log("Initial form values:", formik.values); // Add this line
 
     useEffect(() => {
       const getData = async () => {
         const response = await api.get(`/getAllLeadInfoById/${leadId}`);
-        const dateOfBirth =
+        const year =
           response.data.dateOfBirth &&
           response.data.dateOfBirth.substring(0, 10);
         formik.setValues({
-          ...response.data,
-          dateOfBirth: dateOfBirth,
-          name:response.data.studentName,
+          year: year,
+          name: response.data.studentName,
+          assessmentDate: currentDate, // Update assessmentDate
+          remarks: response.data.remark,
+          referredBy: response.data.referBy,
         });
       };
       getData();
@@ -124,9 +128,7 @@ const AssessmentChild = forwardRef(
                   className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={
-                    formik.values.assessmentDate && formik.values.currentDate
-                  }
+                  value={formik.values.assessmentDate} // Use formik.values.assessmentDate
                 />
                 {formik.touched.assessmentDate &&
                   formik.errors.assessmentDate && (
@@ -156,10 +158,10 @@ const AssessmentChild = forwardRef(
                   className="form-control  "
                   aria-label="Default form-control example"
                   type="date"
-                  name="dateOfBirth"
+                  name="year"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.dateOfBirth}
+                  value={formik.values.year}
                 />
               </div>
               <div className="col-md-6 col-12 mb-4">
@@ -378,11 +380,11 @@ const AssessmentChild = forwardRef(
                 <div className="">
                   <textarea
                     type="text"
-                    name="remark"
+                    name="remarks"
                     className="form-control"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.remark}
+                    value={formik.values.remarks}
                     id="floatingTextarea2"
                   ></textarea>
                 </div>
