@@ -187,15 +187,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                   Relation To Child<span className="text-danger">*</span>
                 </label>
               </div>
-              <input
-                type="text"
-                className="form-control"
-                name="relationToChild"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.relationToChild}
-              />
-              {/* <div className="form-check form-check-inline">
+              <div className="form-check form-check-inline">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -264,7 +256,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 <label className="form-check-label" for="inlineRadio2">
                   Others
                 </label>
-              </div> */}
+              </div>
               {formik.touched.relationToChild &&
                 formik.errors.relationToChild && (
                   <div className="error text-danger ">
@@ -350,5 +342,4 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     </form>
   );
 });
-
 export default Form4;
