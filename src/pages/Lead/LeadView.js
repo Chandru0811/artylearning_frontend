@@ -7,17 +7,25 @@ import { toast } from "react-toastify";
 import { ImCross } from "react-icons/im";
 import { TiTick } from "react-icons/ti";
 import Modal from "react-bootstrap/Modal";
+import "boxicons";
 
 function Leadview() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [doassesmentData, setDoassesmentData] = useState([]);
 
-  // Payment Status Modal
-  const [show, setShow] = useState(false);
+  // Payment Status & Summary Modal
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [showPaymentStatusModal, setShowPaymentStatusModal] = useState(false);
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
+
+  const handleClose = () => {
+    setShowPaymentStatusModal(false);
+    setShowSummaryModal(false);
+  };
+
+  const handlePaymentStatusShow = () => setShowPaymentStatusModal(true);
+  const handleSummaryShow = () => setShowSummaryModal(true);
 
   // console.log(data);
 
@@ -63,7 +71,11 @@ function Leadview() {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose} animation={false}>
+      <Modal
+        show={showPaymentStatusModal}
+        onHide={handleClose}
+        animation={false}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Payment Status</Modal.Title>
         </Modal.Header>
@@ -78,7 +90,9 @@ function Leadview() {
                 className="form-select"
                 aria-label="example"
               >
-                <option value="Pending" selected>Pending</option>
+                <option value="Pending" selected>
+                  Pending
+                </option>
                 <option value="Paid">Paid</option>
                 <option value="Cancel">Cancel</option>
               </select>
@@ -86,13 +100,116 @@ function Leadview() {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <button className="btn btn-border btn-sm" type="button" onClick={handleClose}>
+          <button
+            className="btn btn-border btn-sm"
+            type="button"
+            onClick={handleClose}
+          >
             Close
           </button>
-          <button className="btn btn-button btn-sm" type="submit" onClick={handleClose}>
+          <button
+            className="btn btn-button btn-sm"
+            type="submit"
+            onClick={handleClose}
+          >
             Save
           </button>
         </Modal.Footer>
+      </Modal>
+      <Modal show={showSummaryModal} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Summary</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <ul>
+              <div className="row">
+                <div className="d-flex align-items-center mb-3">
+                  <box-icon
+                    name="check-circle"
+                    type="solid"
+                    color="#0bda5d"
+                  ></box-icon>
+                  &nbsp; &nbsp;
+                  <li className="list-unstyled d-flex text-start">
+                    Student Information
+                  </li>
+                </div>
+              </div>
+              <div className="d-flex align-items-center mb-3">
+                <box-icon
+                  name="x-circle"
+                  type="solid"
+                  color="#d42615"
+                ></box-icon>
+                &nbsp; &nbsp;
+                <li className="list-unstyled d-flex align-items-center">
+                  Child Ability
+                </li>
+              </div>
+              <div className="d-flex align-items-center mb-3">
+                <box-icon
+                  name="x-circle"
+                  type="solid"
+                  color="#d42615"
+                ></box-icon>
+                &nbsp; &nbsp;
+                <li className="list-unstyled d-flex align-items-center">
+                  Parent Information &nbsp; &nbsp;
+                </li>
+              </div>
+              <div className="d-flex align-items-center mb-3">
+                <box-icon
+                  name="check-circle"
+                  type="solid"
+                  color="#0bda5d"
+                ></box-icon>
+                &nbsp; &nbsp;
+                <li className="list-unstyled d-flex align-items-center">
+                  Address
+                </li>
+              </div>
+              <div className="d-flex align-items-center mb-3">
+                <box-icon
+                  name="x-circle"
+                  type="solid"
+                  color="#d42615"
+                ></box-icon>
+                &nbsp; &nbsp;
+                <li className="list-unstyled d-flex align-items-center">
+                  Account Information
+                </li>
+              </div>
+              <div className="d-flex align-items-center mb-3">
+                <box-icon
+                  name="check-circle"
+                  type="solid"
+                  color="#0bda5d"
+                ></box-icon>
+                &nbsp; &nbsp;
+                <li className="list-unstyled d-flex align-items-center">
+                  Authorised Person Address
+                </li>
+              </div>
+            </ul>
+          </div>
+        </Modal.Body>
+        {/* <Modal.Footer> */}
+          {/* <button
+            className="btn btn-border btn-sm"
+            type="button"
+            onClick={handleClose}
+          >
+            Close
+          </button>
+          <button
+            className="btn btn-button btn-sm"
+            type="submit"
+            onClick={handleClose}
+          >
+            Save
+          </button> */}
+        {/* </Modal.Footer> */}
       </Modal>
       <div className="mb-5">
         <div className="container-fluid minHeight">
@@ -106,10 +223,17 @@ function Leadview() {
                         <span>Back</span>
                       </button>
                     </Link>
+                    <button
+                      type="button"
+                      onClick={handleSummaryShow}
+                      class="btn btn-border btn-sm"
+                    >
+                      <span>Summary</span>
+                    </button>
 
                     <button
                       type="button"
-                      onClick={handleShow}
+                      onClick={handlePaymentStatusShow}
                       class="btn btn-border btn-sm"
                     >
                       <span>Payment Status</span>
