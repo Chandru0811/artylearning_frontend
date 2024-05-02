@@ -4,6 +4,7 @@ import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../List/CourseList";
+import StudentSummary from "./StudentSummary";
 function StudentView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
@@ -103,6 +104,7 @@ function StudentView() {
                 </button>
               </Link>
             )}
+            <StudentSummary className="ms-2"  data={data}  />
             <Link to={"/student"}>
               <button
                 className="btn btn-border btn-sm mx-3"
@@ -111,6 +113,7 @@ function StudentView() {
                 Back
               </button>
             </Link>
+            
           </div>
 
           <div className="accordion-item">
