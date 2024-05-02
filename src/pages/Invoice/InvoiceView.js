@@ -69,10 +69,10 @@ function InvoiceView() {
     doc.text(`Student Name :${data.studentName}`, 14, 90);
     doc.text(`Student Id : ${data.studentUniqueId}`, 14, 100);
     // doc.text(`Being Payment Of : ${data.studentUniqueId}`, 14, 110);
-    doc.text(`Course Name : ${data.courseName}`, 135, 80);
+    doc.text(`Course Name : ${data.courseName}`, 120, 80);
     doc.text(
       `Due Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
-      140,
+      120,
       90
     );
 
