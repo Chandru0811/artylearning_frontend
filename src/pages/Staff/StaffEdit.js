@@ -10,8 +10,11 @@ import StaffSalaryEdit from "./EditStaff/StaffSalaryEdit";
 import StaffLeaveEdit from "./EditStaff/StaffLeaveEdit";
 import StaffContractEdit from "./EditStaff/StaffContractEdit";
 import { Link, useParams } from "react-router-dom";
+import Tooltip from "react-bootstrap/Tooltip";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = ["", "", "", "", "", "", "", ""];
+const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Information" },{ tooltip: "Contact Information" },
+{ tooltip: "Required Information" },{ tooltip: "Login Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
 
 function StaffEdit() {
   const { staff_id } = useParams();
@@ -89,19 +92,19 @@ function StaffEdit() {
   };
   return (
     <div class="container-fluid minHeight my-5">
-      <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step key={index} {...stepProps} onClick={() => setActiveStep(index)}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
+      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index} onClick={() => setActiveStep(index)}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+              }
+            >
+              <StepLabel></StepLabel>
+            </OverlayTrigger>
+          </Step>
+        ))}
       </Stepper>
       <div class="container-fluid py-3 card shadow border-0 mb-7 mt-5">
         {activeStep === steps.length ? (
