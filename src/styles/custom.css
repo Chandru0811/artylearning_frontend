@@ -279,3 +279,23 @@
 .red {
   background-color: red;
 }
+
+/* table */
+
+.paysliptable > * {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.paysliptable .table {
+  --bs-table-bg: transparent !important;
+}
+
+.paysliptable .table-bordered {
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #000;
+}
+
+.paysliptable .table-end-border {
+  border-right: 2px solid #000;
+}

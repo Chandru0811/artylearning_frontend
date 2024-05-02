@@ -9,8 +9,11 @@ import StaffLoginAdd from "./AddStaff/StaffLoginAdd";
 import StaffSalaryAdd from "./AddStaff/StaffSalaryAdd";
 import StaffLeaveAdd from "./AddStaff/StaffLeaveAdd";
 import StaffContractAdd from "./AddStaff/StaffContractAdd";
+import Tooltip from "react-bootstrap/Tooltip";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = ["", "", "", "", "", "", "", ""];
+const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Information" },{ tooltip: "Contact Information" },
+{ tooltip: "Required Information" },{ tooltip: "Login Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
 
 function StaffAdd() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -89,10 +92,17 @@ function StaffAdd() {
   };
   return (
     <div class="container-fluid minHeight my-5">
-      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+              }
+            >
+              <StepLabel></StepLabel>
+            </OverlayTrigger>
           </Step>
         ))}
       </Stepper>
