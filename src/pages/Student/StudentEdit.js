@@ -3,13 +3,23 @@ import { useState } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import EditRegistration from "./EditStudent/EditRegistration";
-import EditDetails from "./EditStudent/EditDetails";
+// import EditRegistration from "./EditStudent/EditRegistration";
+// import EditDetails from "./EditStudent/EditDetails";
 import { useParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
+import EditStudentDetails from "./EditStudent/EditStudentDetails";
+import EditParentGuardian from "./EditStudent/EditParentGuardian";
+import EditEmergencyContact from "./EditStudent/EditEmergencyContact";
 
-const steps = [{ tooltip: "Student Details" }, { tooltip: "Emergency Contact" }];
+const steps = [
+  { tooltip: "Student Details" },
+  { tooltip: "Parents/Guardian" },
+  { tooltip: "Emergency Contact" },
+  { tooltip: "Course Details" },
+  { tooltip: "Student Relation" },
+  { tooltip: "Terms and Conditions" },
+];
 
 export default function StudentAdd() {
   const { id } = useParams();
@@ -34,10 +44,15 @@ export default function StudentAdd() {
     switch (activeStep.toString()) {
       case "0":
         if (childRef.current) {
-          childRef.current.EditDetails();
+          childRef.current.Editstudentdetails();
         }
         break;
       case "1":
+        if (childRef.current) {
+          childRef.current.Editparentguardian();
+        }
+        break;
+      case "2":
         if (childRef.current) {
           childRef.current.EmergencyContact();
         }
@@ -82,7 +97,7 @@ export default function StudentAdd() {
       <div className="container-fluid card shadow border-0 mb-4">
         <React.Fragment>
           {activeStep === 0 && (
-            <EditDetails
+            <EditStudentDetails
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
@@ -90,7 +105,15 @@ export default function StudentAdd() {
             />
           )}
           {activeStep === 1 && (
-            <EditRegistration
+            <EditParentGuardian
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+            />
+          )}
+          {activeStep === 2 && (
+            <EditEmergencyContact
               formData={formData}
               ref={childRef}
               setFormData={setFormData}
