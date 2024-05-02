@@ -68,7 +68,7 @@ function Footer() {
           </div>
           <div className="col-md-4 col-12 mt-3">
             <a
-              href="https://hrisasia.com/privacypolicy/index.html"
+              href="https://artylearning.com/privacypolicy/index.html"
               style={{ color: "#000" }}
               target="_blank"
               rel="noreferrer"
@@ -80,7 +80,7 @@ function Footer() {
             <div className="d-flex align-items-center justify-content-between">
               <span>
                 <a
-                  href="https://hrisasia.com/termsandconditions/index.html"
+                  href="https://artylearning.com/termsandconditions/index.html"
                   style={{ color: "#000" }}
                   target="_blank"
                   rel="noreferrer"
