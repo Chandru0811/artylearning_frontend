@@ -11,6 +11,9 @@ import { OverlayTrigger } from "react-bootstrap";
 import EditStudentDetails from "./EditStudent/EditStudentDetails";
 import EditParentGuardian from "./EditStudent/EditParentGuardian";
 import EditEmergencyContact from "./EditStudent/EditEmergencyContact";
+import EditCourseDetail from "./EditStudent/EditCourceDetails";
+import EditStudentRelation from "./EditStudent/EditStudentRelation";
+import EditTermsAndCondition from "./EditStudent/EditTermsAndCondition";
 
 const steps = [
   { tooltip: "Student Details" },
@@ -54,7 +57,22 @@ export default function StudentAdd() {
         break;
       case "2":
         if (childRef.current) {
-          childRef.current.EmergencyContact();
+          childRef.current.Emergencycontact();
+        }
+        break;
+      case "3":
+        if (childRef.current) {
+          childRef.current.coursedetail();
+        }
+        break;
+      case "4":
+        if (childRef.current) {
+          childRef.current.Studentrelation();
+        }
+        break;
+      case "5":
+        if (childRef.current) {
+          childRef.current.termsAndCondition();
         }
         break;
 
@@ -114,6 +132,30 @@ export default function StudentAdd() {
           )}
           {activeStep === 2 && (
             <EditEmergencyContact
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+            />
+          )}
+          {activeStep === 3 && (
+            <EditCourseDetail
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+            />
+          )}
+          {activeStep === 4 && (
+            <EditStudentRelation
+              formData={formData}
+              ref={childRef}
+              setFormData={setFormData}
+              handleNext={handleNext}
+            />
+          )}
+          {activeStep === 5 && (
+            <EditTermsAndCondition
               formData={formData}
               ref={childRef}
               setFormData={setFormData}

@@ -203,7 +203,7 @@ const AddEmergencyContact = forwardRef(
     // };
 
     useImperativeHandle(ref, () => ({
-      EmergencyContact: formik.handleSubmit,
+      Emergencycontact: formik.handleSubmit,
     }));
     return (
       <div className="container-fluid">

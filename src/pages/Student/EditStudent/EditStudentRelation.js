@@ -9,7 +9,7 @@ const validationSchema = Yup.object().shape({
   studentRelationStudentName: Yup.string().required("*Student Name is required!"),
 });
 
-const Addrelation = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditStudentRelation = forwardRef(({ formData, setFormData, handleNext }, ref) => {
 
   const [centerData, setCenterData] = useState(null);
   const fetchData = async () => {
@@ -25,6 +25,38 @@ const Addrelation = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(
+          `/getAllStudentDetails/${formData.id}`
+        );
+        if (
+          response.data.studentRelationModels &&
+          response.data.studentRelationModels.length > 0
+        ) {
+          formik.setValues({
+            ...response.data.studentRelationModels[0],
+            stdRealtionId: response.data.studentRelationModels[0].id,
+          });
+        } else {
+          // If there are no emergency contacts, set default values or handle the case as needed
+          formik.setValues({
+            stdRealtionId: null,
+            studentRelationCenter: "",
+            studentRelation: "",
+            studentRelationStudentName: "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // console.log(formik.values);
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       studentRelationCenter: formData.studentRelationCenter || "",
@@ -34,32 +66,71 @@ const Addrelation = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       try {
-        const requestData = { ...data, studentId: formData.student_id };
-        const response = await api.post(
-          `/createStudentRelations`,
-          requestData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (response.status === 201) {
-          toast.success(response.data.message);
-          setFormData((prv) => ({ ...prv, ...data }));
-          // console.log("Form data is ",formData)
-          handleNext();
+        if (formData.stdRealtionId !== null) {
+            console.log("Emergency Contact ID:", formData.stdRealtionId);
+            const response = await api.put(
+                `/updateStudentRelation/${formData.stdRealtionId}`,
+                data,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            if (response.status === 200) {
+                toast.success(response.data.message);
+                setFormData((prv) => ({ ...prv, ...data }));
+            } else {
+                toast.error(response.data.message);
+            }
         } else {
-          toast.error(response.data.message);
+            const response = await api.post(
+                `/createStudentRelations/${formData.id}`,
+                data,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            if (response.status === 201) {
+                toast.success(response.data.message);
+                setFormData((prv) => ({ ...prv, ...data }));
+            } else {
+                toast.error(response.data.message);
+            }
         }
-      } catch (error) {
+    } catch (error) {
         toast.error(error);
-      }
+    }
+
+      // try {
+      //   const requestData = { ...data, studentId: formData.student_id };
+      //   const response = await api.post(
+      //     `/createStudentRelations`,
+      //     requestData,
+      //     {
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //     }
+      //   );
+      //   if (response.status === 201) {
+      //     toast.success(response.data.message);
+      //     setFormData((prv) => ({ ...prv, ...data }));
+      //     // console.log("Form data is ",formData)
+      //     handleNext();
+      //   } else {
+      //     toast.error(response.data.message);
+      //   }
+      // } catch (error) {
+      //   toast.error(error);
+      // }
     },
   });
 
   useImperativeHandle(ref, () => ({
-    StudentRelation: formik.handleSubmit,
+    Studentrelation: formik.handleSubmit,
   }));
   return (
     <div className="container-fluid">
@@ -141,4 +212,4 @@ const Addrelation = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     </div>
   );
 });
-export default Addrelation;
+export default EditStudentRelation;

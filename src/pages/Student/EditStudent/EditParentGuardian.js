@@ -61,15 +61,25 @@ const EditParentGuardian = forwardRef(
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [selectedParentId, setSelectedParentId] = useState(null);
+    // const [selectedParentId, setSelectedParentId] = useState(null);
 
-    const handleEdit = (parentId) => {
-      setSelectedParentId(parentId);
-      handleShow();
-    };
+    // const handleEdit = (parentId) => {
+    //   setSelectedParentId(parentId);
+    //   handleShow();
+    // };
+
+    const [editingParent, setEditingParent] = useState(null);
+
+const handleEdit = (parentId) => {
+  // Fetch the parent's data
+  const parent = data.studentParentsDetails.find((p) => p.id === parentId);
+  setEditingParent(parent);
+  handleShow();
+};
 
     const formik = useFormik({
       initialValues: {
+        parentDetailId:"",
         parentName: formData.parentName || "",
         parentDateOfBirth: formData.parentDateOfBirth || "",
         email: formData.email || "",
@@ -164,21 +174,6 @@ const EditParentGuardian = forwardRef(
     //   // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, []);
 
-    // useEffect(() => {
-    //   const fetchData = async () => {
-    //     try {
-    //       const response = await api.get(
-    //         `/getAllStudentDetails/${formData.id}`
-    //       );
-    //       setData(response.data);
-    //       formik.setValues(response.data.studentParentsDetails);
-    //     } catch (error) {
-    //       console.error("Error fetching data:", error);
-    //     }
-    //   };
-    //   fetchData();
-    // }, [formData.id]);
-
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -194,23 +189,27 @@ const EditParentGuardian = forwardRef(
       fetchData();
     }, [formData.id]);
 
-
     useEffect(() => {
       const fetchParentData = async () => {
-        if (selectedParentId) {
+        if (editingParent) {
           try {
             const response = await api.get(
               `/getAllStudentDetails/${formData.id}`
             );
             setData(response.data);
-            formik.setValues(response.data);
+
+            formik.setValues({
+              ...response.data.studentParentsDetails[0],
+              parentDetailId: response.data.studentParentsDetails.id,
+              parentDateOfBirth : response.data.studentParentsDetails[0].parentDateOfBirth.substring(0,10),
+            });
           } catch (error) {
             console.error("Error fetching data:", error);
           }
         }
       };
       fetchParentData();
-    }, [selectedParentId]);
+    }, [editingParent]);
 
     useImperativeHandle(ref, () => ({
       Editparentguardian: formik.handleSubmit,
@@ -655,6 +654,159 @@ const EditParentGuardian = forwardRef(
                           formik.errors.occupation && (
                             <div className="invalid-feedback">
                               {formik.errors.occupation}
+                            </div>
+                          )}
+                      </div>
+                      <div className="col-md-6 col-12 mb-2">
+                        <lable className="">
+                         Date Of Birth<span class="text-danger">*</span>
+                        </lable>
+                        <input
+                          type="date"
+                          name="parentDateOfBirth"
+                          className={`form-control ${
+                            formik.touched.parentDateOfBirth &&
+                            formik.errors.parentDateOfBirth
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("parentDateOfBirth")}
+                        />
+                        {formik.touched.parentDateOfBirth &&
+                          formik.errors.parentDateOfBirth && (
+                            <div className="invalid-feedback">
+                              {formik.errors.parentDateOfBirth}
+                            </div>
+                          )}
+                      </div>
+                      <div className="col-md-6 col-12 mb-2">
+                        <lable className="">
+                          Profile Image
+                        </lable>
+                        <input
+                          type="file"
+                          name="file"
+                          className={`form-control    ${
+                            formik.touched.file &&
+                            formik.errors.file
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("file")}
+                        />
+                      </div>
+                      <div className="col-md-6 col-12 mb-2">
+                        <lable className="">
+                          Email<span class="text-danger">*</span>
+                        </lable>
+                        <input
+                          type="email"
+                          name="Email"
+                          className={`form-control    ${
+                            formik.touched.email &&
+                            formik.errors.email
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("email")}
+                        />
+                        {formik.touched.email &&
+                          formik.errors.email && (
+                            <div className="invalid-feedback">
+                              {formik.errors.email}
+                            </div>
+                          )}
+                      </div>
+                      <div className="col-md-6 col-12 mb-2">
+                        <lable className="">
+                          Mobile No<span class="text-danger">*</span>
+                        </lable>
+                        <input
+                          type="text"
+                          name="mobileNumber"
+                          className={`form-control    ${
+                            formik.touched.mobileNumber &&
+                            formik.errors.mobileNumber
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("mobileNumber")}
+                        />
+                        {formik.touched.mobileNumber &&
+                          formik.errors.mobileNumber && (
+                            <div className="invalid-feedback">
+                              {formik.errors.mobileNumber}
+                            </div>
+                          )}
+                      </div>
+                      <div className="col-md-6 col-12 mb-2">
+                        <lable className="">
+                          Relation<span class="text-danger">*</span>
+                        </lable>
+                        <select
+                            className={`form-select ${
+                              formik.touched.relation &&
+                              formik.errors.relation
+                                ? "is-invalid"
+                                : ""
+                            }`}
+                            name="relation"
+                            {...formik.getFieldProps("relation")}
+                          >
+                            <option selected></option>
+                            <option value="Brother">Brother</option>
+                            <option value="Father">Father</option>
+                            <option value="Mother">Mother</option>
+                            <option value="Sister">Sister</option>
+                          </select>
+                        {formik.touched.relation &&
+                          formik.errors.relation && (
+                            <div className="invalid-feedback">
+                              {formik.errors.relation}
+                            </div>
+                          )}
+                      </div>
+                      <div className="col-md-6 col-12 mb-2">
+                        <lable className="">
+                         Postal Code<span class="text-danger">*</span>
+                        </lable>
+                        <input
+                          type="text"
+                          name="postalCode"
+                          className={`form-control    ${
+                            formik.touched.postalCode &&
+                            formik.errors.postalCode
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("postalCode")}
+                        />
+                        {formik.touched.postalCode &&
+                          formik.errors.postalCode && (
+                            <div className="invalid-feedback">
+                              {formik.errors.postalCode}
+                            </div>
+                          )}
+                      </div>
+                      <div className="col-md-12 col-12 mb-2">
+                        <lable className="">
+                         Address<span class="text-danger">*</span>
+                        </lable>
+                        <textarea
+                          type="text"
+                          name="address"
+                          className={`form-control    ${
+                            formik.touched.address &&
+                            formik.errors.address
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                          {...formik.getFieldProps("address")}
+                        />
+                        {formik.touched.address &&
+                          formik.errors.address && (
+                            <div className="invalid-feedback">
+                              {formik.errors.address}
                             </div>
                           )}
                       </div>

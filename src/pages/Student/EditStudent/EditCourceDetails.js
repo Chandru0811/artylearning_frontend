@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
   signatureDate: Yup.string().required("*Signature Date is required!"),
 });
 
-const AddcourseDetail = forwardRef(
+const EditCourseDetail = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
     const [courseData, setCourseData] = useState(null);
 
@@ -32,34 +32,72 @@ const AddcourseDetail = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         data.parentSignature = null;
-
         try {
-          const requestData = {
-            ...data,
-            studentId: formData.student_id,
-            course: data.courseId,
-          };
-
-          const response = await api.post(
-            `/createStudentCourseDetails`,
-            requestData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (response.status === 201) {
-            toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...data }));
-            // console.log("Form data is ",formData)
-            handleNext();
+          if (formData.courseDetailId !== null) {
+              console.log("Emergency Contact ID:", formData.courseDetailId);
+              const response = await api.put(
+                  `/updateStudentCourseDetail/${formData.courseDetailId}`,
+                  data,
+                  {
+                      headers: {
+                          "Content-Type": "application/json",
+                      },
+                  }
+              );
+              if (response.status === 200) {
+                  toast.success(response.data.message);
+                  setFormData((prv) => ({ ...prv, ...data }));
+              } else {
+                  toast.error(response.data.message);
+              }
           } else {
-            toast.error(response.data.message);
+              const response = await api.post(
+                  `/createStudentCourseDetails/${formData.id}`,
+                  data,
+                  {
+                      headers: {
+                          "Content-Type": "application/json",
+                      },
+                  }
+              );
+              if (response.status === 201) {
+                  toast.success(response.data.message);
+                  setFormData((prv) => ({ ...prv, ...data }));
+              } else {
+                  toast.error(response.data.message);
+              }
           }
-        } catch (error) {
+      } catch (error) {
           toast.error(error);
-        }
+      }
+
+        // try {
+        //   const requestData = {
+        //     ...data,
+        //     studentId: formData.student_id,
+        //     course: data.courseId,
+        //   };
+
+        //   const response = await api.post(
+        //     `/createStudentCourseDetails`,
+        //     requestData,
+        //     {
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //     }
+        //   );
+        //   if (response.status === 201) {
+        //     toast.success(response.data.message);
+        //     setFormData((prv) => ({ ...prv, ...data }));
+        //     // console.log("Form data is ",formData)
+        //     handleNext();
+        //   } else {
+        //     toast.error(response.data.message);
+        //   }
+        // } catch (error) {
+        //   toast.error(error);
+        // }
       },
     });
 
@@ -76,8 +114,45 @@ const AddcourseDetail = forwardRef(
       fetchData();
     }, []);
 
+    useEffect(() => {
+      const getData = async () => {
+        try {
+          const response = await api.get(
+            `/getAllStudentDetails/${formData.id}`
+          );
+          if (
+            response.data.studentCourseDetailModels &&
+            response.data.studentCourseDetailModels.length > 0
+          ) {
+            formik.setValues({
+              ...response.data.studentCourseDetailModels[0],
+              courseDetailId: response.data.studentCourseDetailModels[0].id,
+            });
+          } else {
+            // If there are no emergency contacts, set default values or handle the case as needed
+            formik.setValues({
+              courseDetailId: null,
+              courseId:"",
+              startDate: "",
+              startTime: "",
+              parentSignature: null || "",
+              courseDay: "",
+              endDate: "",
+              endTime:"",
+              signatureDate: "",
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      // console.log(formik.values);
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useImperativeHandle(ref, () => ({
-      CourseDetail: formik.handleSubmit,
+      coursedetail: formik.handleSubmit,
     }));
 
     return (
@@ -131,7 +206,7 @@ const AddcourseDetail = forwardRef(
                         </label>
                         <br />
                         <input
-                          className="form-control "
+                          className="form-control"
                           type="time"
                           name="startTime"
                           onChange={formik.handleChange}
@@ -233,4 +308,4 @@ const AddcourseDetail = forwardRef(
     );
   }
 );
-export default AddcourseDetail;
+export default EditCourseDetail;

@@ -79,7 +79,7 @@ export default function StudentAdd() {
     <div class="container-fluid minHeight">
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
-          <Step key={index} onClick={() => setActiveStep(index)}>
+          <Step key={index}>
             <OverlayTrigger
               placement="top"
               overlay={

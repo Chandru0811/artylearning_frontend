@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -9,10 +9,10 @@ const validationSchema = Yup.object().shape({
   termsAndConditionSignatureDate: Yup.string().required(
     "*Signature Date is required!"
   ),
-  agree: Yup.string().required("*Agree Terms and conditions is required!")
+  agree: Yup.string().required("*Agree Terms and conditions is required!"),
 });
 
-const AddTermsAndCondition = forwardRef(
+const EditTermsAndCondition = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
     const formik = useFormik({
@@ -26,26 +26,66 @@ const AddTermsAndCondition = forwardRef(
       onSubmit: async (data) => {
         data.parentSignature = null;
         try {
-          const response = await api.post(
-            `/createStudentTermsAndConditions/${formData.student_id}`,
-            data,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (response.status === 201) {
-            toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...data }));
-            // console.log("Form data is ",formData)
-            navigate("/student");
+          if (formData.stdTermsAndConditionId !== null) {
+              // console.log("Emergency Contact ID:", formData.stdTermsAndConditionId);
+              const response = await api.put(
+                  `/updateStudentTermsAndCondition/${formData.stdTermsAndConditionId}`,
+                  data,
+                  {
+                      headers: {
+                          "Content-Type": "application/json",
+                      },
+                  }
+              );
+              if (response.status === 200) {
+                  toast.success(response.data.message);
+                  setFormData((prv) => ({ ...prv, ...data }));
+              } else {
+                  toast.error(response.data.message);
+              }
           } else {
-            toast.error(response.data.message);
+              const response = await api.post(
+                  `/createStudentTermsAndConditions/${formData.id}`,
+                  data,
+                  {
+                      headers: {
+                          "Content-Type": "application/json",
+                      },
+                  }
+              );
+              if (response.status === 201) {
+                  toast.success(response.data.message);
+                  setFormData((prv) => ({ ...prv, ...data }));
+              } else {
+                  toast.error(response.data.message);
+              }
           }
-        } catch (error) {
+      } catch (error) {
           toast.error(error);
-        }
+      }
+
+
+        // try {
+        //   const response = await api.post(
+        //     `/createStudentTermsAndConditions/${formData.student_id}`,
+        //     data,
+        //     {
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //     }
+        //   );
+        //   if (response.status === 201) {
+        //     toast.success(response.data.message);
+        //     setFormData((prv) => ({ ...prv, ...data }));
+        //     // console.log("Form data is ",formData)
+        //     navigate("/student");
+        //   } else {
+        //     toast.error(response.data.message);
+        //   }
+        // } catch (error) {
+        //   toast.error(error);
+        // }
       },
     });
 
@@ -58,8 +98,41 @@ const AddTermsAndCondition = forwardRef(
     //   });
     // };
 
+    useEffect(() => {
+      const getData = async () => {
+        try {
+          const response = await api.get(
+            `/getAllStudentDetails/${formData.id}`
+          );
+          if (
+            response.data.studentTermsAndConditions &&
+            response.data.studentTermsAndConditions.length > 0
+          ) {
+            formik.setValues({
+              ...response.data.studentTermsAndConditions[0],
+              stdTermsAndConditionId: response.data.studentTermsAndConditions[0].id,
+              termsAndConditionSignatureDate : response.data.studentTermsAndConditions[0].termsAndConditionSignatureDate.substring(0,10),
+            });
+          } else {
+            // If there are no emergency contacts, set default values or handle the case as needed
+            formik.setValues({
+              stdTermsAndConditionId: null,
+              parentSignature: null || "",
+              termsAndConditionSignatureDate: "",
+              agree: "",
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      // console.log(formik.values);
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useImperativeHandle(ref, () => ({
-      TermsAndCondition: formik.handleSubmit,
+      termsAndCondition: formik.handleSubmit,
     }));
 
     return (
@@ -136,14 +209,11 @@ const AddTermsAndCondition = forwardRef(
                         Terms & Conditions.
                       </span>
                     </small>
-                    {formik.touched.agree &&
-                          formik.errors.agree && (
-                            <div className="text-danger">
-                              <small>
-                                {formik.errors.agree}
-                              </small>
-                            </div>
-                          )}
+                    {formik.touched.agree && formik.errors.agree && (
+                      <div className="text-danger">
+                        <small>{formik.errors.agree}</small>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -155,4 +225,4 @@ const AddTermsAndCondition = forwardRef(
   }
 );
 
-export default AddTermsAndCondition;
+export default EditTermsAndCondition;
