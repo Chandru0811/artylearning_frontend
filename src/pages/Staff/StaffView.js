@@ -4,6 +4,7 @@ import { FaCloudDownloadAlt } from "react-icons/fa";
 // import teacher from "../../assets/images/teacher.jpg";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import TeacherSummary from "../Teacher/TeacherSummary";
 
 function StaffView() {
   const { id } = useParams();
@@ -37,7 +38,8 @@ function StaffView() {
                   <span>Back</span>
                 </button>
               </Link>
-              {storedScreens?.payrollIndex && (
+              <TeacherSummary data={data} />
+              {/* {storedScreens?.payrollIndex && (
                 <Link to="/staff/payslip">
                   <button type="button" class="btn btn-border">
                     <span>Payroll</span>
@@ -50,7 +52,7 @@ function StaffView() {
                     <span>Leave Request</span>
                   </button>
                 </Link>
-              )}
+              )} */}
             </div>
           </div>
         </div>

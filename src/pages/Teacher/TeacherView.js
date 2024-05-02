@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../config/URL";
+import TeacherSummary from "./TeacherSummary";
 
 function TeacherView() {
   const { id } = useParams();
@@ -11,10 +12,10 @@ function TeacherView() {
 
   useEffect(() => {
     const getData = async () => {
-      try{
+      try {
         const response = await api.get(`/getAllUsersById/${id}`);
         setData(response.data);
-      }catch (error) {
+      } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
@@ -35,7 +36,8 @@ function TeacherView() {
                   <span>Back</span>
                 </button>
               </Link>
-              {storedScreens?.payrollIndex && (
+              <TeacherSummary data={data} />
+              {/* {storedScreens?.payrollIndex && (
                 <Link to="/teacher/payslip">
                   <button type="submit" class="btn btn-border">
                     <span>Payroll</span>
@@ -48,7 +50,7 @@ function TeacherView() {
                     <span>Leave Request</span>
                   </button>
                 </Link>
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -152,7 +154,7 @@ function TeacherView() {
                 {data.userAccountInfo &&
                 data.userAccountInfo.length > 0 &&
                 data.userAccountInfo[0].startDate
-                  ? data.userAccountInfo[0].startDate.substring(0,10)
+                  ? data.userAccountInfo[0].startDate.substring(0, 10)
                   : "--"}
               </p>
             </div>
@@ -847,7 +849,10 @@ function TeacherView() {
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].startDateOfEmployment
-                  ? data.userContractCreationModels[0].startDateOfEmployment.substring(0,10)
+                  ? data.userContractCreationModels[0].startDateOfEmployment.substring(
+                      0,
+                      10
+                    )
                   : "--"}
               </p>
             </div>
