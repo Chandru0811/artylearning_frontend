@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import TeacherView from "../../pages/Teacher/TeacherView";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
@@ -7,6 +8,9 @@ function Header({ onLogout }) {
   const handelLogOutClick = () => {
     onLogout();
     navigate("/login");
+  };
+  const handleSwitchAccount = () => {
+    navigate("/teacher/view/:id");
   };
   return (
     <nav>
@@ -25,6 +29,9 @@ function Header({ onLogout }) {
               {userName}
             </button>
             <ul class="dropdown-menu px-2">
+            <li style={{ cursor: "pointer" }} onClick={handleSwitchAccount}>
+                Account
+              </li>
               <li style={{ cursor: "pointer" }} onClick={handelLogOutClick}>
                 Log out
               </li>

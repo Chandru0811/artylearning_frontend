@@ -110,6 +110,30 @@ import StudentRegisterCourse from "../pages/Student/StudentRegisterCourse";
 import SendNotification from "../pages/SendNotification/SendNotification";
 import SendNotificationAdd from "../pages/SendNotification/SendNotificationAdd";
 import SendNotificationEdit from "../pages/SendNotification/SendNotificationEdit";
+import StaffingAttendance from "../pages/StaffingAttendance/StaffingAttendance";
+import StaffingAttendanceAdd from "../pages/StaffingAttendance/StaffingAttendanceAdd";
+import StaffingAttendanceEdit from "../pages/StaffingAttendance/StaffingAttendanceEdit";
+import StaffingAttendanceView from "../pages/StaffingAttendance/StaffingAttendanceView";
+import Holiday from "../pages/Staff/Holiday/Holiday";
+import HolidayAdd from "../pages/Staff/Holiday/HolidayAdd";
+import HolidayEdit from "../pages/Staff/Holiday/HolidayEdit";
+import HolidayView from "../pages/Staff/Holiday/HolidayView";
+import Deduction from "../pages/Staff/Deductions/Deduction";
+import DeductionAdd from "../pages/Staff/Deductions/DeductionAdd";
+import DeductionEdit from "../pages/Staff/Deductions/DeductionEdit";
+import DeductionView from "../pages/Staff/Deductions/DeductionView";
+import LeaveAdmin from "../pages/Staff/Leave Admin/LeaveAdmin";
+import Leave from "../pages/Staff/Leave/Leave";
+import LeaveAdminEdit from "../pages/Staff/Leave Admin/LeaveAdminEdit";
+import LeaveAdminView from "../pages/Staff/Leave Admin/LeaveAdminView";
+import LeaveAdd from "../pages/Staff/Leave/LeaveAdd";
+import LeaveView from "../pages/Staff/Leave/LeaveView";
+import Payroll from "../pages/Payroll/PayrollAdmin/Payroll";
+import AddPayroll from "../pages/Payroll/PayrollAdmin/AddPayroll";
+import EditPayroll from "../pages/Payroll/PayrollAdmin/EditPayroll";
+import Viewpayroll from "../pages/Payroll/PayrollAdmin/ViewPayroll";
+import Payslip from "../pages/EmployeePayslip/Payslip";
+import ViewPayslip from "../pages/EmployeePayslip/ViewPayslip";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -194,6 +218,44 @@ function Admin({ handleLogout }) {
                 element={<TeacherLeaveView />}
               />
               <Route path="/teacher/payslip" element={<TeacherPayslip />} />
+
+              {/* StaffingAttendance */}
+              <Route path="/staffing/attendance" element={<StaffingAttendance/>}/>
+              <Route path="/staffing/attendance/add" element={<StaffingAttendanceAdd/>}/>
+              <Route path="/staffing/attendance/edit" element={<StaffingAttendanceEdit/>}/>
+              <Route path="/staffing/attendance/view" element={<StaffingAttendanceView/>}/>
+
+              {/* {/ {/ Holiday /} /} */}
+              <Route path="/holiday" element={<Holiday />} />
+              <Route path="/holiday/add" element={<HolidayAdd />} />
+              <Route path="/holiday/edit" element={<HolidayEdit />} />
+              <Route path="/holiday/list" element={<HolidayView />} />
+
+                   {/* {/ {/ Deduction /} /} */}
+              <Route path="/deduction" element={<Deduction />} />
+              <Route path="/deduction/add" element={<DeductionAdd />} />
+              <Route path="/deduction/edit" element={<DeductionEdit />} />
+              <Route path="/deduction/list" element={<DeductionView />} />
+
+              {/* {/ Leave Admin /} */}
+              <Route path="/leaveadmin" element={<LeaveAdmin />} />
+              <Route path="/leaveadmin/edit" element={<LeaveAdminEdit />} />
+              <Route path="/leaveadmin/view" element={<LeaveAdminView />} />
+
+              {/* {/ Leave /} */}
+              <Route path="/leave" element={<Leave />} />
+              <Route path="/leave/add" element={<LeaveAdd />} />
+              <Route path="/leave/view" element={<LeaveView />} />
+
+              {/* {/ Payroll /} */}
+              <Route path="/payrolladmin" element={<Payroll />} />
+              <Route path="/payrolladmin/add" element={<AddPayroll />} />
+              <Route path="/payrolladmin/edit" element={<EditPayroll />} />
+              <Route path="/payrolladmin/view" element={<Viewpayroll />} />
+
+              {/* {/ Payslip /} */}
+              <Route path="/employeepayslip" element={<Payslip />} />
+              <Route path="/employeepayslip/view" element={<ViewPayslip />} />
 
               {/* Report */}
               <Route path="/report/attendance" element={<Attendance />} />
