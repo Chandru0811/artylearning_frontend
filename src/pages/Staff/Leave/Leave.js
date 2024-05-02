@@ -102,7 +102,7 @@ const Leave = () => {
                                 ) : data.status === "Rejected" ? (
                                     <span className="badge badges-Red">Rejected</span>
                                 ) : (
-                                    <span className="badge badges-Blue">Pending</span>
+                                    <span className="badge badges-Yellow">Pending</span>
                                 )}
                             </td>
                             <td>
