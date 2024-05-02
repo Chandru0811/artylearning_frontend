@@ -12,8 +12,11 @@ import LoginAdd from "./AddTeacher/LoginAdd";
 import LeaveAdd from "./AddTeacher/LeaveAdd";
 import SalaryAdd from "./AddTeacher/SalaryAdd";
 import ContractAdd from "./AddTeacher/ContractAdd";
+import Tooltip from "react-bootstrap/Tooltip";
+import { OverlayTrigger } from "react-bootstrap";
 
-const steps = ["", "", "", "", "", "", "", ""];
+const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Information" },{ tooltip: "Contact Information" },
+{ tooltip: "Login Information" },{ tooltip: "Required Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
 
 export default function TeacherAdd() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -96,21 +99,21 @@ export default function TeacherAdd() {
 
   return (
     <>
-      <div className="container-fluid py-5">
-        <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
-            return (
-              <Step key={index} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
+      <div className="container-fluid minHeight my-5">
+      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+              }
+            >
+              <StepLabel></StepLabel>
+            </OverlayTrigger>
+          </Step>
+        ))}
+      </Stepper>
       </div>
 
       <div class="container-fluid minHeight">
