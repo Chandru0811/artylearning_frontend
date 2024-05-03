@@ -117,8 +117,9 @@ const Lead = () => {
                 </th>
                 <th scope="col">Centre</th>
                 <th scope="col">Student Name</th>
-                <th scope="col">Subject</th>
+
                 <th scope="col">Parent Name</th>
+                <th scope="col">Payment Status</th>
                 {/* <th scope="col">Status</th> */}
                 <th scope="col">Action</th>
                 {/* <th scope="col" className="text-center">
@@ -140,15 +141,17 @@ const Lead = () => {
                       )}
                   </td>
                   <td>{data.studentName}</td>
-                  <td>
-                    {subjectData &&
-                      subjectData.map((subject) =>
-                        parseInt(data.subject) === subject.id
-                          ? subject.subjects || "--"
-                          : ""
-                      )}
-                  </td>
+
                   <td>{data.fathersFullName}</td>
+                  <td>
+                    {data.paymentStatus === "REJECTED" ? (
+                      <span className="badge bg-danger">Rejected</span>
+                    ) : data.paymentStatus === "PAID" ? (
+                      <span className="badge bg-success">Paid</span>
+                    ) : (
+                      <span className="badge bg-warning">Pending</span>
+                    )}
+                  </td>
                   {/* <td>
                     {data.status === "arranged" ? (
                       <span className="badge badges-Brown">
