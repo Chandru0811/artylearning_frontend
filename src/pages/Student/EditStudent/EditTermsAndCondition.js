@@ -18,18 +18,16 @@ const EditTermsAndCondition = forwardRef(
     const formik = useFormik({
       initialValues: {
         parentSignature: null || "",
-        termsAndConditionSignatureDate:
-          formData.termsAndConditionSignatureDate || "",
-        agree: formData.agree || "",
+        termsAndConditionSignatureDate: formData.termsAndConditionSignatureDate || "",
+        agree: formData.agree || "", 
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         data.parentSignature = null;
         try {
-          if (formData.stdTermsAndConditionId !== null) {
-              // console.log("Emergency Contact ID:", formData.stdTermsAndConditionId);
+          if (data.stdTermsAndConditionId !== null) {
               const response = await api.put(
-                  `/updateStudentTermsAndCondition/${formData.stdTermsAndConditionId}`,
+                  `/updateStudentTermsAndCondition/${data.stdTermsAndConditionId}`,
                   data,
                   {
                       headers: {
@@ -39,13 +37,13 @@ const EditTermsAndCondition = forwardRef(
               );
               if (response.status === 200) {
                   toast.success(response.data.message);
-                  setFormData((prv) => ({ ...prv, ...data }));
+                  navigate("/student");
               } else {
                   toast.error(response.data.message);
               }
           } else {
               const response = await api.post(
-                  `/createStudentTermsAndConditions/${formData.id}`,
+                  `/createStudentTermsAndConditions/${data.id}`,
                   data,
                   {
                       headers: {
@@ -55,7 +53,7 @@ const EditTermsAndCondition = forwardRef(
               );
               if (response.status === 201) {
                   toast.success(response.data.message);
-                  setFormData((prv) => ({ ...prv, ...data }));
+                  navigate("/student");
               } else {
                   toast.error(response.data.message);
               }
@@ -63,29 +61,6 @@ const EditTermsAndCondition = forwardRef(
       } catch (error) {
           toast.error(error);
       }
-
-
-        // try {
-        //   const response = await api.post(
-        //     `/createStudentTermsAndConditions/${formData.student_id}`,
-        //     data,
-        //     {
-        //       headers: {
-        //         "Content-Type": "application/json",
-        //       },
-        //     }
-        //   );
-        //   if (response.status === 201) {
-        //     toast.success(response.data.message);
-        //     setFormData((prv) => ({ ...prv, ...data }));
-        //     // console.log("Form data is ",formData)
-        //     navigate("/student");
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // }
       },
     });
 

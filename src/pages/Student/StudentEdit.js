@@ -52,12 +52,12 @@ export default function StudentAdd() {
         break;
       case "1":
         if (childRef.current) {
-          childRef.current.Editparentguardian();
+          childRef.current.editParentGuardian();
         }
         break;
       case "2":
         if (childRef.current) {
-          childRef.current.Emergencycontact();
+          childRef.current.emergencyContact();
         }
         break;
       case "3":

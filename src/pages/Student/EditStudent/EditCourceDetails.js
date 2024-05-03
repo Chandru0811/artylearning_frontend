@@ -33,10 +33,9 @@ const EditCourseDetail = forwardRef(
       onSubmit: async (data) => {
         data.parentSignature = null;
         try {
-          if (formData.courseDetailId !== null) {
-              console.log("Emergency Contact ID:", formData.courseDetailId);
+          if (data.courseDetailId !== null) {
               const response = await api.put(
-                  `/updateStudentCourseDetail/${formData.courseDetailId}`,
+                  `/updateStudentCourseDetail/${data.courseDetailId}`,
                   data,
                   {
                       headers: {
@@ -46,13 +45,13 @@ const EditCourseDetail = forwardRef(
               );
               if (response.status === 200) {
                   toast.success(response.data.message);
-                  setFormData((prv) => ({ ...prv, ...data }));
+                  handleNext();
               } else {
                   toast.error(response.data.message);
               }
           } else {
               const response = await api.post(
-                  `/createStudentCourseDetails/${formData.id}`,
+                  `/createStudentCourseDetails/${data.id}`,
                   data,
                   {
                       headers: {
@@ -62,7 +61,7 @@ const EditCourseDetail = forwardRef(
               );
               if (response.status === 201) {
                   toast.success(response.data.message);
-                  setFormData((prv) => ({ ...prv, ...data }));
+                  handleNext();
               } else {
                   toast.error(response.data.message);
               }
@@ -70,34 +69,6 @@ const EditCourseDetail = forwardRef(
       } catch (error) {
           toast.error(error);
       }
-
-        // try {
-        //   const requestData = {
-        //     ...data,
-        //     studentId: formData.student_id,
-        //     course: data.courseId,
-        //   };
-
-        //   const response = await api.post(
-        //     `/createStudentCourseDetails`,
-        //     requestData,
-        //     {
-        //       headers: {
-        //         "Content-Type": "application/json",
-        //       },
-        //     }
-        //   );
-        //   if (response.status === 201) {
-        //     toast.success(response.data.message);
-        //     setFormData((prv) => ({ ...prv, ...data }));
-        //     // console.log("Form data is ",formData)
-        //     handleNext();
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // }
       },
     });
 
@@ -127,6 +98,10 @@ const EditCourseDetail = forwardRef(
             formik.setValues({
               ...response.data.studentCourseDetailModels[0],
               courseDetailId: response.data.studentCourseDetailModels[0].id,
+              startDate: response.data.studentCourseDetailModels[0].startDate.substring(0,10),
+              endDate: response.data.studentCourseDetailModels[0].endDate.substring(0,10),
+              signatureDate: response.data.studentCourseDetailModels[0].signatureDate.substring(0,10),
+              courseDay: response.data.studentCourseDetailModels[0].courseDay.substring(0,10),
             });
           } else {
             // If there are no emergency contacts, set default values or handle the case as needed

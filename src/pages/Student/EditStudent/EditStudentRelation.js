@@ -66,10 +66,9 @@ const EditStudentRelation = forwardRef(({ formData, setFormData, handleNext }, r
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       try {
-        if (formData.stdRealtionId !== null) {
-            console.log("Emergency Contact ID:", formData.stdRealtionId);
+        if (data.stdRealtionId !== null) {
             const response = await api.put(
-                `/updateStudentRelation/${formData.stdRealtionId}`,
+                `/updateStudentRelation/${data.stdRealtionId}`,
                 data,
                 {
                     headers: {
@@ -79,13 +78,13 @@ const EditStudentRelation = forwardRef(({ formData, setFormData, handleNext }, r
             );
             if (response.status === 200) {
                 toast.success(response.data.message);
-                setFormData((prv) => ({ ...prv, ...data }));
+                handleNext();
             } else {
                 toast.error(response.data.message);
             }
         } else {
             const response = await api.post(
-                `/createStudentRelations/${formData.id}`,
+                `/createStudentRelations/${data.id}`,
                 data,
                 {
                     headers: {
@@ -95,7 +94,7 @@ const EditStudentRelation = forwardRef(({ formData, setFormData, handleNext }, r
             );
             if (response.status === 201) {
                 toast.success(response.data.message);
-                setFormData((prv) => ({ ...prv, ...data }));
+                handleNext();
             } else {
                 toast.error(response.data.message);
             }
@@ -103,29 +102,6 @@ const EditStudentRelation = forwardRef(({ formData, setFormData, handleNext }, r
     } catch (error) {
         toast.error(error);
     }
-
-      // try {
-      //   const requestData = { ...data, studentId: formData.student_id };
-      //   const response = await api.post(
-      //     `/createStudentRelations`,
-      //     requestData,
-      //     {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
-      //   if (response.status === 201) {
-      //     toast.success(response.data.message);
-      //     setFormData((prv) => ({ ...prv, ...data }));
-      //     // console.log("Form data is ",formData)
-      //     handleNext();
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // }
     },
   });
 
