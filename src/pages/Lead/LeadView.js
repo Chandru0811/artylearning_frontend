@@ -13,6 +13,7 @@ function Leadview() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [doassesmentData, setDoassesmentData] = useState([]);
+  const [paymentStatus, setPaymentStatus] = useState("PENDING");
 
   // Payment Status & Summary Modal
 
@@ -43,11 +44,28 @@ function Leadview() {
     }
   };
 
+  const handleSavePaymentStatus = async () => {
+    try {
+      const response = await api.put(`/updateLeadInfo/${id}`, {
+        paymentStatus,
+      });
+      if (response.status === 200) {
+        toast.success("Payment status updated successfully");
+        handleClose(); // Close the modal after successful update
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error updating payment status");
+    }
+  };
+
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllLeadInfoById/${id}`);
+        const response = await api.get(`/getAllLeadInfoWithReferrerById/${id}`);
         setData(response.data);
+        setPaymentStatus(response.data.paymentStatus);
       } catch (error) {
         toast.error("Error Fetch Data ", error);
       }
@@ -84,17 +102,18 @@ function Leadview() {
             <div className="text-start mt-4">
               <select
                 name="paymentStatus"
-                // onChange={formik.handleChange}
+                onChange={(e) => setPaymentStatus(e.target.value)}
                 // onBlur={formik.handleBlur}
                 // value={formik.values.paymentStatus}
+                value={paymentStatus}
                 className="form-select"
                 aria-label="example"
               >
-                <option value="Pending" selected>
+                <option value="PENDING" selected>
                   Pending
                 </option>
-                <option value="Paid">Paid</option>
-                <option value="Cancel">Cancel</option>
+                <option value="PAID">Paid</option>
+                <option value="REJECTED">Rejected</option>
               </select>
             </div>
           </div>
@@ -110,7 +129,7 @@ function Leadview() {
           <button
             className="btn btn-button btn-sm"
             type="submit"
-            onClick={handleClose}
+            onClick={handleSavePaymentStatus}
           >
             Save
           </button>
@@ -195,7 +214,7 @@ function Leadview() {
           </div>
         </Modal.Body>
         {/* <Modal.Footer> */}
-          {/* <button
+        {/* <button
             className="btn btn-border btn-sm"
             type="button"
             onClick={handleClose}
@@ -906,6 +925,20 @@ function Leadview() {
                           <div className="col-6">
                             <p className="text-muted text-sm">
                               : {data.referBy || "--"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <div className="row mb-2">
+                          <div className="col-6 d-flex  align-items-center">
+                            <p className="text-sm fw-medium ">
+                              Refer Center Name
+                            </p>
+                          </div>
+                          <div className="col-6">
+                            <p className="text-muted text-sm">
+                              : {data.referedStudentCenterName || "--"}
                             </p>
                           </div>
                         </div>

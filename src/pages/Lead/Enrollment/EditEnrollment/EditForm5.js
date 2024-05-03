@@ -29,7 +29,7 @@ const EditForm5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       enquiryDate: formData.enquiryDate || "",
       marketingSource: formData.marketingSource || "",
       referBy: formData.referBy || "",
-      referStudentcenter: formData.referStudentcenter || "",
+      referedStudentCenterNameId: formData.referedStudentCenterNameId || "",
       remark: formData.remark || "",
       preferredTimeSlot: formData.preferredTimeSlot || "",
     },
@@ -407,7 +407,9 @@ const EditForm5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                   value={formik.values.marketingSource}
                 >
                   <option selected>--Select--</option>
-                  <option value="Friends or Relatives">Friends or Relatives</option>
+                  <option value="Friends or Relatives">
+                    Friends or Relatives
+                  </option>
                   <option value="Facebook">Facebook</option>
                   <option value="Google">Google</option>
                   <option value="Others">Others</option>
@@ -462,27 +464,31 @@ const EditForm5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <div className="col-md-6 col-12 mb-3">
               <label>Refer Student Center</label>
               <div className="input-group ">
-              <select
-                className="form-select"
-                name="referStudentcenter"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.referStudentcenter}
-              >
-                <option selected></option>
-                {centerData &&
-                  centerData.map((referStudentcenter) => (
-                    <option key={referStudentcenter.id} value={referStudentcenter.id}>
-                      {referStudentcenter.centerNames}
-                    </option>
-                  ))}
-              </select>
+                <select
+                  className="form-select"
+                  name="referedStudentCenterNameId"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.referedStudentCenterNameId}
+                >
+                  <option selected></option>
+                  {centerData &&
+                    centerData.map((referedStudentCenterNameId) => (
+                      <option
+                        key={referedStudentCenterNameId.id}
+                        value={referedStudentCenterNameId.id}
+                      >
+                        {referedStudentCenterNameId.centerNames}
+                      </option>
+                    ))}
+                </select>
               </div>
-              {formik.touched.referStudentcenter && formik.errors.referStudentcenter && (
-                <div className="error text-danger">
-                  <small>{formik.errors.referStudentcenter}</small>
-                </div>
-              )}
+              {formik.touched.referedStudentCenterNameId &&
+                formik.errors.referedStudentCenterNameId && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.referedStudentCenterNameId}</small>
+                  </div>
+                )}
             </div>
 
             <div className="col-md-6 col-12">
