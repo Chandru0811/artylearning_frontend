@@ -43,10 +43,8 @@ function CourseAdd({ onSuccess }) {
     maxClassSize: Yup.number().typeError("*Must be a Number"),
     courseType: Yup.string().required("*Select the Course Type"),
     status: Yup.string().required("*Status is required"),
-    classReplacementAllowed: Yup.string().required(
-      "*Select the Class Replacement Allowed"
-    ),
-    replacementLessonStudentBuffer: Yup.number().notRequired(""),
+    classReplacementAllowed: Yup.string().required("*Select the Class Replacement Allowed"),
+    replacementLessonStudentBuffer: Yup.number().typeError("*Must be a Number"),
   });
 
   const formik = useFormik({
@@ -292,6 +290,11 @@ function CourseAdd({ onSuccess }) {
                   }`}
                   {...formik.getFieldProps("replacementLessonStudentBuffer")}
                 />
+                {formik.touched.replacementLessonStudentBuffer && formik.errors.replacementLessonStudentBuffer && (
+                  <div className="text-danger" style={{ fontSize: ".875em" }}>
+                    {formik.errors.replacementLessonStudentBuffer}
+                  </div>
+                )}
               </div>
             </div>
             <div className="row mt-3">

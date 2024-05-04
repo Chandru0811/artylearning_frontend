@@ -60,7 +60,7 @@ const AssessmentBeliever = forwardRef(
 
           <div className="row">
             <div className="col-md-6 col-12 my-4">
-              <p>Comprehending Of Instructions<span className="text-danger">*</span></p>
+              <p>Comprehension Of Instructions<span className="text-danger">*</span></p>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input mx-2"

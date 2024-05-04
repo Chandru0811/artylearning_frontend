@@ -217,7 +217,7 @@ function CourseView() {
                   {/* <p className="text-muted text-sm">
                     : {data.classReplacementAllowed}
                   </p> */}
-                  <p>{data.classReplacementAllowed ? "Yes" : "No"}</p>
+                  <p className="text-muted text-sm">: {data.classReplacementAllowed ? "Yes" : "No"}</p>
                 </div>
               </div>
             </div>

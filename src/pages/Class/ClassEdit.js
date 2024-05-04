@@ -33,7 +33,6 @@ function ClassEdit() {
     durationInMins: Yup.number()
       .typeError("*Must be a number")
       .required("*Duration min is required")
-      .positive("*Please enter a valid number")
       .integer("*Must be a number"),
 
     durationInHrs: Yup.number()

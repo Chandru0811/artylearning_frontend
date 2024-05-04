@@ -743,8 +743,8 @@ function TeacherView() {
                 :{" "}
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].address
-                  ? data.userContractCreationModels[0].address
+                data.userContractCreationModels[0].userContractAddress
+                  ? data.userContractCreationModels[0].userContractAddress
                   : "--"}
               </p>{" "}
             </div>
