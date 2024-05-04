@@ -1,7 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import api from "../../../config/URL";
+import { toast } from "react-toastify";
 
 
 function HolidayEdit() {
@@ -10,34 +13,77 @@ function HolidayEdit() {
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Select the start date"),
     endDate: Yup.string().required("*Select the end date"),
+    holidayDescription : Yup.string().required("*Holiday Description is required"),
   });
-
+  const [centerData, setCenterData] = useState(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
   const formik = useFormik({
     initialValues: {
-
-      centerName: "Arty Learning @ Hougang",
-      holidayName: "New Year",
+      centerName: "",
+      holidayName: "",
       startDate: "",
       endDate: "",
+      holidayDescription:""
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
+      try {
+        const payload = {
+          centerName: values.centerId,
+          holidayName:values.holidayName,
+          startDate:values.startDate,
+          endDate:values.endDate,
+          holidayDescription:values.holidayDescription
+        }
+        const response = await api.put(`/updateUserHoliday/${id}`, payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      // try {
-      //   const response = await api.post("addPublicHolidays", values);
-      //   // console.log(response)
-      //   if (response.status === 201) {
-      //     toast.success(response.data.message);
-      //     navigate("/Holiday");
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error("Error Submiting Data, ", error);
-      // }
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/holiday");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(
+          error.message || "An error occurred while submitting the form"
+        );
+      }
     },
   });
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllUserHolidayById/${id}`);
+        const formattedResponseData = {
+          ...response.data,
+          startDate: response.data.startDate.substring(0, 10),
+          endDate: response.data.endDate.substring(0, 10),
+        };
+        formik.setValues(formattedResponseData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    getData();
+    fetchData();
+  }, []);
 
   return (
     <section className="HolidayAdd p-3">
@@ -53,42 +99,36 @@ function HolidayEdit() {
                 </Link>
                 &nbsp;&nbsp;
                 <button type="submit" className="btn btn-sm btn-button">
-                  Save
+                  Update
                 </button>
               </div>
             </div>
             <div className="row mt-3">
-            <div className="col-lg-6 col-md-6 col-12">
+              <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <label className="form-label">
                     Center Name<span className="text-danger">*</span>
                   </label>
                   <select
-                    className={`form-control ${
-                      formik.touched.centerName && formik.errors.centerName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("centerName")}
-                    defaultValue={formik.values.centerName} // Set default value here
-                  >
-                    
-                    <option value="Arty Learning @ AKM" selected>
-                      Arty Learning @ AKM
-                    </option>
-                    <option value="Arty Learning @ AK">
-                      Arty Learning @ AK
-                    </option>
-                    <option value="Arty Learning @ KK">
-                      Arty Learning @ KK
-                    </option>
-                  </select>
-
-                  {formik.touched.centerName && formik.errors.centerName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerName}
-                    </div>
-                  )}
+                  {...formik.getFieldProps("centerName")}
+                  name="centerName"
+                  className={`form-select ${
+                    formik.touched.centerName && formik.errors.centerName
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                >
+                  <option selected></option>
+                  {centerData &&
+                    centerData.map((center) => (
+                      <option key={center.id} value={center.id}>
+                        {center.centerNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.centerName && formik.errors.centerName && (
+                  <div className="invalid-feedback">{formik.errors.centerName}</div>
+                )}
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-12">
@@ -119,7 +159,6 @@ function HolidayEdit() {
                   </lable>
                   <input
                     type="date"
-                    value="2024-01-01"
                     className={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
                         ? "is-invalid"
@@ -141,7 +180,6 @@ function HolidayEdit() {
                   </lable>
                   <input
                     type="date"
-                    value="2024-01-01"
                     className={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate
                         ? "is-invalid"
@@ -152,6 +190,28 @@ function HolidayEdit() {
                   {formik.touched.endDate && formik.errors.endDate && (
                     <div className="invalid-feedback">
                       {formik.errors.endDate}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-lg-12 col-md-12 col-12">
+                <div className="text-start mt-2 mb-3">
+                  <lable className="form-lable">
+                    Description<span className="text-danger">*</span>
+                  </lable>
+                  <textarea
+                    type="text"
+                    rows={5}
+                    className={`form-control  ${
+                      formik.touched.holidayDescription && formik.errors.holidayDescription
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("holidayDescription")}
+                  />
+                  {formik.touched.holidayDescription && formik.errors.holidayDescription && (
+                    <div className="invalid-feedback">
+                      {formik.errors.holidayDescription}
                     </div>
                   )}
                 </div>

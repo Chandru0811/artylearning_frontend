@@ -228,8 +228,8 @@ function Admin({ handleLogout }) {
               {/* {/ {/ Holiday /} /} */}
               <Route path="/holiday" element={<Holiday />} />
               <Route path="/holiday/add" element={<HolidayAdd />} />
-              <Route path="/holiday/edit" element={<HolidayEdit />} />
-              <Route path="/holiday/list" element={<HolidayView />} />
+              <Route path="/holiday/edit/:id" element={<HolidayEdit />} />
+              <Route path="/holiday/list/:id" element={<HolidayView />} />
 
                    {/* {/ {/ Deduction /} /} */}
               <Route path="/deduction" element={<Deduction />} />
