@@ -98,11 +98,11 @@ function CenterView() {
             </div>
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
-                <div className="col-6  ">
+                <div className="col-6">
                   <p className="fw-medium">Email</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.email || "--"}</p>
+                  <div className="text-muted text-sm" style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden"  }}>: {data.email || "--"}</div>
                 </div>
               </div>
             </div>

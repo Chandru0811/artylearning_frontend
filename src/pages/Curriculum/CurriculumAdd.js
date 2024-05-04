@@ -93,7 +93,7 @@ function CurriculumAdd({ onSuccess, course_id }) {
                   </select>
                   {formik.touched.lessonNo && formik.errors.lessonNo && (
                     <div className="invalid-feedback">
-                      {formik.errors.status}
+                      {formik.errors.lessonNo}
                     </div>
                   )}
                 </div>
