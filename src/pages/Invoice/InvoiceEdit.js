@@ -611,7 +611,7 @@ export default function InvoiceEdit() {
                         Tax Type<span class="text-danger">*</span>
                       </th>
                       <th>
-                        GST Amountx`<span class="text-danger">*</span>
+                        GST Amount<span class="text-danger">*</span>
                       </th>
                       <th>
                         Total Amount (Inc GST)<span class="text-danger">*</span>
@@ -748,7 +748,7 @@ export default function InvoiceEdit() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Gst
+                    GST
                   </label>
                   <br />
                   <input

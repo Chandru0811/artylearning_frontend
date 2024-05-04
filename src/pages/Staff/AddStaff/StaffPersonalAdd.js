@@ -26,7 +26,7 @@ const StaffPersonalAdd = forwardRef(
         idType: formData.idType || "",
         idNo: formData.idNo || "",
         citizenship: formData.citizenship || "",
-        file: null || "",
+        file: formData.file || "",
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
       },
@@ -199,9 +199,9 @@ const StaffPersonalAdd = forwardRef(
                 }}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.file && formik.errors.file && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.file}</small>
+              {formik.touched.file && !formik.values.file && (
+                <div className="error text-danger">
+                  <small>Photo is required</small>
                 </div>
               )}
             </div>

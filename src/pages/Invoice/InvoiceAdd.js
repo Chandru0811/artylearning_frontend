@@ -21,7 +21,7 @@ export default function InvoiceAdd() {
 
   const validationSchema = Yup.object({
     center: Yup.string().required("*Select a Centre"),
-    parent: Yup.string().required("*Select a parent"),
+    parent: Yup.string().required("*Parent is required"),
     student: Yup.string().required("*Select a Student"),
     course: Yup.string().required("*Select a course"),
     schedule: Yup.string().required("*Select a schedule"),
@@ -542,7 +542,7 @@ export default function InvoiceAdd() {
                         Tax Type<span class="text-danger">*</span>
                       </th>
                       <th>
-                        GST Amountx`<span class="text-danger">*</span>
+                        GST Amount<span class="text-danger">*</span>
                       </th>
                       <th>
                         Total Amount (Inc GST)<span class="text-danger">*</span>
@@ -679,7 +679,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Gst
+                  GST
                   </label>
                   <br />
                   <input

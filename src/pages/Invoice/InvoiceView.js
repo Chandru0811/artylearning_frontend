@@ -306,14 +306,6 @@ function InvoiceView() {
                   - &nbsp; {data.studentUniqueId || "--"}
                 </div>
               </div>
-              <div className="row my-1">
-                <div className="col-6 ">
-                  <p>Due Date</p>
-                </div>
-                <div className="col-6">
-                  - &nbsp; {data.dueDate ? data.dueDate.substring(0, 10) : "--"}
-                </div>
-              </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12">
               <div className="row my-1">
@@ -400,7 +392,7 @@ function InvoiceView() {
             <div className="d-flex justify-content-center flex-column align-items-center">
               <img src={QR} alt=".." />
               <p className="text-center">
-                Arty Learning Pte.Ltd. <br />
+                Arty Learning Pvt.Ltd <br />
                 UEN:202042173K{" "}
               </p>
             </div>

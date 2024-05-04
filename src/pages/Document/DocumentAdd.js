@@ -78,6 +78,7 @@ function DocumentAdd() {
     date: Yup.string().required("*Date is required"),
     folderCategoryListing: Yup.string().required("*FolderCategory is required"),
     batchId: Yup.string().required("*Batch Time is required"),
+    expiredDate: Yup.string().required("*Expired Date is required"),
   });
 
   const formik = useFormik({
@@ -490,10 +491,18 @@ function DocumentAdd() {
               <input
                 name="expiredDate"
                 type="text"
-                className="form-control"
+                className={`form-control  ${
+                  formik.touched.expiredDate && formik.errors.expiredDate
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("expiredDate")}
                 value={calculateExpiryDate(formik.values.date)}
                 readOnly // Make the input read-only
               />
+               {formik.touched.expiredDate && formik.errors.expiredDate && (
+                  <div className="invalid-feedback">{formik.errors.expiredDate}</div>
+                )}
             </div>
           </div>
         </div>

@@ -41,37 +41,39 @@ function ScheduleTeacherView({ id, onSuccess }) {
       </div>
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">View schedule Teache</Modal.Title>
+          <Modal.Title className="headColor">View Schedule Teacher</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="container">
-            <div className="row py-4">
+          <div className="container py-4">
+            <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-5">
                     <p className="fw-bold">Centre</p>
                   </div>
-                  <div className="col-6">
+                  <div className="col-7">
                     <p>:&nbsp;{data.centerName}</p>
                   </div>
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-5">
                     <p className="fw-bold">Course</p>
                   </div>
-                  <div className="col-6">
+                  <div className="col-7">
                     <p>:&nbsp;{data.course}</p>
                   </div>
                 </div>
               </div>
+              </div>
+              <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-5">
                     <p className="fw-bold">Class</p>
                   </div>
-                  <div className="col-6">
+                  <div className="col-7">
                     <p>:&nbsp;{data.className}</p>
                   </div>
                 </div>
@@ -87,12 +89,12 @@ function ScheduleTeacherView({ id, onSuccess }) {
                   </div>
 
                  </div> */}
-              <div className="col-md-6 col-12">
+              <div className="col-md-6 col-12 mb-2">
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-5">
                     <p className="fw-bold">Teacher</p>
                   </div>
-                  <div className="col-6">
+                  <div className="col-7">
                     <p>:&nbsp;{data.teacher}</p>
                   </div>
                 </div>
