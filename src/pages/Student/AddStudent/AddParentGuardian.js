@@ -50,22 +50,24 @@ const AddParentGuardian = forwardRef(
             }))
           : [],
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("Add ParentGuardian",values);
+        console.log("Add ParentGuardian", values);
+
+        // console.log("Form Data is", formDatas);
         try {
           const formDatas = new FormData();
-          values.parentInformation.map((parent, index) => {
-            formDatas.append(`parentInformation[${index}][parentNames]`, parent.parentNames);
-            formDatas.append(`parentInformation[${index}][parentDateOfBirths]`, parent.parentDateOfBirths);
-            formDatas.append(`parentInformation[${index}][emails]`, parent.emails);
-            formDatas.append(`parentInformation[${index}][relations]`, parent.relations);
-            formDatas.append(`parentInformation[${index}][occupations]`, parent.occupations);
-            formDatas.append(`parentInformation[${index}][files]`, parent.files);
-            formDatas.append(`parentInformation[${index}][mobileNumbers]`, parent.mobileNumbers);
-            formDatas.append(`parentInformation[${index}][postalCodes]`, parent.postalCodes);
-            formDatas.append(`parentInformation[${index}][passwords]`, parent.passwords);
-            formDatas.append(`parentInformation[${index}][addresses]`, parent.addresses);
+          values.parentInformation.map((parent) => {
+            formDatas.append(`parentNames`, parent.parentNames);
+            formDatas.append(`parentDateOfBirths`, parent.parentDateOfBirths);
+            formDatas.append(`emails`, parent.emails);
+            formDatas.append(`relations`, parent.relations);
+            formDatas.append(`occupations`, parent.occupations);
+            formDatas.append(`files`, parent.files);
+            formDatas.append(`mobileNumbers`, parent.mobileNumbers);
+            formDatas.append(`postalCodes`, parent.postalCodes);
+            formDatas.append(`passwords`, parent.passwords);
+            formDatas.append(`addresses`, parent.addresses);
           });
 
           const response = await api.post(
@@ -186,10 +188,14 @@ const AddParentGuardian = forwardRef(
                             }
                           ></input>
                           {formik.touched.parentInformation?.[index]?.emails &&
-                            formik.errors.parentInformation?.[index]?.emails && (
+                            formik.errors.parentInformation?.[index]
+                              ?.emails && (
                               <div className="text-danger">
                                 <small>
-                                  {formik.errors.parentInformation[index].emails}
+                                  {
+                                    formik.errors.parentInformation[index]
+                                      .emails
+                                  }
                                 </small>
                               </div>
                             )}
@@ -207,15 +213,20 @@ const AddParentGuardian = forwardRef(
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             value={
-                              formik.values.parentInformation[index]?.passwords ||
-                              ""
+                              formik.values.parentInformation[index]
+                                ?.passwords || ""
                             }
                           ></input>
-                          {formik.touched.parentInformation?.[index]?.passwords &&
-                            formik.errors.parentInformation?.[index]?.passwords && (
+                          {formik.touched.parentInformation?.[index]
+                            ?.passwords &&
+                            formik.errors.parentInformation?.[index]
+                              ?.passwords && (
                               <div className="text-danger">
                                 <small>
-                                  {formik.errors.parentInformation[index].passwords}
+                                  {
+                                    formik.errors.parentInformation[index]
+                                      .passwords
+                                  }
                                 </small>
                               </div>
                             )}
@@ -299,7 +310,10 @@ const AddParentGuardian = forwardRef(
                             name="files"
                             className="form-control"
                             onChange={(event) => {
-                              formik.setFieldValue(`parentInformation[${index}].files`, event.target.files[0]);
+                              formik.setFieldValue(
+                                `parentInformation[${index}].files`,
+                                event.target.files[0]
+                              );
                             }}
                             onBlur={formik.handleBlur}
                           />
@@ -390,11 +404,12 @@ const AddParentGuardian = forwardRef(
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             value={
-                              formik.values.parentInformation[index]?.addresses ||
-                              ""
+                              formik.values.parentInformation[index]
+                                ?.addresses || ""
                             }
                           />
-                          {formik.touched.parentInformation?.[index]?.addresses &&
+                          {formik.touched.parentInformation?.[index]
+                            ?.addresses &&
                             formik.errors.parentInformation?.[index]
                               ?.addresses && (
                               <div className="text-danger">

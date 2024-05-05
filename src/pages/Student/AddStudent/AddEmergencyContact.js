@@ -44,28 +44,51 @@ const AddEmergencyContact = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        console.log("Add Rows Datas", data);
-        try {
-          const response = await api.post(
-            `/createStudentEmergencyContacts/${formData.student_id}`,
-            data,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+        // console.log("Add Rows Datas", data);
+        const formDatas = new FormData();
+
+        // Append fields for emergency contact
+        formDatas.append("emergencyContactName", data.emergencyContactName);
+        formDatas.append("authorizedRelation", data.authorizedRelation);
+        formDatas.append("emergencyContactNo", data.emergencyContactNo);
+
+        // Append fields for each emergency contact information
+        data.emergencyContactInformation.forEach((contact, index) => {
+          formDatas.append(`name`, contact.name);
+          formDatas.append(`emergencyRelation`, contact.emergencyRelation);
+          formDatas.append(`contactNo`, contact.contactNo);
+          formDatas.append(
+            `studentEmergencyContactPostalCode`,
+            contact.studentEmergencyContactPostalCode
           );
-          if (response.status === 201) {
-            toast.success(response.data.message);
-            setFormData((prev) => ({ ...prev, ...data }));
-            // console.log("Form data is ",formData)
-            handleNext();
-          } else {
-            toast.error(response.data.message);
-          }
-        } catch (error) {
-          toast.error(error);
-        }
+          formDatas.append(
+            `studentEmergencyContactAddress`,
+            contact.studentEmergencyContactAddress
+          );
+          formDatas.append(`personProfile`, contact.personProfile);
+        });
+        console.log(formDatas);
+        // try {
+        //   const response = await api.post(
+        //     `/createStudentEmergencyContacts/${formData.student_id}`,
+        //     formDatas,
+        //     {
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //     }
+        //   );
+        //   if (response.status === 201) {
+        //     toast.success(response.data.message);
+        //     setFormData((prev) => ({ ...prev, ...data }));
+        //     // console.log("Form data is ",formData)
+        //     handleNext();
+        //   } else {
+        //     toast.error(response.data.message);
+        //   }
+        // } catch (error) {
+        //   toast.error(error);
+        // }
       },
     });
 

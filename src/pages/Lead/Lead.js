@@ -135,7 +135,7 @@ const Lead = () => {
                     {" "}
                     {centerData &&
                       centerData.map((center) =>
-                        parseInt(data.center) === center.id
+                        parseInt(data.centerId) === center.id
                           ? center.centerNames || "--"
                           : ""
                       )}
