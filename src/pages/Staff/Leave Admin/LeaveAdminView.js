@@ -1,8 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
+import api from "../../../config/URL";
+import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllTeachersWithIds from "../../List/TeacherList";
 
 function LeaveAdminView() {
+
+  const [data, setData] = useState([]);
+  console.log('Leave Datas:',data);
+  const { id } = useParams();
+  const [centerData, setCenterData] = useState(null);
+  const [teacherData, setTeacherData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      const teacherData = await fetchAllTeachersWithIds();
+      setCenterData(centerData);
+      setTeacherData(teacherData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getUserLeaveRequestById/${id}`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getData();
+    fetchData();
+  }, []);
+
   return (
     <div class="container-fluid minHeight mb-5">
       <div class="container-fluid py-4">
@@ -23,7 +58,13 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Centre Name</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: Art Learning @ Hougang</p>
+              <p className="text-muted text-sm">
+                : {centerData &&
+                      centerData.map((centerId) =>
+                        parseInt(data.centerId) === centerId.id
+                          ? centerId.centerNames || "--"
+                          : ""
+                      )}</p>
             </div>
           </div>
         </div>
@@ -33,7 +74,14 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Employee Name</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: Sathish</p>
+              <p className="text-muted text-sm">
+                {/* : {teacherData &&
+                      teacherData.map((teacher) =>
+                        parseInt(data.teacher) === teacher.id
+                          ? teacher.teacherNames || "--"
+                          : ""
+                      )}*/}
+                      : {data.employeeName || "--"}</p> 
             </div>
           </div>
         </div>
@@ -43,7 +91,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Leave Type</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: Sick Leave</p>
+              <p className="text-muted text-sm">: {data.leaveType || "--"}</p>
             </div>
           </div>
         </div>
@@ -53,7 +101,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">No.Of.Days</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: 02</p>
+              <p className="text-muted text-sm">: {data.noOfDays || "--"}</p>
             </div>
           </div>
         </div>
@@ -63,7 +111,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">From Date</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: 2024-04-30</p>
+              <p className="text-muted text-sm">: {data.fromDate || "--"}</p>
             </div>
           </div>
         </div>
@@ -73,7 +121,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">To Date</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: 2024-05-01</p>
+              <p className="text-muted text-sm">: {data.toDate || "--"}</p>
             </div>
           </div>
         </div>
@@ -83,7 +131,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Day Type</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: Full Day</p>
+              <p className="text-muted text-sm">: {data.dayType || "--"}</p>
             </div>
           </div>
         </div>
@@ -93,7 +141,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Request Date</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: 2024-04-29</p>
+              <p className="text-muted text-sm">: {data.requestDate || "--"}</p>
             </div>
           </div>
         </div>
@@ -103,7 +151,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Approver Name</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: Manoj</p>
+              <p className="text-muted text-sm">: {data.approverName || "--"}</p>
             </div>
           </div>
         </div>
@@ -113,7 +161,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Status</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: Approved</p>
+              <p className="text-muted text-sm">: {data.leaveStatus || "--"}</p>
             </div>
           </div>
         </div>
@@ -123,7 +171,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Leave Reason</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: Fever</p>
+              <p className="text-muted text-sm">: {data.leaveReason || "--"}</p>
             </div>
           </div>
         </div>

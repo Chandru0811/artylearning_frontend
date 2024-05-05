@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 function HolidayAdd() {
   const validationSchema = Yup.object({
-    centerName: Yup.string().required("*Center Name is required"),
+    centerId: Yup.string().required("*Center Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Select the start date"),
     endDate: Yup.string().required("*Select the end date"),
@@ -19,7 +19,7 @@ function HolidayAdd() {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      centerName: "",
+      centerId: "",
       holidayName: "",
       startDate: "",
       endDate: "",
@@ -30,7 +30,7 @@ function HolidayAdd() {
       console.log(values);
       try {
         const payload = {
-          centerId: values.centerName,
+          centerId: values.centerId,
           holidayName:values.holidayName,
           startDate:values.startDate,
           endDate:values.endDate,
@@ -94,15 +94,15 @@ function HolidayAdd() {
                     Center Name<span className="text-danger">*</span>
                   </label>
                   <select
-                  {...formik.getFieldProps("centerName")}
-                  name="centerName"
+                  {...formik.getFieldProps("centerId")}
+                  name="centerId"
                   className={`form-select ${
-                    formik.touched.centerName && formik.errors.centerName
+                    formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""
                   }`}
                 >
-                  <option selected></option>
+                  <option selected disabled></option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
@@ -110,8 +110,8 @@ function HolidayAdd() {
                       </option>
                     ))}
                 </select>
-                {formik.touched.centerName && formik.errors.centerName && (
-                  <div className="invalid-feedback">{formik.errors.centerName}</div>
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="invalid-feedback">{formik.errors.centerId}</div>
                 )}
                 </div>
               </div>
