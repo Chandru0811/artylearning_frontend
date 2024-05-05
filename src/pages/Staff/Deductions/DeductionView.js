@@ -1,7 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import api from "../../../config/URL";
+import { toast } from "react-toastify";
 
 function DeductionView() {
+  const [data, setData] = useState({});
+  const { id } = useParams();
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllUserDeductionById/${id}`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Error fetching data");
+      }
+    };
+    getData();
+  }, [id]);
+
   return (
     <section>
       <div className="container">
@@ -23,7 +41,7 @@ function DeductionView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : Arty Learning @ Hougang
+                    : {data.centerNames || "--"}
                   </p>
                 </div>
               </div>
@@ -34,17 +52,22 @@ function DeductionView() {
                   <p className="fw-medium">Employee Name</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: Ragul</p>
+                  <p className="text-muted text-sm">
+                    : {""}
+                    {data.employeeName || "--"}
+                  </p>
                 </div>
               </div>
             </div>
             <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Deduction Nam</p>
+                  <p className="fw-medium">Deduction Name</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: CPF</p>
+                  <p className="text-muted text-sm">
+                    : {data.allDeduction ? data.allDeduction.join(", ") : "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -54,7 +77,9 @@ function DeductionView() {
                   <p className="fw-medium">Deduction Month</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: 2024-01</p>
+                  <p className="text-muted text-sm">
+                    : {data.deductionMonth || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -64,7 +89,9 @@ function DeductionView() {
                   <p className="fw-medium">Deduction Amount</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: $10</p>
+                  <p className="text-muted text-sm">
+                    : {data.deductionAmount || "--"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -74,7 +101,9 @@ function DeductionView() {
                   <p className="fw-medium">Total Deduction Amount</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: $100</p>
+                  <p className="text-muted text-sm">
+                    : {data.totalDeductionAmount || "--"}
+                  </p>
                 </div>
               </div>
             </div>

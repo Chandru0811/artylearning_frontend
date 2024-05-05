@@ -1,13 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import api from "../../../config/URL";
+import { toast } from "react-toastify"; // Adjust import as needed
+import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
 
 function DeductionAdd() {
+  const navigate = useNavigate();
+  const [centerData, setCenterData] = useState(null);
+  const [teacherData, setTeacherData] = useState(null);
+
   const validationSchema = Yup.object({
-    centerName: Yup.string().required("*Center Name is required"),
-    employeeName: Yup.string().required("*Employee Name is required"),
-    deductionName: Yup.string().required("*Select the deduction Name"),
+    centerId: Yup.number().required("*Center Name is required"),
+    userId: Yup.number().required("*Employee Name is required"),
+    allDeduction: Yup.array().min(1, "*Select at least one Deduction Name"),
     deductionMonth: Yup.string().required("*Select the Deduction Month"),
     deductionAmount: Yup.string().required("*Deduction Amount is required"),
     totalDeductionAmount: Yup.string().required(
@@ -18,30 +26,56 @@ function DeductionAdd() {
   const formik = useFormik({
     initialValues: {
       centerName: "",
-      employeeName: "",
-      deductionName: "",
-      deductionMonth: "",
+      userId: "",
+      allDeduction:[],
       deductionAmount: "",
       totalDeductionAmount: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
-
-      // try {
-      //   const response = await api.post("addPublicHolidays", values);
-      //   // console.log(response)
-      //   if (response.status === 201) {
-      //     toast.success(response.data.message);
-      //     navigate("/Holiday");
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error("Error Submiting Data, ", error);
-      // }
+      try {
+        const response = await api.post("createUserDeduction", values);
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/deduction");
+          // Redirect or perform other actions upon successful form submission
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("Error Submitting Data: " + error.message);
+      }
     },
   });
+
+  const handleCenterChange = (event) => {
+    setTeacherData(null);
+    const centerId = event.target.value;
+    formik.setFieldValue("centerId", centerId);
+    fetchTeacher(centerId);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchTeacher = async (centerId) => {
+    try {
+      const teacher = await fetchAllTeacherListByCenter(centerId);
+      setTeacherData(teacher);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   return (
     <section className="HolidayAdd p-3">
@@ -62,67 +96,56 @@ function DeductionAdd() {
               </div>
             </div>
             <div className="row mt-3">
-              <div className="col-lg-6 col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
-                  <label className="form-label">
-                    Center Name<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className={`form-control ${
-                      formik.touched.centerName && formik.errors.centerName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("centerName")}
-                    defaultValue={formik.values.centerName} // Set default value here
-                  >
-                    <option value=""></option>
-                    <option value="Arty Learning @ AKM">
-                      Arty Learning @ AKM
-                    </option>
-                    <option value="Arty Learning @ AK">
-                      Arty Learning @ AK
-                    </option>
-                    <option value="Arty Learning @ KK">
-                      Arty Learning @ KK
-                    </option>
-                  </select>
-
-                  {formik.touched.centerName && formik.errors.centerName && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerName}
-                    </div>
-                  )}
-                </div>
+              <div className="col-md-6 col-12 mb-3 ">
+                <lable className="">Centre Name</lable>
+                <span className="text-danger">*</span>
+                <select
+                  {...formik.getFieldProps("centerId")}
+                  className={`form-select ${
+                    formik.touched.centerId && formik.errors.centerId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  aria-label="Default select example"
+                  onChange={handleCenterChange}
+                >
+                  <option selected></option>
+                  {centerData &&
+                    centerData.map((center) => (
+                      <option key={center.id} value={center.id}>
+                        {center.centerNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.centerId}
+                  </div>
+                )}
               </div>
-              <div className="col-lg-6 col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
-                  <label className="form-label">
-                    Employee Name<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className={`form-control ${
-                      formik.touched.employeeName && formik.errors.employeeName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("employeeName")}
-                    defaultValue={formik.values.employeeName} // Set default value here
-                  >
-                    <option value=""></option>
-                    <option value="Arty Learning @ AKM">Suriya</option>
-                    <option value="Arty Learning @ AK">Chandru</option>
-                    <option value="Arty Learning @ KK">Ragul</option>
-                  </select>
-
-                  {formik.touched.employeeName &&
-                    formik.errors.employeeName && (
-                      <div className="invalid-feedback">
-                        {formik.errors.employeeName}
-                      </div>
-                    )}
-                </div>
+              <div className="col-md-6 col-12 mb-3 ">
+                <lable className="">Employee Name</lable>
+                <select
+                  {...formik.getFieldProps("userId")}
+                  class={`form-select  ${
+                    formik.touched.userId && formik.errors.userId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                >
+                  <option selected></option>
+                  {teacherData &&
+                    teacherData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.teacherNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.userId && formik.errors.userId && (
+                  <div className="invalid-feedback">{formik.errors.userId}</div>
+                )}
               </div>
+
               <div className="col-md-6 col-12 mb-3">
                 <label>Deduction Name</label>
                 <span className="text-danger">*</span>
@@ -132,11 +155,11 @@ function DeductionAdd() {
                       className="form-check-input"
                       type="checkbox"
                       id="myCheckbox1"
-                      name="deductionName"
+                      name="allDeduction"
                       value="CPF"
                       checked={
-                        formik.values.deductionName &&
-                        formik.values.deductionName.includes("CPF")
+                        formik.values.allDeduction &&
+                        formik.values.allDeduction.includes("CPF")
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -153,15 +176,16 @@ function DeductionAdd() {
                       className="form-check-input"
                       type="checkbox"
                       id="myCheckbox2"
-                      name="deductionName"
+                      name="allDeduction"
                       value="LOP"
                       checked={
-                        formik.values.deductionName &&
-                        formik.values.deductionName.includes("LOP")
+                        formik.values.allDeduction &&
+                        formik.values.allDeduction.includes("LOP")
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
+
                     <label for="myCheckbox2" className="custom-checkbox">
                       <div className="inner-square"></div>
                     </label>
@@ -174,15 +198,16 @@ function DeductionAdd() {
                       className="form-check-input"
                       type="checkbox"
                       id="myCheckbox3"
-                      name="deductionName"
-                      value="Loan Interest"
+                      name="allDeduction"
+                      value="LOAN_INTEREST"
                       checked={
-                        formik.values.deductionName &&
-                        formik.values.deductionName.includes("Loan Interest")
+                        formik.values.allDeduction &&
+                        formik.values.allDeduction.includes("LOAN INTEREST")
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
+
                     <label for="myCheckbox3" className="custom-checkbox">
                       <div className="inner-square"></div>
                     </label>
@@ -191,13 +216,13 @@ function DeductionAdd() {
                     </label>
                   </div>
                 </div>
-                {formik.touched.deductionName &&
-                  formik.errors.deductionName && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.deductionName}</small>
-                    </div>
-                  )}
+                {formik.touched.allDeduction && formik.errors.allDeduction && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.allDeduction}</small>
+                  </div>
+                )}
               </div>
+
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <lable className="form-lable">
