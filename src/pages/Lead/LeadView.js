@@ -50,8 +50,30 @@ function Leadview() {
         paymentStatus,
       });
       if (response.status === 200) {
-        toast.success("Payment status updated successfully");
+        toast.success(response.data.message);
         handleClose(); // Close the modal after successful update
+        try {
+          if (paymentStatus === "PAID") {
+            const migrateResponse = await api.post(`/leadToStudentMigrate`, {
+              leadId: id,
+              status: "paid",
+            });
+            if (migrateResponse.status === 201) {
+              toast.success(migrateResponse.data.message);
+            } else {
+              toast.error(migrateResponse.data.message);
+            }
+          }
+        } catch (error) {
+          console.log("Error Payment Response", error?.response?.status);
+          if (error?.response?.status === 409) {
+            toast.warning(error?.response?.data.message);
+          } else if (error?.response?.status === 404) {
+            toast.warning(error?.response?.data.message);
+          } else {
+            toast.error(error?.response?.data.message);
+          }
+        }
       } else {
         toast.error(response.data.message);
       }
@@ -863,7 +885,7 @@ function Leadview() {
                               :{" "}
                               {centerData &&
                                 centerData.map((center) =>
-                                  parseInt(data.center) === center.id
+                                  parseInt(data.centerId) === center.id
                                     ? center.centerNames || "--"
                                     : ""
                                 )}

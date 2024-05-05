@@ -12,7 +12,7 @@ import api from "../../../../config/URL";
 import { logDOM } from "@testing-library/react";
 
 const validationSchema = Yup.object().shape({
-  center: Yup.string().required("*Centre is required"),
+  centerId: Yup.string().required("*Centre is required"),
   // preferredDay: Yup.array().of(Yup.string().required("*Select Days")),
   preferredDay: Yup.array()
     .min(1, "*Select at least one preferred day")
@@ -25,7 +25,7 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
 
   const formik = useFormik({
     initialValues: {
-      center: formData.center || "",
+      centerId: formData.centerId || "",
       preferredDay: formData.preferredDay || "",
       enquiryDate: formData.enquiryDate || "",
       marketingSource: formData.marketingSource || "",
@@ -50,7 +50,7 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         if (response.status === 200) {
           toast.success(response.data.message);
           setFormData((prv) => ({ ...prv, ...data }));
-          handleNext()
+          handleNext();
         } else {
           toast.error(response.data.message);
         }
@@ -92,22 +92,22 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               </lable>
               <select
                 className="form-select"
-                name="center"
+                name="centerId"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.center}
+                value={formik.values.centerId}
               >
                 <option selected></option>
                 {centerData &&
-                  centerData.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
+                  centerData.map((centerId) => (
+                    <option key={centerId.id} value={centerId.id}>
+                      {centerId.centerNames}
                     </option>
                   ))}
               </select>
-              {formik.touched.center && formik.errors.center && (
+              {formik.touched.centerId && formik.errors.centerId && (
                 <div className="error text-danger">
-                  <small>{formik.errors.center}</small>
+                  <small>{formik.errors.centerId}</small>
                 </div>
               )}
             </div>

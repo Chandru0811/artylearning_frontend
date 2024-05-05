@@ -10,7 +10,7 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 
 const Holiday = () => {
   const tableRef = useRef(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  // const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
 
   const [datas, setDatas] = useState([]);
@@ -119,7 +119,7 @@ const Holiday = () => {
                   {centerData &&
                     centerData.map((centerId) =>
                       parseInt(data.centerId) === centerId.id
-                        ? centerId.centerName || "--"
+                        ? centerId.centerNames || "--"
                         : ""
                     )}
                 </td>
@@ -143,13 +143,11 @@ const Holiday = () => {
                         <FaEdit />
                       </button>
                     </Link>
-                    {storedScreens?.centerListingDelete && (
-                      <Delete
+                    <Delete
                         onSuccess={refreshData}
-                        path={`/deleteCenter/${data.id}`}
+                        path={`/deleteUserHoliday/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
-                    )}
                   </div>
                 </td>
               </tr>

@@ -222,8 +222,8 @@ function Admin({ handleLogout }) {
               {/* StaffingAttendance */}
               <Route path="/staffing/attendance" element={<StaffingAttendance/>}/>
               <Route path="/staffing/attendance/add" element={<StaffingAttendanceAdd/>}/>
-              <Route path="/staffing/attendance/edit" element={<StaffingAttendanceEdit/>}/>
-              <Route path="/staffing/attendance/view" element={<StaffingAttendanceView/>}/>
+              <Route path="/staffing/attendance/edit/:id" element={<StaffingAttendanceEdit/>}/>
+              <Route path="/staffing/attendance/view/:id" element={<StaffingAttendanceView/>}/>
 
               {/* {/ {/ Holiday /} /} */}
               <Route path="/holiday" element={<Holiday />} />
@@ -234,24 +234,24 @@ function Admin({ handleLogout }) {
                    {/* {/ {/ Deduction /} /} */}
               <Route path="/deduction" element={<Deduction />} />
               <Route path="/deduction/add" element={<DeductionAdd />} />
-              <Route path="/deduction/edit" element={<DeductionEdit />} />
-              <Route path="/deduction/list" element={<DeductionView />} />
+              <Route path="/deduction/edit/:id" element={<DeductionEdit />} />
+              <Route path="/deduction/list/:id" element={<DeductionView />} />
 
               {/* {/ Leave Admin /} */}
               <Route path="/leaveadmin" element={<LeaveAdmin />} />
-              <Route path="/leaveadmin/edit" element={<LeaveAdminEdit />} />
-              <Route path="/leaveadmin/view" element={<LeaveAdminView />} />
+              <Route path="/leaveadmin/edit/:id" element={<LeaveAdminEdit />} />
+              <Route path="/leaveadmin/view/:id" element={<LeaveAdminView />} />
 
               {/* {/ Leave /} */}
               <Route path="/leave" element={<Leave />} />
               <Route path="/leave/add" element={<LeaveAdd />} />
-              <Route path="/leave/view" element={<LeaveView />} />
+              <Route path="/leave/view/:id" element={<LeaveView />} />
 
               {/* {/ Payroll /} */}
               <Route path="/payrolladmin" element={<Payroll />} />
               <Route path="/payrolladmin/add" element={<AddPayroll />} />
-              <Route path="/payrolladmin/edit" element={<EditPayroll />} />
-              <Route path="/payrolladmin/view" element={<Viewpayroll />} />
+              <Route path="/payrolladmin/edit/:id" element={<EditPayroll />} />
+              <Route path="/payrolladmin/view/:id" element={<Viewpayroll />} />
 
               {/* {/ Payslip /} */}
               <Route path="/employeepayslip" element={<Payslip />} />

@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../../config/URL";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import { toast } from "react-toastify";
 
 function HolidayView() {
   const [data, setData] = useState([]);
   const { id } = useParams();
+  const [centerData, setCenterData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -16,6 +28,7 @@ function HolidayView() {
       }
     };
     getData();
+    fetchData();
   }, []);
 
   return (
@@ -35,11 +48,16 @@ function HolidayView() {
             <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Center Name</p>
+                  <p className="fw-medium">Centre Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.centerName || "--"}
+                    : {centerData &&
+                      centerData.map((centerId) =>
+                        parseInt(data.centerId) === centerId.id
+                          ? centerId.centerNames || "--"
+                          : ""
+                      )}
                   </p>
                 </div>
               </div>
