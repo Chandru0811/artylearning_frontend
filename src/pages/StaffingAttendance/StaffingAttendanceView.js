@@ -1,8 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import api from "../../config/URL";
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllTeachersWithIds from "../List/TeacherList";
+import { toast } from "react-toastify";
 
 
 function StaffingAttendanceView() {
+
+  const [data, setData] = useState([]);
+  console.log('Attendance Datas:',data);
+  const { id } = useParams();
+  const [centerData, setCenterData] = useState(null);
+  const [teacherData, setTeacherData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      const teacherData = await fetchAllTeachersWithIds();
+      setCenterData(centerData);
+      setTeacherData(teacherData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getUserAttendanceById/${id}`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getData();
+    fetchData();
+  }, []);
+
   return (
     <div className="container ">
       <div className="row  mt-3">
@@ -21,7 +56,13 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Centre Name </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: Arty Dreamers</p>
+                  <p className="text-muted text-sm">
+                    : {centerData &&
+                      centerData.map((centerId) =>
+                        parseInt(data.centerId) === centerId.id
+                          ? centerId.centerNames || "--"
+                          : ""
+                      )}</p>
                 </div>
               </div>
             </div>
@@ -31,7 +72,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Employee Name </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: Kishore Kumar</p>
+                  <p className="text-muted text-sm">: {data.employeeName || "--"}</p>
                 </div>
               </div>
             </div>
@@ -41,7 +82,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Date</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: 2024-02-13</p>
+                  <p className="text-muted text-sm">: {data.date || "--"}</p>
                 </div>
               </div>
             </div>
@@ -51,7 +92,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Attendance Status </p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: Present</p>
+                  <p className="text-muted text-sm">: {data.attendanceStatus || "--"}</p>
                 </div>
               </div>
             </div>
@@ -61,7 +102,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Check In</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: 09:00 AM</p>
+                  <p className="text-muted text-sm">: {data.checkIn || "--"}</p>
                 </div>
               </div>
             </div>
@@ -71,17 +112,17 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Check Out</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: 06:00 PM</p>
+                  <p className="text-muted text-sm">: {data.checkOut || "--"}</p>
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-12">
+            {/* <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
                   <p className="fw-medium">Check In Mode</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: Tap In</p>
+                  <p className="text-muted text-sm">: {data.checkInMode || "--"}</p>
                 </div>
               </div>
             </div>
@@ -91,7 +132,17 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Check Out Mode</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: Tap In</p>
+                  <p className="text-muted text-sm">: {data.checkOutMode || "--"}</p>
+                </div>
+              </div>
+            </div> */}
+             <div className="col-md-6 col-12">
+              <div className="row    mb-2">
+                <div className="col-6 ">
+                  <p className="fw-medium">Mode Of Working</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.modeOfWorking || "--"}</p>
                 </div>
               </div>
             </div>
@@ -101,7 +152,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">OT Start Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: 06:01 PM</p>
+                  <p className="text-muted text-sm">: {data.otStartTime || "--"}</p>
                 </div>
               </div>
             </div>
@@ -111,17 +162,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">OT End Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: 08:00 PM</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row    mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Hours Worked</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: 11 Hrs</p>
+                  <p className="text-muted text-sm">: {data.otEndTime || "--"}</p>
                 </div>
               </div>
             </div>
@@ -131,7 +172,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Attendance Remark</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: Good</p>
+                  <p className="text-muted text-sm">: {data.attendanceRemark || "--"}</p>
                 </div>
               </div>
             </div>

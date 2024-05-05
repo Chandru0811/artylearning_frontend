@@ -6,32 +6,33 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-
 function HolidayEdit() {
   const validationSchema = Yup.object({
-    centerName: Yup.string().required("*Center Name is required"),
+    centerId: Yup.string().required("*Center Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Select the start date"),
     endDate: Yup.string().required("*Select the end date"),
-    holidayDescription : Yup.string().required("*Holiday Description is required"),
+    holidayDescription: Yup.string().required(
+      "*Holiday Description is required"
+    ),
   });
   const [centerData, setCenterData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
   const formik = useFormik({
     initialValues: {
-      centerName: "",
+      centerId: "",
       holidayName: "",
       startDate: "",
       endDate: "",
-      holidayDescription:""
+      holidayDescription: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
       try {
         const payload = {
-          centerName: values.centerId,
+          centerId: values.centerId,
           holidayName:values.holidayName,
           startDate:values.startDate,
           endDate:values.endDate,
@@ -110,25 +111,27 @@ function HolidayEdit() {
                     Center Name<span className="text-danger">*</span>
                   </label>
                   <select
-                  {...formik.getFieldProps("centerName")}
-                  name="centerName"
-                  className={`form-select ${
-                    formik.touched.centerName && formik.errors.centerName
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerName && formik.errors.centerName && (
-                  <div className="invalid-feedback">{formik.errors.centerName}</div>
-                )}
+                    {...formik.getFieldProps("centerId")}
+                    name="centerId"
+                    className={`form-select ${
+                      formik.touched.centerId && formik.errors.centerId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected disabled></option>
+                    {centerData &&
+                      centerData.map((center) => (
+                        <option key={center.id} value={center.id}>
+                          {center.centerNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.centerId && formik.errors.centerId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.centerId}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-12">
@@ -203,17 +206,19 @@ function HolidayEdit() {
                     type="text"
                     rows={5}
                     className={`form-control  ${
-                      formik.touched.holidayDescription && formik.errors.holidayDescription
+                      formik.touched.holidayDescription &&
+                      formik.errors.holidayDescription
                         ? "is-invalid"
                         : ""
                     }`}
                     {...formik.getFieldProps("holidayDescription")}
                   />
-                  {formik.touched.holidayDescription && formik.errors.holidayDescription && (
-                    <div className="invalid-feedback">
-                      {formik.errors.holidayDescription}
-                    </div>
-                  )}
+                  {formik.touched.holidayDescription &&
+                    formik.errors.holidayDescription && (
+                      <div className="invalid-feedback">
+                        {formik.errors.holidayDescription}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
