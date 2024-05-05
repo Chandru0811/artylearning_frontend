@@ -85,7 +85,7 @@ function EditPayroll() {
         centerId: values.centerId,
         centerName: selectedCenterName,
         userId: values.userId,
-        employeeName : selectedTeacherName,
+        employeeName: selectedTeacherName,
         grossPay: values.grossPay,
         bonus: values.bonus,
         deductionAmount: values.deductionAmount,
@@ -94,11 +94,15 @@ function EditPayroll() {
       };
       // console.log(values);
       try {
-        const response = await api.put(`/updateUserPayroll/${id}`, requestBody, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await api.put(
+          `/updateUserPayroll/${id}`,
+          requestBody,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/payrolladmin");
@@ -122,6 +126,7 @@ function EditPayroll() {
     const getData = async () => {
       const response = await api.get(`/getAllUserPayrollById/${id}`);
       formik.setValues(response.data);
+      fetchTeacher(response.data.centerId);
       setData(response.data);
     };
 
@@ -162,7 +167,6 @@ function EditPayroll() {
                 aria-label="Default select example"
                 onChange={handleCenterChange}
               >
-                <option selected></option>
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
@@ -186,7 +190,6 @@ function EditPayroll() {
                     : ""
                 }`}
               >
-                <option selected></option>
                 {teacherData &&
                   teacherData.map((teacher) => (
                     <option key={teacher.id} value={teacher.id}>
