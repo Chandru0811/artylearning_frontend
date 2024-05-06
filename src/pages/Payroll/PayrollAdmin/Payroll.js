@@ -87,6 +87,17 @@ const Payroll = () => {
           </button>
         </Link>
       </div>
+      {loading ? (
+        <div className="loader-container">
+          <div class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      ) : (
       <table ref={tableRef} className="display">
         <thead>
           <tr>
@@ -148,6 +159,7 @@ const Payroll = () => {
           ))}
         </tbody>
       </table>
+      )}
     </div>
   );
 };
