@@ -1,8 +1,4 @@
-import React, {
-  forwardRef,
-  useEffect,
-  useState,
-} from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -10,6 +6,7 @@ import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
+import { data } from "jquery";
 
 const validationSchema = Yup.object().shape({
   parentName: Yup.string().required("*Guardian Name is required!"),
@@ -32,6 +29,8 @@ const validationSchema = Yup.object().shape({
 
 const EditParentDetailModel = forwardRef(({ id, getData }) => {
   const [show, setShow] = useState(false);
+  const [data, setData] = useState([]);
+
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
@@ -54,22 +53,35 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
     onSubmit: async (data) => {
       console.log("Api Data:", data);
       try {
-          const response = await api.put(
-            `/updateMultipleStudentParentsDetailsWithProfileImages/${id}`,
-            [data],
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (response.status === 200) {
-            toast.success(response.data.message);
-            handleClose();
-            getData();
-          } else {
-            toast.error(response.data.message);
+        const formDatas = new FormData();
+        formDatas.append('parentName', data.parentName);
+        formDatas.append('parentDateOfBirth', data.parentDateOfBirth);
+        formDatas.append('email', data.email);
+        formDatas.append('relation', data.relation);
+        formDatas.append('occupation', data.occupation);
+        formDatas.append('file', data.file);
+        formDatas.append('mobileNumber', data.mobileNumber);
+        formDatas.append('postalCode', data.postalCode);
+        formDatas.append('address', data.address);
+        formDatas.append('parentId', id);
+        formDatas.append('password', "12345678");
+
+        const response = await api.put(
+          `/updateStudentParentsDetailsWithProfileImages/${id}`,
+          formDatas,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           }
+        );
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          handleClose();
+          getData();
+        } else {
+          toast.error(response.data.message);
+        }
       } catch (error) {
         toast.error(error);
       }
@@ -84,18 +96,17 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         );
         const getFormData = {
           ...response.data,
-          parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10)
+          parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10),
         };
         formik.setValues(getFormData);
-        console.log("Student ParentsDetails Data:",getFormData);
+        setData(response.data);
+        console.log("Student ParentsDetails Data:", getFormData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchParentData();
   }, []);
-
-
 
   return (
     <div className="container-fluid">
@@ -186,19 +197,20 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   <input
                     type="file"
                     name="file"
-                    className={`form-control    ${
-                      formik.touched.file && formik.errors.file
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("file")}
+                    className="form-control"
+                    onChange={(event) => {
+                      formik.setFieldValue("file", event.target.files[0]);
+                    }}
+                    onBlur={formik.handleBlur}
                   />
-                  {/* <img
-                    src={parent.parentSignature}
-                    className="img-fluid rounded"
-                    style={{width:"20%"}}
-                    alt="Parent Signature Img"
-                  ></img> */}
+                  <div className="my-2 text-center">
+                    <img
+                      src={data.profileImage}
+                      className="img-fluid rounded"
+                      style={{ width: "60%" }}
+                      alt="Parent Signature Img"
+                    ></img>
+                  </div>
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <lable className="">
