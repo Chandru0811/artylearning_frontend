@@ -2,10 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../../List/CenterList";
 
 function DeductionView() {
   const [data, setData] = useState({});
   const { id } = useParams();
+  const [centerData, setCenterData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -18,7 +29,8 @@ function DeductionView() {
       }
     };
     getData();
-  }, [id]);
+    fetchData(); // Call fetchData here to fetch center data
+  }, [id]); // Add id as a dependency
 
   return (
     <section>
@@ -41,7 +53,12 @@ function DeductionView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.centerNames || "--"}
+                    : {centerData &&
+                      centerData.map((centerId) =>
+                        parseInt(data.centerId) === centerId.id
+                          ? centerId.centerNames || "--"
+                          : ""
+                      )}
                   </p>
                 </div>
               </div>
@@ -95,7 +112,7 @@ function DeductionView() {
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-12">
+            {/* <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6  ">
                   <p className="fw-medium">Total Deduction Amount</p>
@@ -106,7 +123,7 @@ function DeductionView() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

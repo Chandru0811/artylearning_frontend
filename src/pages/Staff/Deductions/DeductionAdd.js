@@ -3,61 +3,88 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
-import { toast } from "react-toastify"; // Adjust import as needed
+import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+
+const validationSchema = Yup.object({
+  centerId: Yup.number().required("*Center Name is required"),
+  userId: Yup.number().required("*Employee Name is required"),
+  allDeduction: Yup.string().required("*Select the Deduction Name"),
+  deductionMonth: Yup.string().required("*Select the Deduction Month"),
+  deductionAmount: Yup.string().required("*Deduction Amount is required"),
+});
 
 function DeductionAdd() {
-  const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
-
-  const validationSchema = Yup.object({
-    centerId: Yup.number().required("*Center Name is required"),
-    userId: Yup.number().required("*Employee Name is required"),
-    allDeduction: Yup.array().min(1, "*Select at least one Deduction Name"),
-    deductionMonth: Yup.string().required("*Select the Deduction Month"),
-    deductionAmount: Yup.string().required("*Deduction Amount is required"),
-    totalDeductionAmount: Yup.string().required(
-      "*Total Deduction Amount is required"
-    ),
-  });
+  const [userNamesData, setUserNameData] = useState(null);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      centerName: "",
+      centerId: "",
       userId: "",
-      allDeduction:[],
+      allDeduction: "",
+      deductionMonth: "",
       deductionAmount: "",
-      totalDeductionAmount: "",
+     
     },
-    validationSchema: validationSchema,
+     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log("Attendance Emp:", values);
+      let selectedCenterName = "";
+      let selectedEmployeeName = "";
+
+      centerData.forEach((center) => {
+        if (parseInt(values.centerId) === center.id) {
+          selectedCenterName = center.centerNames || "--";
+        }
+      });
+
+      userNamesData.forEach((employee) => {
+        if (parseInt(values.userId) === employee.id) {
+          selectedEmployeeName = employee.userNames || "--";
+        }
+      });
+
+      let payload = {
+        centerId: values.centerId,
+        centerName: selectedCenterName,
+        userId: values.employeeName,
+        employeeName: selectedEmployeeName,
+        allDeduction: values.allDeduction,
+        deductionMonth: values.deductionMonth,
+        deductionAmount: values.deductionAmount,
+      };
+
       try {
-        const response = await api.post("createUserDeduction", values);
+        const response = await api.post("/createUserDeduction", payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/deduction");
-          // Redirect or perform other actions upon successful form submission
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Error Submitting Data: " + error.message);
+        toast.error(error);
       }
     },
   });
 
-  const handleCenterChange = (event) => {
-    setTeacherData(null);
+  const handleCenterChange = async (event) => {
+    setUserNameData(null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
-    fetchTeacher(centerId);
+    try {
+      await fetchUserName(centerId);
+    } catch (error) {
+      toast.error(error);
+    }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const fetchData = async () => {
     try {
@@ -68,14 +95,19 @@ function DeductionAdd() {
     }
   };
 
-  const fetchTeacher = async (centerId) => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchUserName = async (centerId) => {
     try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setTeacherData(teacher);
+      const userNames = await fetchAllEmployeeListByCenter(centerId);
+      setUserNameData(userNames);
     } catch (error) {
       toast.error(error);
     }
   };
+
 
   return (
     <section className="HolidayAdd p-3">
@@ -109,7 +141,7 @@ function DeductionAdd() {
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
-                  <option selected></option>
+                  <option selected disabled></option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
@@ -133,11 +165,11 @@ function DeductionAdd() {
                       : ""
                   }`}
                 >
-                  <option selected></option>
-                  {teacherData &&
-                    teacherData.map((teacher) => (
-                      <option key={teacher.id} value={teacher.id}>
-                        {teacher.teacherNames}
+                  <option selected disabled></option>
+                  {userNamesData &&
+                    userNamesData.map((userName) => (
+                      <option key={userName.id} value={userName.id}>
+                        {userName.userNames}
                       </option>
                     ))}
                 </select>
@@ -145,8 +177,33 @@ function DeductionAdd() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
+              <div className="col-md-6 col-12 mb-3 ">
+                <lable className="">Deduction Name</lable>
+                <span className="text-danger">*</span>
+                <select
+                  {...formik.getFieldProps("allDeduction")}
+                  className={`form-select ${
+                    formik.touched.allDeduction && formik.errors.allDeduction
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  aria-label="Default select example"
+                 
+                >
+                  <option></option>
+                  <option>CPF</option>
+                  <option>LOP</option>
+                  <option>LOAN INTEREST</option>
+                 
+                </select>
+                {formik.touched.allDeduction && formik.errors.allDeduction && (
+                  <div className="invalid-feedback">
+                    {formik.errors.allDeduction}
+                  </div>
+                )}
+              </div>
 
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12">
                 <label>Deduction Name</label>
                 <span className="text-danger">*</span>
                 <div className="mt-2 d-flex">
@@ -164,10 +221,10 @@ function DeductionAdd() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
-                    <label for="myCheckbox1" className="custom-checkbox">
+                    <label htmlFor="myCheckbox1" className="custom-checkbox">
                       <div className="inner-square"></div>
                     </label>
-                    <label for="myCheckbox1" className="mx-1">
+                    <label htmlFor="myCheckbox1" className="mx-1">
                       CPF
                     </label>
                   </div>
@@ -186,10 +243,10 @@ function DeductionAdd() {
                       onBlur={formik.handleBlur}
                     />
 
-                    <label for="myCheckbox2" className="custom-checkbox">
+                    <label htmlFor="myCheckbox2" className="custom-checkbox">
                       <div className="inner-square"></div>
                     </label>
-                    <label for="myCheckbox2" className="mx-1">
+                    <label htmlFor="myCheckbox2" className="mx-1">
                       LOP
                     </label>
                   </div>
@@ -202,16 +259,16 @@ function DeductionAdd() {
                       value="LOAN_INTEREST"
                       checked={
                         formik.values.allDeduction &&
-                        formik.values.allDeduction.includes("LOAN INTEREST")
+                        formik.values.allDeduction.includes("LOAN_INTEREST")
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
 
-                    <label for="myCheckbox3" className="custom-checkbox">
+                    <label htmlFor="myCheckbox3" className="custom-checkbox">
                       <div className="inner-square"></div>
                     </label>
-                    <label for="myCheckbox3" className="mx-1">
+                    <label htmlFor="myCheckbox3" className="mx-1">
                       Loan Interest
                     </label>
                   </div>
@@ -221,16 +278,16 @@ function DeductionAdd() {
                     <small>{formik.errors.allDeduction}</small>
                   </div>
                 )}
-              </div>
+              </div> */}
 
-              <div className="col-lg-6 col-md-6 col-12">
+              <div className="col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
-                  <lable className="form-lable">
+                  <label className="form-label">
                     Deduction Month<span className="text-danger">*</span>
-                  </lable>
+                  </label>
                   <input
                     type="month"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.deductionMonth &&
                       formik.errors.deductionMonth
                         ? "is-invalid"
@@ -246,14 +303,15 @@ function DeductionAdd() {
                     )}
                 </div>
               </div>
-              <div className="col-lg-6 col-md-6 col-12">
+
+              <div className="col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
-                  <lable className="form-lable">
+                  <label className="form-label">
                     Deduction Amount<span className="text-danger">*</span>
-                  </lable>
+                  </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.deductionAmount &&
                       formik.errors.deductionAmount
                         ? "is-invalid"
@@ -269,14 +327,15 @@ function DeductionAdd() {
                     )}
                 </div>
               </div>
-              <div className="col-lg-6 col-md-6 col-12">
+
+              {/* <div className="col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
-                  <lable className="form-lable">
+                  <label className="form-label">
                     Total Deduction Amount<span className="text-danger">*</span>
-                  </lable>
+                  </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.totalDeductionAmount &&
                       formik.errors.totalDeductionAmount
                         ? "is-invalid"
@@ -291,7 +350,7 @@ function DeductionAdd() {
                       </div>
                     )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </form>
         </div>

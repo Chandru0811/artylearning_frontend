@@ -5,47 +5,22 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+
+const validationSchema = Yup.object({
+  centerId: Yup.string().required("*Center Name is required"),
+  userId: Yup.string().required("*Employee Name is required"),
+  allDeduction: Yup.string().required("*Select the Deduction Name"),
+  deductionMonth: Yup.string().required("*Select the Deduction Month"),
+  deductionAmount: Yup.string().required("*Deduction Amount is required"),
+  
+});
 
 function DeductionEdit() {
-  const { id } = useParams();
+  const [centerData, setCenterData] = useState(null);
+  const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
-  const [centerData, setCenterData] = useState([]);
-  const [teacherData, setTeacherData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const centers = await fetchAllCentersWithIds();
-        setCenterData(centers);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const fetchTeachers = async (centerId) => {
-    try {
-      const teachers = await fetchAllTeacherListByCenter(centerId);
-      setTeacherData(teachers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Center Name is required"),
-    userId: Yup.string().required("*Employee Name is required"),
-    allDeduction: Yup.array().min(1, "*Select at least one Deduction Name"),
-    //  allDeduction: Yup.string().required("*Select the Deduction Name"),
-    deductionMonth: Yup.string().required("*Select the Deduction Month"),
-    deductionAmount: Yup.string().required("*Deduction Amount is required"),
-    totalDeductionAmount: Yup.string().required(
-      "*Total Deduction Amount is required"
-    ),
-  });
+  const { id } = useParams();
 
   const formik = useFormik({
     initialValues: {
@@ -53,13 +28,12 @@ function DeductionEdit() {
       userId: "",
       deductionMonth: "",
       deductionAmount: "",
-      totalDeductionAmount: "",
-      allDeduction: [],
+     
+      allDeduction: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-
         const response = await api.put(`/updateUserDeduction/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
@@ -67,7 +41,7 @@ function DeductionEdit() {
         });
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/deduction");
+          navigate("/staffing/attendance");
         } else {
           toast.error(response.data.message);
         }
@@ -77,37 +51,47 @@ function DeductionEdit() {
     },
   });
 
+  const handleCenterChange = async (event) => {
+    setUserNameData(null);
+    const centerId = event.target.value;
+    formik.setFieldValue("centerId", centerId);
+    try {
+      await fetchUserName(centerId);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchUserName = async (centerId) => {
+    try {
+      const userNames = await fetchAllEmployeeListByCenter(centerId);
+      setUserNameData(userNames);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllUserDeductionById/${id}`);
-        if (response.status === 200) {
-          const deductionData = response.data;
-          formik.setValues({
-            centerId: deductionData.centerId,
-            userId: deductionData.userId,
-            deductionMonth: deductionData.deductionMonth,
-            deductionAmount: deductionData.deductionAmount,
-            totalDeductionAmount: deductionData.totalDeductionAmount,
-            allDeduction: deductionData.allDeduction,
-          });
-          fetchTeachers(deductionData.centerId);
-        } else {
-          toast.error(response.data.message);
-        }
+        formik.setValues(response.data);
       } catch (error) {
-        toast.error("Error fetching data:", error);
+        console.error("Error fetching data:", error);
       }
     };
-
     getData();
-  }, [id]);
-
-  const handleCenterChange = (event) => {
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    fetchTeachers(centerId);
-  };
+    fetchData();
+  }, []);
 
   return (
     <section className="HolidayAdd p-3">
@@ -165,11 +149,11 @@ function DeductionEdit() {
                       : ""
                   }`}
                 >
-                  <option selected></option>
-                  {teacherData &&
-                    teacherData.map((teacher) => (
-                      <option key={teacher.id} value={teacher.id}>
-                        {teacher.teacherNames}
+                  <option selected disabled></option>
+                  {userNamesData &&
+                    userNamesData.map((userName) => (
+                      <option key={userName.id} value={userName.id}>
+                        {userName.userNames}
                       </option>
                     ))}
                 </select>
@@ -177,8 +161,33 @@ function DeductionEdit() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
+              <div className="col-md-6 col-12 mb-3 ">
+                <lable className="">Deduction Name</lable>
+                <span className="text-danger">*</span>
+                <select
+                  {...formik.getFieldProps("allDeduction")}
+                  className={`form-select ${
+                    formik.touched.allDeduction && formik.errors.allDeduction
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  aria-label="Default select example"
+                 
+                >
+                 
+                  <option value="CPF">CPF</option>
+                  <option value="LOP">LOP</option>
+                  <option value="LOAN INTEREST">LOAN INTEREST</option>
+                 
+                </select>
+                {formik.touched.allDeduction && formik.errors.allDeduction && (
+                  <div className="invalid-feedback">
+                    {formik.errors.allDeduction}
+                  </div>
+                )}
+              </div>
 
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12 mb-3">
                 <label>Deduction Name</label>
                 <span className="text-danger">*</span>
                 <div className="mt-2 d-flex">
@@ -253,7 +262,7 @@ function DeductionEdit() {
                     <small>{formik.errors.allDeduction}</small>
                   </div>
                 )}
-              </div>
+              </div> */}
 
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
@@ -301,7 +310,7 @@ function DeductionEdit() {
                     )}
                 </div>
               </div>
-              <div className="col-lg-6 col-md-6 col-12">
+              {/* <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <lable className="form-lable">
                     Total Deduction Amount<span className="text-danger">*</span>
@@ -323,7 +332,7 @@ function DeductionEdit() {
                       </div>
                     )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </form>
         </div>
