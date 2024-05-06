@@ -16,19 +16,20 @@ const validationSchema = Yup.object({
   fromDate: Yup.string().required("*From Date is required"),
   toDate: Yup.string().required("*To Date is required"),
   dayType: Yup.string().required("*Leave Status is required"),
-  leaveStatus : Yup.string().required("*Day Type is required"),
+  leaveStatus: Yup.string().required("*Day Type is required"),
   leaveReason: Yup.string().required("*Leave Reason is required"),
 });
 
 function LeaveAdminEdit() {
   const [centerData, setCenterData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
   const formik = useFormik({
     initialValues: {
       centerId: "",
-      centerName:"",
+      centerName: "",
       userId: "",
       leaveType: "",
       noOfDays: "",
@@ -77,11 +78,15 @@ function LeaveAdminEdit() {
       };
 
       try {
-        const response = await api.put(`/updateUserLeaveRequest/${id}`, payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await api.put(
+          `/updateUserLeaveRequest/${id}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/leaveadmin");
@@ -123,21 +128,34 @@ function LeaveAdminEdit() {
     const getData = async () => {
       try {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
-        const formattedResponseData = {
-          ...response.data,
-          fromDate: response.data.fromDate.substring(0, 10),
-          toDate: response.data.toDate.substring(0, 10),
-        };
-        formik.setValues(formattedResponseData);
+        console.log(response.data);
+        formik.setValues(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     getData();
-    fetchData();
-  }, []);
+  }, [id]);
 
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await api.get(`/getUserLeaveRequestById/${id}`);
+  //       const formattedResponseData = {
+  //         ...response.data,
+  //         fromDate: response.data.fromDate.substring(0, 10),
+  //         toDate: response.data.toDate.substring(0, 10),
+  //       };
+  //       formik.setValues(formattedResponseData);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   getData();
+  //   fetchData();
+  // }, []);
 
   return (
     <section>
@@ -327,8 +345,15 @@ function LeaveAdminEdit() {
               <input
                 type="file"
                 className="form-control"
-                {...formik.getFieldProps("attachment")}
+                onChange={(event) =>
+                  formik.setFieldValue("attachment", event.target.files[0])
+                }
               />
+              {/* <input
+                type="file"
+                className="form-control"
+                {...formik.getFieldProps("attachment")}
+              /> */}
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">

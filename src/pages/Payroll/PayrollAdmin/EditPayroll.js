@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { format } from "date-fns"; // Import format function from date-fns
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
@@ -29,8 +30,10 @@ const validationSchema = Yup.object({
 function EditPayroll() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
-  const navigate = useNavigate();
   const { id } = useParams();
+  const [userSalaryInfo, setUserSalaryInfo] = useState(null);
+
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -38,9 +41,9 @@ function EditPayroll() {
       userId: "",
       grossPay: "",
       payrollMonth: "",
-      bonus: "",
-      deductionAmount: "",
-      netPay: "",
+      bonus: 0,
+      deductionAmount: 0,
+      netPay: 0,
       status: "",
     },
     validationSchema: validationSchema,
@@ -72,7 +75,7 @@ function EditPayroll() {
         netPay: values.netPay,
         status: values.status,
       };
-
+      // console.log(payload);
       try {
         const response = await api.put(`/updateUserPayroll/${id}`, payload, {
           headers: {
@@ -90,10 +93,14 @@ function EditPayroll() {
       }
     },
   });
+
   const handleCenterChange = async (event) => {
     setUserNameData(null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
+    formik.setFieldValue("deductionAmount", "");
+    formik.setFieldValue("grossPay", "");
+    formik.setFieldValue("bonus", "");
     try {
       await fetchUserName(centerId);
     } catch (error) {
@@ -110,6 +117,10 @@ function EditPayroll() {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const fetchUserName = async (centerId) => {
     try {
       const userNames = await fetchAllEmployeeListByCenter(centerId);
@@ -119,15 +130,64 @@ function EditPayroll() {
     }
   };
 
+  const fetchUserSalaryInfo = async (userId, payrollMonth) => {
+    // alert(userId, payrollMonth);
+    const queryParams = new URLSearchParams({
+      userId: 110,
+      deductionMonth: payrollMonth,
+    });
+
+    try {
+      const response = await api.get(
+        `/getCurrentMonthUserDeduction?${queryParams}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setUserSalaryInfo(response.data);
+      formik.setFieldValue("deductionAmount", response.data.deductionAmount);
+      formik.setFieldValue("grossPay", response.data.grossPay);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const currentMonth = format(new Date(), "yyyy-MM");
+    formik.setFieldValue("payrollMonth", currentMonth);
+  }, []);
+
+  const handleUserChange = async (event) => {
+    const userId = event.target.value;
+    formik.setFieldValue("userId", userId);
+    const { payrollMonth } = formik.values;
+    await fetchUserSalaryInfo(userId, payrollMonth);
+  };
+
+  useEffect(() => {
+    const calculateNetPay = () => {
+      const grossPay = parseFloat(formik.values.grossPay) || 0;
+      const bonus = parseFloat(formik.values.bonus) || 0;
+      const deductionAmount = parseFloat(formik.values.deductionAmount) || 0;
+      const netPay = grossPay + bonus - deductionAmount;
+      formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
+    };
+    calculateNetPay();
+  }, [
+    formik.values.grossPay,
+    formik.values.bonus,
+    formik.values.deductionAmount,
+  ]);
+
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllUserPayrollById/${id}`);
-        const formattedResponseData = {
-          ...response.data,
-          date: response.data.date.substring(0, 10),
-        };
-        formik.setValues(formattedResponseData);
+        // console.log("Formated Data is ", response.data);
+        formik.setValues(response.data);
+        fetchUserName(response.data.centerId);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -136,97 +196,6 @@ function EditPayroll() {
     getData();
     fetchData();
   }, []);
-
-  // const { id } = useParams();
-  // const [data, setData] = useState([]);
-  // const navigate = useNavigate();
-  // const [centerData, setCenterData] = useState(null);
-  // const [teacherData, setTeacherData] = useState(null);
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = async () => {
-  //   try {
-  //     const centers = await fetchAllCentersWithIds();
-  //     setCenterData(centers);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-  // };
-
-  //   validationSchema: validationSchema,
-  //   onSubmit: async (values) => {
-  //     let selectedCenterName = "";
-  //     let selectedTeacherName = "";
-
-  //     centerData.forEach((center) => {
-  //       if (parseInt(values.centerId) === center.id) {
-  //         selectedCenterName = center.centerNames || "--";
-  //       }
-  //     });
-
-  //     teacherData.forEach((teacher) => {
-  //       if (parseInt(values.userId) === teacher.id) {
-  //         selectedTeacherName = teacher.teacherNames || "--";
-  //       }
-  //     });
-
-  //     let requestBody = {
-  //       centerId: values.centerId,
-  //       centerName: selectedCenterName,
-  //       userId: values.userId,
-  //       employeeName: selectedTeacherName,
-  //       grossPay: values.grossPay,
-  //       payrollMonth: values.payrollMonth,
-  //       bonus: values.bonus,
-  //       deductionAmount: values.deductionAmount,
-  //       netPay: values.netPay,
-  //       status: values.status,
-  //     };
-  //     // console.log(values);
-  //     try {
-  //       const response = await api.put(
-  //         `/updateUserPayroll/${id}`,
-  //         requestBody,
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
-  //       if (response.status === 200) {
-  //         toast.success(response.data.message);
-  //         navigate("/payrolladmin");
-  //       } else {
-  //         toast.error(response.data.message);
-  //       }
-  //     } catch (error) {
-  //       toast.error(error);
-  //     }
-  //   },
-  // });
-
-  // const handleCenterChange = (event) => {
-  //   setTeacherData(null);
-  //   const centerId = event.target.value;
-  //   formik.setFieldValue("centerId", centerId);
-  //   fetchTeacher(centerId); // Fetch courses for the selected center
-  // };
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const response = await api.get(`/getAllUserPayrollById/${id}`);
-  //     formik.setValues(response.data);
-  //     fetchTeacher(response.data.centerId);
-  //     setData(response.data);
-  //   };
-
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [id]);
 
   return (
     <div className="container-fluid">
@@ -281,8 +250,9 @@ function EditPayroll() {
                     ? "is-invalid"
                     : ""
                 }`}
+                onChange={handleUserChange}
               >
-                <option selected disabled></option>
+                <option></option>
                 {userNamesData &&
                   userNamesData.map((userName) => (
                     <option key={userName.id} value={userName.id}>
@@ -310,6 +280,7 @@ function EditPayroll() {
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                   {...formik.getFieldProps("grossPay")}
+                  readOnly
                 />
                 {formik.touched.grossPay && formik.errors.grossPay && (
                   <div className="invalid-feedback">
@@ -376,6 +347,7 @@ function EditPayroll() {
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                   {...formik.getFieldProps("deductionAmount")}
+                  readOnly
                 />
                 {formik.touched.deductionAmount &&
                   formik.errors.deductionAmount && (
@@ -400,6 +372,7 @@ function EditPayroll() {
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                   {...formik.getFieldProps("netPay")}
+                  readOnly
                 />
                 {formik.touched.netPay && formik.errors.netPay && (
                   <div className="invalid-feedback">{formik.errors.netPay}</div>
