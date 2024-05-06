@@ -156,7 +156,7 @@ function Payslip() {
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6 col-12">
+                {/* <div className="col-md-6 col-12">
                   <div className="row">
                     <div className="col-6">
                       <p className="fw-medium d-flex justify-content-end">
@@ -179,7 +179,7 @@ function Payslip() {
                       <p className="text-muted text-sm">: 0</p>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="row paysliptable ">
                 <div className="col-md-6 col-12">
@@ -187,30 +187,30 @@ function Payslip() {
                     <thead className="table-bordered">
                       <tr>
                         <th scope="col">EARNING</th>
-                        <th scope="col">HOURS</th>
+                        {/* <th scope="col">HOURS</th> */}
                         <th scope="col">AMOUNT</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>BASIC SALARY</td>
-                        <td>224</td>
+                        {/* <td>224</td> */}
                         <td>$4480.00</td>
                       </tr>
-                      <tr>
+                      {/* <tr>
                         <td>OVERTIME</td>
                         <td>5</td>
                         <td>$100.00</td>
-                      </tr>
+                      </tr> */}
                       <tr>
                         <td>BONUS</td>
-                        <td>-</td>
+                        {/* <td>-</td> */}
                         <td>$100.00</td>
                       </tr>
                       <tr className="table-bordered">
                         <td>GROSS PAY</td>
-                        <td>265</td>
-                        <td>$4680.00</td>
+                        {/* <td>265</td> */}
+                        <td>$4580.00</td>
                       </tr>
                     </tbody>
                   </table>
@@ -232,10 +232,10 @@ function Payslip() {
                         <td>LOSS OF PAY</td>
                         <td>$160.00</td>
                       </tr>
-                      <tr>
+                      {/* <tr>
                         <td style={{ visibility: "hidden" }}>jjk</td>
                         <td style={{ visibility: "hidden" }}>fvbg</td>
-                      </tr>
+                      </tr> */}
                       <tr className="table-bordered">
                         <td>DEDUCTION TOTAL</td>
                         <td>$260.00</td>
@@ -251,7 +251,7 @@ function Payslip() {
                       <p className="fw-medium">NET PAY</p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: $4420.00</p>
+                      <p className="text-muted text-sm">: $4320.00</p>
                     </div>
                   </div>
                 </div>
@@ -264,7 +264,7 @@ function Payslip() {
                     </div>
                     <div className="col-6">
                       <p className="text-muted text-sm">
-                        : Four Thousand Four Hundred Twenty Dollars Only
+                        : Four Thousand Three Hundred Twenty Dollars Only
                       </p>
                     </div>
                   </div>
@@ -275,14 +275,12 @@ function Payslip() {
                 <Link to="/">
                   <button className="btn btn-sm btn-border mx-2">Back</button>
                 </Link>
-                <Link to="/">
-                  <button
-                    className="btn btn-success mx-2"
-                    onClick={downloadPdf}
-                  >
-                    Download
-                  </button>
-                </Link>
+                <button
+                  className="btn btn-success mx-2"
+                  onClick={downloadPdf}
+                >
+                  Download
+                </button>
               </div>
             </div>
           </div>

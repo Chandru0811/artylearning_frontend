@@ -4,8 +4,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import api from "../../config/URL";
+import fetchAllEmployeeListByCenter from "../List/EmployeeList";
+
 
 
 const validationSchema = Yup.object({
@@ -23,7 +24,7 @@ const validationSchema = Yup.object({
 
 function StaffingAttendanceAdd() {
   const [centerData, setCenterData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
+  const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -45,7 +46,7 @@ function StaffingAttendanceAdd() {
     onSubmit: async (values) => {
       console.log("Attendance Emp:", values);
       let selectedCenterName = "";
-      let selectedTeacherName = "";
+      let selectedEmployeeName = "";
 
       centerData.forEach((center) => {
         if (parseInt(values.centerId) === center.id) {
@@ -53,9 +54,9 @@ function StaffingAttendanceAdd() {
         }
       });
 
-      teacherData.forEach((teacher) => {
-        if (parseInt(values.userId) === teacher.id) {
-          selectedTeacherName = teacher.teacherNames || "--";
+      userNamesData.forEach((employee) => {
+        if (parseInt(values.userId) === employee.id) {
+          selectedEmployeeName = employee.userNames || "--";
         }
       });
 
@@ -63,7 +64,7 @@ function StaffingAttendanceAdd() {
         centerId: values.centerId,
         centerName: selectedCenterName,
         userId: values.userId,
-        employeeName: selectedTeacherName,
+        employeeName: selectedEmployeeName,
         date: values.date,
         attendanceStatus: values.attendanceStatus,
         modeOfWorking: values.modeOfWorking,
@@ -94,12 +95,16 @@ function StaffingAttendanceAdd() {
     },
   });
 
-  const handleCenterChange = (event) => {
-    setTeacherData(null);
+  const handleCenterChange = async (event) => {
+    setUserNameData(null); 
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
-    fetchTeacher(centerId); // Fetch courses for the selected center
-  };
+    try {
+      await fetchUserName(centerId); 
+    } catch (error) {
+      toast.error(error); 
+    }
+  }
 
   const fetchData = async () => {
     try {
@@ -114,10 +119,10 @@ function StaffingAttendanceAdd() {
     fetchData();
   }, []);
 
-  const fetchTeacher = async (centerId) => {
+  const fetchUserName = async (centerId) => {
     try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setTeacherData(teacher);
+      const userNames = await fetchAllEmployeeListByCenter(centerId);
+      setUserNameData(userNames);
     } catch (error) {
       toast.error(error);
     }
@@ -165,6 +170,7 @@ function StaffingAttendanceAdd() {
                   </div>
                 )}
               </div>
+
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Employee Name</lable>
                 <select
@@ -176,10 +182,10 @@ function StaffingAttendanceAdd() {
                   }`}
                 >
                   <option selected disabled></option>
-                  {teacherData &&
-                    teacherData.map((teacher) => (
-                      <option key={teacher.id} value={teacher.id}>
-                        {teacher.teacherNames}
+                  {userNamesData &&
+                    userNamesData.map((userName) => (
+                      <option key={userName.id} value={userName.id}>
+                        {userName.userNames}
                       </option>
                     ))}
                 </select>
@@ -187,6 +193,7 @@ function StaffingAttendanceAdd() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
+              
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Date</lable>
                 <span className="text-danger">*</span>

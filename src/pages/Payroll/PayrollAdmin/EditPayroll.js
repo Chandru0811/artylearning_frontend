@@ -4,61 +4,40 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
-import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
 import api from "../../../config/URL";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+
+const validationSchema = Yup.object({
+  centerId: Yup.string().required("*Centre name is required"),
+  userId: Yup.string().required("*Employee name is required"),
+  grossPay: Yup.number()
+    .required("*Basic pay is required")
+    .typeError("Basic pay must be a number"),
+  payrollMonth: Yup.string().required("*Select the Payroll Month"),
+  bonus: Yup.number()
+    .required("*Bonus is required")
+    .typeError("Bonus must be a number"),
+  deductionAmount: Yup.number()
+    .required("*Deduction is required")
+    .typeError("Deduction must be a number"),
+  netPay: Yup.number()
+    .required("*Net pay is required")
+    .typeError("Net pay must be a number"),
+  status: Yup.string().required("*Status is required"),
+});
 
 function EditPayroll() {
-  const { id } = useParams();
-  const [data, setData] = useState([]);
-  const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchTeacher = async (centerId) => {
-    try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setTeacherData(teacher);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const validationSchema = Yup.object().shape({
-    centerId: Yup.string().required("*Centre name is required"),
-    userId: Yup.string().required("*Employee name is required"),
-    grossPay: Yup.number()
-      .required("*Gross pay is required")
-      .typeError("Gross pay must be a number"),
-    bonus: Yup.number()
-      .required("*Bonus is required")
-      .typeError("Bonus must be a number"),
-    deductionAmount: Yup.number()
-      .required("*Deduction is required")
-      .typeError("Deduction must be a number"),
-    netPay: Yup.number()
-      .required("*Net pay is required")
-      .typeError("Net pay must be a number"),
-    status: Yup.string().required("*Status is required"),
-  });
+  const [userNamesData, setUserNameData] = useState(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   const formik = useFormik({
     initialValues: {
       centerId: "",
       userId: "",
       grossPay: "",
+      payrollMonth: "",
       bonus: "",
       deductionAmount: "",
       netPay: "",
@@ -67,7 +46,7 @@ function EditPayroll() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       let selectedCenterName = "";
-      let selectedTeacherName = "";
+      let selectedEmployeeName = "";
 
       centerData.forEach((center) => {
         if (parseInt(values.centerId) === center.id) {
@@ -75,34 +54,31 @@ function EditPayroll() {
         }
       });
 
-      teacherData.forEach((teacher) => {
-        if (parseInt(values.userId) === teacher.id) {
-          selectedTeacherName = teacher.teacherNames || "--";
+      userNamesData.forEach((employee) => {
+        if (parseInt(values.userId) === employee.id) {
+          selectedEmployeeName = employee.userNames || "--";
         }
       });
 
-      let requestBody = {
-        centerId: values.centerId,
+      let payload = {
         centerName: selectedCenterName,
+        centerId: values.centerId,
         userId: values.userId,
-        employeeName: selectedTeacherName,
+        employeeName: selectedEmployeeName,
         grossPay: values.grossPay,
+        payrollMonth: values.payrollMonth,
         bonus: values.bonus,
         deductionAmount: values.deductionAmount,
         netPay: values.netPay,
         status: values.status,
       };
-      // console.log(values);
+
       try {
-        const response = await api.put(
-          `/updateUserPayroll/${id}`,
-          requestBody,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await api.put(`/updateUserPayroll/${id}`, payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/payrolladmin");
@@ -114,25 +90,143 @@ function EditPayroll() {
       }
     },
   });
-
-  const handleCenterChange = (event) => {
-    setTeacherData(null);
+  const handleCenterChange = async (event) => {
+    setUserNameData(null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
-    fetchTeacher(centerId); // Fetch courses for the selected center
+    try {
+      await fetchUserName(centerId);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchUserName = async (centerId) => {
+    try {
+      const userNames = await fetchAllEmployeeListByCenter(centerId);
+      setUserNameData(userNames);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
     const getData = async () => {
-      const response = await api.get(`/getAllUserPayrollById/${id}`);
-      formik.setValues(response.data);
-      fetchTeacher(response.data.centerId);
-      setData(response.data);
+      try {
+        const response = await api.get(`/getAllUserPayrollById/${id}`);
+        const formattedResponseData = {
+          ...response.data,
+          date: response.data.date.substring(0, 10),
+        };
+        formik.setValues(formattedResponseData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+    fetchData();
+  }, []);
+
+  // const { id } = useParams();
+  // const [data, setData] = useState([]);
+  // const navigate = useNavigate();
+  // const [centerData, setCenterData] = useState(null);
+  // const [teacherData, setTeacherData] = useState(null);
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
+  // const fetchData = async () => {
+  //   try {
+  //     const centers = await fetchAllCentersWithIds();
+  //     setCenterData(centers);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
+  // };
+
+  //   validationSchema: validationSchema,
+  //   onSubmit: async (values) => {
+  //     let selectedCenterName = "";
+  //     let selectedTeacherName = "";
+
+  //     centerData.forEach((center) => {
+  //       if (parseInt(values.centerId) === center.id) {
+  //         selectedCenterName = center.centerNames || "--";
+  //       }
+  //     });
+
+  //     teacherData.forEach((teacher) => {
+  //       if (parseInt(values.userId) === teacher.id) {
+  //         selectedTeacherName = teacher.teacherNames || "--";
+  //       }
+  //     });
+
+  //     let requestBody = {
+  //       centerId: values.centerId,
+  //       centerName: selectedCenterName,
+  //       userId: values.userId,
+  //       employeeName: selectedTeacherName,
+  //       grossPay: values.grossPay,
+  //       payrollMonth: values.payrollMonth,
+  //       bonus: values.bonus,
+  //       deductionAmount: values.deductionAmount,
+  //       netPay: values.netPay,
+  //       status: values.status,
+  //     };
+  //     // console.log(values);
+  //     try {
+  //       const response = await api.put(
+  //         `/updateUserPayroll/${id}`,
+  //         requestBody,
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       if (response.status === 200) {
+  //         toast.success(response.data.message);
+  //         navigate("/payrolladmin");
+  //       } else {
+  //         toast.error(response.data.message);
+  //       }
+  //     } catch (error) {
+  //       toast.error(error);
+  //     }
+  //   },
+  // });
+
+  // const handleCenterChange = (event) => {
+  //   setTeacherData(null);
+  //   const centerId = event.target.value;
+  //   formik.setFieldValue("centerId", centerId);
+  //   fetchTeacher(centerId); // Fetch courses for the selected center
+  // };
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const response = await api.get(`/getAllUserPayrollById/${id}`);
+  //     formik.setValues(response.data);
+  //     fetchTeacher(response.data.centerId);
+  //     setData(response.data);
+  //   };
+
+  //   getData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [id]);
 
   return (
     <div className="container-fluid">
@@ -153,10 +247,9 @@ function EditPayroll() {
           </div>
 
           <div className="row mt-3">
-            <div className="col-md-6 col-12 mb-2">
-              <label className="form-label">
-                Centre Name<span className="text-danger">*</span>
-              </label>
+            <div className="col-md-6 col-12 mb-3 ">
+              <lable className="">Centre Name</lable>
+              <span className="text-danger">*</span>
               <select
                 {...formik.getFieldProps("centerId")}
                 className={`form-select ${
@@ -167,6 +260,7 @@ function EditPayroll() {
                 aria-label="Default select example"
                 onChange={handleCenterChange}
               >
+                <option selected disabled></option>
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
@@ -178,10 +272,8 @@ function EditPayroll() {
                 <div className="invalid-feedback">{formik.errors.centerId}</div>
               )}
             </div>
-            <div className="col-md-6 col-12 mb-2">
-              <label className="form-label">
-                Employee Name<span className="text-danger">*</span>
-              </label>
+            <div className="col-md-6 col-12 mb-3 ">
+              <lable className="">Employee Name</lable>
               <select
                 {...formik.getFieldProps("userId")}
                 class={`form-select  ${
@@ -190,10 +282,11 @@ function EditPayroll() {
                     : ""
                 }`}
               >
-                {teacherData &&
-                  teacherData.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.teacherNames}
+                <option selected disabled></option>
+                {userNamesData &&
+                  userNamesData.map((userName) => (
+                    <option key={userName.id} value={userName.id}>
+                      {userName.userNames}
                     </option>
                   ))}
               </select>
@@ -201,10 +294,11 @@ function EditPayroll() {
                 <div className="invalid-feedback">{formik.errors.userId}</div>
               )}
             </div>
+
             <div className="  col-md-6 col-12">
               <div className="text-start mt-2 mb-3">
                 <lable className="form-lable">
-                  Gross Pay<span className="text-danger">*</span>
+                  Basic Pay<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
@@ -220,6 +314,27 @@ function EditPayroll() {
                 {formik.touched.grossPay && formik.errors.grossPay && (
                   <div className="invalid-feedback">
                     {formik.errors.grossPay}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="text-start mt-2 mb-3">
+                <label className="form-label">
+                  Payroll Month<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="month"
+                  className={`form-control ${
+                    formik.touched.payrollMonth && formik.errors.payrollMonth
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("payrollMonth")}
+                />
+                {formik.touched.payrollMonth && formik.errors.payrollMonth && (
+                  <div className="invalid-feedback">
+                    {formik.errors.payrollMonth}
                   </div>
                 )}
               </div>
