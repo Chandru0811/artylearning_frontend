@@ -128,7 +128,7 @@ const AddParentDetailModel = forwardRef(({ formData, id, getData }) => {
           `/createMultipleStudentParentsDetailsWithProfileImages/${id}`,
           formDatas,
           {
-            headers: {
+            headers: { 
               "Content-Type": "multipart/form-data",
             },
           }
