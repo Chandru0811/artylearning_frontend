@@ -31,28 +31,31 @@ const AddcourseDetail = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        data.parentSignature = null;
-
         try {
-          const requestData = {
-            ...data,
-            studentId: formData.student_id,
-            course: data.courseId,
-          };
+          const formDatas = new FormData();
+
+          // Append each form field to FormData object
+          formDatas.append("courseId", data.courseId);
+          formDatas.append("courseName", data.courseId);
+          formDatas.append("startDate", data.startDate);
+          formDatas.append("startTime", data.startTime);
+          formDatas.append("file", data.parentSignature);
+          formDatas.append("courseDay", data.courseDay);
+          formDatas.append("endDate", data.endDate);
+          formDatas.append("endTime", data.endTime);
+          formDatas.append("signatureDate", data.signatureDate);
+          formDatas.append("studentDetailId ", formData.student_id); // Assuming formDatas.student_id is defined
+
+          // You don't need to set parentSignature to null in formDatas, it's already null if not set
 
           const response = await api.post(
             `/createStudentCourseDetails`,
-            requestData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+            formDatas
           );
+
           if (response.status === 201) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            // console.log("Form data is ",formData)
             handleNext();
           } else {
             toast.error(response.data.message);

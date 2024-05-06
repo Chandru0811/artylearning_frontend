@@ -9,7 +9,7 @@ const validationSchema = Yup.object().shape({
   termsAndConditionSignatureDate: Yup.string().required(
     "*Signature Date is required!"
   ),
-  agree: Yup.string().required("*Agree Terms and conditions is required!")
+  agree: Yup.string().required("*Agree Terms and conditions is required!"),
 });
 
 const AddTermsAndCondition = forwardRef(
@@ -17,28 +17,35 @@ const AddTermsAndCondition = forwardRef(
     const navigate = useNavigate();
     const formik = useFormik({
       initialValues: {
-        parentSignature: null || "",
+        file: null,
         termsAndConditionSignatureDate:
           formData.termsAndConditionSignatureDate || "",
         agree: formData.agree || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        data.parentSignature = null;
+        const formDatas = new FormData();
+        formDatas.append("file", data.file);
+        formDatas.append(
+          "termsAndConditionSignatureDate",
+          data.termsAndConditionSignatureDate
+        );
+        formDatas.append("agree", data.agree);
+        formDatas.append("studentDetailId", formData.student_id);
+
         try {
           const response = await api.post(
-            `/createStudentTermsAndConditions/${formData.student_id}`,
-            data,
+            `/createStudentTermsAndConditions`,
+            formDatas,
             {
               headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
               },
             }
           );
           if (response.status === 201) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            // console.log("Form data is ",formData)
             navigate("/student");
           } else {
             toast.error(response.data.message);
@@ -48,15 +55,6 @@ const AddTermsAndCondition = forwardRef(
         }
       },
     });
-
-    // const handleNextStep = () => {
-    //   formik.validateForm().then((errors) => {
-    //     formik.handleSubmit();
-    //     if (Object.keys(errors).length === 0) {
-    //       handleNext();
-    //     }
-    //   });
-    // };
 
     useImperativeHandle(ref, () => ({
       TermsAndCondition: formik.handleSubmit,
@@ -79,14 +77,13 @@ const AddTermsAndCondition = forwardRef(
                         <br />
                         <input
                           type="file"
-                          name="parentSignature"
                           className="form-control"
-                          // onChange={(event) => {
-                          //   formik.setFieldValue(
-                          //     "parentSignature",
-                          //     event.currentTarget.parentSignatures[0]
-                          //   );
-                          // }}
+                          onChange={(event) => {
+                            formik.setFieldValue(
+                              "file",
+                              event.currentTarget.files[0]
+                            );
+                          }}
                           onBlur={formik.handleBlur}
                         />
                       </div>
@@ -130,20 +127,17 @@ const AddTermsAndCondition = forwardRef(
                       onBlur={formik.handleBlur}
                     />
                     <small>
-                      By submitting this form, I confrim that I have read and
+                      By submitting this form, I confirm that I have read and
                       agree to Arty Learning's&nbsp;
                       <span style={{ color: "#ff7500" }}>
                         Terms & Conditions.
                       </span>
                     </small>
-                    {formik.touched.agree &&
-                          formik.errors.agree && (
-                            <div className="text-danger">
-                              <small>
-                                {formik.errors.agree}
-                              </small>
-                            </div>
-                          )}
+                    {formik.touched.agree && formik.errors.agree && (
+                      <div className="text-danger">
+                        <small>{formik.errors.agree}</small>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

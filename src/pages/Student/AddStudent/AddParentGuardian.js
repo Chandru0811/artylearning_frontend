@@ -52,7 +52,7 @@ const AddParentGuardian = forwardRef(
       },
       // validationSchema: validationSchema,
       onSubmit: async (values) => {
-        console.log("Add ParentGuardian", values);
+        // console.log("Add ParentGuardian", values);
 
         // console.log("Form Data is", formDatas);
         try {
@@ -66,7 +66,6 @@ const AddParentGuardian = forwardRef(
             formDatas.append(`files`, parent.files);
             formDatas.append(`mobileNumbers`, parent.mobileNumbers);
             formDatas.append(`postalCodes`, parent.postalCodes);
-            formDatas.append(`passwords`, parent.passwords);
             formDatas.append(`addresses`, parent.addresses);
           });
 
@@ -195,37 +194,6 @@ const AddParentGuardian = forwardRef(
                                   {
                                     formik.errors.parentInformation[index]
                                       .emails
-                                  }
-                                </small>
-                              </div>
-                            )}
-                        </div>
-                        <div className="text-start mt-4">
-                          <label htmlFor="" className="mb-1 fw-medium">
-                            <small>Password</small>
-                            <span className="text-danger">*</span>
-                          </label>
-                          <br />
-                          <input
-                            className="form-control "
-                            type="password"
-                            name={`parentInformation[${index}].passwords`}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={
-                              formik.values.parentInformation[index]
-                                ?.passwords || ""
-                            }
-                          ></input>
-                          {formik.touched.parentInformation?.[index]
-                            ?.passwords &&
-                            formik.errors.parentInformation?.[index]
-                              ?.passwords && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.parentInformation[index]
-                                      .passwords
                                   }
                                 </small>
                               </div>

@@ -38,13 +38,13 @@ const AddEmergencyContact = forwardRef(
               formData.studentEmergencyContactPostalCode || "",
             studentEmergencyContactAddress:
               formData.studentEmergencyContactAddress || "",
-            personProfile: formData.personProfile || "",
+            files: formData.files || "",
           },
         ],
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        // console.log("Add Rows Datas", data);
+        // handleNext();
         const formDatas = new FormData();
 
         // Append fields for emergency contact
@@ -54,41 +54,43 @@ const AddEmergencyContact = forwardRef(
 
         // Append fields for each emergency contact information
         data.emergencyContactInformation.forEach((contact, index) => {
-          formDatas.append(`name`, contact.name);
-          formDatas.append(`emergencyRelation`, contact.emergencyRelation);
-          formDatas.append(`contactNo`, contact.contactNo);
+          // Append contact fields directly without the index
+          formDatas.append("emergencyContactName", data.emergencyContactName);
+          formDatas.append("authorizedRelation", data.authorizedRelation);
+          formDatas.append("emergencyContactNo", data.emergencyContactNo);
+          formDatas.append("name", contact.name);
+          formDatas.append("emergencyRelation", contact.emergencyRelation);
+          formDatas.append("contactNo", contact.contactNo);
           formDatas.append(
-            `studentEmergencyContactPostalCode`,
+            "studentEmergencyContactPostalCode",
             contact.studentEmergencyContactPostalCode
           );
           formDatas.append(
-            `studentEmergencyContactAddress`,
+            "studentEmergencyContactAddress",
             contact.studentEmergencyContactAddress
           );
-          formDatas.append(`personProfile`, contact.personProfile);
+          formDatas.append("files", contact.files);
         });
         console.log(formDatas);
-        // try {
-        //   const response = await api.post(
-        //     `/createStudentEmergencyContacts/${formData.student_id}`,
-        //     formDatas,
-        //     {
-        //       headers: {
-        //         "Content-Type": "application/json",
-        //       },
-        //     }
-        //   );
-        //   if (response.status === 201) {
-        //     toast.success(response.data.message);
-        //     setFormData((prev) => ({ ...prev, ...data }));
-        //     // console.log("Form data is ",formData)
-        //     handleNext();
-        //   } else {
-        //     toast.error(response.data.message);
-        //   }
-        // } catch (error) {
-        //   toast.error(error);
-        // }
+        try {
+          const response = await api.post(
+            `/createStudentEmergencyContacts/${formData.student_id}`,
+            formDatas,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data", // Specify the Content-Type header
+              },
+            }
+          );
+          if (response.status === 201) {
+            toast.success(response.data.message);
+            setFormData((prev) => ({ ...prev, ...data }));
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error);
+        }
       },
     });
 
@@ -294,16 +296,19 @@ const AddEmergencyContact = forwardRef(
                             </label>
                             <br />
                             <input
-                              className="form-control "
+                              className="form-control"
                               type="file"
-                              onChange={formik.handleChange}
+                              onChange={(event) => {
+                                const fileName = event.target.files[0].name;
+                                event.target.parentNode.querySelector(
+                                  ".file-name"
+                                ).textContent = fileName;
+                              }}
                               onBlur={formik.handleBlur}
-                              name={`emergencyContactInformation[${index}].personProfile`}
-                              value={
-                                formik.values.emergencyContactInformation[index]
-                                  ?.personProfile || ""
-                              }
+                              name={`emergencyContactInformation[${index}].files`}
+                              accept=".jpg, .jpeg, .png"
                             />
+                            <span className="file-name"></span>
                           </div>
                         </div>
                       </div>
