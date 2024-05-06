@@ -11,9 +11,11 @@ import api from "../../../config/URL";
 const Leave = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  console.log("Leave Data:", datas);
+  const userId = sessionStorage.getItem("userId");
+  // console.log("Data:", datas.employeeData);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
+  // console.log("centerData", centerData);
 
   const fetchData = async () => {
     try {
@@ -27,8 +29,11 @@ const Leave = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllUserLeaveRequests");
+        const response = await api.get(
+          `/getUserLeaveRequestByUserId/${userId}`
+        );
         setDatas(response.data);
+        // console.log("responsedata", response.data);
         setLoading(false);
       } catch (error) {
         toast.error("Error Fetching Data : ", error);
@@ -80,7 +85,9 @@ const Leave = () => {
               <p className="fw-medium">Employee Name :</p>
             </div>
             <div className="col-6">
-              {/* <p className="text-muted text-sm">: {datas.employeeName | "--"}</p> */}
+              <p className="text-muted text-sm">
+                : {datas.employeeName || "--"}
+              </p>
             </div>
           </div>
         </div>
@@ -90,7 +97,7 @@ const Leave = () => {
               <p className="fw-medium">Leave Limit :</p>
             </div>
             <div className="col-6">
-              {/* <p className="text-muted text-sm">: {datas.leavLimit | "--"}</p> */}
+              <p className="text-muted text-sm">: {datas.leaveLimit || "--"}</p>
             </div>
           </div>
         </div>
@@ -120,14 +127,14 @@ const Leave = () => {
             </tr>
           </thead>
           <tbody>
-            {datas.map((data, index) => (
+            {datas.employeeData.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>
                   {centerData &&
-                    centerData.map((center) =>
-                      parseInt(data.centerId) === center.id
-                        ? center.centerNames || "--"
+                    centerData.map((centerId) =>
+                      parseInt(data.centerId) === centerId.id
+                        ? centerId.centerNames || "--"
                         : ""
                     )}
                 </td>
@@ -145,7 +152,7 @@ const Leave = () => {
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
                     <Link
-                      to={`/leave/view/${data.id}`}
+                      to={`/leaveadmin/view/${data.id}`}
                       style={{ display: "inline-block" }}
                     >
                       <button className="btn btn-sm">
