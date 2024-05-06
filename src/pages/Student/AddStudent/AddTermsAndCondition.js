@@ -77,12 +77,10 @@ const AddTermsAndCondition = forwardRef(
                         <br />
                         <input
                           type="file"
+                          name="file"
                           className="form-control"
-                          onChange={(event) => {
-                            formik.setFieldValue(
-                              "file",
-                              event.currentTarget.files[0]
-                            );
+                          oonChange={(event) => {
+                            formik.setFieldValue("file", event.target.files[0]);
                           }}
                           onBlur={formik.handleBlur}
                         />

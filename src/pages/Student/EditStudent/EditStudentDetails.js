@@ -397,7 +397,7 @@ const Edi = forwardRef(
                           </div>
                         )}
                     </div>
-                    <div className="text-start mt-4">
+                    {/* <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Profile Image</small>
                         <span className="text-danger">*</span>
@@ -415,13 +415,7 @@ const Edi = forwardRef(
                         }}
                         onBlur={formik.handleBlur}
                       />
-                      {/* {formik.touched.profileImage &&
-                        formik.errors.profileImage && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.profileImage}</small>
-                          </div>
-                        )} */}
-                    </div>
+                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Age</small>

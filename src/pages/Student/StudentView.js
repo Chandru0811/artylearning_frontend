@@ -8,7 +8,7 @@ import StudentSummary from "./StudentSummary";
 function StudentView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  console.log(data);
+  console.log("Student Datas:", data);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   const [centerData, setCenterData] = useState(null);
@@ -104,7 +104,7 @@ function StudentView() {
                 </button>
               </Link>
             )}
-            <StudentSummary className="ms-2"  data={data}  />
+            <StudentSummary className="ms-2" data={data} />
             <Link to={"/student"}>
               <button
                 className="btn btn-border btn-sm mx-3"
@@ -113,7 +113,6 @@ function StudentView() {
                 Back
               </button>
             </Link>
-            
           </div>
 
           <div className="accordion-item">
@@ -1051,6 +1050,33 @@ function StudentView() {
                     </tbody>
                   </table>
                 </div>
+                {data.studentCourseDetailModels &&
+              data.studentCourseDetailModels.length > 0 &&
+              data.studentCourseDetailModels.map((parent) => (
+                <div className="container-fluid col-12 p-2">
+                  <h6>Parent Signature</h6>
+                  <img
+                    src={parent.parentSignature}
+                    className="img-fluid rounded"
+                    style={{width:"20%"}}
+                    alt="Parent Signature Img"
+                  ></img>
+                </div>
+              ))}
+              {(!data.studentCourseDetailModels ||
+              data.studentCourseDetailModels.length === 0) && (
+              <div
+                id="panelsStayOpen-collapseThree"
+                class="accordion-collapse collapse"
+              >
+                <div class="accordion-body">
+                  <div className="text-muted">
+                    Parent Signature / not available !
+                  </div>
+                </div>
+              </div>
+            )}
+
               </div>
             </div>
           </div>

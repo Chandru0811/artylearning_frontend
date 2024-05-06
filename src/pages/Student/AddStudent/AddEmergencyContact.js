@@ -42,9 +42,9 @@ const AddEmergencyContact = forwardRef(
           },
         ],
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (data) => {
-        // handleNext();
+        handleNext();
         const formDatas = new FormData();
 
         // Append fields for emergency contact

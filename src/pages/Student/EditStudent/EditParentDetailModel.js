@@ -87,6 +87,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
           parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10)
         };
         formik.setValues(getFormData);
+        console.log("Student ParentsDetails Data:",getFormData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -192,6 +193,12 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                     }`}
                     {...formik.getFieldProps("file")}
                   />
+                  {/* <img
+                    src={parent.parentSignature}
+                    className="img-fluid rounded"
+                    style={{width:"20%"}}
+                    alt="Parent Signature Img"
+                  ></img> */}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <lable className="">
