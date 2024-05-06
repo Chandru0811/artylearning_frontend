@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
+// import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Select a Centre Name"),
@@ -15,18 +16,18 @@ const validationSchema = Yup.object({
   fromDate: Yup.string().required("*From Date is required"),
   toDate: Yup.string().required("*To Date is required"),
   dayType: Yup.string().required("*Leave Status is required"),
-  leaveStatus : Yup.string().required("*Day Type is required"),
+  leaveStatus: Yup.string().required("*Day Type is required"),
   leaveReason: Yup.string().required("*Leave Reason is required"),
 });
 
 function LeaveAdd() {
   const [centerData, setCenterData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
+  const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       centerId: "",
-      centerName:"",
+      centerName: "",
       userId: "",
       leaveType: "",
       noOfDays: "",
@@ -43,7 +44,7 @@ function LeaveAdd() {
     onSubmit: async (values) => {
       console.log("Leave Data:", values);
       let selectedCenterName = "";
-      let selectedTeacherName = "";
+      let selectedEmployeeName = "";
 
       centerData.forEach((center) => {
         if (parseInt(values.centerId) === center.id) {
@@ -51,9 +52,9 @@ function LeaveAdd() {
         }
       });
 
-      teacherData.forEach((teacher) => {
-        if (parseInt(values.userId) === teacher.id) {
-          selectedTeacherName = teacher.teacherNames || "--";
+      userNamesData.forEach((employee) => {
+        if (parseInt(values.userId) === employee.id) {
+          selectedEmployeeName = employee.userNames || "--";
         }
       });
 
@@ -61,7 +62,7 @@ function LeaveAdd() {
         centerId: values.centerId,
         centerName: selectedCenterName,
         userId: values.userId,
-        employeeName: selectedTeacherName,
+        employeeName: selectedEmployeeName,
         leaveType: values.leaveType,
         noOfDays: values.noOfDays,
         fromDate: values.fromDate,
@@ -101,20 +102,24 @@ function LeaveAdd() {
     }
   };
 
-  const fetchTeacher = async (centerId) => {
+  const fetchUserName = async (centerId) => {
     try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setTeacherData(teacher);
+      const userNames = await fetchAllEmployeeListByCenter(centerId);
+      setUserNameData(userNames);
     } catch (error) {
       toast.error(error);
     }
   };
 
-  const handleCenterChange = (event) => {
-    setTeacherData(null);
+  const handleCenterChange = async (event) => {
+    setUserNameData(null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
-    fetchTeacher(centerId);
+    try {
+      await fetchUserName(centerId);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   useEffect(() => {
@@ -165,10 +170,8 @@ function LeaveAdd() {
                 <div className="invalid-feedback">{formik.errors.centerId}</div>
               )}
             </div>
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Employee Name<span className="text-danger">*</span>
-              </label>
+            <div className="col-md-6 col-12 mb-3 ">
+              <lable className="">Employee Name</lable>
               <select
                 {...formik.getFieldProps("userId")}
                 class={`form-select  ${
@@ -178,10 +181,10 @@ function LeaveAdd() {
                 }`}
               >
                 <option selected disabled></option>
-                {teacherData &&
-                  teacherData.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.teacherNames}
+                {userNamesData &&
+                  userNamesData.map((userName) => (
+                    <option key={userName.id} value={userName.id}>
+                      {userName.userNames}
                     </option>
                   ))}
               </select>
@@ -214,7 +217,7 @@ function LeaveAdd() {
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label>
-                Leave Ststus<span className="text-danger">*</span>
+                Leave Status<span className="text-danger">*</span>
               </label>
               <select
                 className={`form-select  ${
