@@ -2,25 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import fetchAllCentersWithIds from "../../List/CenterList";
-import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
 
 function Viewpayroll() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [centerData, setCenterData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
-
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      const teacherData = await fetchAllTeacherListByCenter();
-      setCenterData(centerData);
-      setTeacherData(teacherData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   useEffect(() => {
     const getData = async () => {
@@ -32,7 +17,6 @@ function Viewpayroll() {
       }
     };
     getData();
-    fetchData();
   }, [id]);
 
   return (
