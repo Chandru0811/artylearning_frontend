@@ -83,7 +83,7 @@ function DeductionView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.allDeduction ? data.allDeduction.join(", ") : "--"}
+                    : {data.deductionName || "--"}
                   </p>
                 </div>
               </div>

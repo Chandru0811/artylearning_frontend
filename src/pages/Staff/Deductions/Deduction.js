@@ -104,7 +104,7 @@ const Deduction = () => {
                 <td>{data.deductionName}</td>
                 <td>{data.deductionAmount}</td>
                 <td>
-                  <Link to={`/deduction/view/${data.id}`}>
+                  <Link to={`/deduction/list/${data.id}`}>
                     <button className="btn btn-sm">
                       <FaEye />
                     </button>
