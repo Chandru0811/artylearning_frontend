@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { data } from "jquery";
+import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Select a Centre Name"),
@@ -110,7 +109,7 @@ function LeaveAdminEdit() {
 
   const fetchTeacher = async (centerId) => {
     try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
+      const teacher = await fetchAllEmployeeListByCenter(centerId);
       setTeacherData(teacher);
     } catch (error) {
       toast.error(error);
@@ -130,6 +129,8 @@ function LeaveAdminEdit() {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
         console.log(response.data);
         formik.setValues(response.data);
+        fetchData();
+        fetchTeacher(response.data.centerId);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -214,11 +215,11 @@ function LeaveAdminEdit() {
                     : ""
                 }`}
               >
-                <option selected disabled></option>
+                <option></option>
                 {teacherData &&
                   teacherData.map((teacher) => (
                     <option key={teacher.id} value={teacher.id}>
-                      {teacher.teacherNames}
+                      {teacher.userNames}
                     </option>
                   ))}
               </select>
@@ -251,7 +252,7 @@ function LeaveAdminEdit() {
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label>
-                Leave Ststus<span className="text-danger">*</span>
+                Leave Status<span className="text-danger">*</span>
               </label>
               <select
                 className={`form-select  ${
@@ -261,8 +262,9 @@ function LeaveAdminEdit() {
                 }`}
                 {...formik.getFieldProps("leaveStatus")}
               >
-                <option selected></option>
-                <option value="PENDING">Pending</option>
+                <option value="PENDING" selected>
+                  Pending
+                </option>
                 <option value="REJECTED">Rejected</option>
                 <option value="APPROVED">Approved</option>
               </select>
