@@ -132,6 +132,7 @@ function StaffingAttendanceEdit() {
           date: response.data.date.substring(0, 10),
         };
         formik.setValues(formattedResponseData);
+        fetchUserName(response.data.centerId);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

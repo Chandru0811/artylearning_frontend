@@ -6,8 +6,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllEmployeeListByCenter from "../List/EmployeeList";
-
-
+import { format } from "date-fns";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Centre name is required"),
@@ -25,13 +24,14 @@ const validationSchema = Yup.object({
 function StaffingAttendanceAdd() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
+  const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       centerId: "",
       userId: "",
-      date: "",
+      date: currentDate,
       attendanceStatus: "",
       modeOfWorking: "",
       checkIn: "",
@@ -96,15 +96,15 @@ function StaffingAttendanceAdd() {
   });
 
   const handleCenterChange = async (event) => {
-    setUserNameData(null); 
+    setUserNameData(null);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     try {
-      await fetchUserName(centerId); 
+      await fetchUserName(centerId);
     } catch (error) {
-      toast.error(error); 
+      toast.error(error);
     }
-  }
+  };
 
   const fetchData = async () => {
     try {
@@ -193,7 +193,7 @@ function StaffingAttendanceAdd() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-              
+
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Date</lable>
                 <span className="text-danger">*</span>
