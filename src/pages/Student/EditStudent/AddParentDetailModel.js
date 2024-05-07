@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   parentInformation: Yup.array().of(
@@ -30,15 +31,19 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-const AddParentDetailModel = forwardRef(({ formData, id, getData }) => {
+const AddParentDetailModel = forwardRef(({ formData }) => {
+  const { id } = useParams();
   const [show, setShow] = useState(false);
+  const [data, setData] = useState({});
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
     console.log("Id:", id);
   };
   const [rows, setRows] = useState(
-    formData && formData.parentInformation ? formData.parentInformation.length : 1
+    formData && formData.parentInformation
+      ? formData.parentInformation.length
+      : 1
   );
 
   // const formik = useFormik({
@@ -90,26 +95,25 @@ const AddParentDetailModel = forwardRef(({ formData, id, getData }) => {
 
   const formik = useFormik({
     initialValues: {
-      parentInformation: formData && formData.parentInformation 
-        ? formData.parentInformation.map((parent) => ({
-            parentNames: parent.parentNames || "",
-            parentDateOfBirths: parent.parentDateOfBirths || "",
-            emails: parent.emails || "",
-            relations: parent.relations || "",
-            occupations: parent.occupations || "",
-            files: null || "",
-            passwords: parent.passwords || "",
-            mobileNumbers: parent.mobileNumbers || "",
-            postalCodes: parent.postalCodes || "",
-            addresses: parent.addresses || "",
-          }))
-        : [],
+      parentInformation:
+        formData && formData.parentInformation
+          ? formData.parentInformation.map((parent) => ({
+              parentNames: parent.parentNames || "",
+              parentDateOfBirths: parent.parentDateOfBirths || "",
+              emails: parent.emails || "",
+              relations: parent.relations || "",
+              occupations: parent.occupations || "",
+              files: null || "",
+              passwords: parent.passwords || "",
+              mobileNumbers: parent.mobileNumbers || "",
+              postalCodes: parent.postalCodes || "",
+              addresses: parent.addresses || "",
+            }))
+          : [],
     },
     // validationSchema: validationSchema,
     onSubmit: async (values) => {
       // console.log("Add ParentGuardian", values);
-
-      // console.log("Form Data is", formDatas);
       try {
         const formDatas = new FormData();
         values.parentInformation.map((parent) => {
@@ -128,13 +132,15 @@ const AddParentDetailModel = forwardRef(({ formData, id, getData }) => {
           `/createMultipleStudentParentsDetailsWithProfileImages/${id}`,
           formDatas,
           {
-            headers: { 
+            headers: {
               "Content-Type": "multipart/form-data",
             },
           }
         );
         if (response.status === 201) {
           toast.success(response.data.message);
+          getData();
+          handleClose();
         } else {
           toast.error(response.data.message);
         }
@@ -143,6 +149,20 @@ const AddParentDetailModel = forwardRef(({ formData, id, getData }) => {
       }
     },
   });
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllStudentDetails/${formData.id}`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -151,7 +171,7 @@ const AddParentDetailModel = forwardRef(({ formData, id, getData }) => {
           type="button"
           className="btn btn-border btn-sm"
         >
-          <i className="bx bx-plus"></i> Add More
+          <i className="bx bx-plus"></i> Add
         </button>
 
         <Modal
@@ -168,488 +188,302 @@ const AddParentDetailModel = forwardRef(({ formData, id, getData }) => {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {/* <div className="row">
-                <div className="col-md-6 col-12 mb-2">
-                  <lable className="form-lable">
-                    Parents / Guardian Name
-                    <span className="text-danger">*</span>
-                  </lable>
-                  <div className="input-group mb-3">
-                    <input
-                      className="form-control "
-                      type="text"
-                      name="parentName"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.parentName}
-                    />
-                    {formik.touched.parentName && formik.errors.parentName && (
-                      <div className="invalid-feedback">
-                        {formik.errors.parentName}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Occupation<span class="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="text"
-                    className={`form-control    ${
-                      formik.touched.occupation && formik.errors.occupation
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("occupation")}
-                  />
-                  {formik.touched.occupation && formik.errors.occupation && (
-                    <div className="invalid-feedback">
-                      {formik.errors.occupation}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Date Of Birth<span class="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="date"
-                    name="parentDateOfBirth"
-                    className={`form-control ${
-                      formik.touched.parentDateOfBirth &&
-                      formik.errors.parentDateOfBirth
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("parentDateOfBirth")}
-                  />
-                  {formik.touched.parentDateOfBirth &&
-                    formik.errors.parentDateOfBirth && (
-                      <div className="invalid-feedback">
-                        {formik.errors.parentDateOfBirth}
-                      </div>
-                    )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <lable className="">Profile Image</lable>
-                  <input
-                    type="file"
-                    name="file"
-                    className={`form-control    ${
-                      formik.touched.file && formik.errors.file
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("file")}
-                  />
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Email<span class="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="email"
-                    name="Email"
-                    className={`form-control    ${
-                      formik.touched.email && formik.errors.email
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("email")}
-                  />
-                  {formik.touched.email && formik.errors.email && (
-                    <div className="invalid-feedback">
-                      {formik.errors.email}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Mobile No<span class="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="text"
-                    name="mobileNumber"
-                    className={`form-control    ${
-                      formik.touched.mobileNumber && formik.errors.mobileNumber
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("mobileNumber")}
-                  />
-                  {formik.touched.mobileNumber &&
-                    formik.errors.mobileNumber && (
-                      <div className="invalid-feedback">
-                        {formik.errors.mobileNumber}
-                      </div>
-                    )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Relation<span class="text-danger">*</span>
-                  </lable>
-                  <select
-                    className={`form-select ${
-                      formik.touched.relation && formik.errors.relation
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    name="relation"
-                    {...formik.getFieldProps("relation")}
-                  >
-                    <option selected></option>
-                    <option value="Brother">Brother</option>
-                    <option value="Father">Father</option>
-                    <option value="Mother">Mother</option>
-                    <option value="Sister">Sister</option>
-                  </select>
-                  {formik.touched.relation && formik.errors.relation && (
-                    <div className="invalid-feedback">
-                      {formik.errors.relation}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <lable className="">
-                    Postal Code<span class="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="text"
-                    name="postalCode"
-                    className={`form-control    ${
-                      formik.touched.postalCode && formik.errors.postalCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("postalCode")}
-                  />
-                  {formik.touched.postalCode && formik.errors.postalCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.postalCode}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-12 col-12 mb-2">
-                  <lable className="">
-                    Address<span class="text-danger">*</span>
-                  </lable>
-                  <textarea
-                    type="text"
-                    name="address"
-                    className={`form-control    ${
-                      formik.touched.address && formik.errors.address
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("address")}
-                  />
-                  {formik.touched.address && formik.errors.address && (
-                    <div className="invalid-feedback">
-                      {formik.errors.address}
-                    </div>
-                  )}
-                </div>
-              </div> */}
-
               {[...Array(rows)].map((_, index) => (
                 <div className="border-0 mb-5" key={index}>
-                  <div>
-                    <div className=" border-0 my-2">
-                      <form onSubmit={formik.handleSubmit}>
-                        <div className="container pt-3">
-                          <div className="row mt-2">
-                            <div className="col-lg-6 col-md-6 col-12">
-                              <div className="text-start">
-                                <label htmlFor="" className="mb-1 fw-medium">
-                                  <small>Parents / Guardian Name</small>
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <br />
-                                <input
-                                  className="form-control "
-                                  type="text"
-                                  name={`parentInformation[${index}].parentNames`}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={
-                                    formik.values.parentInformation[index]
-                                      ?.parentNames || ""
-                                  }
-                                />
-                                {formik.touched.parentInformation?.[index]
-                                  ?.parentNames &&
-                                  formik.errors.parentInformation?.[index]
-                                    ?.parentNames && (
-                                    <div className="text-danger">
-                                      <small>
-                                        {
-                                          formik.errors.parentInformation[index]
-                                            .parentNames
-                                        }
-                                      </small>
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="text-start mt-4 mb-4">
-                                <label htmlFor="" className="mb-1 fw-medium">
-                                  <small>Date Of Birth</small>
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <br />
-                                <input
-                                  className="form-control  form-contorl-sm"
-                                  type="date"
-                                  name={`parentInformation[${index}].parentDateOfBirths`}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={
-                                    formik.values.parentInformation[index]
-                                      ?.parentDateOfBirths || ""
-                                  }
-                                />
+                  <div className=" border-0 my-2">
+                    <form onSubmit={formik.handleSubmit}>
+                      <div className="container pt-3">
+                        <div className="row mt-2">
+                          <div className="col-lg-6 col-md-6 col-12">
+                            <div className="text-start">
+                              <label htmlFor="" className="mb-1 fw-medium">
+                                <small>Parents / Guardian Name</small>
+                                <span className="text-danger">*</span>
+                              </label>
+                              <br />
+                              <input
+                                className="form-control "
+                                type="text"
+                                name={`parentInformation[${index}].parentNames`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={
+                                  formik.values.parentInformation[index]
+                                    ?.parentNames || ""
+                                }
+                              />
+                              {formik.touched.parentInformation?.[index]
+                                ?.parentNames &&
+                                formik.errors.parentInformation?.[index]
+                                  ?.parentNames && (
+                                  <div className="text-danger">
+                                    <small>
+                                      {
+                                        formik.errors.parentInformation[index]
+                                          .parentNames
+                                      }
+                                    </small>
+                                  </div>
+                                )}
+                            </div>
+                            <div className="text-start mt-4 mb-4">
+                              <label htmlFor="" className="mb-1 fw-medium">
+                                <small>Date Of Birth</small>
+                                <span className="text-danger">*</span>
+                              </label>
+                              <br />
+                              <input
+                                className="form-control  form-contorl-sm"
+                                type="date"
+                                name={`parentInformation[${index}].parentDateOfBirths`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={
+                                  formik.values.parentInformation[index]
+                                    ?.parentDateOfBirths || ""
+                                }
+                              />
 
-                                {formik.touched.parentInformation?.[index]
-                                  ?.parentDateOfBirths &&
-                                  formik.errors.parentInformation?.[index]
-                                    ?.parentDateOfBirths && (
-                                    <div className="text-danger">
-                                      <small>
-                                        {
-                                          formik.errors.parentInformation[index]
-                                            .parentDateOfBirths
-                                        }
-                                      </small>
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="text-start mt-4">
-                                <label htmlFor="" className="mb-1 fw-medium">
-                                  <small>Email</small>
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <br />
-                                <input
-                                  className="form-control "
-                                  type="emails"
-                                  name={`parentInformation[${index}].emails`}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={
-                                    formik.values.parentInformation[index]
-                                      ?.emails || ""
-                                  }
-                                ></input>
-                                {formik.touched.parentInformation?.[index]
-                                  ?.emails &&
-                                  formik.errors.parentInformation?.[index]
-                                    ?.emails && (
-                                    <div className="text-danger">
-                                      <small>
-                                        {
-                                          formik.errors.parentInformation[index]
-                                            .emails
-                                        }
-                                      </small>
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="text-start mt-4">
-                                <label htmlFor="" className="mb-1 fw-medium">
-                                  <small>Relation</small>
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <br />
-                                <select
-                                  className="form-select "
-                                  type="text"
-                                  name={`parentInformation[${index}].relations`}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={
-                                    formik.values.parentInformation[index]
-                                      ?.relations || ""
-                                  }
-                                >
-                                  <option selected></option>
-                                  <option value="Brother">Brother</option>
-                                  <option value="Father">Father</option>
-                                  <option value="Mother">Mother</option>
-                                  <option value="Sister">Sister</option>
-                                </select>
-                                {formik.touched.parentInformation?.[index]
-                                  ?.relations &&
-                                  formik.errors.parentInformation?.[index]
-                                    ?.relations && (
-                                    <div className="text-danger">
-                                      <small>
-                                        {
-                                          formik.errors.parentInformation[index]
-                                            .relations
-                                        }
-                                      </small>
-                                    </div>
-                                  )}
-                              </div>
+                              {formik.touched.parentInformation?.[index]
+                                ?.parentDateOfBirths &&
+                                formik.errors.parentInformation?.[index]
+                                  ?.parentDateOfBirths && (
+                                  <div className="text-danger">
+                                    <small>
+                                      {
+                                        formik.errors.parentInformation[index]
+                                          .parentDateOfBirths
+                                      }
+                                    </small>
+                                  </div>
+                                )}
                             </div>
-                            <div className="col-lg-6 col-md-6 col-12">
-                              <div className="text-start">
-                                <label htmlFor="" className="mb-1 fw-medium">
-                                  <small>Occupation</small>
-                                </label>
-                                <br />
-                                <input
-                                  className="form-control "
-                                  type="text"
-                                  name={`parentInformation[${index}].occupations`}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={
-                                    formik.values.parentInformation[index]
-                                      ?.occupations || ""
-                                  }
-                                ></input>
-                                {formik.touched.parentInformation?.[index]
-                                  ?.occupations &&
-                                  formik.errors.parentInformation?.[index]
-                                    ?.occupations && (
-                                    <div className="text-danger">
-                                      <small>
-                                        {
-                                          formik.errors.parentInformation[index]
-                                            .occupations
-                                        }
-                                      </small>
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="text-start mt-4">
-                                <label htmlFor="" className="fw-medium">
-                                  <small>Profile Image</small>
-                                </label>
-                                <br />
-                                <input
-                                  type="file"
-                                  name="files"
-                                  className="form-control"
-                                  onChange={(event) => {
-                                    formik.setFieldValue(
-                                      `parentInformation[${index}].files`,
-                                      event.target.files[0]
-                                    );
-                                  }}
-                                  onBlur={formik.handleBlur}
-                                />
-                                <p>
-                                  <small>
-                                    Note: File must be PNG,JPG,GIF or BMP, Max
-                                    Size 1 MB
-                                  </small>
-                                </p>
-                              </div>
-                              <div className="text-start">
-                                <label htmlFor="" className="mb-1 fw-medium">
-                                  <small>Mobile No</small>
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <br />
-                                <input
-                                  className="form-control "
-                                  type="tel"
-                                  name={`parentInformation[${index}].mobileNumbers`}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={
-                                    formik.values.parentInformation[index]
-                                      ?.mobileNumbers || ""
-                                  }
-                                />
-                                {formik.touched.parentInformation?.[index]
-                                  ?.mobileNumbers &&
-                                  formik.errors.parentInformation?.[index]
-                                    ?.mobileNumbers && (
-                                    <div className="text-danger">
-                                      <small>
-                                        {
-                                          formik.errors.parentInformation[index]
-                                            .mobileNumbers
-                                        }
-                                      </small>
-                                    </div>
-                                  )}
-                              </div>
-                              <div className="text-start mt-4">
-                                <label htmlFor="" className="mb-1 fw-medium">
-                                  <small>Postal Code</small>
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <br />
-                                <input
-                                  className="form-control "
-                                  type="tel"
-                                  name={`parentInformation[${index}].postalCodes`}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={
-                                    formik.values.parentInformation[index]
-                                      ?.postalCodes || ""
-                                  }
-                                />
-                                {formik.touched.parentInformation?.[index]
-                                  ?.postalCodes &&
-                                  formik.errors.parentInformation?.[index]
-                                    ?.postalCodes && (
-                                    <div className="text-danger">
-                                      <small>
-                                        {
-                                          formik.errors.parentInformation[index]
-                                            .postalCodes
-                                        }
-                                      </small>
-                                    </div>
-                                  )}
-                              </div>
+                            <div className="text-start mt-4">
+                              <label htmlFor="" className="mb-1 fw-medium">
+                                <small>Email</small>
+                                <span className="text-danger">*</span>
+                              </label>
+                              <br />
+                              <input
+                                className="form-control "
+                                type="emails"
+                                name={`parentInformation[${index}].emails`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={
+                                  formik.values.parentInformation[index]
+                                    ?.emails || ""
+                                }
+                              ></input>
+                              {formik.touched.parentInformation?.[index]
+                                ?.emails &&
+                                formik.errors.parentInformation?.[index]
+                                  ?.emails && (
+                                  <div className="text-danger">
+                                    <small>
+                                      {
+                                        formik.errors.parentInformation[index]
+                                          .emails
+                                      }
+                                    </small>
+                                  </div>
+                                )}
                             </div>
-                            <div className="col-12">
-                              <div className="text-start mt-4">
-                                <label htmlFor="" className=" fw-medium">
-                                  <small>Address</small>
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <br />
-                                <textarea
-                                  className="form-control "
-                                  type="text"
-                                  style={{
-                                    height: "7rem",
-                                  }}
-                                  name={`parentInformation[${index}].addresses`}
-                                  onChange={formik.handleChange}
-                                  onBlur={formik.handleBlur}
-                                  value={
-                                    formik.values.parentInformation[index]
-                                      ?.addresses || ""
-                                  }
-                                />
-                                {formik.touched.parentInformation?.[index]
-                                  ?.addresses &&
-                                  formik.errors.parentInformation?.[index]
-                                    ?.addresses && (
-                                    <div className="text-danger">
-                                      <small>
-                                        {
-                                          formik.errors.parentInformation[index]
-                                            ?.addresses
-                                        }
-                                      </small>
-                                    </div>
-                                  )}
-                              </div>
+                            <div className="text-start mt-4">
+                              <label htmlFor="" className="mb-1 fw-medium">
+                                <small>Relation</small>
+                                <span className="text-danger">*</span>
+                              </label>
+                              <br />
+                              <select
+                                className="form-select "
+                                type="text"
+                                name={`parentInformation[${index}].relations`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={
+                                  formik.values.parentInformation[index]
+                                    ?.relations || ""
+                                }
+                              >
+                                <option selected></option>
+                                <option value="Brother">Brother</option>
+                                <option value="Father">Father</option>
+                                <option value="Mother">Mother</option>
+                                <option value="Sister">Sister</option>
+                              </select>
+                              {formik.touched.parentInformation?.[index]
+                                ?.relations &&
+                                formik.errors.parentInformation?.[index]
+                                  ?.relations && (
+                                  <div className="text-danger">
+                                    <small>
+                                      {
+                                        formik.errors.parentInformation[index]
+                                          .relations
+                                      }
+                                    </small>
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                          <div className="col-lg-6 col-md-6 col-12">
+                            <div className="text-start">
+                              <label htmlFor="" className="mb-1 fw-medium">
+                                <small>Occupation</small>
+                              </label>
+                              <br />
+                              <input
+                                className="form-control "
+                                type="text"
+                                name={`parentInformation[${index}].occupations`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={
+                                  formik.values.parentInformation[index]
+                                    ?.occupations || ""
+                                }
+                              ></input>
+                              {formik.touched.parentInformation?.[index]
+                                ?.occupations &&
+                                formik.errors.parentInformation?.[index]
+                                  ?.occupations && (
+                                  <div className="text-danger">
+                                    <small>
+                                      {
+                                        formik.errors.parentInformation[index]
+                                          .occupations
+                                      }
+                                    </small>
+                                  </div>
+                                )}
+                            </div>
+                            <div className="text-start mt-4">
+                              <label htmlFor="" className="fw-medium">
+                                <small>Profile Image</small>
+                              </label>
+                              <br />
+                              <input
+                                type="file"
+                                name="files"
+                                className="form-control"
+                                onChange={(event) => {
+                                  formik.setFieldValue(
+                                    `parentInformation[${index}].files`,
+                                    event.target.files[0]
+                                  );
+                                }}
+                                onBlur={formik.handleBlur}
+                              />
+                              <p>
+                                <small>
+                                  Note: File must be PNG,JPG,GIF or BMP, Max
+                                  Size 1 MB
+                                </small>
+                              </p>
+                            </div>
+                            <div className="text-start">
+                              <label htmlFor="" className="mb-1 fw-medium">
+                                <small>Mobile No</small>
+                                <span className="text-danger">*</span>
+                              </label>
+                              <br />
+                              <input
+                                className="form-control "
+                                type="tel"
+                                name={`parentInformation[${index}].mobileNumbers`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={
+                                  formik.values.parentInformation[index]
+                                    ?.mobileNumbers || ""
+                                }
+                              />
+                              {formik.touched.parentInformation?.[index]
+                                ?.mobileNumbers &&
+                                formik.errors.parentInformation?.[index]
+                                  ?.mobileNumbers && (
+                                  <div className="text-danger">
+                                    <small>
+                                      {
+                                        formik.errors.parentInformation[index]
+                                          .mobileNumbers
+                                      }
+                                    </small>
+                                  </div>
+                                )}
+                            </div>
+                            <div className="text-start mt-4">
+                              <label htmlFor="" className="mb-1 fw-medium">
+                                <small>Postal Code</small>
+                                <span className="text-danger">*</span>
+                              </label>
+                              <br />
+                              <input
+                                className="form-control "
+                                type="tel"
+                                name={`parentInformation[${index}].postalCodes`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={
+                                  formik.values.parentInformation[index]
+                                    ?.postalCodes || ""
+                                }
+                              />
+                              {formik.touched.parentInformation?.[index]
+                                ?.postalCodes &&
+                                formik.errors.parentInformation?.[index]
+                                  ?.postalCodes && (
+                                  <div className="text-danger">
+                                    <small>
+                                      {
+                                        formik.errors.parentInformation[index]
+                                          .postalCodes
+                                      }
+                                    </small>
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                          <div className="col-12">
+                            <div className="text-start mt-4">
+                              <label htmlFor="" className=" fw-medium">
+                                <small>Address</small>
+                                <span className="text-danger">*</span>
+                              </label>
+                              <br />
+                              <textarea
+                                className="form-control "
+                                type="text"
+                                style={{
+                                  height: "7rem",
+                                }}
+                                name={`parentInformation[${index}].addresses`}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={
+                                  formik.values.parentInformation[index]
+                                    ?.addresses || ""
+                                }
+                              />
+                              {formik.touched.parentInformation?.[index]
+                                ?.addresses &&
+                                formik.errors.parentInformation?.[index]
+                                  ?.addresses && (
+                                  <div className="text-danger">
+                                    <small>
+                                      {
+                                        formik.errors.parentInformation[index]
+                                          ?.addresses
+                                      }
+                                    </small>
+                                  </div>
+                                )}
                             </div>
                           </div>
                         </div>
-                      </form>
-                    </div>
+                      </div>
+                    </form>
                   </div>
                 </div>
               ))}

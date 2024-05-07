@@ -10,7 +10,7 @@ import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Center Name is required"),
   userId: Yup.string().required("*Employee Name is required"),
-  allDeduction: Yup.string().required("*Select the Deduction Name"),
+  deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),
   deductionAmount: Yup.string().required("*Deduction Amount is required"),
   
@@ -28,8 +28,7 @@ function DeductionEdit() {
       userId: "",
       deductionMonth: "",
       deductionAmount: "",
-     
-      allDeduction: "",
+      deductionName: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -41,7 +40,7 @@ function DeductionEdit() {
         });
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/staffing/attendance");
+          navigate("/deduction");
         } else {
           toast.error(response.data.message);
         }
@@ -165,9 +164,9 @@ function DeductionEdit() {
                 <lable className="">Deduction Name</lable>
                 <span className="text-danger">*</span>
                 <select
-                  {...formik.getFieldProps("allDeduction")}
+                  {...formik.getFieldProps("deductionName")}
                   className={`form-select ${
-                    formik.touched.allDeduction && formik.errors.allDeduction
+                    formik.touched.deductionName && formik.errors.deductionName
                       ? "is-invalid"
                       : ""
                   }`}
@@ -180,89 +179,12 @@ function DeductionEdit() {
                   <option value="LOAN INTEREST">LOAN INTEREST</option>
                  
                 </select>
-                {formik.touched.allDeduction && formik.errors.allDeduction && (
+                {formik.touched.deductionName && formik.errors.deductionName && (
                   <div className="invalid-feedback">
-                    {formik.errors.allDeduction}
+                    {formik.errors.deductionName}
                   </div>
                 )}
               </div>
-
-              {/* <div className="col-md-6 col-12 mb-3">
-                <label>Deduction Name</label>
-                <span className="text-danger">*</span>
-                <div className="mt-2 d-flex">
-                  <div className="checkbox-container mx-2">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="myCheckbox1"
-                      name="allDeduction"
-                      value="CPF"
-                      checked={
-                        formik.values.allDeduction &&
-                        formik.values.allDeduction.includes("CPF")
-                      }
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                    <label for="myCheckbox1" className="custom-checkbox">
-                      <div className="inner-square"></div>
-                    </label>
-                    <label for="myCheckbox1" className="mx-1">
-                      CPF
-                    </label>
-                  </div>
-                  <div className="checkbox-container mx-2">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="myCheckbox2"
-                      name="allDeduction"
-                      value="LOP"
-                      checked={
-                        formik.values.allDeduction &&
-                        formik.values.allDeduction.includes("LOP")
-                      }
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-
-                    <label for="myCheckbox2" className="custom-checkbox">
-                      <div className="inner-square"></div>
-                    </label>
-                    <label for="myCheckbox2" className="mx-1">
-                      LOP
-                    </label>
-                  </div>
-                  <div className="checkbox-container mx-2">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="myCheckbox3"
-                      name="allDeduction"
-                      value="LOAN_INTEREST"
-                      checked={
-                        formik.values.allDeduction &&
-                        formik.values.allDeduction.includes("LOAN INTEREST")
-                      }
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-
-                    <label for="myCheckbox3" className="custom-checkbox">
-                      <div className="inner-square"></div>
-                    </label>
-                    <label for="myCheckbox3" className="mx-1">
-                      Loan Interest
-                    </label>
-                  </div>
-                </div>
-                {formik.touched.allDeduction && formik.errors.allDeduction && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.allDeduction}</small>
-                  </div>
-                )}
-              </div> */}
 
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">

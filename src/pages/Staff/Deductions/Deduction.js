@@ -101,7 +101,7 @@ const Deduction = () => {
                 <th scope="row">{index + 1}</th>
                 <td>{data.centerName}</td>
                 <td>{data.employeeName}</td>
-                <td>{data.allDeduction.join(", ")}</td>
+                <td>{data.deductionName}</td>
                 <td>{data.deductionAmount}</td>
                 <td>
                   <Link to={`/deduction/view/${data.id}`}>

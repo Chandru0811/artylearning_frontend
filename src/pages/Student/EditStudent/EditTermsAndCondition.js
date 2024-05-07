@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -15,52 +15,69 @@ const validationSchema = Yup.object().shape({
 const EditTermsAndCondition = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
+    const [data, setData] = useState([]);
     const formik = useFormik({
       initialValues: {
-        parentSignature: null || "",
-        termsAndConditionSignatureDate: formData.termsAndConditionSignatureDate || "",
-        agree: formData.agree || "", 
+        file: null || "",
+        termsAndConditionSignatureDate:
+          formData.termsAndConditionSignatureDate || "",
+        agree: formData.agree || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        data.parentSignature = null;
         try {
           if (data.stdTermsAndConditionId !== null) {
-              const response = await api.put(
-                  `/updateStudentTermsAndCondition/${data.stdTermsAndConditionId}`,
-                  data,
-                  {
-                      headers: {
-                          "Content-Type": "application/json",
-                      },
-                  }
-              );
-              if (response.status === 200) {
-                  toast.success(response.data.message);
-                  navigate("/student");
-              } else {
-                  toast.error(response.data.message);
+            const formDatas = new FormData();
+            formDatas.append("file", data.file);
+            formDatas.append(
+              "termsAndConditionSignatureDate",
+              data.termsAndConditionSignatureDate
+            );
+            formDatas.append("agree", data.agree);
+            formDatas.append("studentTermsAndConditionId", data.stdTermsAndConditionId);
+            const response = await api.put(
+              `/updateStudentTermsAndConditions/${data.stdTermsAndConditionId}`,
+              formDatas,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
               }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              navigate("/student");
+            } else {
+              toast.error(response.data.message);
+            }
           } else {
-              const response = await api.post(
-                  `/createStudentTermsAndConditions/${data.id}`,
-                  data,
-                  {
-                      headers: {
-                          "Content-Type": "application/json",
-                      },
-                  }
-              );
-              if (response.status === 201) {
-                  toast.success(response.data.message);
-                  navigate("/student");
-              } else {
-                  toast.error(response.data.message);
+            const formDatas = new FormData();
+            formDatas.append("file", data.file);
+            formDatas.append(
+              "termsAndConditionSignatureDate",
+              data.termsAndConditionSignatureDate
+            );
+            formDatas.append("agree", data.agree);
+            formDatas.append("studentDetailId", formData.student_id);
+            const response = await api.post(
+              `/createStudentTermsAndConditions/${data.id}`,
+              formDatas,
+              {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
               }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              navigate("/student");
+            } else {
+              toast.error(response.data.message);
+            }
           }
-      } catch (error) {
+        } catch (error) {
           toast.error(error);
-      }
+        }
       },
     });
 
@@ -85,14 +102,20 @@ const EditTermsAndCondition = forwardRef(
           ) {
             formik.setValues({
               ...response.data.studentTermsAndConditions[0],
-              stdTermsAndConditionId: response.data.studentTermsAndConditions[0].id,
-              termsAndConditionSignatureDate : response.data.studentTermsAndConditions[0].termsAndConditionSignatureDate.substring(0,10),
+              stdTermsAndConditionId:
+                response.data.studentTermsAndConditions[0].id,
+              termsAndConditionSignatureDate:
+                response.data.studentTermsAndConditions[0].termsAndConditionSignatureDate.substring(
+                  0,
+                  10
+                ),
             });
+            setData(response.data);
           } else {
             // If there are no emergency contacts, set default values or handle the case as needed
             formik.setValues({
               stdTermsAndConditionId: null,
-              parentSignature: null || "",
+              file: null || "",
               termsAndConditionSignatureDate: "",
               agree: "",
             });
@@ -126,17 +149,39 @@ const EditTermsAndCondition = forwardRef(
                         </label>
                         <br />
                         <input
-                          type="file"
-                          name="parentSignature"
-                          className="form-control"
-                          // onChange={(event) => {
-                          //   formik.setFieldValue(
-                          //     "parentSignature",
-                          //     event.currentTarget.parentSignatures[0]
-                          //   );
-                          // }}
-                          onBlur={formik.handleBlur}
+                         type="file"
+                         className="form-control"
+                         name="file"
+                         onChange={(event) => {
+                           formik.setFieldValue("file", event.target.files[0]);
+                         }}
+                         onBlur={formik.handleBlur}
                         />
+                        {data.studentTermsAndConditions &&
+                          data.studentTermsAndConditions.length > 0 &&
+                          data.studentTermsAndConditions.map((parent) => (
+                            <div className="container-fluid col-12 p-2">
+                              <img
+                                src={parent.parentSignature}
+                                className="img-fluid rounded"
+                                style={{ width: "60%" }}
+                                alt="Parent Signature Img"
+                              ></img>
+                            </div>
+                          ))}
+                        {(!data.studentTermsAndConditions ||
+                          data.studentTermsAndConditions.length === 0) && (
+                          <div
+                            id="panelsStayOpen-collapseThree"
+                            class="accordion-collapse collapse"
+                          >
+                            <div class="accordion-body">
+                              <div className="text-muted">
+                                Parent Signature / not available !
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">

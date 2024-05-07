@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../../List/CourseList";
+import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   signatureDate: Yup.string().required("*Signature Date is required!"),
@@ -17,6 +18,8 @@ const validationSchema = Yup.object().shape({
 const EditCourseDetail = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
     const [courseData, setCourseData] = useState(null);
+    const [data, setData] = useState([]);
+    const { id } = useParams();
 
     const formik = useFormik({
       initialValues: {
@@ -31,44 +34,71 @@ const EditCourseDetail = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        data.parentSignature = null;
         try {
           if (data.courseDetailId !== null) {
-              const response = await api.put(
-                  `/updateStudentCourseDetail/${data.courseDetailId}`,
-                  data,
-                  {
-                      headers: {
-                          "Content-Type": "application/json",
-                      },
-                  }
-              );
-              if (response.status === 200) {
-                  toast.success(response.data.message);
-                  handleNext();
-              } else {
-                  toast.error(response.data.message);
+            // console.log("ID :",data.courseDetailId);
+            const formDatas = new FormData();
+            formDatas.append("courseName", "Arty Dreamers @ RDI");
+            formDatas.append("courseId", data.courseId);
+            formDatas.append("courseDay", data.courseDay);
+            formDatas.append("startDate", data.startDate);
+            formDatas.append("endDate", data.endDate);
+            formDatas.append("file", data.file);
+            formDatas.append("startTime", data.startTime);
+            formDatas.append("endTime", data.endTime);
+            formDatas.append("signatureDate", data.signatureDate);
+            formDatas.append("studentDetailId", id);
+            formDatas.append("detailId", data.courseDetailId);
+            const response = await api.put(
+              `/updateStudentCourseDetail/${data.courseDetailId}`,
+              formDatas,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
               }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              handleNext();
+              getData();
+            } else {
+              toast.error(response.data.message);
+            }
           } else {
-              const response = await api.post(
-                  `/createStudentCourseDetails/${data.id}`,
-                  data,
-                  {
-                      headers: {
-                          "Content-Type": "application/json",
-                      },
-                  }
-              );
-              if (response.status === 201) {
-                  toast.success(response.data.message);
-                  handleNext();
-              } else {
-                  toast.error(response.data.message);
+            const formDatas = new FormData();
+
+            // Append each form field to FormData object
+            formDatas.append("courseId", data.courseId);
+            formDatas.append("courseName", data.courseId);
+            formDatas.append("startDate", data.startDate);
+            formDatas.append("startTime", data.startTime);
+            formDatas.append("file", data.file);
+            formDatas.append("courseDay", data.courseDay);
+            formDatas.append("endDate", data.endDate);
+            formDatas.append("endTime", data.endTime);
+            formDatas.append("signatureDate", data.signatureDate);
+            formDatas.append("studentDetailId", id);
+            const response = await api.post(
+              `/createStudentCourseDetails/${id}`,
+              formDatas,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
               }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              handleNext();
+              getData();
+            } else {
+              toast.error(response.data.message);
+            }
           }
-      } catch (error) {
+        } catch (error) {
           toast.error(error);
-      }
+        }
       },
     });
 
@@ -81,49 +111,61 @@ const EditCourseDetail = forwardRef(
       }
     };
 
-    useEffect(() => {
-      fetchData();
-    }, []);
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllStudentDetails/${formData.id}`);
+        if (
+          response.data.studentCourseDetailModels &&
+          response.data.studentCourseDetailModels.length > 0
+        ) {
+          formik.setValues({
+            ...response.data.studentCourseDetailModels[0],
+            courseDetailId: response.data.studentCourseDetailModels[0].id,
+            startDate:
+              response.data.studentCourseDetailModels[0].startDate.substring(
+                0,
+                10
+              ),
+            endDate:
+              response.data.studentCourseDetailModels[0].endDate.substring(
+                0,
+                10
+              ),
+            signatureDate:
+              response.data.studentCourseDetailModels[0].signatureDate.substring(
+                0,
+                10
+              ),
+            courseDay:
+              response.data.studentCourseDetailModels[0].courseDay.substring(
+                0,
+                10
+              ),
+          });
+          setData(response.data);
+          // console.log("StudentDetails",response.data);
+        } else {
+          // If there are no emergency contacts, set default values or handle the case as needed
+          formik.setValues({
+            courseDetailId: null,
+            courseId: "",
+            startDate: "",
+            startTime: "",
+            parentSignature: null || "",
+            courseDay: "",
+            endDate: "",
+            endTime: "",
+            signatureDate: "",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
     useEffect(() => {
-      const getData = async () => {
-        try {
-          const response = await api.get(
-            `/getAllStudentDetails/${formData.id}`
-          );
-          if (
-            response.data.studentCourseDetailModels &&
-            response.data.studentCourseDetailModels.length > 0
-          ) {
-            formik.setValues({
-              ...response.data.studentCourseDetailModels[0],
-              courseDetailId: response.data.studentCourseDetailModels[0].id,
-              startDate: response.data.studentCourseDetailModels[0].startDate.substring(0,10),
-              endDate: response.data.studentCourseDetailModels[0].endDate.substring(0,10),
-              signatureDate: response.data.studentCourseDetailModels[0].signatureDate.substring(0,10),
-              courseDay: response.data.studentCourseDetailModels[0].courseDay.substring(0,10),
-            });
-          } else {
-            // If there are no emergency contacts, set default values or handle the case as needed
-            formik.setValues({
-              courseDetailId: null,
-              courseId:"",
-              startDate: "",
-              startTime: "",
-              parentSignature: null || "",
-              courseDay: "",
-              endDate: "",
-              endTime:"",
-              signatureDate: "",
-            });
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      // console.log(formik.values);
+      fetchData();
       getData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -197,15 +239,37 @@ const EditCourseDetail = forwardRef(
                         <input
                           type="file"
                           className="form-control"
-                          name="parentSignature"
+                          name="file"
                           onChange={(event) => {
-                            formik.setFieldValue(
-                              "parentSignature",
-                              event.currentTarget.files[0]
-                            );
+                            formik.setFieldValue("file", event.target.files[0]);
                           }}
                           onBlur={formik.handleBlur}
                         />
+                        {data.studentCourseDetailModels &&
+                          data.studentCourseDetailModels.length > 0 &&
+                          data.studentCourseDetailModels.map((parent) => (
+                            <div className="container-fluid col-12 p-2">
+                              <img
+                                src={parent.parentSignature}
+                                className="img-fluid rounded"
+                                style={{ width: "60%" }}
+                                alt="Parent Signature Img"
+                              ></img>
+                            </div>
+                          ))}
+                        {(!data.studentCourseDetailModels ||
+                          data.studentCourseDetailModels.length === 0) && (
+                          <div
+                            id="panelsStayOpen-collapseThree"
+                            class="accordion-collapse collapse"
+                          >
+                            <div class="accordion-body">
+                              <div className="text-muted">
+                                Parent Signature / not available !
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">

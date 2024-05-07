@@ -63,7 +63,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         formDatas.append('mobileNumber', data.mobileNumber);
         formDatas.append('postalCode', data.postalCode);
         formDatas.append('address', data.address);
-        formDatas.append('parentId', id);
+        // formDatas.append('parentId', id);
         formDatas.append('password', "12345678");
 
         const response = await api.put(
@@ -78,6 +78,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         if (response.status === 201) {
           toast.success(response.data.message);
           handleClose();
+          fetchParentData();
           getData();
         } else {
           toast.error(response.data.message);
@@ -88,23 +89,24 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
     },
   });
 
+  const fetchParentData = async () => {
+    try {
+      const response = await api.get(
+        `/getAllStudentParentsDetailsById/${id}`
+      );
+      const getFormData = {
+        ...response.data,
+        parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10),
+      };
+      formik.setValues(getFormData);
+      setData(response.data);
+      console.log("Student ParentsDetails Data:", getFormData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchParentData = async () => {
-      try {
-        const response = await api.get(
-          `/getAllStudentParentsDetailsById/${id}`
-        );
-        const getFormData = {
-          ...response.data,
-          parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10),
-        };
-        formik.setValues(getFormData);
-        setData(response.data);
-        console.log("Student ParentsDetails Data:", getFormData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
     fetchParentData();
   }, []);
 
