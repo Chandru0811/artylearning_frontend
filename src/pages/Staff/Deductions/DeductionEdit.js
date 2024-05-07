@@ -84,6 +84,7 @@ function DeductionEdit() {
       try {
         const response = await api.get(`/getAllUserDeductionById/${id}`);
         formik.setValues(response.data);
+        fetchUserName(response.data.centerId);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
