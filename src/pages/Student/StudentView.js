@@ -7,7 +7,7 @@ import fetchAllCoursesWithIds from "../List/CourseList";
 import StudentSummary from "./StudentSummary";
 function StudentView() {
   const { id } = useParams();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   console.log("Student Datas:", data);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
@@ -31,6 +31,7 @@ function StudentView() {
         const response = await api.get(`/getAllStudentDetails/${id}`);
         // console.log("Api data:", response.data);
         setData(response.data);
+        console.log("StudentDetails", response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -115,6 +116,7 @@ function StudentView() {
             </Link>
           </div>
 
+          {/* Student Details */}
           <div className="accordion-item">
             <h2 className="accordion-header">
               <button
@@ -402,6 +404,7 @@ function StudentView() {
             </div>
           </div>
 
+          {/* Emergency Contact */}
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button
@@ -421,7 +424,7 @@ function StudentView() {
             >
               <div clasclassName="accordion-body row">
                 <div className="container p-3">
-                  <div className="row pb-3">
+                  <div className="row pb-3 ">
                     <div className="col-md-6 col-12">
                       <div className="row  mb-2">
                         <div className="col-6  ">
@@ -477,6 +480,7 @@ function StudentView() {
                         </div>
                       </div>
                     </div>
+
                     <div className="col-md-6 col-12 mt-5">
                       <div className="row  mb-2">
                         <div className="col-6  ">
@@ -487,102 +491,120 @@ function StudentView() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-6 col-12">
-                      <div className="row  mb-2">
-                        <div className="col-6  ">
-                          <p className="fw-medium">Name</p>
+
+                    {/* Multiple Emergency Contact Data */}
+                    <h5 className="my-4">
+                      Authorized Person to take Child From Home
+                    </h5>
+                    {data?.studentEmergencyContacts?.[0]?.emergencyAuthorizedContactModels?.map(
+                      (emergency, index) => (
+                        <div className="row" key={index}>
+                          <div className="d-flex align-items-center justify-content-between">
+                            <button
+                              className="btn btn-sm border-none text-primary px-3 my-3 fw-bold fs-4"
+                              style={{ backgroundColor: "#b2d3df" }}
+                            >
+                              {index + 1}
+                            </button>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Name</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {emergency.name || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Contact No</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {emergency.contactNo || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Relation</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {emergency.authorizedRelation || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Postal Code</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {emergency.postalCode || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Address</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {emergency.emergencyContactAddress || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Person Profile</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  <img
+                                   src={emergency.personProfile}
+                                   name="personProfile"
+                                   className="img-fluid ms-2 w-100 rounded"
+                                  />
+                                </p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="col-6">
-                          <p className="text-muted text-sm">
-                            <b className="mx-2">:</b>
-                            {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0].name
-                              ? data.studentEmergencyContacts[0].name
-                              : "--"}
-                          </p>
-                        </div>
+                      )
+                    )}
+                    {/* {(!data.studentEmergencyContacts.emergencyAuthorizedContactModels ||
+                      data.studentEmergencyContacts.emergencyAuthorizedContactModels.length === 0) && (
+                      <div className="text-muted">
+                        No parent/guardian information available
                       </div>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <div className="row  mb-2">
-                        <div className="col-6  ">
-                          <p className="fw-medium">Contact No</p>
-                        </div>
-                        <div className="col-6">
-                          <p className="text-muted text-sm">
-                            <b className="mx-2">:</b>
-                            {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0].contactNo
-                              ? data.studentEmergencyContacts[0].contactNo
-                              : "--"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <div className="row  mb-2">
-                        <div className="col-6  ">
-                          <p className="fw-medium">Relation</p>
-                        </div>
-                        <div className="col-6">
-                          <p className="text-muted text-sm">
-                            <b className="mx-2">:</b>
-                            {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0].authorizedRelation
-                              ? data.studentEmergencyContacts[0]
-                                  .authorizedRelation
-                              : "--"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <div className="row  mb-2">
-                        <div className="col-6  ">
-                          <p className="fw-medium">Postal Code</p>
-                        </div>
-                        <div className="col-6">
-                          <p className="text-muted text-sm">
-                            <b className="mx-2">:</b>
-                            {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0]
-                              .studentEmergencyContactPostalCode
-                              ? data.studentEmergencyContacts[0]
-                                  .studentEmergencyContactPostalCode
-                              : "--"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <div className="row  mb-2">
-                        <div className="col-6  ">
-                          <p className="fw-medium">Address</p>
-                        </div>
-                        <div className="col-6">
-                          <p className="text-muted text-sm">
-                            <b className="mx-2">:</b>
-                            {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0]
-                              .studentEmergencyContactAddress
-                              ? data.studentEmergencyContacts[0]
-                                  .studentEmergencyContactAddress
-                              : "--"}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    )} */}
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Parent Details */}
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button
@@ -901,6 +923,7 @@ function StudentView() {
             )}
           </div>
 
+          {/* Relation */}
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button
@@ -961,6 +984,7 @@ function StudentView() {
             </div>
           </div>
 
+          {/* Course Details */}
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button
@@ -1051,32 +1075,31 @@ function StudentView() {
                   </table>
                 </div>
                 {data.studentCourseDetailModels &&
-              data.studentCourseDetailModels.length > 0 &&
-              data.studentCourseDetailModels.map((parent) => (
-                <div className="container-fluid col-12 p-2">
-                  <h6>Parent Signature</h6>
-                  <img
-                    src={parent.parentSignature}
-                    className="img-fluid rounded"
-                    style={{width:"20%"}}
-                    alt="Parent Signature Img"
-                  ></img>
-                </div>
-              ))}
-              {(!data.studentCourseDetailModels ||
-              data.studentCourseDetailModels.length === 0) && (
-              <div
-                id="panelsStayOpen-collapseThree"
-                class="accordion-collapse collapse"
-              >
-                <div class="accordion-body">
-                  <div className="text-muted">
-                    Parent Signature / not available !
+                  data.studentCourseDetailModels.length > 0 &&
+                  data.studentCourseDetailModels.map((parent) => (
+                    <div className="container-fluid col-12 p-2">
+                      <h6>Parent Signature</h6>
+                      <img
+                        src={parent.parentSignature}
+                        className="img-fluid rounded"
+                        style={{ width: "20%" }}
+                        alt="Parent Signature Img"
+                      ></img>
+                    </div>
+                  ))}
+                {(!data.studentCourseDetailModels ||
+                  data.studentCourseDetailModels.length === 0) && (
+                  <div
+                    id="panelsStayOpen-collapseThree"
+                    class="accordion-collapse collapse"
+                  >
+                    <div class="accordion-body">
+                      <div className="text-muted">
+                        Parent Signature / not available !
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            )}
-
+                )}
               </div>
             </div>
           </div>

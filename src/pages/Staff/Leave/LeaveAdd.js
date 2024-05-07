@@ -7,27 +7,28 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+import { data } from "jquery";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Select a Centre Name"),
-  userId: Yup.string().required("*Employee Name is required"),
   leaveType: Yup.string().required("*Select a Leave Type"),
   noOfDays: Yup.string().required("*No.Of.Days is required"),
   fromDate: Yup.string().required("*From Date is required"),
   toDate: Yup.string().required("*To Date is required"),
   dayType: Yup.string().required("*Leave Status is required"),
-  leaveStatus: Yup.string().required("*Day Type is required"),
   leaveReason: Yup.string().required("*Leave Reason is required"),
 });
 
 function LeaveAdd() {
-  const [centerData, setCenterData] = useState(null);
-  const [userNamesData, setUserNameData] = useState(null);
+  // const [centerData, setCenterData] = useState(null);
+  // const [userNamesData, setUserNameData] = useState(null);
+  const [datas, setDatas] = useState([]);
+  const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       centerId: "",
       centerName: "",
+      employeeName:"",
       userId: "",
       leaveType: "",
       noOfDays: "",
@@ -43,26 +44,10 @@ function LeaveAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Leave Data:", values);
-      let selectedCenterName = "";
-      let selectedEmployeeName = "";
-
-      centerData.forEach((center) => {
-        if (parseInt(values.centerId) === center.id) {
-          selectedCenterName = center.centerNames || "--";
-        }
-      });
-
-      userNamesData.forEach((employee) => {
-        if (parseInt(values.userId) === employee.id) {
-          selectedEmployeeName = employee.userNames || "--";
-        }
-      });
-
+    
       const payload = {
-        centerId: values.centerId,
-        centerName: selectedCenterName,
-        userId: values.userId,
-        employeeName: selectedEmployeeName,
+        userId: datas.userId,
+        employeeName: datas.employeeName,
         leaveType: values.leaveType,
         noOfDays: values.noOfDays,
         fromDate: values.fromDate,
@@ -71,7 +56,7 @@ function LeaveAdd() {
         approverName: values.approverName,
         dayType: values.dayType,
         attachment: values.attachment,
-        leaveStatus: values.leaveStatus,
+        leaveStatus: "PENDING",
         leaveReason: values.leaveReason,
       };
 
@@ -93,37 +78,18 @@ function LeaveAdd() {
     },
   });
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchUserName = async (centerId) => {
-    try {
-      const userNames = await fetchAllEmployeeListByCenter(centerId);
-      setUserNameData(userNames);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const handleCenterChange = async (event) => {
-    setUserNameData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    try {
-      await fetchUserName(centerId);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    const getData = async () => {
+      try {
+        const response = await api.get(
+          `/getUserLeaveRequestByUserId/${userId}`
+        );
+        setDatas(response.data);
+      } catch (error) {
+        toast.error("Error Fetching Data : ", error);
+      }
+    };
+    getData();
   }, []);
 
   return (
@@ -146,52 +112,20 @@ function LeaveAdd() {
           <div className="row">
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
-                Centre Name<span className="text-danger">*</span>
+                Employee Name<span className="text-danger">*</span>
               </label>
-              <select
-                {...formik.getFieldProps("centerId")}
-                className={`form-select ${
-                  formik.touched.centerId && formik.errors.centerId
-                    ? "is-invalid"
-                    : ""
-                }`}
-                aria-label="Default select example"
-                onChange={handleCenterChange}
-              >
-                <option disabled></option>
-                {centerData &&
-                  centerData.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
-                    </option>
-                  ))}
-              </select>
-              {formik.touched.centerId && formik.errors.centerId && (
-                <div className="invalid-feedback">{formik.errors.centerId}</div>
-              )}
+              <input
+                type="text"
+                name="employeeName"
+                className="form-control"
+                value={datas && datas.employeeName}
+                // {...formik.getFieldProps("employeeName")}
+                readOnly
+              />
+              <input type="hidden" name="userId" value={datas && datas.userId}
+              {...formik.getFieldProps("userId")} />
             </div>
-            <div className="col-md-6 col-12 mb-3 ">
-              <lable className="">Employee Name</lable>
-              <select
-                {...formik.getFieldProps("userId")}
-                class={`form-select  ${
-                  formik.touched.userId && formik.errors.userId
-                    ? "is-invalid"
-                    : ""
-                }`}
-              >
-                <option selected disabled></option>
-                {userNamesData &&
-                  userNamesData.map((userName) => (
-                    <option key={userName.id} value={userName.id}>
-                      {userName.userNames}
-                    </option>
-                  ))}
-              </select>
-              {formik.touched.userId && formik.errors.userId && (
-                <div className="invalid-feedback">{formik.errors.userId}</div>
-              )}
-            </div>
+
             <div className="col-md-6 col-12 mb-3">
               <label>
                 Leave Type<span className="text-danger">*</span>
@@ -212,29 +146,6 @@ function LeaveAdd() {
               {formik.touched.leaveType && formik.errors.leaveType && (
                 <div className="invalid-feedback">
                   {formik.errors.leaveType}
-                </div>
-              )}
-            </div>
-            <div className="col-md-6 col-12 mb-3">
-              <label>
-                Leave Status<span className="text-danger">*</span>
-              </label>
-              <select
-                className={`form-select  ${
-                  formik.touched.leaveStatus && formik.errors.leaveStatus
-                    ? "is-invalid"
-                    : ""
-                }`}
-                {...formik.getFieldProps("leaveStatus")}
-              >
-                <option selected></option>
-                <option value="PENDING">Pending</option>
-                <option value="REJECTED">Rejected</option>
-                <option value="APPROVED">Approved</option>
-              </select>
-              {formik.touched.leaveStatus && formik.errors.leaveStatus && (
-                <div className="invalid-feedback">
-                  {formik.errors.leaveStatus}
                 </div>
               )}
             </div>

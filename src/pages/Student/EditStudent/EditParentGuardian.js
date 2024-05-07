@@ -40,7 +40,7 @@ const EditParentGuardian = forwardRef(
                 <h5 className="headColor mb-3">Parents / Guardian Details</h5>
                 {/* <div className="overflow-scroll"> */}
                   <table className="table table-border-solid">
-                    <thead className=" table-light bg-warning ">
+                    <thead className=" table-light bg-warning">
                       <tr>
                         <th scope="col" className="fw-medium">
                           S.No

@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
   contactNo: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
     .notRequired(""),
-  studentEmergencyContactPostalCode: Yup.string()
+  postalCode: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
     .notRequired(""),
 });
@@ -34,47 +34,35 @@ const AddEmergencyContact = forwardRef(
             name: formData.name || "",
             emergencyRelation: formData.emergencyRelation || "",
             contactNo: formData.contactNo || "",
-            studentEmergencyContactPostalCode:
-              formData.studentEmergencyContactPostalCode || "",
-            studentEmergencyContactAddress:
-              formData.studentEmergencyContactAddress || "",
-            files: formData.files || "",
+            postalCode:formData.postalCode || "",
+            emergencyContactAddress:formData.emergencyContactAddress || "",
+            files: null || "",
           },
         ],
       },
       // validationSchema: validationSchema,
       onSubmit: async (data) => {
-        handleNext();
+        // handleNext();
         const formDatas = new FormData();
 
         // Append fields for emergency contact
         formDatas.append("emergencyContactName", data.emergencyContactName);
-        formDatas.append("authorizedRelation", data.authorizedRelation);
+        formDatas.append("emergencyRelation", data.emergencyRelation);
         formDatas.append("emergencyContactNo", data.emergencyContactNo);
 
         // Append fields for each emergency contact information
-        data.emergencyContactInformation.forEach((contact, index) => {
-          // Append contact fields directly without the index
-          formDatas.append("emergencyContactName", data.emergencyContactName);
-          formDatas.append("authorizedRelation", data.authorizedRelation);
-          formDatas.append("emergencyContactNo", data.emergencyContactNo);
+        data.emergencyContactInformation.forEach((contact) => {
           formDatas.append("name", contact.name);
-          formDatas.append("emergencyRelation", contact.emergencyRelation);
           formDatas.append("contactNo", contact.contactNo);
-          formDatas.append(
-            "studentEmergencyContactPostalCode",
-            contact.studentEmergencyContactPostalCode
-          );
-          formDatas.append(
-            "studentEmergencyContactAddress",
-            contact.studentEmergencyContactAddress
-          );
+          formDatas.append("authorizedRelation", contact.authorizedRelation);
+          formDatas.append("postalCode",contact.postalCode);
+          formDatas.append("emergencyContactAddress",contact.emergencyContactAddress);
           formDatas.append("files", contact.files);
         });
         console.log(formDatas);
         try {
           const response = await api.post(
-            `/createStudentEmergencyContacts/${formData.student_id}`,
+            `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.student_id}`,
             formDatas,
             {
               headers: {
@@ -85,6 +73,7 @@ const AddEmergencyContact = forwardRef(
           if (response.status === 201) {
             toast.success(response.data.message);
             setFormData((prev) => ({ ...prev, ...data }));
+            handleNext();
           } else {
             toast.error(response.data.message);
           }
@@ -140,10 +129,10 @@ const AddEmergencyContact = forwardRef(
                               </label>
                               <br />
                               <select
-                                name="authorizedRelation"
+                                name="emergencyRelation"
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
-                                value={formik.values.authorizedRelation}
+                                value={formik.values.emergencyRelation}
                                 className="form-select "
                                 aria-label="example"
                               >
@@ -220,14 +209,14 @@ const AddEmergencyContact = forwardRef(
                             </label>
                             <br />
                             <select
-                              name={`emergencyContactInformation[${index}].emergencyRelation`}
+                              name={`emergencyContactInformation[${index}].authorizedRelation`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               className="form-select "
                               aria-label=" example"
                               value={
                                 formik.values.emergencyContactInformation[index]
-                                  ?.emergencyRelation || ""
+                                  ?.authorizedRelation || ""
                               }
                             >
                               <option value=""></option>
@@ -247,10 +236,10 @@ const AddEmergencyContact = forwardRef(
                               type="text"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              name={`emergencyContactInformation[${index}].studentEmergencyContactAddress`}
+                              name={`emergencyContactInformation[${index}].emergencyContactAddress`}
                               value={
                                 formik.values.emergencyContactInformation[index]
-                                  ?.studentEmergencyContactAddress || ""
+                                  ?.emergencyContactAddress || ""
                               }
                             />
                           </div>
@@ -283,10 +272,10 @@ const AddEmergencyContact = forwardRef(
                               type="text"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              name={`emergencyContactInformation[${index}].studentEmergencyContactPostalCode`}
+                              name={`emergencyContactInformation[${index}].postalCode`}
                               value={
                                 formik.values.emergencyContactInformation[index]
-                                  ?.studentEmergencyContactPostalCode || ""
+                                  ?.postalCode || ""
                               }
                             />
                           </div>
@@ -298,14 +287,21 @@ const AddEmergencyContact = forwardRef(
                             <input
                               className="form-control"
                               type="file"
+                              name="files"
+                               // name={`emergencyContactInformation[${index}].files`}
+                              // onChange={(event) => {
+                              //   const fileName = event.target.files[0].name;
+                              //   event.target.parentNode.querySelector(
+                              //     ".file-name"
+                              //   ).textContent = fileName;
+                              // }}
                               onChange={(event) => {
-                                const fileName = event.target.files[0].name;
-                                event.target.parentNode.querySelector(
-                                  ".file-name"
-                                ).textContent = fileName;
+                                formik.setFieldValue(
+                                  `emergencyContactInformation[${index}].files`,
+                                  event.target.files[0]
+                                );
                               }}
                               onBlur={formik.handleBlur}
-                              name={`emergencyContactInformation[${index}].files`}
                               accept=".jpg, .jpeg, .png"
                             />
                             <span className="file-name"></span>

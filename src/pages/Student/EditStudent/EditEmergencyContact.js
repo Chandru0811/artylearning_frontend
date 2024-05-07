@@ -35,53 +35,49 @@ const EditEmergencyContact = forwardRef(
       onSubmit: async (data) => {
         console.log("Api Data:", data.emergencyContactId);
         try {
-            if (data.emergencyContactId !== null ) {
-                console.log("Emergency Contact ID:", data.emergencyContactId);
-                const response = await api.put(
-                    `/updateStudentEmergencyContact/${data.emergencyContactId}`,
-                    data,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-                if (response.status === 200) {
-                    toast.success(response.data.message);
-                    handleNext();
-                } else {
-                    toast.error(response.data.message);
-                }
+          if (data.emergencyContactId !== null) {
+            console.log("Emergency Contact ID:", data.emergencyContactId);
+            const response = await api.put(
+              `/updateStudentEmergencyContact/${data.emergencyContactId}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              handleNext();
             } else {
-                const response = await api.post(
-                    `/createStudentEmergencyContacts/${data.id}`,
-                    data,
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-                if (response.status === 201) {
-                    toast.success(response.data.message);
-                    handleNext();
-                } else {
-                    toast.error(response.data.message);
-                }
+              toast.error(response.data.message);
             }
+          } else {
+            const response = await api.post(
+              `/createStudentEmergencyContacts/${data.id}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          }
         } catch (error) {
-            toast.error(error);
+          toast.error(error);
         }
-    },
-
-
+      },
     });
 
     const fetchData = async () => {
       try {
-        const response = await api.get(
-          `/getAllStudentDetails/${formData.id}`
-        );
+        const response = await api.get(`/getAllStudentDetails/${formData.id}`);
         setData(response.data);
         formik.setValues({
           ...response.data.studentEmergencyContacts[0],
@@ -207,19 +203,35 @@ const EditEmergencyContact = forwardRef(
                 </tr>
               </thead>
               <tbody>
-                {data.studentEmergencyContacts &&
-                  data.studentEmergencyContacts.map((stdEmg, index) => (
+                {data?.studentEmergencyContacts?.[0]?.emergencyAuthorizedContactModels?.map(
+                  (stdEmg, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{stdEmg.name || "-"}</td>
+                      <td style={{ width: "20%" }}>
+                        <p className="d-flex">
+                          <img
+                            src={stdEmg.personProfile}
+                            className="rounded-5 mx-1"
+                            style={{ width: "20%" }}
+                            alt="Img"
+                          ></img>
+                          {stdEmg.name || "-"}
+                        </p>
+                      </td>
                       <td>{stdEmg.contactNo || "-"}</td>
                       <td>{stdEmg.authorizedRelation || "-"}</td>
-                      <td>{stdEmg.studentEmergencyContactPostalCode || "-"}</td>
-                      <td>
-                        <EditEmergencyContactModel id={stdEmg.id}  getData={fetchData}/>
+                      <td>{stdEmg.postalCode || "-"}</td>
+                      <td className="ps-0">
+                        <EditEmergencyContactModel
+                          id={stdEmg.id}
+                          emergencyId={data?.studentEmergencyContacts?.[0]?.id}
+                          getData={fetchData}
+                          formValue={formik.values}
+                        />
                       </td>
                     </tr>
-                  ))}
+                  )
+                )}
               </tbody>
             </table>
           </div>
