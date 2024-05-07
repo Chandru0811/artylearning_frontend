@@ -67,64 +67,141 @@ function Payslip() {
     doc.text("DATE OF JOINING ", 120, 70);
     doc.text("DESIGNATION ", 120, 80);
     doc.setFont("helvetica", "normal");
-    doc.text(`: hi`, 45, 70);
-    doc.text(`: hi`, 45, 80);
-    doc.text(`: hi`, 155, 70);
-    doc.text(`: hi`, 155, 80);
+    doc.text(`: ${data.employeeName}`, 45, 70);
+    doc.text(`: ${data.payslipMonth}`, 45, 80);
+    doc.text(`: ${data.dateOfJoining.substring(0, 10)}`, 155, 70);
+    doc.text(`: ${data.designation}`, 155, 80);
     // doc.text("PAID DAYS : JANUARY", 14, 90);
     // doc.text("LOP : 0", 125, 90);
 
-    doc.line(10, 95, 200, 95);
+    // doc.line(10, 95, 200, 95);
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("EARNING", 10, 105);
-    // doc.text("HOURS", 40, 130);
-    doc.text("AMOUNT", 70, 105);
-    doc.text("DEDUCTION", 120, 105);
-    doc.text("AMOUNT", 165, 105);
+    // doc.setFont("helvetica", "bold");
+    // doc.setFontSize(11);
+    // doc.text("EARNING", 10, 105);
+    // // doc.text("HOURS", 40, 130);
+    // doc.text("AMOUNT", 70, 105);
+    // doc.text("DEDUCTION", 120, 105);
+    // doc.text("AMOUNT", 165, 105);
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("BASIC SALARY", 10, 115);
-    // doc.text("224", 40, 140);
-    doc.text(`: hi`, 70, 115);
-    doc.text("HEALTH", 120, 115);
-    doc.text(`: hi`, 165, 115);
+    // doc.setFont("helvetica", "normal");
+    // doc.setFontSize(10);
+    // doc.text("BASIC SALARY", 10, 115);
+    // // doc.text("224", 40, 140);
+    // doc.text(`: ${data.basicSalary}`, 70, 115);
+    // doc.text(`${data.deductions.map(deduction => [deduction.detectionName, deduction.amount])}`, 120, 115);
+    // doc.text(`: ${data.deductions.amount}`, 165, 115);
 
-    // doc.text("OVERTIME", 10, 150);
-    // doc.text("5", 40, 150);
-    // doc.text("$100.00", 70, 150);
-    doc.text("LOSS OF PAY", 120, 125);
-    doc.text("$160.00", 165, 125);
+    // // doc.text("OVERTIME", 10, 150);
+    // // doc.text("5", 40, 150);
+    // // doc.text("$100.00", 70, 150);
+    // doc.text(`${data.detectionName}`, 120, 125);
+    // doc.text(`: ${data.amount}`, 165, 125);
 
-    doc.text("BONUS", 10, 125);
-    // doc.text("-", 40, 160);
-    doc.text(`: hi`, 70, 125);
+    // doc.text("BONUS", 10, 125);
+    // // doc.text("-", 40, 160);
+    // doc.text(`: ${data.bonus}`, 70, 125);
 
-    doc.line(10, 129, 200, 129);
-    doc.line(10, 140, 200, 140);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
-    doc.text("GROSS PAY", 10, 135);
-    // doc.text("265", 40, 170);
-    doc.text(`: hi`, 70, 135);
-    doc.text("DEDUCTION TOTAL", 120, 135);
-    doc.text(`: hi`, 165, 135);
+    // doc.line(10, 129, 200, 129);
+    // doc.line(10, 140, 200, 140);
+    // doc.setFont("helvetica", "bold");
+    // doc.setFontSize(10);
+    // doc.text("GROSS PAY", 10, 135);
+    // // doc.text("265", 40, 170);
+    // doc.text(`: ${data.grossPay}`, 70, 135);
+    // doc.text("DEDUCTION TOTAL", 120, 135);
+    // doc.text(`: ${data.deductionTotal}`, 165, 135);
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("NET PAY", 12, 150);
-    doc.setFont("helvetica", "normal");
-    doc.text(`: hi`, 70, 150);
+    // doc.setFont("helvetica", "bold");
+    // doc.setFontSize(11);
+    // doc.text("NET PAY", 12, 150);
+    // doc.setFont("helvetica", "normal");
+    // doc.text(`: ${data.netPay}`, 70, 150);
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("IN WORDS", 12, 160);
-    doc.setFont("helvetica", "normal");
-    doc.text(`: hi}`, 70, 160);
+    // doc.setFont("helvetica", "bold");
+    // doc.setFontSize(11);
+    // doc.text("IN WORDS", 12, 160);
+    // doc.setFont("helvetica", "normal");
+    // doc.text(`: ${data.netPayInWords}`, 70, 160);
 
-    doc.save("Payslip.pdf");
+    // doc.save("Payslip.pdf");
+
+    // Assuming data.deductions is an array of objects with properties detectionName and amount
+
+// Define table headers
+// Define headers for the table
+const headers = ["EARNING", "AMOUNT", "DEDUCTION", "AMOUNT"];
+
+// Define earning data
+const earningData = [
+    ["BASIC SALARY", data.basicSalary],
+    ["BONUS", data.bonus],
+    // Add other earning categories as needed
+];
+
+// Define deduction data
+const deductionData =[ [data.deductions.map(deduction => [deduction.detectionName])],
+[data.deductions.map(deduction =>  [deduction.amount])]
+];
+// Calculate gross pay by summing all earning amounts
+const grossPay = earningData.reduce((total, [_, amount]) => total + amount, 0);
+
+// Calculate deduction total by summing all deduction amounts
+const deductionTotal = deductionData.reduce((total, [, amount]) => total + amount, 0);
+
+// Define table body by concatenating earning and deduction data
+const tableBody = [...earningData];
+const tableColumn = [["", "",], ...deductionData]
+
+// Define table dimensions and styles
+const startX = 10;
+const startXX = 60;
+const startY = 95;
+const cellWidth = 50;
+const cellHeight = 10;
+const fontSize = 10;
+
+// Draw table headers
+doc.setFont("helvetica", "bold");
+doc.setFontSize(fontSize);
+headers.forEach((header, index) => doc.text(header, startX + index * cellWidth, startY));
+
+// Draw table body
+doc.setFont("helvetica", "normal");
+doc.setFontSize(fontSize);
+// Iterate over rows
+tableBody.forEach((row, rowIndex) => {
+  // Calculate Y position for the current row
+  const rowX = startY + (rowIndex + 1) * cellHeight;
+  
+  // Iterate over cells in the row
+  row.forEach((cell, colIndex) => {
+      // Calculate X position for the current cell
+      const colX = startX + colIndex * cellWidth;
+      
+      // Draw the cell content
+      doc.text(cell.toString(), colX, rowX);
+  });   
+});
+
+
+tableColumn.forEach((col, colIndex) => {
+  
+  const colX = startXX + colIndex * cellWidth;
+  
+  // Iterate over cells in the column
+  col.forEach((cell, rowIndex) => {
+      // Calculate Y position for the current cell
+      const rowX = startY + (rowIndex + 1) * cellHeight;
+      
+      // Draw the cell content
+      doc.text(cell.toString(), colX, rowX);
+  });
+});
+
+// Save document
+doc.save("Payslip.pdf");
+
   };
 
   return (
@@ -258,64 +335,55 @@ function Payslip() {
                 </div> */}
                   </div>
                   <div className="row paysliptable ">
-                    <div className="col-md-6 col-12">
-                      <table class="table table-end-border table-borderless">
+                    <div className="col-12">
+                      <table class="table ">
                         <thead className="table-bordered">
                           <tr>
                             <th scope="col">EARNING</th>
-                            {/* <th scope="col">HOURS</th> */}
-                            <th scope="col">AMOUNT</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>BASIC SALARY</td>
-                            {/* <td>224</td> */}
-                            <td>{data.basicSalary}</td>
-                          </tr>
-                          {/* <tr>
-                        <td>OVERTIME</td>
-                        <td>5</td>
-                        <td>$100.00</td>
-                      </tr> */}
-                          <tr>
-                            <td>BONUS</td>
-                            {/* <td>-</td> */}
-                            <td>{data.bonus}</td>
-                          </tr>
-                          <tr>
-                            <td style={{ visibility: "hidden" }}>jjk</td>
-                            <td style={{ visibility: "hidden" }}>fvbg</td>
-                          </tr>
-                          <tr className="table-bordered">
-                            <td>GROSS PAY</td>
-                            {/* <td>265</td> */}
-                            <td>{data.grossPay}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <table class="table table-borderless">
-                        <thead className="table-bordered">
-                          <tr>
+                            <th scope="col" style={{borderRight : "2px solid black"}}>AMOUNT</th>
                             <th scope="col">DEDUCTION</th>
                             <th scope="col">AMOUNT</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {data.deductions &&
-                            data.deductions.map((data, index) => (
-                              <tr key={index + 1}>
-                                <td>{data.detectionName}</td>
-                                <td>{data.amount}</td>
-                              </tr>
-                            ))}
                           <tr>
-                            <td style={{ visibility: "hidden" }}>jjk</td>
-                            <td style={{ visibility: "hidden" }}>fvbg</td>
+                            <td>
+                              <div className="mb-2">BASIC SALARY</div>
+                              <div>BONUS</div>
+                            </td>
+
+                            <td  style={{borderRight : "2px solid black"}}>
+                              <div className="mb-2">{data.basicSalary}</div>
+                              <div>{data.bonus}</div>
+                            </td>
+                            <td>
+                              {data.deductions &&
+                                data.deductions.map((data, index) => (
+                                  <tr key={index + 1}>
+                                    <td>
+                                      <div className="mb-2">{data.detectionName}</div>
+                                    </td>
+                                  </tr>
+                                ))}
+                            </td>
+                            <td>
+                              {data.deductions &&
+                                data.deductions.map((data, index) => (
+                                  <tr key={index + 1}>
+                                    <td>
+                                      <div className="mb-2">
+                                      {data.amount}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                            </td>
+                            {/* <td>{data.amount}</td> */}
                           </tr>
+
                           <tr className="table-bordered">
+                            <td>GROSS PAY</td>
+                            <td style={{borderRight : "2px solid black"}}>{data.grossPay}</td>
                             <td>DEDUCTION TOTAL</td>
                             <td>{data.deductionTotal}</td>
                           </tr>
