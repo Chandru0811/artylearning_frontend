@@ -28,7 +28,32 @@ const EditEmergencyContact = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
     const [rows, setRows] = useState([{}]);
     const [data, setData] = useState([]);
-    console.log("Data is", rows)
+    console.log("Data is", rows);
+
+    const handleDelete = () => {
+      formik.setFieldValue(
+        "emergencyAuthorizedContactModels",
+        formik.values.emergencyAuthorizedContactModels.slice(0, -1)
+      );
+      setRows((prev) => prev.slice(0, -1));
+    };
+
+    const handleAddRow = () => {
+      const newContactModel = {
+        name: "",
+        emergencyRelation: "",
+        contactNo: "",
+        postalCode: "",
+        emergencyContactAddress: "",
+        files: null,
+      };
+      formik.setFieldValue("emergencyAuthorizedContactModels", [
+        ...formik.values.emergencyAuthorizedContactModels,
+        newContactModel,
+      ]);
+      setRows((prev) => [...prev, {}]);
+    };
+
     const formik = useFormik({
       initialValues: {
         emergencyContactId: "",
@@ -56,7 +81,9 @@ const EditEmergencyContact = forwardRef(
             formDatas.append("emergencyRelation", data.emergencyRelation);
             formDatas.append("emergencyContactNo", data.emergencyContactNo);
             data.emergencyAuthorizedContactModels.forEach((contact) => {
-              formDatas.append("emergencyAuthorizedContactIds", contact.id);
+              if (contact.id) {
+                formDatas.append("emergencyAuthorizedContactIds", contact.id);
+              }
               formDatas.append("name", contact.name);
               formDatas.append("contactNo", contact.contactNo);
               formDatas.append(
@@ -196,7 +223,6 @@ const EditEmergencyContact = forwardRef(
     //     console.error("Error fetching data:", error);
     //   }
     // };
-
 
     console.log("Formik values is ", formik.values);
 
@@ -445,9 +471,7 @@ const EditEmergencyContact = forwardRef(
             <div className="col-12 mb-4">
               <button
                 type="button"
-                onClick={() => {
-                  setRows((prev) => [...prev, {}]);
-                }}
+                onClick={handleAddRow}
                 className="btn btn-border btn-sm"
               >
                 <i className="bx bx-plus"></i> Add More
@@ -456,7 +480,7 @@ const EditEmergencyContact = forwardRef(
               {rows.length > 1 && (
                 <button
                   type="button"
-                  onClick={() => setRows((prev) => prev.slice(0, -1))}
+                  onClick={handleDelete}
                   className="btn btn-outline-danger"
                 >
                   Delete
