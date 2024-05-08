@@ -110,12 +110,12 @@ function Sidebar() {
           {
             title: "Payroll",
             path: "/payrolladmin",
-            access: storedScreens.rolesMatrixIndex,
+            access: true,
           },
           {
             title: "Payslip",
             path: "/employeepayslip",
-            access: storedScreens.rolesMatrixIndex,
+            access: true,
           },
           {
             title: "Role & Matrix",

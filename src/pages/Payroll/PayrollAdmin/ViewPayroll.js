@@ -6,7 +6,6 @@ import api from "../../../config/URL";
 function Viewpayroll() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   // console.log("View Data", data);
 
@@ -15,7 +14,6 @@ function Viewpayroll() {
       try {
         const response = await api.get(`getAllUserPayrollById/${id}`);
         setData(response.data);
-        setLoading(false);
       } catch (error) {
         toast.error("Error Fetching Data ", error);
       }
@@ -34,112 +32,100 @@ function Viewpayroll() {
           </Link>
         </div>
       </div>
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+      <div className="container">
+        <div className="row mt-5">
+          <div className="col-md-6 col-12">
+            <div className="row mb-2">
+              <div className="col-6 ">
+                <p className="fw-medium">Centre Name</p>
+              </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">
+                  : {data.centerName || "--"}
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="container">
-          <div className="row mt-5">
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Centre Name</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.centerName || "--"}
-                  </p>
-                </div>
+          <div className="col-md-6 col-12">
+            <div className="row mb-2">
+              <div className="col-6  ">
+                <p className="fw-medium">Employee Name</p>
+              </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">
+                  : {data.employeeName || "--"}
+                </p>
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6  ">
-                  <p className="fw-medium">Employee Name</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.employeeName || "--"}
-                  </p>
-                </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="row mb-2">
+              <div className="col-6  ">
+                <p className="fw-medium">Payroll Month</p>
+              </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">
+                  : {data.payrollMonth || "--"}
+                </p>
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6  ">
-                  <p className="fw-medium">Payroll Month</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.payrollMonth || "--"}
-                  </p>
-                </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="row mb-2">
+              <div className="col-6  ">
+                <p className="fw-medium">Gross Pay</p>
+              </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">
+                  : {data.grossPay || "--"}
+                </p>
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6  ">
-                  <p className="fw-medium">Gross Pay</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.grossPay || "--"}
-                  </p>
-                </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="row mb-2">
+              <div className="col-6 ">
+                <p className="fw-medium">Bonus</p>
+              </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">: {data.bonus || "--"}</p>
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Bonus</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: {data.bonus || "--"}</p>
-                </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="row mb-2">
+              <div className="col-6 ">
+                <p className="fw-medium">Deduction</p>
+              </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">
+                  : {data.deductionAmount || "0"}
+                </p>
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Deduction</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.deductionAmount || "0"}
-                  </p>
-                </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="row mb-2">
+              <div className="col-6  ">
+                <p className="fw-medium">Net Pay</p>
+              </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">: {data.netPay || "--"}</p>
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6  ">
-                  <p className="fw-medium">Net Pay</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: {data.netPay || "--"}</p>
-                </div>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="row mb-2">
+              <div className="col-6">
+                <p className="fw-medium">Status</p>
               </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6">
-                  <p className="fw-medium">Status</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: {data.status || "--"}</p>
-                </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">: {data.status || "--"}</p>
               </div>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
