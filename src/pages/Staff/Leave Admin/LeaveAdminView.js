@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import fetchAllTeachersWithIds from "../../List/TeacherList";
+
 
 function LeaveAdminView() {
-
   const [data, setData] = useState([]);
-  console.log('Leave Datas:',data);
+  console.log("Leave Datas:", data);
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
+  // const [teacherData, setTeacherData] = useState(null);
+  
 
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      const teacherData = await fetchAllTeachersWithIds();
+      // const teacherData = await fetchAllTeachersWithIds();
       setCenterData(centerData);
-      setTeacherData(teacherData);
+      // setTeacherData(teacherData);
     } catch (error) {
       toast.error(error);
     }
@@ -59,12 +58,14 @@ function LeaveAdminView() {
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
-                : {centerData &&
-                      centerData.map((centerId) =>
-                        parseInt(data.centerId) === centerId.id
-                          ? centerId.centerNames || "--"
-                          : ""
-                      )}</p>
+                :{" "}
+                {centerData &&
+                  centerData.map((centerId) =>
+                    parseInt(data.centerId) === centerId.id
+                      ? centerId.centerNames || "--"
+                      : ""
+                  )}
+              </p>
             </div>
           </div>
         </div>
@@ -80,8 +81,9 @@ function LeaveAdminView() {
                         parseInt(data.teacher) === teacher.id
                           ? teacher.teacherNames || "--"
                           : ""
-                      )}*/}
-                      : {data.employeeName || "--"}</p> 
+                      )} */}
+                : {data.employeeName || "--"}
+              </p>
             </div>
           </div>
         </div>
@@ -151,7 +153,9 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Approver Name</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: {data.approverName || "--"}</p>
+              <p className="text-muted text-sm">
+                : {data.approverName || "--"}
+              </p>
             </div>
           </div>
         </div>
@@ -176,7 +180,7 @@ function LeaveAdminView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Attachment</p>
+      {/* <p class="headColor mt-5">Attachment</p>
       <hr></hr>
       <div className="row mt-4">
         <div className="">
@@ -226,7 +230,7 @@ function LeaveAdminView() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

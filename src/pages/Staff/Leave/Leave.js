@@ -30,7 +30,7 @@ const Leave = () => {
     const getData = async () => {
       try {
         const response = await api.get(
-          `/getUserLeaveRequestByUserId/${128}`
+          `/getUserLeaveRequestByUserId/${userId}`
         );
         setDatas(response.data);
         // console.log("responsedata", response.data);
@@ -78,30 +78,6 @@ const Leave = () => {
           </button>
         </Link>
       </div>
-      <div className="row pb-3">
-        <div className="col-md-6 col-12">
-          <div className="row mt-3 mb-2">
-            <div className="col-6">
-              <p className="fw-medium">Employee Name :</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                : {datas.employeeName || "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row  mb-2 mt-3">
-            <div className="col-6  ">
-              <p className="fw-medium">Leave Limit :</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {datas.leaveLimit || "--"}</p>
-            </div>
-          </div>
-        </div>
-      </div>
       {loading ? (
         <div className="loader-container">
           <div class="loading">
@@ -113,58 +89,86 @@ const Leave = () => {
           </div>
         </div>
       ) : (
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col">Centre Name</th>
-              <th scope="col">Employee Name</th>
-              <th scope="col">Leave Type</th>
-              <th scope="col">Leave Status</th>
-              <th className="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.employeeData.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>
-                  {centerData &&
-                    centerData.map((centerId) =>
-                      parseInt(data.centerId) === centerId.id
-                        ? centerId.centerNames || "--"
-                        : ""
-                    )}
-                </td>
-                <td>{data.employeeName}</td>
-                <td>{data.leaveType}</td>
-                <td>
-                  {data.leaveStatus === "APPROVED" ? (
-                    <span className="badge badges-Green">Approved</span>
-                  ) : data.leaveStatus === "REJECTED" ? (
-                    <span className="badge badges-Red">Rejected</span>
-                  ) : (
-                    <span className="badge badges-Yellow">Pending</span>
-                  )}
-                </td>
-                <td>
-                  <div className="d-flex justify-content-center align-items-center ">
-                    <Link
-                      to={`/leaveadmin/view/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    >
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                  </div>
-                </td>
+        <div>
+          <div className="row pb-3">
+            <div className="col-md-6 col-12">
+              <div className="row mt-3 mb-2">
+                <div className="col-6">
+                  <p className="fw-medium">Employee Name :</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {datas.employeeName || "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2 mt-3">
+                <div className="col-6  ">
+                  <p className="fw-medium">Leave Limit :</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {datas.leaveLimit || "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                  S No
+                </th>
+                <th scope="col">Centre Name</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Leave Type</th>
+                <th scope="col">Leave Status</th>
+                <th className="text-center">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {datas.employeeData.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td>
+                    {centerData &&
+                      centerData.map((centerId) =>
+                        parseInt(data.centerId) === centerId.id
+                          ? centerId.centerNames || "--"
+                          : ""
+                      )}
+                  </td>
+                  <td>{data.employeeName}</td>
+                  <td>{data.leaveType}</td>
+                  <td>
+                    {data.leaveStatus === "APPROVED" ? (
+                      <span className="badge badges-Green">Approved</span>
+                    ) : data.leaveStatus === "REJECTED" ? (
+                      <span className="badge badges-Red">Rejected</span>
+                    ) : (
+                      <span className="badge badges-Yellow">Pending</span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="d-flex justify-content-center align-items-center ">
+                      <Link
+                        to={`/leaveadmin/view/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      >
+                        <button className="btn btn-sm">
+                          <FaEye />
+                        </button>
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -6,12 +6,10 @@ import * as Yup from "yup";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
-import { data } from "jquery";
+
 
 const validationSchema = Yup.object({
   leaveType: Yup.string().required("*Select a Leave Type"),
-  noOfDays: Yup.string().required("*No.Of.Days is required"),
   fromDate: Yup.string().required("*From Date is required"),
   toDate: Yup.string().required("*To Date is required"),
   dayType: Yup.string().required("*Leave Status is required"),
@@ -19,23 +17,50 @@ const validationSchema = Yup.object({
 });
 
 function LeaveAdd() {
-  // const [centerData, setCenterData] = useState(null);
-  // const [userNamesData, setUserNameData] = useState(null);
+  const [centerData, setCenterData] = useState(null);
   const [datas, setDatas] = useState([]);
   const userId = sessionStorage.getItem("userId");
-  const navigate = useNavigate();
+  const centerId = sessionStorage.getItem("centerId");
+  const navigate = useNavigate()
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+
+  const [daysDifference, setDaysDifference] = useState(0);
+ 
+  const calculateDays = (fromDate, toDate) => {
+    const fromDateObj = new Date(fromDate);
+    const toDateObj = new Date(toDate);
+    const difference = toDateObj.getTime() - fromDateObj.getTime();
+    const daysDifference = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
+    formik.setFieldValue("noOfDays", daysDifference);
+    return daysDifference;
+  };
+
+  const fetchData = async () => {
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       centerId: "",
       centerName: "",
-      employeeName:"",
+      employeeName: "",
       userId: "",
       leaveType: "",
       noOfDays: "",
       fromDate: "",
       toDate: "",
       requestDate: "",
-      approverName: "",
       dayType: "",
       attachment: "",
       leaveStatus: "",
@@ -44,21 +69,34 @@ function LeaveAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Leave Data:", values);
-    
+
+      let selectedCenterName = "";
+      
+
+      if (centerData) {
+        centerData.forEach((center) => {
+          if (parseInt(centerId) === center.id) {
+            selectedCenterName = center.centerNames || "--";
+          }
+        });
+      }
       const payload = {
-        userId: datas.userId,
+        userId: userId,
+        centerId: centerId,
+        centerName: selectedCenterName,
         employeeName: datas.employeeName,
         leaveType: values.leaveType,
-        noOfDays: values.noOfDays,
+        noOfDays: daysDifference,
         fromDate: values.fromDate,
         toDate: values.toDate,
-        requestDate: values.requestDate,
-        approverName: values.approverName,
+        requestDate: selectedDate,
         dayType: values.dayType,
         attachment: values.attachment,
         leaveStatus: "PENDING",
         leaveReason: values.leaveReason,
       };
+
+      console.log("Request Date is", payload);
 
       try {
         const response = await api.post("/createUserLeaveRequest", payload, {
@@ -122,8 +160,12 @@ function LeaveAdd() {
                 // {...formik.getFieldProps("employeeName")}
                 readOnly
               />
-              <input type="hidden" name="userId" value={datas && datas.userId}
-              {...formik.getFieldProps("userId")} />
+              <input
+                type="hidden"
+                name="userId"
+                value={datas && datas.userId}
+                {...formik.getFieldProps("userId")}
+              />
             </div>
 
             <div className="col-md-6 col-12 mb-3">
@@ -149,6 +191,7 @@ function LeaveAdd() {
                 </div>
               )}
             </div>
+
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 No.Of.Days<span className="text-danger">*</span>
@@ -161,6 +204,8 @@ function LeaveAdd() {
                     : ""
                 }`}
                 {...formik.getFieldProps("noOfDays")}
+                value={daysDifference || "0"}
+                readOnly
               />
               {formik.touched.noOfDays && formik.errors.noOfDays && (
                 <div className="invalid-feedback">{formik.errors.noOfDays}</div>
@@ -178,6 +223,14 @@ function LeaveAdd() {
                     : ""
                 }`}
                 {...formik.getFieldProps("fromDate")}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  const daysDiff = calculateDays(
+                    e.target.value,
+                    formik.values.toDate
+                  );
+                  setDaysDifference(daysDiff);
+                }}
               />
               {formik.touched.fromDate && formik.errors.fromDate && (
                 <div className="invalid-feedback">{formik.errors.fromDate}</div>
@@ -195,11 +248,20 @@ function LeaveAdd() {
                     : ""
                 }`}
                 {...formik.getFieldProps("toDate")}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  const daysDiff = calculateDays(
+                    formik.values.fromDate,
+                    e.target.value || "0"
+                  );
+                  setDaysDifference(daysDiff) ;
+                }}
               />
               {formik.touched.toDate && formik.errors.toDate && (
                 <div className="invalid-feedback">{formik.errors.toDate}</div>
               )}
             </div>
+
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 Day Type<span className="text-danger">*</span>
