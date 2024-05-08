@@ -6,6 +6,7 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
+import { format } from "date-fns";
 
 const validationSchema = Yup.object({
   centerId: Yup.number().required("*Center Name is required"),
@@ -50,7 +51,7 @@ function DeductionAdd() {
       let payload = {
         centerId: values.centerId,
         centerName: selectedCenterName,
-        userId: values.employeeName,
+        userId: values.userId,
         employeeName: selectedEmployeeName,
         deductionName: values.deductionName,
         deductionMonth: values.deductionMonth,
@@ -108,6 +109,10 @@ function DeductionAdd() {
     }
   };
 
+  useEffect(() => {
+    const currentMonth = format(new Date(), "yyyy-MM");
+    formik.setFieldValue("deductionMonth", currentMonth);
+  }, []);
 
   return (
     <section className="HolidayAdd p-3">
@@ -128,8 +133,8 @@ function DeductionAdd() {
               </div>
             </div>
             <div className="row mt-3">
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Centre Name</lable>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Centre Name</label>
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("centerId")}
@@ -155,8 +160,8 @@ function DeductionAdd() {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Employee Name</lable>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Employee Name</label>
                 <select
                   {...formik.getFieldProps("userId")}
                   class={`form-select  ${
@@ -177,8 +182,8 @@ function DeductionAdd() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Deduction Name</lable>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Deduction Name</label>
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("deductionName")}
@@ -202,9 +207,7 @@ function DeductionAdd() {
                   </div>
                 )}
               </div>
-
-              <div className="col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
+              <div className="col-md-6 col-12 mb-3">
                   <label className="form-label">
                     Deduction Month<span className="text-danger">*</span>
                   </label>
@@ -224,11 +227,8 @@ function DeductionAdd() {
                         {formik.errors.deductionMonth}
                       </div>
                     )}
-                </div>
               </div>
-
-              <div className="col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
+              <div className="col-md-6 col-12 mb-3">
                   <label className="form-label">
                     Deduction Amount<span className="text-danger">*</span>
                   </label>
@@ -248,11 +248,9 @@ function DeductionAdd() {
                         {formik.errors.deductionAmount}
                       </div>
                     )}
-                </div>
               </div>
-
               {/* <div className="col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
+                <div className="text-start mb-3">
                   <label className="form-label">
                     Total Deduction Amount<span className="text-danger">*</span>
                   </label>

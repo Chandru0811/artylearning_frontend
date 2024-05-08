@@ -132,7 +132,7 @@ function AddPayroll() {
   const fetchUserSalaryInfo = async (userId, payrollMonth) => {
     // alert(userId, payrollMonth);
     const queryParams = new URLSearchParams({
-      userId: 110,
+      userId: userId,
       deductionMonth: payrollMonth,
     });
 
