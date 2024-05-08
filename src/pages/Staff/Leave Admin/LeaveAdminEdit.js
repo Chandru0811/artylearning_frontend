@@ -11,7 +11,6 @@ const validationSchema = Yup.object({
   centerId: Yup.string().required("*Select a Centre Name"),
   userId: Yup.string().required("*Employee Name is required"),
   leaveType: Yup.string().required("*Select a Leave Type"),
-  noOfDays: Yup.string().required("*No.Of.Days is required"),
   fromDate: Yup.string().required("*From Date is required"),
   toDate: Yup.string().required("*To Date is required"),
   dayType: Yup.string().required("*Leave Status is required"),
@@ -22,8 +21,9 @@ const validationSchema = Yup.object({
 function LeaveAdminEdit() {
   const [centerData, setCenterData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
-  const [userData, setUserData] = useState(null);
+  const [daysDifference, setDaysDifference] = useState(null);
   const navigate = useNavigate();
+  
   const { id } = useParams();
   const formik = useFormik({
     initialValues: {
@@ -43,9 +43,12 @@ function LeaveAdminEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Leave Data:", values);
+      // console.log("Leave Data:", values);
       let selectedCenterName = "";
       let selectedTeacherName = "";
+
+      // console.log("Teacher Data", teacherData)
+      // console.log("user Data", values.userId)
 
       centerData.forEach((center) => {
         if (parseInt(values.centerId) === center.id) {
@@ -55,7 +58,7 @@ function LeaveAdminEdit() {
 
       teacherData.forEach((teacher) => {
         if (parseInt(values.userId) === teacher.id) {
-          selectedTeacherName = teacher.teacherNames || "--";
+          selectedTeacherName = teacher.userNames || "--";
         }
       });
 
@@ -65,7 +68,7 @@ function LeaveAdminEdit() {
         userId: values.userId,
         employeeName: selectedTeacherName,
         leaveType: values.leaveType,
-        noOfDays: values.noOfDays,
+        noOfDays: daysDifference || values.noOfDays,
         fromDate: values.fromDate,
         toDate: values.toDate,
         requestDate: values.requestDate,
@@ -75,6 +78,8 @@ function LeaveAdminEdit() {
         leaveStatus: values.leaveStatus,
         leaveReason: values.leaveReason,
       };
+
+      // console.log("payload Values", payload)
 
       try {
         const response = await api.put(
@@ -116,6 +121,35 @@ function LeaveAdminEdit() {
     }
   };
 
+  const calculateDays = (fromDate, toDate) => {
+    const fromDateObj = new Date(fromDate);
+    const toDateObj = new Date(toDate);
+    const difference = toDateObj.getTime() - fromDateObj.getTime();
+    const daysDifference = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
+    formik.setFieldValue("noOfDays", daysDifference);
+    return { daysDifference, originalNoOfDays: formik.values.noOfDays };
+  };
+
+  const handleFromDateChange = (e) => {
+    formik.handleChange(e);
+    const { daysDifference, originalNoOfDays } = calculateDays(
+      e.target.value,
+      formik.values.toDate
+    );
+    setDaysDifference(daysDifference);
+    formik.setFieldValue("noOfDays", originalNoOfDays);
+  };
+
+  const handleToDateChange = (e) => {
+    formik.handleChange(e);
+    const { daysDifference, originalNoOfDays } = calculateDays(
+      formik.values.fromDate,
+      e.target.value
+    );
+    setDaysDifference(daysDifference);
+    formik.setFieldValue("noOfDays", originalNoOfDays);
+  };
+
   const handleCenterChange = (event) => {
     setTeacherData(null);
     const centerId = event.target.value;
@@ -131,6 +165,11 @@ function LeaveAdminEdit() {
         formik.setValues(response.data);
         fetchData();
         fetchTeacher(response.data.centerId);
+        const { daysDifference } = calculateDays(
+          response.data.fromDate,
+          response.data.toDate
+        );
+        setDaysDifference(daysDifference);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -138,25 +177,6 @@ function LeaveAdminEdit() {
 
     getData();
   }, [id]);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getUserLeaveRequestById/${id}`);
-  //       const formattedResponseData = {
-  //         ...response.data,
-  //         fromDate: response.data.fromDate.substring(0, 10),
-  //         toDate: response.data.toDate.substring(0, 10),
-  //       };
-  //       formik.setValues(formattedResponseData);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   getData();
-  //   fetchData();
-  // }, []);
 
   return (
     <section>
@@ -209,13 +229,13 @@ function LeaveAdminEdit() {
               <select
                 {...formik.getFieldProps("userId")}
                 name="userId"
-                class={`form-select  ${
+                className={`form-select  ${
                   formik.touched.userId && formik.errors.userId
                     ? "is-invalid"
                     : ""
                 }`}
               >
-                <option></option>
+                <option value="" disabled selected hidden></option>
                 {teacherData &&
                   teacherData.map((teacher) => (
                     <option key={teacher.id} value={teacher.id}>
@@ -239,7 +259,7 @@ function LeaveAdminEdit() {
                 }`}
                 {...formik.getFieldProps("leaveType")}
               >
-                <option selected></option>
+                <option value="" disabled selected hidden></option>
                 <option value="SICK_LEAVE">Sick Leave</option>
                 <option value="CASUAL_LEAVE">Casual Leave</option>
                 <option value="PRIVILEGE_LEAVE">Privilege Leave</option>
@@ -262,9 +282,7 @@ function LeaveAdminEdit() {
                 }`}
                 {...formik.getFieldProps("leaveStatus")}
               >
-                <option value="PENDING" selected>
-                  Pending
-                </option>
+                <option value="PENDING">Pending</option>
                 <option value="REJECTED">Rejected</option>
                 <option value="APPROVED">Approved</option>
               </select>
@@ -286,6 +304,8 @@ function LeaveAdminEdit() {
                     : ""
                 }`}
                 {...formik.getFieldProps("noOfDays")}
+                value={daysDifference || formik.values.noOfDays}
+                readOnly
               />
               {formik.touched.noOfDays && formik.errors.noOfDays && (
                 <div className="invalid-feedback">{formik.errors.noOfDays}</div>
@@ -303,6 +323,7 @@ function LeaveAdminEdit() {
                     : ""
                 }`}
                 {...formik.getFieldProps("fromDate")}
+                onChange={handleFromDateChange}
               />
               {formik.touched.fromDate && formik.errors.fromDate && (
                 <div className="invalid-feedback">{formik.errors.fromDate}</div>
@@ -320,6 +341,7 @@ function LeaveAdminEdit() {
                     : ""
                 }`}
                 {...formik.getFieldProps("toDate")}
+                onChange={handleToDateChange}
               />
               {formik.touched.toDate && formik.errors.toDate && (
                 <div className="invalid-feedback">{formik.errors.toDate}</div>
@@ -351,11 +373,6 @@ function LeaveAdminEdit() {
                   formik.setFieldValue("attachment", event.target.files[0])
                 }
               />
-              {/* <input
-                type="file"
-                className="form-control"
-                {...formik.getFieldProps("attachment")}
-              /> */}
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">

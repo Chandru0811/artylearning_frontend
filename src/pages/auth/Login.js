@@ -37,6 +37,8 @@ function Login({ onLogin }) {
           sessionStorage.setItem("token", response.data.accessToken);
           sessionStorage.setItem("userId", response.data.userId);
           sessionStorage.setItem("userName", response.data.role);
+          sessionStorage.setItem("loginUserId", response.data.loginUserId);
+          sessionStorage.setItem("centerId", response.data.centerId);
           onLogin(response.data.roleId);
           navigate("/dashboard");
         } else {
