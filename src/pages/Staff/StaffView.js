@@ -5,6 +5,7 @@ import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import TeacherSummary from "../Teacher/TeacherSummary";
+import BlockImg from "../.././assets/images/Block_Img1.jpg";
 
 function StaffView() {
   const { id } = useParams();
@@ -59,13 +60,28 @@ function StaffView() {
       </div>
       <p class="headColor mt-3">Personal Information</p>
       <div className="d-flex justify-content-center">
-        <img
-          src={data.photo}
-          style={{ borderRadius: 70 }}
-          alt="staff"
-          width="100"
-          height="100"
-        />
+        <p className="my-2 d-flex">
+          {data.photo ? (
+            <img
+              src={data.photo}
+              onError={(e) => {
+                e.target.src = BlockImg;
+              }}
+              style={{ borderRadius: 70 }}
+              width="100"
+              height="100"
+              alt="Staff"
+            />
+          ) : (
+            <img
+              src={BlockImg}
+              alt="Staff"
+              style={{ borderRadius: 70 }}
+              width="100"
+              height="100"
+            />
+          )}
+        </p>
       </div>
       <div className="row mt-4">
         <div className="col-md-6 col-12">
@@ -164,8 +180,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].startDate
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].startDate
                   ? data.userAccountInfo[0].startDate.substring(0, 10)
                   : "--"}
               </p>
@@ -181,8 +197,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].colorCode
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].colorCode
                   ? data.userAccountInfo[0].colorCode
                   : "--"}
               </p>
@@ -198,8 +214,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].teacherId
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].teacherId
                   ? data.userAccountInfo[0].teacherId
                   : "--"}
               </p>
@@ -215,8 +231,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].teacherType
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].teacherType
                   ? data.userAccountInfo[0].teacherType
                   : "--"}
               </p>
@@ -232,8 +248,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].shgType
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].shgType
                   ? data.userAccountInfo[0].shgType
                   : "--"}
               </p>
@@ -249,8 +265,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].shgAmount
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].shgAmount
                   ? data.userAccountInfo[0].shgAmount
                   : "--"}
               </p>
@@ -266,8 +282,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].status
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].status
                   ? data.userAccountInfo[0].status
                   : "--"}
               </p>
@@ -283,8 +299,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].endDate
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].endDate
                   ? data.userAccountInfo[0].endDate.substring(0, 10)
                   : "--"}
               </p>
@@ -300,8 +316,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                typeof data.userAccountInfo[0].approvelContentRequired ===
+                  data.userAccountInfo.length > 0 &&
+                  typeof data.userAccountInfo[0].approvelContentRequired ===
                   "boolean"
                   ? data.userAccountInfo[0].approvelContentRequired
                     ? "Yes"
@@ -320,8 +336,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].dutyDays
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].dutyDays
                   ? data.userAccountInfo[0].dutyDays.join(", ")
                   : "--"}
               </p>
@@ -337,8 +353,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].workingDays
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].workingDays
                   ? data.userAccountInfo[0].workingDays.join(", ")
                   : "--"}
               </p>
@@ -354,8 +370,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].signatureDate
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].signatureDate
                   ? data.userAccountInfo[0].signatureDate
                   : "--"}
               </p>
@@ -371,8 +387,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].signature
+                  data.userAccountInfo.length > 0 &&
+                  data.userAccountInfo[0].signature
                   ? data.userAccountInfo[0].signature
                   : "--"}
               </p>
@@ -391,8 +407,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContactInfo &&
-                data.userContactInfo.length > 0 &&
-                data.userContactInfo[0].email
+                  data.userContactInfo.length > 0 &&
+                  data.userContactInfo[0].email
                   ? data.userContactInfo[0].email
                   : "--"}
               </p>
@@ -408,8 +424,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContactInfo &&
-                data.userContactInfo.length > 0 &&
-                data.userContactInfo[0].contactNumber
+                  data.userContactInfo.length > 0 &&
+                  data.userContactInfo[0].contactNumber
                   ? data.userContactInfo[0].contactNumber
                   : "--"}
               </p>
@@ -425,8 +441,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContactInfo &&
-                data.userContactInfo.length > 0 &&
-                data.userContactInfo[0].address
+                  data.userContactInfo.length > 0 &&
+                  data.userContactInfo[0].address
                   ? data.userContactInfo[0].address
                   : "--"}
               </p>
@@ -442,8 +458,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContactInfo &&
-                data.userContactInfo.length > 0 &&
-                data.userContactInfo[0].postalCode
+                  data.userContactInfo.length > 0 &&
+                  data.userContactInfo[0].postalCode
                   ? data.userContactInfo[0].postalCode
                   : "--"}
               </p>
@@ -516,8 +532,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salary
+                  data.userSalaryCreationModels.length > 0 &&
+                  data.userSalaryCreationModels[0].salary
                   ? data.userSalaryCreationModels[0].salary
                   : "--"}
               </p>
@@ -533,12 +549,12 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].effectiveDate
+                  data.userSalaryCreationModels.length > 0 &&
+                  data.userSalaryCreationModels[0].effectiveDate
                   ? data.userSalaryCreationModels[0].effectiveDate.substring(
-                      0,
-                      10
-                    )
+                    0,
+                    10
+                  )
                   : "--"}
               </p>
             </div>
@@ -553,8 +569,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salaryType
+                  data.userSalaryCreationModels.length > 0 &&
+                  data.userSalaryCreationModels[0].salaryType
                   ? data.userSalaryCreationModels[0].salaryType
                   : "--"}
               </p>
@@ -573,8 +589,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].year
+                  data.userLeaveCreationModels.length > 0 &&
+                  data.userLeaveCreationModels[0].year
                   ? data.userLeaveCreationModels[0].year.substring(0, 10)
                   : "--"}
               </p>
@@ -590,8 +606,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].annualLeave
+                  data.userLeaveCreationModels.length > 0 &&
+                  data.userLeaveCreationModels[0].annualLeave
                   ? data.userLeaveCreationModels[0].annualLeave
                   : "--"}
               </p>
@@ -607,8 +623,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].medicalLeave
+                  data.userLeaveCreationModels.length > 0 &&
+                  data.userLeaveCreationModels[0].medicalLeave
                   ? data.userLeaveCreationModels[0].medicalLeave
                   : "--"}
               </p>
@@ -624,8 +640,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].otherLeave
+                  data.userLeaveCreationModels.length > 0 &&
+                  data.userLeaveCreationModels[0].otherLeave
                   ? data.userLeaveCreationModels[0].otherLeave
                   : "--"}
               </p>
@@ -641,8 +657,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].carryForwardLeave
+                  data.userLeaveCreationModels.length > 0 &&
+                  data.userLeaveCreationModels[0].carryForwardLeave
                   ? data.userLeaveCreationModels[0].carryForwardLeave
                   : "--"}
               </p>
@@ -665,8 +681,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].employer
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].employer
                   ? data.userContractCreationModels[0].employer
                   : "--"}
               </p>
@@ -682,8 +698,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].uen
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].uen
                   ? data.userContractCreationModels[0].uen
                   : "--"}
               </p>{" "}
@@ -699,8 +715,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].addressOfEmployment
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].addressOfEmployment
                   ? data.userContractCreationModels[0].addressOfEmployment
                   : "--"}
               </p>{" "}
@@ -720,8 +736,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].employee
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].employee
                   ? data.userContractCreationModels[0].employee
                   : "--"}
               </p>{" "}
@@ -737,8 +753,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].nric
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].nric
                   ? data.userContractCreationModels[0].nric
                   : "--"}
               </p>{" "}
@@ -754,8 +770,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].userContractAddress
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].userContractAddress
                   ? data.userContractCreationModels[0].userContractAddress
                   : "--"}
               </p>{" "}
@@ -771,8 +787,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].jobTitle
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].jobTitle
                   ? data.userContractCreationModels[0].jobTitle
                   : "--"}
               </p>{" "}
@@ -788,8 +804,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].mainDuties
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].mainDuties
                   ? data.userContractCreationModels[0].mainDuties
                   : "--"}
               </p>{" "}
@@ -805,12 +821,12 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].startDateOfEmployment
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].startDateOfEmployment
                   ? data.userContractCreationModels[0].startDateOfEmployment.substring(
-                      0,
-                      10
-                    )
+                    0,
+                    10
+                  )
                   : "--"}
               </p>
             </div>
@@ -825,8 +841,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].training
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].training
                   ? data.userContractCreationModels[0].training
                   : "--"}
               </p>{" "}
@@ -842,8 +858,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].allowance
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].allowance
                   ? data.userContractCreationModels[0].allowance
                   : "--"}
               </p>
@@ -859,12 +875,12 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].userContractStartDate
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].userContractStartDate
                   ? data.userContractCreationModels[0].userContractStartDate.substring(
-                      0,
-                      10
-                    )
+                    0,
+                    10
+                  )
                   : "--"}
               </p>
             </div>
@@ -879,8 +895,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].contactPeriod
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].contactPeriod
                   ? data.userContractCreationModels[0].contactPeriod
                   : "--"}
               </p>{" "}
@@ -896,8 +912,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].probation
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].probation
                   ? data.userContractCreationModels[0].probation
                   : "--"}
               </p>{" "}
@@ -913,8 +929,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].workingDays
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].workingDays
                   ? data.userContractCreationModels[0].workingDays
                   : "--"}
               </p>{" "}
@@ -930,8 +946,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].userContractSalary
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].userContractSalary
                   ? data.userContractCreationModels[0].userContractSalary
                   : "--"}
               </p>{" "}
@@ -947,12 +963,12 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].salaryStartDate
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].salaryStartDate
                   ? data.userContractCreationModels[0].salaryStartDate.substring(
-                      0,
-                      10
-                    )
+                    0,
+                    10
+                  )
                   : "--"}
               </p>{" "}
             </div>
@@ -967,12 +983,12 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].userContractEndDate
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].userContractEndDate
                   ? data.userContractCreationModels[0].userContractEndDate.substring(
-                      0,
-                      10
-                    )
+                    0,
+                    10
+                  )
                   : "--"}
               </p>{" "}
             </div>
@@ -990,8 +1006,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].payNow
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].payNow
                   ? data.userContractCreationModels[0].payNow
                   : "--"}
               </p>{" "}
@@ -1007,8 +1023,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].internetBanking
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].internetBanking
                   ? data.userContractCreationModels[0].internetBanking
                   : "--"}
               </p>{" "}
@@ -1024,12 +1040,12 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].contractDate
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].contractDate
                   ? data.userContractCreationModels[0].contractDate.substring(
-                      0,
-                      10
-                    )
+                    0,
+                    10
+                  )
                   : "--"}
               </p>{" "}
             </div>
@@ -1044,8 +1060,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].terminationNotice
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].terminationNotice
                   ? data.userContractCreationModels[0].terminationNotice
                   : "--"}
               </p>{" "}
@@ -1061,8 +1077,8 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].signature
+                  data.userContractCreationModels.length > 0 &&
+                  data.userContractCreationModels[0].signature
                   ? data.userContractCreationModels[0].signature
                   : "--"}
               </p>{" "}

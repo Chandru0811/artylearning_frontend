@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
 import { IoMdDownload } from "react-icons/io";
+import BlockImg from "../.././assets/images/Block_Img1.jpg";
 // import { SCREENS } from "../../config/ScreenFilter";
 
 function DocumentView() {
@@ -70,16 +71,34 @@ function DocumentView() {
                       <video
                         controls
                         style={{ width: "200px", height: "auto" }}
+                        onError={(e) => {
+                          e.target.src = BlockImg;
+                        }}
                       >
                         <source src={item.fileAttachment} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
                     ) : (
-                      <img
-                        src={item.fileAttachment}
-                        alt="img"
-                        style={{ width: "200px", height: "auto" }}
-                      />
+                      <p className="my-2 d-flex">
+                        {item.fileAttachment ? (
+                          <img
+                            src={item.fileAttachment}
+                            onError={(e) => {
+                              e.target.src = BlockImg;
+                            }}
+                            width="200"
+                            height="auto"
+                            alt="img"
+                          />
+                        ) : (
+                          <img
+                            src={BlockImg}
+                            alt="img"
+                            width="200"
+                            height="auto"
+                          />
+                        )}
+                      </p>
                     )}
                   </td>
                   <td className="p-4">{item.fileExtension}</td>

@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
   emergencyContactNo: Yup.string()
@@ -451,12 +452,32 @@ const EditEmergencyContact = forwardRef(
                               accept=".jpg, .jpeg, .png"
                             />
                             <div className="my-2 text-center">
-                              <img
+                              {/* <img
                                 src={row.personProfile}
                                 className="img-fluid rounded"
                                 style={{ width: "60%" }}
                                 alt="Parent Signature Img"
-                              ></img>
+                              ></img> */}
+                              <p className="my-2 d-flex">
+                                {row.personProfile ? (
+                                  <img
+                                    src={row.personProfile}
+                                    onError={(e) => {
+                                      e.target.src = BlockImg;
+                                    }}
+                                    alt="Person Profile"
+                                    style={{ width: "60%" }}
+                                    className="img-fluid rounded"
+                                  />
+                                ) : (
+                                  <img
+                                    src={BlockImg}
+                                    alt="Person Profile"
+                                    style={{ width: "60%" }}
+                                    className="img-fluid rounded"
+                                  />
+                                )}
+                              </p>
                             </div>
                           </div>
                         </div>

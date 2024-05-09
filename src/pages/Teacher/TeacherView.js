@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../config/URL";
 import TeacherSummary from "./TeacherSummary";
+import BlockImg from "../.././assets/images/Block_Img1.jpg";
 
 function TeacherView() {
   const { id } = useParams();
@@ -57,13 +58,28 @@ function TeacherView() {
       </div>
       <p class="headColor mt-3">Personal Information</p>
       <div className="d-flex justify-content-center">
-        <img
-          src={data.photo}
-          style={{ borderRadius: 70 }}
-          alt="tescher"
-          width="100"
-          height="100"
-        />
+         <p className="my-2 d-flex">
+          {data.photo ? (
+            <img
+              src={data.photo}
+              onError={(e) => {
+                e.target.src = BlockImg;
+              }}
+              style={{ borderRadius: 70 }}
+              width="100"
+              height="100"
+              alt="Teacher"
+            />
+          ) : (
+            <img
+              src={BlockImg}
+              alt="Teacher"
+              style={{ borderRadius: 70 }}
+              width="100"
+              height="100"
+            />
+          )}
+        </p>
       </div>
       <div className="row mt-4">
         <div className="col-md-6 col-12">
