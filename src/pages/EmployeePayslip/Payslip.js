@@ -13,7 +13,7 @@ function Payslip() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [data, setData] = useState({});
   const userId = sessionStorage.getItem("userId");
-  console.log("kishore", userId);
+  // console.log("kishore", userId);
 
   const [loading, setLoading] = useState(true);
 
@@ -36,6 +36,8 @@ function Payslip() {
       } else {
         console.log("Error Fetching Data ", error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,21 +51,21 @@ function Payslip() {
     setSelectedMonth(event.target.value);
     // console.log("Selected month:", event.target.value);
   };
-  
+
   const downloadPdf = () => {
     const doc = new jsPDF();
-  
+
     doc.setFontSize(12);
     doc.text(`PAYSLIP MONTH : ${selectedMonth}`, 10, 10);
     doc.addImage(Logo, "Logo", 13, 25, 40, 25);
     doc.setFontSize(15);
     doc.setFont("helvetica", "bold");
     doc.text("Arty Learning @HG", 60, 25);
-  
+
     doc.setFont("helvetica", "normal");
     doc.text("Tel No : 87270752", 60, 35);
     doc.text("Email : Artylearning@gmail.com", 60, 45);
-  
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     doc.text("EMPLOYEE NAME ", 10, 70);
@@ -75,38 +77,40 @@ function Payslip() {
     doc.text(`: ${data.payslipMonth}`, 45, 80);
     doc.text(`: ${data.dateOfJoining.substring(0, 10)}`, 155, 70);
     doc.text(`: ${data.designation}`, 155, 80);
-  
+
     doc.line(10, 87, 200, 87); // Line above the table
-  
+
     const headers = ["EARNING", "AMOUNT", "DEDUCTION", "AMOUNT"];
-  
+
     const earningData = [
       ["BASIC SALARY", data.basicSalary],
       ["BONUS", data.bonus],
       // Add other earning categories as needed
     ];
-  
+
     const deductionData = [
-      data.deductions.map(deduction => deduction.detectionName),
-      data.deductions.map(deduction => deduction.amount)
+      data.deductions.map((deduction) => deduction.detectionName),
+      data.deductions.map((deduction) => deduction.amount),
     ];
-  
+
     const numRows = deductionData[0].length;
-  
+
     const tableBody = [...earningData];
     const tableColumn = [["", ""], ...deductionData];
-  
+
     const startX = 10;
     const startXX = 60;
     const startY = 95;
     const cellWidth = 50;
     const cellHeight = 10;
     const fontSize = 10;
-  
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(fontSize);
-    headers.forEach((header, index) => doc.text(header, startX + index * cellWidth, startY));
-  
+    headers.forEach((header, index) =>
+      doc.text(header, startX + index * cellWidth, startY)
+    );
+
     doc.setFont("helvetica", "normal");
     doc.setFontSize(fontSize);
     tableBody.forEach((row, rowIndex) => {
@@ -116,7 +120,7 @@ function Payslip() {
         doc.text(cell.toString(), colX, rowX);
       });
     });
-  
+
     tableColumn.forEach((col, colIndex) => {
       const colX = startXX + colIndex * cellWidth;
       col.forEach((cell, rowIndex) => {
@@ -124,41 +128,45 @@ function Payslip() {
         doc.text(cell.toString(), colX, rowX);
       });
     });
-  
+
     // Calculate Y position for "GROSS PAY" text and "DEDUCTION TOTAL" text
     const totalY = startY + (numRows + 2) * cellHeight; // numRows + 1 for deduction rows, +1 for space
-  
+
     // Draw line above the "GROSS PAY" section
     const lineAboveGrossPayY = totalY - 5;
     doc.line(startX, lineAboveGrossPayY, 200, lineAboveGrossPayY);
-  
+
     // Draw "GROSS PAY" text along with its value in bold
     doc.setFont("helvetica", "bold");
     doc.text(`GROSS PAY: ${data.grossPay}`, startX, totalY);
-  
+
     // Draw line below the "GROSS PAY" section
     const lineBelowGrossPayY = totalY + 5;
     doc.line(startX, lineBelowGrossPayY, 200, lineBelowGrossPayY);
-  
+
     // Draw "DEDUCTION TOTAL" text along with its value in bold
     const deductionTotalWidth = cellWidth; // Assuming the same width as other deduction columns
     const deductionTotalX = startXX + deductionTotalWidth; // Align with the "DEDUCTION" column
-    doc.text(`DEDUCTION TOTAL: ${data.deductionTotal}`, deductionTotalX, totalY);
-  
+    doc.text(
+      `DEDUCTION TOTAL: ${data.deductionTotal}`,
+      deductionTotalX,
+      totalY
+    );
+
     // Draw "NET PAY" text along with its value in bold
     const netPayY = totalY + cellHeight; // Offset it from the "GROSS PAY" text
     doc.text(`NET PAY : ${data.netPay}`, startX, netPayY);
-  
+
     // Draw "IN WORDS" text along with its value in bold
     const inWordsY = netPayY + cellHeight; // Offset it from the "NET PAY" text
     doc.text(`IN WORDS : ${data.netPayInWords}`, startX, inWordsY);
-  
+
     // Restore default font settings
     doc.setFont("helvetica", "normal");
-  
+
     doc.save("Payslip.pdf");
   };
-  
+
   return (
     <section>
       <div className="container">
@@ -296,7 +304,12 @@ function Payslip() {
                             <thead className="table-bordered">
                               <tr>
                                 <th scope="col">EARNING</th>
-                                <th scope="col" style={{ borderRight: "2px solid black" }}>AMOUNT</th>
+                                <th
+                                  scope="col"
+                                  style={{ borderRight: "2px solid black" }}
+                                >
+                                  AMOUNT
+                                </th>
                                 <th scope="col">DEDUCTION</th>
                                 <th scope="col">AMOUNT</th>
                               </tr>
@@ -317,7 +330,9 @@ function Payslip() {
                                     data.deductions.map((data, index) => (
                                       <tr key={index + 1}>
                                         <td>
-                                          <div className="mb-2">{data.detectionName}</div>
+                                          <div className="mb-2">
+                                            {data.detectionName}
+                                          </div>
                                         </td>
                                       </tr>
                                     ))}
@@ -339,7 +354,9 @@ function Payslip() {
 
                               <tr className="table-bordered">
                                 <td>GROSS PAY</td>
-                                <td style={{ borderRight: "2px solid black" }}>{data.grossPay}</td>
+                                <td style={{ borderRight: "2px solid black" }}>
+                                  {data.grossPay}
+                                </td>
                                 <td>DEDUCTION TOTAL</td>
                                 <td>{data.deductionTotal}</td>
                               </tr>
@@ -354,7 +371,9 @@ function Payslip() {
                               <p className="fw-medium">NET PAY</p>
                             </div>
                             <div className="col-6">
-                              <p className="text-muted text-sm">: {data.netPay}</p>
+                              <p className="text-muted text-sm">
+                                : {data.netPay}
+                              </p>
                             </div>
                           </div>
                         </div>

@@ -167,6 +167,15 @@ function EditPayroll() {
   };
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      const { userId, payrollMonth } = formik.values;
+      await fetchUserSalaryInfo(userId, payrollMonth);
+    };
+
+    fetchUserData();
+  }, [formik.values.userId, formik.values.payrollMonth]);
+
+  useEffect(() => {
     const calculateNetPay = () => {
       const grossPay = parseFloat(formik.values.grossPay) || 0;
       const bonus = parseFloat(formik.values.bonus) || 0;
