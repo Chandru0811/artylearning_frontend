@@ -93,7 +93,7 @@ function Payslip() {
       data.deductions.map((deduction) => deduction.amount),
     ];
 
-    const numRows = deductionData[0].length;
+    const numRows = Math.max(earningData.length, deductionData[0].length);
 
     const tableBody = [...earningData];
     const tableColumn = [["", ""], ...deductionData];
@@ -130,15 +130,16 @@ function Payslip() {
     });
 
     // Calculate Y position for "GROSS PAY" text and "DEDUCTION TOTAL" text
-    const totalY = startY + (numRows + 2) * cellHeight; // numRows + 1 for deduction rows, +1 for space
+    const totalY = startY + (numRows + 2) * cellHeight - 5; // numRows + 1 for deduction rows, +1 for space
 
     // Draw line above the "GROSS PAY" section
-    const lineAboveGrossPayY = totalY - 5;
+    const lineAboveGrossPayY = totalY - 8;
     doc.line(startX, lineAboveGrossPayY, 200, lineAboveGrossPayY);
 
     // Draw "GROSS PAY" text along with its value in bold
     doc.setFont("helvetica", "bold");
-    doc.text(`GROSS PAY: ${data.grossPay}`, startX, totalY);
+    doc.text(`GROSS PAY`, startX, totalY);
+    doc.text(`${data.grossPay}`, startXX, totalY); // Adjust the position for the value
 
     // Draw line below the "GROSS PAY" section
     const lineBelowGrossPayY = totalY + 5;
@@ -148,21 +149,25 @@ function Payslip() {
     const deductionTotalWidth = cellWidth; // Assuming the same width as other deduction columns
     const deductionTotalX = startXX + deductionTotalWidth; // Align with the "DEDUCTION" column
     doc.text(
-      `DEDUCTION TOTAL: ${data.deductionTotal}`,
+      `DEDUCTION TOTAL`,
       deductionTotalX,
       totalY
     );
+    doc.text(`${data.deductionTotal}`, deductionTotalX + 50, totalY); // Adjust the position for the value
 
-    // Draw "NET PAY" text along with its value in bold
-    const netPayY = totalY + cellHeight; // Offset it from the "GROSS PAY" text
-    doc.text(`NET PAY : ${data.netPay}`, startX, netPayY);
+    //  Draw "NET PAY" text along with its value in bold
+    const netPayY = totalY + cellHeight + 5; // Offset it from the "GROSS PAY" text
+    doc.setFont("helvetica", "bold");
+    doc.text(`NET PAY`, startX, netPayY);
+    doc.setFont("helvetica", "normal"); // Change font to normal
+    doc.text(`: ${data.netPay}`, startX + 20, netPayY); // Adjust the position for the value
 
     // Draw "IN WORDS" text along with its value in bold
     const inWordsY = netPayY + cellHeight; // Offset it from the "NET PAY" text
-    doc.text(`IN WORDS : ${data.netPayInWords}`, startX, inWordsY);
-
-    // Restore default font settings
-    doc.setFont("helvetica", "normal");
+    doc.setFont("helvetica", "bold");
+    doc.text(`IN WORDS`, startX, inWordsY);
+    doc.setFont("helvetica", "normal"); // Change font to normal
+    doc.text(`: ${data.netPayInWords}`, startX + 20, inWordsY); // Adjust the position for the value
 
     doc.save("Payslip.pdf");
   };

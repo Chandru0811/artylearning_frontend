@@ -155,7 +155,7 @@ const Leave = () => {
                   <td>
                     <div className="d-flex justify-content-center align-items-center ">
                       <Link
-                        to={`/leaveadmin/view/${data.id}`}
+                        to={`/leave/view/${data.id}`}
                         style={{ display: "inline-block" }}
                       >
                         <button className="btn btn-sm">

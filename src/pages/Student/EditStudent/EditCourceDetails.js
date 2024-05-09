@@ -10,6 +10,7 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../../List/CourseList";
 import { useParams } from "react-router-dom";
+import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
   signatureDate: Yup.string().required("*Signature Date is required!"),
@@ -249,27 +250,41 @@ const EditCourseDetail = forwardRef(
                           data.studentCourseDetailModels.length > 0 &&
                           data.studentCourseDetailModels.map((parent) => (
                             <div className="container-fluid col-12 p-2">
-                              <img
-                                src={parent.parentSignature}
-                                className="img-fluid rounded"
-                                style={{ width: "60%" }}
-                                alt="Parent Signature Img"
-                              ></img>
+                              <p className="my-2 d-flex">
+                                {parent.parentSignature ? (
+                                  <img
+                                    src={parent.parentSignature}
+                                    onError={(e) => {
+                                      e.target.src = BlockImg;
+                                    }}
+                                    className="img-fluid rounded"
+                                    style={{ width: "60%" }}
+                                    alt="Parent Signature Img"
+                                  />
+                                ) : (
+                                  <img
+                                    src={BlockImg}
+                                    className="img-fluid rounded"
+                                    style={{ width: "60%" }}
+                                    alt="Parent Signature Img"
+                                  />
+                                )}
+                              </p>
                             </div>
                           ))}
                         {(!data.studentCourseDetailModels ||
                           data.studentCourseDetailModels.length === 0) && (
-                          <div
-                            id="panelsStayOpen-collapseThree"
-                            class="accordion-collapse collapse"
-                          >
-                            <div class="accordion-body">
-                              <div className="text-muted">
-                                Parent Signature / not available !
+                            <div
+                              id="panelsStayOpen-collapseThree"
+                              class="accordion-collapse collapse"
+                            >
+                              <div class="accordion-body">
+                                <div className="text-muted">
+                                  Parent Signature / not available !
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">
@@ -347,4 +362,5 @@ const EditCourseDetail = forwardRef(
     );
   }
 );
+
 export default EditCourseDetail;

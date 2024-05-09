@@ -43,7 +43,7 @@ function LeaveView() {
       <div class="container-fluid py-4">
         <div class="row align-items-center">
           <div class="hstack gap-2 justify-content-end">
-            <Link to="/leaveadmin">
+            <Link to="/leave">
               <button type="button" class="btn btn-sm btn-border">
                 <span>Back</span>
               </button>
@@ -176,7 +176,7 @@ function LeaveView() {
           </div>
         </div>
       </div>
-      <p class="headColor mt-5">Attachment</p>
+      {/* <p class="headColor mt-5">Attachment</p>
       <hr></hr>
       <div className="row mt-4">
         <div className="">
@@ -226,7 +226,7 @@ function LeaveView() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -11,11 +11,7 @@ import { toast } from "react-toastify";
 function SendNotificationEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   console.log(id);
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-  };
-
+  const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({

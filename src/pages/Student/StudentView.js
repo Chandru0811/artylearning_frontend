@@ -5,6 +5,8 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import StudentSummary from "./StudentSummary";
+import BlockImg from "../../assets/images/Block_Img1.jpg";
+
 function StudentView() {
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -356,13 +358,24 @@ function StudentView() {
                         <div className="col-6">
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
-                            <img
-                              // src={Profile1}
-                              src={data.profileImage}
-                              className="img-fluid ms-2 w-100 rounded"
-                              alt="234"
-                            ></img>
-                            {/* {data.profileImage || "--"} */}
+                            <p className="my-2 d-flex">
+                              {data.profileImage ? (
+                                <img
+                                  src={data.profileImage}
+                                  onError={(e) => {
+                                    e.target.src = BlockImg;
+                                  }}
+                                  className="img-fluid ms-2 w-100 rounded"
+                                  alt="Profile Image"
+                                />
+                              ) : (
+                                <img
+                                  src={BlockImg}
+                                  className="img-fluid ms-2 w-100 rounded"
+                                  alt="Profile Image"
+                                />
+                              )}
+                            </p>
                           </p>
                         </div>
                       </div>
@@ -434,11 +447,11 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0]
-                              .emergencyContactName
+                              data.studentEmergencyContacts.length > 0 &&
+                              data.studentEmergencyContacts[0]
+                                .emergencyContactName
                               ? data.studentEmergencyContacts[0]
-                                  .emergencyContactName
+                                .emergencyContactName
                               : "--"}
                           </p>
                         </div>
@@ -453,10 +466,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0].emergencyContactNo
+                              data.studentEmergencyContacts.length > 0 &&
+                              data.studentEmergencyContacts[0].emergencyContactNo
                               ? data.studentEmergencyContacts[0]
-                                  .emergencyContactNo
+                                .emergencyContactNo
                               : "--"}
                           </p>
                         </div>
@@ -471,10 +484,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0].emergencyRelation
+                              data.studentEmergencyContacts.length > 0 &&
+                              data.studentEmergencyContacts[0].emergencyRelation
                               ? data.studentEmergencyContacts[0]
-                                  .emergencyRelation
+                                .emergencyRelation
                               : "--"}
                           </p>
                         </div>
@@ -580,11 +593,26 @@ function StudentView() {
                               <div className="col-6">
                                 <p className="text-muted text-sm">
                                   <b className="mx-2">:</b>
-                                  <img
-                                   src={emergency.personProfile}
-                                   name="personProfile"
-                                   className="img-fluid ms-2 w-100 rounded"
-                                  />
+                                  <p className="my-2 d-flex">
+                                    {emergency.personProfile ? (
+                                      <img
+                                        src={emergency.personProfile}
+                                        onError={(e) => {
+                                          e.target.src = BlockImg;
+                                        }}
+                                        name="personProfile"
+                                        className="img-fluid ms-2 w-100 rounded"
+                                        alt="Person Profile"
+                                      />
+                                    ) : (
+                                      <img
+                                        src={BlockImg}
+                                        name="personProfile"
+                                        className="img-fluid ms-2 w-100 rounded"
+                                        alt="Person Profile"
+                                      />
+                                    )}
+                                  </p>
                                 </p>
                               </div>
                             </div>
@@ -745,11 +773,24 @@ function StudentView() {
                           <div className="col-6">
                             <p className="text-muted text-sm">
                               <b className="mx-2">:</b>
-                              <img
-                                src={parent.profileImage || "--"}
-                                className="img-fluid ms-2 w-100 rounded"
-                                alt={parent.parentName || "--"}
-                              ></img>
+                              <p className="my-2 d-flex">
+                                {parent.profileImage ? (
+                                  <img
+                                    src={parent.profileImage}
+                                    onError={(e) => {
+                                      e.target.src = BlockImg;
+                                    }}
+                                    className="img-fluid ms-2 w-100 rounded"
+                                    alt="Profile Image"
+                                  />
+                                ) : (
+                                  <img
+                                    src={BlockImg}
+                                    className="img-fluid ms-2 w-100 rounded"
+                                    alt="Profile Image"
+                                  />
+                                )}
+                              </p>
                               {/* {data.studentParentsDetails &&
                           data.studentParentsDetails.length > 0 &&
                           data.studentParentsDetails[0].profileImage
@@ -768,8 +809,8 @@ function StudentView() {
                             <p className="text-muted text-sm">
                               <b className="mx-2">:</b>
                               {data.studentParentsDetails &&
-                              data.studentParentsDetails.length > 0 &&
-                              data.studentParentsDetails[0].address
+                                data.studentParentsDetails.length > 0 &&
+                                data.studentParentsDetails[0].address
                                 ? data.studentParentsDetails[0].address
                                 : "--"}
                             </p>
@@ -910,17 +951,17 @@ function StudentView() {
               ))}
             {(!data.studentParentsDetails ||
               data.studentParentsDetails.length === 0) && (
-              <div
-                id="panelsStayOpen-collapseThree"
-                class="accordion-collapse collapse"
-              >
-                <div class="accordion-body">
-                  <div className="text-muted">
-                    No parent/guardian information available
+                <div
+                  id="panelsStayOpen-collapseThree"
+                  class="accordion-collapse collapse"
+                >
+                  <div class="accordion-body">
+                    <div className="text-muted">
+                      No parent/guardian information available
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
 
           {/* Relation */}
@@ -1084,22 +1125,21 @@ function StudentView() {
                         className="img-fluid rounded"
                         style={{ width: "20%" }}
                         alt="Parent Signature Img"
+                        onError={(e) => {
+                          e.target.src = BlockImg;
+                        }}
                       ></img>
                     </div>
                   ))}
                 {(!data.studentCourseDetailModels ||
                   data.studentCourseDetailModels.length === 0) && (
-                  <div
-                    id="panelsStayOpen-collapseThree"
-                    class="accordion-collapse collapse"
-                  >
-                    <div class="accordion-body">
-                      <div className="text-muted">
-                        Parent Signature / not available !
-                      </div>
-                    </div>
-                  </div>
-                )}
+                    <img
+                      src={BlockImg}
+                      className="img-fluid rounded"
+                      style={{ width: "20%" }}
+                      alt="Parent Signature Img"
+                    />
+                  )}
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
   termsAndConditionSignatureDate: Yup.string().required(
@@ -63,9 +64,9 @@ const EditTermsAndCondition = forwardRef(
               `/createStudentTermsAndConditions/${data.id}`,
               formDatas,
               {
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
               }
             );
             if (response.status === 201) {
@@ -149,39 +150,53 @@ const EditTermsAndCondition = forwardRef(
                         </label>
                         <br />
                         <input
-                         type="file"
-                         className="form-control"
-                         name="file"
-                         onChange={(event) => {
-                           formik.setFieldValue("file", event.target.files[0]);
-                         }}
-                         onBlur={formik.handleBlur}
+                          type="file"
+                          className="form-control"
+                          name="file"
+                          onChange={(event) => {
+                            formik.setFieldValue("file", event.target.files[0]);
+                          }}
+                          onBlur={formik.handleBlur}
                         />
                         {data.studentTermsAndConditions &&
                           data.studentTermsAndConditions.length > 0 &&
                           data.studentTermsAndConditions.map((parent) => (
                             <div className="container-fluid col-12 p-2">
-                              <img
-                                src={parent.parentSignature}
-                                className="img-fluid rounded"
-                                style={{ width: "60%" }}
-                                alt="Parent Signature Img"
-                              ></img>
+                              <p className="my-2 d-flex">
+                                {parent.parentSignature ? (
+                                  <img
+                                    src={parent.parentSignature}
+                                    onError={(e) => {
+                                      e.target.src = BlockImg;
+                                    }}
+                                    className="img-fluid rounded"
+                                    style={{ width: "60%" }}
+                                    alt="Parent Signature Img"
+                                  />
+                                ) : (
+                                  <img
+                                    src={BlockImg}
+                                    className="img-fluid rounded"
+                                    style={{ width: "60%" }}
+                                    alt="Parent Signature Img"
+                                  />
+                                )}
+                              </p>
                             </div>
                           ))}
                         {(!data.studentTermsAndConditions ||
                           data.studentTermsAndConditions.length === 0) && (
-                          <div
-                            id="panelsStayOpen-collapseThree"
-                            class="accordion-collapse collapse"
-                          >
-                            <div class="accordion-body">
-                              <div className="text-muted">
-                                Parent Signature / not available !
+                            <div
+                              id="panelsStayOpen-collapseThree"
+                              class="accordion-collapse collapse"
+                            >
+                              <div class="accordion-body">
+                                <div className="text-muted">
+                                  Parent Signature / not available !
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">

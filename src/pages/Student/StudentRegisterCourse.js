@@ -143,7 +143,7 @@ function StudentRegisterCourse() {
       <div className="container">
         <form onSubmit={formik.handleSubmit}>
           <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-            <Link to="/student">
+            <Link to={`/student/view/${id}`}>
               <button type="button" className="btn btn-sm btn-border   ">
                 Back
               </button>
