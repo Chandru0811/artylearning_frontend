@@ -98,7 +98,7 @@ function DocumentAdd() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const selectedValue = formik.values.center; // Assuming formik is in scope
+        const selectedValue = formik.values.center;// Assuming formik is in scope
         let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
@@ -149,7 +149,7 @@ function DocumentAdd() {
               ? "7:00 pm"
               : "",
           date: values.date,
-          expiredDate: calculateExpiryDate(values.date), // Calculating expiry date
+          expiredDate: values.expiredDate // Calculating expiry date
         };
 
         if (folderCategory === "group") {
@@ -176,6 +176,13 @@ function DocumentAdd() {
       }
     },
   });
+
+  useEffect(() => {
+    if (formik.values.date) {
+      const calculatedExpiredDate = calculateExpiryDate(formik.values.date);
+      formik.setFieldValue("expiredDate", calculatedExpiredDate);
+    }
+  }, [formik.values.date]);
 
   const calculateExpiryDate = (date) => {
     if (!date) return "";
@@ -498,7 +505,6 @@ function DocumentAdd() {
                 }`}
                 {...formik.getFieldProps("expiredDate")}
                 value={calculateExpiryDate(formik.values.date)}
-                readOnly // Make the input read-only
               />
                {formik.touched.expiredDate && formik.errors.expiredDate && (
                   <div className="invalid-feedback">{formik.errors.expiredDate}</div>
