@@ -13,6 +13,8 @@ function Leadview() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [doassesmentData, setDoassesmentData] = useState([]);
+
+  console.log("Doassesment Data:",doassesmentData);
   const [paymentStatus, setPaymentStatus] = useState("PENDING");
 
   // Payment Status & Summary Modal
@@ -264,13 +266,13 @@ function Leadview() {
                         <span>Back</span>
                       </button>
                     </Link>
-                    <button
+                    {/* <button
                       type="button"
                       onClick={handleSummaryShow}
                       class="btn btn-border btn-sm"
                     >
                       <span>Summary</span>
-                    </button>
+                    </button> */}
 
                     <button
                       type="button"
@@ -292,6 +294,8 @@ function Leadview() {
         </div>
         <div className="container-fluid">
           <div class="accordion" id="accordionExample">
+
+            {/* Lead Information */}
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button
@@ -997,6 +1001,8 @@ function Leadview() {
                 </div>
               </div>
             </div>
+
+            {/* Assessment Information */}
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button
@@ -1016,6 +1022,8 @@ function Leadview() {
                 data-bs-parent="#accordionExample"
               >
                 <div class="accordion-body">
+
+                  {/* Child Particulars */}
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-2 mb-4">Child Particulars</h5>
@@ -1310,6 +1318,7 @@ function Leadview() {
                       </div>
                     </div>
                   </div>
+                  {/* Child Pencil Grip */}
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-5 mb-4">Child Pencil Grip</h5>
@@ -1403,6 +1412,7 @@ function Leadview() {
                       </div>
                     </div>
                   </div>
+                  {/* Arty Beliver & Arty Dreamers */}
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-5 mb-4">
@@ -1504,6 +1514,10 @@ function Leadview() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Alphabet */}
+                  {doassesmentData.leadDoAssessmentAlphabet &&
+                    doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-5 mb-4">Alphabet</h5>
@@ -3846,7 +3860,16 @@ function Leadview() {
                       </div>
                     </div>
                   </div>
-                  <div className="container-fluid">
+                  ):(
+                    <div className="text-center">
+                      <p>Alphabet Information not available </p>
+                    </div>
+                  )}
+
+                    {/* Arty Pursuers */}
+                    {doassesmentData.leadDoAssessmentArtyPursuers &&
+                    doassesmentData.leadDoAssessmentArtyPursuers.length > 0 ? (
+                    <div className="container-fluid">
                     <div className="row m-3">
                       <h5 className="headColor mt-5  mb-4">Arty Pursuers</h5>
                       <div className="col-12">
@@ -4233,7 +4256,6 @@ function Leadview() {
                           </tbody>
                         </table>
                       </div>
-
                       <div className="col-12">
                         <div className="row mb-2">
                           <div className="col-md-3 col-6 d-flex">
@@ -5131,6 +5153,12 @@ function Leadview() {
                       </div>
                     </div>
                   </div>
+                    ):(
+                      <div className="text-center">
+                        <p>Arty Pursuers Information not available </p>
+                      </div>
+                    )}
+                  
                 </div>
               </div>
             </div>
