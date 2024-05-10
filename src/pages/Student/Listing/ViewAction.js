@@ -1,22 +1,25 @@
-import React from 'react'
+import React from "react";
 import { FaCloudDownloadAlt } from "react-icons/fa";
-import Profile from '../../../assets/Student.png';
-import { Link } from 'react-router-dom';
+import Profile from "../../../assets/Student.png";
+import { Link } from "react-router-dom";
 
 function ViewAction() {
   return (
-    <div className='mb-5'>
-      <div className='container-fluid'>
+    <div className="mb-5">
+      <div className="container-fluid">
         <div className="card shadow border mb-5 products">
-          <div className='container-fluid py-4'>
+          <div className="container-fluid py-4">
             <div class="row align-items-center ">
               <div class="col">
                 <div class="d-flex justify-content-between">
-                  <h1 class="h4 ls-tight my-4" style={{ color: '#d48a22', }}>View Staff</h1>
-                  <div className='justify-content-end'>
+                  <h1 class="h4 ls-tight my-4" style={{ color: "#d48a22" }}>
+                    View Staff
+                  </h1>
+                  <div className="justify-content-end">
                     <Link to="/listing/Addendance">
                       <span>
-                        <button className='btn-sm btn-danger '><span>Student Attendance</span>
+                        <button className="btn-sm btn-danger ">
+                          <span>Student Attendance</span>
                         </button>
                       </span>
                     </Link>
@@ -27,13 +30,19 @@ function ViewAction() {
           </div>
         </div>
       </div>
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <div className="card shadow border-0 mb-5">
-          <div className='card-header '><h4>Student Details</h4>
-            <div className='d-flex justify-content-center'>
-              <img src={Profile} className='img-fluid rounded-circle' alt='234' width={'90px'}></img>
+          <div className="card-header ">
+            <h4>Student Details</h4>
+            <div className="d-flex justify-content-center">
+              <img
+                src={Profile}
+                className="img-fluid rounded-circle"
+                alt="234"
+                width={"90px"}
+              ></img>
             </div>
-            <div className='row mt-5 m-3'>
+            <div className="row mt-5 m-3">
               <div className="col-md-6 col-12">
                 <div className="row mb-5">
                   <div className="col-6 d-flex justify-content-end align-items-center">
@@ -102,7 +111,9 @@ function ViewAction() {
                     </p>
                   </div>
                   <div className="col-6">
-                    <p className="text-muted text-sm">: 11 January 2020(3 Years 11 Months Old)</p>
+                    <p className="text-muted text-sm">
+                      : 11 January 2020(3 Years 11 Months Old)
+                    </p>
                   </div>
                 </div>
               </div>
@@ -138,7 +149,9 @@ function ViewAction() {
                     </p>
                   </div>
                   <div className="col-6">
-                    <p className="text-muted text-sm">: aliciaonggm@gmail.com</p>
+                    <p className="text-muted text-sm">
+                      : aliciaonggm@gmail.com
+                    </p>
                   </div>
                 </div>
               </div>
@@ -151,18 +164,6 @@ function ViewAction() {
                   </div>
                   <div className="col-6">
                     <p className="text-muted text-sm">: 91372040</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12">
-                <div className="row mb-5">
-                  <div className="col-6 d-flex justify-content-end align-items-center">
-                    <p className="text-sm">
-                      <b>Signature</b>
-                    </p>
-                  </div>
-                  <div className="col-6">
-                    <p className="text-muted text-sm">: </p>
                   </div>
                 </div>
               </div>
@@ -234,7 +235,9 @@ function ViewAction() {
                     </p>
                   </div>
                   <div className="col-6">
-                    <p className="text-muted text-sm">: AP/ WED_13092023_5PM/Wed/6</p>
+                    <p className="text-muted text-sm">
+                      : AP/ WED_13092023_5PM/Wed/6
+                    </p>
                   </div>
                 </div>
               </div>
@@ -255,11 +258,11 @@ function ViewAction() {
         </div>
       </div>
 
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <div className="card shadow border-0 mb-5">
-          <div className='card-header'>
+          <div className="card-header">
             <h4>Course</h4>
-            <div className='row mt-5 m-3'>
+            <div className="row mt-5 m-3">
               <div className="col-md-6 col-12">
                 <div className="row mb-5">
                   <div className="col-6 d-flex justify-content-end align-items-center">
@@ -349,11 +352,11 @@ function ViewAction() {
         </div>
       </div>
 
-
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <div className="card shadow border-0 mb-5">
-          <div className='card-header '><h4>Family</h4>
-            <div className='row mt-5 m-3'>
+          <div className="card-header ">
+            <h4>Family</h4>
+            <div className="row mt-5 m-3">
               <div className="col-md-6 col-12">
                 <div className="row mb-5">
                   <div className="col-6 d-flex justify-content-end align-items-center">
@@ -395,10 +398,11 @@ function ViewAction() {
         </div>
       </div>
 
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <div className="card shadow border-0 mb-5">
-          <div className='card-header '><h4>Emergency Contact</h4>
-            <div className='row mt-5 m-3'>
+          <div className="card-header ">
+            <h4>Emergency Contact</h4>
+            <div className="row mt-5 m-3">
               <div className="col-md-6 col-12">
                 <div className="row mb-5">
                   <div className="col-6 d-flex justify-content-end align-items-center">
@@ -464,12 +468,12 @@ function ViewAction() {
         </div>
       </div>
 
-      <div className='container-fluid'>
+      <div className="container-fluid">
         <div className=" card p-3 d-flex jusfify-content-between mt-2">
           <div classNameme="col">
-            <h5 >Required Documents</h5>
+            <h5>Required Documents</h5>
           </div>
-          <div className='table-responsive'>
+          <div className="table-responsive">
             <table className="table table-hover">
               <thead className="thead-light">
                 <tr>
@@ -482,13 +486,16 @@ function ViewAction() {
                 <tr>
                   <td>Assessment form</td>
                   <td>evelynchiasting.pdf</td>
-                  <td><FaCloudDownloadAlt /></td>
-
+                  <td>
+                    <FaCloudDownloadAlt />
+                  </td>
                 </tr>
                 <tr>
                   <td>Enrollment Form</td>
                   <td>evelynchiasting.pdf</td>
-                  <td><FaCloudDownloadAlt /></td>
+                  <td>
+                    <FaCloudDownloadAlt />
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -496,7 +503,7 @@ function ViewAction() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default ViewAction
+export default ViewAction;
