@@ -160,7 +160,7 @@ const Form2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <div className="row">
                 <div class="col-sm-6 col-12 my-3">
                   <label>
-                    Write A-Z(Uppercase)<span className="text-danger">*</span>
+                    Write A-Z (Uppercase)<span className="text-danger">*</span>
                   </label>
                   <div className="d-flex">
                     <div class="form-check">
@@ -197,7 +197,7 @@ const Form2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 </div>
                 <div class="col-sm-6 col-12 my-3">
                   <label>
-                    Write a-z(Lowercase)<span className="text-danger">*</span>
+                    Write a-z (Lowercase)<span className="text-danger">*</span>
                   </label>
                   <div className="d-flex">
                     <div class="form-check">

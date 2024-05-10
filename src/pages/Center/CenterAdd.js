@@ -27,11 +27,7 @@ const validationSchema = Yup.object().shape({
     )
     .required("*Email is required"),
   openingDate: Yup.date().required("*Date is required"),
-  uenNumber: Yup.number()
-    .typeError("*UEN must be number")
-    .required("*UEN number is required")
-    .positive("*Please enter a valid number")
-    .integer("*Number must be numeric"),
+  uenNumber: Yup.string().required("*UEN number is required"),
   gst: Yup.string().required("*Choose an option"),
   taxRegistrationNumber: Yup.number()
     .typeError("*Tax Number must be numeric")

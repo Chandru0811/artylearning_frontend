@@ -35,7 +35,6 @@ const validationSchema = Yup.object().shape({
     "*Medical Condition Result is required!"
   ),
   nationality: Yup.string().required("*Select a Nationality!"),
-  remark: Yup.string().required("*Remark is required!"),
   primaryLanguageSpokenEnglish: Yup.string().required(
     "*Primary Language is required!"
   ),
@@ -580,7 +579,6 @@ const AddStudentDetails = forwardRef(
                 <div className="text-start mt-4">
                   <label htmlFor="" className="mb-1 fw-medium">
                     <small>Remark</small>
-                    <span className="text-danger">*</span>
                   </label>
                   <br />
                   <textarea
@@ -594,11 +592,6 @@ const AddStudentDetails = forwardRef(
                       height: "7rem",
                     }}
                   />
-                  {formik.touched.remark && formik.errors.remark && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.remark}</small>
-                    </div>
-                  )}
                 </div>
 
                 <div className="mb-5">

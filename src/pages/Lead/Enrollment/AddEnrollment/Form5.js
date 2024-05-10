@@ -30,6 +30,7 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       enquiryDate: formData.enquiryDate || "",
       marketingSource: formData.marketingSource || "",
       referBy: formData.referBy || "",
+      referal: formData.referal || "",
       referedStudentCenterNameId: formData.referedStudentCenterNameId || "",
       remark: formData.remark || "",
       preferredTimeSlot: formData.preferredTimeSlot || "",
@@ -417,7 +418,7 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             </div>
 
             <div className="col-md-6 col-12 mb-3">
-              <label>Refer By</label>
+              <label>Referred By</label>
               <div className="input-group ">
                 <input
                   className="form-control"
@@ -433,6 +434,25 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 </div>
               )}
             </div>
+
+            <div className="col-md-6 col-12 mb-3">
+              <label>Name of Referal</label>
+              <div className="input-group ">
+                <input
+                  className="form-control"
+                  name="referal"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.referal}
+                />
+              </div>
+              {formik.touched.referal && formik.errors.referal && (
+                <div className="error text-danger">
+                  <small>{formik.errors.referal}</small>
+                </div>
+              )}
+            </div>
+
 
             <div className="col-md-6 col-12">
               <label>
