@@ -6,10 +6,12 @@ import api from "../../../config/URL";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  workingDays : Yup.date().required("*Working Days is required"),
-  userContractSalary : Yup.number().typeError("*Salary Must be numbers").notRequired(),
-  uen : Yup.number().typeError("*UEN Must be numbers").notRequired(),
-  nric : Yup.number().typeError("*NRIC Must be numbers").notRequired(),
+  workingDays: Yup.date().required("*Working Days is required"),
+  userContractSalary: Yup.number()
+    .typeError("*Salary Must be numbers")
+    .notRequired(),
+  uen: Yup.number().typeError("*UEN Must be numbers").notRequired(),
+  nric: Yup.number().typeError("*NRIC Must be numbers").notRequired(),
   allowance: Yup.number().typeError("*Allowance Must be numbers").notRequired(),
 });
 
@@ -41,11 +43,9 @@ const StaffContractAdd = forwardRef(
         internetBanking: formData.internetBanking || "",
         contractDate: formData.contractDate || "",
         terminationNotice: formData.terminationNotice || "",
-        signature: null,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
-        values.signature = null;
         try {
           const response = await api.post(
             `/createUserContractCreation/${formData.user_id}`,
@@ -251,8 +251,10 @@ const StaffContractAdd = forwardRef(
                   value={formik.values.probation}
                 />
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Working Days<span className="text-danger">*</span></label>
+              {/* <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>
+                  Working Days<span className="text-danger">*</span>
+                </label>
                 <input
                   type="date"
                   className="form-control"
@@ -266,6 +268,36 @@ const StaffContractAdd = forwardRef(
                     <small>{formik.errors.workingDays}</small>
                   </div>
                 )}
+              </div> */}
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>
+                  Working Days<span className="text-danger">*</span>
+                </label>
+                <select
+                  className={`form-select  ${
+                    formik.touched.workingDays && formik.errors.workingDays
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  name="workingDays"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.workingDays}
+                >
+                  <option></option>
+                  <option value="Sunday">Sunday</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                </select>
+                {formik.touched.workingDays && formik.errors.workingDays && (
+                  <div className="invalid-feedback">
+                    {formik.errors.workingDays}
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Salary</label>
@@ -277,11 +309,12 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractSalary}
                 />
-                {formik.touched.userContractSalary && formik.errors.userContractSalary && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.userContractSalary}</small>
-                  </div>
-                )}
+                {formik.touched.userContractSalary &&
+                  formik.errors.userContractSalary && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.userContractSalary}</small>
+                    </div>
+                  )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Salary Start Date</label>
@@ -349,21 +382,6 @@ const StaffContractAdd = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.terminationNotice}
-                  />
-                </div>
-                <div class="col-md-6 col-12 mb-2 mt-3">
-                  <label>Signature</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    name="signature"
-                    onChange={(event) => {
-                      formik.setFieldValue(
-                        "signature",
-                        event.currentTarget.files[0]
-                      );
-                    }}
-                    onBlur={formik.handleBlur}
                   />
                 </div>
               </div>

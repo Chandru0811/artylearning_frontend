@@ -45,7 +45,7 @@ export default function InvoiceAdd() {
       course: "",
       schedule: "",
       noOfLessons: "",
-      remark: "",
+      remarks: "",
       invoiceDate: "",
       dueDate: "",
       packageId: null,
@@ -79,13 +79,13 @@ export default function InvoiceAdd() {
             invoiceDate: values.invoiceDate,
             dueDate: values.dueDate,
             packageId: values.packageId,
-            noOfLessons:values.noOfLessons,
+            noOfLessons: values.noOfLessons,
             invoicePeriodFrom: values.invoicePeriodFrom,
             invoicePeriodTo: values.invoicePeriodTo,
             gst: parseFloat(values.gst), // Ensure numerical values are parsed correctly
             creditAdviceOffset: parseFloat(values.creditAdviceOffset), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
-            remark: values.remark,
+            remarks: values.remarks,
             receiptAmount: parseFloat(values.receiptAmount), // Ensure numerical values are parsed correctly
           },
           invoiceItemsList: values.invoiceItems.map((item) => ({
@@ -346,14 +346,14 @@ export default function InvoiceAdd() {
               </div>
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
-                  Remark
+                  Remarks
                 </label>
                 <br />
                 <textarea
-                  {...formik.getFieldProps("remark")}
+                  {...formik.getFieldProps("remarks")}
                   className="form-control "
                   type="text"
-                  placeholder="Remark"
+                  placeholder="Remarks"
                   style={{
                     height: "7rem",
                   }}
@@ -679,7 +679,7 @@ export default function InvoiceAdd() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                  GST
+                    GST
                   </label>
                   <br />
                   <input

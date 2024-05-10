@@ -58,7 +58,7 @@ function TeacherView() {
       </div>
       <p class="headColor mt-3">Personal Information</p>
       <div className="d-flex justify-content-center">
-         <p className="my-2 d-flex">
+        <p className="my-2 d-flex">
           {data.photo ? (
             <img
               src={data.photo}
@@ -318,23 +318,6 @@ function TeacherView() {
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Duty Days</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].dutyDays
-                  ? data.userAccountInfo[0].dutyDays.join(", ")
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
               <p className="text-sm fw-medium">Working Days</p>
             </div>
             <div className="col-6">
@@ -344,40 +327,6 @@ function TeacherView() {
                 data.userAccountInfo.length > 0 &&
                 data.userAccountInfo[0].workingDays
                   ? data.userAccountInfo[0].workingDays.join(", ")
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Signature Date</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].signatureDate
-                  ? data.userAccountInfo[0].signatureDate
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Signature</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].signature
-                  ? data.userAccountInfo[0].signature
                   : "--"}
               </p>
             </div>
@@ -1031,23 +980,6 @@ function TeacherView() {
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].terminationNotice
                   ? data.userContractCreationModels[0].terminationNotice
-                  : "--"}
-              </p>{" "}
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Signature</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userContractCreationModels &&
-                data.userContractCreationModels.length > 0 &&
-                data.userContractCreationModels[0].signature
-                  ? data.userContractCreationModels[0].signature
                   : "--"}
               </p>{" "}
             </div>

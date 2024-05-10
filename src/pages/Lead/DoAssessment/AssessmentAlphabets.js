@@ -1,8 +1,14 @@
-import React, { forwardRef, useImperativeHandle } from "react";
-import { useFormik } from "formik";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
+import { Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({});
 
@@ -40,6 +46,10 @@ const secondHalfArray = alphabetArray.slice(13);
 
 const AssessmentAlphabets = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
+    const { leadId } = useParams();
+    const [assessmentAvailable, setAssessmentAvailable] = useState(false);
+    const [assessmentAlphabetId, setAssessmentAlphabetId] = useState(false);
+     console.log(assessmentAlphabetId);
     const formik = useFormik({
       initialValues: {
         association: formData.association || false,
@@ -179,29 +189,70 @@ const AssessmentAlphabets = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         data.leadId = formData.leadId;
-        console.log(data);
-        try {
-          const response = await api.post(
-            "/createLeadDoAssessmentAlphabet",
-            data,
-            {
+        // console.log(data);
+        if (assessmentAvailable) {
+          try {
+            const response = await api.put(
+              `/updateLeadDoAssessmentAlphabet/${assessmentAlphabetId}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...data }));
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            toast.error(error);
+          }
+        } else {
+          try {
+            const response = await api.post("/createLeadDoAssessmentAlphabet", data, {
               headers: {
                 "Content-Type": "application/json",
               },
+            });
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              const assesmentId = response.data.assessmentId;
+
+              setFormData((prv) => ({
+                ...prv,
+                ...data,
+                assesmentId,
+              }));
+             
+              handleNext();
+            } else {
+              toast.error(response.data.message);
             }
-          );
-          if (response.status === 200) {
-            toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...data }));
-            handleNext();
-          } else {
-            toast.error(response.data.message);
+          } catch (error) {
+            toast.error(error);
           }
-        } catch (error) {
-          toast.error(error);
         }
       },
     });
+
+    useEffect(() => {
+      const getData = async () => {
+        const AlphabetResponse = await api.get(
+          `/getLeadAssessmentDataByLeadId/${leadId}`
+        );
+        console.log("AlphabetResponse Data", AlphabetResponse.data.leadDoAssessmentAlphabet[0])
+        if (AlphabetResponse?.data?.leadDoAssessmentAlphabet?.length > 0) {
+          setAssessmentAvailable(true);
+          setAssessmentAlphabetId(AlphabetResponse.data.leadDoAssessmentAlphabet[0].id);
+          formik.setValues(AlphabetResponse.data.leadDoAssessmentAlphabet[0])
+        } 
+      };
+      getData();
+    }, []);
 
     const handleCheckboxChange = (fieldName) => {
       return (event) => {

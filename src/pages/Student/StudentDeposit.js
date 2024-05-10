@@ -5,7 +5,7 @@ const StudentDeposit = () => {
   return (
     <div className="container my-4">
       <div className="mb-5 mt-3 d-flex justify-content-end">
-        <Link to={"/student/view"}>
+        <Link to={`/student`}>
           <button type="button" className="btn btn-sm btn-border">
             Back
           </button>

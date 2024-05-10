@@ -29,17 +29,7 @@ function ClassEdit() {
     courseId: Yup.string().required("*Course Name is required"),
     className: Yup.string().required("*Class Name is required"),
     classType: Yup.string().required("*Class Type is required"),
-
-    durationInMins: Yup.number()
-      .typeError("*Must be a number")
-      .required("*Duration min is required")
-      .integer("*Must be a number"),
-
-    durationInHrs: Yup.number()
-      .typeError("*Must be number")
-      .required("*Duration hrs is required")
-      .positive("*Please enter a valid number")
-      .integer("*Must be a number"),
+    durationInHrs: Yup.number().required("*Duration is required"),
   });
 
   const formik = useFormik({
@@ -48,7 +38,6 @@ function ClassEdit() {
       courseId: "",
       className: "",
       classType: "",
-      durationInMins: "",
       durationInHrs: "",
       remark: "",
     },
@@ -115,11 +104,10 @@ function ClassEdit() {
               <select
                 {...formik.getFieldProps("centerId")}
                 name="centerId"
-                className={`form-select   ${
-                  formik.touched.centerId && formik.errors.centerId
+                className={`form-select   ${formik.touched.centerId && formik.errors.centerId
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -142,11 +130,10 @@ function ClassEdit() {
               <select
                 {...formik.getFieldProps("courseId")}
                 name="courseId"
-                className={`form-select   ${
-                  formik.touched.courseId && formik.errors.courseId
+                className={`form-select   ${formik.touched.courseId && formik.errors.courseId
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -170,11 +157,10 @@ function ClassEdit() {
                 name="className"
                 class="form-control "
                 type="text"
-                className={`form-control  ${
-                  formik.touched.className && formik.errors.className
+                className={`form-control  ${formik.touched.className && formik.errors.className
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
                 {...formik.getFieldProps("className")}
               />
               {formik.touched.className && formik.errors.className && (
@@ -224,19 +210,23 @@ function ClassEdit() {
             </div>
             <div class="col-md-6 col-12 mb-4">
               <label>
-                Duration (Hr)<span class="text-danger">*</span>
+                Duration<span class="text-danger">*</span>
               </label>
-              <input
-                name="durationInHrs"
-                class="form-control "
-                type="text"
-                className={`form-control  ${
-                  formik.touched.durationInHrs && formik.errors.durationInHrs
+              <select
+               {...formik.getFieldProps("durationInHrs")}
+                className={`form-select  ${formik.touched.durationInHrs && formik.errors.durationInHrs
                     ? "is-invalid"
                     : ""
-                }`}
-                {...formik.getFieldProps("durationInHrs")}
-              />
+                  }`}
+                name="durationInHrs"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.durationInHrs}
+              >
+                <option selected></option>
+                <option value="1.00">1.00 hr</option>
+                <option value="1.30">1.30 hr</option>
+              </select>
               {formik.touched.durationInHrs && formik.errors.durationInHrs && (
                 <div className="invalid-feedback">
                   {formik.errors.durationInHrs}
@@ -244,38 +234,15 @@ function ClassEdit() {
               )}
             </div>
             <div class="col-md-6 col-12 mb-4">
-              <label>
-                Duration (Min)<span class="text-danger">*</span>
-              </label>
-              <input
-                name="durationInMins"
-                class="form-control "
-                type="text"
-                className={`form-control  ${
-                  formik.touched.durationInMins && formik.errors.durationInMins
-                    ? "is-invalid"
-                    : ""
-                }`}
-                {...formik.getFieldProps("durationInMins")}
-              />
-              {formik.touched.durationInMins &&
-                formik.errors.durationInMins && (
-                  <div className="invalid-feedback">
-                    {formik.errors.durationInMins}
-                  </div>
-                )}
-            </div>
-            <div class="col-md-6 col-12 mb-4">
               <label>Remark</label>
               <textarea
                 name="remark"
                 class="form-control "
                 type="text"
-                className={`form-control  ${
-                  formik.touched.remark && formik.errors.remark
+                className={`form-control  ${formik.touched.remark && formik.errors.remark
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
                 {...formik.getFieldProps("remark")}
               />
               {formik.touched.remark && formik.errors.remark && (

@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -7,9 +12,6 @@ import { toast } from "react-toastify";
 import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
-  termsAndConditionSignatureDate: Yup.string().required(
-    "*Signature Date is required!"
-  ),
   agree: Yup.string().required("*Agree Terms and conditions is required!"),
 });
 
@@ -20,8 +22,6 @@ const EditTermsAndCondition = forwardRef(
     const formik = useFormik({
       initialValues: {
         file: null || "",
-        termsAndConditionSignatureDate:
-          formData.termsAndConditionSignatureDate || "",
         agree: formData.agree || "",
       },
       validationSchema: validationSchema,
@@ -30,12 +30,11 @@ const EditTermsAndCondition = forwardRef(
           if (data.stdTermsAndConditionId !== null) {
             const formDatas = new FormData();
             formDatas.append("file", data.file);
-            formDatas.append(
-              "termsAndConditionSignatureDate",
-              data.termsAndConditionSignatureDate
-            );
             formDatas.append("agree", data.agree);
-            formDatas.append("studentTermsAndConditionId", data.stdTermsAndConditionId);
+            formDatas.append(
+              "studentTermsAndConditionId",
+              data.stdTermsAndConditionId
+            );
             const response = await api.put(
               `/updateStudentTermsAndConditions/${data.stdTermsAndConditionId}`,
               formDatas,
@@ -54,10 +53,6 @@ const EditTermsAndCondition = forwardRef(
           } else {
             const formDatas = new FormData();
             formDatas.append("file", data.file);
-            formDatas.append(
-              "termsAndConditionSignatureDate",
-              data.termsAndConditionSignatureDate
-            );
             formDatas.append("agree", data.agree);
             formDatas.append("studentDetailId", formData.student_id);
             const response = await api.post(
@@ -105,11 +100,6 @@ const EditTermsAndCondition = forwardRef(
               ...response.data.studentTermsAndConditions[0],
               stdTermsAndConditionId:
                 response.data.studentTermsAndConditions[0].id,
-              termsAndConditionSignatureDate:
-                response.data.studentTermsAndConditions[0].termsAndConditionSignatureDate.substring(
-                  0,
-                  10
-                ),
             });
             setData(response.data);
           } else {
@@ -117,7 +107,6 @@ const EditTermsAndCondition = forwardRef(
             formik.setValues({
               stdTermsAndConditionId: null,
               file: null || "",
-              termsAndConditionSignatureDate: "",
               agree: "",
             });
           }
@@ -186,42 +175,17 @@ const EditTermsAndCondition = forwardRef(
                           ))}
                         {(!data.studentTermsAndConditions ||
                           data.studentTermsAndConditions.length === 0) && (
-                            <div
-                              id="panelsStayOpen-collapseThree"
-                              class="accordion-collapse collapse"
-                            >
-                              <div class="accordion-body">
-                                <div className="text-muted">
-                                  Parent Signature / not available !
-                                </div>
+                          <div
+                            id="panelsStayOpen-collapseThree"
+                            class="accordion-collapse collapse"
+                          >
+                            <div class="accordion-body">
+                              <div className="text-muted">
+                                Parent Signature / not available !
                               </div>
                             </div>
-                          )}
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12 px-5">
-                      <div className="text-start mt-2">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Signature Date</small>
-                          <span className="text-danger">*</span>
-                        </label>
-                        <br />
-                        <input
-                          className="form-control "
-                          type="date"
-                          name="termsAndConditionSignatureDate"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.termsAndConditionSignatureDate}
-                        />
-                        {formik.touched.termsAndConditionSignatureDate &&
-                          formik.errors.termsAndConditionSignatureDate && (
-                            <div className="text-danger">
-                              <small>
-                                {formik.errors.termsAndConditionSignatureDate}
-                              </small>
-                            </div>
-                          )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

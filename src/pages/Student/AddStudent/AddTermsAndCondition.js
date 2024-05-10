@@ -6,9 +6,6 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  termsAndConditionSignatureDate: Yup.string().required(
-    "*Signature Date is required!"
-  ),
   agree: Yup.string().required("*Agree Terms and conditions is required!"),
 });
 
@@ -18,18 +15,12 @@ const AddTermsAndCondition = forwardRef(
     const formik = useFormik({
       initialValues: {
         file: null,
-        termsAndConditionSignatureDate:
-          formData.termsAndConditionSignatureDate || "",
         agree: formData.agree || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         const formDatas = new FormData();
         formDatas.append("file", data.file);
-        formDatas.append(
-          "termsAndConditionSignatureDate",
-          data.termsAndConditionSignatureDate
-        );
         formDatas.append("agree", data.agree);
         formDatas.append("studentDetailId", formData.student_id);
 
@@ -84,31 +75,6 @@ const AddTermsAndCondition = forwardRef(
                           }}
                           onBlur={formik.handleBlur}
                         />
-                      </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-12 px-5">
-                      <div className="text-start mt-2">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Signature Date</small>
-                          <span className="text-danger">*</span>
-                        </label>
-                        <br />
-                        <input
-                          className="form-control "
-                          type="date"
-                          name="termsAndConditionSignatureDate"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.termsAndConditionSignatureDate}
-                        />
-                        {formik.touched.termsAndConditionSignatureDate &&
-                          formik.errors.termsAndConditionSignatureDate && (
-                            <div className="text-danger">
-                              <small>
-                                {formik.errors.termsAndConditionSignatureDate}
-                              </small>
-                            </div>
-                          )}
                       </div>
                     </div>
                   </div>

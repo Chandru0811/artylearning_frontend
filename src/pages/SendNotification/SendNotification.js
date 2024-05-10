@@ -129,7 +129,7 @@ const SendNotification = () => {
             <tr>
               <th scope="col">S No</th>
               <th scope="col">Event Name</th>
-              <th scope="col">Meassage</th>
+              <th scope="col">Message</th>
               <th scope="col">Created At</th>
               <th scope="col">Action</th>
             </tr>

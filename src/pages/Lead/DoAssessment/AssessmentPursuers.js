@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -7,15 +12,17 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   sightWords: Yup.array()
-  .min(1, "*Select at least one Sight Words")
-  .required("*Select Sight Words"),
+    .min(1, "*Select at least one Sight Words")
+    .required("*Select Sight Words"),
   hbrothersSightWords: Yup.array()
-  .min(1, "*Select at least one Sight Words")
-  .required("*Select Sight Words"),
+    .min(1, "*Select at least one Sight Words")
+    .required("*Select Sight Words"),
 });
 
 const AssessmentPursuers = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
+    const [assessmentAvailable, setAssessmentAvailable] = useState(false);
+    const [PursuerAssessmentId, setPursuerAssessmentId] = useState(false);
     const { leadId } = useParams();
     const navigate = useNavigate();
 
@@ -126,38 +133,75 @@ const AssessmentPursuers = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         data.leadId = leadId;
-        try {
-          const response = await api.post(
-            "/createLeadDoAssessmentArtyPursuers",
-            data,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
+        if (assessmentAvailable) {
+          try {
+            const response = await api.put(
+              `/updateLeadDoAssessmentArtyPursuers/${PursuerAssessmentId}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...data, leadId }));
+              navigate("/lead/lead");
+            } else {
+              toast.error(response.data.message);
             }
-          );
-          if (response.status === 201) {
-            toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...data, leadId }));
-            navigate("/lead/lead");
-          } else {
-            toast.error(response.data.message);
+          } catch (error) {
+            toast.error(error);
           }
-        } catch (error) {
-          toast.error(error);
+        } else {
+          try {
+            const response = await api.post(
+              "/createLeadDoAssessmentArtyPursuers",
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              const assesmentId = response.data.assessmentId;
+
+              setFormData((prv) => ({
+                ...prv,
+                ...data,
+                assesmentId,
+              }));
+
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            toast.error(error);
+          }
         }
       },
     });
 
-    // const handleNextStep = () => {
-    //   // e.preventDefault()
-    //   formik.validateForm().then((errors) => {
-    //     formik.handleSubmit();
-    //     if (Object.keys(errors).length === 0) {
-    //       handleNext();
-    //     }
-    //   });
-    // };
+    useEffect(() => {
+      const getData = async () => {
+        const PursuerResponse = await api.get(
+          `/getLeadAssessmentDataByLeadId/${leadId}`
+        );
+        console.log("PursuerResponse is", PursuerResponse);
+        if (PursuerResponse?.data?.leadDoAssessmentArtyPursuers?.length > 0) {
+          setAssessmentAvailable(true);
+          setPursuerAssessmentId(
+            PursuerResponse.data.leadDoAssessmentArtyPursuers[0].id
+          );
+          formik.setValues(PursuerResponse.data.leadDoAssessmentArtyPursuers[0])
+        }
+      };
+      getData();
+    }, []);
 
     const handleCheckboxChange = (fieldName) => {
       return (event) => {
@@ -390,7 +434,7 @@ const AssessmentPursuers = forwardRef(
                     </td>
                   </tr>
                   <tr>
-                  <th scope="row"></th>
+                    <th scope="row"></th>
                     <td>
                       {formik.touched.sightWords && formik.errors.sightWords ? (
                         <div className="text-danger">
@@ -1970,9 +2014,10 @@ const AssessmentPursuers = forwardRef(
                     </td>
                   </tr>
                   <tr>
-                  <th scope="row"></th>
+                    <th scope="row"></th>
                     <td>
-                      {formik.touched.hbrothersSightWords && formik.errors.hbrothersSightWords ? (
+                      {formik.touched.hbrothersSightWords &&
+                      formik.errors.hbrothersSightWords ? (
                         <div className="text-danger">
                           {formik.errors.hbrothersSightWords}
                         </div>

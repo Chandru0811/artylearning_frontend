@@ -17,19 +17,13 @@ const validationSchema = Yup.object().shape({
   shgType: Yup.string().required("*Shg Type is required!"),
   shgAmount: Yup.string().required("*Shg Amount is required!"),
   status: Yup.string().required("*Status is required!"),
-  endDate: Yup.string().required("*End Date is required!"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required!"
   ),
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required!"))
     .min(1, "*Working Days is required!"),
-  dutyDays: Yup.array()
-    .of(Yup.string().required("*Duty Days is required!"))
-    .min(1, "*Duty Days is required!"),
   centerId: Yup.string().required("*Centres is required!"),
-
-  signatureDate: Yup.string().required("*Signature Date is required!"),
 });
 const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const [centerData, setCenterData] = useState(null);
@@ -47,7 +41,6 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     fetchData();
   }, []);
 
-
   const formik = useFormik({
     initialValues: {
       startDate: formData.startDate || "",
@@ -60,10 +53,7 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       endDate: formData.endDate || "",
       approvelContentRequired: formData.approvelContentRequired || "",
       workingDays: formData.workingDays || [],
-      dutyDays: formData.dutyDays || [],
       centerId: formData.centerId || "",
-      signature: null || "",
-      signatureDate: formData.signatureDate || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -75,18 +65,14 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       };
       values.signature = null;
       try {
-        const response = await api.post(
-          `/createUserAccountInfo`,
-          updatedData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await api.post(`/createUserAccountInfo`, updatedData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (response.status === 201) {
           toast.success(response.data.message);
-          setFormData((prv) => ({ ...prv, ...values}));
+          setFormData((prv) => ({ ...prv, ...values }));
           handleNext();
         } else {
           toast.error(response.data.message);
@@ -255,13 +241,7 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               onBlur={formik.handleBlur}
               value={formik.values.endDate}
             />
-            {formik.touched.endDate && formik.errors.endDate && (
-              <div className="error text-danger ">
-                <small>{formik.errors.endDate}</small>
-              </div>
-            )}
           </div>
-
           <div className="col-lg-6 col-md-6 col-12 mb-2 mt-3">
             <label>
               Approval Required for photos / videos upload
@@ -278,9 +258,7 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label className="form-check-label me-4">
-                  Yes
-                </label>
+                <label className="form-check-label me-4">Yes</label>
               </div>
               <div className="form-check">
                 <input
@@ -292,9 +270,7 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                <label className="form-check-label">
-                  No
-                </label>
+                <label className="form-check-label">No</label>
               </div>
             </div>
             {formik.touched.approvelContentRequired &&
@@ -465,167 +441,8 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             )}
           </div>
           <div className="col-md-6 col-12 mb-2 mt-3">
-            <label>
-              Duty Days <span className="text-danger">*</span>
-            </label>
-            <div className="mt-2 d-flex mt-3">
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="myCheckbox8"
-                  value="MONDAY"
-                  name="dutyDays"
-                  checked={
-                    formik.values.dutyDays &&
-                    formik.values.dutyDays.includes("MONDAY")
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label for="myCheckbox8" className="custom-checkbox">
-                  <div className="inner-square"></div>
-                </label>
-                <label for="myCheckbox8" className="mx-1">
-                  Mon
-                </label>
-              </div>
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="myCheckbox9"
-                  value="TUESDAY"
-                  name="dutyDays"
-                  checked={
-                    formik.values.dutyDays &&
-                    formik.values.dutyDays.includes("TUESDAY")
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label for="myCheckbox9" className="custom-checkbox">
-                  <div className="inner-square"></div>
-                </label>
-                <label for="myCheckbox9" className="mx-1">
-                  Tue
-                </label>
-              </div>
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="myCheckbox10"
-                  value="WEDNESDAY"
-                  name="dutyDays"
-                  checked={
-                    formik.values.dutyDays &&
-                    formik.values.dutyDays.includes("WEDNESDAY")
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label for="myCheckbox10" className="custom-checkbox">
-                  <div className="inner-square"></div>
-                </label>
-                <label for="myCheckbox10" className="mx-1">
-                  Wed
-                </label>
-              </div>
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="myCheckbox11"
-                  value="THURSDAY"
-                  name="dutyDays"
-                  checked={
-                    formik.values.dutyDays &&
-                    formik.values.dutyDays.includes("THURSDAY")
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label for="myCheckbox11" className="custom-checkbox">
-                  <div className="inner-square"></div>
-                </label>
-                <label for="myCheckbox11" className="mx-1">
-                  Thu
-                </label>
-              </div>
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="myCheckbox12"
-                  value="FRIDAY"
-                  name="dutyDays"
-                  checked={
-                    formik.values.dutyDays &&
-                    formik.values.dutyDays.includes("FRIDAY")
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label for="myCheckbox12" className="custom-checkbox">
-                  <div className="inner-square"></div>
-                </label>
-                <label for="myCheckbox12" className="mx-1">
-                  Fri
-                </label>
-              </div>
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="myCheckbox13"
-                  value="SATURDAY"
-                  name="dutyDays"
-                  checked={
-                    formik.values.dutyDays &&
-                    formik.values.dutyDays.includes("SATURDAY")
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label for="myCheckbox13" className="custom-checkbox">
-                  <div className="inner-square"></div>
-                </label>
-                <label for="myCheckbox13" className="mx-1">
-                  Sat
-                </label>
-              </div>
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="myCheckbox14"
-                  value="SUNDAY"
-                  name="dutyDays"
-                  checked={
-                    formik.values.dutyDays &&
-                    formik.values.dutyDays.includes("SUNDAY")
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label for="myCheckbox14" className="custom-checkbox">
-                  <div className="inner-square"></div>
-                </label>
-                <label for="myCheckbox14" className="mx-1">
-                  Sun
-                </label>
-              </div>
-            </div>
-            {formik.touched.dutyDays && formik.errors.dutyDays && (
-              <div className="error text-danger ">
-                <small>{formik.errors.dutyDays}</small>
-              </div>
-            )}
-          </div>
-          <div className="col-md-6 col-12 mb-2 mt-3">
             <lable className="form-lable">
-            Centre Name<span className="text-danger">*</span>
+              Centre Name<span className="text-danger">*</span>
             </lable>
             <div className="input-group mb-3">
               <select
@@ -649,36 +466,6 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 <div className="invalid-feedback">{formik.errors.centerId}</div>
               )}
             </div>
-          </div>
-          <div className="col-md-6 col-12 mb-2 mt-3">
-            <label>Signature</label>
-            <input
-              type="file"
-              className="form-control "
-              name="signature"
-              onChange={(event) => {
-                formik.setFieldValue("signature", event.currentTarget.files[0]);
-              }}
-              onBlur={formik.handleBlur}
-            />
-          </div>
-          <div className="col-md-6 col-12 mb-2 mt-3">
-            <label>
-              Signature Date<span className="text-danger">*</span>
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              name="signatureDate"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.signatureDate}
-            />
-            {formik.touched.signatureDate && formik.errors.signatureDate && (
-              <div className="error text-danger ">
-                <small>{formik.errors.signatureDate}</small>
-              </div>
-            )}
           </div>
         </div>
       </div>
