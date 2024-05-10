@@ -367,13 +367,7 @@ const AccountEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               onBlur={formik.handleBlur}
               value={formik.values.endDate}
             />
-            {formik.touched.endDate && formik.errors.endDate && (
-              <div className="error text-danger ">
-                <small>{formik.errors.endDate}</small>
-              </div>
-            )}
           </div>
-
           <div className="col-lg-6 col-md-6 col-12 mb-2 mt-3">
             <label>
               Approval Required for photos / videos upload
@@ -411,7 +405,7 @@ const AccountEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 </label>
               </div>
             </div>
-            {formik.touched.endDate && formik.errors.approvelContentRequired ? (
+            {formik.touched.approvelContentRequired && formik.errors.approvelContentRequired ? (
               <div className="error text-danger ">
                 <small>{formik.errors.approvelContentRequired}</small>
               </div>

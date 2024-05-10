@@ -20,7 +20,6 @@ const validationSchema = Yup.object().shape({
     .matches(/^[0-9]+$/, "*Amount Must be numbers")
     .required("*SHG amount is required"),
   status: Yup.string().required("*Status is required"),
-  endDate: Yup.string().required("*End Date is required"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required"
   ),
@@ -257,13 +256,7 @@ const StaffAccountAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.endDate}
               />
-              {formik.touched.endDate && formik.errors.endDate && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.endDate}</small>
-                </div>
-              )}
             </div>
-
             <div className="col-lg-6 col-md-6 col-12 mb-2 mt-3">
               <label>
                 Approval Required for photos / videos upload

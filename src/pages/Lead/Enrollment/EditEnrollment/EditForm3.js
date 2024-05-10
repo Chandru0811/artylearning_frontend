@@ -238,7 +238,7 @@ const EditForm3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             </div>
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label className="form-label">Mother's monthly income<span className="text-danger">*</span></label>
+            <label className="form-label">Mother's Monthly Income<span className="text-danger">*</span></label>
             <select className="form-select"
               name="monthlyIncomeOfMother"
               onChange={formik.handleChange}
@@ -389,7 +389,7 @@ const EditForm3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             </div>
           </div>
           <div className="col-md-6 col-12">
-            <label className="form-label">Father's monthly income<span className="text-danger">*</span></label>
+            <label className="form-label">Father's Monthly Income<span className="text-danger">*</span></label>
             <select className="form-select"
               name="monthlyIncomeOfFather"
               onChange={formik.handleChange}
