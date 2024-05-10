@@ -50,11 +50,9 @@ const AddParentGuardian = forwardRef(
             }))
           : [],
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         // console.log("Add ParentGuardian", values);
-
-        // console.log("Form Data is", formDatas);
         try {
           const formDatas = new FormData();
           values.parentInformation.map((parent) => {
@@ -86,7 +84,12 @@ const AddParentGuardian = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
+          if(error?.response?.status === 500){
+            toast.warning("Please Fill All the fields to continue")
+          }else{
+            toast.error(error?.response?.data?.message);
+          }
+          
         }
       },
     });

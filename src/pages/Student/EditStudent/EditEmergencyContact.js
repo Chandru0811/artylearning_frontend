@@ -132,7 +132,7 @@ const EditEmergencyContact = forwardRef(
                 "emergencyContactAddress",
                 contact.emergencyContactAddress
               );
-              formDatas.append("files", contact.files);
+              formDatas.append("files", contact.files || undefined);
             });
             const response = await api.post(
               `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.id}`,
