@@ -229,16 +229,16 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               value={formik.values.monthlyIncomeOfMother}
             >
               <option selected></option>
-              <option value="$0_$1,000">$0 - $1,000</option>
-              <option value="$1,001_$2,000">$1,001 - $2,000</option>
-              <option value="$2001_$3,000">$2001 - $3,000</option>
-              <option value="$3,001_$4,000">$3,001 - $4,000</option>
-              <option value="$4001_$5,000">$4001 - $5,000</option>
-              <option value="$5,001_$6,000">$5,001 - $6,000</option>
-              <option value="$6001_$7,000">$6001 - $7,000</option>
-              <option value="$7,001_$8,000">$7,001 - $8,000</option>
-              <option value="$8001_$9,000">$8001 - $9,000</option>
-              <option value="$9,001_$10,000">$9,001 - $10,000</option>
+              <option value="$0_$1000">$0 - $1,000</option>
+              <option value="$1001_$2000">$1,001 - $2,000</option>
+              <option value="$2001_$3000">$2001 - $3,000</option>
+              <option value="$3001_$4000">$3,001 - $4,000</option>
+              <option value="$4001_$5000">$4001 - $5,000</option>
+              <option value="$5001_$6000">$5,001 - $6,000</option>
+              <option value="$6001_$7000">$6001 - $7,000</option>
+              <option value="$7001_$8000">$7,001 - $8,000</option>
+              <option value="$8001_$9000">$8001 - $9,000</option>
+              <option value="$9001_$10000">$9,001 - $10,000</option>
               <option value="ABOVE_$10000">Above $10,000</option>
               <option value="PREFER_NOT_TO_DISCLOSE">Prefer Not To Disclose</option>
             </select>
@@ -380,16 +380,16 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               value={formik.values.monthlyIncomeOfFather}
             >
               <option selected></option>
-              <option value="$0_$1,000">$0 - $1,000</option>
-              <option value="$1,001_$2,000">$1,001 - $2,000</option>
-              <option value="$2001_$3,000">$2001 - $3,000</option>
-              <option value="$3,001_$4,000">$3,001 - $4,000</option>
-              <option value="$4001_$5,000">$4001 - $5,000</option>
-              <option value="$5,001_$6,000">$5,001 - $6,000</option>
-              <option value="$6001_$7,000">$6001 - $7,000</option>
-              <option value="$7,001_$8,000">$7,001 - $8,000</option>
-              <option value="$8001_$9,000">$8001 - $9,000</option>
-              <option value="$9,001_$10,000">$9,001 - $10,000</option>
+              <option value="$0_$1000">$0 - $1,000</option>
+              <option value="$1001_$2000">$1,001 - $2,000</option>
+              <option value="$2001_$3000">$2001 - $3,000</option>
+              <option value="$3001_$4000">$3,001 - $4,000</option>
+              <option value="$4001_$5000">$4001 - $5,000</option>
+              <option value="$5001_$6000">$5,001 - $6,000</option>
+              <option value="$6001_$7000">$6001 - $7,000</option>
+              <option value="$7001_$8000">$7,001 - $8,000</option>
+              <option value="$8001_$9000">$8001 - $9,000</option>
+              <option value="$9001_$10000">$9,001 - $10,000</option>
               <option value="ABOVE_$10000">Above $10,000</option>
               <option value="PREFER_NOT_TO_DISCLOSE">Prefer Not To Disclose</option>
             </select>
