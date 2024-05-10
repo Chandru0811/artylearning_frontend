@@ -23,6 +23,7 @@ const validationSchema = Yup.object().shape({
   nameOfSchool: Yup.string().required("*School Name is required"),
   nameOfChildrenInTotal: Yup.string().required("*Name of Children is required"),
   fathersFullName: Yup.string().required("*Father Name is required"),
+  status: Yup.string().required("*Status is required"),
 });
 
 const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
@@ -40,6 +41,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       nameOfSchool: "",
       nameOfChildrenInTotal: "",
       fathersFullName: "",
+      status: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -208,7 +210,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <div className="mb-3">
               <div>
                 <label for="exampleFormControlInput1" className="form-label">
-                  Allergy / Medical Condition(For Instance: Asthma)
+                  Allergy / Medical Condition (For Instance: Asthma)
                   <span className="text-danger">*</span>
                 </label>
               </div>
@@ -230,7 +232,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               </div>
             </div>
           </div>
-          <div className="col-md-12 col-12 ">
+          <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <div>
                 <label for="exampleFormControlInpu  t1" className="form-label">
@@ -314,6 +316,34 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               )}
             </div>
           </div>
+          <div class="col-md-6 col-12 mb-4">
+            <label>
+              Status<span class="text-danger">*</span>
+            </label>
+            <select
+              className={`form-select  ${formik.touched.status && formik.errors.status
+                  ? "is-invalid"
+                  : ""
+                }`}
+              name="status"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.status}
+            >
+              <option ></option>
+              <option value="Pending">Pending</option>
+              <option value="Arranging assessment">Arranging assessment</option>
+              <option value="Assessment confirmed">Assessment confirmed</option>
+              <option value="Waiting for payment">Waiting for payment</option>
+              <option value="Rejected">Rejected</option>
+              <option value="KIV">KIV</option>
+            </select>
+            {formik.touched.status && formik.errors.status && (
+              <div className="invalid-feedback">
+                {formik.errors.status}
+              </div>
+            )}
+          </div>
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <div>
@@ -393,7 +423,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Name Of children In Total
+              Number Of Children In Total
                 <span className="text-danger">*</span>
               </label>
               <input

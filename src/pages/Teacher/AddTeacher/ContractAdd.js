@@ -6,10 +6,12 @@ import api from "../../../config/URL";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  workingDays : Yup.date().required("*Working Days is required"),
-  userContractSalary : Yup.number().typeError("*Salary Must be numbers").notRequired(),
-  uen : Yup.number().typeError("*UEN Must be numbers").notRequired(),
-  nric : Yup.number().typeError("*NRIC Must be numbers").notRequired(),
+  workingDays: Yup.date().required("*Working Days is required"),
+  userContractSalary: Yup.number()
+    .typeError("*Salary Must be numbers")
+    .notRequired(),
+  uen: Yup.number().typeError("*UEN Must be numbers").notRequired(),
+  nric: Yup.number().typeError("*NRIC Must be numbers").notRequired(),
   allowance: Yup.number().typeError("*Allowance Must be numbers").notRequired(),
 });
 
@@ -40,12 +42,10 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
       internetBanking: formData.internetBanking || "",
       contractDate: formData.contractDate || "",
       terminationNotice: formData.terminationNotice || "",
-      signature: null || "",
     },
     validationSchema: validationSchema,
 
     onSubmit: async (values) => {
-      values.signature = null;
       try {
         const response = await api.post(
           `/createUserContractCreation/${formData.user_id}`,
@@ -102,10 +102,10 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
                 value={formik.values.uen}
               />
               {formik.touched.uen && formik.errors.uen && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.uen}</small>
-                  </div>
-                )}
+                <div className="error text-danger ">
+                  <small>{formik.errors.uen}</small>
+                </div>
+              )}
             </div>
           </div>
           <div class="col-md-6 col-12 mb-2 mt-3">
@@ -143,10 +143,10 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
                 value={formik.values.nric}
               />
               {formik.touched.nric && formik.errors.nric && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.nric}</small>
-                  </div>
-                )}
+                <div className="error text-danger ">
+                  <small>{formik.errors.nric}</small>
+                </div>
+              )}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>Address</label>
@@ -214,10 +214,10 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
                 value={formik.values.allowance}
               />
               {formik.touched.allowance && formik.errors.allowance && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.allowance}</small>
-                  </div>
-                )}
+                <div className="error text-danger ">
+                  <small>{formik.errors.allowance}</small>
+                </div>
+              )}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>Start Date</label>
@@ -253,7 +253,9 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
               />
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Working Days<span className="text-danger">*</span></label>
+              <label>
+                Working Days<span className="text-danger">*</span>
+              </label>
               <input
                 type="date"
                 className="form-control"
@@ -263,10 +265,10 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
                 value={formik.values.workingDays}
               />
               {formik.touched.workingDays && formik.errors.workingDays && (
-              <div className="error text-danger ">
-                <small>{formik.errors.workingDays}</small>
-              </div>
-            )}
+                <div className="error text-danger ">
+                  <small>{formik.errors.workingDays}</small>
+                </div>
+              )}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>Salary</label>
@@ -278,7 +280,8 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
                 onBlur={formik.handleBlur}
                 value={formik.values.userContractSalary}
               />
-              {formik.touched.userContractSalary && formik.errors.userContractSalary && (
+              {formik.touched.userContractSalary &&
+                formik.errors.userContractSalary && (
                   <div className="error text-danger ">
                     <small>{formik.errors.userContractSalary}</small>
                   </div>
@@ -350,21 +353,6 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.terminationNotice}
-                />
-              </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Signature</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  name="signature"
-                  onChange={(event) => {
-                    formik.setFieldValue(
-                      "signature",
-                      event.currentTarget.files[0]
-                    );
-                  }}
-                  onBlur={formik.handleBlur}
                 />
               </div>
             </div>

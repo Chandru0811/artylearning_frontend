@@ -51,7 +51,7 @@ export default function InvoiceEdit() {
       courseId: "",
       schedule: "",
       noOfLessons: "",
-      remark: "",
+      remarks: "",
       invoiceDate: "",
       dueDate: "",
       packageId: "",
@@ -93,7 +93,7 @@ export default function InvoiceEdit() {
           gst: parseFloat(values.gst), // Ensure numerical values are parsed correctly
           creditAdviceOffset: parseFloat(values.creditAdviceOffset), // Ensure numerical values are parsed correctly
           totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
-          remark: values.remark,
+          remarks: values.remarks,
           receiptAmount: parseFloat(values.receiptAmount), // Ensure numerical values are parsed correctly
         },
         invoiceItemsList: values.invoiceItems.map((item) => ({
@@ -218,7 +218,7 @@ export default function InvoiceEdit() {
     };
 
     getData();
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -351,7 +351,9 @@ export default function InvoiceEdit() {
                     ))}
                 </select>
                 {formik.touched.courseId && formik.errors.courseId && (
-                  <div className="invalid-feedback">{formik.errors.courseId}</div>
+                  <div className="invalid-feedback">
+                    {formik.errors.courseId}
+                  </div>
                 )}
               </div>
               <div className="text-start mt-3">
@@ -398,15 +400,15 @@ export default function InvoiceEdit() {
               </div>
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
-                  Remark
+                  Remarks
                 </label>
                 <br />
                 <textarea
-                  name="remark"
-                  {...formik.getFieldProps("remark")}
+                  name="remarks"
+                  {...formik.getFieldProps("remarks")}
                   className="form-control "
                   type="text"
-                  placeholder="Remark"
+                  placeholder="Remarks"
                   style={{
                     height: "7rem",
                   }}

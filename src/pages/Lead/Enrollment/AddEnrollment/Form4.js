@@ -118,7 +118,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Name Of Emergency Contact Pereson's(Other Than Parents)
+                Name Of Emergency Contact Person's (Other Than Parents)
                 <span className="text-danger">*</span>
               </label>
               <input
@@ -140,7 +140,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Emergency Contact Person's NRIC/FIC No.(other Than Parents)Last
+                Emergency Contact Person's NRIC/FIC No. (other Than Parents)Last
                 $ Digits<span className="text-danger">*</span>
               </label>
               <input
@@ -161,7 +161,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Emergency Contact Person's Contact Number(other Than Parents)
+                Emergency Contact Person's Contact Number (other Than Parents)
                 <span className="text-danger">*</span>
               </label>
               <input
@@ -268,7 +268,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-12 col-12">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Name Of Authorised Person To Take child From Class(Other Than
+                Name Of Authorised Person To Take child From Class (Other Than
                 Parents-For Pickups)
               </label>
               <form className="">
@@ -287,7 +287,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
                 Relation To Child Of Authorised Person To Take Child From
-                Class(Other Than Parents-For Pickups)
+                Class (Other Than Parents-For Pickups)
               </label>
               <form className="">
                 <textarea
@@ -304,7 +304,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-12 col-12">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                NRIC/FIN No. Authorised Person To Take Child From Class(Other
+                NRIC/FIN No. Authorised Person To Take Child From Class (Other
                 Than Parents-For Pickups)
               </label>
               <form className="">
@@ -325,7 +325,7 @@ const Form4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 for="exampleFormControlInput1"
                 className="form-label"
               ></label>
-              Contact Number Authorised Person To Take Child From Class(Other
+              Contact Number Authorised Person To Take Child From Class (Other
               Than Parents-For Pickups)
               <textarea
                 type="text"

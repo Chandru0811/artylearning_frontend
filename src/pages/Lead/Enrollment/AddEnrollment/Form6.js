@@ -10,6 +10,7 @@ const Form6 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
 
   const validationSchema = Yup.object().shape({
     addressOfAuthorisedPerson: Yup.string().required("*Address is required"),
+    declare: Yup.string().required("*Declare is required")
   });
 
   const formik = useFormik({
@@ -17,7 +18,7 @@ const Form6 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
       consentScrapbook: false,
       consentPhotos: false,
-      declare: false,
+      declare: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -135,10 +136,18 @@ const Form6 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 type="checkbox"
                 checked={formik.values.declare}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.declare}
               />
               <label className="form-check-label" htmlFor="declare">
                 I agree that the information provided is true to my abilities.
               </label>
+              {formik.touched.declare &&
+                  formik.errors.declare && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.declare}</small>
+                    </div>
+                  )}
             </div>
           </div>
         </div>
