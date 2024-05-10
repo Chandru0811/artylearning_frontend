@@ -447,11 +447,11 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                              data.studentEmergencyContacts.length > 0 &&
-                              data.studentEmergencyContacts[0]
-                                .emergencyContactName
+                            data.studentEmergencyContacts.length > 0 &&
+                            data.studentEmergencyContacts[0]
+                              .emergencyContactName
                               ? data.studentEmergencyContacts[0]
-                                .emergencyContactName
+                                  .emergencyContactName
                               : "--"}
                           </p>
                         </div>
@@ -466,10 +466,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                              data.studentEmergencyContacts.length > 0 &&
-                              data.studentEmergencyContacts[0].emergencyContactNo
+                            data.studentEmergencyContacts.length > 0 &&
+                            data.studentEmergencyContacts[0].emergencyContactNo
                               ? data.studentEmergencyContacts[0]
-                                .emergencyContactNo
+                                  .emergencyContactNo
                               : "--"}
                           </p>
                         </div>
@@ -484,10 +484,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                              data.studentEmergencyContacts.length > 0 &&
-                              data.studentEmergencyContacts[0].emergencyRelation
+                            data.studentEmergencyContacts.length > 0 &&
+                            data.studentEmergencyContacts[0].emergencyRelation
                               ? data.studentEmergencyContacts[0]
-                                .emergencyRelation
+                                  .emergencyRelation
                               : "--"}
                           </p>
                         </div>
@@ -809,8 +809,8 @@ function StudentView() {
                             <p className="text-muted text-sm">
                               <b className="mx-2">:</b>
                               {data.studentParentsDetails &&
-                                data.studentParentsDetails.length > 0 &&
-                                data.studentParentsDetails[0].address
+                              data.studentParentsDetails.length > 0 &&
+                              data.studentParentsDetails[0].address
                                 ? data.studentParentsDetails[0].address
                                 : "--"}
                             </p>
@@ -951,17 +951,17 @@ function StudentView() {
               ))}
             {(!data.studentParentsDetails ||
               data.studentParentsDetails.length === 0) && (
-                <div
-                  id="panelsStayOpen-collapseThree"
-                  class="accordion-collapse collapse"
-                >
-                  <div class="accordion-body">
-                    <div className="text-muted">
-                      No parent/guardian information available
-                    </div>
+              <div
+                id="panelsStayOpen-collapseThree"
+                class="accordion-collapse collapse"
+              >
+                <div class="accordion-body">
+                  <div className="text-muted">
+                    No parent/guardian information available
                   </div>
                 </div>
-              )}
+              </div>
+            )}
           </div>
 
           {/* Relation */}
@@ -1069,9 +1069,6 @@ function StudentView() {
                         <th scope="col" className="fw-medium">
                           End Time
                         </th>
-                        <th scope="col" className="fw-medium">
-                          Signature Date
-                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1133,13 +1130,13 @@ function StudentView() {
                   ))}
                 {(!data.studentCourseDetailModels ||
                   data.studentCourseDetailModels.length === 0) && (
-                    <img
-                      src={BlockImg}
-                      className="img-fluid rounded"
-                      style={{ width: "20%" }}
-                      alt="Parent Signature Img"
-                    />
-                  )}
+                  <img
+                    src={BlockImg}
+                    className="img-fluid rounded"
+                    style={{ width: "20%" }}
+                    alt="Parent Signature Img"
+                  />
+                )}
               </div>
             </div>
           </div>

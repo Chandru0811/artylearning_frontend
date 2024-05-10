@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Bs1SquareFill,
   Bs2SquareFill,
@@ -6,7 +6,7 @@ import {
   Bs4SquareFill,
   Bs5SquareFill,
   Bs6SquareFill,
-  Bs7SquareFill
+  Bs7SquareFill,
 } from "react-icons/bs";
 import { FaAngleLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -16,21 +16,49 @@ function TermsAndCondition() {
     <div className="container-fluid">
       <div class="card shadow border-0 mb-5">
         <div class="container-fluid py-4">
-          <h1 class="h4 ls-tight" style={{ color: '#ff7500' }}>Registration</h1>
+          <h1 class="h4 ls-tight" style={{ color: "#ff7500" }}>
+            Registration
+          </h1>
         </div>
       </div>
-      <div className='card shadow border-0 mb-5'>
-        <div className=' text-center mb-5 '>
-          <div className='row mt-5 d-flex justify-content-center'>
-            <span className='col-lg-2 col-md-6 col-sm-12 text-center'><Bs1SquareFill />&nbsp;<small>Student Details</small></span>&nbsp;&nbsp;
-            <span className='col-lg-3 col-md-6 col-sm-12 text-center'><Bs2SquareFill />&nbsp;<small>Videography / Photography</small></span>&nbsp;&nbsp;
-            <span className='col-lg-3 col-md-6 col-sm-12 text-center'><Bs3SquareFill />&nbsp;<small>Parent / Guardian</small></span>&nbsp;&nbsp;
-            <span className='col-lg-3 col-md-6 col-sm-12 text-center'><Bs4SquareFill />&nbsp;<small>Emergency Contact</small></span>
+      <div className="card shadow border-0 mb-5">
+        <div className=" text-center mb-5 ">
+          <div className="row mt-5 d-flex justify-content-center">
+            <span className="col-lg-2 col-md-6 col-sm-12 text-center">
+              <Bs1SquareFill />
+              &nbsp;<small>Student Details</small>
+            </span>
+            &nbsp;&nbsp;
+            <span className="col-lg-3 col-md-6 col-sm-12 text-center">
+              <Bs2SquareFill />
+              &nbsp;<small>Videography / Photography</small>
+            </span>
+            &nbsp;&nbsp;
+            <span className="col-lg-3 col-md-6 col-sm-12 text-center">
+              <Bs3SquareFill />
+              &nbsp;<small>Parent / Guardian</small>
+            </span>
+            &nbsp;&nbsp;
+            <span className="col-lg-3 col-md-6 col-sm-12 text-center">
+              <Bs4SquareFill />
+              &nbsp;<small>Emergency Contact</small>
+            </span>
           </div>
-          <div className='row mt-5 mb-5 d-flex justify-content-center'>
-            <div className='col-lg-5 col-md-6 col-sm-12 text-start'><Bs5SquareFill />&nbsp;<small>Authorized Person to Take Child from Class</small></div>&nbsp;&nbsp;
-            <div className='col-lg-2 col-md-6 col-sm-12 text-start'><Bs6SquareFill />&nbsp;<small>Course Detail</small></div>&nbsp;&nbsp;
-            <div className='col-lg-3 col-md-6 col-sm-12 text-start'><Bs7SquareFill />&nbsp;<small>Terms & Conditions</small></div>
+          <div className="row mt-5 mb-5 d-flex justify-content-center">
+            <div className="col-lg-5 col-md-6 col-sm-12 text-start">
+              <Bs5SquareFill />
+              &nbsp;<small>Authorized Person to Take Child from Class</small>
+            </div>
+            &nbsp;&nbsp;
+            <div className="col-lg-2 col-md-6 col-sm-12 text-start">
+              <Bs6SquareFill />
+              &nbsp;<small>Course Detail</small>
+            </div>
+            &nbsp;&nbsp;
+            <div className="col-lg-3 col-md-6 col-sm-12 text-start">
+              <Bs7SquareFill />
+              &nbsp;<small>Terms & Conditions</small>
+            </div>
           </div>
 
           <div className="card shadow border-0 my-2 px-2">
@@ -42,37 +70,37 @@ function TermsAndCondition() {
                       <small>Parent Signature</small>
                     </label>
                     <br />
-                    <input className='form-control'
-                      type="file"
-                    />
+                    <input className="form-control" type="file" />
                   </div>
                 </div>
-                <div className="col-lg-6 col-md-6 col-12 px-5">
-                  <div className="text-start mt-2">
-                    <label htmlFor="" className="mb-1 fw-medium">
-                      <small>Signature Date</small>
-                    </label>
-                    <br />
-                    <select className='form-control'
-                      type="date"
-                    />
-                  </div>
-                </div>
-              </div><br /><br />
-              <div>
-                <input type='checkbox' name='Terms And Conditions' /> &nbsp;
-                By submitting this form, I confrim that I have read and agree to Arty Learning s
-                <span style={{ color: '#ff7500' }}>Terms & Conditions.</span>
               </div>
-              <div className='d-flex justify-content-end mt-5  m-3'>
+              <br />
+              <br />
+              <div>
+                <input type="checkbox" name="Terms And Conditions" /> &nbsp; By
+                submitting this form, I confrim that I have read and agree to
+                Arty Learning s
+                <span style={{ color: "#ff7500" }}>Terms & Conditions.</span>
+              </div>
+              <div className="d-flex justify-content-end mt-5  m-3">
                 <Link to="/student/register/course-detail">
-                  <button className='btn btn-danger' style={{ background: 'red' }}>
-                    <span><FaAngleLeft />  Prev</span></button>
+                  <button
+                    className="btn btn-danger"
+                    style={{ background: "red" }}
+                  >
+                    <span>
+                      <FaAngleLeft /> Prev
+                    </span>
+                  </button>
                 </Link>
                 &nbsp;&nbsp;
                 <Link to="">
-                  <button className='btn btn-danger me-5' style={{ background: 'red' }}>
-                    <span>Save</span></button>
+                  <button
+                    className="btn btn-danger me-5"
+                    style={{ background: "red" }}
+                  >
+                    <span>Save</span>
+                  </button>
                 </Link>
               </div>
             </div>
@@ -80,7 +108,7 @@ function TermsAndCondition() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default TermsAndCondition
+export default TermsAndCondition;

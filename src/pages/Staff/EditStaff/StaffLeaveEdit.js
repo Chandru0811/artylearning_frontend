@@ -8,7 +8,7 @@ const validationSchema = Yup.object().shape({
   year: Yup.string().required("*year is required!"),
 
   annualLeave: Yup.string()
-    .matches(/^[0-9]+$/, "*Annual Leave Must be numbers")
+    .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Annual Leave Must be numbers")
     .required("*Annual Leave is required!"),
   medicalLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Medical Leave Must be numbers")
@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[0-9]+$/, "*Other Leave Must be numbers")
     .required("*Other Leave is required!"),
   carryForwardLeave: Yup.string()
-    .matches(/^[0-9]+$/, "*Carry Forward Leave Must be numbers")
+    .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Carry Forward Leave Must be numbers")
     .required("*Carry Forward Leave is required!"),
 });
 const StaffLeaveEdit = forwardRef(
