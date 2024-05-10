@@ -90,7 +90,7 @@ function AddPayroll() {
         }
       } catch (error) {
         if(error?.response?.status === 409){
-          toast.warning("11111")
+          toast.warning("The payroll for this user has already been generated")
         }else{
           toast.error(error?.response?.data?.message);
         }
