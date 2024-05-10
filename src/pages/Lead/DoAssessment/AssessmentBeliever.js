@@ -1,20 +1,27 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   comprehendingOfInstruction: Yup.string().required("*Select a Instruction"),
   attentionMilestone: Yup.string().required("*Select Attention Milestone"),
   verbalLanguageDevelopment: Yup.string().required("*Select Verbal Language"),
-  artyRemarks: Yup.string().required(
-    "*Arty Remarks is Required"
-  ),
+  artyRemarks: Yup.string().required("*Arty Remarks is Required"),
 });
 
 const AssessmentBeliever = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
+    const { leadId } = useParams();
+    const [assessmentAvailable, setAssessmentAvailable] = useState(false);
+    const [assessmentId, setAssessmentId] = useState(false);
     const formik = useFormik({
       initialValues: {
         comprehendingOfInstruction: formData.comprehendingOfInstruction || "",
@@ -26,28 +33,72 @@ const AssessmentBeliever = forwardRef(
 
       onSubmit: async (data) => {
         setFormData((prv) => ({ ...prv, ...data }));
-        try {
-          const response = await api.put(
-            `/updateLeadDoAssessment/${formData.assesmentId}`,
-            data,
-            {
+        if (assessmentAvailable) {
+          try {
+            const response = await api.put(
+              `/updateLeadDoAssessment/${formData.assesmentId}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...data }));
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            toast.error(error);
+          }
+        } else {
+          try {
+            const response = await api.post("/createLeadDoAssessment", data, {
               headers: {
                 "Content-Type": "application/json",
               },
+            });
+            if (response.status === 201) {
+              const leadId = response.data.leadId;
+              toast.success(response.data.message);
+              const assesmentId = response.data.assessmentId;
+
+              setFormData((prv) => ({
+                ...prv,
+                ...data,
+                assesmentId,
+              }));
+              console.log("Lead Id: ", response.data.leadId);
+              handleNext();
+            } else {
+              toast.error(response.data.message);
             }
-          );
-          if (response.status === 200) {
-            toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...data }));
-            handleNext();
-          } else {
-            toast.error(response.data.message);
+          } catch (error) {
+            toast.error(error);
           }
-        } catch (error) {
-          toast.error(error);
         }
       },
     });
+
+    useEffect(() => {
+      const getData = async () => {
+        const response = await api.get(
+          `/getLeadAssessmentDataByLeadId/${leadId}`
+        );
+        if (response?.data?.leadDoAssessmentModel?.length > 0) {
+          setAssessmentAvailable(true);
+          setAssessmentId(response.data.leadDoAssessmentModel[0].id);
+        } else {
+          const leadResponse = await api.get(
+            `/getAllLeadInfoWithReferrerById/${leadId}`
+          );
+        }
+      };
+      getData();
+    }, []);
 
     useImperativeHandle(ref, () => ({
       AssessmentBeliever: formik.handleSubmit,
@@ -60,7 +111,10 @@ const AssessmentBeliever = forwardRef(
 
           <div className="row">
             <div className="col-md-6 col-12 my-4">
-              <p>Comprehension Of Instructions<span className="text-danger">*</span></p>
+              <p>
+                Comprehension Of Instructions
+                <span className="text-danger">*</span>
+              </p>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input mx-2"
@@ -89,17 +143,20 @@ const AssessmentBeliever = forwardRef(
                   No
                 </label>
               </div>
-              {formik.errors.comprehendingOfInstruction && formik.touched.comprehendingOfInstruction && (
-                      <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        {formik.errors.comprehendingOfInstruction}
-                      </div>
-                    )}
+              {formik.errors.comprehendingOfInstruction &&
+                formik.touched.comprehendingOfInstruction && (
+                  <div
+                    className="text-danger mt-1"
+                    style={{ fontSize: "14px" }}
+                  >
+                    {formik.errors.comprehendingOfInstruction}
+                  </div>
+                )}
             </div>
             <div className="col-md-6 col-12 my-4">
-              <label for="floatingTextarea2">Remarks<span className="text-danger">*</span></label>
+              <label for="floatingTextarea2">
+                Remarks<span className="text-danger">*</span>
+              </label>
               <div className="">
                 <textarea
                   type="text"
@@ -111,19 +168,19 @@ const AssessmentBeliever = forwardRef(
                 ></textarea>
               </div>
               {formik.errors.artyRemarks && formik.touched.artyRemarks && (
-                      <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        {formik.errors.artyRemarks}
-                      </div>
-                    )}
+                <div className="text-danger mt-1" style={{ fontSize: "14px" }}>
+                  {formik.errors.artyRemarks}
+                </div>
+              )}
             </div>
           </div>
 
           <div className="row">
             <div className="col-md-6 col-12 mb-4">
-              <p>Verbal Language Development<span className="text-danger">*</span></p>
+              <p>
+                Verbal Language Development
+                <span className="text-danger">*</span>
+              </p>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input mx-2"
@@ -204,17 +261,20 @@ const AssessmentBeliever = forwardRef(
                   Multi Word
                 </label>
               </div>
-              {formik.errors.verbalLanguageDevelopment && formik.touched.verbalLanguageDevelopment && (
-                      <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        {formik.errors.verbalLanguageDevelopment}
-                      </div>
-                    )}
+              {formik.errors.verbalLanguageDevelopment &&
+                formik.touched.verbalLanguageDevelopment && (
+                  <div
+                    className="text-danger mt-1"
+                    style={{ fontSize: "14px" }}
+                  >
+                    {formik.errors.verbalLanguageDevelopment}
+                  </div>
+                )}
             </div>
             <div className="col-md-6 col-12 mb-4">
-              <p>Attention Milestone<span className="text-danger">*</span></p>
+              <p>
+                Attention Milestone<span className="text-danger">*</span>
+              </p>
               <div className="form-check form-check-inline">
                 <input
                   className="form-check-input mx-2"
@@ -289,14 +349,15 @@ const AssessmentBeliever = forwardRef(
                   Single Challenged
                 </label>
               </div>
-              {formik.errors.attentionMilestone && formik.touched.attentionMilestone && (
-                      <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        {formik.errors.attentionMilestone}
-                      </div>
-                    )}
+              {formik.errors.attentionMilestone &&
+                formik.touched.attentionMilestone && (
+                  <div
+                    className="text-danger mt-1"
+                    style={{ fontSize: "14px" }}
+                  >
+                    {formik.errors.attentionMilestone}
+                  </div>
+                )}
             </div>
           </div>
         </div>
