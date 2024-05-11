@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle }  from 'react';
 import { useFormik } from "formik";
 
-const StaffRequiredAdd= forwardRef(({ formData, setFormData, handleNext }, ref)=> {
+const StaffRequiredAdd= forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref)=> {
   const formik = useFormik({
     initialValues: {
     resume: null || "",
@@ -9,9 +9,11 @@ const StaffRequiredAdd= forwardRef(({ formData, setFormData, handleNext }, ref)=
     },
    
     onSubmit: (data) => {
+      setLoadIndicators(true);
       setFormData((prv) => ({ ...prv, ...data }));
       // console.log("form parent",formData );
       // console.log("data", data);
+      setLoadIndicators(false);
     },
   });
   const handleNextStep = () => {

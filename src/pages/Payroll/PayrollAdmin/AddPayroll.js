@@ -31,6 +31,7 @@ function AddPayroll() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const [bonus, setBonus] = useState(0); // State for bonus value
 
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ function AddPayroll() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       let selectedCenterName = "";
       let selectedEmployeeName = "";
 
@@ -94,6 +96,8 @@ function AddPayroll() {
         }else{
           toast.error(error?.response?.data?.message);
         }
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -205,7 +209,13 @@ function AddPayroll() {
                 </button>
               </Link>
               &nbsp;&nbsp;
-              <button type="submit" className="btn btn-sm btn-button">
+              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 Save
               </button>
             </div>

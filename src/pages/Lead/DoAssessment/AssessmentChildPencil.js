@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AssessmentChildPencil = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const { leadId } = useParams();
     const [assessmentAvailable, setAssessmentAvailable] = useState(false);
     const [assessmentId, setAssessmentId] = useState(false);
@@ -33,6 +33,7 @@ const AssessmentChildPencil = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         console.log("Bank Datas:", data);
+        // setLoadIndicators(true);
         // setFormData((prv) => ({ ...prv, ...data }));
         // if (assessmentAvailable) {
         //   try {
@@ -46,7 +47,7 @@ const AssessmentChildPencil = forwardRef(
         //       }
         //     );
         //     if (response.status === 200) {
-        //       // const leadId = response.data.leadId;
+        //       const leadId = response.data.leadId;
         //       toast.success(response.data.message);
         //       const assesmentId = assessmentId;
         //       setFormData((prv) => ({
@@ -54,13 +55,15 @@ const AssessmentChildPencil = forwardRef(
         //         ...data,
         //         assesmentId,
         //       }));
-        //       // console.log("Lead Id: ",response.data.leadId);
+        //       console.log("Lead Id: ", response.data.leadId);
         //       handleNext();
         //     } else {
         //       toast.error(response.data.message);
         //     }
         //   } catch (error) {
         //     toast.error(error);
+        //   } finally {
+        //     setLoadIndicators(false);
         //   }
         // } else {
         //   try {
@@ -70,7 +73,7 @@ const AssessmentChildPencil = forwardRef(
         //       },
         //     });
         //     if (response.status === 201) {
-        //       // const leadId = response.data.leadId;
+        //       const leadId = response.data.leadId;
         //       toast.success(response.data.message);
         //       const assesmentId = response.data.assessmentId;
 
@@ -79,7 +82,7 @@ const AssessmentChildPencil = forwardRef(
         //         ...data,
         //         assesmentId,
         //       }));
-        //       // console.log("Lead Id: ",response.data.leadId);
+        //       console.log("Lead Id: ", response.data.leadId);
         //       handleNext();
         //     } else {
         //       toast.error(response.data.message);
@@ -123,8 +126,9 @@ const AssessmentChildPencil = forwardRef(
             <div className="container">
               <div class="plans">
                 <div class="plan">
-                  <input type="radio"
-                  className="form-check-input"
+                  <input
+                    type="radio"
+                    className="form-check-input"
                     name="pencilGrip"
                     id="FISTED"
                     value="FISTED"
@@ -132,16 +136,27 @@ const AssessmentChildPencil = forwardRef(
                     onBlur={formik.handleBlur}
                     checked={formik.values.pencilGrip === "FISTED"}
                   />
-                  <label class="plan-content" for="FISTED" style={{ padding: "20px" }}>
-                    <img src={Tripod} alt="FISTED" class="img-fluid" width={30} height={30} />
+                  <label
+                    class="plan-content"
+                    for="FISTED"
+                    style={{ padding: "20px" }}
+                  >
+                    <img
+                      src={Tripod}
+                      alt="FISTED"
+                      class="img-fluid"
+                      width={30}
+                      height={30}
+                    />
                     <div class="plan-details">
                       <span>Fisted</span>
                     </div>
                   </label>
                 </div>
                 <div class="plan">
-                  <input type="radio"
-                  className="form-check-input"
+                  <input
+                    type="radio"
+                    className="form-check-input"
                     name="pencilGrip"
                     id="PLAMERGRASP"
                     value="PLAMERGRASP"
@@ -149,16 +164,27 @@ const AssessmentChildPencil = forwardRef(
                     onBlur={formik.handleBlur}
                     checked={formik.values.pencilGrip === "PLAMERGRASP"}
                   />
-                  <label class="plan-content" for="PLAMERGRASP" style={{ padding: "10px" }}>
-                    <img src={Fisted} alt="PLAMERGRASP" class="img-fluid" width={30} height={30} />
+                  <label
+                    class="plan-content"
+                    for="PLAMERGRASP"
+                    style={{ padding: "10px 15px" }}
+                  >
+                    <img
+                      src={Fisted}
+                      alt="PLAMERGRASP"
+                      class="img-fluid"
+                      width={30}
+                      height={30}
+                    />
                     <div class="plan-details">
                       <span>Plamer Grasp</span>
                     </div>
                   </label>
                 </div>
                 <div class="plan">
-                  <input type="radio"
-                  className="form-check-input"
+                  <input
+                    type="radio"
+                    className="form-check-input"
                     name="pencilGrip"
                     id="TRIPOD"
                     value="TRIPOD"
@@ -166,16 +192,27 @@ const AssessmentChildPencil = forwardRef(
                     onBlur={formik.handleBlur}
                     checked={formik.values.pencilGrip === "TRIPOD"}
                   />
-                  <label class="plan-content" for="TRIPOD" style={{ padding: "20px" }}>
-                    <img src={Plamer} alt="TRIPOD" class="img-fluid" width={30} height={30} />
+                  <label
+                    class="plan-content"
+                    for="TRIPOD"
+                    style={{ padding: "20px" }}
+                  >
+                    <img
+                      src={Plamer}
+                      alt="TRIPOD"
+                      class="img-fluid"
+                      width={30}
+                      height={30}
+                    />
                     <div class="plan-details">
                       <span>Tripod</span>
                     </div>
                   </label>
                 </div>
                 <div class="plan">
-                  <input type="radio"
-                  className="form-check-input"
+                  <input
+                    type="radio"
+                    className="form-check-input"
                     name="pencilGrip"
                     id="FOREFINGERANDTHUMB"
                     value="FOREFINGERANDTHUMB"
@@ -183,8 +220,18 @@ const AssessmentChildPencil = forwardRef(
                     onBlur={formik.handleBlur}
                     checked={formik.values.pencilGrip === "FOREFINGERANDTHUMB"}
                   />
-                  <label class="plan-content" for="FOREFINGERANDTHUMB" style={{ padding: "10px" }}>
-                    <img src={Fore} alt="FOREFINGERANDTHUMB" class="img-fluid" width={30} height={30} />
+                  <label
+                    class="plan-content"
+                    for="FOREFINGERANDTHUMB"
+                    style={{ padding: "10px" }}
+                  >
+                    <img
+                      src={Fore}
+                      alt="FOREFINGERANDTHUMB"
+                      class="img-fluid"
+                      width={30}
+                      height={30}
+                    />
                     <div class="plan-details">
                       <span>Fore Finger And Thumb</span>
                     </div>
@@ -224,14 +271,15 @@ const AssessmentChildPencil = forwardRef(
                   />
                   <label className="form-check-label mx-2">Loose</label>
                 </div>
-                {formik.errors.pencilGripOptions && formik.touched.pencilGripOptions && (
-                  <div
-                    className="text-danger mt-1"
-                    style={{ fontSize: "14px" }}
-                  >
-                    {formik.errors.pencilGripOptions}
-                  </div>
-                )}
+                {formik.errors.pencilGripOptions &&
+                  formik.touched.pencilGripOptions && (
+                    <div
+                      className="text-danger mt-1"
+                      style={{ fontSize: "14px" }}
+                    >
+                      {formik.errors.pencilGripOptions}
+                    </div>
+                  )}
               </div>
             </div>
           </div>

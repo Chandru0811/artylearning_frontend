@@ -21,6 +21,7 @@ const validationSchema = Yup.object({
 function LeaveAdminEdit() {
   const [centerData, setCenterData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(null);
   const navigate = useNavigate();
   
@@ -43,6 +44,7 @@ function LeaveAdminEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log("Leave Data:", values);
       let selectedCenterName = "";
       let selectedTeacherName = "";
@@ -99,6 +101,8 @@ function LeaveAdminEdit() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -190,7 +194,13 @@ function LeaveAdminEdit() {
                 </button>
               </Link>
               &nbsp;&nbsp;
-              <button type="submit" className="btn btn-sm btn-button">
+              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 Update
               </button>
             </div>

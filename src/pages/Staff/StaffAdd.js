@@ -18,6 +18,7 @@ const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Informat
 function StaffAdd() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const childRef = React.useRef();
   const [formData, setFormData] = useState({});
   console.log("perant", formData);
@@ -114,6 +115,7 @@ function StaffAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -123,6 +125,7 @@ function StaffAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -132,6 +135,7 @@ function StaffAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -141,6 +145,7 @@ function StaffAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -150,6 +155,7 @@ function StaffAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -159,6 +165,7 @@ function StaffAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -168,6 +175,7 @@ function StaffAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -177,6 +185,7 @@ function StaffAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -191,13 +200,20 @@ function StaffAdd() {
             </button>
 
             <div style={{ flex: "1 1 auto" }}></div>
-
             <button
-              className="btn btn-button btn-sm"
+              type="submit"
               onClick={handleButtonClick}
               style={{ padding: "7px" }}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
             >
-              {activeStep === steps.length - 1 ? "Submit" : "Save and Next"}
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
             </button>
           </div>
         </React.Fragment>

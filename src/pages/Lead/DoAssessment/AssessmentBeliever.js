@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AssessmentBeliever = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const { leadId } = useParams();
     const [assessmentAvailable, setAssessmentAvailable] = useState(false);
     const [assessmentId, setAssessmentId] = useState(false);
@@ -32,6 +32,7 @@ const AssessmentBeliever = forwardRef(
       validationSchema: validationSchema,
 
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         setFormData((prv) => ({ ...prv, ...data }));
         if (assessmentAvailable) {
           try {
@@ -53,6 +54,8 @@ const AssessmentBeliever = forwardRef(
             }
           } catch (error) {
             toast.error(error);
+          } finally {
+            setLoadIndicators(false);
           }
         } else {
           try {

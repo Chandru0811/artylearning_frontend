@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const StaffAccountEdit = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
 
     const fetchData = async () => {
@@ -85,6 +85,7 @@ const StaffAccountEdit = forwardRef(
       // },
       onSubmit: async (values) => {
         // console.log("Api Data:", values);
+        setLoadIndicators(true);
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
         const updatedData = {
@@ -136,6 +137,8 @@ const StaffAccountEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally{
+          setLoadIndicators(false);
         }
       },
     });

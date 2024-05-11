@@ -14,12 +14,19 @@ import Form6 from "./AddEnrollment/Form6";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
-const steps = [{ tooltip: "Student Information" }, { tooltip: "Child Ability" },{ tooltip: "Parent Information" },{ tooltip: "Address" },{ tooltip: "Account Information" },{ tooltip: "Authorised Person Address" }];
-
+const steps = [
+  { tooltip: "Student Information" },
+  { tooltip: "Child Ability" },
+  { tooltip: "Parent Information" },
+  { tooltip: "Address" },
+  { tooltip: "Account Information" },
+  { tooltip: "Authorised Person Address" },
+];
 
 export default function EnrollmentAdd() {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({});
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
 
@@ -73,7 +80,7 @@ export default function EnrollmentAdd() {
 
   return (
     <div className="container-fluid minHeight">
-     <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index}>
             <OverlayTrigger
@@ -95,6 +102,7 @@ export default function EnrollmentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 1 && (
@@ -103,6 +111,7 @@ export default function EnrollmentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 2 && (
@@ -111,6 +120,7 @@ export default function EnrollmentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 3 && (
@@ -119,6 +129,7 @@ export default function EnrollmentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 4 && (
@@ -127,6 +138,7 @@ export default function EnrollmentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 5 && (
@@ -135,6 +147,7 @@ export default function EnrollmentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
@@ -150,12 +163,27 @@ export default function EnrollmentAdd() {
             <div style={{ flex: "1 1 auto" }}></div>
 
             <button
+              type="submit"
+              onClick={handleButtonClick}
+              style={{ padding: "7px" }}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
+            </button>
+            {/* <button
               className="btn btn-button btn-sm mt-5 mb-3"
               onClick={handleButtonClick}
               style={{ padding: "7px" }}
             >
               {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
-            </button>
+            </button> */}
           </div>
         </React.Fragment>
       </div>

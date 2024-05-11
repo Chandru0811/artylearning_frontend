@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
   relationToChild: Yup.string().required("*Relationship is required"),
 });
 
-const EditForm4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       address: formData.address || "",
@@ -38,6 +38,7 @@ const EditForm4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       try {
         const response = await api.put(`/updateLeadInfo/${formData.id}`, data, {
           headers: {
@@ -53,10 +54,20 @@ const EditForm4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });
 
+  useEffect(() => {
+    const getData = async () => {
+      const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+      formik.setValues(response.data);
+    };
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useImperativeHandle(ref, () => ({
     editform4: formik.handleSubmit,
   }));

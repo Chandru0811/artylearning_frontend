@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 function CurriculumEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -28,6 +29,7 @@ function CurriculumEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log(values);
       try {
         const response = await api.put(
@@ -49,6 +51,9 @@ function CurriculumEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error);
       }
+      finally {
+              setLoadIndicator(false);
+            }
     },
   });
 
@@ -108,7 +113,7 @@ function CurriculumEdit({ id, onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Curriculum Code.<span className="text-danger">*</span>
+                    Curriculum Code<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -157,7 +162,14 @@ function CurriculumEdit({ id, onSuccess }) {
               <Button variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit">
+              <Button variant="danger" type="submit"disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 Update
               </Button>
             </Modal.Footer>

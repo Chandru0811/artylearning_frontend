@@ -19,6 +19,7 @@ const validationSchema = Yup.object({
 function DeductionAdd() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -32,6 +33,7 @@ function DeductionAdd() {
     },
      validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       console.log("Attendance Emp:", values);
       let selectedCenterName = "";
       let selectedEmployeeName = "";
@@ -72,7 +74,10 @@ function DeductionAdd() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
+
     },
   });
 
@@ -127,9 +132,15 @@ function DeductionAdd() {
                   </button>
                 </Link>
                 &nbsp;&nbsp;
-                <button type="submit" className="btn btn-sm btn-button">
-                  Save
-                </button>
+                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>
               </div>
             </div>
             <div className="row mt-3">

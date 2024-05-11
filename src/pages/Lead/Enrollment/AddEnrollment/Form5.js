@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
   enquiryDate: Yup.string().required("*Enquiry Date is required"),
 });
 
-const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const Form5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const [centerData, setCenterData] = useState(null);
 
   const formik = useFormik({
@@ -37,6 +37,7 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       console.log("Data is ", data);
       try {
         const response = await api.put(
@@ -57,6 +58,8 @@ const Form5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally{
+        setLoadIndicators(false);
       }
     },
   });

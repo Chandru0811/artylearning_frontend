@@ -19,6 +19,7 @@ const validationSchema = Yup.object({
 function DeductionEdit() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -32,6 +33,7 @@ function DeductionEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       try {
         const response = await api.put(`/updateUserDeduction/${id}`, values, {
           headers: {
@@ -46,6 +48,8 @@ function DeductionEdit() {
         }
       } catch (error) {
         toast.error(error.message);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -106,9 +110,15 @@ function DeductionEdit() {
                   </button>
                 </Link>
                 &nbsp;&nbsp;
-                <button type="submit" className="btn btn-sm btn-button">
-                  Update
-                </button>
+                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Update
+              </button>
               </div>
             </div>
             <div className="row mt-3">

@@ -32,6 +32,7 @@ function EditPayroll() {
   const [userNamesData, setUserNameData] = useState(null);
   const { id } = useParams();
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const navigate = useNavigate();
 
@@ -48,6 +49,7 @@ function EditPayroll() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       let selectedCenterName = "";
       let selectedEmployeeName = "";
 
@@ -90,6 +92,8 @@ function EditPayroll() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -218,7 +222,13 @@ function EditPayroll() {
                 </button>
               </Link>
               &nbsp;&nbsp;
-              <button type="submit" className="btn btn-sm btn-button">
+              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 Update
               </button>
             </div>
