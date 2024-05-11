@@ -16,6 +16,7 @@ const Holiday = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
     try {
@@ -82,11 +83,13 @@ const Holiday = () => {
   return (
     <div className="container my-4">
       <div className="col-12 text-end mb-3">
-        <Link to="/holiday/add">
-          <button type="button" className="btn btn-sm btn-button">
-            Add <i class="bx bx-plus"></i>
-          </button>
-        </Link>
+        {storedScreens?.holidayCreate && (
+          <Link to="/holiday/add">
+            <button type="button" className="btn btn-sm btn-button">
+              Add <i class="bx bx-plus"></i>
+            </button>
+          </Link>
+        )}
       </div>
       {loading ? (
         <div className="loader-container">
@@ -124,30 +127,36 @@ const Holiday = () => {
                     )}
                 </td>
                 <td>{data.holidayName}</td>
-                <td>{data.startDate.substring(0,10)}</td>
+                <td>{data.startDate.substring(0, 10)}</td>
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
-                    <Link
-                      to={`/holiday/list/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    >
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                    <Link
-                      to={`/holiday/edit/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    >
-                      <button className="btn btn-sm">
-                        <FaEdit />
-                      </button>
-                    </Link>
-                    <Delete
+                    {storedScreens?.holidayRead && (
+                      <Link
+                        to={`/holiday/list/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      >
+                        <button className="btn btn-sm">
+                          <FaEye />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.holidayUpdate && (
+                      <Link
+                        to={`/holiday/edit/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      >
+                        <button className="btn btn-sm">
+                          <FaEdit />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.holidayDelete && (
+                      <Delete
                         onSuccess={refreshData}
                         path={`/deleteUserHoliday/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
+                    )}
                   </div>
                 </td>
               </tr>

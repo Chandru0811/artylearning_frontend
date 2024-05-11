@@ -183,7 +183,7 @@ const PersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div class="form-group  col-sm ">
+            {/* <div class="form-group  col-sm ">
               <label>Photo</label>
               <input
                 type="file"
@@ -194,9 +194,7 @@ const PersonalEdit = forwardRef(
                 }}
                 onBlur={formik.handleBlur}
               />
-            </div>
-          </div>
-          <div class="container row d-flex my-4 justify-align-content-around">
+            </div> */}
             <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">

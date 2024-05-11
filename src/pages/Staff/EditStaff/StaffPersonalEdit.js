@@ -92,7 +92,7 @@ const StaffPersonalEdit = forwardRef(
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
           <div class="container-fluid row d-flex my-4">
-            <div class="form-group  col-sm ">
+            <div class="form-group col-sm">
               <label>Staff Name</label>
               <span className="text-danger">*</span>
               <input
@@ -127,7 +127,6 @@ const StaffPersonalEdit = forwardRef(
               )}
             </div>
           </div>
-
           <div class="container row d-flex my-4 justify-align-content-around">
             <div class="form-group  col-sm ">
               <label>ID Type</label>
@@ -182,7 +181,7 @@ const StaffPersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div class="form-group  col-sm ">
+            {/* <div class="form-group  col-sm ">
               <label>Photo</label>
               <input
                 type="file"
@@ -193,9 +192,7 @@ const StaffPersonalEdit = forwardRef(
                 }}
                 onBlur={formik.handleBlur}
               />
-            </div>
-          </div>
-          <div class="container row d-flex my-4 justify-align-content-around">
+            </div> */}
             <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
