@@ -116,7 +116,11 @@ const AddParentGuardian = forwardRef(
                   <div className="container pt-3">
                     <div className="row mt-2">
                       <div className="col-lg-6 col-md-6 col-12">
-                        <div className="text-start mt-2"></div>
+                        <div className="text-end mt-4">
+                          <label>
+                            {/* Primary Contact */}
+                          </label>
+                        </div>
                         <div className="text-start">
                           <label htmlFor="" className="mb-1 fw-medium">
                             <small>Parents / Guardian Name</small>
@@ -249,8 +253,8 @@ const AddParentGuardian = forwardRef(
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6 col-12">
-                        <div className="text-end">
-                          <label htmlFor="" className="my-1 fw-bold">
+                        <div className="text-end mb-3">
+                          <label htmlFor="" className="my-1 fw-bold text-primary">
                             Primary Contact
                           </label>
                           <input
