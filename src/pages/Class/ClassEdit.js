@@ -12,6 +12,7 @@ function ClassEdit() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
+const [loadIndicator, setLoadIndicator] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -44,6 +45,7 @@ function ClassEdit() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
+      setLoadIndicator(true);
       try {
         const response = await api.put(
           `/updateCourseClassListing/${id}`,
@@ -62,6 +64,8 @@ function ClassEdit() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -91,9 +95,15 @@ function ClassEdit() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm ">
-            Update
-          </button>
+          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>
         </div>
         <div className="container">
           <div className="row py-4">

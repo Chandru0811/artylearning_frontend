@@ -11,6 +11,7 @@ function ClassAdd() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -45,6 +46,7 @@ function ClassAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       const selectedValue = formik.values.centerId; // Assuming formik is in scope
       let selectedOptionName = "";
 
@@ -72,6 +74,8 @@ function ClassAdd() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -86,9 +90,15 @@ function ClassAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm ">
-            Submit
-          </button>
+          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>
         </div>
         <div className="container">
           <div className="row py-4">

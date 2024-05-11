@@ -18,6 +18,7 @@ export default function InvoiceAdd() {
   const [courseData, setCourseData] = useState(null);
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const validationSchema = Yup.object({
     center: Yup.string().required("*Select a Centre"),
@@ -67,6 +68,7 @@ export default function InvoiceAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       try {
         // Prepare the payload to send to the API
         const payload = {
@@ -114,6 +116,8 @@ export default function InvoiceAdd() {
         toast.error(
           error.message || "An error occurred while submitting the form"
         );
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -709,10 +713,19 @@ export default function InvoiceAdd() {
               <Link to="/invoice">
                 <button className="btn btn-sm btn-border mx-2">Cancel</button>
               </Link>
-
-              <button type="submit" className="btn btn-sm btn-button mx-2">
-                Generate
+              <button type="submit" className="btn btn-sm btn-button mx-2" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+               Generate
               </button>
+
+              {/* <button type="submit" className="btn btn-sm btn-button mx-2">
+                Generate
+              </button> */}
             </div>
           </div>
         </div>

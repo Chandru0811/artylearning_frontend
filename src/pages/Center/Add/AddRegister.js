@@ -8,6 +8,7 @@ import api from "../../../config/URL";
 
 function AddRegister({ id, onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -27,6 +28,7 @@ function AddRegister({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       console.log(values);
 
       try {
@@ -48,6 +50,8 @@ function AddRegister({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -169,9 +173,19 @@ function AddRegister({ id, onSuccess }) {
             <Button variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <button type="submit" className="btn btn-danger">
-              Submit
-            </button>
+            <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Submit
+              </Button>
           </Modal.Footer>
         </form>
       </Modal>

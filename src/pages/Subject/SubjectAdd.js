@@ -11,6 +11,8 @@ import api from "../../config/URL";
 function SubjectAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
 
   const handleClose = () => {
     setShow(false);
@@ -33,6 +35,7 @@ function SubjectAdd({ onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log(values);
       try {
         const response = await api.post("/createCourseSubject", values, {
@@ -50,6 +53,8 @@ function SubjectAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -158,9 +163,19 @@ function SubjectAdd({ onSuccess }) {
             <Button variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="danger" type="submit">
-              Submit
-            </Button>
+            <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Submit
+              </Button>
           </Modal.Footer>
         </form>
       </Modal>

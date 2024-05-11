@@ -17,6 +17,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -101,6 +102,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
     onSubmit: async (values) => {
       // const batch12hr = convertTo12Hour(values.batch);
       // values.batch = batch12hr;
+      setLoadIndicator(true);
       let selectedCenterName = "";
       let selectedClassName = "";
       let selectedCourseName = "";
@@ -165,6 +167,8 @@ function ScheduleTeacherAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -387,7 +391,17 @@ function ScheduleTeacherAdd({ onSuccess }) {
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit">
+              <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Submit
               </Button>
             </Modal.Footer>

@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
@@ -16,6 +16,7 @@ const validationSchema = Yup.object().shape({
 
 function AttendancesAdd() {
   const navigate = useNavigate();
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const formik = useFormik({
     initialValues: {
       studentid: "",
@@ -30,6 +31,7 @@ function AttendancesAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicator(true);
       try {
         console.log(data);
         alert("Attendance Created Successfully");
@@ -37,6 +39,8 @@ function AttendancesAdd() {
       } catch (error) {
         console.error("Error submitting form", error);
         alert("Failed to Create Attendance");
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -50,9 +54,15 @@ function AttendancesAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm ">
-            Save
-          </button>
+          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>
         </div>
         <div className="container">
           <div className="row py-4">

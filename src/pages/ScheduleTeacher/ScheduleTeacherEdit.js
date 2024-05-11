@@ -19,6 +19,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   // const navigate = useNavigate();
 
   const handleClose = () => {
@@ -106,6 +107,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // const batch12hr = convertTo12Hour(values.batch);
       // values.batch = batch12hr;
       let selectedCenterName = "";
@@ -172,6 +174,8 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -383,7 +387,17 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit">
+              <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Update
               </Button>
             </Modal.Footer>

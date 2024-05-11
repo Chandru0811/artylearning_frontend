@@ -18,6 +18,7 @@ function DocumentAdd() {
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -97,6 +98,7 @@ function DocumentAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       try {
         const selectedValue = formik.values.center;// Assuming formik is in scope
         let selectedOptionName = "";
@@ -173,6 +175,8 @@ function DocumentAdd() {
         }
       } catch (error) {
         toast.error("Error submitting form data:", error.message);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -229,9 +233,15 @@ function DocumentAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm ">
-            Save
-          </button>
+          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>
         </div>
         <div className="container">
           <div className="row py-4">

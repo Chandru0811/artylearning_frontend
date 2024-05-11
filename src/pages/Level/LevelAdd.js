@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 function LevelAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -31,6 +32,7 @@ function LevelAdd({ onSuccess }) {
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log(values);
       try {
         const response = await api.post("/createCourseLevel", values, {
@@ -47,6 +49,8 @@ function LevelAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -137,9 +141,22 @@ function LevelAdd({ onSuccess }) {
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit">
+              <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Submit
               </Button>
+              {/* <Button variant="danger" type="submit">
+                Submit
+              </Button> */}
             </Modal.Footer>
           </Modal.Body>
         </form>

@@ -9,6 +9,8 @@ import api from "../../config/URL";
 
 function SubjectEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
   const navigate = useState();
 
   const handleClose = () => setShow(false);
@@ -28,6 +30,8 @@ function SubjectEdit({ id, onSuccess }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       // console.log(values);
+      setLoadIndicator(true);
+
       try {
         const response = await api.put(`/updateCourseSubject/${id}`, values, {
           headers: {
@@ -44,6 +48,8 @@ function SubjectEdit({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -160,9 +166,20 @@ function SubjectEdit({ id, onSuccess }) {
             <Button variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="danger" type="submit">
-              Submit
-            </Button>
+            <button
+                type="submit"
+                onSubmit={formik.handleSubmit}
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Update
+              </button>
           </Modal.Footer>
         </form>
       </Modal>

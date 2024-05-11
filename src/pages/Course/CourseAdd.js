@@ -15,6 +15,8 @@ function CourseAdd({ onSuccess }) {
   console.log("Center Data", centerData);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
 
   const fetchData = async () => {
     try {
@@ -67,6 +69,7 @@ function CourseAdd({ onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       console.log(values);
       try {
         const classReplacementAllowed =
@@ -90,6 +93,8 @@ function CourseAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -105,9 +110,15 @@ function CourseAdd({ onSuccess }) {
               </button>
             </Link>
             &nbsp;&nbsp;
-            <button type="submit" className="btn btn-button btn-sm ">
-              Save
-            </button>
+            <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>
           </div>
           <div className="container">
             <div className="row">
@@ -438,7 +449,7 @@ function CourseAdd({ onSuccess }) {
                   />
                   <p className="my-0 me-1">No</p>
                 </div>
-                {formik.errors.classRepAllow &&
+                {formik.errors.classReplacementAllowed &&
                   formik.touched.classReplacementAllowed && (
                     <div className="text-danger" style={{ fontSize: ".875em" }}>
                       {formik.errors.classReplacementAllowed}

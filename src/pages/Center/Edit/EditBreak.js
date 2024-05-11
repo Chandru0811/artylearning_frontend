@@ -9,6 +9,7 @@ import api from "../../../config/URL";
 
 function EditBreak({ id, onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -26,6 +27,7 @@ function EditBreak({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       try {
         const response = await api.put(`/updateCenterBreaks/${id}`, values, {
           headers: {
@@ -41,6 +43,8 @@ function EditBreak({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -156,12 +160,19 @@ function EditBreak({ id, onSuccess }) {
               Cancel
             </Button>
             <Button
-              type="submit"
-              variant="danger"
-              onSubmit={formik.handleSubmit}
-            >
-              Update
-            </Button>
+                type="submit"
+                onSubmit={formik.handleSubmit}
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Update
+              </Button>
           </Modal.Footer>
         </form>
       </Modal>

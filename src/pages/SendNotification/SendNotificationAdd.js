@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 function SendNotificationAdd({ onSuccess }) {
   // const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
 
   const handleClose = () => {
     setShow(false);
@@ -33,6 +35,7 @@ function SendNotificationAdd({ onSuccess }) {
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       console.log("pushNotification:", values);
       try {
         const response = await api.post(`/sendSmsPushNotifications`, values, {
@@ -52,6 +55,8 @@ function SendNotificationAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -122,7 +127,17 @@ function SendNotificationAdd({ onSuccess }) {
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit">
+              <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Submit
               </Button>
             </Modal.Footer>

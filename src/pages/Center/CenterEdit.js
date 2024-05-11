@@ -52,6 +52,7 @@ const validationSchema = Yup.object().shape({
 function CenterEdit() {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -74,6 +75,7 @@ function CenterEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       try {
         const response = await api.put(`/updateCenter/${id}`, values, {
           headers: {
@@ -88,7 +90,9 @@ function CenterEdit() {
         }
       } catch (error) {
         toast.error(error);
-      }
+      }finally {
+        setLoadIndicator(false);
+      }  
     },
   });
   useEffect(() => {
@@ -127,9 +131,15 @@ function CenterEdit() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm ">
-            Update
-          </button>
+          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Update
+              </button>
         </div>
         <div className="container">
           <div className="row">

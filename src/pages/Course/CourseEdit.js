@@ -16,7 +16,7 @@ function CourseEdit() {
   const [centerData, setCenterData] = useState(null);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
-
+const [loadIndicator, setLoadIndicator] = useState(false);
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -70,6 +70,7 @@ function CourseEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       console.log(values);
       values.classReplacementAllowed = values.classReplacementAllowed === true;
       try {
@@ -86,6 +87,8 @@ function CourseEdit() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -119,9 +122,15 @@ function CourseEdit() {
               </button>
             </Link>
             &nbsp;&nbsp;
-            <button type="submit" className="btn btn-button btn-sm ">
-              Update
-            </button>
+            <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Update
+              </button>
           </div>
           <div className="container">
             <div className="row">

@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -7,7 +7,9 @@ import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
-  code: Yup.number().typeError("*Enter a valid number").required("*Code is required"),
+  code: Yup.number()
+    .typeError("*Enter a valid number")
+    .required("*Code is required"),
   centerManager: Yup.string().required("*Select the Center Manager"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
@@ -15,11 +17,11 @@ const validationSchema = Yup.object().shape({
     .positive("*Please enter a valid number")
     .integer("*Zip Code is must be number"),
   mobile: Yup.string()
-  .matches(
-    /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-    "*Invalid Phone Number"
-  )
-  .required("*Mobile Number is required"),
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
+    )
+    .required("*Mobile Number is required"),
   email: Yup.string()
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -46,6 +48,8 @@ const validationSchema = Yup.object().shape({
 
 function CenterAdd() {
   const navigate = useNavigate();
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       centerName: "",
@@ -66,10 +70,10 @@ function CenterAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      
+      setLoadIndicator(true);
+
       // Convert gst value to boolean
       values.gst = values.gst === "true";
-      // console.log(values)
       try {
         const response = await api.post("/createCenter", values, {
           headers: {
@@ -84,6 +88,8 @@ function CenterAdd() {
         }
       } catch (error) {
         toast.error(error);
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -97,9 +103,15 @@ function CenterAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm">
-            Save
-          </button>
+          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>
         </div>
         <div className="container">
           <div className="row">

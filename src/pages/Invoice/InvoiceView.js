@@ -19,16 +19,20 @@ function InvoiceView() {
   console.log("data", data);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
+    setLoadIndicator(true);
     try {
       const courseData = await fetchAllCoursesWithIds();
       const studentData = await fetchAllStudentsWithIds();
       setCourseData(courseData);
       setStudentData(studentData);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Error fetching data");
+    } finally {
+      setLoadIndicator(false);
     }
   };
 
@@ -39,6 +43,7 @@ function InvoiceView() {
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        toast.error("Error fetching data");
       } finally {
         setLoading(false);
       }
@@ -251,9 +256,19 @@ function InvoiceView() {
           {/* <Link to="/sendAndPublish"> */}
           <SendAndPublish data={data} id={id} />
           {/* </Link> */}
-          <button className="btn btn-border btn-sm me-1 " onClick={generatePDF}>
+          <button
+        onClick={generatePDF}
+        className="btn btn-border btn-sm me-1"
+        disabled={loadIndicator}
+      >
+        {loadIndicator && (
+          <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+        )}
+        Generate PDF
+      </button>
+          {/* <button className="btn btn-border btn-sm me-1 " onClick={generatePDF}>
             Generate Pdf
-          </button>
+          </button> */}
           {storedScreens?.paymentCreate && (
             <Link to="/invoice/payment">
               <button className="btn btn-button btn-sm">Pay Now</button>

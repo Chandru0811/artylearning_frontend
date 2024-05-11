@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 function EditPackage({ id, onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -24,6 +25,7 @@ function EditPackage({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       try {
         const response = await api.put(`/updateCenterPackages/${id}`, values, {
           headers: {
@@ -39,6 +41,8 @@ function EditPackage({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -123,12 +127,19 @@ function EditPackage({ id, onSuccess }) {
               Cancel
             </Button>
             <Button
-              type="submit"
-              variant="danger"
-              onSubmit={formik.handleSubmit}
-            >
-              Update
-            </Button>
+                type="submit"
+                onSubmit={formik.handleSubmit}
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Update
+              </Button>
           </Modal.Footer>
         </form>
       </Modal>

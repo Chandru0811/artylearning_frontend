@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 // import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllEmployeeListByCenter from "../List/EmployeeList";
 import api from "../../config/URL";
-import { data } from "jquery";
+
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Centre name is required"),
@@ -24,6 +24,7 @@ const validationSchema = Yup.object({
 
 function StaffingAttendanceEdit() {
   const [centerData, setCenterData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -45,6 +46,7 @@ function StaffingAttendanceEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       let selectedCenterName = "";
       let selectedEmployeeName = "";
 
@@ -91,6 +93,8 @@ function StaffingAttendanceEdit() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -153,7 +157,15 @@ function StaffingAttendanceEdit() {
                   <button className="btn btn-sm btn-border">Back</button>
                 </Link>
                 &nbsp;&nbsp;
-                <button className="btn btn-sm btn-button">Update</button>
+                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Update
+              </button>
               </div>
             </div>
             <div className="row mt-3">

@@ -22,6 +22,8 @@ export default function InvoiceEdit() {
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [packageData, setPackageData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
 
   const [rows, setRows] = useState([{}]);
 
@@ -76,6 +78,7 @@ export default function InvoiceEdit() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       const payload = {
         generateInvoice: {
           centerId: values.centerId,
@@ -123,6 +126,8 @@ export default function InvoiceEdit() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -780,10 +785,19 @@ export default function InvoiceEdit() {
               <Link to="/invoice">
                 <button className="btn btn-sm btn-border mx-2">Cancel</button>
               </Link>
-
-              <button type="submit" className="btn btn-sm btn-button mx-2">
-                Generate
+              <button type="submit" className="btn btn-sm btn-button mx-2" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+               Generate
               </button>
+
+              {/* <button type="submit" className="btn btn-sm btn-button mx-2">
+                Generate
+              </button> */}
             </div>
           </div>
         </div>

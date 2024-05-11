@@ -13,6 +13,7 @@ function DocumentFile() {
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassListtingData] = useState(null);
   const [documentData, setDocumentData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -85,6 +86,7 @@ function DocumentFile() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        setLoadIndicator(true);
         const formData = new FormData();
         values.files.forEach((file) => {
           formData.append("files", file);
@@ -109,6 +111,8 @@ function DocumentFile() {
         }
       } catch (error) {
         toast.error("Error uploading files: " + error.message);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -277,7 +281,13 @@ function DocumentFile() {
                   Back
                 </button>
               </Link>
-              <button type="submit" className="btn btn-button btn-sm ">
+              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 Save
               </button>
             </div>

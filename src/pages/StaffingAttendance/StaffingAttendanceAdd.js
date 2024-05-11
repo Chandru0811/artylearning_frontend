@@ -24,6 +24,7 @@ const validationSchema = Yup.object({
 function StaffingAttendanceAdd() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
 
@@ -44,6 +45,7 @@ function StaffingAttendanceAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       console.log("Attendance Emp:", values);
       let selectedCenterName = "";
       let selectedEmployeeName = "";
@@ -91,6 +93,8 @@ function StaffingAttendanceAdd() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -139,8 +143,15 @@ function StaffingAttendanceAdd() {
                   <button className="btn btn-sm btn-border">Back</button>
                 </Link>
                 &nbsp;&nbsp;
-                <button className="btn btn-sm btn-button">Save</button>
-              </div>
+                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>              </div>
             </div>
             <div className="row mt-3">
               <div className="col-md-6 col-12 mb-3 ">

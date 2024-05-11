@@ -10,7 +10,8 @@ import { toast } from "react-toastify";
 
 function Edit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
-
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -29,6 +30,7 @@ function Edit({ id, onSuccess }) {
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       // console.log(values);
+      setLoadIndicator(true);
       try {
         const response = await api.put(`/updateCourseLevel/${id}`, values, {
           headers: {
@@ -44,7 +46,10 @@ function Edit({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
+
     },
   });
 
@@ -163,9 +168,20 @@ function Edit({ id, onSuccess }) {
               <Button variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit">
+              <button
+                type="submit"
+                onSubmit={formik.handleSubmit}
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Update
-              </Button>
+              </button>
             </Modal.Footer>
           </Modal.Body>
         </form>

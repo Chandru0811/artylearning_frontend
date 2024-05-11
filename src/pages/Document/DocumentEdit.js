@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 function DocumentEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -24,6 +25,7 @@ function DocumentEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log(values);
       try {
         const response = await api.put(
@@ -44,6 +46,8 @@ function DocumentEdit({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -109,7 +113,17 @@ function DocumentEdit({ id, onSuccess }) {
             <Button variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant="danger" type="submit">
+            <Button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
               Update
             </Button>
           </Modal.Footer>
