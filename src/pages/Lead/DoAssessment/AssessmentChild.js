@@ -98,6 +98,8 @@ const AssessmentChild = forwardRef(
             }
           } catch (error) {
             toast.error(error);
+          } finally {
+            setLoadIndicators(false);
           }
         }
       },

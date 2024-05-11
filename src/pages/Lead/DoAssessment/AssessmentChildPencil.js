@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   pencilGrip: Yup.string().required("*Select a Pencil Grip"),
-  pencilGripOptions: Yup.string().required("*Select a Pencil Grip Options"),
+  pencilGripHandle: Yup.string().required("*Select a Pencil Grip Options"),
 });
 
 const AssessmentChildPencil = forwardRef(
@@ -24,95 +24,97 @@ const AssessmentChildPencil = forwardRef(
     const { leadId } = useParams();
     const [assessmentAvailable, setAssessmentAvailable] = useState(false);
     const [assessmentId, setAssessmentId] = useState(false);
-    console.log(assessmentId);
+    // console.log(assessmentId);
     const formik = useFormik({
       initialValues: {
         pencilGrip: formData.pencilGrip || "",
-        pencilGripOptions: formData.pencilGripOptions || "",
+        pencilGripHandle: formData.pencilGripHandle || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         console.log("Bank Datas:", data);
-        // setLoadIndicators(true);
-        // setFormData((prv) => ({ ...prv, ...data }));
-        // if (assessmentAvailable) {
-        //   try {
-        //     const response = await api.put(
-        //       `/updateLeadDoAssessment/${assessmentId}`,
-        //       data,
-        //       {
-        //         headers: {
-        //           "Content-Type": "application/json",
-        //         },
-        //       }
-        //     );
-        //     if (response.status === 200) {
-        //       const leadId = response.data.leadId;
-        //       toast.success(response.data.message);
-        //       const assesmentId = assessmentId;
-        //       setFormData((prv) => ({
-        //         ...prv,
-        //         ...data,
-        //         assesmentId,
-        //       }));
-        //       console.log("Lead Id: ", response.data.leadId);
-        //       handleNext();
-        //     } else {
-        //       toast.error(response.data.message);
-        //     }
-        //   } catch (error) {
-        //     toast.error(error);
-        //   } finally {
-        //     setLoadIndicators(false);
-        //   }
-        // } else {
-        //   try {
-        //     const response = await api.post("/createLeadDoAssessment", data, {
-        //       headers: {
-        //         "Content-Type": "application/json",
-        //       },
-        //     });
-        //     if (response.status === 201) {
-        //       const leadId = response.data.leadId;
-        //       toast.success(response.data.message);
-        //       const assesmentId = response.data.assessmentId;
+        setLoadIndicators(true);
+        setFormData((prv) => ({ ...prv, ...data }));
+        if (assessmentAvailable) {
+          try {
+            const response = await api.put(
+              `/updateLeadDoAssessment/${assessmentId}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 200) {
+              const leadId = response.data.leadId;
+              toast.success(response.data.message);
+              const assesmentId = assessmentId;
+              setFormData((prv) => ({
+                ...prv,
+                ...data,
+                assesmentId,
+              }));
+              console.log("Lead Id: ", response.data.leadId);
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            toast.error(error);
+          } finally {
+            setLoadIndicators(false);
+          }
+        } else {
+          try {
+            const response = await api.post("/createLeadDoAssessment", data, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (response.status === 201) {
+              const leadId = response.data.leadId;
+              toast.success(response.data.message);
+              const assesmentId = response.data.assessmentId;
 
-        //       setFormData((prv) => ({
-        //         ...prv,
-        //         ...data,
-        //         assesmentId,
-        //       }));
-        //       console.log("Lead Id: ", response.data.leadId);
-        //       handleNext();
-        //     } else {
-        //       toast.error(response.data.message);
-        //     }
-        //   } catch (error) {
-        //     toast.error(error);
-        //   }
-        // }
+              setFormData((prv) => ({
+                ...prv,
+                ...data,
+                assesmentId,
+              }));
+              console.log("Lead Id: ", response.data.leadId);
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            toast.error(error);
+          } finally {
+            setLoadIndicators(false);
+          }
+        }
       },
     });
 
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     const response = await api.get(
-    //       `/getLeadAssessmentDataByLeadId/${leadId}`
-    //     );
-    //     if (response?.data?.leadDoAssessmentModel?.length > 0) {
-    //       setAssessmentAvailable(true);
-    //       setAssessmentId(response.data.leadDoAssessmentModel[0].id);
-    //       formik.setValues({
-    //         ...response.data.leadDoAssessmentModel[0],
-    //       });
-    //     } else {
-    //       const leadResponse = await api.get(
-    //         `/getAllLeadInfoWithReferrerById/${leadId}`
-    //       );
-    //     }
-    //   };
-    //   getData();
-    // }, []);
+    useEffect(() => {
+      const getData = async () => {
+        const response = await api.get(
+          `/getLeadAssessmentDataByLeadId/${leadId}`
+        );
+        if (response?.data?.leadDoAssessmentModel?.length > 0) {
+          setAssessmentAvailable(true);
+          setAssessmentId(response.data.leadDoAssessmentModel[0].id);
+          formik.setValues({
+            ...response.data.leadDoAssessmentModel[0],
+          });
+        } else {
+          const leadResponse = await api.get(
+            `/getAllLeadInfoWithReferrerById/${leadId}`
+          );
+        }
+      };
+      getData();
+    }, []);
 
     useImperativeHandle(ref, () => ({
       AssessmentChildPencil: formik.handleSubmit,
@@ -125,7 +127,7 @@ const AssessmentChildPencil = forwardRef(
             <h5 className="headColor">Child Pencil Grip</h5>
             <div className="container">
               <div class="plans">
-                <div class="plan">
+                <div class="plan h-100">
                   <input
                     type="radio"
                     className="form-check-input"
@@ -153,7 +155,7 @@ const AssessmentChildPencil = forwardRef(
                     </div>
                   </label>
                 </div>
-                <div class="plan">
+                <div class="plan h-100">
                   <input
                     type="radio"
                     className="form-check-input"
@@ -167,7 +169,7 @@ const AssessmentChildPencil = forwardRef(
                   <label
                     class="plan-content"
                     for="PLAMERGRASP"
-                    style={{ padding: "10px 15px" }}
+                    style={{ padding: "10px 20px" }}
                   >
                     <img
                       src={Fisted}
@@ -181,7 +183,7 @@ const AssessmentChildPencil = forwardRef(
                     </div>
                   </label>
                 </div>
-                <div class="plan">
+                <div class="plan h-100">
                   <input
                     type="radio"
                     className="form-check-input"
@@ -209,7 +211,7 @@ const AssessmentChildPencil = forwardRef(
                     </div>
                   </label>
                 </div>
-                <div class="plan">
+                <div class="plan h-100">
                   <input
                     type="radio"
                     className="form-check-input"
@@ -251,33 +253,33 @@ const AssessmentChildPencil = forwardRef(
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="pencilGripOptions"
+                    name="pencilGripHandle"
                     id="STEADY"
                     value="STEADY"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    checked={formik.values.pencilGripOptions === "STEADY"}
+                    checked={formik.values.pencilGripHandle === "STEADY"}
                   />
                   <label className="form-check-label mx-2">Steady</label>
                   <input
                     className="form-check-input ms-3"
                     type="radio"
-                    name="pencilGripOptions"
+                    name="pencilGripHandle"
                     id="LOOSE"
                     value="LOOSE"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    checked={formik.values.pencilGripOptions === "LOOSE"}
+                    checked={formik.values.pencilGripHandle === "LOOSE"}
                   />
                   <label className="form-check-label mx-2">Loose</label>
                 </div>
-                {formik.errors.pencilGripOptions &&
-                  formik.touched.pencilGripOptions && (
+                {formik.errors.pencilGripHandle &&
+                  formik.touched.pencilGripHandle && (
                     <div
                       className="text-danger mt-1"
                       style={{ fontSize: "14px" }}
                     >
-                      {formik.errors.pencilGripOptions}
+                      {formik.errors.pencilGripHandle}
                     </div>
                   )}
               </div>

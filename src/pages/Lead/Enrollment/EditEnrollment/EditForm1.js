@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
   nameOfSchool: Yup.string().required("*School Name is required"),
   nameOfChildrenInTotal: Yup.string().required("*Name of Children is required"),
   fathersFullName: Yup.string().required("*Father Name is required"),
-  status: Yup.string().required("*Status is required"),
+  leadStatus: Yup.string().required("*Status is required"),
 });
 
 const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -41,7 +41,7 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
       nameOfSchool: "",
       nameOfChildrenInTotal: "",
       fathersFullName: "",
-      status: "",
+      leadStatus: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -61,7 +61,7 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicators(false);
       }
     },
@@ -324,16 +324,17 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               Status<span class="text-danger">*</span>
             </label>
             <select
-              className={`form-select  ${formik.touched.status && formik.errors.status
+              className={`form-select  ${
+                formik.touched.leadStatus && formik.errors.leadStatus
                   ? "is-invalid"
                   : ""
-                }`}
-              name="status"
+              }`}
+              name="leadStatus"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.status}
+              value={formik.values.leadStatus}
             >
-              <option ></option>
+              <option></option>
               <option value="Pending">Pending</option>
               <option value="Arranging assessment">Arranging assessment</option>
               <option value="Assessment confirmed">Assessment confirmed</option>
@@ -341,10 +342,8 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <option value="Rejected">Rejected</option>
               <option value="KIV">KIV</option>
             </select>
-            {formik.touched.status && formik.errors.status && (
-              <div className="invalid-feedback">
-                {formik.errors.status}
-              </div>
+            {formik.touched.leadStatus && formik.errors.leadStatus && (
+              <div className="invalid-feedback">{formik.errors.leadStatus}</div>
             )}
           </div>
           <div className="col-md-6 col-12">
@@ -426,7 +425,7 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-              Number Of Children In Total
+                Number Of Children In Total
                 <span className="text-danger">*</span>
               </label>
               <input
