@@ -12,13 +12,18 @@ import AssessmentPursuers from "./DoAssessment/AssessmentPursuers";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
-const steps = [{ tooltip: "Child Particulars" }, { tooltip: "Child Pencil Grip" },{ tooltip: "Arty Beliver & Arty Dreamers" },{ tooltip: "Alphabet" },{ tooltip: "Arty Pursuers" }];
-
-
+const steps = [
+  { tooltip: "Child Particulars" },
+  { tooltip: "Child Pencil Grip" },
+  { tooltip: "Arty Beliver & Arty Dreamers" },
+  { tooltip: "Alphabet" },
+  { tooltip: "Arty Pursuers" },
+];
 
 export default function LeadAssessment() {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({});
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
   // console.log("Form Data:", formData);
@@ -66,7 +71,7 @@ export default function LeadAssessment() {
 
   return (
     <div className="container-fluid minHeight">
-     <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index}>
             <OverlayTrigger
@@ -88,6 +93,7 @@ export default function LeadAssessment() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 1 && (
@@ -96,6 +102,7 @@ export default function LeadAssessment() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 2 && (
@@ -104,6 +111,7 @@ export default function LeadAssessment() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 3 && (
@@ -112,6 +120,7 @@ export default function LeadAssessment() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 4 && (
@@ -120,6 +129,7 @@ export default function LeadAssessment() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
@@ -138,7 +148,14 @@ export default function LeadAssessment() {
               className="btn btn-button btn-sm mt-5 mb-3"
               onClick={handleSaveAndNext}
               style={{ padding: "7px" }}
+              disabled={loadIndicator}
             >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
               {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
             </button>
           </div>

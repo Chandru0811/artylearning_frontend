@@ -45,11 +45,11 @@ const firstHalfArray = alphabetArray.slice(0, 13);
 const secondHalfArray = alphabetArray.slice(13);
 
 const AssessmentAlphabets = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const { leadId } = useParams();
     const [assessmentAvailable, setAssessmentAvailable] = useState(false);
     const [assessmentAlphabetId, setAssessmentAlphabetId] = useState(false);
-     console.log(assessmentAlphabetId);
+    console.log(assessmentAlphabetId);
     const formik = useFormik({
       initialValues: {
         association: formData.association || false,
@@ -188,6 +188,7 @@ const AssessmentAlphabets = forwardRef(
 
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         data.leadId = formData.leadId;
         // console.log(data);
         if (assessmentAvailable) {
@@ -210,14 +211,20 @@ const AssessmentAlphabets = forwardRef(
             }
           } catch (error) {
             toast.error(error);
+          } finally {
+            setLoadIndicators(false);
           }
         } else {
           try {
-            const response = await api.post("/createLeadDoAssessmentAlphabet", data, {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
+            const response = await api.post(
+              "/createLeadDoAssessmentAlphabet",
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
             if (response.status === 200) {
               toast.success(response.data.message);
               const assesmentId = response.data.assessmentId;
@@ -227,7 +234,7 @@ const AssessmentAlphabets = forwardRef(
                 ...data,
                 assesmentId,
               }));
-             
+
               handleNext();
             } else {
               toast.error(response.data.message);
@@ -244,12 +251,17 @@ const AssessmentAlphabets = forwardRef(
         const AlphabetResponse = await api.get(
           `/getLeadAssessmentDataByLeadId/${leadId}`
         );
-        console.log("AlphabetResponse Data", AlphabetResponse.data.leadDoAssessmentAlphabet[0])
+        console.log(
+          "AlphabetResponse Data",
+          AlphabetResponse.data.leadDoAssessmentAlphabet[0]
+        );
         if (AlphabetResponse?.data?.leadDoAssessmentAlphabet?.length > 0) {
           setAssessmentAvailable(true);
-          setAssessmentAlphabetId(AlphabetResponse.data.leadDoAssessmentAlphabet[0].id);
-          formik.setValues(AlphabetResponse.data.leadDoAssessmentAlphabet[0])
-        } 
+          setAssessmentAlphabetId(
+            AlphabetResponse.data.leadDoAssessmentAlphabet[0].id
+          );
+          formik.setValues(AlphabetResponse.data.leadDoAssessmentAlphabet[0]);
+        }
       };
       getData();
     }, []);
