@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
     .required("*Confirm Password is required"),
 });
 
-const LoginEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const LoginEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -43,8 +43,9 @@ const LoginEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     //     toast.error(error);
     //   }
     // },
-
+   
     onSubmit: async (values) => {
+      setLoadIndicators(true)
       console.log("Api Data:", values);
       try {
         if (values.loginId !== null) {
@@ -84,6 +85,8 @@ const LoginEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally{
+        setLoadIndicators(false)
       }
     },
   });

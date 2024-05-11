@@ -241,6 +241,8 @@ const AssessmentAlphabets = forwardRef(
             }
           } catch (error) {
             toast.error(error);
+          }finally {
+            setLoadIndicators(false);
           }
         }
       },

@@ -12,7 +12,7 @@ const validationSchema = Yup.object().shape({
 });
 
 
-const SalaryEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const SalaryEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       salary: "",
@@ -44,6 +44,7 @@ const SalaryEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     // },
 
     onSubmit: async (values) => {
+      setLoadIndicators(true)
       console.log("Api Data:", values);
       try {
         if (values.salaryId !== null) {
@@ -83,6 +84,8 @@ const SalaryEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally{
+        setLoadIndicators(false)
       }
     },
   });

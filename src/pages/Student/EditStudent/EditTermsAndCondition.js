@@ -13,7 +13,7 @@ import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
   termsAndConditionSignatureDate: Yup.string().required("*Signature Date is required"),
-  agree: Yup.string().required("*Agree Terms and conditions is required!"),
+  agree: Yup.boolean().oneOf([true], "*Agree Terms and conditions is required").required(),
 });
 
 const EditTermsAndCondition = forwardRef(

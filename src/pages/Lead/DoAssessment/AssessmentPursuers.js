@@ -145,7 +145,7 @@ const AssessmentPursuers = forwardRef(
                 },
               }
             );
-            if (response.status === 201) {
+            if (response.status === 200) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...data, leadId }));
               navigate("/lead/lead");
@@ -184,6 +184,8 @@ const AssessmentPursuers = forwardRef(
             }
           } catch (error) {
             toast.error(error);
+          }finally {
+            setLoadIndicators(false);
           }
         }
       },

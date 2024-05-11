@@ -23,7 +23,8 @@ export default function TeacherEdit() {
   const { staff_id } = useParams();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  
   const childRef = React.useRef();
   const [formData, setFormData] = useState({ staff_id });
   
@@ -150,6 +151,7 @@ export default function TeacherEdit() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
               {activeStep === 1 && (
@@ -158,6 +160,7 @@ export default function TeacherEdit() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
               {activeStep === 2 && (
@@ -166,6 +169,7 @@ export default function TeacherEdit() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
               {activeStep === 3 && (
@@ -174,6 +178,7 @@ export default function TeacherEdit() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
               {activeStep === 4 && (
@@ -182,6 +187,7 @@ export default function TeacherEdit() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
               {activeStep === 5 && (
@@ -190,6 +196,7 @@ export default function TeacherEdit() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
               {activeStep === 6 && (
@@ -198,6 +205,7 @@ export default function TeacherEdit() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
               {activeStep === 7 && (
@@ -206,6 +214,7 @@ export default function TeacherEdit() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
 
@@ -230,14 +239,28 @@ export default function TeacherEdit() {
                   Skip
                 </button>
               )} */}
-                <button
+              <button
+              className="btn btn-button btn-sm mt-5 mb-3"
+              onClick={handleButtonClick}
+              style={{ padding: "7px" }}
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
+            </button>
+                {/* <button
                   type="submit"
                   className="btn btn-button btn-sm mt-4"
                   onClick={handleButtonClick}
                   style={{ padding: "7px" }}
                 >
                   {activeStep === steps.length - 1 ? "Submit" : "Save And Next"}
-                </button>
+                </button> */}
               </div>
             </React.Fragment>
           )}

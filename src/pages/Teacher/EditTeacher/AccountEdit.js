@@ -30,7 +30,7 @@ const validationSchema = Yup.object().shape({
   centerId: Yup.string().required("*Centres is required!"),
 });
 
-const AccountEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const [centerData, setCenterData] = useState(null);
 
   const fetchData = async () => {
@@ -82,6 +82,7 @@ const AccountEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     // },
 
     onSubmit: async (values) => {
+      setLoadIndicators(true);
       // console.log("Api Data:", values);
       const Approval = values.approvelContentRequired === "Yes" ? true : false;
       const updatedData = {
@@ -133,6 +134,8 @@ const AccountEdit = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

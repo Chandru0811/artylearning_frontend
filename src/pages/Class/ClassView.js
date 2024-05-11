@@ -112,11 +112,11 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Duration(Mins)</p>
+                  <p className="fw-medium">Remarks</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.durationInMins || ""}
+                    : {data.remark || ""}
                   </p>
                 </div>
               </div>

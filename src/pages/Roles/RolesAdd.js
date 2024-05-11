@@ -1168,6 +1168,31 @@ function RolesAdd() {
                     <tr>
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Payslip
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="payslipIndex"
+                          checked={formik.values.payslipIndex}
+                          onChange={handleCheckboxChange(`payslipIndex`)}
+                        />
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
                           Leave Request
                         </p>
                       </td>
