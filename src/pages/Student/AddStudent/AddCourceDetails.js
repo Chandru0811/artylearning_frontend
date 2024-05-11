@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddcourseDetail = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [courseData, setCourseData] = useState(null);
 
     const formik = useFormik({
@@ -31,6 +31,7 @@ const AddcourseDetail = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         try {
           const formDatas = new FormData();
 
@@ -62,6 +63,8 @@ const AddcourseDetail = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

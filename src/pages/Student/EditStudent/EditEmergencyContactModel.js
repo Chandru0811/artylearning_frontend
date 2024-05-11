@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddEmergencyContact = forwardRef(
-  ({ id, emergencyId, formValue, getData }) => {
+  ({ id, emergencyId,setLoadIndicators, formValue, getData }) => {
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
 
@@ -40,6 +40,7 @@ const AddEmergencyContact = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         console.log("Api Data:", data);
         try {
           let record = [{}];
@@ -79,6 +80,8 @@ const AddEmergencyContact = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

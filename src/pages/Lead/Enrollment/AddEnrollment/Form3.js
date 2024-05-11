@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
 });
 
-const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const Form3 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const [primaryContact, setPrimaryContact] = useState(null);
 
   const formik = useFormik({
@@ -53,6 +53,7 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       const primarycontact = data.primaryContact === "father" ? true : data.primaryContact === "mother" ? true : false;
       const updatedData = {
         ...data,
@@ -77,6 +78,8 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

@@ -19,6 +19,7 @@ const AddEmergencyContactModel = forwardRef(
   ({ id, emergencyId, formValue, getData, formData }) => {
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
+    const [loadIndicator, setLoadIndicator] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
@@ -38,6 +39,7 @@ const AddEmergencyContactModel = forwardRef(
       },
       // validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicator(true);
         console.log("Api Data:", data);
         try {
           let record = [{}];
@@ -55,7 +57,9 @@ const AddEmergencyContactModel = forwardRef(
             formDatas.append("contactNo", data.contactNo);
             formDatas.append("authorizedRelation", data.authorizedRelation);
             formDatas.append("postalCode", data.postalCode);
-            formDatas.append("emergencyContactAddress",data.emergencyContactAddress
+            formDatas.append(
+              "emergencyContactAddress",
+              data.emergencyContactAddress
             );
             formDatas.append("files", data.files);
             formDatas.append("deleteEmergencyAuthorizedContactIds ", 1);
@@ -88,6 +92,8 @@ const AddEmergencyContactModel = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        } finally {
+          setLoadIndicator(false);
         }
       },
     });
@@ -233,11 +239,25 @@ const AddEmergencyContactModel = forwardRef(
                 </Button>
                 <Button
                   type="submit"
+                  className="btn btn-button btn-sm"
+                  onSubmit={formik.handleSubmit}
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Save{" "}
+                </Button>
+                {/* <Button
+                  type="submit"
                   variant="danger"
                   onSubmit={formik.handleSubmit}
                 >
                   Save
-                </Button>
+                </Button> */}
               </Modal.Footer>
             </form>
           </Modal>

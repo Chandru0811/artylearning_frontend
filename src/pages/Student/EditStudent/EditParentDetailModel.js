@@ -27,9 +27,10 @@ const validationSchema = Yup.object().shape({
   address: Yup.string().required("*Address is required"),
 });
 
-const EditParentDetailModel = forwardRef(({ id, getData }) => {
+const EditParentDetailModel = forwardRef(({ id,setLoadIndicators, getData }) => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -52,6 +53,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
     // validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Api Data:", data);
+      setLoadIndicators(true);
       try {
         const formDatas = new FormData();
         formDatas.append('parentName', data.parentName);
@@ -85,6 +87,8 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

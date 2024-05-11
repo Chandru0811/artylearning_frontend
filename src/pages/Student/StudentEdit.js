@@ -26,6 +26,7 @@ const steps = [
 
 export default function StudentAdd() {
   const { id } = useParams();
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
 
   const [formData, setFormData] = useState({ id });
@@ -120,6 +121,7 @@ export default function StudentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 1 && (
@@ -128,6 +130,7 @@ export default function StudentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 2 && (
@@ -136,6 +139,7 @@ export default function StudentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 3 && (
@@ -144,6 +148,7 @@ export default function StudentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 4 && (
@@ -152,6 +157,7 @@ export default function StudentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 5 && (
@@ -160,6 +166,7 @@ export default function StudentAdd() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
 
@@ -176,10 +183,18 @@ export default function StudentAdd() {
             <div style={{ flex: "1 1 auto" }}></div>
 
             <button
-              className="btn btn-button btn-sm mt-5 mb-3"
+              type="submit"
               onClick={handleButtonClick}
               style={{ padding: "7px" }}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
             >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
               {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
             </button>
           </div>

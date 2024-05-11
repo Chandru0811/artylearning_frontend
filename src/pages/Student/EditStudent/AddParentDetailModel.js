@@ -33,6 +33,7 @@ const validationSchema = Yup.object().shape({
 
 const AddParentDetailModel = forwardRef(({ formData }) => {
   const { id } = useParams();
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const [show, setShow] = useState(false);
   const [data, setData] = useState({});
   const handleClose = () => setShow(false);
@@ -113,6 +114,7 @@ const AddParentDetailModel = forwardRef(({ formData }) => {
     },
     // validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log("Add ParentGuardian", values);
       try {
         const formDatas = new FormData();
@@ -146,6 +148,8 @@ const AddParentDetailModel = forwardRef(({ formData }) => {
         }
       } catch (error) {
         toast.error(error.message);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -493,12 +497,26 @@ const AddParentDetailModel = forwardRef(({ formData }) => {
                 Cancel
               </Button>
               <Button
+                  type="submit"
+                  className="btn btn-button btn-sm"
+                  onSubmit={formik.handleSubmit}
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Save{" "}
+                </Button>
+              {/* <Button
                 type="submit"
                 variant="danger"
                 onSubmit={formik.handleSubmit}
               >
                 Save
-              </Button>
+              </Button> */}
             </Modal.Footer>
           </form>
         </Modal>

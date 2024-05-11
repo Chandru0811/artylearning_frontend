@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Edi = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const fetchData = async () => {
       try {
@@ -80,6 +80,7 @@ const Edi = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         setFormData((prv) => ({ ...prv, ...data }));
         console.log("Api Data:", data);
         try {
@@ -112,6 +113,8 @@ const Edi = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

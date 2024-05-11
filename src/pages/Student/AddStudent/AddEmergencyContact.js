@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddEmergencyContact = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [rows, setRows] = useState([{}]);
 
     const formik = useFormik({
@@ -42,6 +42,7 @@ const AddEmergencyContact = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         // handleNext();
         const formDatas = new FormData();
 
@@ -79,6 +80,8 @@ const AddEmergencyContact = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

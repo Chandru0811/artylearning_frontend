@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddTermsAndCondition = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
     const formik = useFormik({
       initialValues: {
@@ -21,6 +21,7 @@ const AddTermsAndCondition = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         const formDatas = new FormData();
         formDatas.append("file", data.file);
         formDatas.append("termsAndConditionSignatureDate", data.termsAndConditionSignatureDate);
@@ -46,6 +47,8 @@ const AddTermsAndCondition = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

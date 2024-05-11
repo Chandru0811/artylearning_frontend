@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditTermsAndCondition = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const formik = useFormik({
@@ -28,6 +28,7 @@ const EditTermsAndCondition = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         try {
           if (data.stdTermsAndConditionId !== null) {
             const formDatas = new FormData();
@@ -76,6 +77,8 @@ const EditTermsAndCondition = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

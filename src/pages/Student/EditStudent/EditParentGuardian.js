@@ -12,16 +12,19 @@ import BlockImg from "../../../assets/images/Block_Img1.jpg";
 import { FaEdit } from "react-icons/fa";
 
 const EditParentGuardian = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [data, setData] = useState({});
     console.log("Api Datas:",data);
 
     const getData = async () => {
+      setLoadIndicators(true);
       try {
         const response = await api.get(`/getAllStudentDetails/${formData.id}`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+      }finally {
+        setLoadIndicators(false);
       }
     };
 

@@ -17,8 +17,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditCourseDetail = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [courseData, setCourseData] = useState(null);
+    
     const [data, setData] = useState([]);
     const { id } = useParams();
 
@@ -35,6 +36,7 @@ const EditCourseDetail = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         try {
           if (data.courseDetailId !== null) {
             // console.log("ID :",data.courseDetailId);
@@ -98,6 +100,8 @@ const EditCourseDetail = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

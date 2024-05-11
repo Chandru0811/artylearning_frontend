@@ -9,7 +9,7 @@ const validationSchema = Yup.object().shape({
   studentRelationStudentName: Yup.string().required("*Student Name is required!"),
 });
 
-const EditStudentRelation = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditStudentRelation = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
 
   const [centerData, setCenterData] = useState(null);
   const fetchData = async () => {
@@ -65,6 +65,7 @@ const EditStudentRelation = forwardRef(({ formData, setFormData, handleNext }, r
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       try {
         if (data.stdRealtionId !== null) {
             const response = await api.put(
@@ -101,6 +102,8 @@ const EditStudentRelation = forwardRef(({ formData, setFormData, handleNext }, r
         }
     } catch (error) {
         toast.error(error);
+    }finally {
+      setLoadIndicators(false);
     }
     },
   });

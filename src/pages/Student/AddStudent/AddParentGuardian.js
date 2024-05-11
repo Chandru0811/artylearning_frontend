@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddParentGuardian = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
@@ -55,6 +55,7 @@ const AddParentGuardian = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
+        setLoadIndicators(true);
         // console.log("Add ParentGuardian", values);
         try {
           const formDatas = new FormData();
@@ -94,6 +95,8 @@ const AddParentGuardian = forwardRef(
           } else {
             toast.error(error?.response?.data?.message);
           }
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

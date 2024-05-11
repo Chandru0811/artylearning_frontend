@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditEmergencyContact = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [rows, setRows] = useState([{}]);
     const [data, setData] = useState([]);
     console.log("Data is", rows);
@@ -74,6 +74,7 @@ const EditEmergencyContact = forwardRef(
       },
       // validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         try {
           if (data.emergencyContactId !== null) {
             // console.log("ID :",data.emergencyContactId);
@@ -153,6 +154,8 @@ const EditEmergencyContact = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const fetchData = async () => {
       try {
@@ -84,6 +84,7 @@ const AddStudentDetails = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
+        setLoadIndicators(true);
         try {
           const formData = new FormData();
 
@@ -134,6 +135,8 @@ const AddStudentDetails = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });
