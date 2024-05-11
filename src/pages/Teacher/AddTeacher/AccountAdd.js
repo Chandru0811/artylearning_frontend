@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
     .min(1, "*Working Days is required!"),
   centerId: Yup.string().required("*Centres is required!"),
 });
-const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const [centerData, setCenterData] = useState(null);
 
   const fetchData = async () => {
@@ -57,6 +57,7 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicators(true);
       values.userId = formData.user_id;
       const Approval = values.approvelContentRequired === "Yes" ? true : false;
       const updatedData = {
@@ -79,6 +80,8 @@ const AccountAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

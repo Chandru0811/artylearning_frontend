@@ -81,6 +81,8 @@ const AssessmentBeliever = forwardRef(
             }
           } catch (error) {
             toast.error(error);
+          }finally {
+            setLoadIndicators(false);
           }
         }
       },

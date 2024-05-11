@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[0-9]+$/, "*Postal Code Must be numbers")
     .required("*Postal Code is required!"),
 });
-const ContactAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const ContactAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       email: formData.email,
@@ -27,6 +27,7 @@ const ContactAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicators(true);
       try {
         const response = await api.post(
           `/createUserContactInfo/${formData.user_id}`,
@@ -46,6 +47,8 @@ const ContactAdd = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

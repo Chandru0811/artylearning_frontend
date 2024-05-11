@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     .required("*Postal Code is required!"),
 });
 const ContactEdit = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({
       initialValues: {
         email: "",
@@ -50,6 +50,7 @@ const ContactEdit = forwardRef(
       //   }
       // },
       onSubmit: async (values) => {
+        setLoadIndicators(true)
         // console.log("Api Data:", values);
         try {
           if (values.contactId !== null) {
@@ -85,6 +86,8 @@ const ContactEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally{
+          setLoadIndicators(false)
         }
       },
     });
