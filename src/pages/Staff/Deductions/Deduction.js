@@ -12,6 +12,7 @@ const Deduction = () => {
   const [datas, setDatas] = useState([]);
   console.log(datas);
   const [loading, setLoading] = useState(true);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   useEffect(() => {
     const getData = async () => {
@@ -67,11 +68,13 @@ const Deduction = () => {
   return (
     <div className="container my-4">
       <div className="my-3 d-flex justify-content-end mb-5">
-        <Link to="/deduction/add">
-          <button type="button" className="btn btn-button btn-sm">
-            Add <i class="bx bx-plus"></i>
-          </button>
-        </Link>
+        {storedScreens?.deductionCreate && (
+          <Link to="/deduction/add">
+            <button type="button" className="btn btn-button btn-sm">
+              Add <i class="bx bx-plus"></i>
+            </button>
+          </Link>
+        )}
       </div>
       {loading ? (
         <div className="loader-container">
@@ -104,22 +107,27 @@ const Deduction = () => {
                 <td>{data.deductionName}</td>
                 <td>{data.deductionAmount}</td>
                 <td>
-                  <Link to={`/deduction/list/${data.id}`}>
-                    <button className="btn btn-sm">
-                      <FaEye />
-                    </button>
-                  </Link>
+                  {storedScreens?.deductionRead && (
+                    <Link to={`/deduction/list/${data.id}`}>
+                      <button className="btn btn-sm">
+                        <FaEye />
+                      </button>
+                    </Link>
+                  )}
+                  {storedScreens?.deductionUpdate && (
+                    <Link to={`/deduction/edit/${data.id}`}>
+                      <button className="btn btn-sm">
+                        <FaEdit />
+                      </button>
+                    </Link>
+                  )}
 
-                  <Link to={`/deduction/edit/${data.id}`}>
-                    <button className="btn btn-sm">
-                      <FaEdit />
-                    </button>
-                  </Link>
-
-                  <Delete
-                    onSuccess={refreshData}
-                    path={`/deleteUserDeduction/${data.id}`}
-                  />
+                  {storedScreens?.deductionDelete && (
+                    <Delete
+                      onSuccess={refreshData}
+                      path={`/deleteUserDeduction/${data.id}`}
+                    />
+                  )}
                 </td>
               </tr>
             ))}

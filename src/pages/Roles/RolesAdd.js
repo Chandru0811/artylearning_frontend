@@ -66,11 +66,11 @@ function RolesAdd() {
       attendanceCreate: true,
       attendanceUpdate: true,
       attendanceDelete: true,
-      staffingAttendanceCreate: true,
-      staffingAttendanceIndex: true,
-      staffingAttendanceRead: true,
-      staffingAttendanceUpdate: true,
-      staffingAttendanceDelete: true,
+      staffAttendanceCreate: true,
+      staffAttendanceIndex: true,
+      staffAttendanceRead: true,
+      staffAttendanceUpdate: true,
+      staffAttendanceDelete: true,
       leaveAdminIndex: true,
       leaveAdminRead: true,
       leaveAdminUpdate: true,
@@ -379,7 +379,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="classRead"
                           checked={formik.values.classRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`classRead`)}
                         />
                       </td>
                       <td>
@@ -388,7 +388,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="classCreate"
                           checked={formik.values.classCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`classCreate`)}
                         />
                       </td>
                       <td>
@@ -397,7 +397,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="classUpdate"
                           checked={formik.values.classUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`classUpdate`)}
                         />
                       </td>
                       <td>
@@ -406,7 +406,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="classDelete"
                           checked={formik.values.classDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`classDelete`)}
                         />
                       </td>
                     </tr>
@@ -431,7 +431,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="levelRead"
                           checked={formik.values.levelRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`levelRead`)}
                         />
                       </td>
                       <td>
@@ -440,7 +440,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="levelCreate"
                           checked={formik.values.levelCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`levelCreate`)}
                         />
                       </td>
                       <td>
@@ -449,7 +449,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="levelUpdate"
                           checked={formik.values.levelUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`levelUpdate`)}
                         />
                       </td>
                       <td>
@@ -458,7 +458,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="levelDelete"
                           checked={formik.values.levelDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`levelDelete`)}
                         />
                       </td>
                     </tr>
@@ -483,7 +483,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="subjectRead"
                           checked={formik.values.subjectRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`subjectRead`)}
                         />
                       </td>
                       <td>
@@ -492,7 +492,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="subjectCreate"
                           checked={formik.values.subjectCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`subjectCreate`)}
                         />
                       </td>
                       <td>
@@ -501,7 +501,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="subjectUpdate"
                           checked={formik.values.subjectUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`subjectUpdate`)}
                         />
                       </td>
                       <td>
@@ -510,7 +510,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="subjectDelete"
                           checked={formik.values.subjectDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`subjectDelete`)}
                         />
                       </td>
                     </tr>
@@ -592,7 +592,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="centerListingRead"
                           checked={formik.values.centerListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`centerListingRead`)}
                         />
                       </td>
                       <td>
@@ -601,7 +601,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="centerListingCreate"
                           checked={formik.values.centerListingCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`centerListingCreate`)}
                         />
                       </td>
                       <td>
@@ -610,7 +610,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="centerListingUpdate"
                           checked={formik.values.centerListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`centerListingUpdate`)}
                         />
                       </td>
                       <td>
@@ -619,7 +619,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="centerListingDelete"
                           checked={formik.values.centerListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`centerListingDelete`)}
                         />
                       </td>
                     </tr>
@@ -648,7 +648,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leadListingRead"
                           checked={formik.values.leadListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`leadListingRead`)}
                         />
                       </td>
                       <td>
@@ -657,7 +657,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leadListingCreate"
                           checked={formik.values.leadListingCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`leadListingCreate`)}
                         />
                       </td>
                       <td>
@@ -666,7 +666,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leadListingUpdate"
                           checked={formik.values.leadListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`leadListingUpsate`)}
                         />
                       </td>
                       <td>
@@ -675,7 +675,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leadListingDelete"
                           checked={formik.values.leadListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`leadListingDelete`)}
                         />
                       </td>
                     </tr>
@@ -700,7 +700,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="enrollmentRead"
                           checked={formik.values.enrollmentRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -709,7 +709,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="enrollmentCreate"
                           checked={formik.values.enrollmentCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`enrollmentCreate`)}
                         />
                       </td>
                       <td>
@@ -718,7 +718,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="enrollmentUpdate"
                           checked={formik.values.enrollmentUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -727,7 +727,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="enrollmentDelete"
                           checked={formik.values.enrollmentDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -756,7 +756,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="staffRead"
                           checked={formik.values.staffRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`staffRead`)}
                         />
                       </td>
                       <td>
@@ -765,7 +765,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="staffCreate"
                           checked={formik.values.staffCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`staffCreate`)}
                         />
                       </td>
                       <td>
@@ -774,7 +774,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="staffUpdate"
                           checked={formik.values.staffUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`staffUpdate`)}
                         />
                       </td>
                       <td>
@@ -783,7 +783,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="staffDelete"
                           checked={formik.values.staffDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`staffDelete`)}
                         />
                       </td>
                     </tr>
@@ -808,7 +808,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="teacherRead"
                           checked={formik.values.teacherRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`teacherRead`)}
                         />
                       </td>
                       <td>
@@ -817,7 +817,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="teacherCreate"
                           checked={formik.values.teacherCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`teacherCreate`)}
                         />
                       </td>
                       <td>
@@ -826,7 +826,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="teacherUpdate"
                           checked={formik.values.teacherUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`teacherUpdate`)}
                         />
                       </td>
                       <td>
@@ -835,7 +835,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="teacherDelete"
                           checked={formik.values.teacherDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`teacherDelete`)}
                         />
                       </td>
                     </tr>
@@ -849,10 +849,10 @@ function RolesAdd() {
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="staffingAttendanceIndex"
-                          checked={formik.values.staffingAttendanceIndex}
+                          name="staffAttendanceIndex"
+                          checked={formik.values.staffAttendanceIndex}
                           onChange={handleCheckboxChange(
-                            `staffingAttendanceIndex`
+                            `staffAttendanceIndex`
                           )}
                         />
                       </td>
@@ -860,36 +860,42 @@ function RolesAdd() {
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="staffingAttendanceRead"
-                          checked={formik.values.staffingAttendanceRead}
-                          onChange={formik.handleChange}
+                          name="staffAttendanceRead"
+                          checked={formik.values.staffAttendanceRead}
+                          onChange={handleCheckboxChange(`staffAttendanceRead`)}
                         />
                       </td>
                       <td>
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="staffingAttendanceCreate"
-                          checked={formik.values.staffingAttendanceCreate}
-                          onChange={formik.handleChange}
+                          name="staffAttendanceCreate"
+                          checked={formik.values.staffAttendanceCreate}
+                          onChange={handleCheckboxChange(
+                            `staffAttendanceCreate`
+                          )}
                         />
                       </td>
                       <td>
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="staffingAttendanceUpdate"
-                          checked={formik.values.staffingAttendanceUpdate}
-                          onChange={formik.handleChange}
+                          name="staffAttendanceUpdate"
+                          checked={formik.values.staffAttendanceUpdate}
+                          onChange={handleCheckboxChange(
+                            `staffAttendanceUpdate`
+                          )}
                         />
                       </td>
                       <td>
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="staffingAttendanceDelete"
-                          checked={formik.values.staffingAttendanceDelete}
-                          onChange={formik.handleChange}
+                          name="staffAttendanceDelete"
+                          checked={formik.values.staffAttendanceDelete}
+                          onChange={handleCheckboxChange(
+                            `staffAttendanceDelete`
+                          )}
                         />
                       </td>
                     </tr>
@@ -915,7 +921,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveAdminceRead"
                           checked={formik.values.leaveAdminRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`leaveAdminRead`)}
                         />
                       </td>
                       <td>
@@ -924,7 +930,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveAdminceCreate"
                           checked={formik.values.leaveAdminCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -933,7 +939,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveAdminUpdate"
                           checked={formik.values.leaveAdminUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`leaveAdminUpdate`)}
                         />
                       </td>
                       <td>
@@ -942,7 +948,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveAdminDelete"
                           checked={formik.values.leaveAdminDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -968,7 +974,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveRead"
                           checked={formik.values.leaveRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -977,7 +983,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveCreate"
                           checked={formik.values.leaveCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`leaveCreate`)}
                         />
                       </td>
                       <td>
@@ -986,7 +992,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveUpdate"
                           checked={formik.values.leaveUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -995,7 +1001,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveDelete"
                           checked={formik.values.leaveDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1021,7 +1027,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="holidayRead"
                           checked={formik.values.holidayRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`holidayRead`)}
                         />
                       </td>
                       <td>
@@ -1030,7 +1036,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="holidayCreate"
                           checked={formik.values.holidayCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`holidayCreate`)}
                         />
                       </td>
                       <td>
@@ -1039,7 +1045,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="holidayUpdate"
                           checked={formik.values.holidayUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`holidayUpdate`)}
                         />
                       </td>
                       <td>
@@ -1048,7 +1054,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="holidayDelete"
                           checked={formik.values.holidayDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`holidayDelete`)}
                         />
                       </td>
                     </tr>
@@ -1074,7 +1080,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="deductionRead"
                           checked={formik.values.deductionRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`deductionRead`)}
                         />
                       </td>
                       <td>
@@ -1083,7 +1089,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="deductionCreate"
                           checked={formik.values.deductionCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`deductionCreate`)}
                         />
                       </td>
                       <td>
@@ -1092,7 +1098,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="deductionUpdate"
                           checked={formik.values.deductionUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`deductionUpdate`)}
                         />
                       </td>
                       <td>
@@ -1101,7 +1107,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="deductionDelete"
                           checked={formik.values.deductionDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`deductionDelete`)}
                         />
                       </td>
                     </tr>
@@ -1127,7 +1133,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="payrollRead"
                           checked={formik.values.payrollRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`payrollRead`)}
                         />
                       </td>
                       <td>
@@ -1136,25 +1142,25 @@ function RolesAdd() {
                           type="checkbox"
                           name="payrollCreate"
                           checked={formik.values.payrollCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`payrollCreate`)}
                         />
                       </td>
                       <td>
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="teacherUpdate"
-                          checked={formik.values.teacherUpdate}
-                          onChange={formik.handleChange}
+                          name="payrollUpdate"
+                          checked={formik.values.payrollUpdate}
+                          onChange={handleCheckboxChange(`payrollUpdate`)}
                         />
                       </td>
                       <td>
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="teacherDelete"
-                          checked={formik.values.teacherDelete}
-                          onChange={formik.handleChange}
+                          name="payrollDelete"
+                          checked={formik.values.payrollDelete}
+                          onChange={handleCheckboxChange(`payrollDelete`)}
                         />
                       </td>
                     </tr>
@@ -1189,7 +1195,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveRequestIdex"
                           checked={formik.values.leaveRequestIdex}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1198,7 +1204,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveRequestIdex"
                           checked={formik.values.leaveRequestIdex}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1207,7 +1213,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="leaveRequestIdex"
                           checked={formik.values.leaveRequestIdex}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1232,7 +1238,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="teacherRead"
                           checked={formik.values.teacherRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1241,7 +1247,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="teacherCreate"
                           checked={formik.values.teacherCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1250,7 +1256,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="teacherUpdate"
                           checked={formik.values.teacherUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1259,7 +1265,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="teacherDelete"
                           checked={formik.values.teacherDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1288,7 +1294,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`studentListingRead`)}
                         />
                       </td>
                       <td>
@@ -1297,7 +1303,9 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingCreate"
                           checked={formik.values.studentListingCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(
+                            `studentListingCreate`
+                          )}
                         />
                       </td>
                       <td>
@@ -1306,7 +1314,9 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(
+                            `studentListingUpdate`
+                          )}
                         />
                       </td>
                       <td>
@@ -1315,7 +1325,9 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(
+                            `studentListingDelete`
+                          )}
                         />
                       </td>
                     </tr>
@@ -1340,7 +1352,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="attendanceRead"
                           checked={formik.values.attendanceRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1349,7 +1361,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="attendanceCreate"
                           checked={formik.values.attendanceCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1358,7 +1370,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="attendanceUpdate"
                           checked={formik.values.attendanceUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`attendanceUpdate`)}
                         />
                       </td>
                       <td>
@@ -1367,7 +1379,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="attendanceDelete"
                           checked={formik.values.attendanceDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1392,7 +1404,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1401,7 +1413,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="changeClassCreate"
                           checked={formik.values.changeClassCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`changeClassCreate`)}
                         />
                       </td>
                       <td>
@@ -1410,7 +1422,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1419,7 +1431,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1444,7 +1456,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1453,7 +1465,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="transferOutCreate"
                           checked={formik.values.transferOutCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`transferOutCreate`)}
                         />
                       </td>
                       <td>
@@ -1462,7 +1474,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1471,7 +1483,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1496,7 +1508,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1505,7 +1517,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="withdrawIndex"
                           checked={formik.values.withdrawIndex}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`withdrawIndex`)}
                         />
                       </td>
                       <td>
@@ -1514,7 +1526,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1523,7 +1535,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1548,7 +1560,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1557,7 +1569,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="endClassCreate"
                           checked={formik.values.endClassCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`endClassCreate`)}
                         />
                       </td>
                       <td>
@@ -1566,7 +1578,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1575,7 +1587,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1600,7 +1612,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1609,7 +1621,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="registerNewCreate"
                           checked={formik.values.registerNewCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`registerNewCreate`)}
                         />
                       </td>
                       <td>
@@ -1618,7 +1630,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1627,7 +1639,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1652,7 +1664,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingRead"
                           checked={formik.values.studentListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1661,7 +1673,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="deductDepositCreate"
                           checked={formik.values.deductDepositCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`deductDepositCreate`)}
                         />
                       </td>
                       <td>
@@ -1670,7 +1682,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingUpdate"
                           checked={formik.values.studentListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1679,7 +1691,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentListingDelete"
                           checked={formik.values.studentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1710,7 +1722,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentListingRead"
                           checked={formik.values.documentListingRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`documentListingRead`)}
                         />
                       </td>
                       <td>
@@ -1719,7 +1731,9 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentListingCreate"
                           checked={formik.values.documentListingCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(
+                            `documentListingCreate`
+                          )}
                         />
                       </td>
                       <td>
@@ -1728,7 +1742,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentListingUpdate"
                           checked={formik.values.documentListingUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1737,7 +1751,9 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentListingDelete"
                           checked={formik.values.documentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(
+                            `documentListingDelete`
+                          )}
                         />
                       </td>
                     </tr>
@@ -1762,7 +1778,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1771,7 +1787,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1780,7 +1796,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentFileIdex"
                           checked={formik.values.documentFileIdex}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1789,7 +1805,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentListingDelete"
                           checked={formik.values.documentListingDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -1818,7 +1834,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="invoiceRead"
                           checked={formik.values.invoiceRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`invoiceRead`)}
                         />
                       </td>
                       <td>
@@ -1827,7 +1843,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="invoiceCreate"
                           checked={formik.values.invoiceCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`invoiceCreate`)}
                         />
                       </td>
                       <td>
@@ -1836,7 +1852,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="invoiceUpdate"
                           checked={formik.values.invoiceUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`invoiceUpdate`)}
                         />
                       </td>
                       <td>
@@ -1845,7 +1861,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="invoiceDelete"
                           checked={formik.values.invoiceDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`invoiceDelete`)}
                         />
                       </td>
                     </tr>
@@ -1888,7 +1904,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="invoiceUpdate"
                           checked={formik.values.invoiceUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -1897,7 +1913,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="invoiceDelete"
                           checked={formik.values.invoiceDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2050,7 +2066,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentReportRead"
                           checked={formik.values.documentReportRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange(`documentRepostRead`)}
                         />
                       </td>
                       <td>
@@ -2059,7 +2075,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentReportCreate"
                           checked={formik.values.documentReportCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2068,7 +2084,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentReportUpdate"
                           checked={formik.values.documentReportUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2077,7 +2093,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="documentReportDelete"
                           checked={formik.values.documentReportDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2104,7 +2120,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="attendanceReportRead"
                           checked={formik.values.attendanceReportRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2113,7 +2129,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="attendanceReportCreate"
                           checked={formik.values.attendanceReportCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2122,7 +2138,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="attendanceReportUpdate"
                           checked={formik.values.attendanceReportUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2131,7 +2147,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="attendanceReportDelete"
                           checked={formik.values.attendanceReportDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2156,7 +2172,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentReportRead"
                           checked={formik.values.studentReportRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2165,7 +2181,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentReportCreate"
                           checked={formik.values.studentReportCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2174,7 +2190,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentReportUpdate"
                           checked={formik.values.studentReportUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2183,7 +2199,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="studentReportDelete"
                           checked={formik.values.studentReportDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2210,7 +2226,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="assessmentReportRead"
                           checked={formik.values.assessmentReportRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2219,7 +2235,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="assessmentReportCreate"
                           checked={formik.values.assessmentReportCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2228,7 +2244,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="assessmentReportUpdate"
                           checked={formik.values.assessmentReportUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2237,7 +2253,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="assessmentReportDelete"
                           checked={formik.values.assessmentReportDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2264,7 +2280,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="enrollmentReportRead"
                           checked={formik.values.enrollmentReportRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2273,7 +2289,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="enrollmentReportCreate"
                           checked={formik.values.enrollmentReportCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2282,7 +2298,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="enrollmentReportUpdate"
                           checked={formik.values.enrollmentReportUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2291,7 +2307,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="enrollmentReportDelete"
                           checked={formik.values.enrollmentReportDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2318,7 +2334,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="feeCollectionReportRead"
                           checked={formik.values.feeCollectionReportRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2327,7 +2343,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="feeCollectionReportCreate"
                           checked={formik.values.feeCollectionReportCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2336,7 +2352,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="feeCollectionReportUpdate"
                           checked={formik.values.feeCollectionReportUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2345,7 +2361,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="feeCollectionReportDelete"
                           checked={formik.values.feeCollectionReportDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2372,7 +2388,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="packageBalanceReportRead"
                           checked={formik.values.packageBalanceReportRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2381,7 +2397,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="packageBalanceReportCreate"
                           checked={formik.values.packageBalanceReportCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2390,7 +2406,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="packageBalanceReportUpdate"
                           checked={formik.values.packageBalanceReportUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2399,7 +2415,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="packageBalanceReportDelete"
                           checked={formik.values.packageBalanceReportDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2426,7 +2442,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="salesRevenueReportRead"
                           checked={formik.values.salesRevenueReportRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2435,7 +2451,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="salesRevenueReportCreate"
                           checked={formik.values.salesRevenueReportCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2444,7 +2460,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="salesRevenueReportUpdate"
                           checked={formik.values.salesRevenueReportUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2453,7 +2469,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="salesRevenueReportDelete"
                           checked={formik.values.salesRevenueReportDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>
@@ -2480,7 +2496,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="replaceClassLessonListRead"
                           checked={formik.values.replaceClassLessonListRead}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2489,7 +2505,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="replaceClassLessonListCreate"
                           checked={formik.values.replaceClassLessonListCreate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2498,7 +2514,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="replaceClassLessonListUpdate"
                           checked={formik.values.replaceClassLessonListUpdate}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                       <td>
@@ -2507,7 +2523,7 @@ function RolesAdd() {
                           type="checkbox"
                           name="replaceClassLessonListDelete"
                           checked={formik.values.replaceClassLessonListDelete}
-                          onChange={formik.handleChange}
+                          onChange={handleCheckboxChange}
                         /> */}
                       </td>
                     </tr>

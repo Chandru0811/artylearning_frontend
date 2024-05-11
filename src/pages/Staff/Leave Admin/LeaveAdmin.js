@@ -11,9 +11,10 @@ import api from "../../../config/URL";
 const LeaveAdmin = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  console.log("Leave Data:",datas);
+  console.log("Leave Data:", datas);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
     try {
@@ -115,23 +116,26 @@ const LeaveAdmin = () => {
                 </td>
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
-                    <Link
-                      to={`/leaveadmin/view/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    >
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                    <Link
-                      to={`/leaveadmin/edit/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    >
-                      <button className="btn btn-sm">
-                        <FaEdit />
-                      </button>
-                    </Link>
-              
+                    {storedScreens?.leaveAdminRead && (
+                      <Link
+                        to={`/leaveadmin/view/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      >
+                        <button className="btn btn-sm">
+                          <FaEye />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.leaveAdminUpdate && (
+                      <Link
+                        to={`/leaveadmin/edit/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      >
+                        <button className="btn btn-sm">
+                          <FaEdit />
+                        </button>
+                      </Link>
+                    )}
                   </div>
                 </td>
               </tr>

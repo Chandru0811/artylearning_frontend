@@ -6,7 +6,7 @@ import api from "../../../config/URL";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  workingDays: Yup.date().required("*Working Days is required"),
+  workingDays: Yup.string().required("*Working Days is required"),
   userContractSalary: Yup.number()
     .typeError("*Salary Must be numbers")
     .notRequired(),
@@ -252,7 +252,7 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
                 value={formik.values.probation}
               />
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            {/* <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Working Days<span className="text-danger">*</span>
               </label>
@@ -267,6 +267,36 @@ const ContractAdd = forwardRef(({ formData, setFormData }, ref) => {
               {formik.touched.workingDays && formik.errors.workingDays && (
                 <div className="error text-danger ">
                   <small>{formik.errors.workingDays}</small>
+                </div>
+              )}
+            </div> */}
+            <div class="col-md-6 col-12 mb-2 mt-3">
+              <label>
+                Working Days<span className="text-danger">*</span>
+              </label>
+              <select
+                className={`form-select  ${
+                  formik.touched.workingDays && formik.errors.workingDays
+                    ? "is-invalid"
+                    : ""
+                }`}
+                name="workingDays"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.workingDays}
+              >
+                <option></option>
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+              </select>
+              {formik.touched.workingDays && formik.errors.workingDays && (
+                <div className="invalid-feedback">
+                  {formik.errors.workingDays}
                 </div>
               )}
             </div>
