@@ -12,7 +12,9 @@ import fetchAllCoursesWithIds from "../../List/CourseList";
 import { useParams } from "react-router-dom";
 import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
-const validationSchema = Yup.object().shape({});
+const validationSchema = Yup.object().shape({
+  signatureDate: Yup.string().required("*Signature Date is required")
+});
 
 const EditCourseDetail = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
@@ -29,6 +31,7 @@ const EditCourseDetail = forwardRef(
         courseDay: formData.courseDay || "",
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
+        signatureDate: formData.signatureDate || ""
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -44,6 +47,7 @@ const EditCourseDetail = forwardRef(
             formDatas.append("file", data.file);
             formDatas.append("startTime", data.startTime);
             formDatas.append("endTime", data.endTime);
+            formDatas.append("signatureDate", data.signatureDate);
             formDatas.append("studentDetailId", id);
             formDatas.append("detailId", data.courseDetailId);
             const response = await api.put(
@@ -264,17 +268,17 @@ const EditCourseDetail = forwardRef(
                           ))}
                         {(!data.studentCourseDetailModels ||
                           data.studentCourseDetailModels.length === 0) && (
-                          <div
-                            id="panelsStayOpen-collapseThree"
-                            class="accordion-collapse collapse"
-                          >
-                            <div class="accordion-body">
-                              <div className="text-muted">
-                                Parent Signature / not available !
+                            <div
+                              id="panelsStayOpen-collapseThree"
+                              class="accordion-collapse collapse"
+                            >
+                              <div class="accordion-body">
+                                <div className="text-muted">
+                                  Parent Signature / not available !
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        )}
+                          )}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">
@@ -319,6 +323,25 @@ const EditCourseDetail = forwardRef(
                           onBlur={formik.handleBlur}
                           value={formik.values.endTime}
                         />
+                      </div>
+                      <div className="text-start mt-2">
+                        <label htmlFor="" className="mb-1 fw-medium">
+                          <small>Signature Date<span className="text-danger">*</span></small>
+                        </label>
+                        <br />
+                        <input
+                          className="form-control  form-contorl-sm"
+                          name="signatureDate"
+                          type="date"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.signatureDate}
+                        />
+                        {formik.touched.signatureDate && formik.errors.signatureDate && (
+                          <div className="text-danger">
+                            <small>{formik.errors.signatureDate}</small>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -241,7 +241,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     aria-label="Default select example"
                     onChange={handleCenterChange}
                   >
-                    <option disabled></option>
+                    <option></option>
                     {centerData &&
                       centerData.map((center) => (
                         <option key={center.id} value={center.id}>
@@ -268,7 +268,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     }`}
                     onChange={handleCourseChange}
                   >
-                    <option disabled></option>
+                    <option></option>
                     {courseData &&
                       courseData.map((course) => (
                         <option key={course.id} value={course.id}>
@@ -295,7 +295,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     }`}
                     // onChange={handleClassChange}
                   >
-                    <option selected></option>
+                    <option></option>
                     {classData &&
                       classData.map((classes) => (
                         <option key={classes.id} value={classes.id}>
@@ -342,7 +342,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                         : ""
                     }`}
                   >
-                    <option disabled></option>
+                    <option></option>
                     <option value="MONDAY">MONDAY</option>
                     <option value="TUESDAY">TUESDAY</option>
                     <option value="WEDNESDAY">WEDNESDAY</option>
@@ -367,7 +367,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                         : ""
                     }`}
                   >
-                    <option selected></option>
+                    <option></option>
                     {teacherData &&
                       teacherData.map((teacher) => (
                         <option key={teacher.id} value={teacher.id}>

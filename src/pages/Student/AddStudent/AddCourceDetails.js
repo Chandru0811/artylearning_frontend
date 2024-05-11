@@ -10,7 +10,9 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../../List/CourseList";
 
-const validationSchema = Yup.object().shape({});
+const validationSchema = Yup.object().shape({
+  signatureDate: Yup.string().required("*Signature Date is required")
+});
 
 const AddcourseDetail = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
@@ -21,10 +23,11 @@ const AddcourseDetail = forwardRef(
         courseId: formData.courseId || "",
         startDate: formData.startDate || "",
         startTime: formData.startTime || "",
-        parentSignature: null || "",
+        file: null || "",
         courseDay: formData.courseDay || "",
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
+        signatureDate:formData.signatureDate || ""
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -36,10 +39,11 @@ const AddcourseDetail = forwardRef(
           formDatas.append("courseName", data.courseId);
           formDatas.append("startDate", data.startDate);
           formDatas.append("startTime", data.startTime);
-          formDatas.append("file", data.parentSignature);
+          formDatas.append("file", data.file);
           formDatas.append("courseDay", data.courseDay);
           formDatas.append("endDate", data.endDate);
           formDatas.append("endTime", data.endTime);
+          formDatas.append("signatureDate", data.signatureDate);
           formDatas.append("studentDetailId ", formData.student_id); // Assuming formDatas.student_id is defined
 
           // You don't need to set parentSignature to null in formDatas, it's already null if not set
@@ -146,10 +150,10 @@ const AddcourseDetail = forwardRef(
                         <input
                           type="file"
                           className="form-control"
-                          name="parentSignature"
+                          name="file"
                           onChange={(event) => {
                             formik.setFieldValue(
-                              "parentSignature",
+                              "file",
                               event.currentTarget.files[0]
                             );
                           }}
@@ -200,6 +204,25 @@ const AddcourseDetail = forwardRef(
                           value={formik.values.endTime}
                         />
                       </div>
+                      <div className="text-start mt-2">
+                        <label htmlFor="" className="mb-1 fw-medium">
+                          <small>Signature Date<span className="text-danger">*</span></small>
+                        </label>
+                        <br />
+                        <input
+                          className="form-control  form-contorl-sm"
+                          name="signatureDate"
+                          type="date"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.signatureDate}
+                        />
+                        {formik.touched.signatureDate && formik.errors.signatureDate && (
+                      <div className="text-danger">
+                        <small>{formik.errors.signatureDate}</small>
+                      </div>
+                    )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -211,4 +234,5 @@ const AddcourseDetail = forwardRef(
     );
   }
 );
+
 export default AddcourseDetail;
