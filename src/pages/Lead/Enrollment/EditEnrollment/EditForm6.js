@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +48,15 @@ const EditForm6 = forwardRef(({ formData,setLoadIndicators,setFormData, handleNe
       }
     },
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+      formik.setValues(response.data);
+    };
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useImperativeHandle(ref, () => ({
     editform6: formik.handleSubmit,
