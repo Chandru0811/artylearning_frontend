@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
 import { toast } from "react-toastify";
+import { data } from "jquery";
 
 const validationSchema = Yup.object().shape({
   fathersFullName: Yup.string().required("*Father Full Name is required"),
@@ -57,11 +58,17 @@ const EditForm3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       mothersMobileNumber: formData.mothersMobileNumber || "",
       mothersEmailAddress: formData.mothersEmailAddress || "",
       monthlyIncomeOfMother: formData.monthlyIncomeOfMother || "",
+      primaryContact: formData.primaryContact || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      const primarycontact = data.primaryContact === "father" ? true : data.primaryContact === "mother" ? true : false;
+      const updatedData = {
+        ...data,
+        primaryContact: primarycontact,
+      };
       try {
-        const response = await api.put(`/updateLeadInfo/${formData.id}`, data, {
+        const response = await api.put(`/updateLeadInfo/${formData.id}`, updatedData, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -92,6 +99,7 @@ const EditForm3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         ...response.data,
         fathersDateOfBirth: fathersDateOfBirth,
         mothersDateOfBirth: mothersDateOfBirth,
+        primaryContact : response.data.primaryContact === true || false
       });
     };
     getData();
@@ -101,14 +109,6 @@ const EditForm3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   useImperativeHandle(ref, () => ({
     editForm3: formik.handleSubmit,
   }));
-
-  const handlePrimaryContactChange = (event, type) => {
-    if (event.target.checked) {
-      setPrimaryContact(type);
-    } else {
-      setPrimaryContact(null);
-    }
-  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -123,12 +123,14 @@ const EditForm3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <div className="col-6 text-end">
                 <label className="form-label">Primary Contact</label>
                 <input
-                  type="checkbox"
-                  className="form-check-input mx-2" 
-                  checked={primaryContact === "mother"}
-                  onChange={(event) =>
-                    handlePrimaryContactChange(event, "mother")
-                  } />
+                  type="radio"
+                  name="primaryContact"
+                  className="form-check-input mx-2"
+                  value="mother"
+                  checked={formik.values.primaryContact === "mother"}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
               </div>
             </div>
           </div>
@@ -274,12 +276,14 @@ const EditForm3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <div className="col-6 text-end">
                 <label className="form-label">Primary Contact</label>
                 <input
-                  type="checkbox"
-                  className="form-check-input mx-2" 
-                  checked={primaryContact === "father"}
-                  onChange={(event) =>
-                    handlePrimaryContactChange(event, "father")
-                  } />
+                  type="radio"
+                  name="primaryContact"
+                  className="form-check-input mx-2"
+                  value="father"
+                  checked={formik.values.primaryContact === "father"}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
               </div>
             </div>
           </div>

@@ -14,7 +14,7 @@ import { FaEdit } from "react-icons/fa";
 const EditParentGuardian = forwardRef(
   ({ formData, setFormData, handleNext }, ref) => {
     const [data, setData] = useState({});
-    console.log(data);
+    console.log("Api Datas:",data);
 
     const getData = async () => {
       try {
@@ -91,7 +91,7 @@ const EditParentGuardian = forwardRef(
                               )}
 
                               {parent.parentName}
-                              {index === 0 && (
+                              {parent.primaryContact === true && (
                                 <GoDotFill className="text-primary" />
                               )}
                             </p>

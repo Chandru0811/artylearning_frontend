@@ -11,10 +11,7 @@ const validationSchema = Yup.object().shape({
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
   fathersMobileNumber: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?\d{8,15}$/,
-      "Invalid Phone Number"
-    )
+    .matches(/^(?:\+?65)?\s?\d{8,15}$/, "Invalid Phone Number")
     .required("*Mobile Number is required"),
   fathersEmailAddress: Yup.string()
     .email("*Invalid Email")
@@ -26,11 +23,8 @@ const validationSchema = Yup.object().shape({
   mothersDateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
-    mothersMobileNumber: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?\d{8,15}$/,
-      "Invalid Phone Number"
-    )
+  mothersMobileNumber: Yup.string()
+    .matches(/^(?:\+?65)?\s?\d{8,15}$/, "Invalid Phone Number")
     .required("*Mobile Number is required"),
   mothersEmailAddress: Yup.string()
     .email("*Invalid Email")
@@ -39,7 +33,6 @@ const validationSchema = Yup.object().shape({
 });
 
 const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
-
   const [primaryContact, setPrimaryContact] = useState(null);
 
   const formik = useFormik({
@@ -56,13 +49,19 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       mothersMobileNumber: formData.mothersMobileNumber || "",
       mothersEmailAddress: formData.mothersEmailAddress || "",
       monthlyIncomeOfMother: formData.monthlyIncomeOfMother || "",
+      primaryContact: formData.primaryContact || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      const primarycontact = data.primaryContact === "father" ? true : data.primaryContact === "mother" ? true : false;
+      const updatedData = {
+        ...data,
+        primaryContact: primarycontact,
+      };
       try {
         const response = await api.put(
           `/updateLeadInfo/${formData.lead_id}`,
-          data,
+          updatedData,
           {
             headers: {
               "Content-Type": "application/json",
@@ -86,35 +85,31 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     form3: formik.handleSubmit,
   }));
 
-  const handlePrimaryContactChange = (event, type) => {
-    if (event.target.checked) {
-      setPrimaryContact(type);
-    } else {
-      setPrimaryContact(null);
-    }
-  };
-
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="container py-4">
         <h5 className="headColor mb-5">Parent Information</h5>
-        <div className="row"> <div className="col-12 mb-3">
-          <div className="row">
-            <div className="col-6">
-              <h6>Mother's Info</h6>
-            </div>
-            <div className="col-6 text-end">
-              <label className="form-label">Primary Contact</label>
-              <input
-                type="checkbox"
-                className="form-check-input mx-2"
-                checked={primaryContact === "mother"}
-                onChange={(event) =>
-                  handlePrimaryContactChange(event, "mother")
-                } />
+        <div className="row">
+          {" "}
+          <div className="col-12 mb-3">
+            <div className="row">
+              <div className="col-6">
+                <h6>Mother's Info</h6>
+              </div>
+              <div className="col-6 text-end">
+                <label className="form-label">Primary Contact</label>
+                <input
+                  type="radio"
+                  name="primaryContact"
+                  className="form-check-input mx-2"
+                  value="mother"
+                  checked={formik.values.primaryContact === "mother"}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </div>
             </div>
           </div>
-        </div>
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
@@ -221,8 +216,11 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             </div>
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label className="form-label">Mother's Monthly Income<span className="text-danger">*</span></label>
-            <select className="form-select"
+            <label className="form-label">
+              Mother's Monthly Income<span className="text-danger">*</span>
+            </label>
+            <select
+              className="form-select"
               name="monthlyIncomeOfMother"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -240,7 +238,9 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <option value="$8001_$9000">$8001 - $9,000</option>
               <option value="$9001_$10000">$9,001 - $10,000</option>
               <option value="ABOVE_$10000">Above $10,000</option>
-              <option value="PREFER_NOT_TO_DISCLOSE">Prefer Not To Disclose</option>
+              <option value="PREFER_NOT_TO_DISCLOSE">
+                Prefer Not To Disclose
+              </option>
             </select>
             {formik.touched.monthlyIncomeOfMother &&
               formik.errors.monthlyIncomeOfMother && (
@@ -257,12 +257,14 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <div className="col-6 text-end">
                 <label className="form-label">Primary Contact</label>
                 <input
-                  type="checkbox"
+                  type="radio"
+                  name="primaryContact"
                   className="form-check-input mx-2"
-                  checked={primaryContact === "father"}
-                  onChange={(event) =>
-                    handlePrimaryContactChange(event, "father")
-                  } />
+                  value="father"
+                  checked={formik.values.primaryContact === "father"}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
               </div>
             </div>
           </div>
@@ -372,8 +374,11 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             </div>
           </div>
           <div className="col-md-6 col-12 mb-3">
-            <label className="form-label">Father's Monthly Income<span className="text-danger">*</span></label>
-            <select className="form-select"
+            <label className="form-label">
+              Father's Monthly Income<span className="text-danger">*</span>
+            </label>
+            <select
+              className="form-select"
               name="monthlyIncomeOfFather"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -391,7 +396,9 @@ const Form3 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <option value="$8001_$9000">$8001 - $9,000</option>
               <option value="$9001_$10000">$9,001 - $10,000</option>
               <option value="ABOVE_$10000">Above $10,000</option>
-              <option value="PREFER_NOT_TO_DISCLOSE">Prefer Not To Disclose</option>
+              <option value="PREFER_NOT_TO_DISCLOSE">
+                Prefer Not To Disclose
+              </option>
             </select>
             {formik.touched.monthlyIncomeOfFather &&
               formik.errors.monthlyIncomeOfFather && (

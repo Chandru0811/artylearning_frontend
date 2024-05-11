@@ -32,6 +32,8 @@ const AddParentGuardian = forwardRef(
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
+    const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
+      useState(null);
 
     const formik = useFormik({
       initialValues: {
@@ -47,6 +49,7 @@ const AddParentGuardian = forwardRef(
               mobileNumbers: parent.mobileNumbers || "",
               postalCodes: parent.postalCodes || "",
               addresses: parent.addresses || "",
+              primaryContact: parent.primaryContact || "",
             }))
           : [],
       },
@@ -65,6 +68,8 @@ const AddParentGuardian = forwardRef(
             formDatas.append(`mobileNumbers`, parent.mobileNumbers);
             formDatas.append(`postalCodes`, parent.postalCodes);
             formDatas.append(`addresses`, parent.addresses);
+            // formDatas.append(`primaryContact`, parent.primaryContact);
+            formDatas.append(`primaryContact`, parent.primaryContact ? true : false );
           });
 
           const response = await api.post(
@@ -84,12 +89,11 @@ const AddParentGuardian = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          if(error?.response?.status === 500){
-            toast.warning("Please Fill All the fields to continue")
-          }else{
+          if (error?.response?.status === 500) {
+            toast.warning("Please Fill All the fields to continue");
+          } else {
             toast.error(error?.response?.data?.message);
           }
-          
         }
       },
     });
@@ -109,6 +113,7 @@ const AddParentGuardian = forwardRef(
                   <div className="container pt-3">
                     <div className="row mt-2">
                       <div className="col-lg-6 col-md-6 col-12">
+                        <div className="text-start mt-2"></div>
                         <div className="text-start">
                           <label htmlFor="" className="mb-1 fw-medium">
                             <small>Parents / Guardian Name</small>
@@ -241,6 +246,42 @@ const AddParentGuardian = forwardRef(
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6 col-12">
+                        <div className="text-end">
+                          <label htmlFor="" className="my-1 fw-bold">
+                            Primary Contact
+                          </label>
+                          <input
+                            type="radio"
+                            name={`parentInformation[${index}].primaryContact`}
+                            className="form-check-input ms-3 mt-2"
+                            checked={selectedPrimaryContactIndex === index}
+                            onChange={(e) => {
+                              const isChecked = e.target.checked;
+                              const newIndex = isChecked ? index : null;
+
+                              // If a radio button is checked, set its value to true
+                              formik.setFieldValue(
+                                `parentInformation[${index}].primaryContact`,
+                                isChecked ? true : false
+                              );
+
+                              // If a radio button is checked, deselect the previously selected radio button
+                              if (
+                                isChecked &&
+                                selectedPrimaryContactIndex !== null &&
+                                selectedPrimaryContactIndex !== index
+                              ) {
+                                formik.setFieldValue(
+                                  `parentInformation[${selectedPrimaryContactIndex}].primaryContact`,
+                                  false
+                                );
+                              }
+
+                              setSelectedPrimaryContactIndex(newIndex);
+                            }}
+                            onBlur={formik.handleBlur}
+                          />
+                        </div>
                         <div className="text-start">
                           <label htmlFor="" className="mb-1 fw-medium">
                             <small>Occupation</small>
