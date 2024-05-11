@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AssessmentPursuers = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [assessmentAvailable, setAssessmentAvailable] = useState(false);
     const [PursuerAssessmentId, setPursuerAssessmentId] = useState(false);
     const { leadId } = useParams();
@@ -132,6 +132,7 @@ const AssessmentPursuers = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         data.leadId = leadId;
         if (assessmentAvailable) {
           try {
@@ -153,6 +154,8 @@ const AssessmentPursuers = forwardRef(
             }
           } catch (error) {
             toast.error(error);
+          } finally {
+            setLoadIndicators(false);
           }
         } else {
           try {
@@ -197,7 +200,9 @@ const AssessmentPursuers = forwardRef(
           setPursuerAssessmentId(
             PursuerResponse.data.leadDoAssessmentArtyPursuers[0].id
           );
-          formik.setValues(PursuerResponse.data.leadDoAssessmentArtyPursuers[0])
+          formik.setValues(
+            PursuerResponse.data.leadDoAssessmentArtyPursuers[0]
+          );
         }
       };
       getData();
