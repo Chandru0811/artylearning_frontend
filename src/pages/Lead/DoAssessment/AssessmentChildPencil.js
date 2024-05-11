@@ -32,87 +32,87 @@ const AssessmentChildPencil = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        setLoadIndicators(true);
         console.log("Bank Datas:", data);
-        setFormData((prv) => ({ ...prv, ...data }));
-        if (assessmentAvailable) {
-          try {
-            const response = await api.put(
-              `/updateLeadDoAssessment/${assessmentId}`,
-              data,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            if (response.status === 200) {
-              const leadId = response.data.leadId;
-              toast.success(response.data.message);
-              const assesmentId = assessmentId;
-              setFormData((prv) => ({
-                ...prv,
-                ...data,
-                assesmentId,
-              }));
-              console.log("Lead Id: ", response.data.leadId);
-              handleNext();
-            } else {
-              toast.error(response.data.message);
-            }
-          } catch (error) {
-            toast.error(error);
-          } finally {
-            setLoadIndicators(false);
-          }
-        } else {
-          try {
-            const response = await api.post("/createLeadDoAssessment", data, {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-            if (response.status === 201) {
-              const leadId = response.data.leadId;
-              toast.success(response.data.message);
-              const assesmentId = response.data.assessmentId;
+        // setLoadIndicators(true);
+        // setFormData((prv) => ({ ...prv, ...data }));
+        // if (assessmentAvailable) {
+        //   try {
+        //     const response = await api.put(
+        //       `/updateLeadDoAssessment/${assessmentId}`,
+        //       data,
+        //       {
+        //         headers: {
+        //           "Content-Type": "application/json",
+        //         },
+        //       }
+        //     );
+        //     if (response.status === 200) {
+        //       const leadId = response.data.leadId;
+        //       toast.success(response.data.message);
+        //       const assesmentId = assessmentId;
+        //       setFormData((prv) => ({
+        //         ...prv,
+        //         ...data,
+        //         assesmentId,
+        //       }));
+        //       console.log("Lead Id: ", response.data.leadId);
+        //       handleNext();
+        //     } else {
+        //       toast.error(response.data.message);
+        //     }
+        //   } catch (error) {
+        //     toast.error(error);
+        //   } finally {
+        //     setLoadIndicators(false);
+        //   }
+        // } else {
+        //   try {
+        //     const response = await api.post("/createLeadDoAssessment", data, {
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //     });
+        //     if (response.status === 201) {
+        //       const leadId = response.data.leadId;
+        //       toast.success(response.data.message);
+        //       const assesmentId = response.data.assessmentId;
 
-              setFormData((prv) => ({
-                ...prv,
-                ...data,
-                assesmentId,
-              }));
-              console.log("Lead Id: ", response.data.leadId);
-              handleNext();
-            } else {
-              toast.error(response.data.message);
-            }
-          } catch (error) {
-            toast.error(error);
-          }
-        }
+        //       setFormData((prv) => ({
+        //         ...prv,
+        //         ...data,
+        //         assesmentId,
+        //       }));
+        //       console.log("Lead Id: ", response.data.leadId);
+        //       handleNext();
+        //     } else {
+        //       toast.error(response.data.message);
+        //     }
+        //   } catch (error) {
+        //     toast.error(error);
+        //   }
+        // }
       },
     });
 
-    useEffect(() => {
-      const getData = async () => {
-        const response = await api.get(
-          `/getLeadAssessmentDataByLeadId/${leadId}`
-        );
-        if (response?.data?.leadDoAssessmentModel?.length > 0) {
-          setAssessmentAvailable(true);
-          setAssessmentId(response.data.leadDoAssessmentModel[0].id);
-          formik.setValues({
-            ...response.data.leadDoAssessmentModel[0],
-          });
-        } else {
-          const leadResponse = await api.get(
-            `/getAllLeadInfoWithReferrerById/${leadId}`
-          );
-        }
-      };
-      getData();
-    }, []);
+    // useEffect(() => {
+    //   const getData = async () => {
+    //     const response = await api.get(
+    //       `/getLeadAssessmentDataByLeadId/${leadId}`
+    //     );
+    //     if (response?.data?.leadDoAssessmentModel?.length > 0) {
+    //       setAssessmentAvailable(true);
+    //       setAssessmentId(response.data.leadDoAssessmentModel[0].id);
+    //       formik.setValues({
+    //         ...response.data.leadDoAssessmentModel[0],
+    //       });
+    //     } else {
+    //       const leadResponse = await api.get(
+    //         `/getAllLeadInfoWithReferrerById/${leadId}`
+    //       );
+    //     }
+    //   };
+    //   getData();
+    // }, []);
 
     useImperativeHandle(ref, () => ({
       AssessmentChildPencil: formik.handleSubmit,
