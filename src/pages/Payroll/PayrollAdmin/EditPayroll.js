@@ -219,7 +219,7 @@ function EditPayroll() {
               </Link>
               &nbsp;&nbsp;
               <button type="submit" className="btn btn-sm btn-button">
-                Save
+                Update
               </button>
             </div>
           </div>
