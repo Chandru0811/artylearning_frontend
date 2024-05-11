@@ -29,9 +29,9 @@ function Header({ onLogout }) {
               {userName}
             </button>
             <ul class="dropdown-menu px-2">
-            <li style={{ cursor: "pointer" }} onClick={handleSwitchAccount}>
+              {/* <li style={{ cursor: "pointer" }} onClick={handleSwitchAccount}>
                 Account
-              </li>
+              </li> */}
               <li style={{ cursor: "pointer" }} onClick={handelLogOutClick}>
                 Log out
               </li>

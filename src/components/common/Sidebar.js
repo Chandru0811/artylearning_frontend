@@ -85,37 +85,37 @@ function Sidebar() {
           {
             title: "Attendance",
             path: "/staffing/attendance",
-            access: storedScreens.teacherIndex,
-          },
-          {
-            title: "Leave Admin",
-            path: "/leaveadmin",
-            access: true,
+            access: storedScreens.staffAttendanceIndex,
           },
           {
             title: "Leave",
+            path: "/leaveadmin",
+            access: storedScreens.leaveAdminIndex,
+          },
+          {
+            title: "Leave Request",
             path: "/leave",
-            access: true,
+            access: storedScreens.leaveIndex,
           },
           {
             title: "Holiday",
             path: "/holiday",
-            access: true,
+            access: storedScreens.holidayIndex,
           },
           {
             title: "Deduction",
             path: "/deduction",
-            access: true,
+            access: storedScreens.deductDepositIndex,
           },
           {
             title: "Payroll",
             path: "/payrolladmin",
-            access: true,
+            access: storedScreens.payrollIndex,
           },
           {
             title: "Payslip",
             path: "/employeepayslip",
-            access: true,
+            access: storedScreens.payslipIndex,
           },
           {
             title: "Role & Matrix",
