@@ -91,8 +91,13 @@ const AddEmergencyContactModel = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
-        } finally {
+          if(error?.response?.status === 400  || error?.response?.status === 500 ){
+            toast.warning("Please Fill The All Feilds")
+          }else{
+            // toast.error(error?.response?.data?.message);
+            toast.warning("Please Fill The All Feilds")
+          }
+        }finally {
           setLoadIndicator(false);
         }
       },

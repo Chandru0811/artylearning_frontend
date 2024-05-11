@@ -10,7 +10,7 @@ import BlockImg from "../.././assets/images/Block_Img1.jpg";
 function StaffView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  // console.log(data);
+  console.log("Api Staff data:",data);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   useEffect(() => {

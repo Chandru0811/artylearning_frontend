@@ -116,7 +116,7 @@ const Course = () => {
                   {data.status === "Active" ? (
                     <span className="badge badges-Green">Active</span>
                   ) : (
-                    <span className="badge badges-Red">In Active</span>
+                    <span className="badge badges-Red">Inactive</span>
                   )}
                 </td>
                 <td>
