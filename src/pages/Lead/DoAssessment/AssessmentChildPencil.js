@@ -167,7 +167,7 @@ const AssessmentChildPencil = forwardRef(
                   <label
                     class="plan-content"
                     for="PLAMERGRASP"
-                    style={{ padding: "10px" }}
+                    style={{ padding: "10px 15px" }}
                   >
                     <img
                       src={Fisted}
