@@ -19,10 +19,10 @@ const Student = () => {
 
   useEffect(() => {
     const getCenterData = async () => {
-      try{
+      try {
         const response = await api.get("/getAllStudentDetails");
         setDatas(response.data);
-      }catch (error) {
+      } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
@@ -85,13 +85,13 @@ const Student = () => {
       ) : (
         <div className="container my-4">
           <div className="my-3 d-flex justify-content-end">
-          {storedScreens?.studentListingCreate && (
-            <Link to="/student/add">
-              <button type="button" className="btn btn-button btn-sm">
-                Add <i class="bx bx-plus"></i>
-              </button>
-            </Link>
-          )}
+            {storedScreens?.studentListingCreate && (
+              <Link to="/student/add">
+                <button type="button" className="btn btn-button btn-sm">
+                  Add <i class="bx bx-plus"></i>
+                </button>
+              </Link>
+            )}
           </div>
           <table ref={tableRef} className="display">
             <thead>
@@ -122,26 +122,26 @@ const Student = () => {
                   <td>{data.status}</td> */}
                   <td>
                     <div className="d-flex">
-                    {storedScreens?.studentListingRead && (
-                      <Link to={`/student/view/${data.id}`}>
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                    )}
-                    {storedScreens?.studentListingUpdate && (
-                      <Link to={`/student/edit/${data.id}`}>
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                    )}
-                    {storedScreens?.studentListingDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteStudentDetail/${data.id}`}
-                      />
-                    )}
+                      {storedScreens?.studentListingRead && (
+                        <Link to={`/student/view/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEye />
+                          </button>
+                        </Link>
+                      )}
+                      {storedScreens?.studentListingUpdate && (
+                        <Link to={`/student/edit/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                      )}
+                      {storedScreens?.studentListingDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteStudentDetail/${data.id}`}
+                        />
+                      )}
                     </div>
                   </td>
                 </tr>
