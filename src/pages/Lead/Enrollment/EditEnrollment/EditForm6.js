@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 
-const EditForm6 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditForm6 = forwardRef(({ formData,setLoadIndicators,setFormData, handleNext }, ref) => {
   const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
@@ -22,6 +22,7 @@ const EditForm6 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicators(true);
       try {
         const response = await api.put(
           `/updateLeadInfo/${formData.id}`,
@@ -42,6 +43,8 @@ const EditForm6 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

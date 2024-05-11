@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
   enquiryDate: Yup.string().required("*Enquiry Date is required!"),
 });
 
-const EditForm5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const [centerData, setCenterData] = useState(null);
 
   const formik = useFormik({
@@ -36,6 +36,7 @@ const EditForm5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       try {
         const response = await api.put(`/updateLeadInfo/${formData.id}`, data, {
           headers: {
@@ -51,6 +52,8 @@ const EditForm5 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

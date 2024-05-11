@@ -20,6 +20,7 @@ function StaffEdit() {
   const { staff_id } = useParams();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const childRef = React.useRef();
   const [formData, setFormData] = useState({ staff_id });
   console.log("perant", formData);
@@ -142,6 +143,7 @@ function StaffEdit() {
                 ref={childRef}
                 setFormData={setFormData}
                 handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
               />
             )}
 
@@ -151,6 +153,7 @@ function StaffEdit() {
                 ref={childRef}
                 setFormData={setFormData}
                 handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
               />
             )}
 
@@ -160,6 +163,7 @@ function StaffEdit() {
                 ref={childRef}
                 setFormData={setFormData}
                 handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
               />
             )}
 
@@ -169,6 +173,7 @@ function StaffEdit() {
                 ref={childRef}
                 setFormData={setFormData}
                 handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
               />
             )}
 
@@ -178,6 +183,7 @@ function StaffEdit() {
                 ref={childRef}
                 setFormData={setFormData}
                 handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
               />
             )}
 
@@ -187,6 +193,7 @@ function StaffEdit() {
                 ref={childRef}
                 setFormData={setFormData}
                 handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
               />
             )}
             {activeStep === 6 && (
@@ -195,6 +202,7 @@ function StaffEdit() {
                 ref={childRef}
                 setFormData={setFormData}
                 handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
               />
             )}
 
@@ -204,6 +212,7 @@ function StaffEdit() {
                 ref={childRef}
                 setFormData={setFormData}
                 handleNext={handleNext}
+                setLoadIndicators={setLoadIndicator}
               />
             )}
 
@@ -220,13 +229,20 @@ function StaffEdit() {
               <div style={{ flex: "1 1 auto" }}></div>
 
               <button
-                type="submit"
-                className="btn btn-button btn-sm"
-                onClick={handleButtonClick}
-                style={{ padding: "7px" }}
-              >
-                {activeStep === steps.length - 1 ? "Submit" : "Save and Next"}
-              </button>
+              type="submit"
+              onClick={handleButtonClick}
+              style={{ padding: "7px" }}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
+            </button>
             </div>
           </React.Fragment>
         )}

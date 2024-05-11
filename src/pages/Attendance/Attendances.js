@@ -14,6 +14,7 @@ function Attendances() {
   // const [courseData, setCourseData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("1");
   // const [selectedCourse, setSelectedCourse] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedBatch, setSelectedBatch] = useState("1");
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [count, setCount] = useState(0);
@@ -47,6 +48,7 @@ function Attendances() {
   }, []);
 
   const fetchData = async () => {
+    setLoadIndicator(true);
     try {
       const requestBody = {
         centerId: selectedCenter,
@@ -61,6 +63,8 @@ function Attendances() {
       setAttendanceData(response.data);
     } catch (error) {
       toast.error("Error fetching data:", error);
+    } finally {
+      setLoadIndicator(false);
     }
   };
 
@@ -207,11 +211,24 @@ function Attendances() {
           </div>
           <div className="col-md-4 col-12 d-flex align-items-end mb-3">
             <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Search
+            </button>
+            {/* <button
               className="btn btn-light btn-button btn-sm mt-3"
               onClick={handelSubmitData}
             >
               Search
-            </button>{" "}
+            </button> */}
             &nbsp;&nbsp;
             {/* <button
               className="btn btn-light btn-button2 btn-sm mt-3"
@@ -437,10 +454,17 @@ function Attendances() {
                           {storedScreens?.attendanceUpdate && (
                             <button
                               className="btn btn-button"
+                              disabled={loadIndicator}
                               onClick={() =>
                                 handleSubmit(attendanceIndex, attendanceItem)
                               }
                             >
+                              {loadIndicator && (
+                                <span
+                                  className="spinner-border spinner-border-sm me-2"
+                                  aria-hidden="true"
+                                ></span>
+                              )}
                               Submit
                             </button>
                           )}

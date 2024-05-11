@@ -16,6 +16,7 @@ function HolidayAdd() {
     holidayDescription : Yup.string().required("*Holiday Description is required"),
   });
   const [centerData, setCenterData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -27,6 +28,7 @@ function HolidayAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       console.log(values);
       try {
         const payload = {
@@ -52,6 +54,8 @@ function HolidayAdd() {
         toast.error(
           error.message || "An error occurred while submitting the form"
         );
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -82,9 +86,15 @@ function HolidayAdd() {
                   </button>
                 </Link>
                 &nbsp;&nbsp;
-                <button type="submit" className="btn btn-sm btn-button">
-                  Save
-                </button>
+                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                Save
+              </button>
               </div>
             </div>
             <div className="row mt-3">

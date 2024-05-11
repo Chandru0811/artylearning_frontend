@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
   status: Yup.string().required("*Status is required"),
 });
 
-const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
 
   const formik = useFormik({
@@ -45,6 +45,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       try {
         const response = await api.put(`/updateLeadInfo/${formData.id}`, data, {
           headers: {
@@ -60,6 +61,8 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

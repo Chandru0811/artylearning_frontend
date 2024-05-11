@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
     .required("*Confirm Password is required"),
 });
 const StaffLoginAdd = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({
       initialValues: {
         password: formData.password,
@@ -22,6 +22,7 @@ const StaffLoginAdd = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
+        setLoadIndicators(true);
         try {
           const response = await api.post(
             `/createUserLoginInfo/${formData.user_id}`,
@@ -41,6 +42,8 @@ const StaffLoginAdd = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

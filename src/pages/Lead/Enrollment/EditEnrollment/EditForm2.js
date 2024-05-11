@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
   canReadSimpleSentence: Yup.string().required("*Select a Simple Sentence"),
 });
 
-const EditForm2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditForm2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       pencilGrip: formData.pencilGrip || "",
@@ -27,6 +27,7 @@ const EditForm2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       const uppercase = data.writeUpperAToZ === "Yes" ? true : false;
       const lowercase = data.writeLowerAToZ === "Yes" ? true : false;
       const sound = data.soundOfAToZ === "Yes" ? true : false;
@@ -57,6 +58,8 @@ const EditForm2 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

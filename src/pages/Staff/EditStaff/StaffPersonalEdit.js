@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
   citizenship: Yup.string().required("*CitizenShip is required!"),
 });
 const StaffPersonalEdit = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({
       initialValues: {
         teacherName: formData.teacherName || "",
@@ -28,6 +28,7 @@ const StaffPersonalEdit = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        setLoadIndicators(true);
         setFormData((prv) => ({ ...prv, ...data }));
         // console.log("Api Data:", data);
         data.photo = null;
@@ -60,6 +61,8 @@ const StaffPersonalEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally{
+          setLoadIndicators(false);
         }
       },
     });

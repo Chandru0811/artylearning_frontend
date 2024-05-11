@@ -102,7 +102,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                       aria-hidden="true"
                     ></span>
                   )}
-                Save
+                Update
               </button>
         </div>
         <div className="container">

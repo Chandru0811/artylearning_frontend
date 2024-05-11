@@ -16,7 +16,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const StaffContractAdd = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
     const formik = useFormik({
       initialValues: {
@@ -46,6 +46,7 @@ const StaffContractAdd = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
+        setLoadIndicators(true);
         try {
           const response = await api.post(
             `/createUserContractCreation/${formData.user_id}`,
@@ -65,6 +66,8 @@ const StaffContractAdd = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

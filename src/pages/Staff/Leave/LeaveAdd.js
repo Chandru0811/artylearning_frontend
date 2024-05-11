@@ -18,6 +18,7 @@ const validationSchema = Yup.object({
 
 function LeaveAdd() {
   const [centerData, setCenterData] = useState(null);
+  
   const [datas, setDatas] = useState([]);
   const userId = sessionStorage.getItem("userId");
   const centerId = sessionStorage.getItem("centerId");
@@ -27,6 +28,7 @@ function LeaveAdd() {
   );
 
   const [daysDifference, setDaysDifference] = useState(0);
+  const [loadIndicator, setLoadIndicator] = useState(false);
  
   const calculateDays = (fromDate, toDate) => {
     const fromDateObj = new Date(fromDate);
@@ -68,6 +70,7 @@ function LeaveAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       console.log("Leave Data:", values);
 
       let selectedCenterName = "";
@@ -112,6 +115,8 @@ function LeaveAdd() {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -142,7 +147,13 @@ function LeaveAdd() {
                 </button>
               </Link>
               &nbsp;&nbsp;
-              <button type="submit" className="btn btn-sm btn-button">
+              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 Save
               </button>
             </div>

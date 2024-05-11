@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
   file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalAdd = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({
       initialValues: {
         role: "staff",
@@ -52,6 +52,7 @@ const StaffPersonalAdd = forwardRef(
       //   }
       // },
       onSubmit: async (values) => {
+        setLoadIndicators(true);
         try {
           const formData = new FormData();
 
@@ -86,6 +87,8 @@ const StaffPersonalAdd = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });

@@ -20,6 +20,7 @@ export default function EnrollmentEdit() {
 
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({ id });
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
 
@@ -93,6 +94,7 @@ export default function EnrollmentEdit() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 1 && (
@@ -101,6 +103,7 @@ export default function EnrollmentEdit() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 2 && (
@@ -109,6 +112,7 @@ export default function EnrollmentEdit() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 3 && (
@@ -117,6 +121,7 @@ export default function EnrollmentEdit() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 4 && (
@@ -125,6 +130,7 @@ export default function EnrollmentEdit() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           {activeStep === 5 && (
@@ -133,6 +139,7 @@ export default function EnrollmentEdit() {
               ref={childRef}
               setFormData={setFormData}
               handleNext={handleNext}
+              setLoadIndicators={setLoadIndicator}
             />
           )}
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
@@ -146,14 +153,28 @@ export default function EnrollmentEdit() {
             </button>
 
             <div style={{ flex: "1 1 auto" }}></div>
-
             <button
+              type="submit"
+              onClick={handleButtonClick}
+              style={{ padding: "7px" }}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
+            </button>
+            {/* <button
               className="btn btn-button btn-sm mt-5 mb-3"
               onClick={handleButtonClick}
               style={{ padding: "7px" }}
             >
               {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
-            </button>
+            </button> */}
           </div>
         </React.Fragment>
       </div>

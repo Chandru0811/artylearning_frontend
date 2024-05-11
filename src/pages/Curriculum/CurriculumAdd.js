@@ -9,6 +9,7 @@ import api from "../../config/URL";
 
 function CurriculumAdd({ onSuccess, course_id }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -31,6 +32,7 @@ function CurriculumAdd({ onSuccess, course_id }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log(values);
       values.courseId = course_id;
       try {
@@ -49,6 +51,8 @@ function CurriculumAdd({ onSuccess, course_id }) {
         }
       } catch (error) {
         toast.error(error);
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -99,7 +103,7 @@ function CurriculumAdd({ onSuccess, course_id }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Curriculum Code.<span className="text-danger">*</span>
+                    Curriculum Code<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -147,7 +151,14 @@ function CurriculumAdd({ onSuccess, course_id }) {
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit">
+              <Button variant="danger" type="submit"disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
                 Submit
               </Button>
             </Modal.Footer>

@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
   relationToChild: Yup.string().required("*Relationship is required"),
 });
 
-const EditForm4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       address: formData.address || "",
@@ -38,6 +38,7 @@ const EditForm4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       try {
         const response = await api.put(`/updateLeadInfo/${formData.id}`, data, {
           headers: {
@@ -53,6 +54,8 @@ const EditForm4 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally {
+        setLoadIndicators(false);
       }
     },
   });

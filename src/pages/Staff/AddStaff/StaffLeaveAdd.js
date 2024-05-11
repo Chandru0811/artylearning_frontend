@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
     .required("*Carry Forward Leave is required!"),
 });
 const StaffLeaveAdd = forwardRef(
-  ({ formData, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({
       initialValues: {
         year: formData.year,
@@ -32,6 +32,7 @@ const StaffLeaveAdd = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
+        setLoadIndicators(true);
         try {
           const response = await api.post(
             `/createUserLeaveCreation/${formData.user_id}`,
@@ -51,6 +52,8 @@ const StaffLeaveAdd = forwardRef(
           }
         } catch (error) {
           toast.error(error);
+        }finally {
+          setLoadIndicators(false);
         }
       },
     });
