@@ -16,6 +16,7 @@ const Leave = () => {
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
   // console.log("centerData", centerData);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
     try {
@@ -72,11 +73,13 @@ const Leave = () => {
   return (
     <div className="container my-4">
       <div className="my-5 d-flex justify-content-end">
-        <Link to="/leave/add">
-          <button type="button" className="btn btn-button btn-sm">
-            Add <i class="bx bx-plus"></i>
-          </button>
-        </Link>
+        {storedScreens?.leaveCreate && (
+          <Link to="/leave/add">
+            <button type="button" className="btn btn-button btn-sm">
+              Add <i class="bx bx-plus"></i>
+            </button>
+          </Link>
+        )}
       </div>
       {loading ? (
         <div className="loader-container">

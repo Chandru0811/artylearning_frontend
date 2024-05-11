@@ -436,6 +436,29 @@ const AssessmentPursuers = forwardRef(
                   <tr>
                     <th scope="row"></th>
                     <td>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="inlineCheckbox1"
+                          name="sightWords"
+                          value="NIL"
+                          checked={
+                            formik.values.sightWords &&
+                            formik.values.sightWords.includes("NIL")
+                          }
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        <label class="form-check-label" for="flexCheckDefault">
+                          Nil
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row"></th>
+                    <td>
                       {formik.touched.sightWords && formik.errors.sightWords ? (
                         <div className="text-danger">
                           {formik.errors.sightWords}
@@ -2009,6 +2032,29 @@ const AssessmentPursuers = forwardRef(
                         />
                         <label class="form-check-label" for="flexCheckDefault">
                           wr
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row"></th>
+                    <td>
+                      <div class="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="hbrothersSightWords"
+                          value="NIL"
+                          checked={
+                            formik.values.hbrothersSightWords &&
+                            formik.values.hbrothersSightWords.includes("NIL")
+                          }
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          id="flexCheckDefault"
+                        />
+                        <label class="form-check-label" for="flexCheckDefault">
+                          Nil
                         </label>
                       </div>
                     </td>

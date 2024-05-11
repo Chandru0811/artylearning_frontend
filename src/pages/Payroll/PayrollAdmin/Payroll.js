@@ -11,7 +11,7 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 
 const Payroll = () => {
   const tableRef = useRef(null);
-
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
@@ -81,11 +81,13 @@ const Payroll = () => {
   return (
     <div className="container">
       <div className="col-12 text-end my-3">
-        <Link to={`/payrolladmin/add`}>
-          <button type="button" className="btn btn-button btn-sm">
-            Add <i class="bx bx-plus"></i>
-          </button>
-        </Link>
+        {storedScreens?.payrollCreate && (
+          <Link to={`/payrolladmin/add`}>
+            <button type="button" className="btn btn-button btn-sm">
+              Add <i class="bx bx-plus"></i>
+            </button>
+          </Link>
+        )}
       </div>
       {loading ? (
         <div className="loader-container">
@@ -98,67 +100,73 @@ const Payroll = () => {
           </div>
         </div>
       ) : (
-      <table ref={tableRef} className="display">
-        <thead>
-          <tr>
-            <th scope="col">S No</th>
-            <th scope="col">Centre Name</th>
-            <th scope="col">Emplopee Name</th>
-            <th scope="col">Bonus</th>
-            {/* <th scope="col">Gross Pay</th> */}
-            {/* <th scope="col">Deduction</th> */}
-            <th scope="col">Net Pay</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {datas.map((data, index) => (
-            <tr key={index}>
-              <th scope="row">{index + 1}</th>
-              <td>
-                {centerData &&
-                  centerData.map((center) =>
-                    parseInt(data.centerId) === center.id
-                      ? center.centerNames || "--"
-                      : ""
-                  )}
-              </td>
-              <td>{data.employeeName}</td>
-              <td>{data.bonus}</td>
-              {/* <td>{data.grossPay}</td> */}
-              {/* <td>{data.deduction}</td> */}
-              <td>{data.netPay}</td>
-              <td>
-                {data.status === "APPROVED" ? (
-                  <span className="badge badges-Green">Approved</span>
-                ) : data.status === "PENDING" ? (
-                  <span className="badge badges-Yellow">Pending</span>
-                ) : (
-                  <span className="badge badges-Red">Rejected</span>
-                )}
-              </td>
-              <td>
-                <Link to={`/payrolladmin/view/${data.id}`}>
-                  <button className="btn btn-sm">
-                    <FaEye />
-                  </button>
-                </Link>
-                <Link to={`/payrolladmin/edit/${data.id}`}>
-                  <button className="btn btn-sm">
-                    <FaEdit />
-                  </button>
-                </Link>
-                <Delete
-                  onSuccess={refreshData}
-                  path={`/deleteUserPayroll/${data.id}`}
-                  style={{ display: "inline-block" }}
-                />
-              </td>
+        <table ref={tableRef} className="display">
+          <thead>
+            <tr>
+              <th scope="col">S No</th>
+              <th scope="col">Centre Name</th>
+              <th scope="col">Emplopee Name</th>
+              <th scope="col">Bonus</th>
+              {/* <th scope="col">Gross Pay</th> */}
+              {/* <th scope="col">Deduction</th> */}
+              <th scope="col">Net Pay</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {datas.map((data, index) => (
+              <tr key={index}>
+                <th scope="row">{index + 1}</th>
+                <td>
+                  {centerData &&
+                    centerData.map((center) =>
+                      parseInt(data.centerId) === center.id
+                        ? center.centerNames || "--"
+                        : ""
+                    )}
+                </td>
+                <td>{data.employeeName}</td>
+                <td>{data.bonus}</td>
+                {/* <td>{data.grossPay}</td> */}
+                {/* <td>{data.deduction}</td> */}
+                <td>{data.netPay}</td>
+                <td>
+                  {data.status === "APPROVED" ? (
+                    <span className="badge badges-Green">Approved</span>
+                  ) : data.status === "PENDING" ? (
+                    <span className="badge badges-Yellow">Pending</span>
+                  ) : (
+                    <span className="badge badges-Red">Rejected</span>
+                  )}
+                </td>
+                <td>
+                  {storedScreens?.payrollRead && (
+                    <Link to={`/payrolladmin/view/${data.id}`}>
+                      <button className="btn btn-sm">
+                        <FaEye />
+                      </button>
+                    </Link>
+                  )}
+                  {storedScreens?.payrollUpdate && (
+                    <Link to={`/payrolladmin/edit/${data.id}`}>
+                      <button className="btn btn-sm">
+                        <FaEdit />
+                      </button>
+                    </Link>
+                  )}
+                  {storedScreens?.payrollDelete && (
+                    <Delete
+                      onSuccess={refreshData}
+                      path={`/deleteUserPayroll/${data.id}`}
+                      style={{ display: "inline-block" }}
+                    />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );

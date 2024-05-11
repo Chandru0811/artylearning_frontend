@@ -592,7 +592,7 @@ function Leadview() {
                           <div className="col-6">
                             <p className="text-muted text-sm">
                               :{" "}
-                              {data.fathersDateOfBirth
+                              {data.mothersDateOfBirth
                                 ? data.mothersDateOfBirth.substring(0, 10)
                                 : "--"}
                             </p>
@@ -618,7 +618,7 @@ function Leadview() {
                           </div>
                           <div className="col-6">
                             <p className="text-muted text-sm">
-                              : {data.mothersEmailAddress || "--"}
+                            : {data.mothersEmailAddress || "--"}
                             </p>
                           </div>
                         </div>

@@ -6,7 +6,7 @@ import api from "../../../config/URL";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  workingDays: Yup.date().required("*Working Days is required"),
+  workingDays: Yup.string().required("*Working Days is required"),
   userContractSalary: Yup.number()
     .typeError("*Salary Must be numbers")
     .notRequired(),

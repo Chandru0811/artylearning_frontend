@@ -15,12 +15,8 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  fisted: Yup.string().required("*Select Fisted Pencil Grip"),
-  tripod: Yup.string().required("*Select Tripod Pencil Grip"),
-  plamerGrap: Yup.string().required("*Select Plamer Grasp Pencil Grip"),
-  foreFinger: Yup.string().required(
-    "*Select Fore Finger And Thumb Pencil Grip"
-  ),
+  pencilGrip: Yup.string().required("*Select a Pencil Grip"),
+  pencilGripOptions: Yup.string().required("*Select a Pencil Grip Options"),
 });
 
 const AssessmentChildPencil = forwardRef(
@@ -31,90 +27,89 @@ const AssessmentChildPencil = forwardRef(
     console.log(assessmentId);
     const formik = useFormik({
       initialValues: {
-        fisted: formData.fisted || "",
-        tripod: formData.tripod || "",
-        plamerGrap: formData.plamerGrap || "",
-        foreFinger: formData.foreFinger || "",
+        pencilGrip: formData.pencilGrip || "",
+        pencilGripOptions: formData.pencilGripOptions || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        setFormData((prv) => ({ ...prv, ...data }));
-        if (assessmentAvailable) {
-          try {
-            const response = await api.put(
-              `/updateLeadDoAssessment/${assessmentId}`,
-              data,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            if (response.status === 200) {
-              // const leadId = response.data.leadId;
-              toast.success(response.data.message);
-              const assesmentId = assessmentId;
-              setFormData((prv) => ({
-                ...prv,
-                ...data,
-                assesmentId,
-              }));
-              // console.log("Lead Id: ",response.data.leadId);
-              handleNext();
-            } else {
-              toast.error(response.data.message);
-            }
-          } catch (error) {
-            toast.error(error);
-          }
-        } else {
-          try {
-            const response = await api.post("/createLeadDoAssessment", data, {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-            if (response.status === 201) {
-              // const leadId = response.data.leadId;
-              toast.success(response.data.message);
-              const assesmentId = response.data.assessmentId;
+        console.log("Bank Datas:", data);
+        // setFormData((prv) => ({ ...prv, ...data }));
+        // if (assessmentAvailable) {
+        //   try {
+        //     const response = await api.put(
+        //       `/updateLeadDoAssessment/${assessmentId}`,
+        //       data,
+        //       {
+        //         headers: {
+        //           "Content-Type": "application/json",
+        //         },
+        //       }
+        //     );
+        //     if (response.status === 200) {
+        //       // const leadId = response.data.leadId;
+        //       toast.success(response.data.message);
+        //       const assesmentId = assessmentId;
+        //       setFormData((prv) => ({
+        //         ...prv,
+        //         ...data,
+        //         assesmentId,
+        //       }));
+        //       // console.log("Lead Id: ",response.data.leadId);
+        //       handleNext();
+        //     } else {
+        //       toast.error(response.data.message);
+        //     }
+        //   } catch (error) {
+        //     toast.error(error);
+        //   }
+        // } else {
+        //   try {
+        //     const response = await api.post("/createLeadDoAssessment", data, {
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //     });
+        //     if (response.status === 201) {
+        //       // const leadId = response.data.leadId;
+        //       toast.success(response.data.message);
+        //       const assesmentId = response.data.assessmentId;
 
-              setFormData((prv) => ({
-                ...prv,
-                ...data,
-                assesmentId,
-              }));
-              // console.log("Lead Id: ",response.data.leadId);
-              handleNext();
-            } else {
-              toast.error(response.data.message);
-            }
-          } catch (error) {
-            toast.error(error);
-          }
-        }
+        //       setFormData((prv) => ({
+        //         ...prv,
+        //         ...data,
+        //         assesmentId,
+        //       }));
+        //       // console.log("Lead Id: ",response.data.leadId);
+        //       handleNext();
+        //     } else {
+        //       toast.error(response.data.message);
+        //     }
+        //   } catch (error) {
+        //     toast.error(error);
+        //   }
+        // }
       },
     });
 
-    useEffect(() => {
-      const getData = async () => {
-        const response = await api.get(
-          `/getLeadAssessmentDataByLeadId/${leadId}`
-        );
-        if (response?.data?.leadDoAssessmentModel?.length > 0) {
-          setAssessmentAvailable(true);
-          setAssessmentId(response.data.leadDoAssessmentModel[0].id);
-          formik.setValues({
-            ...response.data.leadDoAssessmentModel[0],
-          });
-        } else {
-          const leadResponse = await api.get(
-            `/getAllLeadInfoWithReferrerById/${leadId}`
-          );
-        }
-      };
-      getData();
-    }, []);
+    // useEffect(() => {
+    //   const getData = async () => {
+    //     const response = await api.get(
+    //       `/getLeadAssessmentDataByLeadId/${leadId}`
+    //     );
+    //     if (response?.data?.leadDoAssessmentModel?.length > 0) {
+    //       setAssessmentAvailable(true);
+    //       setAssessmentId(response.data.leadDoAssessmentModel[0].id);
+    //       formik.setValues({
+    //         ...response.data.leadDoAssessmentModel[0],
+    //       });
+    //     } else {
+    //       const leadResponse = await api.get(
+    //         `/getAllLeadInfoWithReferrerById/${leadId}`
+    //       );
+    //     }
+    //   };
+    //   getData();
+    // }, []);
 
     useImperativeHandle(ref, () => ({
       AssessmentChildPencil: formik.handleSubmit,
@@ -124,193 +119,119 @@ const AssessmentChildPencil = forwardRef(
       <section>
         <form onSubmit={formik.handleSubmit}>
           <div className="py-3">
-            <h5 className="headColor">Child Pencil Grip </h5>
-            <div class="container-fluid row d-flex my-4">
-              <div className="col-12 mb-4">
-                <div className="row mt-3">
-                  <div className="col-md-6 col-12 mb-2">
-                    <label className="form-check-label">
-                      Fisted
-                      <img
-                        src={Tripod}
-                        alt="Tripod"
-                        className="img-fluid"
-                        width={30}
-                        height={30}
-                      />
-                      <span className="text-danger">*</span>
-                    </label>
-                    <div className="d-flex mt-2">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="fisted"
-                        id="STEADY"
-                        value="STEADY"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        checked={formik.values.fisted === "STEADY"}
-                      />
-                      <label className="form-check-label mx-2">Steady</label>
-                      <input
-                        className="form-check-input ms-3"
-                        type="radio"
-                        name="fisted"
-                        id="LOOSE"
-                        value="LOOSE"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        checked={formik.values.fisted === "LOOSE"}
-                      />
-                      <label className="form-check-label mx-2">Loose</label>
+            <h5 className="headColor">Child Pencil Grip</h5>
+            <div className="container">
+              <div class="plans">
+                <div class="plan">
+                  <input type="radio"
+                  className="form-check-input"
+                    name="pencilGrip"
+                    id="FISTED"
+                    value="FISTED"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    checked={formik.values.pencilGrip === "FISTED"}
+                  />
+                  <label class="plan-content" for="FISTED" style={{ padding: "20px" }}>
+                    <img src={Tripod} alt="FISTED" class="img-fluid" width={30} height={30} />
+                    <div class="plan-details">
+                      <span>Fisted</span>
                     </div>
-                    {formik.errors.fisted && formik.touched.fisted && (
-                      <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        {formik.errors.fisted}
-                      </div>
-                    )}
-                  </div>
-                  <div className="col-md-6 col-12 mb-2">
-                    <label className="form-check-label">
-                      Plamer Grasp
-                      <img
-                        src={Fisted}
-                        alt="Plamer Grasp"
-                        className="img-fluid"
-                        width={30}
-                        height={30}
-                      />
-                      <span className="text-danger">*</span>
-                    </label>
-                    <div className="d-flex mt-2">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="plamerGrap"
-                        id="STEADY"
-                        value="STEADY"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        checked={formik.values.plamerGrap === "STEADY"}
-                      />
-                      <label className="form-check-label mx-2">Steady</label>
-                      <input
-                        className="form-check-input ms-3"
-                        type="radio"
-                        name="plamerGrap"
-                        id="LOOSE"
-                        value="LOOSE"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        checked={formik.values.plamerGrap === "LOOSE"}
-                      />
-                      <label className="form-check-label mx-2">Loose</label>
-                    </div>
-                    {formik.errors.plamerGrap && formik.touched.plamerGrap && (
-                      <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        {formik.errors.plamerGrap}
-                      </div>
-                    )}
-                  </div>
+                  </label>
                 </div>
-                <div className="row my-5">
-                  <div className="col-md-6 col-12 mb-2">
-                    <label className="form-check-label">
-                      Tripod
-                      <img
-                        src={Plamer}
-                        alt="Tripod"
-                        className="img-fluid"
-                        width={30}
-                        height={30}
-                      />
-                      <span className="text-danger">*</span>
-                    </label>
-                    <div className="d-flex mt-2">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="tripod"
-                        id="STEADY"
-                        value="STEADY"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        checked={formik.values.tripod === "STEADY"}
-                      />
-                      <label className="form-check-label mx-2">Steady</label>
-                      <input
-                        className="form-check-input ms-3"
-                        type="radio"
-                        name="tripod"
-                        id="LOOSE"
-                        value="LOOSE"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        checked={formik.values.tripod === "LOOSE"}
-                      />
-                      <label className="form-check-label mx-2">Loose</label>
+                <div class="plan">
+                  <input type="radio"
+                  className="form-check-input"
+                    name="pencilGrip"
+                    id="PLAMERGRASP"
+                    value="PLAMERGRASP"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    checked={formik.values.pencilGrip === "PLAMERGRASP"}
+                  />
+                  <label class="plan-content" for="PLAMERGRASP" style={{ padding: "10px" }}>
+                    <img src={Fisted} alt="PLAMERGRASP" class="img-fluid" width={30} height={30} />
+                    <div class="plan-details">
+                      <span>Plamer Grasp</span>
                     </div>
-                    {formik.errors.tripod && formik.touched.tripod && (
-                      <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        {formik.errors.tripod}
-                      </div>
-                    )}
-                  </div>
-                  <div className="col-md-6 col-12 mb-2">
-                    <label className="form-check-label">
-                      Fore Finger And Thumb
-                      <img
-                        src={Fore}
-                        alt="Fore Finger And Thumb"
-                        className="img-fluid"
-                        width={30}
-                        height={30}
-                      />
-                      <span className="text-danger">*</span>
-                    </label>
-                    <div className="d-flex mt-2">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="foreFinger"
-                        id="STEADY"
-                        value="STEADY"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        checked={formik.values.foreFinger === "STEADY"}
-                      />
-                      <label className="form-check-label mx-2">Steady</label>
-                      <input
-                        className="form-check-input ms-3"
-                        type="radio"
-                        name="foreFinger"
-                        id="LOOSE"
-                        value="LOOSE"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        checked={formik.values.foreFinger === "LOOSE"}
-                      />
-                      <label className="form-check-label mx-2">Loose</label>
-                    </div>
-                    {formik.errors.foreFinger && formik.touched.foreFinger && (
-                      <div
-                        className="text-danger mt-1"
-                        style={{ fontSize: "14px" }}
-                      >
-                        {formik.errors.foreFinger}
-                      </div>
-                    )}
-                  </div>
+                  </label>
                 </div>
+                <div class="plan">
+                  <input type="radio"
+                  className="form-check-input"
+                    name="pencilGrip"
+                    id="TRIPOD"
+                    value="TRIPOD"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    checked={formik.values.pencilGrip === "TRIPOD"}
+                  />
+                  <label class="plan-content" for="TRIPOD" style={{ padding: "20px" }}>
+                    <img src={Plamer} alt="TRIPOD" class="img-fluid" width={30} height={30} />
+                    <div class="plan-details">
+                      <span>Tripod</span>
+                    </div>
+                  </label>
+                </div>
+                <div class="plan">
+                  <input type="radio"
+                  className="form-check-input"
+                    name="pencilGrip"
+                    id="FOREFINGERANDTHUMB"
+                    value="FOREFINGERANDTHUMB"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    checked={formik.values.pencilGrip === "FOREFINGERANDTHUMB"}
+                  />
+                  <label class="plan-content" for="FOREFINGERANDTHUMB" style={{ padding: "10px" }}>
+                    <img src={Fore} alt="FOREFINGERANDTHUMB" class="img-fluid" width={30} height={30} />
+                    <div class="plan-details">
+                      <span>Fore Finger And Thumb</span>
+                    </div>
+                  </label>
+                </div>
+                {formik.errors.pencilGrip && formik.touched.pencilGrip && (
+                  <div
+                    className="text-danger mt-1"
+                    style={{ fontSize: "14px" }}
+                  >
+                    {formik.errors.pencilGrip}
+                  </div>
+                )}
+              </div>
+              <div>
+                <div className="d-flex mt-2">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="pencilGripOptions"
+                    id="STEADY"
+                    value="STEADY"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    checked={formik.values.pencilGripOptions === "STEADY"}
+                  />
+                  <label className="form-check-label mx-2">Steady</label>
+                  <input
+                    className="form-check-input ms-3"
+                    type="radio"
+                    name="pencilGripOptions"
+                    id="LOOSE"
+                    value="LOOSE"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    checked={formik.values.pencilGripOptions === "LOOSE"}
+                  />
+                  <label className="form-check-label mx-2">Loose</label>
+                </div>
+                {formik.errors.pencilGripOptions && formik.touched.pencilGripOptions && (
+                  <div
+                    className="text-danger mt-1"
+                    style={{ fontSize: "14px" }}
+                  >
+                    {formik.errors.pencilGripOptions}
+                  </div>
+                )}
               </div>
             </div>
           </div>

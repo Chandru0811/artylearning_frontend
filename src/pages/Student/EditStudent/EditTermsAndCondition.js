@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
+  termsAndConditionSignatureDate: Yup.string().required("*Signature Date is required"),
   agree: Yup.string().required("*Agree Terms and conditions is required!"),
 });
 
@@ -22,6 +23,7 @@ const EditTermsAndCondition = forwardRef(
     const formik = useFormik({
       initialValues: {
         file: null || "",
+        termsAndConditionSignatureDate: formData.termsAndConditionSignatureDate || "",
         agree: formData.agree || "",
       },
       validationSchema: validationSchema,
@@ -30,6 +32,7 @@ const EditTermsAndCondition = forwardRef(
           if (data.stdTermsAndConditionId !== null) {
             const formDatas = new FormData();
             formDatas.append("file", data.file);
+            formDatas.append("termsAndConditionSignatureDate", data.termsAndConditionSignatureDate);
             formDatas.append("agree", data.agree);
             formDatas.append(
               "studentTermsAndConditionId",
@@ -132,7 +135,7 @@ const EditTermsAndCondition = forwardRef(
                 <p class="headColor">Terms & Condition</p>
                 <div className="container py-3">
                   <div className="row">
-                    <div className="col-lg-6 col-md-6 col-12">
+                    <div className="col-md-6 col-12">
                       <div className="text-start">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>Parent Signature</small>
@@ -186,6 +189,27 @@ const EditTermsAndCondition = forwardRef(
                             </div>
                           </div>
                         )}
+                      </div>
+                    </div>
+                    <div className="col-md-6 col-12">
+                      <div className="text-start mt-2">
+                        <label className="mb-1 fw-medium">
+                          <small>Signature Date<span className="text-danger">*</span></small>
+                        </label>
+                        <br />
+                        <input
+                          className="form-control  form-contorl-sm"
+                          name="termsAndConditionSignatureDate"
+                          type="date"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.termsAndConditionSignatureDate}
+                        />
+                        {formik.touched.termsAndConditionSignatureDate && formik.errors.termsAndConditionSignatureDate && (
+                      <div className="text-danger">
+                        <small>{formik.errors.termsAndConditionSignatureDate}</small>
+                      </div>
+                    )}
                       </div>
                     </div>
                   </div>

@@ -15,6 +15,7 @@ const StaffingAttendance = () => {
   console.log("Leave Data:", datas);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
     try {
@@ -81,11 +82,13 @@ const StaffingAttendance = () => {
   return (
     <div className="container my-4">
       <div className="my-3 d-flex align-items-end justify-content-end">
-        <Link to="/staffing/attendance/add">
-          <button type="button" className="btn btn-button btn-sm">
-            Add <i className="bx bx-plus"></i>
-          </button>
-        </Link>
+        {storedScreens?.staffAttendanceCreate && (
+          <Link to="/staffing/attendance/add">
+            <button type="button" className="btn btn-button btn-sm">
+              Add <i className="bx bx-plus"></i>
+            </button>
+          </Link>
+        )}
       </div>
 
       {loading ? (
@@ -135,27 +138,33 @@ const StaffingAttendance = () => {
                 </td>
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
-                    <Link
-                      to={`/staffing/attendance/view/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    >
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                    <Link
-                      to={`/staffing/attendance/edit/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    >
-                      <button className="btn btn-sm">
-                        <FaEdit />
-                      </button>
-                    </Link>
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteUserAttendance/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    />
+                    {storedScreens?.staffAttendanceRead && (
+                      <Link
+                        to={`/staffing/attendance/view/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      >
+                        <button className="btn btn-sm">
+                          <FaEye />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.staffAttendanceUpdate && (
+                      <Link
+                        to={`/staffing/attendance/edit/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      >
+                        <button className="btn btn-sm">
+                          <FaEdit />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.staffAttendanceDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteUserAttendance/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      />
+                    )}
                   </div>
                 </td>
               </tr>
