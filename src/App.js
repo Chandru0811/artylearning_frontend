@@ -67,6 +67,8 @@ function App() {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("userId");
     sessionStorage.removeItem("userName");
+    sessionStorage.removeItem("loginUserId");
+    sessionStorage.removeItem("centerId");
   };
 
   return (

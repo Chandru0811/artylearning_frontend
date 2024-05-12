@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { useFormik } from "formik";
@@ -9,6 +9,15 @@ import api from "../../config/URL";
 
 function Login({ onLogin }) {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if already logged in, redirect to dashboard
+    const isAuthenticated = sessionStorage.getItem("isAuthenticated");
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("*Invalid email address")
@@ -32,15 +41,23 @@ function Login({ onLogin }) {
           },
         });
         if (response.status === 200) {
-          toast.success(response.data.message);
-          sessionStorage.setItem("roleId", response.data.roleId);
-          sessionStorage.setItem("token", response.data.accessToken);
-          sessionStorage.setItem("userId", response.data.userId);
-          sessionStorage.setItem("userName", response.data.role);
-          sessionStorage.setItem("loginUserId", response.data.loginUserId);
-          sessionStorage.setItem("centerId", response.data.centerId);
-          onLogin(response.data.roleId);
-          navigate("/dashboard");
+          const { role } = response.data;
+          if (role === "SMS_PARENT") {
+            toast.warning(
+              "You don't have access to the website. Please log in using Artylearning mobile app."
+            );
+          } else {
+            // Proceed with login for other roles
+            toast.success(response.data.message);
+            sessionStorage.setItem("roleId", response.data.roleId);
+            sessionStorage.setItem("token", response.data.accessToken);
+            sessionStorage.setItem("userId", response.data.userId);
+            sessionStorage.setItem("userName", response.data.role);
+            sessionStorage.setItem("loginUserId", response.data.loginUserId);
+            sessionStorage.setItem("centerId", response.data.centerId);
+            onLogin(response.data.roleId);
+            navigate("/dashboard");
+          }
         } else {
           toast.error(response.data.message);
         }
@@ -48,8 +65,6 @@ function Login({ onLogin }) {
         toast.error("Failed: " + error.message);
       }
 
-      // Pass email and password to onLogin
-      navigate("/login");
       resetForm();
     },
   });
