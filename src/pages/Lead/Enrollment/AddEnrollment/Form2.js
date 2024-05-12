@@ -200,7 +200,7 @@ const Form2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
                 </div>
                 <div class="col-sm-6 col-12 my-3">
                   <label>
-                    Write a-z (Lowercase)<span className="text-danger">*</span>
+                    Write A-Z (Lowercase)<span className="text-danger">*</span>
                   </label>
                   <div className="d-flex">
                     <div class="form-check">
@@ -242,7 +242,7 @@ const Form2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
               <div className="row">
                 <div class="col-sm-6 col-12">
                   <label>
-                    Sounds of (a-z)
+                    Sounds of (A-Z)
                     <span className="text-danger">*</span>
                   </label>
                   <div className="d-flex">
@@ -279,7 +279,7 @@ const Form2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
                 </div>
                 <div class="col-sm-6 col-12 p-0">
                   <label>
-                    Can read simple sentence
+                    Can Read Simple Sentence
                     <span className="text-danger">*</span>
                   </label>
                   <div className="d-flex">

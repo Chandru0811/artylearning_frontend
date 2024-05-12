@@ -343,7 +343,7 @@ const StaffAccountEdit = forwardRef(
                 Status<span class="text-danger">*</span>
               </lable>
               <select
-                class="form-select "
+                class="form-select"
                 name="status"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
