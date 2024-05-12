@@ -27,10 +27,10 @@ const validationSchema = Yup.object().shape({
   address: Yup.string().required("*Address is required"),
 });
 
-const EditParentDetailModel = forwardRef(({ id,setLoadIndicators, getData }) => {
+const EditParentDetailModel = forwardRef(({ id, getData }) => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
-
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -53,7 +53,7 @@ const EditParentDetailModel = forwardRef(({ id,setLoadIndicators, getData }) => 
     // validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Api Data:", data);
-      setLoadIndicators(true);
+      setLoadIndicator(true);
       try {
         const formDatas = new FormData();
         formDatas.append('parentName', data.parentName);
@@ -88,7 +88,7 @@ const EditParentDetailModel = forwardRef(({ id,setLoadIndicators, getData }) => 
       } catch (error) {
         toast.error(error);
       }finally {
-        setLoadIndicators(false);
+        setLoadIndicator(false);
       }
     },
   });
@@ -330,13 +330,28 @@ const EditParentDetailModel = forwardRef(({ id,setLoadIndicators, getData }) => 
               <Button variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button
+
+              <button
+              type="submit"
+              onSubmit={formik.handleSubmit}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+              {/* <Button
                 type="submit"
                 variant="danger"
-                onSubmit={formik.handleSubmit}
+               
               >
                 Update
-              </Button>
+              </Button> */}
             </Modal.Footer>
           </form>
         </Modal>
