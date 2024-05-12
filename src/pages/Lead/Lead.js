@@ -118,9 +118,9 @@ const Lead = () => {
                 <th scope="col">Centre</th>
                 <th scope="col">Student Name</th>
 
-                <th scope="col">Parent Name</th>
+                {/* <th scope="col">Parent Name</th> */}
                 <th scope="col">Payment Status</th>
-                {/* <th scope="col">Status</th> */}
+                <th scope="col">Status</th>
                 <th scope="col">Action</th>
                 {/* <th scope="col" className="text-center">
                   Pending
@@ -142,7 +142,7 @@ const Lead = () => {
                   </td>
                   <td>{data.studentName}</td>
 
-                  <td>{data.fathersFullName}</td>
+                  {/* <td>{data.fathersFullName}</td> */}
                   <td>
                     {data.paymentStatus === "REJECTED" ? (
                       <span className="badge bg-danger">Rejected</span>
@@ -152,7 +152,7 @@ const Lead = () => {
                       <span className="badge bg-warning">Pending</span>
                     )}
                   </td>
-                  {/* <td>
+                  <td>
                     {data.status === "arranged" ? (
                       <span className="badge badges-Brown">
                         Assessment Arranged
@@ -172,7 +172,7 @@ const Lead = () => {
                     ) : (
                       <span className="badge badges-Red">Completed</span>
                     )}
-                  </td> */}
+                  </td>
 
                   <td>
                     <div className="d-flex">

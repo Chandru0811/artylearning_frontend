@@ -15,8 +15,16 @@ import ContractAdd from "./AddTeacher/ContractAdd";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
-const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Information" },{ tooltip: "Contact Information" },
-{ tooltip: "Login Information" },{ tooltip: "Required Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
+const steps = [
+  { tooltip: "Personal Information" },
+  { tooltip: "Account Information" },
+  { tooltip: "Contact Information" },
+  { tooltip: "Login Information" },
+  { tooltip: "Required Information" },
+  { tooltip: "Salary Information" },
+  { tooltip: "Leave Information" },
+  { tooltip: "Contract Informationn" },
+];
 
 export default function TeacherAdd() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -101,20 +109,20 @@ export default function TeacherAdd() {
   return (
     <>
       <div className="container-fluid minHeight my-5">
-      <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
-        {steps.map((step, index) => (
-          <Step key={index}>
-            <OverlayTrigger
-              placement="top"
-              overlay={
-                <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
-              }
-            >
-              <StepLabel></StepLabel>
-            </OverlayTrigger>
-          </Step>
-        ))}
-      </Stepper>
+        <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
+          {steps.map((step, index) => (
+            <Step key={index}>
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id={`tooltip-${index}`}>{step.tooltip}</Tooltip>
+                }
+              >
+                <StepLabel></StepLabel>
+              </OverlayTrigger>
+            </Step>
+          ))}
+        </Stepper>
       </div>
 
       <div class="container-fluid minHeight">
@@ -149,6 +157,7 @@ export default function TeacherAdd() {
                   ref={childRef}
                   setFormData={setFormData}
                   handleNext={handleNext}
+                  setLoadIndicators={setLoadIndicator}
                 />
               )}
               {activeStep === 1 && (
@@ -236,20 +245,22 @@ export default function TeacherAdd() {
                   Skip
                 </button>
               )} */}
-               <button
-              className="btn btn-button btn-sm mt-5 mb-3"
-              onClick={handleButtonClick}
-              style={{ padding: "7px" }}
-              disabled={loadIndicator}
-            >
-              {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
-              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
-            </button>
+                <button
+                  className="btn btn-button btn-sm mt-5 mb-3"
+                  onClick={handleButtonClick}
+                  style={{ padding: "7px" }}
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  {activeStep === steps.length - 1
+                    ? "Submit"
+                    : " Save And Next"}
+                </button>
                 {/* <button
                   type="submit"
                   className="btn btn-button btn-sm mt-4"
