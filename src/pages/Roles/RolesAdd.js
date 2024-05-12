@@ -279,7 +279,6 @@ function RolesAdd() {
                 >
                   <option value="1">Admin</option>
                   <option value="2">Branch Admin</option>
-                  <option value="3">Parent</option>
                   <option value="4">Staff</option>
                   <option value="5">Staff Admin</option>
                   <option value="6">Teacher</option>
@@ -903,7 +902,7 @@ function RolesAdd() {
                     <tr>
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
-                          Leave Admin
+                          Leave
                         </p>
                       </td>
                       <td>
@@ -956,7 +955,7 @@ function RolesAdd() {
                     <tr>
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
-                          Leave
+                          Leave Request
                         </p>
                       </td>
                       <td>
