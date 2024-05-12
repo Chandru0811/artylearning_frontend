@@ -7,7 +7,6 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
-
 const validationSchema = Yup.object({
   leaveType: Yup.string().required("*Select a Leave Type"),
   fromDate: Yup.string().required("*From Date is required"),
@@ -18,18 +17,16 @@ const validationSchema = Yup.object({
 
 function LeaveAdd() {
   const [centerData, setCenterData] = useState(null);
-  
   const [datas, setDatas] = useState([]);
   const userId = sessionStorage.getItem("userId");
   const centerId = sessionStorage.getItem("centerId");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
 
   const [daysDifference, setDaysDifference] = useState(0);
-  const [loadIndicator, setLoadIndicator] = useState(false);
- 
+
   const calculateDays = (fromDate, toDate) => {
     const fromDateObj = new Date(fromDate);
     const toDateObj = new Date(toDate);
@@ -70,11 +67,9 @@ function LeaveAdd() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      setLoadIndicator(true);
       console.log("Leave Data:", values);
 
       let selectedCenterName = "";
-      
 
       if (centerData) {
         centerData.forEach((center) => {
@@ -115,8 +110,6 @@ function LeaveAdd() {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
-        setLoadIndicator(false);
       }
     },
   });
@@ -147,13 +140,7 @@ function LeaveAdd() {
                 </button>
               </Link>
               &nbsp;&nbsp;
-              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
+              <button type="submit" className="btn btn-sm btn-button">
                 Save
               </button>
             </div>
@@ -180,7 +167,7 @@ function LeaveAdd() {
             </div>
 
             <div className="col-md-6 col-12 mb-3">
-              <label>
+              <label className="form-label">
                 Leave Type<span className="text-danger">*</span>
               </label>
               <select
@@ -203,25 +190,6 @@ function LeaveAdd() {
               )}
             </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                No.Of.Days<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className={`form-control  ${
-                  formik.touched.noOfDays && formik.errors.noOfDays
-                    ? "is-invalid"
-                    : ""
-                }`}
-                {...formik.getFieldProps("noOfDays")}
-                value={daysDifference || "0"}
-                readOnly
-              />
-              {formik.touched.noOfDays && formik.errors.noOfDays && (
-                <div className="invalid-feedback">{formik.errors.noOfDays}</div>
-              )}
-            </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 From Date<span className="text-danger">*</span>
@@ -247,6 +215,7 @@ function LeaveAdd() {
                 <div className="invalid-feedback">{formik.errors.fromDate}</div>
               )}
             </div>
+
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 To Date<span className="text-danger">*</span>
@@ -265,11 +234,31 @@ function LeaveAdd() {
                     formik.values.fromDate,
                     e.target.value || "0"
                   );
-                  setDaysDifference(daysDiff) ;
+                  setDaysDifference(daysDiff);
                 }}
               />
               {formik.touched.toDate && formik.errors.toDate && (
                 <div className="invalid-feedback">{formik.errors.toDate}</div>
+              )}
+            </div>
+
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">
+                No.Of.Days<span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className={`form-control  ${
+                  formik.touched.noOfDays && formik.errors.noOfDays
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("noOfDays")}
+                value={daysDifference || "0"}
+                readOnly
+              />
+              {formik.touched.noOfDays && formik.errors.noOfDays && (
+                <div className="invalid-feedback">{formik.errors.noOfDays}</div>
               )}
             </div>
 

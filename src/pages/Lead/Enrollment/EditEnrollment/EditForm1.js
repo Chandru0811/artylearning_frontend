@@ -23,10 +23,10 @@ const validationSchema = Yup.object().shape({
   nameOfSchool: Yup.string().required("*School Name is required"),
   nameOfChildrenInTotal: Yup.string().required("*Name of Children is required"),
   fathersFullName: Yup.string().required("*Father Name is required"),
-  leadStatus: Yup.string().required("*Status is required"),
+  status: Yup.string().required("*Status is required"),
 });
 
-const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
 
   const formik = useFormik({
@@ -41,11 +41,10 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
       nameOfSchool: "",
       nameOfChildrenInTotal: "",
       fathersFullName: "",
-      leadStatus: "",
+      status: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
-      setLoadIndicators(true);
       try {
         const response = await api.put(`/updateLeadInfo/${formData.id}`, data, {
           headers: {
@@ -61,8 +60,6 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
         }
       } catch (error) {
         toast.error(error);
-      } finally {
-        setLoadIndicators(false);
       }
     },
   });
@@ -124,7 +121,7 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
             </div>
           </div>
           <div class="col-md-6 col-12 mb-2">
-            <label>Subject</label>
+            <label className="form-label">Subject</label>
             <span className="text-danger">*</span>
             <select
               className="form-select"
@@ -325,14 +322,14 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
             </label>
             <select
               className={`form-select  ${
-                formik.touched.leadStatus && formik.errors.leadStatus
+                formik.touched.status && formik.errors.status
                   ? "is-invalid"
                   : ""
               }`}
-              name="leadStatus"
+              name="status"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.leadStatus}
+              value={formik.values.status}
             >
               <option></option>
               <option value="Pending">Pending</option>
@@ -342,8 +339,8 @@ const EditForm1 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
               <option value="Rejected">Rejected</option>
               <option value="KIV">KIV</option>
             </select>
-            {formik.touched.leadStatus && formik.errors.leadStatus && (
-              <div className="invalid-feedback">{formik.errors.leadStatus}</div>
+            {formik.touched.status && formik.errors.status && (
+              <div className="invalid-feedback">{formik.errors.status}</div>
             )}
           </div>
           <div className="col-md-6 col-12">
