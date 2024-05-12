@@ -106,7 +106,7 @@ const EditParentGuardian = forwardRef(
                           <td>{parent.email || "-"}</td>
                           <td>{parent.mobileNumber || "-"}</td>
                           <td>
-                            {index === 0 && (
+                            {parent.primaryContact === true && (
                               <button
                                 className="btn border-white"
                                 type="button" disabled
@@ -114,7 +114,7 @@ const EditParentGuardian = forwardRef(
                                 <FaEdit className="text-secondary" />
                               </button>
                             )}
-                            {index !== 0 && (
+                            {parent.primaryContact === false && (
                               <EditParentDetailModel
                                 id={parent.id}
                                 getData={getData}

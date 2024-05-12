@@ -9,7 +9,7 @@ import api from "../../config/URL";
 const SendNotification = () => {
   const tableRef = useRef(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-   const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState([]);
   // const datas = [
   //   {
@@ -48,7 +48,7 @@ const SendNotification = () => {
       try {
         const response = await api.get("/getAllSmsPushNotifications");
         setDatas(response.data);
-        console.log("message",response.data)
+        console.log("message", response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -57,7 +57,6 @@ const SendNotification = () => {
     };
     getData();
   }, []);
-
 
   // useEffect(() => {
   //   const table = $(tableRef.current).DataTable({
@@ -100,8 +99,8 @@ const SendNotification = () => {
     setLoading(true);
     try {
       const response = await api.get("/getAllSmsPushNotifications");
-     setDatas(response.data);
-     initializeDataTable(); // Reinitialize DataTable after successful data update
+      setDatas(response.data);
+      initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
@@ -110,7 +109,9 @@ const SendNotification = () => {
 
   return (
     <div className="container my-4">
-      {storedScreens?.levelCreate && <SendNotificationAdd onSuccess={refreshData} />}
+      {storedScreens?.sendNotificationCreate && (
+        <SendNotificationAdd onSuccess={refreshData} />
+      )}
       {/* {/ <SendNotificationAdd /> /} */}
       {loading ? (
         <div className="loader-container">
@@ -123,8 +124,7 @@ const SendNotification = () => {
           </div>
         </div>
       ) : (
-
-      <table ref={tableRef} className="display">
+        <table ref={tableRef} className="display">
           <thead>
             <tr>
               <th scope="col">S No</th>
@@ -142,16 +142,18 @@ const SendNotification = () => {
                 <td>{data.messageDescription}</td>
                 <td>{data.datePosted}</td>
                 <td>
-                {storedScreens?.levelUpdate && (
-                    <SendNotificationEdit id={data.id} onSuccess={refreshData} />
+                  {storedScreens?.sendNotificationUpdate && (
+                    <SendNotificationEdit
+                      id={data.id}
+                      onSuccess={refreshData}
+                    />
                   )}
-                 
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-         )}
+      )}
     </div>
   );
 };

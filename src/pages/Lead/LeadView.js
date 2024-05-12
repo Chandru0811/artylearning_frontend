@@ -568,6 +568,14 @@ function Leadview() {
                       <h5 className="headColor mt-5 mb-4">
                         Parent Information
                       </h5>
+                      <div className="d-flex justify-content-between">
+                        <div></div>
+                        <div>
+                          {data.primaryContactMother ? (
+                            <p className="badge text-bg-primary">primary</p>
+                          ) : null}
+                        </div>
+                      </div>
                       <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
@@ -631,6 +639,20 @@ function Leadview() {
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">
+                              Mother's Monthly Income{" "}
+                            </p>
+                          </div>
+                          <div className="col-6">
+                            <p className="text-muted text-sm">
+                              : {data.monthlyIncomeOfMother || "--"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <div className="row mb-2">
+                          <div className="col-6 d-flex  align-items-center">
+                            <p className="text-sm fw-medium ">
                               Mother's Email Address
                             </p>
                           </div>
@@ -641,19 +663,13 @@ function Leadview() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-6 col-12">
-                        <div className="row mb-2">
-                          <div className="col-6 d-flex  align-items-center">
-                            <p className="text-sm fw-medium ">
-                              Mother's Monthly Income{" "}
-                            </p>
-                          </div>
-                          <div className="col-6">
-                            <p className="text-muted text-sm">
-                              : {data.monthlyIncomeOfMother || "--"}
-                            </p>
-                          </div>
-                        </div>
+                    </div>
+                    <div className="d-flex justify-content-between">
+                      <div></div>
+                      <div>
+                        {data.primaryContactFather ? (
+                          <p className="badge text-bg-primary">primary</p>
+                        ) : null}
                       </div>
                     </div>
                     <div className="row  m-3">
@@ -720,12 +736,12 @@ function Leadview() {
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">
-                              Father's Email Address
+                              Father's Monthly Income
                             </p>
                           </div>
                           <div className="col-6">
                             <p className="text-muted text-sm">
-                              : {data.fathersEmailAddress || "--"}
+                              : {data.monthlyIncomeOfFather || "--"}
                             </p>
                           </div>
                         </div>
@@ -734,12 +750,12 @@ function Leadview() {
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">
-                              Father's Monthly Income
+                              Father's Email Address
                             </p>
                           </div>
                           <div className="col-6">
                             <p className="text-muted text-sm">
-                              : {data.monthlyIncomeOfFather || "--"}
+                              : {data.fathersEmailAddress || "--"}
                             </p>
                           </div>
                         </div>
@@ -1354,28 +1370,40 @@ function Leadview() {
                   <div className="container-fluid">
                     <div className="row  m-3">
                       <h5 className="headColor mt-5 mb-4">Child Pencil Grip</h5>
-                      <div className="col-md-6 col-12">
+                      <div className="col-12">
                         <div className="row mb-2">
-                          <div className="col-6 d-flex  align-items-center">
-                            <p className="text-sm fw-medium">Fisted</p>
+                          <div className="col-3 d-flex  align-items-center">
+                            <p className="text-sm fw-medium">Pencil Grip</p>
                           </div>
-                          <div className="col-6">
+                          <div className="col-9">
                             <p className="text-muted text-sm">
-                              :{" "}
+                              : (
                               {doassesmentData &&
                               doassesmentData.leadDoAssessmentModel &&
                               doassesmentData.leadDoAssessmentModel.length >
                                 0 &&
                               doassesmentData.leadDoAssessmentModel[0] &&
-                              doassesmentData.leadDoAssessmentModel[0].fisted
+                              doassesmentData.leadDoAssessmentModel[0]
+                                .pencilGrip
                                 ? doassesmentData.leadDoAssessmentModel[0]
-                                    .fisted
+                                    .pencilGrip
+                                : "--"}
+                              )&nbsp;
+                              {doassesmentData &&
+                              doassesmentData.leadDoAssessmentModel &&
+                              doassesmentData.leadDoAssessmentModel.length >
+                                0 &&
+                              doassesmentData.leadDoAssessmentModel[0] &&
+                              doassesmentData.leadDoAssessmentModel[0]
+                                .pencilGripHandle
+                                ? doassesmentData.leadDoAssessmentModel[0]
+                                    .pencilGripHandle
                                 : "--"}
                             </p>
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-6 col-12">
+                      {/* <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">Plamer Grasp</p>
@@ -1441,7 +1469,7 @@ function Leadview() {
                             </p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   {/* Arty Beliver & Arty Dreamers */}

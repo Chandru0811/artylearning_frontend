@@ -105,7 +105,7 @@ function Sidebar() {
           {
             title: "Deduction",
             path: "/deduction",
-            access: storedScreens.deductDepositIndex,
+            access: storedScreens.deductionIndex,
           },
           {
             title: "Payroll",
