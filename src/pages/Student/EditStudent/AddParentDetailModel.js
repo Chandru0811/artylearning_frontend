@@ -128,6 +128,7 @@ const AddParentDetailModel = forwardRef(({ formData }) => {
           formDatas.append(`mobileNumbers`, parent.mobileNumbers);
           formDatas.append(`postalCodes`, parent.postalCodes);
           formDatas.append(`addresses`, parent.addresses);
+          formDatas.append(`primaryContacts`,false);
         });
 
         const response = await api.post(

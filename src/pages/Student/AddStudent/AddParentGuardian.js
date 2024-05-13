@@ -49,7 +49,7 @@ const AddParentGuardian = forwardRef(
               mobileNumbers: parent.mobileNumbers || "",
               postalCodes: parent.postalCodes || "",
               addresses: parent.addresses || "",
-              primaryContact: parent.primaryContact || "",
+              primaryContacts: parent.primaryContacts || "",
             }))
           : [],
       },
@@ -70,7 +70,7 @@ const AddParentGuardian = forwardRef(
             formDatas.append(`postalCodes`, parent.postalCodes);
             formDatas.append(`addresses`, parent.addresses);
             // formDatas.append(`primaryContact`, parent.primaryContact);
-            formDatas.append(`primaryContact`, parent.primaryContact ? true : false );
+            formDatas.append(`primaryContacts`, parent.primaryContacts ? true : false );
           });
 
           const response = await api.post(
@@ -259,7 +259,7 @@ const AddParentGuardian = forwardRef(
                           </label>
                           <input
                             type="radio"
-                            name={`parentInformation[${index}].primaryContact`}
+                            name={`parentInformation[${index}].primaryContacts`}
                             className="form-check-input ms-3 mt-2"
                             checked={selectedPrimaryContactIndex === index}
                             onChange={(e) => {
@@ -268,7 +268,7 @@ const AddParentGuardian = forwardRef(
 
                               // If a radio button is checked, set its value to true
                               formik.setFieldValue(
-                                `parentInformation[${index}].primaryContact`,
+                                `parentInformation[${index}].primaryContacts`,
                                 isChecked ? true : false
                               );
 
@@ -279,7 +279,7 @@ const AddParentGuardian = forwardRef(
                                 selectedPrimaryContactIndex !== index
                               ) {
                                 formik.setFieldValue(
-                                  `parentInformation[${selectedPrimaryContactIndex}].primaryContact`,
+                                  `parentInformation[${selectedPrimaryContactIndex}].primaryContacts`,
                                   false
                                 );
                               }
