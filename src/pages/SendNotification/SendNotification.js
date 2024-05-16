@@ -11,38 +11,6 @@ const SendNotification = () => {
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState([]);
-  // const datas = [
-  //   {
-  //     id: 1,
-  //     eventName: "Nagaran Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "04-19-2024",
-  //   },
-  //   {
-  //     id: 2,
-  //     eventName: "Manoj Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "05-19-2024",
-  //   },
-  //   {
-  //     id: 3,
-  //     eventName: "Chandru Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "06-19-2024",
-  //   },
-  //   {
-  //     id: 4,
-  //     eventName: "Ragul Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "07-19-2024",
-  //   },
-  //   {
-  //     id: 5,
-  //     eventName: "Antony Test-msg",
-  //     message: "Testting Purpose Notification",
-  //     createdAt: "08-19-2024",
-  //   },
-  // ];
   useEffect(() => {
     const getData = async () => {
       try {
@@ -57,16 +25,6 @@ const SendNotification = () => {
     };
     getData();
   }, []);
-
-  // useEffect(() => {
-  //   const table = $(tableRef.current).DataTable({
-  //     responsive: true,
-  //   });
-
-  //   return () => {
-  //     table.destroy();
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -112,7 +70,6 @@ const SendNotification = () => {
       {storedScreens?.sendNotificationCreate && (
         <SendNotificationAdd onSuccess={refreshData} />
       )}
-      {/* {/ <SendNotificationAdd /> /} */}
       {loading ? (
         <div className="loader-container">
           <div className="loading">

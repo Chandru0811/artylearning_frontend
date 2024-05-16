@@ -212,9 +212,10 @@ function RolesAdd() {
       timeScheduleUnBlock: true,
       timeScheduleAdd: true,
       timeScheduleApproved: true,
-      notificationIndex: true,
-      notificationCreate: true,
-      notificationUpdate: true,
+      sendNotificationIndex: true,
+      sendNotificationCreate: true,
+      sendNotificationUpdate: true,
+      account_read : true
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -2020,9 +2021,9 @@ function RolesAdd() {
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="notificationIndex"
-                          checked={formik.values.notificationIndex}
-                          onChange={handleCheckboxChange(`notificationIndex`)}
+                          name="sendNotificationIndex"
+                          checked={formik.values.sendNotificationIndex}
+                          onChange={handleCheckboxChange(`sendNotificationIndex`)}
                         />
                       </td>
                       <td>
@@ -2038,18 +2039,18 @@ function RolesAdd() {
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="notificationCreate"
-                          checked={formik.values.notificationCreate}
-                          onChange={handleCheckboxChange(`notificationCreate`)}
+                          name="sendNotificationCreate"
+                          checked={formik.values.sendNotificationCreate}
+                          onChange={handleCheckboxChange(`sendNotificationCreate`)}
                         />
                       </td>
                       <td>
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="notificationUpdate"
-                          checked={formik.values.notificationUpdate}
-                          onChange={handleCheckboxChange(`notificationUpdate`)}
+                          name="sendNotificationUpdate"
+                          checked={formik.values.sendNotificationUpdate}
+                          onChange={handleCheckboxChange(`sendNotificationUpdate`)}
                         />
                       </td>
                       <td>
