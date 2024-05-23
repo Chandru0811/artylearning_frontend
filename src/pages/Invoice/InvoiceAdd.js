@@ -169,17 +169,43 @@ export default function InvoiceAdd() {
     fetchStudent(center);
   };
 
-  // Function to calculate total amount based on item amount and GST
-  const calculateTotalAmount = (itemAmount, gst) => {
-    const totalAmount = parseFloat(itemAmount) * (1 + parseFloat(gst) / 100);
-    return totalAmount.toFixed(2); // Round to 2 decimal places
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Inside your component function
+  const calculateTotalAmount = (itemAmount, gstRate) => {
+    const itemAmountValue = parseFloat(itemAmount) || 0;
+    if (!itemAmountValue) {
+      return {
+        gstAmount: "0.00",
+        totalAmount: "0.00",
+      };
+    }
+  
+    const gstAmount = itemAmountValue * (parseFloat(gstRate) / 100);
+    const totalAmount = itemAmountValue + gstAmount;
+    return {
+      gstAmount: gstAmount.toFixed(2),
+      totalAmount: totalAmount.toFixed(2),
+    };
+  };
+
+  useEffect(() => {
+    rows.forEach((_, index) => {
+      const itemAmount = parseFloat(formik.values.invoiceItems[index].itemAmount) || 0;
+      
+      if (formik.values.invoiceItems[index].taxType === "Standard") {
+        const { gstAmount, totalAmount } = calculateTotalAmount(itemAmount, 9);
+        formik.setFieldValue(`invoiceItems[${index}].gstAmount`, gstAmount);
+        formik.setFieldValue(`invoiceItems[${index}].totalAmount`, totalAmount);
+      } else if (formik.values.invoiceItems[index].taxType === "Non-Taxable") {
+        formik.setFieldValue(`invoiceItems[${index}].gstAmount`, "0.00");
+        const totalAmount = calculateTotalAmount(itemAmount, 0).totalAmount;
+        formik.setFieldValue(`invoiceItems[${index}].totalAmount`, totalAmount);
+      }
+    });
+  }, [formik.values.invoiceItems]);
+  
   useEffect(() => {
     // Calculate total Item Amounts
     const totalItemAmount = formik.values.invoiceItems.reduce(
@@ -187,22 +213,22 @@ export default function InvoiceAdd() {
       0
     );
     formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
-
+  
     // Calculate total Gst
     const totalGst = formik.values.invoiceItems.reduce(
       (total, item) => total + parseFloat(item.gstAmount || 0),
       0
     );
     formik.setFieldValue("gst", totalGst.toFixed(2));
-
+  
     // Calculate total Amount
     const totalAmount = formik.values.invoiceItems.reduce(
       (total, item) => total + parseFloat(item.totalAmount || 0),
       0
     );
     formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.invoiceItems]);
+  
 
   return (
     <div className="container-fluid">
@@ -504,34 +530,7 @@ export default function InvoiceAdd() {
           </div>
 
           <div className="row mt-5 pt-5 flex-nowrap">
-            <div className="col-1 text-end d-flex justify-content-center align-items-end ">
-              {rows.length > 1 && (
-                <button
-                  type="button"
-                  className="btn mt-3"
-                  style={{ marginBottom: "1.0rem" }}
-                  onClick={() => {
-                    // Remove the last row from the state
-                    setRows((pr) => pr.slice(0, -1));
-
-                    // Remove the last item from the invoiceItems array in formik values
-                    formik.setFieldValue(
-                      "invoiceItems",
-                      formik.values.invoiceItems.slice(0, -1)
-                    );
-                  }}
-                >
-                  <IoIosCloseCircleOutline
-                    style={{
-                      fontSize: "2rem",
-                      color: "red",
-                      background: "none",
-                    }}
-                  />
-                </button>
-              )}
-            </div>
-            <div className="col-11">
+            <div className="col-12">
               <div className="table-responsive table-bordered">
                 <table class="table table-light table-nowrap">
                   <thead className="thead-light">
@@ -581,30 +580,31 @@ export default function InvoiceAdd() {
                                 `invoiceItems[${index}].itemAmount`,
                                 newValue
                               );
+                            
                               // Calculate total amount when item amount changes
                               const gstValue =
-                                formik.values.invoiceItems[index].gstAmount ||
-                                0;
+                                formik.values.invoiceItems[index].gstAmount || "0.00";
                               const totalAmount = calculateTotalAmount(
                                 newValue,
                                 gstValue
-                              );
+                              ).totalAmount;
                               formik.setFieldValue(
                                 `invoiceItems[${index}].totalAmount`,
                                 totalAmount
                               );
                             }}
+                            
                           />
                         </td>
                         <td>
-                          <input
+                          <select className="form-select"    
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].taxType`
-                            )}
-                            className="form-control"
-                            type="text"
-                            style={{ width: "80%" }}
-                          />
+                            )} style={{ width: "100%" }}>
+                            <option value=""></option>
+                            <option value="Non-Taxable">Non-Taxable</option>
+                            <option value="Standard">Standard</option>
+                          </select>
                         </td>
                         <td>
                           <input
@@ -614,6 +614,7 @@ export default function InvoiceAdd() {
                             className="form-control"
                             type="text"
                             style={{ width: "80%" }}
+                            readOnly
                             onChange={(e) => {
                               const newValue = e.target.value;
                               formik.setFieldValue(
@@ -655,6 +656,24 @@ export default function InvoiceAdd() {
           </div>
           <div className="row mt-3">
             <div className="col-12 text-end">
+            {rows.length > 1 && (
+                <button
+                  type="button"
+                  className="btn btn-sm mx-2 text-danger border-danger bg-white"
+                  onClick={() => {
+                    // Remove the last row from the state
+                    setRows((pr) => pr.slice(0, -1));
+
+                    // Remove the last item from the invoiceItems array in formik values
+                    formik.setFieldValue(
+                      "invoiceItems",
+                      formik.values.invoiceItems.slice(0, -1)
+                    );
+                  }}
+                >
+                  Delete
+                </button>
+              )}
               <button
                 className="btn btn-sm btn-danger me-2"
                 type="button"

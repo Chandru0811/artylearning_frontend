@@ -119,11 +119,11 @@ function StudentRegisterCourse() {
                 0,
                 10
               ),
-            courseDay:
-              response.data.studentCourseDetailModels[0].courseDay.substring(
-                0,
-                10
-              ),
+            // courseDay:
+            //   response.data.studentCourseDetailModels[0].courseDay.substring(
+            //     0,
+            //     10
+            //   ),
           };
           formik.setValues(formattedResponseData);
         } else {
@@ -182,7 +182,7 @@ function StudentRegisterCourse() {
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2">
+              {/* <div class="col-md-6 col-12 mb-2">
                 <lable class="form-lable">
                   Course Day<span class="text-danger">*</span>
                 </lable>
@@ -200,7 +200,32 @@ function StudentRegisterCourse() {
                     {formik.errors.courseDay}
                   </div>
                 )}
-              </div>
+              </div> */}
+              <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label m-0">
+                    Course Day<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("courseDay")}
+                    class={`form-select  ${
+                      formik.touched.courseDay && formik.errors.courseDay
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option></option>
+                    <option value="MONDAY">MONDAY</option>
+                    <option value="TUESDAY">TUESDAY</option>
+                    <option value="WEDNESDAY">WEDNESDAY</option>
+                    <option value="THURSDAY">THURSDAY</option>
+                    <option value="FRIDAY">FRIDAY</option>
+                    <option value="SATURDAY">SATURDAY</option>
+                    <option value="SUNDAY">SUNDAY</option>
+                  </select>
+                  {formik.touched.courseDay && formik.errors.courseDay && (
+                    <div className="invalid-feedback">{formik.errors.courseDay}</div>
+                  )}
+                </div>
             </div>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">

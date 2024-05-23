@@ -672,7 +672,7 @@ function Leadview() {
                         ) : null}
                       </div>
                     </div>
-                    <div className="row  m-3">
+                    {/* <div className="row  m-3">
                       <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
@@ -760,7 +760,7 @@ function Leadview() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="container-fluid">
                     <div className="row  m-3">

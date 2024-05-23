@@ -364,9 +364,8 @@ const Edi = forwardRef(
                         aria-label=". example"
                       >
                         <option value=""></option>
-                        <option value="Indian">Indian</option>
                         <option value="Singaporean">Singaporean</option>
-                        <option value="American">American</option>
+                        <option value="Others">Others</option>
                       </select>
                       {formik.touched.nationality &&
                         formik.errors.nationality && (

@@ -148,9 +148,6 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
             userContractStartDate: contractData.userContractStartDate
               ? contractData.userContractStartDate.substring(0, 10)
               : "",
-            workingDays: contractData.workingDays
-              ? contractData.workingDays.substring(0, 10)
-              : "",
             userContractEndDate: contractData.userContractEndDate
               ? contractData.userContractEndDate.substring(0, 10)
               : "",

@@ -15,10 +15,10 @@ const validationSchema = Yup.object().shape({
   colorCode: Yup.string().required("*Color Code is required"),
   teacherId: Yup.string().required("*Staff Id is required"),
   teacherType: Yup.string().required("*Staff Type is required"),
-  shgType: Yup.string().required("*Shg Type is required"),
-  shgAmount: Yup.string()
-    .matches(/^[0-9]+$/, "*Amount Must be numbers")
-    .required("*SHG amount is required"),
+  // shgType: Yup.string().required("*Shg Type is required"),
+  // shgAmount: Yup.string()
+  //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
+  //   .required("*SHG amount is required"),
   status: Yup.string().required("*Status is required"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required"
@@ -191,7 +191,7 @@ const StaffAccountAdd = forwardRef(
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
-                SHG(s) Type<span class="text-danger">*</span>
+                SHG(s) Type
               </label>
               <input
                 type="text"
@@ -201,15 +201,11 @@ const StaffAccountAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.shgType}
               />
-              {formik.touched.shgType && formik.errors.shgType && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.shgType}</small>
-                </div>
-              )}
+              
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
-                SHG Amount<span class="text-danger">*</span>
+                SHG Amount
               </label>
               <input
                 type="text"
@@ -219,11 +215,6 @@ const StaffAccountAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.shgAmount}
               />
-              {formik.touched.shgAmount && formik.errors.shgAmount && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.shgAmount}</small>
-                </div>
-              )}
             </div>
 
             <div class="col-md-6 col-12 mb-2 mt-3">

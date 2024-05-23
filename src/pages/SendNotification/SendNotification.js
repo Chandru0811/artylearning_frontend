@@ -5,6 +5,7 @@ import $ from "jquery";
 import SendNotificationAdd from "./SendNotificationAdd";
 import SendNotificationEdit from "./SendNotificationEdit";
 import api from "../../config/URL";
+import Delete from "../../components/common/Delete";
 
 const SendNotification = () => {
   const tableRef = useRef(null);
@@ -105,6 +106,16 @@ const SendNotification = () => {
                       onSuccess={refreshData}
                     />
                   )}
+                  {/* {storedScreens?.subjectDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteCourseSubject/${data.id}`}
+                      />
+                    )} */}
+                  <Delete
+                    onSuccess={refreshData}
+                    path={`/deleteSmsPushNotifications/${data.id}`}
+                  />
                 </td>
               </tr>
             ))}
