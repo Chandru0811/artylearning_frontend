@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .required("*Date of Birth is required!")
     .max(new Date(), "*Date of Birth cannot be in the future!"),
   age: Yup.string()
-    .matches(/^\d+$/, "*Age is required!")
+   
     .required("*Age is required!"),
   gender: Yup.string().required("*Gender is required!"),
   schoolType: Yup.string().required("*School Type is required!"),
@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const fetchData = async () => {
       try {
@@ -58,7 +58,20 @@ const AddStudentDetails = forwardRef(
     useEffect(() => {
       fetchData();
     }, []);
-
+    const calculateAge = (dob) => {
+      const birthDate = new Date(dob);
+      const today = new Date();
+    
+      let years = today.getFullYear() - birthDate.getFullYear();
+      let months = today.getMonth() - birthDate.getMonth();
+    
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+    
+      return `${years} years, ${months} months`;
+    };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     const formik = useFormik({
       initialValues: {
         centerId: formData.centerId || "",
@@ -135,11 +148,16 @@ const AddStudentDetails = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
     });
+    useEffect(() => {
+      if (formik.values.dateOfBirth) {
+        formik.setFieldValue("age", calculateAge(formik.values.dateOfBirth));
+      }
+    }, [formik.values.dateOfBirth]);
 
     useImperativeHandle(ref, () => ({
       StudentDetails: formik.handleSubmit,
