@@ -46,7 +46,11 @@ const ContactAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if(error?.response?.status === 409){
+          toast.warning(error?.response?.data?.message)
+        } else {
+          toast.error("Error Submiting data " ,error?.response?.data?.message )
+        }
       }finally {
         setLoadIndicators(false);
       }

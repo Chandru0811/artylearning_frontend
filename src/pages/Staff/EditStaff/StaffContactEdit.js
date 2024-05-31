@@ -89,7 +89,11 @@ const StaffContactEdit = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error);
+          if(error?.response?.status === 409){
+            toast.warning(error?.response?.data?.message)
+          } else {
+            toast.error("Error Submiting data " ,error?.response?.data?.message )
+          }
         }finally{
           setLoadIndicators(false);
         }

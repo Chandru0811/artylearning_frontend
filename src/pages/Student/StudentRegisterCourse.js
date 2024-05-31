@@ -49,23 +49,34 @@ function StudentRegisterCourse() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      const course = values.courseId;
+      console.log("Registration values", values);
 
+      let selectedOptionName = "";
+
+      courseData.forEach((course) => {
+        if (parseInt(values.courseId) === course.id) {
+          selectedOptionName = course.courseNames || "--";
+        }
+      });
       try {
         if (
           data &&
           data.studentCourseDetailModels &&
           data.studentCourseDetailModels.length > 0
         ) {
+          const formData = new FormData();
+          formData.append("courseName", selectedOptionName);
+          formData.append("courseDay", values.courseDay);
+          formData.append("startDate", values.startDate);
+          formData.append("endDate", values.endDate);
+          formData.append("startTime", values.startTime);
+          formData.append("endTime", values.endTime);
+          formData.append("signatureDate", values.signatureDate);
+          formData.append("studentDetailId", values.studentId);
+          formData.append("courseId", values.courseId);
           const response = await api.put(
             `/updateStudentCourseDetail/${data.studentCourseDetailModels[0].id}`,
-            { ...values, course },
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+            formData,
           );
           if (response.status === 200) {
             toast.success(response.data.message);
@@ -74,19 +85,19 @@ function StudentRegisterCourse() {
             toast.error(response.data.message);
           }
         } else {
-          const requestData = {
-            ...values,
-            studentId: id,
-            course: values.courseId,
-          };
+          const formData = new FormData();
+          formData.append("courseName", selectedOptionName);
+          formData.append("courseDay", values.courseDay);
+          formData.append("startDate", values.startDate);
+          formData.append("endDate", values.endDate);
+          formData.append("startTime", values.startTime);
+          formData.append("endTime", values.endTime);
+          formData.append("signatureDate", values.startDate);
+          formData.append("studentDetailId", id);
+          formData.append("courseId", values.courseId);
           const response = await api.post(
             `/createStudentCourseDetails`,
-            requestData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
+            formData,
           );
           if (response.status === 201) {
             toast.success(response.data.message);
@@ -202,30 +213,32 @@ function StudentRegisterCourse() {
                 )}
               </div> */}
               <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label m-0">
-                    Course Day<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    {...formik.getFieldProps("courseDay")}
-                    class={`form-select  ${
-                      formik.touched.courseDay && formik.errors.courseDay
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  >
-                    <option></option>
-                    <option value="MONDAY">MONDAY</option>
-                    <option value="TUESDAY">TUESDAY</option>
-                    <option value="WEDNESDAY">WEDNESDAY</option>
-                    <option value="THURSDAY">THURSDAY</option>
-                    <option value="FRIDAY">FRIDAY</option>
-                    <option value="SATURDAY">SATURDAY</option>
-                    <option value="SUNDAY">SUNDAY</option>
-                  </select>
-                  {formik.touched.courseDay && formik.errors.courseDay && (
-                    <div className="invalid-feedback">{formik.errors.courseDay}</div>
-                  )}
-                </div>
+                <label className="form-label m-0">
+                  Course Day<span className="text-danger">*</span>
+                </label>
+                <select
+                  {...formik.getFieldProps("courseDay")}
+                  class={`form-select  ${
+                    formik.touched.courseDay && formik.errors.courseDay
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                >
+                  <option></option>
+                  <option value="MONDAY">MONDAY</option>
+                  <option value="TUESDAY">TUESDAY</option>
+                  <option value="WEDNESDAY">WEDNESDAY</option>
+                  <option value="THURSDAY">THURSDAY</option>
+                  <option value="FRIDAY">FRIDAY</option>
+                  <option value="SATURDAY">SATURDAY</option>
+                  <option value="SUNDAY">SUNDAY</option>
+                </select>
+                {formik.touched.courseDay && formik.errors.courseDay && (
+                  <div className="invalid-feedback">
+                    {formik.errors.courseDay}
+                  </div>
+                )}
+              </div>
             </div>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">
