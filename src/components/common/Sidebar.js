@@ -183,11 +183,11 @@ function Sidebar() {
             path: "/invoice",
             access: storedScreens.invoiceIndex,
           },
-          {
-            title: "Payment",
-            path: "/payment",
-            access: storedScreens.paymentIndex,
-          },
+          // {
+          //   title: "Payment",
+          //   path: "/payment",
+          //   access: storedScreens.paymentIndex,
+          // },
           // Add more submenus as needed
         ],
       },
@@ -280,7 +280,7 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo-details">
         <span className="logo_name">
-          <img src={Logo} alt="logo" className="img-fluid" />
+          <img src={Logo} alt="logo" width={130} className="img-fluid" />
         </span>
       </div>
       <ul className="nav-links">

@@ -59,13 +59,12 @@ function InvoiceView() {
 
     doc.setFontSize(15);
     doc.setFont("helvetica", "bold");
-    doc.text("Arty Learning @HG", 60, 25,);
+    doc.text("Arty Learning @HG", 60, 25);
 
     doc.setFont("helvetica", "normal");
     doc.text("Tel No:87270752", 60, 35);
     doc.text("Email:Artylearning@gmail.com", 60, 45);
 
-   
     doc.line(16, 70, 50, 70); // x, y, width, height
 
     doc.setFontSize(13);
@@ -85,34 +84,34 @@ function InvoiceView() {
     doc.setFontSize(11);
     doc.text(`Payment Amount Specification`, 10, 126); // Add x, y coordinates for this line
 
-      doc.line(10, 120, 200, 120); // x1, y1, x2, y2
-      // doc.line(10, 145, 200, 145); // x1, y1, x2, y2
+    doc.line(10, 120, 200, 120); // x1, y1, x2, y2
+    // doc.line(10, 145, 200, 145); // x1, y1, x2, y2
 
-      // doc.text(`NO`, 20, 140);
-      // doc.text(`${invoiceItem + 1 || "-"}`, 20, 155);
+    // doc.text(`NO`, 20, 140);
+    // doc.text(`${invoiceItem + 1 || "-"}`, 20, 155);
 
-      // doc.text(`Item`, 40, 140);
-      // doc.text(`${data.item || "-"}`, 40, 155);
+    // doc.text(`Item`, 40, 140);
+    // doc.text(`${data.item || "-"}`, 40, 155);
 
-      // doc.text(`Item Amount`, 60, 140);
+    // doc.text(`Item Amount`, 60, 140);
 
-      // doc.text(`${invoiceItem.itemAmount || "-"}`, 65, 155);
+    // doc.text(`${invoiceItem.itemAmount || "-"}`, 65, 155);
 
-      // doc.text(`Tax Type`, 90, 140);
-      // doc.text(`${invoiceItem.taxType || "-"}`, 90, 155);
+    // doc.text(`Tax Type`, 90, 140);
+    // doc.text(`${invoiceItem.taxType || "-"}`, 90, 155);
 
-      // doc.text(`GST Amount`, 148, 140);
+    // doc.text(`GST Amount`, 148, 140);
 
-      // doc.text(`${invoiceItem.gstAmount || "-"}`, 148, 155);
+    // doc.text(`${invoiceItem.gstAmount || "-"}`, 148, 155);
 
-      // doc.text(`Total Amount`, 175, 140);
+    // doc.text(`Total Amount`, 175, 140);
 
-      // doc.text(`${invoiceItem.totalAmount || "-"}`, 175, 155);
+    // doc.text(`${invoiceItem.totalAmount || "-"}`, 175, 155);
 
-       doc.setFont("helvetica", "bold");
-       doc.setFontSize(14);
-       doc.text(`Official Receipt`, 14, 70);
-      
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(`Official Receipt`, 14, 70);
+
     // Add the table
     const tableData =
       data.invoiceItemsDtoList &&
@@ -124,55 +123,50 @@ function InvoiceView() {
         invoiceItem.gstAmount,
         invoiceItem.totalAmount,
       ]);
-      doc.autoTable({
-        startY: 130,
-        headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'underline' },
-        bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
-        head: [["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"]],
-        body: tableData,
-        footStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
-        body: tableData,
-        foot: [
-          [
-            "",
-            "",
-            "",
-            "",
-            "Creadit Advice Offset",
-            `${data.creditAdviceOffset || "--"}`,
-            "GST",
-            `${data.gst || "--"}`,
-            "Total",
-            `${data.totalAmount || "--"}`,
-          ],
-          [
-            "",
-            "",
-            "",
-            "",
-            "GST",
-            `${data.gst || "--"}`,
-            "",
-            "",
-            "",
-            "",
-          ],
-          [
-            "",
-            "",
-            "",
-            "",
-            "Total",
-            `${data.totalAmount || "--"}`,
-            "",
-            "",
-            "",
-            "",
-          ],
+    doc.autoTable({
+      startY: 130,
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: "underline",
+      },
+      bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+      head: [
+        ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
+      ],
+      body: tableData,
+      footStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+      body: tableData,
+      foot: [
+        [
+          "",
+          "",
+          "",
+          "",
+          "Creadit Advice Offset",
+          `${data.creditAdviceOffset || "--"}`,
+          "GST",
+          `${data.gst || "--"}`,
+          "Total",
+          `${data.totalAmount || "--"}`,
         ],
-      });
+        ["", "", "", "", "GST", `${data.gst || "--"}`, "", "", "", ""],
+        [
+          "",
+          "",
+          "",
+          "",
+          "Total",
+          `${data.totalAmount || "--"}`,
+          "",
+          "",
+          "",
+          "",
+        ],
+      ],
+    });
 
-   // Add Credit Advice Offset, GST, Total Amount
+    // Add Credit Advice Offset, GST, Total Amount
     // doc.text(
     //   `Credit Advice Offset: ${data.creditAdviceOffset || "--"}`,
     //   145,
@@ -189,8 +183,8 @@ function InvoiceView() {
     //   doc.autoTable.previous.finalY + 30
     // );
 
-  //   Add Remark
-  doc.setFontSize(11);
+    //   Add Remark
+    doc.setFontSize(11);
     doc.text(
       `Remark: ${data.remark || "--"}`,
       14,
@@ -257,23 +251,26 @@ function InvoiceView() {
           <SendAndPublish data={data} id={id} />
           {/* </Link> */}
           <button
-        onClick={generatePDF}
-        className="btn btn-border btn-sm me-1"
-        disabled={loadIndicator}
-      >
-        {loadIndicator && (
-          <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
-        )}
-        Generate PDF
-      </button>
+            onClick={generatePDF}
+            className="btn btn-border btn-sm me-1"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Generate PDF
+          </button>
           {/* <button className="btn btn-border btn-sm me-1 " onClick={generatePDF}>
             Generate Pdf
           </button> */}
-          {storedScreens?.paymentCreate && (
+          {/* {storedScreens?.paymentCreate && (
             <Link to="/invoice/payment">
               <button className="btn btn-button btn-sm">Pay Now</button>
             </Link>
-          )}
+          )} */}
         </div>
       </div>
       <div className="card shadow border-0 minHeight">
@@ -281,7 +278,7 @@ function InvoiceView() {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12 p-3">
               <div className="d-flex justify-content-center flex-column align-items-start">
-                <img src={Logo} alt=".." />
+                <img src={Logo} className="img-fluid" width={150} alt=".." />
                 <p className="text-center fw-small">
                   Learning Languages The Creative Way
                 </p>

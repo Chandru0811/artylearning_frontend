@@ -27,7 +27,7 @@ function Header() {
       >
         <Container fluid>
           <Navbar.Brand as={NavLink} to="/" onClick={handleClick}>
-            <img src={Logo} alt="WWG" className="img-fluid" />
+            <img src={Logo} alt="WWG" width={150} className="img-fluid" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
           <Navbar.Offcanvas

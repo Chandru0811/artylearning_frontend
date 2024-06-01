@@ -148,11 +148,7 @@ function Payslip() {
     // Draw "DEDUCTION TOTAL" text along with its value in bold
     const deductionTotalWidth = cellWidth; // Assuming the same width as other deduction columns
     const deductionTotalX = startXX + deductionTotalWidth; // Align with the "DEDUCTION" column
-    doc.text(
-      `DEDUCTION TOTAL`,
-      deductionTotalX,
-      totalY
-    );
+    doc.text(`DEDUCTION TOTAL`, deductionTotalX, totalY);
     doc.text(`${data.deductionTotal}`, deductionTotalX + 50, totalY); // Adjust the position for the value
 
     //  Draw "NET PAY" text along with its value in bold
@@ -207,7 +203,12 @@ function Payslip() {
               <div>
                 <div className="row mt-4">
                   <div className="offset-md-1 col-md-3 col-12">
-                    <img src={Logo} alt="Logo" className="img-fluid" />
+                    <img
+                      src={Logo}
+                      width={150}
+                      alt="Logo"
+                      className="img-fluid"
+                    />
                   </div>
                   <div className="col-md-8 col-12 mt-4">
                     <h5 className="ms-5">ARTY LEARNING</h5>

@@ -84,7 +84,12 @@ function Login({ onLogin }) {
               className="d-flex flex-column align-items-center justify-content-center"
               style={{ minHeight: "100vh", backgroundColor: "#FEF7EA" }}
             >
-              <img className="img-fluid mb-4" src={Logo} alt="Logo" />
+              <img
+                className="img-fluid mb-4"
+                src={Logo}
+                width={200}
+                alt="Logo"
+              />
               <div
                 className="card p-3"
                 style={{

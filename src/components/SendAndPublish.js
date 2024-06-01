@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import api from "../config/URL";
 
 function SendAndPublish({ data }) {
-  
   const [loadIndicator, setLoadIndicator] = useState(false);
   const sendEmail = async () => {
     try {
@@ -176,7 +175,7 @@ function SendAndPublish({ data }) {
                               <td>${product.taxType || "--"}</td>
                               
                               <td>${product.gstAmount || "0"} %</td>
-                              <td>${product.totalAmount }</td>
+                              <td>${product.totalAmount}</td>
                               </tr>
                               `
                   )
@@ -224,7 +223,9 @@ function SendAndPublish({ data }) {
              <p> <strong style="margin-right: 14px;">Remark</strong></p>
             
                 <strong style="margin-right: 14px;margin-bottom: 50px; ">Notes : </strong>
-            <p style="margin-top: 0px;margin-left: 10px;">${data.remark || "--"}</p><br />
+            <p style="margin-top: 0px;margin-left: 10px;">${
+              data.remark || "--"
+            }</p><br />
               </div>
               <div style="width: 50%; text-align: end">
               <div>
@@ -270,16 +271,17 @@ function SendAndPublish({ data }) {
     } catch (error) {
       console.error("Error sending email:", error);
       toast.error("Error sending email");
-      
     }
   };
 
   return (
     <button className="btn btn-border btn-sm me-1" onClick={sendEmail}>
-      {loadIndicator && <span
-                    class="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>}
+      {loadIndicator && (
+        <span
+          class="spinner-border spinner-border-sm me-2"
+          aria-hidden="true"
+        ></span>
+      )}
       Send and Publish
     </button>
   );
