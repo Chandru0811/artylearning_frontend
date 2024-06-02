@@ -666,7 +666,7 @@ function StudentView() {
                       </div>
                       <div className="col-10"></div>
                       <div className="col-2">
-                        {index === 0 && (
+                        {parent.primaryContact && (
                           <div className="col-12 mb-2">
                             <p className="badge text-bg-primary">primary</p>
                           </div>

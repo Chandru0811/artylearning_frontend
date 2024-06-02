@@ -28,12 +28,12 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddParentGuardian = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
     const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
-      useState(null);
+      useState(0);
 
     const formik = useFormik({
       initialValues: {
@@ -70,7 +70,10 @@ const AddParentGuardian = forwardRef(
             formDatas.append(`postalCodes`, parent.postalCodes);
             formDatas.append(`addresses`, parent.addresses);
             // formDatas.append(`primaryContact`, parent.primaryContact);
-            formDatas.append(`primaryContacts`, parent.primaryContacts ? true : false );
+            formDatas.append(
+              `primaryContacts`,
+              parent.primaryContacts ? true : false
+            );
           });
 
           const response = await api.post(
@@ -95,7 +98,7 @@ const AddParentGuardian = forwardRef(
           } else {
             toast.error(error?.response?.data?.message);
           }
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -117,9 +120,7 @@ const AddParentGuardian = forwardRef(
                     <div className="row mt-2">
                       <div className="col-lg-6 col-md-6 col-12">
                         <div className="text-end mt-4">
-                          <label>
-                            {/* Primary Contact */}
-                          </label>
+                          <label>{/* Primary Contact */}</label>
                         </div>
                         <div className="text-start">
                           <label htmlFor="" className="mb-1 fw-medium">
@@ -254,7 +255,10 @@ const AddParentGuardian = forwardRef(
                       </div>
                       <div className="col-lg-6 col-md-6 col-12">
                         <div className="text-end mb-3">
-                          <label htmlFor="" className="my-1 fw-bold text-primary">
+                          <label
+                            htmlFor=""
+                            className="my-1 fw-bold text-primary"
+                          >
                             Primary Contact
                           </label>
                           <input
