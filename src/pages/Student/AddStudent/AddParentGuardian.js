@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -34,6 +34,8 @@ const AddParentGuardian = forwardRef(
     ); // Initially one row for one parent
     const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
       useState(0);
+
+
 
     const formik = useFormik({
       initialValues: {
@@ -103,6 +105,10 @@ const AddParentGuardian = forwardRef(
         }
       },
     });
+
+    useEffect(() => {
+      formik.setFieldValue(`parentInformation[0].primaryContacts`, true);
+    }, []);
 
     useImperativeHandle(ref, () => ({
       ParentGuardian: formik.handleSubmit,
