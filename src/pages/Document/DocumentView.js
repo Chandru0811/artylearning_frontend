@@ -8,7 +8,7 @@ import BlockImg from "../.././assets/images/Block_Img1.jpg";
 
 function DocumentView() {
   const { id } = useParams();
-  console.log(id)
+  // console.log(id)
   const [data, setData] = useState([]);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
@@ -53,10 +53,6 @@ function DocumentView() {
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
                   File Type
                 </th>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  Upload By
-                </th>
-                <th scope="col">Status</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -102,8 +98,6 @@ function DocumentView() {
                     )}
                   </td>
                   <td className="p-4">{item.fileExtension}</td>
-                  <td className="p-4">Teacher Admin</td>
-                  <td className="p-4">Pending</td>
                   <td className="p-4">
                     {storedScreens?.documentListingDelete && (
                       <Delete

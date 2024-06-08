@@ -103,15 +103,19 @@ function CenterAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                Save
-              </button>
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Save
+          </button>
         </div>
         <div className="container">
           <div className="row">

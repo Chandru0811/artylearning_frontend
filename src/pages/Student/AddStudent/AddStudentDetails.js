@@ -16,9 +16,7 @@ const validationSchema = Yup.object().shape({
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required!")
     .max(new Date(), "*Date of Birth cannot be in the future!"),
-  age: Yup.string()
-   
-    .required("*Age is required!"),
+  age: Yup.string().required("*Age is required!"),
   gender: Yup.string().required("*Gender is required!"),
   schoolType: Yup.string().required("*School Type is required!"),
   schoolName: Yup.string().required("*School Name is required!"),
@@ -61,17 +59,17 @@ const AddStudentDetails = forwardRef(
     const calculateAge = (dob) => {
       const birthDate = new Date(dob);
       const today = new Date();
-    
+
       let years = today.getFullYear() - birthDate.getFullYear();
       let months = today.getMonth() - birthDate.getMonth();
-    
+
       if (months < 0) {
         years--;
         months += 12;
       }
-    
+
       return `${years} years, ${months} months`;
-    };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    };
     const formik = useFormik({
       initialValues: {
         centerId: formData.centerId || "",
@@ -99,6 +97,16 @@ const AddStudentDetails = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
+          let selectedCenter = "";
+
+          centerData.forEach((center) => {
+            if (parseInt(values.centerId) === center.id) {
+              selectedCenter = center.centerNames || "--";
+            }
+          });
+
+          // console.log("Center ", selectedCenter);
+
           const formData = new FormData();
 
           // Add each data field manually to the FormData object
@@ -119,7 +127,7 @@ const AddStudentDetails = forwardRef(
           formData.append("allowMagazine", values.allowMagazine);
           formData.append("allowSocialMedia", values.allowSocialMedia);
           formData.append("centerId", values.centerId);
-          formData.append("center", values.centerId);
+          formData.append("center", selectedCenter);
           formData.append(
             "primaryLanguageSpokenEnglish",
             values.primaryLanguageSpokenEnglish
@@ -157,6 +165,7 @@ const AddStudentDetails = forwardRef(
       if (formik.values.dateOfBirth) {
         formik.setFieldValue("age", calculateAge(formik.values.dateOfBirth));
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formik.values.dateOfBirth]);
 
     useImperativeHandle(ref, () => ({

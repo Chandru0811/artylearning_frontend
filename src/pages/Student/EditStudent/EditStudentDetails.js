@@ -16,9 +16,7 @@ const validationSchema = Yup.object().shape({
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required!")
     .max(new Date(), "*Date of Birth cannot be in the future!"),
-  age: Yup.string()
-    
-    .required("*Age is required!"),
+  age: Yup.string().required("*Age is required!"),
   gender: Yup.string().required("*Gender is required!"),
   schoolType: Yup.string().required("*School Type is required!"),
   schoolName: Yup.string().required("*School Name is required!"),
@@ -44,7 +42,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Edi = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const fetchData = async () => {
       try {
@@ -57,17 +55,17 @@ const Edi = forwardRef(
     const calculateAge = (dob) => {
       const birthDate = new Date(dob);
       const today = new Date();
-    
+
       let years = today.getFullYear() - birthDate.getFullYear();
       let months = today.getMonth() - birthDate.getMonth();
-    
+
       if (months < 0) {
         years--;
         months += 12;
       }
-    
+
       return `${years} years, ${months} months`;
-    };    
+    };
 
     const formik = useFormik({
       initialValues: {
@@ -96,7 +94,15 @@ const Edi = forwardRef(
       onSubmit: async (data) => {
         setLoadIndicators(true);
         setFormData((prv) => ({ ...prv, ...data }));
-        console.log("Api Data:", data);
+        let selectedCenter = "";
+
+        centerData.forEach((center) => {
+          if (parseInt(data.centerId) === center.id) {
+            selectedCenter = center.centerNames || "--";
+          }
+        });
+
+        data.center = selectedCenter;
         try {
           const allowMagazine = data.allowMagazine === "Yes" ? true : false;
           const allowSocialMedia =
@@ -127,7 +133,7 @@ const Edi = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
