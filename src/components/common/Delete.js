@@ -18,6 +18,10 @@ function Delete({ onSuccess, path }) {
         onSuccess();
         handleClose();
         toast.success(response.data.message);
+      } else if (response.status === 200) {
+        onSuccess();
+        handleClose();
+        toast.success(response.data.message);
       } else {
         toast.error(response.data.message);
       }
