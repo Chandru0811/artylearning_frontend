@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-import {
-  MdOutlineLeaderboard,
-  MdOutlineAccountBalance,
-  MdOutlineShoppingCart,
-} from "react-icons/md";
+
+import { PiStudentFill } from "react-icons/pi";
+import { GiTeacher } from "react-icons/gi";
+import { FaUsers } from "react-icons/fa";
 import { TbPigMoney } from "react-icons/tb";
 
 function Dashboard() {
@@ -94,7 +93,7 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
-                    <MdOutlineLeaderboard />
+                    <FaUsers />
                   </h5>
                 </span>
                 <h2 className="card-text">
@@ -122,7 +121,7 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
-                    <MdOutlineAccountBalance />
+                    <PiStudentFill />
                   </h5>
                 </span>
                 <h2 className="card-text">
@@ -150,7 +149,7 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
-                    <MdOutlineShoppingCart />
+                    <GiTeacher />
                   </h5>
                 </span>
                 <h2 className="card-text">

@@ -190,6 +190,7 @@ function StaffAdd() {
           )}
 
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
+          {activeStep > 0 && (
             <button
               className="btn btn-border btn-sm"
               style={{ padding: "7px" }}
@@ -198,6 +199,7 @@ function StaffAdd() {
             >
               Back
             </button>
+          )}
 
             <div style={{ flex: "1 1 auto" }}></div>
             <button

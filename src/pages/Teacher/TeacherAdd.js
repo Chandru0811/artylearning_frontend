@@ -225,6 +225,7 @@ export default function TeacherAdd() {
               )}
 
               <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
+              {activeStep > 0 && (
                 <button
                   className="btn btn-sm btn-border mt-4"
                   style={{ padding: "7px" }}
@@ -233,6 +234,7 @@ export default function TeacherAdd() {
                 >
                   Back
                 </button>
+              )}
 
                 <div style={{ flex: "1 1 auto" }}></div>
                 {/* {isStepOptional(activeStep) && (

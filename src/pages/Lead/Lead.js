@@ -117,6 +117,7 @@ const Lead = () => {
                 </th>
                 <th scope="col">Centre</th>
                 <th scope="col">Student Name</th>
+                <th scope="col">Enquiry Date</th>
 
                 {/* <th scope="col">Parent Name</th> */}
                 <th scope="col">Payment Status</th>
@@ -141,6 +142,8 @@ const Lead = () => {
                       )}
                   </td>
                   <td>{data.studentName}</td>
+                  <td>{data.enquiryDate?.substring(0, 10)}</td>
+
 
                   {/* <td>{data.fathersFullName}</td> */}
                   <td>
