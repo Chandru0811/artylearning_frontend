@@ -5,33 +5,127 @@ import { FaEdit, FaFacebookF, FaInstagram, FaRegSave } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 
 function CMSFooter() {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isEditing1, setIsEditing1] = useState(false);
-  const [addressText, setAddressText] = useState(
+  const [headingGang, setHeadingGang] = useState("Arty Learning @ gang");
+  const [isEditingHeadGang, setIsEditingHeadGang] = useState(false);
+
+  const handleChangeHeadgang = (e) => {
+    setHeadingGang(e.target.value);
+  };
+
+  const toggleEditHeadGang = () => {
+    setIsEditingHeadGang(!isEditingHeadGang);
+  };
+
+  const [headingAmk, setHeadingAmk] = useState("Arty Learning @ AMK");
+  const [isEditingHeadAmk, setIsEditingHeadAmk] = useState(false);
+
+  const handleChangeHeadAmk = (e) => {
+    setHeadingAmk(e.target.value);
+  };
+
+  const toggleEditHeadAmk = () => {
+    setIsEditingHeadAmk(!isEditingHeadAmk);
+  };
+
+  const [addressTextGang, setAddressTextGang] = useState(
     "806 Hougang Central, #04-146, Singapore 530806"
   );
-  const [addressText1, setAddressText1] = useState(
+  const [isEditingGang, setIsEditingGang] = useState(false);
+
+  const handleChangeGang = (e) => {
+    setAddressTextGang(e.target.value);
+  };
+
+  const toggleEditModeGang = () => {
+    setIsEditingGang(!isEditingGang);
+  };
+
+  const [addressTextAmk, setAddressTextAmk] = useState(
     "728 Ang Mo Kio Ave 6, #01-4216, Singapore 560728"
   );
+  const [isEditingAmk, setIsEditingAmk] = useState(false);
 
-  const handleChange = (e) => {
-    setAddressText(e.target.value);
+  const handleChangeAmk = (e) => {
+    setAddressTextAmk(e.target.value);
   };
 
-  const handleChange1 = (e) => {
-    setAddressText1(e.target.value);
+  const toggleEditModeAmk = () => {
+    setIsEditingAmk(!isEditingAmk);
   };
 
-  const toggleEditMode = () => {
-    setIsEditing(!isEditing);
+  const [newsletter, setNewsletter] = useState("Subscribe to our newsletter");
+  const [editNews, setEditNews] = useState(false);
+
+  const handleChangeNews = (e) => {
+    setNewsletter(e.target.value);
   };
 
-  const toggleEditMode1 = () => {
-    setIsEditing1(!isEditing1);
+  const toggleEditModeNews = () => {
+    setEditNews(!editNews);
   };
+
+  const [newsletterContent, setNewsletterContent] = useState(
+    "The latest news, articles, and resources, sent to your inbox weekly."
+  );
+  const [editNewsContent, setEditNewsContent] = useState(false);
+
+  const handleChangeNewsContent = (e) => {
+    setNewsletterContent(e.target.value);
+  };
+
+  const toggleEditModeNewsContent = () => {
+    setEditNewsContent(!editNewsContent);
+  };
+
+  const [allRights, setAllRights] = useState(
+    "© 2017 ~ 2024 ArtyLearning. All rights reserved."
+  );
+  const [editAllRights, setEditAllRights] = useState(false);
+
+  const handleChangeAllRights = (e) => {
+    setAllRights(e.target.value);
+  };
+
+  const toggleEditModeAllRights = () => {
+    setEditAllRights(!editAllRights);
+  };
+
+  const [hougangMap, setHougangMap] = useState(
+    "© 2017 ~ 2024 ArtyLearning. All rights reserved."
+  );
+  const [editHougangMap, setEditHougangMap] = useState(false);
+
+  const handleChangeHougangMap = (e) => {
+    setHougangMap(e.target.value);
+  };
+
+  const toggleEditModeHougangMap = () => {
+    setEditHougangMap(!editHougangMap);
+  };
+
+  const [privacyPolicy, setPrivacyPolicy] = useState(
+    "https://artylearning.com/privacypolicy/index.html"
+  );
+  const [editPrivacyPolicy, setEditPrivacyPolicy] = useState(false);
+
+  const handleChangePrivacyPolicy = (e) => setPrivacyPolicy(e.target.value);
+
+  const toggleEditModePrivacyPolicy = () =>
+    setEditPrivacyPolicy(!editPrivacyPolicy);
+
+  const [termsandconditions, setTermsandconditions] = useState(
+    "https://artylearning.com/privacypolicy/index.html"
+  );
+  const [editTeamsandcondition, setEditTeamsandcondition] = useState(false);
+
+  const handleChangeTeamsandcondition = (e) =>
+    setTermsandconditions(e.target.value);
+
+  const toggleEditModeTeamsandcondition = () =>
+    setEditTeamsandcondition(!editTeamsandcondition);
 
   return (
-    <section className="mt-5">
+    <section className="cmsfooter mt-5">
       <div className="container">
         <div className="row">
           <div className="text-end">
@@ -44,44 +138,83 @@ function CMSFooter() {
         <div className="container">
           <div className="row">
             <div className="col-md-4 col-12 mt-3">
-              <h4 style={{ fontWeight: "700" }}>
-                <b>Arty Learning @ gang</b>
-              </h4>
-              {/* <FaEdit /> */}
-              {isEditing ? (
+              {isEditingHeadGang ? (
                 <div>
                   <input
                     type="text"
-                    value={addressText}
-                    onChange={handleChange}
+                    value={headingGang}
+                    onChange={handleChangeHeadgang}
                     className="form-control"
                   />
                   <button
                     className="btn btn-primary btn-sm my-2"
-                    onClick={toggleEditMode}
+                    onClick={toggleEditHeadGang}
                   >
                     <FaRegSave />
                   </button>
                   <button
                     className="btn btn-danger btn-sm my-2 ms-2"
-                    onClick={toggleEditMode}
+                    onClick={toggleEditHeadGang}
                   >
                     <IoClose />
                   </button>
                 </div>
               ) : (
-                <p>
-                  {addressText.split("\n").map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                  <FaEdit
-                    style={{ cursor: "pointer" }}
-                    onClick={toggleEditMode}
+                <div className="editable-text">
+                  <p>
+                    {headingGang.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        <h4 style={{ fontWeight: "700" }}>
+                          <b>{line}</b>
+                        </h4>
+                      </React.Fragment>
+                    ))}
+                    <FaEdit
+                      style={{ cursor: "pointer" }}
+                      onClick={toggleEditHeadGang}
+                      className="edit-icon-head"
+                    />
+                  </p>
+                </div>
+              )}
+              {/* <FaEdit /> */}
+              {isEditingGang ? (
+                <div>
+                  <input
+                    type="text"
+                    value={addressTextGang}
+                    onChange={handleChangeGang}
+                    className="form-control"
                   />
-                </p>
+                  <button
+                    className="btn btn-primary btn-sm my-2"
+                    onClick={toggleEditModeGang}
+                  >
+                    <FaRegSave />
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm my-2 ms-2"
+                    onClick={toggleEditModeGang}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              ) : (
+                <div className="editable-text">
+                  <p>
+                    {addressTextGang.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                    <FaEdit
+                      style={{ cursor: "pointer" }}
+                      onClick={toggleEditModeGang}
+                      className="edit-icon"
+                    />
+                  </p>
+                </div>
               )}
               <Iframe
                 url="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.673307615837!2d103.8430989749658!3d1.3727030986143165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da17835aa20b21%3A0x41c3c93369410510!2sArty%20Learning%20%40%20Ang%20Mo%20Kio%20%7C%20Enrichment%20Classes%20for%20Kids!5e0!3m2!1sen!2sin!4v1709642424960!5m2!1sen!2sin"
@@ -94,44 +227,82 @@ function CMSFooter() {
               />
             </div>
             <div className="col-md-4 col-12 mt-3">
-              <h4 style={{ fontWeight: "700" }}>
-                <b>Arty Learning @ AMK</b>
-              </h4>
-              {isEditing ? (
+              {isEditingHeadAmk ? (
                 <div>
                   <input
                     type="text"
-                    value={setAddressText1}
-                    onChange={handleChange1}
+                    value={headingAmk}
+                    onChange={handleChangeHeadAmk}
                     className="form-control"
                   />
                   <button
                     className="btn btn-primary btn-sm my-2"
-                    onClick={toggleEditMode1}
+                    onClick={toggleEditHeadAmk}
                   >
                     <FaRegSave />
                   </button>
                   <button
                     className="btn btn-danger btn-sm my-2 ms-2"
-                    onClick={toggleEditMode1}
+                    onClick={toggleEditHeadAmk}
                   >
                     <IoClose />
                   </button>
                 </div>
               ) : (
-                <p>
-                  {addressText1.split("\n").map((line, index) => (
-                    <React.Fragment key={index}>
-                      {line}
-                      <br />
-                    </React.Fragment>
-                  ))}
-                  &nbsp;
-                  <FaEdit
-                    style={{ cursor: "pointer" }}
-                    onClick={toggleEditMode1}
+                <div className="editable-text">
+                  <p>
+                    {headingAmk.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        <h4 style={{ fontWeight: "700" }}>
+                          <b>{line}</b>
+                        </h4>
+                      </React.Fragment>
+                    ))}
+                    <FaEdit
+                      style={{ cursor: "pointer" }}
+                      onClick={toggleEditHeadAmk}
+                      className="edit-icon-head"
+                    />
+                  </p>
+                </div>
+              )}
+              {isEditingAmk ? (
+                <div>
+                  <input
+                    type="text"
+                    value={addressTextAmk}
+                    onChange={handleChangeAmk}
+                    className="form-control"
                   />
-                </p>
+                  <button
+                    className="btn btn-primary btn-sm my-2"
+                    onClick={toggleEditModeAmk}
+                  >
+                    <FaRegSave />
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm my-2 ms-2"
+                    onClick={toggleEditModeAmk}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              ) : (
+                <div className="editable-text">
+                  <p>
+                    {addressTextAmk.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                    <FaEdit
+                      style={{ cursor: "pointer" }}
+                      onClick={toggleEditModeAmk}
+                      className="edit-icon"
+                    />
+                  </p>
+                </div>
               )}
               <Iframe
                 url="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.6759974761326!2d103.89156087496583!3d1.3710896986159518!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da171a746bd625%3A0x1c735a076971a9a5!2sArty%20Learning%20%40%20Hougang%20%7C%20Enrichment%20Classes%20for%20Kids!5e0!3m2!1sen!2sin!4v1709641787810!5m2!1sen!2sin"
@@ -144,14 +315,89 @@ function CMSFooter() {
               />
             </div>
             <div className="col-md-3 col-12 mt-3">
-              <p style={{ fontSize: "20px", fontWeight: "500" }}>
+              {/* <p style={{ fontSize: "20px", fontWeight: "500" }}>
                 Subscribe to our newsletter
-              </p>
-              <p>
+              </p> */}
+              {editNews ? (
+                <div>
+                  <input
+                    type="text"
+                    value={newsletter}
+                    onChange={handleChangeNews}
+                    className="form-control"
+                  />
+                  <button
+                    className="btn btn-primary btn-sm my-2"
+                    onClick={toggleEditModeNews}
+                  >
+                    <FaRegSave />
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm my-2 ms-2"
+                    onClick={toggleEditModeNews}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              ) : (
+                <div className="editable-text">
+                  <p>
+                    {newsletter.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        <p style={{ fontSize: "20px", fontWeight: "500" }}>
+                          {line}
+                        </p>
+                      </React.Fragment>
+                    ))}
+                    <FaEdit
+                      style={{ cursor: "pointer" }}
+                      onClick={toggleEditModeNews}
+                      className="edit-icon-news"
+                    />
+                  </p>
+                </div>
+              )}
+              {/* <p>
                 The latest news, articles, and resources, sent to your inbox
                 weekly.
-              </p>
-
+              </p> */}
+              {editNewsContent ? (
+                <div>
+                  <input
+                    type="text"
+                    value={newsletterContent}
+                    onChange={handleChangeNewsContent}
+                    className="form-control"
+                  />
+                  <button
+                    className="btn btn-primary btn-sm my-2"
+                    onClick={toggleEditModeNewsContent}
+                  >
+                    <FaRegSave />
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm my-2 ms-2"
+                    onClick={toggleEditModeNewsContent}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              ) : (
+                <div className="editable-text">
+                  <p>
+                    {newsletterContent.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        <p>{line}</p>
+                      </React.Fragment>
+                    ))}
+                    <FaEdit
+                      style={{ cursor: "pointer" }}
+                      onClick={toggleEditModeNewsContent}
+                      className="edit-icon-newscontent"
+                    />
+                  </p>
+                </div>
+              )}
               <div className="row">
                 <div className="col-md-8 col-12">
                   <input className="form-control mt-3 "></input>
@@ -166,29 +412,128 @@ function CMSFooter() {
           </div>
           <div className="row">
             <div className="col-md-4 col-12 mt-3">
-              <p>© 2017 ~ 2024 ArtyLearning. All rights reserved.</p>
+              {/* <p>© 2017 ~ 2024 ArtyLearning. All rights reserved.</p> */}
+              {editAllRights ? (
+                <div>
+                  <input
+                    type="text"
+                    value={allRights}
+                    onChange={handleChangeAllRights}
+                    className="form-control"
+                  />
+                  <button
+                    className="btn btn-primary btn-sm my-2"
+                    onClick={toggleEditModeAllRights}
+                  >
+                    <FaRegSave />
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm my-2 ms-2"
+                    onClick={toggleEditModeAllRights}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              ) : (
+                <div className="editable-text">
+                  <p>
+                    {allRights.split("\n").map((line, index) => (
+                      <React.Fragment key={index}>
+                        <p>{line}</p>
+                      </React.Fragment>
+                    ))}
+                    <FaEdit
+                      style={{ cursor: "pointer" }}
+                      onClick={toggleEditModeAllRights}
+                      className="edit-icon-allrights"
+                    />
+                  </p>
+                </div>
+              )}
             </div>
+
             <div className="col-md-4 col-12 mt-3">
-              <a
-                href="https://artylearning.com/privacypolicy/index.html"
-                style={{ color: "#000" }}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <p className="text-center">Privacy Policy</p>
-              </a>
+              {editPrivacyPolicy ? (
+                <div>
+                  <input
+                    type="text"
+                    value={privacyPolicy}
+                    onChange={handleChangePrivacyPolicy}
+                    className="form-control"
+                  />
+                  <button
+                    className="btn btn-primary btn-sm my-2"
+                    onClick={toggleEditModePrivacyPolicy}
+                  >
+                    <FaRegSave />
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm my-2 ms-2"
+                    onClick={toggleEditModePrivacyPolicy}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              ) : (
+                <div className="editable-text">
+                  <p>
+                    Privacy Policy{" "}
+                    {/* <a href={privacyPolicy} target="_blank" rel="noopener noreferrer">
+                      {privacyPolicy}
+                    </a> */}
+                    <FaEdit
+                      style={{ cursor: "pointer" }}
+                      onClick={toggleEditModePrivacyPolicy}
+                      className="edit-icon-privacy"
+                    />
+                  </p>
+                </div>
+              )}
             </div>
             <div className="col-md-4 col-12 mt-3">
               <div className="d-flex align-items-center justify-content-between">
                 <span>
-                  <a
+                  {/* <a
                     href="https://artylearning.com/termsandconditions/index.html"
                     style={{ color: "#000" }}
                     target="_blank"
                     rel="noreferrer"
                   >
                     <p>Terms & Condition </p>
-                  </a>
+                  </a> */}
+                  {editTeamsandcondition ? (
+                    <div>
+                      <input
+                        type="text"
+                        value={termsandconditions}
+                        onChange={handleChangeTeamsandcondition}
+                        className="form-control"
+                      />
+                      <button
+                        className="btn btn-primary btn-sm my-2"
+                        onClick={toggleEditModeTeamsandcondition}
+                      >
+                        <FaRegSave />
+                      </button>
+                      <button
+                        className="btn btn-danger btn-sm my-2 ms-2"
+                        onClick={toggleEditModeTeamsandcondition}
+                      >
+                        <IoClose />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="editable-text">
+                      <p>
+                        Teams and Condition{" "}
+                        <FaEdit
+                          style={{ cursor: "pointer" }}
+                          onClick={toggleEditModeTeamsandcondition}
+                          className="edit-icon-teams"
+                        />
+                      </p>
+                    </div>
+                  )}
                 </span>
                 <span className="d-flex">
                   <Link to="#" className="mx-2" style={{ color: "red" }}>

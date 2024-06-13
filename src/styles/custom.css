@@ -299,3 +299,102 @@
 .paysliptable .table-end-border {
   border-right: 2px solid #000;
 }
+
+/* cmsfooter  */
+
+.cmsfooter .edit-icon-head{
+    visibility: hidden;
+    position: absolute;
+    top: 8px;
+    right: -17px;
+    /* color: #4c86f9; */
+}
+
+.cmsfooter .editable-text:hover .edit-icon-head {
+  visibility: visible;
+  cursor: pointer;
+}
+
+.cmsfooter .editable-text {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.cmsfooter .edit-icon {
+  visibility: hidden;
+  position: absolute;
+  top: 26px;
+  right: 135px;
+  /* color: #4c86f9; */
+}
+
+.cmsfooter .editable-text:hover .edit-icon {
+  visibility: visible;
+  cursor: pointer;
+}
+
+.cmsfooter .edit-icon-news{
+  visibility: hidden;
+  position: absolute;
+  top: 35px;
+  right: 95px;
+  /* color: #4c86f9; */
+}
+
+.cmsfooter .editable-text:hover .edit-icon-news {
+visibility: visible;
+cursor: pointer;
+}
+
+.cmsfooter .edit-icon-newscontent{
+  visibility: hidden;
+  position: absolute;
+  top: 50px;
+  right: 95px;
+  /* color: #4c86f9; */
+}
+
+.cmsfooter .editable-text:hover .edit-icon-newscontent {
+visibility: visible;
+cursor: pointer;
+}
+
+.cmsfooter .edit-icon-allrights{
+  visibility: hidden;
+  position: absolute;
+  top: 27px;
+  right: 210px;
+  /* color: #4c86f9; */
+}
+
+.cmsfooter .editable-text:hover .edit-icon-allrights {
+visibility: visible;
+cursor: pointer;
+}
+
+.cmsfooter .edit-icon-privacy{
+  visibility: hidden;
+  position: absolute;
+  top: 5px;
+  right: -18px;
+  /* color: #4c86f9; */
+}
+
+.cmsfooter .editable-text:hover .edit-icon-privacy {
+visibility: visible;
+cursor: pointer;
+}
+
+.cmsfooter .edit-icon-teams{
+  visibility: hidden;
+  position: absolute;
+  top: 5px;
+  right: -18px;
+  /* color: #4c86f9; */
+}
+
+.cmsfooter .editable-text:hover .edit-icon-teams {
+visibility: visible;
+cursor: pointer;
+}
