@@ -765,3 +765,17 @@ input.form-control:hover {
   color: red !important;
   font-size: 45px !important;
 }
+.topbar-wordpress {
+  background-color: #343a40;
+  border: 1px solid #6c757d;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* .topbar-wordpress:focus {
+  color: #fff;
+  border-color: #495057;
+  box-shadow: none;
+  background-color: #495057;
+} */
