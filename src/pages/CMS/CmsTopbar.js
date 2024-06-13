@@ -55,26 +55,30 @@ const ContactSection = () => {
   return (
     <section>
       <div className="container">
-        <div className="row card  bg-dark-subtle my-1 p-1 d-flex justify-content-between">
-          <div className="">Header</div>
-          <div>
-            {isEditing ? (
-              <button
-                className="btn rounded-circle btn-sm btn-success"
-                onClick={saveContent}
-              >
-                <FaSave />
-              </button>
-            ) : (
-              <button
-                className="btn rounded-circle btn-sm btn-light"
-                onClick={toggleEdit}
-              >
-                <FaEdit />
-              </button>
-            )}
+        <div className="container card py-2">
+          <div className="row p-1">
+            <div className="col-md-6 col-12">
+              <h4>Header</h4>
+            </div>
+            <div className="col-md-6 col-12 d-flex justify-content-end">
+              {isEditing ? (
+                <button
+                  className="btn btn-sm btn-outline-primary border"
+                  onClick={saveContent}
+                >
+                  Save
+                </button>
+              ) : (
+                <button
+                  className="btn btn-sm btn-outline-light text-black border"
+                  onClick={toggleEdit}
+                >
+                  Edit
+                </button>
+              )}
+              <button className="btn btn-sm btn-outline-danger border ms-2 ">Save & Publish</button>
+            </div>
           </div>
-          <button className="btn btn-sm ">Save&publish</button>
         </div>
       </div>
       <div className="container-fluid pt-1 pb-2 px-3 mb-2 bg-dark text-white">
