@@ -134,6 +134,8 @@ import EditPayroll from "../pages/Payroll/PayrollAdmin/EditPayroll";
 import Viewpayroll from "../pages/Payroll/PayrollAdmin/ViewPayroll";
 import Payslip from "../pages/EmployeePayslip/Payslip";
 import ViewPayslip from "../pages/EmployeePayslip/ViewPayslip";
+import CMSFooter from "../pages/CMS/CMSFooter";
+import CmsTopbar from "../pages/CMS/CmsTopbar";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -382,6 +384,10 @@ function Admin({ handleLogout }) {
                 path="/campaign/student/add/list"
                 element={<ContactLists />}
               />
+
+              {/* CMS  */}
+              <Route path="/cms/footer" element={<CMSFooter />} />
+              <Route path="/cms/header" element={<CmsTopbar />} />
             </Routes>
           </div>
           <Footer />

@@ -244,6 +244,63 @@ function Sidebar() {
           },
         ],
       },
+      {
+        title: "Content Management",
+        icon: "bx bx-food-menu",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "Header",
+            path: "/cms/header",
+            access: true,
+          },
+          {
+            title: "Home",
+            path: "/report/attendance",
+            access: true,
+          },
+          {
+            title: "About",
+            path: "/report/studentreport",
+            access: true,
+          },
+          {
+            title: "English Course",
+            path: "/report/assessment",
+            access: true,
+          },
+          {
+            title: "Chiness Course",
+            path: "/report/enrolment",
+            access: true,
+          },
+          {
+            title: "Teachers",
+            path: "/report/fee",
+            access: true,
+          },
+          {
+            title: "Products",
+            path: "/report/package",
+            access: true,
+          },
+          {
+            title: "News & Updates",
+            path: "/report/sales",
+            access: true,
+          },
+          {
+            title: "Contact Us",
+            path: "/report/replace_class",
+            access: true,
+          },
+          {
+            title: "Footer",
+            path: "/cms/footer",
+            access: true,
+          },
+        ],
+      },
       // Add other menu items similarly
     ];
 
