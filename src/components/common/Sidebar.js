@@ -256,7 +256,7 @@ function Sidebar() {
           },
           {
             title: "Home",
-            path: "/report/attendance",
+            path: "/cms/home",
             access: true,
           },
           {
@@ -266,7 +266,7 @@ function Sidebar() {
           },
           {
             title: "English Course",
-            path: "/report/assessment",
+            path: "/cms/englishcourse",
             access: true,
           },
           {
@@ -276,17 +276,23 @@ function Sidebar() {
           },
           {
             title: "Teachers",
-            path: "/report/fee",
+            path: "/cms/teacher",
+            access: true,
+          },
+          
+          {
+            title: "Products",
+            path: "/cms/products",
             access: true,
           },
           {
-            title: "Products",
-            path: "/report/package",
+            title: "Products Items",
+            path: "/cms/productsitem",
             access: true,
           },
           {
             title: "News & Updates",
-            path: "/report/sales",
+            path: "/cms/newsupdate",
             access: true,
           },
           {

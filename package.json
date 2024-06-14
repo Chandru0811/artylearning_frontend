@@ -27,6 +27,7 @@
     "react-icons": "^5.0.1",
     "react-iframe": "^1.8.5",
     "react-multi-carousel": "^2.8.4",
+    "react-player": "^2.16.0",
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.4",
