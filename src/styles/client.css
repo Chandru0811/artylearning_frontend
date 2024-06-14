@@ -772,10 +772,15 @@ input.form-control:hover {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
 }
+.edit-container {
+  position: relative;
+  display: inline-block;
+}
 
-/* .topbar-wordpress:focus {
-  color: #fff;
-  border-color: #495057;
-  box-shadow: none;
-  background-color: #495057;
-} */
+.edit-button {
+  display: none;
+}
+
+.edit-container:hover .edit-button {
+  display: inline-block;
+}
