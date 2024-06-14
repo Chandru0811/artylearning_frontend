@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function FreeAssessment() {
   return (
@@ -16,7 +17,10 @@ function FreeAssessment() {
                   >
                     ARTY
                   </b>
-                  <br /> <b  className="artyAnimatedText" id="LEARNING">LEARNING</b>{" "}
+                  <br />{" "}
+                  <b className="artyAnimatedText" id="LEARNING">
+                    LEARNING
+                  </b>{" "}
                 </span>
               </h1>
             </div>
@@ -39,11 +43,15 @@ function FreeAssessment() {
               </span>
 
               <div>
-                <button className="btn btn-danger btn-lg ">ENGLISH</button>
+                <Link to={"/course/english"}>
+                  <button className="btn btn-danger btn-lg">ENGLISH</button>
+                </Link>
                 &nbsp;
-                <button className="btn btn-outline-danger btn-lg">
-                  CHINESE
-                </button>
+                <Link to={"/course/chinesh"}>
+                  <button className="btn btn-outline-danger btn-lg">
+                    CHINESE
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
