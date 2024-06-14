@@ -26,7 +26,7 @@ const ContactSection = () => {
 
   return (
     <section>
-    <div className="container card py-2">
+    <div className="container card my-2 py-2">
       <div className="row p-1">
         <div className="col-md-6 col-12">
           <h4>Header</h4>
