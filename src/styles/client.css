@@ -381,7 +381,7 @@
 /* Courses  */
 
 .bgimage {
-  background-image: url("../assets/clientimage/IMG_195.png");
+  /* background-image: url("../assets/clientimage/IMG_195.png"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -776,11 +776,15 @@ input.form-control:hover {
   position: relative;
   display: inline-block;
 }
-
-.edit-button {
-  display: none;
-}
-
-.edit-container:hover .edit-button {
-  display: inline-block;
+.btn-edit{
+  height: 20px;
+  width: 20px;  
+  font-size: 12px; 
+  padding: 2px 5px;
+  background-color: #eb0505; 
+  color: white;
+  border: none; 
+  border-radius: 3px;
+  cursor: pointer; 
+  
 }

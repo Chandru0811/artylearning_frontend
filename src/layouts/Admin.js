@@ -136,6 +136,16 @@ import Payslip from "../pages/EmployeePayslip/Payslip";
 import ViewPayslip from "../pages/EmployeePayslip/ViewPayslip";
 import CMSFooter from "../pages/CMS/CMSFooter";
 import CmsTopbar from "../pages/CMS/CmsTopbar";
+import CMSProducts from "../pages/CMS/CMSProducts";
+import CMSProductsItems from "../pages/CMS/CMSProductsItem";
+import CMSProductsItemAdd from "../pages/CMS/CMSProductsitemAdd";
+import CMSProductsItemEdit from "../pages/CMS/CMSProductsItemEdit";
+import CmsNewsUpdate from "../pages/CMS/CmsNewsUpdate";
+import CmsCalender from "../pages/CMS/CmsCalender";
+import { CmsTeacher } from "../pages/CMS/CmsTeacher";
+import CmsEnglish from "../pages/CMS/CMSEnglishCourse/CmsEnglish";
+import CmsHome from "../pages/CMS/CmsHome/CmsHome";
+
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -388,7 +398,20 @@ function Admin({ handleLogout }) {
               {/* CMS  */}
               <Route path="/cms/footer" element={<CMSFooter />} />
               <Route path="/cms/header" element={<CmsTopbar />} />
-            </Routes>
+              <Route path="/cms/products" element={<CMSProducts />} />
+              <Route path="/cms/productsitem" element={<CMSProductsItems />} />
+              <Route path="/cms/productsitem/addproductsitem" element={<CMSProductsItemAdd />} />
+              <Route path="/cms/productsitem/editproductsitem" element={<CMSProductsItemEdit />} />
+
+              <Route path="/cms/newsupdate" element={<CmsNewsUpdate />} />
+              <Route path="/calender" element={<CmsCalender />} />
+
+              <Route path="/cms/teacher" element={<CmsTeacher />} />
+
+              <Route path="/cms/englishcourse" element={<CmsEnglish />} />
+
+              <Route path="/cms/home" element={<CmsHome />} />
+              </Routes>
           </div>
           <Footer />
         </section>
