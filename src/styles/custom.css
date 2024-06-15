@@ -398,3 +398,82 @@ cursor: pointer;
 visibility: visible;
 cursor: pointer;
 }
+
+.edit-button-new {
+  position: absolute !important;
+  top: 0 !important;
+  left: 100 !important;
+}
+
+/* YourStylesheet.css */
+
+.custom-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.custom-edit-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(226, 226, 226); /* or any other color that fits your design */
+  border: none;
+  padding: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.custom-edit-button:hover {
+  background-color: #f0f0f0; /* Add a hover effect if desired */
+}
+
+.custom-img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.custom-card-body {
+  flex-grow: 1;
+}
+
+.custom-card-title {
+  font-size: 1.25rem;
+}
+
+.custom-button {
+  background-color: rgb(206, 0, 0); /* Customize the button color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background-color: rgb(206, 0, 0);
+}
+
+.cms-header{
+  background-color: #fff;
+  
+}
+.sized-image {
+  width: 140px;
+  height: 115px;
+  margin-top: 1rem;
+}
+.sized-image {
+  width: 140px;
+  height: 115px;
+  margin-top: 1rem;
+}
+.preserve-whitespace {
+  white-space: pre-wrap;
+}

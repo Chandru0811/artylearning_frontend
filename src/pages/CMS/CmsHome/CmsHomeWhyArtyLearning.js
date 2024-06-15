@@ -7,10 +7,8 @@ function CmsHomeWhyArtyLearning() {
   const [imageUrl, setImageUrl] = useState(Glass);
   const [content, setContent] = useState({
     title: "Why Arty Learning",
-    paragraph1:
-      "We provide free academic assessment for every child, to understand their academic progress and match them to our enrichment classes that will benefit the child the most.",
-    paragraph2:
-      "Our assessment recognises that each child is unique, and with our individualised assessments we can help identify students' diverse learning styles, strengths, and needs.",
+    paragraphs:
+      "We provide free academic assessment for every child, to understand their academic progress and match them to our enrichment classes that will benefit the child the most.\n\nOur assessment recognises that each child is unique, and with our individualised assessments we can help identify students' diverse learning styles, strengths, and needs.",
   });
 
   const toggleEdit = (field) => {
@@ -28,14 +26,14 @@ function CmsHomeWhyArtyLearning() {
 
   return (
     <section className="whyArty my-1">
-      <div className="container-fluid ">
+      <div className="container-fluid">
         <div
           className="container edit-container pt-4"
           style={{ minHeight: "80vh" }}
         >
-          <div className="row pt-5">
-            <div className="col-md-5 col-12 d-flex align-items-center justify-content-end paint">
-              {editingField === "image" ? (
+          <div className="row">
+            <div className="col-md-5 col-12 d-flex flex-column align-items-center justify-content-center paint">
+              {editingField === "Glass" ? (
                 <>
                   <input
                     type="file"
@@ -59,24 +57,20 @@ function CmsHomeWhyArtyLearning() {
                   </button>
                 </>
               ) : (
-                <>
-                  
-                </>
+                <button
+                  className="btn btn-sm border-transparent ms-2 edit-button"
+                  onClick={() => toggleEdit("Glass")}
+                  style={{ border: "none !important" }}
+                >
+                  <FaEdit />
+                </button>
               )}
-              <div className="d-flex flex-column">
-                    <button
-                      className="btn btn-sm border-transparent ms-2 edit-button"
-                      onClick={() => toggleEdit("image")}
-                    >
-                      <FaEdit />
-                    </button>
-                    <img
-                      src={imageUrl}
-                      style={{ borderRadius: "20px" }}
-                      alt="glass"
-                      className="img-fluid"
-                    />
-                  </div>
+              <img
+                src={imageUrl}
+                style={{ borderRadius: "20px" }}
+                alt="glass"
+                className="img-fluid"
+              />
             </div>
             <div
               className="col-md-7 col-12 p-5"
@@ -105,24 +99,25 @@ function CmsHomeWhyArtyLearning() {
                 </>
               ) : (
                 <>
-                  <h1 className="card-title">{content.title}
-                  <button
-                    className="btn btn-sm border-transparent ms-2 edit-button"
-                    onClick={() => toggleEdit("title")}
-                  >
-                    <FaEdit />
-                  </button>
+                  <h1 className="card-title">
+                    {content.title}
+                    <button
+                      className="btn btn-sm border-transparent ms-2 edit-button"
+                      onClick={() => toggleEdit("title")}
+                    >
+                      <FaEdit />
+                    </button>
                   </h1>
                 </>
               )}
 
-              {editingField === "paragraph1" ? (
+              {editingField === "paragraphs" ? (
                 <>
                   <textarea
-                    name="paragraph1"
-                    value={content.paragraph1}
+                    name="paragraphs"
+                    value={content.paragraphs}
                     onChange={handleChange}
-                    rows="4"
+                    rows="8"
                     className="form-control"
                   />
                   <button
@@ -134,42 +129,20 @@ function CmsHomeWhyArtyLearning() {
                 </>
               ) : (
                 <>
-                  <p className="card-text my-4">{content.paragraph1}
-                  <button
-                    className="btn btn-sm border-transparent ms-2 edit-button"
-                    onClick={() => toggleEdit("paragraph1")}
-                  >
-                    <FaEdit />
-                  </button>
-                  </p>
-                </>
-              )}
-
-              {editingField === "paragraph2" ? (
-                <>
-                  <textarea
-                    name="paragraph2"
-                    value={content.paragraph2}
-                    onChange={handleChange}
-                    rows="4"
-                    className="form-control"
-                  />
-                  <button
-                    className="btn btn-sm btn-outline-primary border ms-2"
-                    onClick={saveContent}
-                  >
-                    <FaSave />
-                  </button>
-                </>
-              ) : (
-                <>
-                  <p className="card-text my-4">{content.paragraph2}
-                  <button
-                    className="btn btn-sm border-transparent ms-2 edit-button"
-                    onClick={() => toggleEdit("paragraph2")}
-                  >
-                    <FaEdit />
-                  </button>
+                  <p className="card-text my-4">
+                    {content.paragraphs.split("\n\n").map((text, index) => (
+                      <span key={index}>
+                        {text}
+                        <br />
+                        <br />
+                      </span>
+                    ))}
+                    <button
+                      className="btn btn-sm border-transparent ms-2 edit-button"
+                      onClick={() => toggleEdit("paragraphs")}
+                    >
+                      <FaEdit />
+                    </button>
                   </p>
                 </>
               )}

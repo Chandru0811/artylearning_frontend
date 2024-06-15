@@ -1,65 +1,61 @@
 import React, { useState } from "react";
-import Believer from "../../../assets/clientimage/Arty-Believer.png";
-import Dreamer from "../../../assets/clientimage/Arty-Dreamer.png";
-import Pursuer from "../../../assets/clientimage/Arty-Pursuer.png";
 import { FaEdit, FaSave } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import believer from "../../../assets/clientimage/Arty-(Believer).png";
+import dreamer from "../../../assets/clientimage/Arty-(Dreamer).png";
+import pursuer from "../../../assets/clientimage/Arty-(Prusuers).png";
 
-function CmsEnglishCourseListing() {
-  const [editingSection, setEditingSection] = useState(null);
+function CmsChineseCourseListing() {
   const [editingField, setEditingField] = useState(null);
   const [paragraph1, setParagraph1] = useState(
-    `In our English Enrichment Class, children will embark on an exciting journey to enhance their language skills and foster a deep love for the English language. Through engaging activities, interactive
-discussions, and creative projects, students will develop their vocabulary, grammar, reading, writing, and communication skills. Our
- experienced educators will guide them in exploring various literary genres, analyzing texts, and expressing their thoughts articulately.
-From honing their comprehension abilities to refining their storytelling prowess, this class is designed to provide a holistic
-approach to English proficiency. Through a blend of educational games, multimedia resources, and collaborative exercises, children will not only build a strong foundation in English but also gain the
-confidence to navigate the world of words with enthusiasm and confidence.`
+    `In our Chinese Enrichment Class, children will embark on a captivating journey to explore the richness of the Chinese language and culture. Through engaging activities, interactive lessons, and cultural experiences, students will develop their proficiency in speaking, listening, reading, and writing Mandarin. Our experienced educators will guide them in learning essential language skills while also immersing them in the beauty of Chinese traditions and customs. From mastering the strokes of Chinese characters to engaging in everyday conversations, this class aims to provide a comprehensive foundation in the language. By incorporating games, multimedia resources, and collaborative projects, children will not only gain fluency in Chinese but also a deep appreciation for the cultural nuances that make the language come alive.`
   );
   const [paragraph2, setParagraph2] = useState(
-    `Our children are placed into classes according to their language ability and not by standard educational age.
-
-(Therefore we may ask you to bring your child down for a FREE observation/assessment, only if we have available and suitable slot; based on your waitlist questions answered)`
+    `Our children are placed into classes according to their language ability and not by standard educational age.\n\n(Therefore we may ask you to bring your child down for a FREE observation/assessment, only if we have available and suitable slot; based on your waitlist questions answered)`
   );
+
   const [sections, setSections] = useState([
     {
       id: "Believer",
-      image: Believer,
-      title: "Arty Believer",
+      image: believer,
+      title: "Arty 信念 (初级班)",
       content: [
-        "Designed for children beginning their English alphabet journey.",
-        "Focuses on enhancing fine motor skills and pencil grip through engaging activities.",
-        "Main objective is for children to recognize the entire lowercase alphabet from a to z while also fostering interaction and social skills.",
+        "- 简单的日常对话",
+        "- 认读简单的汉字",
+        "- 书写简单的笔画和汉字",
       ],
     },
     {
       id: "Dreamer",
-      image: Dreamer,
-      title: "Arty Dreamer",
+      image: dreamer,
+      title: "Arty 梦想 (中级班)",
       content: [
-        "Focuses on beginning sounds, word association, and independent writing skills, all of which are crucial for enhancing children's language development and literacy abilities.",
-        "Provides a solid foundation for young learners to confidently move on towards the next stage and fosters a love for learning through the fun activities provided.",
+        "- 完整的表达自己想法",
+        "- 学习常用笔画",
+        "- 认读和书写常用汉字",
+        "- 认读简单拼音和声调",
       ],
     },
     {
       id: "Pursuer",
-      image: Pursuer,
-      title: "Arty Pursuer",
+      image: pursuer,
+      title: "Arty 追寻 (高级班)",
       content: [
-        "Designed for children who already possess a strong foundation of the letter sound and independent writing skill.",
-        "Focuses on cultivating essential skills like independent reading, blending, and spelling.",
-        "Will gain the confidence and preparedness to excel in primary school English, building a solid foundation for their language abilities and future education.",
-        "An excellent opportunity to enhance their learning journey and ensure they are well-prepared for the next level of education.",
+        "- 能持续性的日常沟通",
+        "- 汉语拼音",
+        "- 认读和书写常用汉字",
+        "- 听写练习",
       ],
     },
   ]);
 
+  const [editingSection, setEditingSection] = useState(null);
+
   const handleClose = () => setEditingSection(null);
 
   const handleSave = () => {
-    // Update sections with edited content
     setSections((prevSections) =>
       prevSections.map((section) =>
         section.id === editingSection.id
@@ -107,7 +103,7 @@ confidence to navigate the world of words with enthusiasm and confidence.`
   return (
     <div className="container">
       <div className="row">
-        <div className="col-12 my-5">
+        <div className="col-12 my-5 ">
           <div className="edit-container">
             {editingField === "paragraph1" ? (
               <>
@@ -145,7 +141,7 @@ confidence to navigate the world of words with enthusiasm and confidence.`
               </div>
               <h1 className="">{section.title}</h1>
               {section.content.map((content, index) => (
-                <p key={index} className="headbody preserve-whitespace">
+                <p key={index} className="headbody">
                   {content}
                 </p>
               ))}
@@ -188,6 +184,7 @@ confidence to navigate the world of words with enthusiasm and confidence.`
             )}
           </div>
         </div>
+
         <Modal show={!!editingSection} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Edit Section</Modal.Title>
@@ -246,4 +243,4 @@ confidence to navigate the world of words with enthusiasm and confidence.`
   );
 }
 
-export default CmsEnglishCourseListing;
+export default CmsChineseCourseListing;
