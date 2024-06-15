@@ -42,7 +42,7 @@ const CmsNewsUpdate = () => {
 
   const formik = useFormik({
     initialValues: {
-      file: "",
+      file: null,
       heading: "",
       comments: "",
     },
@@ -90,18 +90,20 @@ const CmsNewsUpdate = () => {
     setShowAddModal(true);
   };
 
-  const handleSaveEditChanges = () => {
-    setContent({ ...tempContent });
-    setNewImage(tempImage);
-    setShowEditModal(false);
-  };
+  // const handleSaveEditChanges = () => {
+  //   setContent({ ...tempContent });
+  //   setNewImage(tempImage);
+  //   setShowEditModal(false);
+  // };
 
   // const handleSaveAddChanges = () => {
   //   // Handle adding news logic here
   //   setShowAddModal(false);
   // };
 
-  const handleCloseEditModal = () => setShowEditModal(false);
+  const handleCloseEditModal = () =>{
+    setShowEditModal(false)
+  };
   const handleCloseAddModal = () => setShowAddModal(false);
 
   const handleEditChange = (e) => {
@@ -153,7 +155,7 @@ const CmsNewsUpdate = () => {
         <div className='d-flex align-content-end justify-content-end'>
 
           <button
-            className="btn btn-button "
+            className="btn btn-button"
             onClick={handleShowAddModal}
           >
             Add News <IoMdAdd />
@@ -345,7 +347,7 @@ const CmsNewsUpdate = () => {
 
       <form onSubmit={formik.handleSubmit}>
         <Modal
-          show={showAddModal}
+          show={showEditModal}
           size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
@@ -389,7 +391,7 @@ const CmsNewsUpdate = () => {
             <Button
               type="submit"
               className="btn btn-button btn-sm"
-              onClick={handleSaveEditChanges}>
+              onClick={handleCloseEditModal}>
               Save Changes
             </Button>
           </Modal.Footer>
