@@ -7,6 +7,7 @@ import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../../components/common/Delete";
 import CMSContactAdd from "./CMSContactAdd";
 import CMSContactEdit from "./CMSContactEdit";
+import CMSContactView from "./CMSContactView";
 
 const CMSContact = () => {
   const tableRef = useRef(null);
@@ -59,11 +60,7 @@ const CMSContact = () => {
               <td>{data.email}</td>
               <td>{data.phone}</td>
               <td>
-                <Link to={`/cms/contact/view`}>
-                  <button className="btn btn-sm">
-                    <FaEye />
-                  </button>
-                </Link>
+                <CMSContactView />
                 <CMSContactEdit />
                 <Delete />
               </td>

@@ -73,7 +73,7 @@ const CMSTestMonail = () => {
   };
 
   return (
-    <div className="container my-4 center">
+    <div className="containercenter">
         <div className="container cms-header shadow-sm py-2">
         <div className="row p-1">
           <div className="col-md-6 col-12">

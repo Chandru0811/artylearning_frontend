@@ -161,13 +161,14 @@ function CMSContactEdit({ id, onSuccess }) {
                   <label className="form-label">
                     Address<span className="text-danger">*</span>
                   </label>
-                  <input
+                  <textarea
                     type="text"
                     className={`form-control  ${
                       formik.touched.address && formik.errors.address
                         ? "is-invalid"
                         : ""
                     }`}
+                    rows="3"
                     {...formik.getFieldProps("address")}
                   />
                   {formik.touched.address && formik.errors.address && (

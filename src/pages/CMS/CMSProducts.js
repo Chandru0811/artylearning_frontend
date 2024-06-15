@@ -70,6 +70,21 @@ function CMSProducts() {
   return (
     <>
       <div className="container">
+      <div className="container cms-header shadow-sm py-2">
+        <div className="row p-1">
+          <div className="col-md-6 col-12">
+            <h4>Products</h4>
+          </div>
+          <div className="col-md-6 col-12 d-flex justify-content-end">
+            <button className="btn btn-sm btn-outline-primary border ms-2">
+              Save
+            </button>
+            <button className="btn btn-sm btn-outline-danger border ms-2">
+              Save & Publish
+            </button>
+          </div>
+        </div>
+      </div>
         <div className="row">
           <div className="offset-md-3 col-md-6 col-12">
             <div className="d-flex justify-content-between align-items-center">

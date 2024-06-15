@@ -454,7 +454,7 @@ function Admin({ handleLogout }) {
               <Route path="/cms/contact/edit" element={<CMSContactEdit />} />
               <Route path="/cms/contact/view" element={<CMSContactView />} />
 
-              <Route path="/cms/testmonial" element={<CMSTestMonail />} />
+              <Route path="/cms/testimonial" element={<CMSTestMonail />} />
               <Route path="/cms/testmonial/addtestmonial" element={<CMSTestMonialAdd />} />
               <Route path="/cms/testmonial/editmonial" element={<CMSTestMonialEdit />} />
 
