@@ -5,6 +5,7 @@ import { FaEdit, FaSave } from "react-icons/fa";
 
 function CmsChineseBanner() {
   const [editingField, setEditingField] = useState(null);
+  const [editingAllParagraphs, setEditingAllParagraphs] = useState(false);
   const [content, setContent] = useState({
     heading: "Chinese Enrichment Class",
     bgImg: bgImg,
@@ -22,9 +23,13 @@ function CmsChineseBanner() {
   });
 
   const toggleEdit = () => {
-    setEditingField((prevEditingField) =>
-      prevEditingField === "paragraphs" ? null : "paragraphs"
-    );
+    if (editingField === "paragraphs") {
+      setEditingField(null);
+      setEditingAllParagraphs(false);
+    } else {
+      setEditingField("paragraphs");
+      setEditingAllParagraphs(true);
+    }
   };
 
   const handleEdit = (index) => {
@@ -33,8 +38,9 @@ function CmsChineseBanner() {
 
   const saveContent = () => {
     setEditingField(null);
-    // Here you might want to send the updated content to your backend or CMS
+    setEditingAllParagraphs(false);
   };
+
   const handleImageChange = (e, field) => {
     const file = e.target.files[0];
     if (file) {
@@ -49,61 +55,45 @@ function CmsChineseBanner() {
     }
   };
 
-  const handleChange = (index, value) => {
-    setContent((prevContent) => {
-      const newParagraphs = [...prevContent.paragraphs];
-      newParagraphs[index] = value;
-      return {
-        ...prevContent,
-        paragraphs: newParagraphs,
-      };
-    });
-  };
-
   return (
     <div className="container-fluid font-styles">
       <div className="row remove-padding">
-      <div className="edit-container mb-3">
-            {editingField === "bgImg" ? (
-              <>
-                <input
-                  type="file"
-                  onChange={(e) => handleImageChange(e, "bgImg")}
-                  className="form-control mb-3"
-                />
-                <button
-                  className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
-                >
-                  <FaSave />
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="btn btn-sm btn-outline-warning border edit-button"
-                  onClick={() => handleEdit("bgImg")}
-                >
-                  <FaEdit />
-                </button>
-              </>
-            )}
-          </div>
+        <div className="edit-container mb-3">
+          {editingField === "bgImg" ? (
+            <>
+              <input
+                type="file"
+                onChange={(e) => handleImageChange(e, "bgImg")}
+                className="form-control mb-3"
+              />
+              <button
+                className="btn btn-sm btn-outline-primary border ms-2"
+                onClick={saveContent}
+              >
+                <FaSave />
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="btn btn-sm btn-outline-warning border edit-button"
+                onClick={() => handleEdit("bgImg")}
+              >
+                <FaEdit />
+              </button>
+            </>
+          )}
+        </div>
         <div
           className="col-md-6 col-12 bgchimage"
           style={{ backgroundImage: `url(${content.bgImg})` }}
         >
-
           <div className="py-5 firsthead d-flex flex-column justify-content-center align-items-center">
             <img src={Alphabet} alt="english" width={80}></img>
             <h1>{content.heading}</h1>
-
           </div>
         </div>
-
         <div className="col-md-6 col-12 p-5">
-          
-
           <div className="edit-container mb-3">
             {editingField === "heading" ? (
               <>
@@ -135,23 +125,24 @@ function CmsChineseBanner() {
             )}
           </div>
 
-          {editingField === "paragraphs" ? (
+          {editingField === "paragraphs" || editingAllParagraphs ? (
             <>
-              {content.paragraphs.map((paragraph, index) => (
-                <div key={index} className="edit-container mb-3">
-                  <textarea
-                    value={paragraph}
-                    onChange={(e) => handleChange(index, e.target.value)}
-                    className="form-control mb-3"
-                    rows="4"
-                  />
-                </div>
-              ))}
+              <textarea
+                value={content.paragraphs.join("\n\n")}
+                onChange={(e) =>
+                  setContent({
+                    ...content,
+                    paragraphs: e.target.value.split("\n\n"),
+                  })
+                }
+                className="form-control mb-3"
+                rows="10"
+              />
               <button
                 className="btn btn-sm btn-outline-primary border ms-2"
                 onClick={saveContent}
               >
-                <FaSave /> Save
+                <FaSave />
               </button>
             </>
           ) : (
