@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import PaperDraw from "../../../assets/clientimage/Paper-draw.jpg";
 import { FaEdit, FaSave } from "react-icons/fa";
-// import { MdModeEditOutline } from "react-icons/md";
 
 function CmsHomeEnrichmentClass() {
   const [editingField, setEditingField] = useState(null);
@@ -12,12 +11,8 @@ function CmsHomeEnrichmentClass() {
   const [content, setContent] = useState({
     header: "Arty Learning",
     subHeader: "Enrichment Classes in Singapore",
-    paragraph1:
-      "We believe that every child has the potential to shine and achieve great things. As a dynamic and innovative language education centre, we are dedicated to providing a nurturing environment that fosters the creativity and development of young minds.",
-    paragraph2:
-      "Driven by a deep passion for education, we believe in the power of creativity and critical thinking. Children learn best when they are actively engaged, inspired and encouraged to explore their unique talents.",
-    paragraph3:
-      "Discover Enrichment Classes Singapore for kids with Arty Learning and embark on a transformative educational journey where boundless potential meets inventive teaching methods.",
+    paragraphs:
+      "We believe that every child has the potential to shine and achieve great things. As a dynamic and innovative language education centre, we are dedicated to providing a nurturing environment that fosters the creativity and development of young minds.\n\nDriven by a deep passion for education, we believe in the power of creativity and critical thinking. Children learn best when they are actively engaged, inspired and encouraged to explore their unique talents.\n\nDiscover Enrichment Classes Singapore for kids with Arty Learning and embark on a transformative educational journey where boundless potential meets inventive teaching methods.",
   });
 
   const toggleEdit = (field) => {
@@ -55,17 +50,17 @@ function CmsHomeEnrichmentClass() {
             </>
           ) : (
             <>
-              <h1 className="fw-bold d-flex">{content.header}
-              <button
-                className="btn btn-sm border-transparent ms-2 edit-button"
-                onClick={() => toggleEdit("header")}
-              >
-                <FaEdit />
-              </button>
+              <h1 className="fw-bold d-flex">
+                {content.header}
+                <button
+                  className="btn btn-sm border-transparent ms-2 edit-button"
+                  onClick={() => toggleEdit("header")}
+                >
+                  <FaEdit />
+                </button>
               </h1>
             </>
           )}
-
           {editingField === "subHeader" ? (
             <>
               <input
@@ -86,24 +81,23 @@ function CmsHomeEnrichmentClass() {
             <>
               <h5 className="text-secondary fw-bold d-flex pt-3 pb-3">
                 {content.subHeader}
-              
-              <button
-                className="btn btn-sm border-transparent ms-2 edit-button"
-                onClick={() => toggleEdit("subHeader")}
-              >
-                <FaEdit />
-              </button>
+                <button
+                  className="btn btn-sm border-transparent ms-2 edit-button"
+                  onClick={() => toggleEdit("subHeader")}
+                >
+                  <FaEdit />
+                </button>
               </h5>
             </>
           )}
 
-          {editingField === "paragraph1" ? (
+          {editingField === "paragraphs" ? (
             <>
               <textarea
-                name="paragraph1"
-                value={content.paragraph1}
+                name="paragraphs"
+                value={content.paragraphs}
                 onChange={handleChange}
-                rows="4"
+                rows="12"
                 className="form-control fs-5 lh-base"
               />
               <button
@@ -115,76 +109,21 @@ function CmsHomeEnrichmentClass() {
             </>
           ) : (
             <>
-              <p className="d-flex mt-2 mb-0 fs-5 lh-base">{content.paragraph1}</p>
-              <button
-                className="btn btn-sm border-transparent ms-2 edit-button"
-                onClick={() => toggleEdit("paragraph1")}
-              >
-                <FaEdit />
-              </button>
-              
-            </>
-          )}
-
-          {editingField === "paragraph2" ? (
-            <>
-              <textarea
-                name="paragraph2"
-                value={content.paragraph2}
-                onChange={handleChange}
-                rows="4"
-                className="form-control fs-5 lh-base"
-              />
-              <button
-                className="btn btn-sm btn-outline-primary border ms-2"
-                onClick={saveContent}
-              >
-                <FaSave />
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="text-secondary fs-5 mt-2 lh-base">
-                {content.paragraph2}
-             
-              <button
-                className="btn btn-sm border-transparent ms-2 edit-button"
-                onClick={() => toggleEdit("paragraph2")}
-              >
-                <FaEdit />
-              </button>
+              <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base">
+                {content.paragraphs.split("\n\n").map((text, index) => (
+                  <span key={index}>
+                    {text}
+                    <br />
+                    <br />
+                  </span>
+                ))}
               </p>
-            </>
-          )}
-
-          {editingField === "paragraph3" ? (
-            <>
-              <textarea
-                name="paragraph3"
-                value={content.paragraph3}
-                onChange={handleChange}
-                rows="4"
-                className="form-control fs-5 lh-base"
-              />
-              <button
-                className="btn btn-sm btn-outline-primary border ms-2"
-                onClick={saveContent}
-              >
-                <FaSave />
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="text-secondary fs-5 mt-2 lh-base">
-                {content.paragraph3}
-              
               <button
                 className="btn btn-sm border-transparent ms-2 edit-button"
-                onClick={() => toggleEdit("paragraph3")}
+                onClick={() => toggleEdit("paragraphs")}
               >
                 <FaEdit />
               </button>
-              </p>
             </>
           )}
         </div>
@@ -216,13 +155,13 @@ function CmsHomeEnrichmentClass() {
             <button
               className="btn btn-sm border-transparent ms-2 edit-button"
               onClick={() => toggleEdit("PaperDraw")}
-              style={{border:"none !important"}}
+              style={{ border: "none !important" }}
             >
               <FaEdit />
             </button>
           )}
           <img
-            className="rounded paper-draw ShadowLayer mt-2"
+            className="rounded paper-draw ShadowLayer mt-2 img-fluid"
             src={paperDraw}
             alt="arty learning"
           />
