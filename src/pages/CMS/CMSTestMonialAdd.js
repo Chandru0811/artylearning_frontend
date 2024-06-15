@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-function CMSProductsItemAdd() {
+function CMSTestMonialAdd() {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -102,7 +102,7 @@ function CMSProductsItemAdd() {
         </div> */}
         <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add Product Item</Modal.Title>
+          <Modal.Title className="headColor">Add TestiMonial</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
         <Modal.Body>
@@ -134,7 +134,23 @@ function CMSProductsItemAdd() {
 
           <div className="mb-3">
             <label htmlFor="details" className="form-label">
-              Image Details
+              Parent Name
+            </label>
+            <input
+              id="details"
+              name="details"
+              className="form-control"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.details}
+            />
+            {formik.touched.details && formik.errors.details && (
+              <div className="text-danger">{formik.errors.details}</div>
+            )}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="details" className="form-label">
+              Parent Description
             </label>
             <textarea
               id="details"
@@ -177,4 +193,4 @@ function CMSProductsItemAdd() {
   );
 }
 
-export default CMSProductsItemAdd;
+export default CMSTestMonialAdd;

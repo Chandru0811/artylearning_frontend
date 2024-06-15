@@ -11,8 +11,10 @@ import { toast } from "react-toastify";
 import profile from "../../assets/images/profile.png";
 import CMSProductsItemAdd from "./CMSProductsitemAdd";
 import CMSProductsItemEdit from "./CMSProductsItemEdit";
+import CMSTestMonialAdd from "./CMSTestMonialAdd";
+import CMSTestMonialEdit from "./CMSTestMonialEdit";
 
-const CMSProductsItem = () => {
+const CMSTestMonail = () => {
   const tableRef = useRef(null);
 
   const [datas, setDatas] = useState([]);
@@ -72,10 +74,10 @@ const CMSProductsItem = () => {
 
   return (
     <div className="container my-4 center">
-      <div className="container cms-header shadow-sm py-2">
+        <div className="container cms-header shadow-sm py-2">
         <div className="row p-1">
           <div className="col-md-6 col-12">
-            <h4>Product Item</h4>
+            <h4>TestiMonial</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
             <button className="btn btn-sm btn-outline-primary border ms-2">
@@ -88,7 +90,7 @@ const CMSProductsItem = () => {
         </div>
       </div>
       <div className="mb-5 mt-3 d-flex justify-content-end">
-        <CMSProductsItemAdd />
+        <CMSTestMonialAdd />
       </div>
       {loading ? (
         <div className="loader-container">
@@ -107,8 +109,9 @@ const CMSProductsItem = () => {
               <th scope="col" className="text-center" style={{ whiteSpace: "nowrap" }}>
                 S No
               </th>
-              <th scope="col" className="text-center">Image Upload</th>
-              <th scope="col" className="text-center">Image Details</th>
+              <th scope="col" className="text-center">Parent Image</th>
+              <th scope="col" className="text-center">Parent Name</th>
+              <th scope="col" className="text-center">Parent Description</th>
               <th scope="col" className="text-center">Action</th>
             </tr>
           </thead>
@@ -119,10 +122,11 @@ const CMSProductsItem = () => {
                 <td className="text-center">
                   <img className="img-fluid sized-image" src={profile} alt="Profile" />
                 </td>
-                <td className="text-center">Image description</td>
+                <td className="text-center">Arty Learning</td>
+                <td className="text-center"> Redundant alt attribute. Screen-readers already announce `img` tags as an image. You don’t need to use the words</td>
                 <td className="text-center">
                   <div className="d-flex">
-                    <CMSProductsItemEdit />
+                    <CMSTestMonialEdit />
                     <Delete
                       onSuccess={refreshData}
                       path={`/deleteCenter/${data.id}`}
@@ -139,4 +143,4 @@ const CMSProductsItem = () => {
   );
 };
 
-export default CMSProductsItem;
+export default CMSTestMonail;
