@@ -18,7 +18,7 @@ function CmsHomeYoutube() {
 
   return (
     <div className="container mt-3 edit-container">
-      <div className="d-flex justify-content-center align-items-center m-3">
+      <div className="d-flex flex-column justify-content-center align-items-center m-3">
         {editing ? (
           <div className="w-100">
             <input
@@ -37,12 +37,6 @@ function CmsHomeYoutube() {
           </div>
         ) : (
           <div className="position-relative w-100">
-            <ReactPlayer
-              url={videoUrl}
-              width="100%"
-              height="500px"
-              controls
-            />
             <button
               className="btn btn-sm border-transparent position-absolute top-0 end-0 m-2"
               onClick={toggleEdit}
@@ -51,6 +45,12 @@ function CmsHomeYoutube() {
             </button>
           </div>
         )}
+        <ReactPlayer
+              url={videoUrl}
+              width="100%"
+              height="500px"
+              controls
+            />
       </div>
     </div>
   );

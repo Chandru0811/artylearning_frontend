@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 
-function CMSProductsItemEdit() {
+function CMSTestMonialEdit() {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -93,7 +93,7 @@ function CMSProductsItemEdit() {
         </div> */}
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Product Item</Modal.Title>
+          <Modal.Title className="headColor">Edit TestiMonial</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
@@ -130,12 +130,25 @@ function CMSProductsItemEdit() {
 
               <div className="mb-3">
                 <label htmlFor="details" className="form-label">
-                  Image Details
+                  Parent Name
                 </label>
                 <input
                   type="text"
                   class="form-control"
-                  value="image description"
+                  value="artylearning"
+                />
+                {formik.touched.details && formik.errors.details && (
+                  <div className="text-danger">{formik.errors.details}</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="details" className="form-label">
+                  Parent Description
+                </label>
+                <textarea
+                  type="text"
+                  class="form-control"
+                  value=" Redundant alt attribute. Screen-readers already announce `img` tags as an image. You don’t need to use the words "
                 />
                 {formik.touched.details && formik.errors.details && (
                   <div className="text-danger">{formik.errors.details}</div>
@@ -167,4 +180,4 @@ function CMSProductsItemEdit() {
   );
 }
 
-export default CMSProductsItemEdit;
+export default CMSTestMonialEdit;

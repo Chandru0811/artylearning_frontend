@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Collapse, Nav } from "react-bootstrap";
 import Logo from "../../assets/images/Logo.png";
 
+
 function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
@@ -260,8 +261,13 @@ function Sidebar() {
             access: true,
           },
           {
+            title: "Testimonial",
+            path: "/cms/testimonial",
+            access: true,
+          },
+          {
             title: "About",
-            path: "/report/studentreport",
+            path: "/cms/aboutus",
             access: true,
           },
           {
@@ -271,7 +277,7 @@ function Sidebar() {
           },
           {
             title: "Chiness Course",
-            path: "/report/enrolment",
+            path: "/cms/chineshcourse",
             access: true,
           },
           {
@@ -297,12 +303,7 @@ function Sidebar() {
           },
           {
             title: "Contact Us",
-            path: "/report/replace_class",
-            access: true,
-          },
-          {
-            title: "Footer",
-            path: "/cms/footer",
+            path: "/cms/contact",
             access: true,
           },
         ],
