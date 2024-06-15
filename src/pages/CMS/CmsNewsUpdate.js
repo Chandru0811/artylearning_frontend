@@ -15,6 +15,7 @@ const CmsNewsUpdate = () => {
   const [tempImage, setTempImage] = useState(null);
   const [newImage, setNewImage] = useState(View);
   const [selectedFile, setSelectedFile] = useState(null);
+
   const [content, setContent] = useState([
     {
       heading: "2024 Arty Learning Calender 2024 Arty Learning Calender",
@@ -31,6 +32,8 @@ const CmsNewsUpdate = () => {
       image: newImage
     }
   ]);
+  const contentArray = Array.isArray(content) ? content : [];
+
   const validationSchema = yup.object().shape({
     file: yup.string().required("*Package Name is required"),
     heading: yup.string().required("*Number of Lesson is required"),
@@ -116,18 +119,17 @@ const CmsNewsUpdate = () => {
       [name]: value,
     }));
   };
+  // const handleFileChange = event => {
+  //   const file = event.target.files[0];
+  //   setSelectedFile(file);
+  //   selectedFile('image', file);
+  // };
+
   const handleFileChange = event => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    selectedFile('image', file);
+    formik.setFieldValue('image', file);
   };
-
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setTempImage(URL.createObjectURL(file));
-  //   }
-  // };
 
   return (
     <div className="news">
@@ -159,7 +161,7 @@ const CmsNewsUpdate = () => {
         </div>
 
         <div className="row">
-          {content.map((item, index) => (
+          {contentArray.map((item, index) => (
             <div className="col-md-4 col-12 calendar-item" key={index}>
               <div className="custom-card shadow-lg h-100 d-flex flex-column align-items-center mx-3 mt-2 pt-3 position-relative">
                 <span
@@ -241,7 +243,6 @@ const CmsNewsUpdate = () => {
       </Modal> */}
 
       <form onSubmit={formik.handleSubmit}>
-
         <Modal
           show={showAddModal}
           size="lg"
@@ -276,6 +277,14 @@ const CmsNewsUpdate = () => {
                       </div>
                     )}
                   </div>
+                  {selectedFile && (
+                    <div>
+
+                      {selectedFile.type.startsWith('image') && (
+                        <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div class="col-md-6 col-12 mb-2">
                   <lable class="">
@@ -319,21 +328,28 @@ const CmsNewsUpdate = () => {
               <Button
                 type="submit"
                 className="btn btn-button btn-sm"
-                disabled={loadIndicator}
+              // disabled={loadIndicator}
               >
-                {loadIndicator && (
+                {/* {loadIndicator && (
                   <span
                     className="spinner-border spinner-border-sm me-2"
                     aria-hidden="true"
                   ></span>
-                )}
+                )} */}
                 Submit
               </Button>
             </Modal.Footer>
           </form>
         </Modal>
+      </form>
 
-        <Modal show={showEditModal} onHide={handleCloseEditModal}>
+      <form onSubmit={formik.handleSubmit}>
+        <Modal
+          show={showAddModal}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          onHide={handleCloseAddModal}>
           <Modal.Header closeButton>
             <Modal.Title>Edit News</Modal.Title>
           </Modal.Header>
@@ -379,6 +395,7 @@ const CmsNewsUpdate = () => {
           </Modal.Footer>
         </Modal>
       </form>
+
     </div>
   );
 }
