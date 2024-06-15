@@ -1,5 +1,6 @@
 import React from "react";
 import Glass from "../../../assets/clientimage/glass-painting.png";
+import { Link } from "react-router-dom";
 
 function WhyArtyLearning() {
   return (
@@ -120,12 +121,14 @@ function WhyArtyLearning() {
                 our individualised assessments we can help identify students'
                 diverse learning styles, strengths, and needs.
               </p>
-              <button
-                type="button"
-                className="btn btn-outline-danger learnMoreBtn my-3"
-              >
-                LEARN MORE
-              </button>
+              <Link to={"/about"}>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger learnMoreBtn my-3"
+                >
+                  LEARN MORE
+                </button>
+              </Link>
             </div>
           </div>
         </div>

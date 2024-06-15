@@ -5,8 +5,7 @@ function AboutJoinUs() {
   return (
     <div className="container">
       <div className="row mt-5 py-5 mx-5">
-        <div className="col-md-6 col-12"></div>
-        <div className="col-md-6 col-12">
+        <div className="col-md-12 col-12">
           <h3 className="fw-bold text-center">
             Join Us In This Journey To Nurture The Children Of Our Future With
             Abundance Of Love.

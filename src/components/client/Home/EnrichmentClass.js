@@ -1,5 +1,6 @@
 import React from "react";
 import PaperDraw from "../../../assets/clientimage/Paper-draw.jpg";
+import { Link } from "react-router-dom";
 function EnrichmentClass() {
   return (
     <div className="container">
@@ -26,7 +27,10 @@ function EnrichmentClass() {
             and embark on a transformative educational journey where boundless
             potential meets inventive teaching methods.
           </p>
+          <Link to={"/about"}>
           <button className="LearnMore">Learn More</button>
+          </Link>
+          
         </div>
         <div className="col-lg-6 col-md-12 col-sm-12 mt-5 p-4">
           <img

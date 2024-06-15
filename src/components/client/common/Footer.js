@@ -89,10 +89,10 @@ function Footer() {
                 </a>
               </span>
               <span className="d-flex">
-                <Link to="#" className="mx-2" style={{ color: "red" }}>
+                <Link to={"https://www.facebook.com/artylearning/reviews"} className="mx-2" style={{ color: "red" }}>
                   <FaFacebookF />
                 </Link>
-                <Link to="#" className="mx-2" style={{ color: "red" }}>
+                <Link to={"https://www.instagram.com/artylearning/"} className="mx-2" style={{ color: "red" }}>
                   <FaInstagram />
                 </Link>
               </span>

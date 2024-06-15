@@ -247,7 +247,7 @@ function Sidebar() {
       },
       {
         title: "Content Management",
-        icon: "bx bx-food-menu",
+        icon: "bx bx-cog",
         isOpen: false,
         subMenus: [
           {

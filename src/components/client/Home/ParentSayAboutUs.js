@@ -345,14 +345,14 @@ function ParentSayAboutUs() {
           </div>
         </Carousel>
 
-        <div className="fs-4 text-center my-3">
+        {/* <div className="fs-4 text-center my-3">
           <Link
             to={"https://www.facebook.com/artylearning/reviews"}
             style={{ color: "red" }}
           >
             Click Here For More Testimonials
           </Link>
-        </div>
+        </div> */}
       </div>
     </>
   );
