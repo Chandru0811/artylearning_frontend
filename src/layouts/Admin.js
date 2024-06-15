@@ -142,9 +142,19 @@ import CMSProductsItemAdd from "../pages/CMS/CMSProductsitemAdd";
 import CMSProductsItemEdit from "../pages/CMS/CMSProductsItemEdit";
 import CmsNewsUpdate from "../pages/CMS/CmsNewsUpdate";
 import CmsCalender from "../pages/CMS/CmsCalender";
-import { CmsTeacher } from "../pages/CMS/CmsTeacher";
+import { CmsTeacher } from "../pages/CMS/CMSTeacher/CmsTeacher";
+
 import CmsEnglish from "../pages/CMS/CMSEnglishCourse/CmsEnglish";
 import CmsHome from "../pages/CMS/CmsHome/CmsHome";
+import CMSContact from "../pages/CMS/CMSContact/CMSContact";
+import CMSContactAdd from "../pages/CMS/CMSContact/CMSContactAdd";
+import CMSContactEdit from "../pages/CMS/CMSContact/CMSContactEdit";
+import CMSContactView from "../pages/CMS/CMSContact/CMSContactView";
+import CMSTestMonail from "../pages/CMS/CMSTestMonial";
+import CMSTestMonialAdd from "../pages/CMS/CMSTestMonialAdd";
+import CMSTestMonialEdit from "../pages/CMS/CMSTestMonialEdit";
+import CmsAboutUs from "../pages/CMS/CmsAboutus/CmsAboutUs";
+import CmsChinesh from "../pages/CMS/CMSChineshCourse/CmsChinesh";
 
 
 function Admin({ handleLogout }) {
@@ -232,10 +242,22 @@ function Admin({ handleLogout }) {
               <Route path="/teacher/payslip" element={<TeacherPayslip />} />
 
               {/* StaffingAttendance */}
-              <Route path="/staffing/attendance" element={<StaffingAttendance/>}/>
-              <Route path="/staffing/attendance/add" element={<StaffingAttendanceAdd/>}/>
-              <Route path="/staffing/attendance/edit/:id" element={<StaffingAttendanceEdit/>}/>
-              <Route path="/staffing/attendance/view/:id" element={<StaffingAttendanceView/>}/>
+              <Route
+                path="/staffing/attendance"
+                element={<StaffingAttendance />}
+              />
+              <Route
+                path="/staffing/attendance/add"
+                element={<StaffingAttendanceAdd />}
+              />
+              <Route
+                path="/staffing/attendance/edit/:id"
+                element={<StaffingAttendanceEdit />}
+              />
+              <Route
+                path="/staffing/attendance/view/:id"
+                element={<StaffingAttendanceView />}
+              />
 
               {/* {/ {/ Holiday /} /} */}
               <Route path="/holiday" element={<Holiday />} />
@@ -243,7 +265,7 @@ function Admin({ handleLogout }) {
               <Route path="/holiday/edit/:id" element={<HolidayEdit />} />
               <Route path="/holiday/list/:id" element={<HolidayView />} />
 
-                   {/* {/ {/ Deduction /} /} */}
+              {/* {/ {/ Deduction /} /} */}
               <Route path="/deduction" element={<Deduction />} />
               <Route path="/deduction/add" element={<DeductionAdd />} />
               <Route path="/deduction/edit/:id" element={<DeductionEdit />} />
@@ -344,8 +366,14 @@ function Admin({ handleLogout }) {
 
               {/* Send Notification */}
               <Route path="/sendNotification" element={<SendNotification />} />
-              <Route path="/sendNotification/add" element={<SendNotificationAdd />} />
-              <Route path="/sendNotification/edit" element={<SendNotificationEdit />} />
+              <Route
+                path="/sendNotification/add"
+                element={<SendNotificationAdd />}
+              />
+              <Route
+                path="/sendNotification/edit"
+                element={<SendNotificationEdit />}
+              />
 
               {/* Re-Schedule */}
               <Route path="/reschedule" element={<Reschedule />} />
@@ -400,8 +428,14 @@ function Admin({ handleLogout }) {
               <Route path="/cms/header" element={<CmsTopbar />} />
               <Route path="/cms/products" element={<CMSProducts />} />
               <Route path="/cms/productsitem" element={<CMSProductsItems />} />
-              <Route path="/cms/productsitem/addproductsitem" element={<CMSProductsItemAdd />} />
-              <Route path="/cms/productsitem/editproductsitem" element={<CMSProductsItemEdit />} />
+              <Route
+                path="/cms/productsitem/addproductsitem"
+                element={<CMSProductsItemAdd />}
+              />
+              <Route
+                path="/cms/productsitem/editproductsitem"
+                element={<CMSProductsItemEdit />}
+              />
 
               <Route path="/cms/newsupdate" element={<CmsNewsUpdate />} />
               <Route path="/calender" element={<CmsCalender />} />
@@ -411,7 +445,22 @@ function Admin({ handleLogout }) {
               <Route path="/cms/englishcourse" element={<CmsEnglish />} />
 
               <Route path="/cms/home" element={<CmsHome />} />
-              </Routes>
+              <Route path="/cms/aboutus" element={<CmsAboutUs />} />
+
+
+              {/* CMS Contact  */}
+              <Route path="/cms/contact" element={<CMSContact />} />
+              <Route path="/cms/contact/add" element={<CMSContactAdd />} />
+              <Route path="/cms/contact/edit" element={<CMSContactEdit />} />
+              <Route path="/cms/contact/view" element={<CMSContactView />} />
+
+              <Route path="/cms/testmonial" element={<CMSTestMonail />} />
+              <Route path="/cms/testmonial/addtestmonial" element={<CMSTestMonialAdd />} />
+              <Route path="/cms/testmonial/editmonial" element={<CMSTestMonialEdit />} />
+
+
+              <Route path="/cms/chineshcourse" element={<CmsChinesh />} />
+            </Routes>
           </div>
           <Footer />
         </section>
