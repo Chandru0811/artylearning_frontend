@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Tabs, Tab } from "react-bootstrap";
-import engteacher1 from "../../assets/clientimage/teacher1.jpeg";
-import engteacher2 from "../../assets/clientimage/teacher2.jpeg";
-import engteacher3 from "../../assets/clientimage/teacher3.jpeg";
-import engteacher4 from "../../assets/clientimage/teacher4.jpg";
-import engteacher5 from "../../assets/clientimage/teacher5.jpeg";
-import engteacher6 from "../../assets/clientimage/teacher6.jpeg";
-import engteacher7 from "../../assets/clientimage/teacher7.jpg";
-import engteacher8 from "../../assets/clientimage/teacher8.jpeg";
-import engteacher9 from "../../assets/clientimage/teacher9.jpeg";
-import engteacher10 from "../../assets/clientimage/teacher10.jpeg";
-import chiteacher from "../../assets/clientimage/teacher1-1.jpg";
-import admin1 from "../../assets/clientimage/teacher2-1.jpg";
-import admin2 from "../../assets/clientimage/teacher2-2.jpeg";
-import admin3 from "../../assets/clientimage/teacher2-3.jpeg";
+import engteacher1 from "../../../assets/clientimage/teacher1.jpeg";
+import engteacher2 from "../../../assets/clientimage/teacher2.jpeg";
+import engteacher3 from "../../../assets/clientimage/teacher3.jpeg";
+import engteacher4 from "../../../assets/clientimage/teacher4.jpg";
+import engteacher5 from "../../../assets/clientimage/teacher5.jpeg";
+import engteacher6 from "../../../assets/clientimage/teacher6.jpeg";
+import engteacher7 from "../../../assets/clientimage/teacher7.jpg";
+import engteacher8 from "../../../assets/clientimage/teacher8.jpeg";
+import engteacher9 from "../../../assets/clientimage/teacher9.jpeg";
+import engteacher10 from "../../../assets/clientimage/teacher10.jpeg";
+import chiteacher from "../../../assets/clientimage/teacher1-1.jpg";
+import admin1 from "../../../assets/clientimage/teacher2-1.jpg";
+import admin2 from "../../../assets/clientimage/teacher2-2.jpeg";
+import admin3 from "../../../assets/clientimage/teacher2-3.jpeg";
+import CmsTeacherEdit from "../../CMS/CMSTeacher/CmsTeacherEdit"
 import { Button, Modal, Form } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { FaYoutube, FaInstagram, FaEdit, FaSave } from "react-icons/fa";
@@ -47,10 +48,17 @@ export const CmsTeacher = () => {
     setShowModal(false);
     // Handle saving changes, such as updating the state or making an API call to save the data
   };
+
+  const data = {
+    name: "Teacher Nazreen",
+    role: "",
+    roleName: "",
+    message: "",
+  };
   return (
     <section style={{ backgroundColor: "#f9fafb" }}>
       <div className="container py-5">
-        <div className="row">
+        {/* <div className="row">
           <div className="offset-md-3 col-md-6">
             <span className="me-3 edit-container">
               {editingField === "heading" ? (
@@ -108,12 +116,14 @@ export const CmsTeacher = () => {
               )}
             </p>
           </div>
+        </div> */}
+        <div className="d-flex justify-content-end">
+          <button className="btn btn-outline-primary">Add Teacher</button>
         </div>
-
         <Tabs
           defaultActiveKey="profile"
           id="fill-tab-example"
-          className="mb-3 tab fw-medium mt-5"
+          className="mb-3 tab fw-medium mt-2"
           style={{ fontSize: "20px" }}
         >
           <Tab eventKey="home" title="English Phonics Teachers">
@@ -372,6 +382,7 @@ export const CmsTeacher = () => {
           </Tab>
           <Tab eventKey="longer-tab" title="Admin">
             <div className="row mt-5">
+              <CmsTeacherEdit showModal={showModal} handleShowModal={handleShowModal} handleCloseModal={handleCloseModal} handleSaveChanges={handleSaveChanges}/>
               <div className="col-md-6 col-12">
                 <div className="row">
                   <div className="col-md-6 col-12">
@@ -383,7 +394,6 @@ export const CmsTeacher = () => {
                     />
                   </div>
                   <div className="col-md-6 col-12">
-                  <FaEdit className="ms-3" size={30} style={{ cursor: "pointer" }} onClick={handleShowModal} />
                     <div className="mx-2">
                       <h1 className="fw-bold">Cheryl Lim</h1>
                       <h4 className="text-danger">Admin Assistant</h4>
@@ -448,47 +458,6 @@ export const CmsTeacher = () => {
           </Tab>
         </Tabs>
       </div>
-
-      <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Content</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formTitle">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="title"
-                // value={content.title}
-                // onChange={handleChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="formImage">
-                <Form.Label>Upload Image File</Form.Label>
-                {/* <Form.Control type="file" onChange={handleFileChange} accept=".jpg,.jpeg,.png,.gif" /> */}
-              </Form.Group>
-            <Form.Group controlId="formDescription2" className="mt-3">
-              <Form.Label>Description 2</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="description2"
-                rows={3}
-                // value={content.description2}
-                // onChange={handleChange}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleSaveChanges}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </section>
   );
 };
