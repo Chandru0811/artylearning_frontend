@@ -1,46 +1,40 @@
 import React, { useState } from "react";
-import img from "../../../assets/clientimage/eng.png";
+import Alphabet from "../../../assets/clientimage/Alphabet.png";
+import bgImg from "../../../assets/clientimage/chinese_image.jpg";
 import { FaEdit, FaSave } from "react-icons/fa";
-import bgimg from "../../../assets/clientimage/IMG_195.png";
 
-function CmsEnglishBanner() {
+function CmsChineseBanner() {
   const [editingField, setEditingField] = useState(null);
   const [content, setContent] = useState({
-    img: img,
-    bgImg: bgimg,
-    heading: "English Enrichment Class",
-    paragraph1:
+    heading: "Chinese Enrichment Class",
+    bgImg: bgImg,
+    paragraphs: [
+      "我们希望每个孩子都能从老师那里得到更加个性化的关注，根据每个孩子的具体需求、优势和挑战，提供量身定制的指导和支持，所以各班师生比例限于1：4。",
+      "学习应该对所有人来说都是有趣的！我们通过不同的游戏，儿歌，实验，手工等来激发孩子学习华文，促进孩子的听、说、读、写全方面的进步。并通过我们Arty Learning家园网站上传课堂的视频和照片，供家长参考，方便孩子在家中复习，为孩子学习提供支持性环境。",
+      "我们希望在家园的共同努力下，促进孩子学习华文，追求卓越。",
       "With our <b>small ratio</b> of 1 teacher to 4 students, each student will receive a more <b>personalised</b> attention from their teacher. This allows the teacher to better understand the specific needs, strengths, and challenges of each student, enabling them to provide tailored instruction and support.",
-    paragraph2: "We believe learning should be fun for all!",
-    paragraph3:
+      "We believe learning should be fun for all!",
       "All our teachers are specially trained by our curriculum specialist. They are skilled to <b>analyse</b> specific needs, strengths and every challenge that each student faces.",
-    paragraph4: "Parents’ involvement in a child’s learning journey is crucial.",
-    paragraph5:
-      "We take <b>Videos and pictures</b> of every student and deliver them to parents through our very own <b>Arty Parents’ Portal</b>. Conveniently developed to reinforce learning while enhancing parents’ involvement.",
-    paragraph6:
+      "Parents’ involvement in a child’s learning journey is crucial.",
+      "We take <b>Videos and pictures</b> of every student and deliver them to parents through our very own <b> Arty Parents’ Portal</b>. Conveniently developed to reinforce learning while enhancing parents’ involvement.",
       "Regular communication with teachers provides a supportive environment for learning and can contribute to academic successes. By showing interest and actively participating in their child's education, parents instil a positive attitude towards learning and helps to encourage children to strive for excellence.",
+    ],
   });
 
   const toggleEdit = () => {
-    setEditingField((prevEditingField) => (prevEditingField === "paragraphs" ? null : "paragraphs"));
+    setEditingField((prevEditingField) =>
+      prevEditingField === "paragraphs" ? null : "paragraphs"
+    );
   };
 
-  const handleEdit = (field) => {
-    setEditingField(field);
+  const handleEdit = (index) => {
+    setEditingField(index);
   };
 
   const saveContent = () => {
     setEditingField(null);
     // Here you might want to send the updated content to your backend or CMS
   };
-
-  const handleChange = (field, value) => {
-    setContent((prevContent) => ({
-      ...prevContent,
-      [field]: value,
-    }));
-  };
-
   const handleImageChange = (e, field) => {
     const file = e.target.files[0];
     if (file) {
@@ -55,8 +49,19 @@ function CmsEnglishBanner() {
     }
   };
 
+  const handleChange = (index, value) => {
+    setContent((prevContent) => {
+      const newParagraphs = [...prevContent.paragraphs];
+      newParagraphs[index] = value;
+      return {
+        ...prevContent,
+        paragraphs: newParagraphs,
+      };
+    });
+  };
+
   return (
-    <div className="container-fluid">
+    <div className="container-fluid font-styles">
       <div className="row remove-padding">
       <div className="edit-container mb-3">
             {editingField === "bgImg" ? (
@@ -76,7 +81,7 @@ function CmsEnglishBanner() {
             ) : (
               <>
                 <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                  className="btn btn-sm btn-outline-warning border edit-button"
                   onClick={() => handleEdit("bgImg")}
                 >
                   <FaEdit />
@@ -85,47 +90,29 @@ function CmsEnglishBanner() {
             )}
           </div>
         <div
-          className="col-md-8 col-12 bgimage"
+          className="col-md-6 col-12 bgchimage"
           style={{ backgroundImage: `url(${content.bgImg})` }}
         >
+
           <div className="py-5 firsthead d-flex flex-column justify-content-center align-items-center">
-            <div className="edit-container">
-              <img src={content.img} alt="english" className="img-fluid"></img>
-              {editingField === "img" ? (
-                <>
-                  <input
-                    type="file"
-                    onChange={(e) => handleImageChange(e, "img")}
-                    className="form-control mb-3"
-                  />
-                  <button
-                    className="btn btn-sm btn-outline-primary border ms-2"
-                    onClick={saveContent}
-                  >
-                    <FaSave />
-                  </button>
-                </>
-              ) : (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={() => handleEdit("img")}
-                >
-                  <FaEdit />
-                </button>
-              )}
-            </div>
-            <h1>English Course</h1>
+            <img src={Alphabet} alt="english" width={80}></img>
+            <h1>{content.heading}</h1>
+
           </div>
         </div>
-        <div className="col-md-4 col-12 p-5">
 
-          <div className="edit-container">
+        <div className="col-md-6 col-12 p-5">
+          
+
+          <div className="edit-container mb-3">
             {editingField === "heading" ? (
               <>
                 <input
                   type="text"
                   value={content.heading}
-                  onChange={(e) => handleChange("heading", e.target.value)}
+                  onChange={(e) =>
+                    setContent({ ...content, heading: e.target.value })
+                  }
                   className="form-control mb-3"
                 />
                 <button
@@ -147,13 +134,14 @@ function CmsEnglishBanner() {
               </>
             )}
           </div>
+
           {editingField === "paragraphs" ? (
             <>
-              {["paragraph1", "paragraph2", "paragraph3", "paragraph4", "paragraph5", "paragraph6"].map((key, index) => (
+              {content.paragraphs.map((paragraph, index) => (
                 <div key={index} className="edit-container mb-3">
                   <textarea
-                    value={content[key]}
-                    onChange={(e) => handleChange(key, e.target.value)}
+                    value={paragraph}
+                    onChange={(e) => handleChange(index, e.target.value)}
                     className="form-control mb-3"
                     rows="4"
                   />
@@ -163,22 +151,22 @@ function CmsEnglishBanner() {
                 className="btn btn-sm btn-outline-primary border ms-2"
                 onClick={saveContent}
               >
-                <FaSave /> 
+                <FaSave /> Save
               </button>
             </>
           ) : (
             <>
-              {["paragraph1", "paragraph2", "paragraph3", "paragraph4", "paragraph5", "paragraph6"].map((key, index) => (
+              {content.paragraphs.map((paragraph, index) => (
                 <div key={index} className="edit-container mb-3">
                   <p
                     className="headbody preserve-whitespace"
-                    dangerouslySetInnerHTML={{ __html: content[key] }}
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
                   ></p>
                 </div>
               ))}
               <button
                 className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                onClick={() => toggleEdit("paragraphs")}
+                onClick={toggleEdit}
               >
                 <FaEdit />
               </button>
@@ -190,4 +178,4 @@ function CmsEnglishBanner() {
   );
 }
 
-export default CmsEnglishBanner;
+export default CmsChineseBanner;
