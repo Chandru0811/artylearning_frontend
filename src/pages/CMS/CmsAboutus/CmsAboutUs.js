@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../../assets/clientimage/Arty_Learning_Logo-2023-tp-400.png";
 import Glass from "../../../assets/clientimage/glass-painting.png";
 import AdminImg from "../../../assets/clientimage/IMG_6872-scaled.jpg";
@@ -6,20 +6,73 @@ import { FaEdit, FaSave } from "react-icons/fa";
 import CmsAboutSupport from "./CmsAboutSupport";
 import CmsAboutMCmsAboutMichelleandAmandaichelle from "./CmsAboutMichelleandAmanda";
 import CmsAboutPersonalized from "./CmsAboutPersonalized";
+import { toast } from "react-toastify";
+import api from "../../../config/URL";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function CmsAboutUs() {
   const [editingField, setEditingField] = useState(null);
-  const [adminImgUrl, setAdminImgUrl] = useState(AdminImg);
-  const [glassImgUrl, setGlassImgUrl] = useState(Glass);
-
+  const [datas, setDatas] = useState([]);
+  const [adminImgUrl, setAdminImgUrl] = useState(null);
   const toggleEdit = (field) => {
     setEditingField(field);
   };
 
-  const saveContent = () => {
-    setEditingField(null);
-  };
+  useEffect(() => {
+    if (datas && datas.imageOne) {
+      setAdminImgUrl(datas.imageOne);
+    }
+  }, [datas]);
 
+  const formik = useFormik({
+    initialValues: {
+      files: null,
+    },
+    // validationSchema,
+    onSubmit: async (data) => {
+      console.log(data);
+      const formData = new FormData();
+      formData.append("imageOne", data.files);
+
+      try {
+        const response = await api.put(
+          `/updateAboutUsSaveImage/${4}`,
+          formData
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          getData();
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setEditingField(null);
+      }
+    },
+  });
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllAboutUsSaveById/${4}`);
+      // formik.setValues(response.data);
+      setDatas(response.data);
+    } catch (error) {
+      toast.error("Error Fetch Data ", error);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setAdminImgUrl(URL.createObjectURL(file));
+    formik.setFieldValue("files", file); // Update Formik's form state with the file
+  };
   return (
     <>
       {/* Header */}
@@ -56,7 +109,8 @@ function CmsAboutUs() {
               <div className="col-md-6 col-12 d-flex flex-column align-items-center justify-content-center">
                 {editingField === "AdminImg" ? (
                   <>
-                    <input
+                    <form onSubmit={formik.handleSubmit}>
+                      {/* <input
                       type="file"
                       onChange={(e) => {
                         const file = e.target.files[0];
@@ -69,13 +123,23 @@ function CmsAboutUs() {
                         }
                       }}
                       className="topbar-wordpress form-control-sm w-50"
-                    />
-                    <button
-                      className="btn btn-sm btn-outline-primary border ms-2"
-                      onClick={saveContent}
-                    >
-                      <FaSave />
-                    </button>
+                    /> */}
+                      <input
+                        type="file"
+                        id="files"
+                        name="files"
+                        className="form-control"
+                        onChange={handleFileChange}
+                        onBlur={formik.handleBlur}
+                      />
+
+                      <button
+                        className="btn btn-sm btn-outline-primary border ms-2"
+                        onClick={formik.handleSubmit}
+                      >
+                        <FaSave />
+                      </button>
+                    </form>
                   </>
                 ) : (
                   <button
@@ -98,14 +162,13 @@ function CmsAboutUs() {
       </div>
 
       {/* Support Painting Glass */}
-      <CmsAboutSupport/>
+      <CmsAboutSupport getData={getData} datas={datas} />
 
       {/* About Michelle and Amanda*/}
-      <CmsAboutMCmsAboutMichelleandAmandaichelle />
+      <CmsAboutMCmsAboutMichelleandAmandaichelle getData={getData} datas={datas}/>
 
       {/* About Personalized */}
-      <CmsAboutPersonalized/>
-
+      <CmsAboutPersonalized getData={getData} datas={datas}/>
     </>
   );
 }

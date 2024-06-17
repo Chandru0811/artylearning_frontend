@@ -2,42 +2,76 @@ import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
+import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  image: Yup.mixed().required("Image file is required"),
-  details: Yup.string().required("Image details are required"),
+  files: Yup.mixed().required("*Image file is required"),
+  teacherName: Yup.string().required("*Name details are required"),
+  // role: Yup.string().required("Image details are required"),
+  teacherRoleName: Yup.string().required("*RoleName details are required"),
+  experience: Yup.string().required("*Experience are required"),
+  teacherDescription: Yup.string().required(
+    "*Description details are required"
+  ),
 });
 
-const CmsTeacherAdd = () => {
+const CmsTeacherAdd = ({getData}) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-
   const [selectedFile, setSelectedFile] = useState(null);
+  
   const handleSaveChanges = () => {
     setShowModal(false);
   };
-  const initialValues = {
-    name: "", // To store the uploaded image file
-    role: "", // To store the uploaded image file
-    roleName: "", // To store the uploaded image file
-    experience: "", // To store the uploaded image file
-    image: "", // To store the uploaded image file
-    details: "", // Details about the image
-  };
 
   const formik = useFormik({
-    initialValues,
+    initialValues: {
+      teacherName: "",
+      role: "",
+      teacherRoleName: "",
+      experience: "",
+      files: "",
+      teacherDescription: "",
+    },
     // validationSchema,
-    onSubmit: (data) => {
+    onSubmit: async (data) => {
       console.log(data);
+      const formData =new FormData()
+      formData.append("files",data.files)
+      formData.append("teacherName ",data.teacherName )
+      formData.append("teacherDescription ",data.teacherDescription )
+      formData.append("teacherRoleName ",data.teacherRoleName )
+      formData.append("experience ",data.experience )
+      formData.append("role ",data.role)
+
+      try {
+        const response = await api.post("/createTeacherSave", formData, 
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
+        );
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          getData();
+          formik.resetForm()
+          setShowModal(false)
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        // setLoadIndicator(false);
+      }
     },
   });
 
-  const handleFileChange = event => {
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue('image', file); // Update Formik's form state with the file
+    formik.setFieldValue("files", file); // Update Formik's form state with the file
   };
 
   return (
@@ -55,91 +89,89 @@ const CmsTeacherAdd = () => {
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
-                <label htmlFor="name" className="form-label">
+                <label htmlFor="teacherName" className="form-label">
                   Name
                 </label>
                 <input
-                  id="details"
-                  name="name"
+                  id="teacherName"
+                  name="teacherName "
                   className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.name}
+                  {...formik.getFieldProps("teacherName")}
                 />
-                {formik.touched.name && formik.errors.name && (
-                  <div className="text-danger">{formik.errors.name}</div>
+                {formik.touched.teacherName && formik.errors.teacherName && (
+                  <div className="text-danger">{formik.errors.teacherName}</div>
                 )}
               </div>
               <div className="mb-3">
                 <label htmlFor="role" className="form-label">
-                Role
+                  Role
                 </label>
                 <select
                   id="role"
                   name="role"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.role}
-                > <option value="">Select a role</option>
-                <option value="admin">Admin</option>
-                <option value="english teacher">English Teacher</option>
-                <option value="chinese teacher">Chinese Teacher</option></select>
+                  className="form-select"
+                  {...formik.getFieldProps("role")}
+                >
+                  {" "}
+                  <option value="">Select a role</option>
+                  <option value="ADMIN">Admin</option>
+                  <option value="ENGLISH">English Teacher</option>
+                  <option value="CHINESE">Chinese Teacher</option>
+                </select>
                 {formik.touched.role && formik.errors.role && (
                   <div className="text-danger">{formik.errors.role}</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="roleName" className="form-label">
+                <label htmlFor="teacherRoleName " className="form-label">
                   Role Name
                 </label>
                 <input
-                  id="roleName"
-                  name="roleName"
+                  id="teacherRoleName "
+                  name="teacherRoleName "
                   className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.roleName}
+                  {...formik.getFieldProps("teacherRoleName")}
                 />
-                {formik.touched.roleName && formik.errors.roleName && (
-                  <div className="text-danger">{formik.errors.roleName}</div>
-                )}
+                {formik.touched.teacherRoleName &&
+                  formik.errors.teacherRoleName && (
+                    <div className="text-danger">
+                      {formik.errors.teacherRoleName}
+                    </div>
+                  )}
               </div>
               <div className="mb-3">
                 <label htmlFor="experience" className="form-label">
-                Experience
+                  Experience
                 </label>
                 <input
                   id="experience"
                   name="experience"
                   className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.experience}
+                  {...formik.getFieldProps("experience")}
                 />
                 {formik.touched.experience && formik.errors.experience && (
                   <div className="text-danger">{formik.errors.experience}</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="image" className="form-label">
+                <label htmlFor="files" className="form-label">
                   Upload Image
                 </label>
                 <input
                   type="file"
-                  id="image"
-                  name="image"
+                  id="files"
+                  name="files"
                   className="form-control"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.image && formik.errors.image && (
-                  <div className="text-danger">{formik.errors.image}</div>
+                {formik.touched.files && formik.errors.files && (
+                  <div className="text-danger">{formik.errors.files}</div>
                 )}
               </div>
               {selectedFile && (
                 <div>
-                  {selectedFile.type.startsWith("image") && (
+                  {selectedFile.type.startsWith("files") && (
                     <img
                       src={URL.createObjectURL(selectedFile)}
                       alt="Selected File"
@@ -149,20 +181,21 @@ const CmsTeacherAdd = () => {
                 </div>
               )}
               <div className="mb-3">
-                <label htmlFor="details" className="form-label">
+                <label htmlFor="teacherDescription " className="form-label">
                   Description
                 </label>
                 <textarea
-                  id="details"
-                  name="details"
+                  id="teacherDescription "
+                  name="teacherDescription "
                   className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.details}
+                  {...formik.getFieldProps("teacherDescription")}
                 />
-                {formik.touched.details && formik.errors.details && (
-                  <div className="text-danger">{formik.errors.details}</div>
-                )}
+                {formik.touched.teacherDescription &&
+                  formik.errors.teacherDescription && (
+                    <div className="text-danger">
+                      {formik.errors.teacherDescription}
+                    </div>
+                  )}
               </div>
             </div>
           </Modal.Body>
