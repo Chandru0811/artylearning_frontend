@@ -7,6 +7,7 @@ import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 // import api from "../../config/URL";
 import { toast } from "react-toastify";
+import api from "../../../config/URL";
 
 function CMSContactEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -16,7 +17,7 @@ function CMSContactEdit({ id, onSuccess }) {
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({
-    centreName: Yup.string().required("*Centre Name is required"),
+    centerName: Yup.string().required("*Centre Name is required"),
     email: Yup.string()
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -24,8 +25,8 @@ function CMSContactEdit({ id, onSuccess }) {
     )
     .required("*Email is required"),
     address: Yup.string().required("*Address is required"),
-    gooleAddress: Yup.string().required("*Google Address is required"),
-    mobile: Yup.string()
+    map: Yup.string().required("*Google Address is required"),
+    mobileNo: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "*Invalid Phone Number"
@@ -35,51 +36,51 @@ function CMSContactEdit({ id, onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
-      centreName: "Arty Learning @ Hougang",
-      email: "artylearning@gmail.com",
-      address: "806 Hougang Central, #04-146, Singapore 530806",
-      googleAddress: "",
-      mobile: "+65 8821 4153",
+      centerName: "",
+      email: "",
+      address: "",
+      map: "",
+      mobileNo: "",
     },
     validationSchema: validationSchema, // Assign the validation schema
-    // onSubmit: async (values) => {
-    //   // console.log(values);
-    //   setLoadIndicator(true);
-    //   try {
-    //     const response = await api.put(`/updateCourseLevel/${id}`, values, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     });
-    //     if (response.status === 200) {
-    //       onSuccess();
-    //       handleClose();
-    //       toast.success(response.data.message);
-    //     } else {
-    //       toast.error(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }finally {
-    //     setLoadIndicator(false);
-    //   }
+    onSubmit: async (values) => {
+      // console.log(values);
+      setLoadIndicator(true);
+      try {
+        const response = await api.put(`/updateContactUsSave/${id}`, values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      }finally {
+        setLoadIndicator(false);
+      }
 
-    // },
+    },
   });
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllCourseLevels/${id}`);
-  //       formik.setValues(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data ", error);
-  //     }
-  //   };
-
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  const getData = async () => {
+    if(id){ 
+    try {
+      const response = await api.get(`/getContactUsSaveById/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  }
+  };
+  useEffect(() => {
+  getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show]);
 
   return (
     <>
@@ -107,15 +108,15 @@ function CMSContactEdit({ id, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.centreName && formik.errors.centreName
+                      formik.touched.centerName && formik.errors.centerName
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("centreName")}
+                    {...formik.getFieldProps("centerName")}
                   />
-                  {formik.touched.centreName && formik.errors.centreName && (
+                  {formik.touched.centerName && formik.errors.centerName && (
                     <div className="invalid-feedback">
-                      {formik.errors.centreName}
+                      {formik.errors.centerName}
                     </div>
                   )}
                 </div>
@@ -145,15 +146,15 @@ function CMSContactEdit({ id, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.mobile && formik.errors.mobile
+                      formik.touched.mobileNo && formik.errors.mobileNo
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("mobile")}
+                    {...formik.getFieldProps("mobileNo")}
                   />
-                  {formik.touched.mobile && formik.errors.mobile && (
+                  {formik.touched.mobileNo && formik.errors.mobileNo && (
                     <div className="invalid-feedback">
-                      {formik.errors.mobile}
+                      {formik.errors.mobileNo}
                     </div>
                   )}
                 </div>
@@ -184,15 +185,15 @@ function CMSContactEdit({ id, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.gooleAddress && formik.errors.gooleAddress
+                      formik.touched.map && formik.errors.map
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("gooleAddress")}
+                    {...formik.getFieldProps("map")}
                   />
-                  {formik.touched.gooleAddress && formik.errors.gooleAddress && (
+                  {formik.touched.map && formik.errors.map && (
                     <div className="invalid-feedback">
-                      {formik.errors.gooleAddress}
+                      {formik.errors.map}
                     </div>
                   )}
                 </div>

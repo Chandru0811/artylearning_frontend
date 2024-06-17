@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 // import api from "../../config/URL";
 import { toast } from "react-toastify";
+import api from "../../../config/URL";
 
 function CMSContactAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
@@ -19,7 +20,7 @@ function CMSContactAdd({ onSuccess }) {
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({
-    centreName: Yup.string().required("*Centre Name is required"),
+    centerName: Yup.string().required("*Centre Name is required"),
     email: Yup.string()
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
@@ -27,8 +28,8 @@ function CMSContactAdd({ onSuccess }) {
     )
     .required("*Email is required"),
     address: Yup.string().required("*Address is required"),
-    gooleAddress: Yup.string().required("*Google Address is required"),
-    mobile: Yup.string()
+    map: Yup.string().required("*Google Address is required"),
+    mobileNo: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "*Invalid Phone Number"
@@ -38,35 +39,35 @@ function CMSContactAdd({ onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
-      centreName: "",
+      centerName: "",
       email: "",
       address: "",
-      googleAddress: "",
-      mobile: "",
+      map: "",
+      mobileNo: "",
     },
     validationSchema: validationSchema, // Assign the validation schema
-    // onSubmit: async (values) => {
-    //   setLoadIndicator(true);
-    //   // console.log(values);
-    //   try {
-    //     const response = await api.post("/createCourseLevel", values, {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     });
-    //     if (response.status === 201) {
-    //       onSuccess();
-    //       handleClose();
-    //       toast.success(response.data.message);
-    //     } else {
-    //       toast.error(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }finally {
-    //     setLoadIndicator(false);
-    //   }
-    // },
+    onSubmit: async (values) => {
+      setLoadIndicator(true);
+      // console.log(values);
+      try {
+        const response = await api.post("/createContactUsSave", values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      }finally {
+        setLoadIndicator(false);
+      }
+    },
   });
 
   return (
@@ -95,15 +96,15 @@ function CMSContactAdd({ onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.centreName && formik.errors.centreName
+                      formik.touched.centerName && formik.errors.centerName
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("centreName")}
+                    {...formik.getFieldProps("centerName")}
                   />
-                  {formik.touched.centreName && formik.errors.centreName && (
+                  {formik.touched.centerName && formik.errors.centerName && (
                     <div className="invalid-feedback">
-                      {formik.errors.centreName}
+                      {formik.errors.centerName}
                     </div>
                   )}
                 </div>
@@ -133,15 +134,15 @@ function CMSContactAdd({ onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.mobile && formik.errors.mobile
+                      formik.touched.mobileNo && formik.errors.mobileNo
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("mobile")}
+                    {...formik.getFieldProps("mobileNo")}
                   />
-                  {formik.touched.mobile && formik.errors.mobile && (
+                  {formik.touched.mobileNo && formik.errors.mobileNo && (
                     <div className="invalid-feedback">
-                      {formik.errors.mobile}
+                      {formik.errors.mobileNo}
                     </div>
                   )}
                 </div>
@@ -172,15 +173,15 @@ function CMSContactAdd({ onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.gooleAddress && formik.errors.gooleAddress
+                      formik.touched.map && formik.errors.map
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("gooleAddress")}
+                    {...formik.getFieldProps("map")}
                   />
-                  {formik.touched.gooleAddress && formik.errors.gooleAddress && (
+                  {formik.touched.map && formik.errors.map && (
                     <div className="invalid-feedback">
-                      {formik.errors.gooleAddress}
+                      {formik.errors.map}
                     </div>
                   )}
                 </div>
