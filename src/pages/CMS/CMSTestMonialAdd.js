@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -8,6 +8,7 @@ import { Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 function CMSTestMonialAdd() {
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -21,52 +22,54 @@ function CMSTestMonialAdd() {
 
 
   const initialValues = {
-    image: '', // To store the uploaded image file
-    details: "", // Details about the image
+    parentImage: '', // To store the uploaded image file
+    parentDescription: "", 
+    parentName: "",// Details about the image
   };
 
   const validationSchema = Yup.object().shape({
-    image: Yup.mixed().required("Image file is required"),
-    details: Yup.string().required("Image details are required"),
+    parentImage: Yup.mixed().required("Image file is required"),
+    parentDescription: Yup.string().required("Image details are required"),
+    parentName: Yup.string().required("Image details are required"),
   });
 
   const handleFileChange = event => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue('image', file); // Update Formik's form state with the file
-  };
-
-  const onSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      setLoadIndicator(true);
-      const formData = new FormData();
-      formData.append("image", values.image);
-      formData.append("details", values.details);
-
-      // Example API call using 'api' from '../../config/URL'
-      const response = await api.post("/upload-image", formData);
-
-      // Handle response or redirect after successful upload
-      console.log("Upload successful", response.data);
-      toast.success("Image uploaded successfully!");
-      resetForm();
-    } catch (error) {
-      console.error("Upload failed", error);
-      toast.error("Failed to upload image.");
-    } finally {
-      setLoadIndicator(false);
-    }
+    formik.setFieldValue('parentImage', file); // Update Formik's form state with the file
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
-  });
+    onSubmit: async (values) => {
+      setLoadIndicator(true);
+      
 
-  // const handleFileChange = (event) => {
-  //   formik.setFieldValue("image", event.currentTarget.files[0]);
-  // };
+      console.log(values);
+const formData=new FormData();
+formData.append("parentDescription",values.parentDescription)
+formData.append("parentName ",values.parentName )
+formData.append("file",values.parentImage)
+      try {
+        const response = await api.post("/createTestimonialSaveWithProfileImages", formData, {
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
+        });
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          formik.resetForm();
+          setShow(false);
+        } 
+      } catch (error) {
+        toast.error(error);
+      }finally {
+        setLoadIndicator(false);
+      }
+    },
+    
+  });
 
   return (
     <div className="container">
@@ -108,60 +111,60 @@ function CMSTestMonialAdd() {
         <Modal.Body>
         <div className="container">
           <div className="mb-3">
-            <label htmlFor="image" className="form-label">
+            <label htmlFor="parentImage" className="form-label">
               Upload Image
             </label>
             <input
               type="file"
-              id="image"
-              name="image"
+              id="parentImage"
+              name="parentImage"
               className="form-control"
               onChange={handleFileChange}
               onBlur={formik.handleBlur}
             />
-            {formik.touched.image && formik.errors.image && (
-              <div className="text-danger">{formik.errors.image}</div>
+            {formik.touched.parentImage && formik.errors.parentImage && (
+              <div className="text-danger">{formik.errors.parentImage}</div>
             )}
           </div>
           {selectedFile && (
         <div>
           
-          {selectedFile.type.startsWith('image') && (
+          {selectedFile.type.startsWith('parentImage') && (
             <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
           )}
         </div>
       )}
 
           <div className="mb-3">
-            <label htmlFor="details" className="form-label">
+            <label htmlFor="parentName" className="form-label">
               Parent Name
             </label>
             <input
-              id="details"
-              name="details"
+              id="parentName"
+              name="parentName"
               className="form-control"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.details}
+              value={formik.values.parentName}
             />
-            {formik.touched.details && formik.errors.details && (
-              <div className="text-danger">{formik.errors.details}</div>
+            {formik.touched.parentName && formik.errors.parentName && (
+              <div className="text-danger">{formik.errors.parentName}</div>
             )}
           </div>
           <div className="mb-3">
-            <label htmlFor="details" className="form-label">
+            <label htmlFor="parentDescription" className="form-label">
               Parent Description
             </label>
             <textarea
-              id="details"
-              name="details"
+              id="parentDescription"
+              name="parentDescription"
               className="form-control"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.details}
+              value={formik.values.parentDescription}
             />
-            {formik.touched.details && formik.errors.details && (
-              <div className="text-danger">{formik.errors.details}</div>
+            {formik.touched.parentDescription && formik.errors.parentDescription && (
+              <div className="text-danger">{formik.errors.parentDescription}</div>
             )}
           </div>
          

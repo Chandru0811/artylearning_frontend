@@ -1,136 +1,92 @@
-import React, { useState } from 'react';
-import View from "../../assets/clientimage/View.jpeg";
-import { MdEdit } from "react-icons/md";
-import { Button, Modal, Form } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Button, Modal} from "react-bootstrap";
 import { IoMdAdd } from "react-icons/io";
 import * as yup from "yup";
 import { useFormik } from "formik";
-// import { toast } from "react-toastify";
-// import api from "../../../config/URL";
+import { toast } from "react-toastify";
+import api from "../../config/URL";
+import NewsUpdateUpdateEdit from "../CMS/CmsNewsUpdateEdit";
+import { useNavigate } from 'react-router-dom';
 
 const CmsNewsUpdate = () => {
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [tempImage, setTempImage] = useState(null);
-  const [newImage, setNewImage] = useState(View);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const currentData = new Date().toISOString().split("T")[0];
 
-  const [content, setContent] = useState([
-    {
-      heading: "2024 Arty Learning Calender 2024 Arty Learning Calender",
-      admin: "admin",
-      calender: "October 1st, 2023",
-      comments: "No Comments",
-      image: newImage
-    },
-    {
-      heading: "2023 Arty Learning Calender",
-      admin: "Staff",
-      calender: "October 1st, 2024",
-      comments: "Hii111111111",
-      image: newImage
-    }
-  ]);
-  const contentArray = Array.isArray(content) ? content : [];
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+  };
+
+  const handleShowAddModal = () => setShowAddModal(true);
 
   const validationSchema = yup.object().shape({
-    file: yup.string().required("*Package Name is required"),
-    heading: yup.string().required("*Number of Lesson is required"),
-    comments: yup.string().required("*Number of Lesson is required"),
+    // file: yup.string().required("*Package Name is required"),  
+    // heading: yup.string().required("*Heading is required"),
+    // role: yup.string().required("*Role is required"),
+    // date: yup.string().required("*Date is required"),
+    // comment: yup.string().required("*comment is required"),
   });
-
+  console.log("object", datas)
   const formik = useFormik({
     initialValues: {
       file: "",
       heading: "",
-      comments: "",
+      role: "",
+      date: "",
+      comment: "",
+      para: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (data) => {
+      // console.log(data);
+      const formData = new FormData()
+      formData.append("file", data.file)
+      formData.append("heading ", data.heading)
+      formData.append("role ", "Admin")
+      formData.append("date ", currentData)
+      formData.append("comment ", data.comment)
+      formData.append("para ", data.para)
       setLoadIndicator(true);
-      console.log("Form values:", values);
-      // try {
-      //   const response = await api.post(`/createCenterPackages/${id}`, values, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   if (response.status === 201) {
-      //     toast.success(response.data.message);
-      //     onSuccess();
-      //     handleClose();
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
+      try {
+        const response = await api.post(`/createNewsUpdatedSaveImages`, formData);
+        if (response.status === 201) {
+          setShowAddModal(false);
+          formik.resetForm();
+          toast.success(response.data.message);
+          refreshData()
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
-  const [tempContent, setTempContent] = useState({ ...content });
-
-  const handleShowEditModal = () => {
-    setTempContent({ ...content });
-    setTempImage(newImage);
-    setShowEditModal(true);
+  const refreshData = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/getAllNewsUpdatedSave");
+      setDatas(response.data);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+    setLoading(false);
+  };
+  const handleClose = () => {
+    setShow(false)
   };
 
-  const handleShowAddModal = () => {
-    setContent({
-      heading: '',
-      admin: '',
-      calender: '',
-      comments: ''
-    });
-    setTempImage(null);
-    setShowAddModal(true);
-  };
-
-  const handleSaveEditChanges = () => {
-    setContent({ ...tempContent });
-    setNewImage(tempImage);
-    setShowEditModal(false);
-  };
-
-  // const handleSaveAddChanges = () => {
-  //   // Handle adding news logic here
-  //   setShowAddModal(false);
-  // };
-
-  const handleCloseEditModal = () => setShowEditModal(false);
-  const handleCloseAddModal = () => setShowAddModal(false);
-
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setTempContent((prevContent) => ({
-      ...prevContent,
-      [name]: value,
-    }));
-  };
-
-  const handleAddChange = (e) => {
-    const { name, value } = e.target;
-    setContent((prevContent) => ({
-      ...prevContent,
-      [name]: value,
-    }));
-  };
-  // const handleFileChange = event => {
-  //   const file = event.target.files[0];
-  //   setSelectedFile(file);
-  //   selectedFile('image', file);
-  // };
-
-  const handleFileChange = event => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-    formik.setFieldValue('image', file);
-  };
-
+  useEffect(() => {
+    refreshData()
+  }, [])
   return (
     <div className="news">
       <div className="container cms-header shadow-sm py-2">
@@ -153,7 +109,7 @@ const CmsNewsUpdate = () => {
         <div className='d-flex align-content-end justify-content-end'>
 
           <button
-            className="btn btn-button "
+            className="btn btn-button"
             onClick={handleShowAddModal}
           >
             Add News <IoMdAdd />
@@ -161,23 +117,26 @@ const CmsNewsUpdate = () => {
         </div>
 
         <div className="row">
-          {contentArray.map((item, index) => (
-            <div className="col-md-4 col-12 calendar-item" key={index}>
+          {datas.map((item, index) => (
+            <div className="col-md-4 col-12 my-2 calendar-item" key={index}>
               <div className="custom-card shadow-lg h-100 d-flex flex-column align-items-center mx-3 mt-2 pt-3 position-relative">
                 <span
                   className="btn custom-edit-button"
-                  onClick={handleShowEditModal}
+                  onClick={handleClose}
                 >
-                  <MdEdit />
+                  {/* {storedScreens?.NewsUpdateUpdate && ( */}
+                  {/* <MdEdit /> */}
+                  <NewsUpdateUpdateEdit id={item.id} onSuccess={refreshData}/>
+                  {/* )} */}
                 </span>
-                <img src={item.image} alt="view" className="custom-img-fluid" />
+                <img src={item.cardImg} alt="view" className="custom-img-fluid" />
                 <div className="custom-card-body d-flex flex-column p-2">
                   <div className="custom-content">
                     <h6 className="custom-card-title">
                       {item.heading}
                     </h6>
                     <p>
-                      {item.admin} / {item.calender} / {item.comments}
+                      {item.role}/{item.date}/{item.comment}
                     </p>
                   </div>
                   <div className="mt-auto">
@@ -190,211 +149,150 @@ const CmsNewsUpdate = () => {
         </div>
       </div>
 
-      {/* <Modal show={showAddModal} onHide={handleCloseAddModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add News</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className='row'>
-            <div controlId="formImage2">
-              <label>Upload Image File</label>
-              <div type="file" onChange={handleFileChange} accept=".jpg,.jpeg,.png,.gif" />
-            </div>
-            {selectedFile && (
-              <div>
-                {selectedFile.type.startsWith('image') && (
-                  <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
-                )}
-              </div>
-            )}
-
-            <div controlId="formHeading2">
-              <Form.Label>Heading</Form.Label>
-              <Form.Control
-                type="text"
-                name="heading"
-                value={content.heading}
-                onChange={handleAddChange}
-              />
-            </div>
-
-            <Form.Group controlId="formComments2" className="mt-3">
-              <Form.Label>Comments</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="comments"
-                rows={3}
-                value={content.comments}
-                onChange={handleAddChange}
-              />
-            </Form.Group>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseAddModal}>
-            Close
-          </Button>
-          <Button type="submit"
-            className="btn btn-button btn-sm"
-            onClick={handleSaveAddChanges}>
-            Save
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
-
-      <form onSubmit={formik.handleSubmit}>
-        <Modal
-          show={showAddModal}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          onHide={handleCloseAddModal}
-        >
-          <form onSubmit={formik.handleSubmit}>
-            <Modal.Header closeButton>
-              <Modal.Title>
-                <p className="headColor">Add News</p>
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div className="row">
-                <div class="col-md-6 col-12 mb-2">
-                  <lable className="form-lable">
-                    Upload Image File
-                  </lable>
-                  <div class="input-group mb-3">
-                    <input
-                      type="file"
-                      className={`form-control   ${formik.touched.file && formik.errors.file
-                        ? "is-invalid"
-                        : ""
-                        }`}
-                      {...formik.getFieldProps("file")}
-                    />
-                    {formik.touched.file && formik.errors.file && (
-                      <div className="invalid-feedback">
-                        {formik.errors.file}
-                      </div>
-                    )}
-                  </div>
-                  {selectedFile && (
-                    <div>
-
-                      {selectedFile.type.startsWith('image') && (
-                        <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
-                      )}
+      <Modal
+        show={showAddModal}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        onHide={handleCloseAddModal}
+      >
+        <form onSubmit={formik.handleSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <p className="headColor">Add News</p>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row">
+              <div class="col-md-6 col-12 mb-2">
+                <lable className="form-lable">
+                  Upload Image File
+                </lable>
+                <div class="input-group mb-3">
+                  <input
+                    type="file"
+                    className={`form-control   ${formik.touched.file && formik.errors.file
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    onChange={(event) => {
+                      formik.setFieldValue("file", event.currentTarget.files[0]);
+                    }}
+                  />
+                  {formik.touched.file && formik.errors.file && (
+                    <div className="invalid-feedback">
+                      {formik.errors.file}
                     </div>
                   )}
                 </div>
-                <div class="col-md-6 col-12 mb-2">
-                  <lable class="">
-                    Heading<span class="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="text"
-                    className={`form-control   ${formik.touched.heading && formik.errors.heading
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    {...formik.getFieldProps("heading")}
-                  />
-                  {formik.touched.heading && formik.errors.heading && (
-                    <div className="invalid-feedback">{formik.errors.heading}</div>
-                  )}
-                </div>
-
-                <div class="col-md-6 col-12 mb-2">
-                  <lable class="">
-                    Comments<span class="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="text"
-                    className={`form-control   ${formik.touched.comments && formik.errors.comments
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    {...formik.getFieldProps("comments")}
-                  />
-                  {formik.touched.comments && formik.errors.comments && (
-                    <div className="invalid-feedback">{formik.errors.comments}</div>
-                  )}
-                </div>
               </div>
-            </Modal.Body>
-            <Modal.Footer className="mt-5">
-              <Button variant="secondary" onClick={handleCloseAddModal}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-              // disabled={loadIndicator}
-              >
-                {/* {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )} */}
-                Submit
-              </Button>
-            </Modal.Footer>
-          </form>
-        </Modal>
-      </form>
 
-      <form onSubmit={formik.handleSubmit}>
-        <Modal
-          show={showAddModal}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          onHide={handleCloseAddModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit News</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group controlId="formImage">
-                <Form.Label>Upload Image File</Form.Label>
-                <Form.Control type="file" onChange={handleFileChange} accept=".jpg,.jpeg,.png,.gif" />
-              </Form.Group>
-
-              <Form.Group controlId="formHeading">
-                <Form.Label>Heading</Form.Label>
-                <Form.Control
+              <div class="col-md-6 col-12 mb-2">
+                <lable class="">
+                  Heading
+                </lable>
+                <input
                   type="text"
-                  name="heading"
-                  value={tempContent.heading}
-                  onChange={handleEditChange}
+                  className={`form-control   ${formik.touched.heading && formik.errors.heading
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("heading")}
                 />
-              </Form.Group>
+                {formik.touched.heading && formik.errors.heading && (
+                  <div className="invalid-feedback">{formik.errors.heading}</div>
+                )}
+              </div>
 
-              <Form.Group controlId="formComments" className="mt-3">
-                <Form.Label>Comments</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  name="comments"
-                  rows={3}
-                  value={tempContent.comments}
-                  onChange={handleEditChange}
+              {/* <div class="col-md-6 col-12 mb-2">
+                <lable class="">
+                  Role
+                </lable>
+                <input
+                  type="text"
+                  className={`form-control   ${formik.touched.role && formik.errors.role
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("role")}
                 />
-              </Form.Group>
-            </Form>
+                {formik.touched.role && formik.errors.role && (
+                  <div className="invalid-feedback">{formik.errors.role}</div>
+                )}
+              </div>
+
+              <div class="col-md-6 col-12 mb-2">
+                <lable class="">
+                  Date
+                </lable>
+                <input
+                  type="date"
+                  className={`form-control   ${formik.touched.date && formik.errors.date
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("date")}
+                />
+                {formik.touched.date && formik.errors.date && (
+                  <div className="invalid-feedback">{formik.errors.date}</div>
+                )}
+              </div> */}
+
+              <div class="col-md-6 col-12 mb-2">
+                <lable class="">
+                  Comment
+                </lable>
+                <input
+                  type="text"
+                  className={`form-control   ${formik.touched.comment && formik.errors.comment
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("comment")}
+                />
+                {formik.touched.comment && formik.errors.comment && (
+                  <div className="invalid-feedback">{formik.errors.comment}</div>
+                )}
+              </div>
+
+              <div class="col-md-6 col-12 mb-2">
+                <lable class="">
+                  Paragraph
+                </lable>
+                <textarea
+                  type="text"
+                  className={`form-control   ${formik.touched.para && formik.errors.para
+                    ? "is-invalid"
+                    : ""
+                    }`}
+                  {...formik.getFieldProps("para")}
+                />
+                {formik.touched.para && formik.errors.para && (
+                  <div className="invalid-feedback">{formik.errors.para}</div>
+                )}
+              </div>
+            </div>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseEditModal}>
-              Close
+          <Modal.Footer className="mt-5">
+            <Button variant="secondary" onClick={handleCloseAddModal}>
+              Cancel
             </Button>
             <Button
               type="submit"
               className="btn btn-button btn-sm"
-              onClick={handleSaveEditChanges}>
-              Save Changes
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
             </Button>
           </Modal.Footer>
-        </Modal>
-      </form>
+        </form>
+      </Modal>
 
     </div>
   );

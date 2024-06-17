@@ -23,7 +23,7 @@ const CMSTestMonail = () => {
   useEffect(() => {
     const getCenterData = async () => {
       try {
-        const response = await api.get("/getAllCenter");
+        const response = await api.get("/getAllTestimonialSave");
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
@@ -63,7 +63,7 @@ const CMSTestMonail = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllCenter");
+      const response = await api.get("/getAllTestimonialSave");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -73,11 +73,11 @@ const CMSTestMonail = () => {
   };
 
   return (
-    <div className="containercenter">
-        <div className="container cms-header shadow-sm py-2">
+    <div className="container center">
+      <div className="container cms-header shadow-sm py-2">
         <div className="row p-1">
           <div className="col-md-6 col-12">
-            <h4>TestiMonial</h4>
+            <h4>Testimonial</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
             <button className="btn btn-sm btn-outline-primary border ms-2">
@@ -90,7 +90,7 @@ const CMSTestMonail = () => {
         </div>
       </div>
       <div className="mb-5 mt-3 d-flex justify-content-end">
-        <CMSTestMonialAdd />
+        <CMSTestMonialAdd onSuccess={refreshData}/>
       </div>
       {loading ? (
         <div className="loader-container">
@@ -120,16 +120,16 @@ const CMSTestMonail = () => {
               <tr key={index}>
                 <td className="text-center">{index + 1}</td>
                 <td className="text-center">
-                  <img className="img-fluid sized-image" src={profile} alt="Profile" />
+                  <img src={data.parentImage} className="img-fluid" alt="image" width={150} />
                 </td>
-                <td className="text-center">Arty Learning</td>
-                <td className="text-center"> Redundant alt attribute. Screen-readers already announce `img` tags as an image. You don’t need to use the words</td>
+                <td className="text-center">{data.parentDescription}</td>
+                <td className="text-center"> {data.parentName}</td>
                 <td className="text-center">
                   <div className="d-flex">
-                    <CMSTestMonialEdit />
+                    <CMSTestMonialEdit id={data.id} onSuccess={refreshData}/>
                     <Delete
                       onSuccess={refreshData}
-                      path={`/deleteCenter/${data.id}`}
+                      path={`/deleteTestimonialSave/${data.id}`}
                       style={{ display: "inline-block" }}
                     />
                   </div>
