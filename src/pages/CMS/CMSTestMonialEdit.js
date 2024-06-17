@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 
-function CMSTestMonialEdit() {
+function CMSTestMonialEdit({ id }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -19,50 +19,71 @@ function CMSTestMonialEdit() {
   const handleShow = () => setShow(true);
 
   const initialValues = {
-    image: null, // To store the uploaded image file
-    details: "", // Details about the image
+    parentImage: null, // To store the uploaded image file
+    parentDescription: "", // Details about the image
+    parentName: "", // Details about the image
   };
 
   const validationSchema = Yup.object().shape({
-    image: Yup.mixed().required("Image file is required"),
-    details: Yup.string().required("Image details are required"),
+    parentImage: Yup.mixed().required("Image file is required"),
+    parentDescription: Yup.string().required("Image details are required"),
+    parentName: Yup.string().required("Image details are required"),
   });
-
-  const onSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      setLoadIndicator(true);
-      const formData = new FormData();
-      formData.append("image", values.image);
-      formData.append("details", values.details);
-
-      // Example API call using 'api' from '../../config/URL'
-      const response = await api.post("/upload-image", formData);
-
-      // Handle response or redirect after successful upload
-      console.log("Upload successful", response.data);
-      toast.success("Image uploaded successfully!");
-      resetForm();
-    } catch (error) {
-      console.error("Upload failed", error);
-      toast.error("Failed to upload image.");
-    } finally {
-      setLoadIndicator(false);
-    }
-  };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+    onSubmit: async (values) => {
+      console.log(values);
+      setLoadIndicator(true);
+      const formData = new FormData();
+      formData.append("file", values.parentImage);
+      formData.append("parentDescription", values.parentDescription);
+      formData.append("parentName", values.parentName);
+      try {
+        const response = await api.put(
+          `/updateTestimonialSaveWithProfileImages/${id}`,
+          values,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
+    },
   });
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllTestimonialSaveById/${id}`);
+      formik.setValues(response.data);
+      setSelectedFile(response.data.parentImage)
+    } catch (error) {
+      toast.error("Error Fetch Data ", error);
+    }
+  };
+  useEffect(() => {
+    if (show) {
+      getData();
+    }
+  }, [show]);
+
   const handleFileChange = event => {
     const file = event.target.files[0];
     setSelectedFile(file);
     formik.setFieldValue('image', file); // Update Formik's form state with the file
   };
-  // const handleFileChange = (event) => {
-  //   formik.setFieldValue("image", event.currentTarget.files[0]);
-  // };
+
 
   return (
     <div className="container">
@@ -99,81 +120,86 @@ function CMSTestMonialEdit() {
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
-                <label htmlFor="image" className="form-label">
+                <label htmlFor="parentImage" className="form-label">
                   Upload Image
                 </label>
                 <input
                   type="file"
-                  id="image"
-                  name="image"
+                  id="parentImage"
+                  name="parentImage"
                   className="form-control"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
                 />
-                {!selectedFile && (
-                  <img className="img-fluid sized-image" src={profile} alt="Slide 1" />
-                )}
-
-                {formik.touched.image && formik.errors.image && (
-                  <div className="text-danger">{formik.errors.image}</div>
+                {formik.touched.parentImage && formik.errors.parentImage && (
+                  <div className="text-danger">{formik.errors.parentImage}</div>
                 )}
               </div>
-              {selectedFile && (
+              {/* {selectedFile && (
                 <div>
-                  
-                  
-                  {selectedFile.type.startsWith('image') && (
+
+                  {selectedFile.type.startsWith('parentImage') && (
                     <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
                   )}
                 </div>
-              )}
+              )} */}
+              <img src={selectedFile} alt="Selected File" style={{ width: '150px' }} />
+
 
               <div className="mb-3">
-                <label htmlFor="details" className="form-label">
+                <label htmlFor="parentName" className="form-label">
                   Parent Name
                 </label>
                 <input
-                  type="text"
-                  class="form-control"
-                  value="artylearning"
+                  id="parentName"
+                  name="parentName"
+                  className="form-control"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.parentName}
                 />
-                {formik.touched.details && formik.errors.details && (
-                  <div className="text-danger">{formik.errors.details}</div>
+                {formik.touched.parentName && formik.errors.parentName && (
+                  <div className="text-danger">{formik.errors.parentName}</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="details" className="form-label">
+                <label htmlFor="parentDescription" className="form-label">
                   Parent Description
                 </label>
                 <textarea
-                  type="text"
-                  class="form-control"
-                  value=" Redundant alt attribute. Screen-readers already announce `img` tags as an image. You don’t need to use the words "
+                  id="parentDescription"
+                  name="parentDescription"
+                  className="form-control"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.parentDescription}
                 />
-                {formik.touched.details && formik.errors.details && (
-                  <div className="text-danger">{formik.errors.details}</div>
+                {formik.touched.parentDescription && formik.errors.parentDescription && (
+                  <div className="text-danger">{formik.errors.parentDescription}</div>
                 )}
               </div>
+
+
             </div>
-            <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
-            </Modal.Footer>
           </Modal.Body>
+          <Modal.Footer>
+            <Button type="button" variant="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Save
+            </Button>
+          </Modal.Footer>
         </form>
       </Modal>
     </div>
