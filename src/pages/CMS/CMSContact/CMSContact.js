@@ -70,10 +70,22 @@ const CMSContact = () => {
 
 
   return (
+ 
     <div className="container">
       <div className="col-12 text-end my-3">
         <CMSContactAdd onSuccess={refreshData}/>
       </div>
+      {loading ? (
+        <div className="loader-container">
+          <div className="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      ) : (
       <table ref={tableRef} className="display">
         <thead>
           <tr>
@@ -93,7 +105,7 @@ const CMSContact = () => {
               <td className="text-center">{data.mobileNo}</td>
               <td className="text-center">
                 <CMSContactView id={data.id} />
-                <CMSContactEdit id={data.id} />
+                <CMSContactEdit id={data.id} onSuccess={refreshData}/>
                 <Delete onSuccess={refreshData}
                   path={`/deleteContactUsSave/${data.id}`}
                 />
@@ -102,7 +114,10 @@ const CMSContact = () => {
           ))}
         </tbody>
       </table>
+      )}
     </div>
+
+   
   );
 };
 

@@ -20,16 +20,16 @@ const CMSTestMonail = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getCenterData = async () => {
+    try {
+      const response = await api.get("/getAllTestimonialSave");
+      setDatas(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data: ", error.message);
+    }
+  };
   useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllTestimonialSave");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data: ", error.message);
-      }
-    };
     getCenterData();
   }, []);
 
