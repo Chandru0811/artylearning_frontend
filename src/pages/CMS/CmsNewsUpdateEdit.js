@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdEdit } from "react-icons/md";
 import { Button, Modal } from "react-bootstrap";
 import * as Yup from "yup";
@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 
-function CmsNewsUpdateEdit({ id,onSuccess }) {
+function CmsNewsUpdateEdit({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
     // const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
@@ -51,7 +51,6 @@ function CmsNewsUpdateEdit({ id,onSuccess }) {
                     handleClose();
                     onSuccess();
                     toast.success(response.data.message);
-                    refreshData()
                 } else {
                     toast.error(response.data.message);
                 }
@@ -64,23 +63,10 @@ function CmsNewsUpdateEdit({ id,onSuccess }) {
         },
     });
 
-    const refreshData = async () => {
-        setLoading(true);
-        try {
-            const response = await api.get("/getAllNewsUpdatedSave");
-            setDatas(response.data);
-        } catch (error) {
-            console.error("Error refreshing data:", error);
-        }
-        setLoading(false);
-    };
     const handleClose = () => {
         setShow(false)
     };
 
-    useEffect(() => {
-        refreshData()
-    }, [])
 
     useEffect(() => {
         const getData = async () => {

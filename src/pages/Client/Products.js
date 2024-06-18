@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import imgs1 from "../../assets/clientimage/threebookArty.png";
 import imgs2 from "../../assets/clientimage/ntxauso.png";
 import imgs3 from "../../assets/clientimage/antbook.png";
@@ -6,6 +6,8 @@ import imgs4 from "../../assets/clientimage/watermelonfruits.png";
 import imgs5 from "../../assets/clientimage/cards-animated.gif";
 import { IoIosCart } from "react-icons/io";
 import Carousel from "react-multi-carousel";
+import api from "../../config/URL";
+import { toast } from "react-toastify";
 
 function Products() {
   const responsive = {
@@ -25,6 +27,20 @@ function Products() {
       slidesToSlide: 1,
     },
   };
+  const [data, setData] = useState([]);
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getProductSavePublish`);
+      setData(response.data);
+    } catch (error) {
+      toast.error("Error Fetching Data: " + error.message);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <>
       <div class="container">
@@ -70,35 +86,26 @@ function Products() {
               className="text-center fw-bolder mt-5"
               style={{ fontSize: "xxx-large" }}
             >
-              A-Z Phonics Card
+              {data.boxA || "A-Z Phonics Card"}
             </h1>
             <div className="d-flex justify-content-center align-items-center mt-4">
-              <img className="img-fluid" src={imgs5} alt="Slide 4" />
+              <img className="img-fluid" src={data.imageProduct||imgs5} alt="Slide 4" />
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p
                 className="text-center fw-small mt-5"
                 style={{ fontSize: "large" }}
               >
-                These cards are specially designed for parents to entice and
-                help children to the letter sounds and assoiation. Each box of
-                cards have different set of words so it will never be reapeted.
+                {data.contentCard ||
+                 "These cards are specially designed for parents to entice and "}
               </p>
-              <p
-                className="text-center fw-small mt-3"
-                style={{ fontSize: "large" }}
-              >
-                There is a QR code which links user to a private Youtube channel
-                on the phonics sounds as well as any new updates Arty Learning
-                puts up.
-              </p>
-              <button
+              {/* <button
                 className="m-5 shadow btn btn-danger"
                 style={{ background: "red" }}
               >
                 <IoIosCart />
                 &nbsp; Buy Now
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
