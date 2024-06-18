@@ -2,11 +2,25 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Collapse, Nav } from "react-bootstrap";
 import Logo from "../../assets/images/Logo.png";
+import api from "../../config/URL";
 
 
 function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllHeaderSavePublish`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error Fetching Data: " + error.message);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
@@ -344,7 +358,7 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo-details">
         <span className="logo_name">
-          <img src={Logo} alt="logo" width={130} className="img-fluid" />
+          <img src={data.artyLogo || Logo} alt="logo" width={130} className="img-fluid" />
         </span>
       </div>
       <ul className="nav-links">

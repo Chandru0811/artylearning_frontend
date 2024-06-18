@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   Container,
@@ -10,13 +10,27 @@ import { Link, NavLink } from "react-router-dom";
 import Logo from "../../../assets/clientimage/Logo.png";
 import English from "../../../assets/clientimage/eng.png";
 import Chinesh from "../../../assets/clientimage/Alphabet.png";
+import api from "../../../config/URL";
 
 function Header() {
   const expand = "xl";
+  const [data, setData] = useState({});
 
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllHeaderSavePublish`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error Fetching Data: " + error.message);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <>
@@ -27,7 +41,7 @@ function Header() {
       >
         <Container fluid>
           <Navbar.Brand as={NavLink} to="/" onClick={handleClick}>
-            <img src={Logo} alt="WWG" width={150} className="img-fluid" />
+            <img src={data.artyLogo || Logo} alt="WWG" width={150} className="img-fluid" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
           <Navbar.Offcanvas
