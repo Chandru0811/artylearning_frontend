@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Hero_Img from "../../../assets/clientimage/Hero_Img.jpg";
+import api from "../../../config/URL";
 
 function Hero() {
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllHomeSavePublish`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error Fetching Data: " + error.message);
+      }
+    };
+    getData();
+  }, []);
+
   return (
     <section className="heroSection">
       <div className="container-fluid p-0">
         <div style={{ position: "relative" }} className="heroPicture">
           <img
-            src={Hero_Img}
+            src={data.heroBackGround || Hero_Img}
             alt="home-img"
             style={{
               width: "100%",
@@ -26,15 +41,19 @@ function Hero() {
               fontSize: "clamp(16px, 4vw, 46px)",
             }}
           >
-            <span>
-              We Help Children Build a <br /> Strong Language Foundation
-            </span>
-            <span className="mt-lg-3">
-              <span>With </span>
-              <span style={{ backgroundColor: "#eb0505", color: "#fff" }}>
-                Our Creative Touch.
-              </span>
-            </span>
+            {data.heroTitle || (
+              <>
+                <span>
+                  We Help Children Build a <br /> Strong Language Foundation
+                </span>
+                <span className="mt-lg-3">
+                  <span>With </span>
+                  <span style={{ backgroundColor: "#eb0505", color: "#fff" }}>
+                    Our Creative Touch.
+                  </span>
+                </span>
+              </>
+            )}
           </h1>
         </div>
       </div>
