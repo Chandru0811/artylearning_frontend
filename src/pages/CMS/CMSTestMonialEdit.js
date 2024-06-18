@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import profile from "../../assets/images/profile.png";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 
-function CMSTestMonialEdit({ id }) {
+function CMSTestMonialEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const initialValues = {
-    parentImage: null, // To store the uploaded image file
-    parentDescription: "", // Details about the image
-    parentName: "", // Details about the image
+    parentImage: null,
+    parentDescription: "",
+    parentName: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -34,7 +31,6 @@ function CMSTestMonialEdit({ id }) {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
       setLoadIndicator(true);
       const formData = new FormData();
       formData.append("file", values.parentImage);
@@ -43,20 +39,17 @@ function CMSTestMonialEdit({ id }) {
       try {
         const response = await api.put(
           `/updateTestimonialSaveWithProfileImages/${id}`,
-          values,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+          formData
         );
-        if (response.status === 200) {
+        if (response.status === 201) {
           toast.success(response.data.message);
+          onSuccess();
+          getData(); // Reload the data to show the updated image
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
@@ -66,24 +59,28 @@ function CMSTestMonialEdit({ id }) {
   const getData = async () => {
     try {
       const response = await api.get(`/getAllTestimonialSaveById/${id}`);
-      formik.setValues(response.data);
-      setSelectedFile(response.data.parentImage)
+      formik.setValues({
+        parentImage: response.data.parentImage,
+        parentDescription: response.data.parentDescription,
+        parentName: response.data.parentName,
+      });
+      setSelectedFile(response.data.parentImage);
     } catch (error) {
-      toast.error("Error Fetch Data ", error);
+      toast.error("Error Fetching Data: " + error.message);
     }
   };
+
   useEffect(() => {
     if (show) {
       getData();
     }
   }, [show]);
 
-  const handleFileChange = event => {
-    const file = event.target.files[0];
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue('image', file); // Update Formik's form state with the file
+    formik.setFieldValue("parentImage", file);
   };
-
 
   return (
     <div className="container">
@@ -91,30 +88,9 @@ function CMSTestMonialEdit({ id }) {
         <FaEdit />
       </button>
 
-      {/* <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-          <Link to="/cms/productsitem">
-            <button type="button" className="btn btn-sm btn-border">
-              Back
-            </button>
-          </Link>
-          &nbsp;&nbsp;
-          <button
-            type="submit"
-            className="btn btn-button btn-sm"
-            disabled={formik.isSubmitting}
-          >
-            {loadIndicator && (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                aria-hidden="true"
-              ></span>
-            )}
-            Save
-          </button>
-        </div> */}
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit TestiMonial</Modal.Title>
+          <Modal.Title className="headColor">Edit Testimonial</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
@@ -135,17 +111,23 @@ function CMSTestMonialEdit({ id }) {
                   <div className="text-danger">{formik.errors.parentImage}</div>
                 )}
               </div>
-              {/* {selectedFile && (
+              {selectedFile && (
                 <div>
-
-                  {selectedFile.type.startsWith('parentImage') && (
-                    <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
-                  )}
+                  {typeof selectedFile === "string" ? (
+                    <img
+                      src={selectedFile}
+                      alt="Selected File"
+                      style={{ maxWidth: "100%" }}
+                    />
+                  ) : selectedFile.type.startsWith("image") ? (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Selected File"
+                      style={{ maxWidth: "100%" }}
+                    />
+                  ) : null}
                 </div>
-              )} */}
-              <img src={selectedFile} alt="Selected File" style={{ width: '150px' }} />
-
-
+              )}
               <div className="mb-3">
                 <label htmlFor="parentName" className="form-label">
                   Parent Name
@@ -174,12 +156,13 @@ function CMSTestMonialEdit({ id }) {
                   onBlur={formik.handleBlur}
                   value={formik.values.parentDescription}
                 />
-                {formik.touched.parentDescription && formik.errors.parentDescription && (
-                  <div className="text-danger">{formik.errors.parentDescription}</div>
-                )}
+                {formik.touched.parentDescription &&
+                  formik.errors.parentDescription && (
+                    <div className="text-danger">
+                      {formik.errors.parentDescription}
+                    </div>
+                  )}
               </div>
-
-
             </div>
           </Modal.Body>
           <Modal.Footer>

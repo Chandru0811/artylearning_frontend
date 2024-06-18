@@ -42,7 +42,7 @@ function CMSContactEdit({ id, onSuccess }) {
       map: "",
       mobileNo: "",
     },
-    validationSchema: validationSchema, // Assign the validation schema
+    // validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       // console.log(values);
       setLoadIndicator(true);
@@ -103,7 +103,7 @@ function CMSContactEdit({ id, onSuccess }) {
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Centre Name<span className="text-danger">*</span>
+                    Centre Name
                   </label>
                   <input
                     type="text"
@@ -122,7 +122,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Email<span className="text-danger">*</span>
+                    Email
                   </label>
                   <input
                     type="text"
@@ -141,7 +141,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Mobile<span className="text-danger">*</span>
+                    Mobile
                   </label>
                   <input
                     type="text"
@@ -160,7 +160,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Address<span className="text-danger">*</span>
+                    Address
                   </label>
                   <textarea
                     type="text"
@@ -180,7 +180,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Google Address<span className="text-danger">*</span>
+                    Google Address
                   </label>
                   <input
                     type="text"
