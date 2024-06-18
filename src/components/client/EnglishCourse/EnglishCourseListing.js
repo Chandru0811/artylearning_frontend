@@ -3,12 +3,21 @@ import Believer from "../../../assets/clientimage/Arty-Believer.png";
 import Dreamer from "../../../assets/clientimage/Arty-Dreamer.png";
 import Pursuer from "../../../assets/clientimage/Arty-Pursuer.png";
 
-function EnglishCourseListing() {
+function EnglishCourseListing({datas}) {
   return (
     <div className="container">
       <div className="row">
         <div className="col-12 my-5 ">
-          <p className="headbody">
+       
+        {datas.content2?.split("\n\n").map((paragraph, index) => (
+                <div key={index} className="edit-container mb-3">
+                  <p
+                    className="headbody preserve-whitespace"
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                  ></p>
+                </div>
+              ))}
+          {/* <p className="headbody">
             In our English Enrichment Class, children will embark on an exciting
             journey to enhance their language skills and foster a deep love for
             the English language. Through engaging activities, interactive
@@ -23,18 +32,23 @@ function EnglishCourseListing() {
             will not only build a strong foundation in English but also gain the
             confidence to navigate the world of words with enthusiasm and
             confidence.
-          </p>
+          </p> */}
         </div>
         <div className="col-md-4 col-12 mt-3">
           <div className="card h-100 p-3 shadow mb-5 bg-white rounded">
             <div className="p-3">
-              <img src={Believer} alt="..." className="img-fluid"></img>
+              <img src={datas.card1Image||Believer} alt="..." className="img-fluid"></img>
             </div>
-            <h1 className=""> Arty Believer</h1>
-            <p className="headbody">
-              Designed for children beginning their English alphabet journey.
-            </p>
-            <p className="headbody">
+            <h1 className="">{datas.card1Heading}</h1>
+            {datas.card1Content?.split("\n\n").map((paragraph, index) => (
+                <div key={index} className="edit-container mb-3">
+                  <p
+                    className="headbody preserve-whitespace"
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                  ></p>
+                </div>
+              ))}
+            {/* <p className="headbody">
               Focuses on enhancing fine motor skills and pencil grip through
               engaging activities.
             </p>
@@ -42,34 +56,50 @@ function EnglishCourseListing() {
               Main objective is for children to recognize the entire lowercase
               alphabet from a to z while also fostering interaction and social
               skills.
-            </p>
+            </p> */}
           </div>
         </div>
         <div className="col-md-4 col-12 mt-3">
           <div className="card p-3 h-100 shadow mb-5 bg-white rounded">
             <div className="p-3">
-              <img src={Dreamer} alt="..." className="img-fluid mb-3"></img>
+              <img src={datas.card2Image||Dreamer} alt="..." className="img-fluid mb-3"></img>
             </div>
-            <h1 className=""> Arty Dreamer</h1>
-            <p className="headbody">
+            <h1 className=""> {datas.card2Heading}</h1>
+            {datas.card2Content?.split("\n\n").map((paragraph, index) => (
+                <div key={index} className="edit-container mb-3">
+                  <p
+                    className="headbody preserve-whitespace"
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                  ></p>
+                </div>
+              ))}
+            {/* <p className="headbody">
               Focuses on beginning sounds, word association, and independent
               writing skills, all of which are crucial for enhancing children's
               language development and literacy abilities.
-            </p>
-            <p className="headbody">
+            </p> */}
+            {/* <p className="headbody">
               Provides a solid foundation for young learners to confidently move
               on towards the next stage and fosters a love for learning through
               the fun activities provided.
-            </p>
+            </p> */}
           </div>
         </div>
         <div className="col-md-4 col-12 mt-3">
           <div className="card h-100 p-3 shadow mb-5 bg-white rounded">
             <div className="p-3">
-              <img src={Pursuer} alt="..." className="img-fluid"></img>
+              <img src={datas.card3Image||Pursuer} alt="..." className="img-fluid"></img>
             </div>
-            <h1 className=""> Arty Pursuer</h1>
-            <p className="headbody">
+            <h1 className=""> {datas.card3Heading}</h1>
+            {datas.card3Content?.split("\n\n").map((paragraph, index) => (
+                <div key={index} className="edit-container mb-3">
+                  <p
+                    className="headbody preserve-whitespace"
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                  ></p>
+                </div>
+              ))}
+            {/* <p className="headbody">
               Designed for children who already possess a strong foundation of
               the letter sound and independent writing skill
             </p>
@@ -85,12 +115,20 @@ function EnglishCourseListing() {
             <p className="headbody">
               An excellent opportunity to enhance their learning journey and
               ensure they are well-prepared for the next level of education.
-            </p>
+            </p> */}
           </div>
         </div>
         <div className="row py-5">
           <div className="col-12">
-            <p className="headbody">
+          {datas.finalContent?.split("\n\n").map((paragraph, index) => (
+                <div key={index} className="edit-container mb-3">
+                  <p
+                    className="headbody preserve-whitespace"
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                  ></p>
+                </div>
+              ))}
+            {/* <p className="headbody">
               Our children are placed into classes according to their language
               ability and not by standard educational age.
             </p>
@@ -98,7 +136,7 @@ function EnglishCourseListing() {
               (Therefore we may ask you to bring your child down for a FREE
               observation/assessment, only if we have available and suitable
               slot; based on your waitlist questions answered)
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

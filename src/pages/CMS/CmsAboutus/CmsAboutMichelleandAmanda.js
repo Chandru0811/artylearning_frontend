@@ -34,11 +34,11 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
   const toggleEdit = (field) => {
     setEditingField(field);
   };
-  console.log("data3", datas);
+  // console.log("data3", datas);
 
-  const saveContent = () => {
-    setEditingField(null);
-  };
+  // const saveContent = () => {
+  //   setEditingField(null);
+  // };
 
   useEffect(() => {
     if (datas) {
@@ -79,7 +79,7 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
 
       try {
         const response = await api.put(
-          `/updateAboutUsSaveImage/${4}`,
+          `/updateAboutUsSaveImage`,
           formData
         );
         if (response.status === 200) {
@@ -148,7 +148,7 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   <FaEdit />
                 </button>
               )}
-              <img className="img-fluid" src={michelleimg} alt="michelleimg" />
+              <img className="img-fluid" src={michelleimg || Michelle} alt="michelleimg" />
             </div>
             <div className="col-md-6 col-12">
               <h5 className="fw-bold text-white bg text-center mt-5">ABOUT</h5>
@@ -197,7 +197,7 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
               ) : (
                 <>
                   <p style={{ fontSize: "20px" }}>
-                    {formik.values.michelle.split("\n\n").map((text, index) => (
+                    {formik.values.michelle?.split("\n\n").map((text, index) => (
                       <span key={index}>
                         {text}
                         <br />
@@ -232,7 +232,7 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                 <>
                   <p style={{ fontSize: "20px" }}>
                     {formik.values.addtionalparagraph
-                      .split("\n\n")
+                      ?.split("\n\n")
                       .map((text, index) => (
                         <span key={index}>
                           {text}
@@ -296,14 +296,14 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                     rows="20"
                     className="form-control"
                   />
-                  <button className="btn btn-sm btn-outline-primary border ms-2">
+                  <span className="btn btn-sm btn-outline-primary border ms-2" onClick={formik.handleSubmit}>
                     <FaSave />
-                  </button>
+                  </span>
                 </>
               ) : (
                 <>
                   <p style={{ fontSize: "20px" }}>
-                    {formik.values.amanda.split("\n\n").map((text, index) => (
+                    {formik.values.amanda?.split("\n\n").map((text, index) => (
                       <span key={index}>
                         {text}
                         <br />
@@ -360,7 +360,7 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   </button>
                 </div>
               )}
-              <img src={ammandaimg} alt="ammandaimg" className="img-fluid" />
+              <img src={ammandaimg ||Amanda} alt="ammandaimg" className="img-fluid" />
             </div>
           </div>
         </form>

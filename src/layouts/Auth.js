@@ -31,7 +31,7 @@ function Auth({ handleLogin }) {
         <Route path="/teachers" element={<Teacher />} />
         <Route path="/products" element={<Products />} />
         <Route path="/news" element={<News />} />
-        <Route path="/calender" element={<Calender />} />
+        <Route path="/calender/:id" element={<Calender />} />
         <Route path="/course/english" element={<EnglishCourse />} />
         <Route path="/course/chinesh" element={<ChineshCourse />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />

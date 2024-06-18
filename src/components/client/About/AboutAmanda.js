@@ -2,13 +2,13 @@ import React from "react";
 import Michelle from "../../../assets/clientimage/Michelle-1-e1691309669627.png";
 import Amanda from "../../../assets/clientimage/Amanda-e1691309466166.png";
 
-function AboutAmanda() {
+function AboutAmanda({datas}) {
   return (
     <div className="container-fluid bgimage_aboutus">
       <div className="container">
         <div className="row  py-5" style={{ marginTop: "100px" }}>
           <div className="col-md-6 col-12">
-            <img src={Michelle} alt="Michelle" className="img-fluid" />
+            <img src={datas.imageThree || Michelle} alt="Michelle" className="img-fluid" />
           </div>
           <div className="col-md-6 col-12">
             <h5 className="fw-bold text-white bg text-center mt-5">ABOUT</h5>
@@ -17,9 +17,18 @@ function AboutAmanda() {
               className="fw-bold"
               style={{ color: "#173067", fontSize: "8vw" }}
             >
-              Michelle
+              {datas.michelleName }
             </h1>
             <p style={{ fontSize: "20px" }}>
+                    {datas.contentTwo?.split("\n\n").map((text, index) => (
+                      <span key={index}>
+                        {text}
+                        <br />
+                        <br />
+                      </span>
+                    ))}
+                    </p>
+            {/* <p style={{ fontSize: "20px" }}>
               Michelle, the co-founder of Arty Learning, possesses a wealth of
               experience and expertise in education and childcare. Her
               dedication and passion for teaching have driven her to become a
@@ -44,10 +53,21 @@ function AboutAmanda() {
               equipped her with valuable insights into child development and
               effective modification techniques to better cater to children's
               needs.
-            </p>
+            </p> */}
           </div>
           <div className="col-12 mt-2">
-            <p style={{ fontSize: "20px" }}>
+          <p style={{ fontSize: "20px" }}>
+                    {datas.contentThree
+                      ?.split("\n\n")
+                      .map((text, index) => (
+                        <span key={index}>
+                          {text}
+                          <br />
+                          <br />
+                        </span>
+                      ))}
+                      </p>
+            {/* <p style={{ fontSize: "20px" }}>
               Her role as a devoted mother to her 3 year old Preschooler ,
               LeAnne, has provided Michelle with a personal understanding of the
               significance of early childhood education. This profound
@@ -61,7 +81,7 @@ function AboutAmanda() {
               make her an invaluable asset to Arty Learning, ensuring that the
               centre thrives as a place of exceptional early childhood
               education.
-            </p>
+            </p> */}
           </div>
         </div>
         <div className="row">
@@ -72,10 +92,19 @@ function AboutAmanda() {
                 className="fw-bold"
                 style={{ color: "#173067", fontSize: "8vw" }}
               >
-                Amanda
+                {datas.amandaName||Amanda}
               </h1>
             </div>
             <p style={{ fontSize: "20px" }}>
+                    {datas.contentFour?.split("\n\n").map((text, index) => (
+                      <span key={index}>
+                        {text}
+                        <br />
+                        <br />
+                      </span>
+                    ))}
+                  </p>
+            {/* <p style={{ fontSize: "20px" }}>
               Amanda is the visionary behind Arty Learning, a language
               enrichment centre that integrates arts and creativity into
               language learning.
@@ -94,10 +123,10 @@ function AboutAmanda() {
               challenges and reach their full potential. Under Amanda's
               guidance, Arty Learning has positively impacted the lives of over
               1000 students over the past 8 years.
-            </p>
+            </p> */}
           </div>
           <div className="col-md-6 col-12 order-md-2 ">
-            <img src={Amanda} alt="Amanda" className="img-fluid" />
+            <img src={datas.imageFour} alt="Amanda" className="img-fluid" />
           </div>
         </div>
       </div>

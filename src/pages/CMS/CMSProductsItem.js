@@ -18,17 +18,17 @@ const CMSProductsItem = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllProductImageSaves");
+      setDatas(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data: ", error.message);
+    }
+  };
   useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllCenter");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data: ", error.message);
-      }
-    };
-    getCenterData();
+    getData();
   }, []);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const CMSProductsItem = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllCenter");
+      const response = await api.get("/getAllProductImageSaves");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -72,23 +72,18 @@ const CMSProductsItem = () => {
 
   return (
     <div className="container-fluid">
-      <div className="container cms-header shadow-sm py-2">
+      <div className="container cms-header shadow-sm py-2 mb-5">
         <div className="row p-1">
           <div className="col-md-6 col-12">
             <h4>Product Item</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-            <button className="btn btn-sm btn-outline-primary border ms-2">
-              Save
-            </button>
+            <CMSProductsItemAdd />
             <button className="btn btn-sm btn-outline-danger border ms-2">
-              Save & Publish
+              Publish
             </button>
           </div>
         </div>
-      </div>
-      <div className="mb-5 mt-3 d-flex justify-content-end">
-        <CMSProductsItemAdd />
       </div>
       {loading ? (
         <div className="loader-container">
@@ -104,28 +99,24 @@ const CMSProductsItem = () => {
         <table ref={tableRef} className="display">
           <thead>
             <tr>
-              <th scope="col" className="text-center" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col" className="text-center">Image Upload</th>
-              <th scope="col" className="text-center">Image Details</th>
-              <th scope="col" className="text-center">Action</th>
+              <th scope="col">S No</th>
+              <th scope="col">Image Upload</th>
+              <th scope="col">Image Details</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
             {datas.map((data, index) => (
               <tr key={index}>
-                <td className="text-center">{index + 1}</td>
-                <td className="text-center">
-                  <img className="img-fluid sized-image" src={profile} alt="Profile" />
-                </td>
-                <td className="text-center">Image description</td>
-                <td className="text-center">
+                <th scope="row">{index + 1}</th>
+                <td><img style={{width:"100px"}} className="rounded-5" src={data.image} alt="product"></img></td>
+                <td>{data.imageDetails}</td>
+                <td>
                   <div className="d-flex">
-                    <CMSProductsItemEdit />
+                    <CMSProductsItemEdit id={data.id} getData={getData}/>
                     <Delete
                       onSuccess={refreshData}
-                      path={`/deleteCenter/${data.id}`}
+                      path={`/deleteProductImageSave/${data.id}`}
                       style={{ display: "inline-block" }}
                     />
                   </div>

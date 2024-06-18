@@ -20,7 +20,7 @@ const CMSTestMonail = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getCenterData = async () => {
+  const getTestimonial = async () => {
     try {
       const response = await api.get("/getAllTestimonialSave");
       setDatas(response.data);
@@ -30,7 +30,7 @@ const CMSTestMonail = () => {
     }
   };
   useEffect(() => {
-    getCenterData();
+    getTestimonial();
   }, []);
 
   useEffect(() => {
@@ -72,26 +72,36 @@ const CMSTestMonail = () => {
     setLoading(false);
   };
 
+  const testimonialPublish = async () => {
+    try {
+      const response = await api.post("/publishTestimonial");
+
+      if (response.status === 201) {
+        toast.success(response.data.message)
+      } else {
+        toast.warning(response.data.message)
+      }
+    } catch (error) {
+      toast.error("Error refreshing data:", error);
+    }
+  };
+
   return (
     <div className="container center">
-      <div className="container cms-header shadow-sm py-2">
+      <div className="container cms-header shadow-sm py-2 mb-4">
         <div className="row p-1">
           <div className="col-md-6 col-12">
             <h4>Testimonial</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-            <button className="btn btn-sm btn-outline-primary border ms-2">
-              Save
-            </button>
-            <button className="btn btn-sm btn-outline-danger border ms-2">
+            <CMSTestMonialAdd onSuccess={refreshData} />
+            <button onClick={testimonialPublish} className="btn btn-sm btn-outline-danger border ms-2" style={{ whiteSpace: 'nowrap' }}>
               Save & Publish
             </button>
           </div>
         </div>
       </div>
-      <div className="mb-5 mt-3 d-flex justify-content-end">
-        <CMSTestMonialAdd onSuccess={refreshData}/>
-      </div>
+
       {loading ? (
         <div className="loader-container">
           <div className="loading">
@@ -110,8 +120,8 @@ const CMSTestMonail = () => {
                 S No
               </th>
               <th scope="col" className="text-center">Parent Image</th>
-              <th scope="col" className="text-center">Parent Name</th>
               <th scope="col" className="text-center">Parent Description</th>
+              <th scope="col" className="text-center">Parent Name</th>
               <th scope="col" className="text-center">Action</th>
             </tr>
           </thead>
@@ -126,7 +136,7 @@ const CMSTestMonail = () => {
                 <td className="text-center"> {data.parentName}</td>
                 <td className="text-center">
                   <div className="d-flex">
-                    <CMSTestMonialEdit id={data.id} onSuccess={refreshData}/>
+                    <CMSTestMonialEdit id={data.id} onSuccess={refreshData} />
                     <Delete
                       onSuccess={refreshData}
                       path={`/deleteTestimonialSave/${data.id}`}

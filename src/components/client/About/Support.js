@@ -1,7 +1,7 @@
 import React from "react";
 import Glass from "../../../assets/clientimage/glass-painting.png";
 
-function Support() {
+function Support({datas}) {
   return (
     <section className="support">
       <div className="container-fluid backgound-imag-2">
@@ -11,7 +11,7 @@ function Support() {
               className="col-md-5 col-12 d-flex align-items-center justify-content-end paint"
             >
               <img
-                src={Glass}
+                src={datas.imageTwo ||Glass}
                 style={{
                   borderRight: "10px solid rgba(255, 255, 255, 0.2)",
                   borderRadius: "20px",
@@ -29,7 +29,15 @@ function Support() {
                 borderRight: "10px solid #000",
               }}
             >
-              <p>
+              <p style={{ fontSize: "20px" }}>
+                    {datas.contentOne?.split("\n").map((text, index) => (
+                      <span key={index}>
+                        {text}
+                        <br />
+                      </span>
+                    ))}
+                  </p>
+              {/* <p>
                 With <b>unwavering support</b> from their family, the{" "}
                 <b>Wonder Sisters </b>
                 embarked on their journey to establish Arty Learning.
@@ -66,7 +74,7 @@ function Support() {
                 comprehensive training underscored their steadfast commitment to
                 delivering the utmost quality education through the platform of
                 Arty Learning.
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

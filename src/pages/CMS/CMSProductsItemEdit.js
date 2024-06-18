@@ -1,75 +1,99 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import profile from "../../assets/images/profile.png";
+import { Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 
-function CMSProductsItemEdit() {
+function CMSProductsItemEdit({ id, getData }) {
+  console.log("Id", id);
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
+  const [data, setDatas] = useState();
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+  };
+
   const handleShow = () => setShow(true);
 
-  const initialValues = {
-    image: null, // To store the uploaded image file
-    details: "", // Details about the image
-  };
-
   const validationSchema = Yup.object().shape({
-    image: Yup.mixed().required("Image file is required"),
-    details: Yup.string().required("Image details are required"),
+    // files: Yup.mixed().required("Image file is required"),
+    // imageDetails: Yup.string().required("Image details are required"),
   });
-
-  const onSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      setLoadIndicator(true);
-      const formData = new FormData();
-      formData.append("image", values.image);
-      formData.append("details", values.details);
-
-      // Example API call using 'api' from '../../config/URL'
-      const response = await api.post("/upload-image", formData);
-
-      // Handle response or redirect after successful upload
-      console.log("Upload successful", response.data);
-      toast.success("Image uploaded successfully!");
-      resetForm();
-    } catch (error) {
-      console.error("Upload failed", error);
-      toast.error("Failed to upload image.");
-    } finally {
-      setLoadIndicator(false);
-    }
-  };
 
   const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit,
+    initialValues: {
+      files: null || "",
+      imageDetails: "",
+    },
+    // validationSchema,
+    onSubmit: async (data) => {
+      console.log(data);
+      const formData = new FormData();
+      formData.append("files", data.files);
+      formData.append("imageDetails ", data.imageDetails);
+
+      try {
+        const response = await api.put(
+          `/updateProductImageSave/${id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data", // No need to set it manually
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          getData();
+          formik.resetForm();
+          // setShowModal(false)
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      }
+    },
   });
-  const handleFileChange = event => {
+
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue('image', file); // Update Formik's form state with the file
+    formik.setFieldValue("files", file); // Update Formik's form state with the file
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await api.get(`/getProductImageSaveById/${id}`);
+      formik.setValues(response.data);
+      setDatas(response.data);
+    } catch (error) {
+      toast.error("Error Fetch Data ", error);
+    }
+  };
+  useEffect(() => {
+    if (show) {
+      fetchData();
+    }
+  }, [show]);
+
   // const handleFileChange = (event) => {
   //   formik.setFieldValue("image", event.currentTarget.files[0]);
   // };
 
   return (
     <div className="container">
-      <button className="btn btn-sm" onClick={handleShow}>
+      <button className="btn btn-sm text-end" onClick={handleShow}>
         <FaEdit />
       </button>
-
       {/* <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/cms/productsitem">
             <button type="button" className="btn btn-sm btn-border">
@@ -104,26 +128,25 @@ function CMSProductsItemEdit() {
                 </label>
                 <input
                   type="file"
-                  id="image"
-                  name="image"
+                  id="files"
+                  name="files"
                   className="form-control"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
                 />
-                {!selectedFile && (
-                  <img className="img-fluid sized-image" src={profile} alt="Slide 1" />
-                )}
-
-                {formik.touched.image && formik.errors.image && (
-                  <div className="text-danger">{formik.errors.image}</div>
+                {formik.touched.files && formik.errors.files && (
+                  <div className="text-danger">{formik.errors.files}</div>
                 )}
               </div>
+              {/* <img src={data.files} alt="product"></img> */}
               {selectedFile && (
                 <div>
-                  
-                  
-                  {selectedFile.type.startsWith('image') && (
-                    <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
+                  {selectedFile.type.startsWith("files") && (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Selected File"
+                      style={{ maxWidth: "100%" }}
+                    />
                   )}
                 </div>
               )}
@@ -132,35 +155,40 @@ function CMSProductsItemEdit() {
                 <label htmlFor="details" className="form-label">
                   Image Details
                 </label>
-                <input
-                  type="text"
-                  class="form-control"
-                  value="image description"
+                <textarea
+                  id="imageDetails"
+                  name="imageDetails"
+                  className="form-control"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.imageDetails}
                 />
-                {formik.touched.details && formik.errors.details && (
-                  <div className="text-danger">{formik.errors.details}</div>
+                {formik.touched.imageDetails && formik.errors.imageDetails && (
+                  <div className="text-danger">
+                    {formik.errors.imageDetails}
+                  </div>
                 )}
               </div>
             </div>
-            <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
-            </Modal.Footer>
           </Modal.Body>
+          <Modal.Footer>
+            <Button type="button" variant="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Save
+            </Button>
+          </Modal.Footer>
         </form>
       </Modal>
     </div>

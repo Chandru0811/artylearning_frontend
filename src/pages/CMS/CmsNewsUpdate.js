@@ -6,7 +6,6 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import NewsUpdateUpdateEdit from "../CMS/CmsNewsUpdateEdit";
-import { useNavigate } from 'react-router-dom';
 
 const CmsNewsUpdate = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -15,7 +14,6 @@ const CmsNewsUpdate = () => {
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
   const currentData = new Date().toISOString().split("T")[0];
 
   const handleCloseAddModal = () => {
@@ -84,9 +82,23 @@ const CmsNewsUpdate = () => {
     setShow(false)
   };
 
+  const publish = async () => {
+    try {
+      const response = await api.post(`/publishNewsUpdated`);
+      // formik.setValues(response.data);
+      // setDatas(response.data)
+      if(response.status === 201){ 
+        toast.success("successfully Teacher published ");
+      }
+    } catch (error) {
+      toast.error("Error Fetch Data ", error);
+    }
+  };
+
   useEffect(() => {
     refreshData()
   }, [])
+  
   return (
     <div className="news">
       <div className="container cms-header shadow-sm py-2">
@@ -95,10 +107,7 @@ const CmsNewsUpdate = () => {
             <h4>News & Updates</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-            <button className="btn btn-sm btn-outline-primary border ms-2">
-              Save
-            </button>
-            <button className="btn btn-sm btn-outline-danger border ms-2">
+            <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
               Save & Publish
             </button>
           </div>
@@ -129,7 +138,7 @@ const CmsNewsUpdate = () => {
                   <NewsUpdateUpdateEdit id={item.id} onSuccess={refreshData}/>
                   {/* )} */}
                 </span>
-                <img src={item.cardImg} alt="view" className="custom-img-fluid" />
+                <img src={item.cardImg} alt="view" style={{height:"45%" , width:"96%"}} className="custom-img-fluid" />
                 <div className="custom-card-body d-flex flex-column p-2">
                   <div className="custom-content">
                     <h6 className="custom-card-title">

@@ -381,13 +381,13 @@
 /* Courses  */
 
 .bgimage {
-  background-image: url("../assets/clientimage/IMG_195.png");
+  /* background-image: url("../assets/clientimage/IMG_195.png"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 .bgchimage {
-  background-image: url("../assets/clientimage/chinese_image.jpg");
+  /* background-image: url("../assets/clientimage/chinese_image.jpg"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
