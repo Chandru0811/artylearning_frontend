@@ -43,6 +43,7 @@ export const CmsTeacher = () => {
   const saveContent = () => {
     setEditingField(null);
   };
+
  const getData = async () => {
       try {
         const response = await api.get(`/getAllTeacherSaves`);
@@ -111,6 +112,19 @@ export const CmsTeacher = () => {
   //   }
   // ];
 
+  const publish = async () => {
+    try {
+      const response = await api.post(`/publishTeacherSave`);
+      // formik.setValues(response.data);
+      // setDatas(response.data)
+      if(response.status === 201){ 
+        toast.success("successfully Teacher published ");
+      }
+    } catch (error) {
+      toast.error("Error Fetch Data ", error);
+    }
+  };
+
   return (
     <section style={{ backgroundColor: "#f9fafb" }}>
       <div className="container card my-2 py-2">
@@ -119,76 +133,18 @@ export const CmsTeacher = () => {
             <h4>Teacher</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-            <button className="btn btn-sm btn-outline-primary border ms-2">
+            {/* <button className="btn btn-sm btn-outline-primary border ms-2">
               Save
-            </button>
-            <button className="btn btn-sm btn-outline-danger border ms-2">
+            </button> */}
+             <CmsTeacherAdd getData={getData}/>
+            <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
               Save & Publish
             </button>
           </div>
         </div>
       </div>
       <div className="container py-5">
-        {/* <div className="row">
-          <div className="offset-md-3 col-md-6">
-            <span className="me-3 edit-container">
-              {editingField === "heading" ? (
-                <input
-                  type="text"
-                  value={heading}
-                  onChange={(e) => setHeading(e.target.value)}
-                  className="topbar-wordpress"
-                />
-              ) : (
-                <h3 className="text-center">{heading}</h3>
-              )}
-              {editingField === "heading" ? (
-                <button
-                  className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
-                >
-                  <FaSave />
-                </button>
-              ) : (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={() => toggleEdit("heading")}
-                >
-                  <FaEdit />
-                </button>
-              )}
-            </span>
-
-            <p className="text-center mx-5 edit-container" style={{ fontSize: "20px" }}>
-            {editingField === "headingMess" ? (
-                <input
-                  type="text"
-                  value={headingMess}
-                  onChange={(e) => setHeadingMess(e.target.value)}
-                  className="topbar-wordpress"
-                />
-              ) : (
-                <p>{headingMess}</p>
-              )}
-              {editingField === "headingMess" ? (
-                <button
-                  className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
-                >
-                  <FaSave />
-                </button>
-              ) : (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={() => toggleEdit("headingMess")}
-                >
-                  <FaEdit />
-                </button>
-              )}
-            </p>
-          </div>
-        </div> */}
-        <CmsTeacherAdd getData={getData}/>
+       
         <Tabs
           defaultActiveKey="profile"
           id="fill-tab-example"
@@ -210,7 +166,7 @@ export const CmsTeacher = () => {
                   </div>
                   <div className="col-md-6 col-12">
                   <div className="d-flex justify-content-end">
-                         <CmsTeacherEdit id={data.id} getData={getData}/>
+                         <CmsTeacherEdit id={data.id} fetchData={getData}/>
                          </div>
                     <div className="mx-2">
                       <h1 className="fw-bold">{data.teacherName}</h1>
@@ -241,7 +197,7 @@ export const CmsTeacher = () => {
                   </div>
                   <div className="col-md-6 col-12">
                     <div className="d-flex justify-content-end">
-                         <CmsTeacherEdit id={data.id} />
+                         <CmsTeacherEdit id={data.id} fetchData={getData}/>
                          </div>
                     <div className="mx-2">
                       <h1 className="fw-bold">{data.teacherName}</h1>
@@ -276,7 +232,7 @@ export const CmsTeacher = () => {
                         </div>
                         <div className="col-md-6 col-12">
                          <div className="d-flex justify-content-end">
-                         <CmsTeacherEdit id={data.id} />
+                         <CmsTeacherEdit id={data.id} fetchData={getData}/>
                          </div>
                           <div className="mx-2">
                             <h1 className="fw-bold">{data.teacherName}</h1>

@@ -9,10 +9,10 @@ function CmsAboutSupport({ getData, datas }) {
   const [editingField, setEditingField] = useState(null);
   const [glassImgUrl, setGlassImgUrl] = useState(null);
   console.log("object", datas);
-  const [content, setContent] = useState({
-    paragraphs: datas.contentOne,
-    // "With unwavering support from their family, the Wonder Sisters embarked on their journey to establish Arty Learning.\n\nRooted in a foundation of strong family values, they held a steadfast conviction in ensuring that every child, regardless of their background, had equal opportunities to acquire language skills and flourish.\n\nTheir dedication to this cause not only resonated in their beliefs but was also demonstrated through the unwavering support they provided to ensure the success of each and every child, as well as their staff. \n\n In their relentless pursuit of growth and skill enhancement, the Wonder Sisters pursued a diverse array of certifications.\n\n These encompassed being First Aid Certified with CPR + AED provider, achieving the status of Certified Practitioners of Neuro-Linguistic Enneagram, and successfully completing the Positive Focus Impact Training for Educators.\n\n Amanda's credentials extended to a Certificate of Professional Practice in Phonics and a Diploma in Early Childhood Education. Similarly, Michelle's qualifications featured a Diploma in Early Literacy accredited by the London Teacher Training College. This comprehensive training underscored their steadfast commitment to delivering the utmost quality education through the platform of Arty Learning.",
-  });
+  // const [content, setContent] = useState({
+  //   paragraphs: datas.contentOne,
+  //   // "With unwavering support from their family, the Wonder Sisters embarked on their journey to establish Arty Learning.\n\nRooted in a foundation of strong family values, they held a steadfast conviction in ensuring that every child, regardless of their background, had equal opportunities to acquire language skills and flourish.\n\nTheir dedication to this cause not only resonated in their beliefs but was also demonstrated through the unwavering support they provided to ensure the success of each and every child, as well as their staff. \n\n In their relentless pursuit of growth and skill enhancement, the Wonder Sisters pursued a diverse array of certifications.\n\n These encompassed being First Aid Certified with CPR + AED provider, achieving the status of Certified Practitioners of Neuro-Linguistic Enneagram, and successfully completing the Positive Focus Impact Training for Educators.\n\n Amanda's credentials extended to a Certificate of Professional Practice in Phonics and a Diploma in Early Childhood Education. Similarly, Michelle's qualifications featured a Diploma in Early Literacy accredited by the London Teacher Training College. This comprehensive training underscored their steadfast commitment to delivering the utmost quality education through the platform of Arty Learning.",
+  // });
 
   useEffect(() => {
     if (datas && datas.imageTwo) {
@@ -47,6 +47,7 @@ function CmsAboutSupport({ getData, datas }) {
   //       setEditingField(null);
   //     }
   // };
+ 
   const formik = useFormik({
     initialValues: {
       files: null,
@@ -56,12 +57,12 @@ function CmsAboutSupport({ getData, datas }) {
     onSubmit: async (values) => {
       const formData = new FormData();
       if (values.files) {
-        formData.append("imageOne", values.files);
+        formData.append("imageTwo", values.files);
       }
       formData.append("contentOne", values.paragraphs);
 
       try {
-        const response = await api.put(`/updateAboutUsSaveImage/${4}`, formData);
+        const response = await api.put(`/updateAboutUsSaveImage`, formData);
         if (response.status === 200) {
           toast.success(response.data.message);
           getData();
@@ -74,10 +75,10 @@ function CmsAboutSupport({ getData, datas }) {
     },
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setContent((prevState) => ({ ...prevState, [name]: value }));
-  };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setContent((prevState) => ({ ...prevState, [name]: value }));
+  // };
 
    const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -136,7 +137,7 @@ function CmsAboutSupport({ getData, datas }) {
                       </div>
                     )}
                     <img
-                      src={glassImgUrl}
+                      src={glassImgUrl ||Glass}
                       style={{
                         borderRight: "10px solid rgba(255, 255, 255, 0.2)",
                         borderRadius: "20px",

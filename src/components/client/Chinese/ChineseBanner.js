@@ -1,19 +1,29 @@
 import React from "react";
 import Alphabet from "../../../assets/clientimage/Alphabet.png";
+import img1 from "../../../assets/clientimage/chinese_image.jpg";
 
-function ChineseBanner() {
+function ChineseBanner({datas}) {
+  console.log("object",datas)
   return (
     <div className="container-fluid font-styles">
       <div className="row remove-padding">
-        <div className="col-md-6 col-12 bgchimage ">
+        <div className="col-md-6 col-12 bgchimage " style={{backgroundImage:`url(${datas.backgroundImage || img1})`}}>
           <div className="py-5 firsthead  d-flex flex-column  justify-content-center align-items-center">
             <img src={Alphabet} alt="english" width={80}></img>
-            <h1>Chinese Class</h1>
+            <h1>{datas.heading}</h1>
           </div>
         </div>
         <div className="col-md-6 col-12 p-5">
-          <h2 className="mb-3 headcolor">Chinese Enrichment Class</h2>
-          <p className="headbody">
+          <h2 className="mb-3 headcolor">{datas.heading}</h2>
+          {datas.content1?.split("\n\n").map((paragraph, index) => (
+                <div key={index} className="edit-container mb-3">
+                  <p
+                    className="headbody preserve-whitespace"
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                  ></p>
+                </div>
+              ))}
+          {/* <p className="headbody">
             我们希望每个孩子都能从老师那里得到更加个性化的关注，根据每个孩子的具体需求、优势和挑战，提供量身定制的指导和支持，所以各班师生比例限于1：4。
           </p>
           <p className="headbody">
@@ -50,7 +60,7 @@ function ChineseBanner() {
             By showing interest and actively participating in their child's
             education, parents instil a positive attitude towards learning and
             helps to encourage children to strive for excellence.
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

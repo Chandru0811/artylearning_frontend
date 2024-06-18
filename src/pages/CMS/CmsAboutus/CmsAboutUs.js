@@ -37,7 +37,7 @@ function CmsAboutUs() {
 
       try {
         const response = await api.put(
-          `/updateAboutUsSaveImage/${4}`,
+          `/updateAboutUsSaveImage`,
           formData
           // headers: {
           //   "Content-Type": "application/json",
@@ -57,8 +57,7 @@ function CmsAboutUs() {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllAboutUsSaveById/${4}`);
-      // formik.setValues(response.data);
+      const response = await api.get(`/getAllAboutUsSave`);
       setDatas(response.data);
     } catch (error) {
       toast.error("Error Fetch Data ", error);
@@ -73,6 +72,17 @@ function CmsAboutUs() {
     setAdminImgUrl(URL.createObjectURL(file));
     formik.setFieldValue("files", file); // Update Formik's form state with the file
   };
+
+  const publish = async () => {
+    try {
+      const response = await api.post(`/publishAboutUs`);
+      if(response.status === 201){ 
+        toast.success("successfully Teacher published ");
+      }
+    } catch (error) {
+      toast.error("Error Fetch Data ", error);
+    }
+  };
   return (
     <>
       {/* Header */}
@@ -82,10 +92,7 @@ function CmsAboutUs() {
             <h4>About Us</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-            <button className="btn btn-sm btn-outline-primary border ms-2">
-              Save
-            </button>
-            <button className="btn btn-sm btn-outline-danger border ms-2">
+            <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
               Save & Publish
             </button>
           </div>
@@ -151,7 +158,7 @@ function CmsAboutUs() {
                   </button>
                 )}
                 <img
-                  src={adminImgUrl}
+                  src={adminImgUrl ||AdminImg}
                   alt="Admins"
                   className="img-fluid image_border"
                 />

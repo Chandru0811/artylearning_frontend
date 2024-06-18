@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
-const CmsTeacherEdit = ({id}) => {
+const CmsTeacherEdit = ({id,fetchData}) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -42,10 +42,9 @@ const CmsTeacherEdit = ({id}) => {
           // },
       );
         if (response.status === 200) {
+          fetchData();
           toast.success(response.data.message);
-          getData();
-          formik.resetForm();
-          showModal(false)
+          handleCloseModal()
         } else {
           toast.error(response.data.message);
         }
