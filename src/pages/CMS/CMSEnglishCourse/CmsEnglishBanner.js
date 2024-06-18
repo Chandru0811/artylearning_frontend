@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import img from "../../../assets/clientimage/eng.png";
 import { FaEdit, FaSave } from "react-icons/fa";
-import bgimg from "../../../assets/clientimage/IMG_195.png";
+import { toast } from "react-toastify";
+import api from "../../../config/URL";
 
-function CmsEnglishBanner() {
+function CmsEnglishBanner({
+  backgroundImage,
+  heading,
+  content1,
+  getData,
+}) {
   const [editingField, setEditingField] = useState(null);
-  const [content, setContent] = useState({
-    img: img,
-    bgImg: bgimg,
-    heading: "English Enrichment Class",
-    paragraphs: [
-      "With our <b>small ratio</b> of 1 teacher to 4 students, each student will receive a more <b>personalised</b> attention from their teacher. This allows the teacher to better understand the specific needs, strengths, and challenges of each student, enabling them to provide tailored instruction and support.",
-      "We believe learning should be fun for all!",
-      "All our teachers are specially trained by our curriculum specialist. They are skilled to <b>analyse</b> specific needs, strengths and every challenge that each student faces.",
-      "Parents’ involvement in a child’s learning journey is crucial.",
-      "We take <b>Videos and pictures</b> of every student and deliver them to parents through our very own <b>Arty Parents’ Portal</b>. Conveniently developed to reinforce learning while enhancing parents’ involvement.",
-      "Regular communication with teachers provides a supportive environment for learning and can contribute to academic successes. By showing interest and actively participating in their child's education, parents instil a positive attitude towards learning and helps to encourage children to strive for excellence.",
-    ].join("\n\n"),
-  });
+  const [logoUrl, setLogoUrl] = useState(null);
+  const [content, setContent] = useState();
+
+  useEffect(() => {
+    setContent({
+      img: img,
+      bgImg: backgroundImage,
+      heading: heading,
+      paragraphs: [content1].join("\n\n"),
+    });
+  }, [backgroundImage, content1, heading]);
+
+  // console.log(content.heading)
 
   const toggleEdit = () => {
     setEditingField((prevEditingField) =>
@@ -29,9 +35,41 @@ function CmsEnglishBanner() {
     setEditingField(field);
   };
 
-  const saveContent = () => {
-    setEditingField(null);
-    // Here you might want to send the updated content to your backend or CMS
+  const updateData = async (formData) => {
+    try {
+      const response = await api.put(`/updateCourseSaveEnglish`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error updating data: ", error.message);
+    } finally {
+      setEditingField(null);
+    }
+  };
+
+  const saveBackgroundContent = async () => {
+    const formData = new FormData();
+    formData.append("backgroundImage", logoUrl);
+    updateData(formData);
+  };
+  const saveHeadingContent = async () => {
+    const formData = new FormData();
+    formData.append("heading", content.heading);
+    updateData(formData);
+  };
+
+  const saveParagraphContent = async () => {
+    const formData = new FormData();
+    formData.append("content1", content.paragraphs.split("\n\n"));
+    updateData(formData);
   };
 
   const handleChange = (e) => {
@@ -39,20 +77,6 @@ function CmsEnglishBanner() {
       ...content,
       paragraphs: e.target.value,
     });
-  };
-
-  const handleImageChange = (e, field) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setContent({
-          ...content,
-          [field]: reader.result,
-        });
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   return (
@@ -63,12 +87,15 @@ function CmsEnglishBanner() {
             <>
               <input
                 type="file"
-                onChange={(e) => handleImageChange(e, "bgImg")}
-                className="form-control mb-3"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setLogoUrl(file);
+                }}
+                className="topbar-wordpress form-control-sm w-50"
               />
               <button
                 className="btn btn-sm btn-outline-primary border ms-2"
-                onClick={saveContent}
+                onClick={saveBackgroundContent}
               >
                 <FaSave />
               </button>
@@ -86,35 +113,13 @@ function CmsEnglishBanner() {
         </div>
         <div
           className="col-md-8 col-12 bgimage"
-          style={{ backgroundImage: `url(${content.bgImg})` }}
+          style={{ backgroundImage: `url(${backgroundImage})` }}
         >
           <div className="py-5 firsthead d-flex flex-column justify-content-center align-items-center">
-            <div className="edit-container">
-              <img src={content.img} alt="english" className="img-fluid"></img>
-              {editingField === "img" ? (
-                <>
-                  <input
-                    type="file"
-                    onChange={(e) => handleImageChange(e, "img")}
-                    className="form-control mb-3"
-                  />
-                  <button
-                    className="btn btn-sm btn-outline-primary border ms-2"
-                    onClick={saveContent}
-                  >
-                    <FaSave />
-                  </button>
-                </>
-              ) : (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={() => handleEdit("img")}
-                >
-                  <FaEdit />
-                </button>
-              )}
+            <div className="edit-container d-flex flex-column justify-content-center align-items-center">
+              <img src={content?.img} alt="english" className="img-fluid"></img>
             </div>
-            <h1>{content.heading}</h1>
+            <h1>Arty Learning</h1>
           </div>
         </div>
         <div className="col-md-4 col-12 p-5">
@@ -123,20 +128,22 @@ function CmsEnglishBanner() {
               <>
                 <input
                   type="text"
-                  value={content.heading}
-                  onChange={(e) => setContent({ ...content, heading: e.target.value })}
+                  value={content?.heading}
+                  onChange={(e) =>
+                    setContent({ ...content, heading: e.target.value })
+                  }
                   className="form-control mb-3"
                 />
                 <button
                   className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
+                  onClick={saveHeadingContent}
                 >
                   <FaSave />
                 </button>
               </>
             ) : (
               <>
-                <h3 className="mb-3 headcolor">{content.heading}</h3>
+                <h3 className="mb-3 headcolor">{heading}</h3>
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   onClick={() => handleEdit("heading")}
@@ -149,26 +156,25 @@ function CmsEnglishBanner() {
           {editingField === "paragraphs" ? (
             <>
               <textarea
-                value={content.paragraphs}
+                value={content?.paragraphs}
                 onChange={handleChange}
                 className="form-control mb-3"
                 rows="10"
-                
               />
               <button
                 className="btn btn-sm btn-outline-primary border ms-2"
-                onClick={saveContent}
+                onClick={saveParagraphContent}
               >
                 <FaSave />
               </button>
             </>
           ) : (
             <>
-              {content.paragraphs.split("\n\n").map((paragraph, index) => (
+              {content?.paragraphs.split("\n\n").map((paragraph, index) => (
                 <div key={index} className="edit-container mb-3">
                   <p
                     className="headbody preserve-whitespace"
-                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                    dangerouslySetInnerHTML={{ __html: content1 }}
                   ></p>
                 </div>
               ))}

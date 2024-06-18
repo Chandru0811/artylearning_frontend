@@ -1,81 +1,142 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEdit, FaSave } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import believer from "../../../assets/clientimage/Arty-(Believer).png";
-import dreamer from "../../../assets/clientimage/Arty-(Dreamer).png";
-import pursuer from "../../../assets/clientimage/Arty-(Prusuers).png";
+import api from "../../../config/URL";
+import { toast } from "react-toastify";
 
-function CmsChineseCourseListing() {
+function CmsChineseCourseListing({
+  card1Image,
+  card1Heading,
+  card1Content,
+  card2Image,
+  card2Heading,
+  card2Content,
+  card3Image,
+  card3Heading,
+  card3Content,
+  finalContent,
+  content2,
+  getData,
+}) {
   const [editingField, setEditingField] = useState(null);
-  const [paragraph1, setParagraph1] = useState(
-    `In our Chinese Enrichment Class, children will embark on a captivating journey to explore the richness of the Chinese language and culture. Through engaging activities, interactive lessons, and cultural experiences, students will develop their proficiency in speaking, listening, reading, and writing Mandarin. Our experienced educators will guide them in learning essential language skills while also immersing them in the beauty of Chinese traditions and customs. From mastering the strokes of Chinese characters to engaging in everyday conversations, this class aims to provide a comprehensive foundation in the language. By incorporating games, multimedia resources, and collaborative projects, children will not only gain fluency in Chinese but also a deep appreciation for the cultural nuances that make the language come alive.`
-  );
-  const [paragraph2, setParagraph2] = useState(
-    `Our children are placed into classes according to their language ability and not by standard educational age.\n\n(Therefore we may ask you to bring your child down for a FREE observation/assessment, only if we have available and suitable slot; based on your waitlist questions answered)`
-  );
-
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [paragraph1, setParagraph1] = useState("");
+  const [paragraph2, setParagraph2] = useState("");
+  const [editingSection, setEditingSection] = useState(null);
   const [sections, setSections] = useState([
     {
       id: "Believer",
-      image: believer,
-      title: "Arty 信念 (初级班)",
-      content: [
-        "- 简单的日常对话",
-        "- 认读简单的汉字",
-        "- 书写简单的笔画和汉字",
-      ],
+      image: null,
+      title: "",
+      content: "",
     },
     {
       id: "Dreamer",
-      image: dreamer,
-      title: "Arty 梦想 (中级班)",
-      content: [
-        "- 完整的表达自己想法",
-        "- 学习常用笔画",
-        "- 认读和书写常用汉字",
-        "- 认读简单拼音和声调",
-      ],
+      image: null,
+      title: "",
+      content: "",
     },
     {
       id: "Pursuer",
-      image: pursuer,
-      title: "Arty 追寻 (高级班)",
-      content: [
-        "- 能持续性的日常沟通",
-        "- 汉语拼音",
-        "- 认读和书写常用汉字",
-        "- 听写练习",
-      ],
+      image: null,
+      title: "",
+      content: "",
     },
   ]);
 
-  const [editingSection, setEditingSection] = useState(null);
+  useEffect(() => {
+    // Initialize the component state with props data on load
+    setSections([
+      {
+        id: "Believer",
+        image: card1Image || null,
+        title: card1Heading || "",
+        content: card1Content || "",
+      },
+      {
+        id: "Dreamer",
+        image: card2Image || null,
+        title: card2Heading || "",
+        content: card2Content || "",
+      },
+      {
+        id: "Pursuer",
+        image: card3Image || null,
+        title: card3Heading || "",
+        content: card3Content || "",
+      },
+    ]);
+    setParagraph1(content2 || "");
+    setParagraph2(finalContent || "");
+  }, [
+    card1Image,
+    card1Heading,
+    card1Content,
+    card2Image,
+    card2Heading,
+    card2Content,
+    card3Image,
+    card3Heading,
+    card3Content,
+    finalContent,
+    content2,
+  ]);
 
-  const handleClose = () => setEditingSection(null);
-
-  const handleSave = () => {
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.id === editingSection.id
-          ? { ...section, ...editingSection }
-          : section
-      )
-    );
-    handleClose();
+  const handleClose = () => {
+    setEditingSection(null);
+    setEditingIndex(null);
   };
 
   const toggleEdit = (field) => {
     setEditingField(field);
   };
 
-  const saveContent = () => {
-    setEditingField(null);
+  const updateData = async (formData) => {
+    try {
+      const response = await api.put(`/updateCourseSaveChinese`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error updating data: " + error.message);
+    } finally {
+      setEditingField(null);
+      handleClose();
+    }
   };
 
-  const handleEdit = (section) => {
+  const saveContent2 = async () => {
+    const formData = new FormData();
+    formData.append("content2", paragraph1);
+    updateData(formData);
+  };
+
+  const saveFinalContent = async () => {
+    const formData = new FormData();
+    formData.append("finalContent", paragraph2);
+    updateData(formData);
+  };
+
+  const saveCardContent = async (index) => {
+    const formData = new FormData();
+    formData.append(`card${index + 1}Image`, sections[index].image);
+    formData.append(`card${index + 1}Heading`, sections[index].title);
+    formData.append(`card${index + 1}Content`, sections[index].content);
+    updateData(formData);
+  };
+
+  const handleEdit = (section, index) => {
     setEditingSection(section);
+    setEditingIndex(index);
   };
 
   const handleChange = (e) => {
@@ -84,26 +145,42 @@ function CmsChineseCourseListing() {
       ...prevSection,
       [name]: value,
     }));
+
+    const updatedSections = sections.map((section, idx) =>
+      idx === editingIndex ? { ...section, [name]: value } : section
+    );
+    setSections(updatedSections);
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditingSection((prevSection) => ({
-          ...prevSection,
-          image: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+      setEditingSection((prevSection) => ({
+        ...prevSection,
+        image: file,
+      }));
+
+      const updatedSections = sections.map((section, idx) =>
+        idx === editingIndex ? { ...section, image: file } : section
+      );
+      setSections(updatedSections);
+    }
+  };
+
+  const handleSave = () => {
+    if (editingIndex !== null) {
+      const updatedSections = sections.map((section, index) =>
+        index === editingIndex ? editingSection : section
+      );
+      setSections(updatedSections);
+      saveCardContent(editingIndex);
     }
   };
 
   return (
     <div className="container">
       <div className="row">
-        <div className="col-12 my-5 ">
+        <div className="col-12 my-5">
           <div className="edit-container">
             {editingField === "paragraph1" ? (
               <>
@@ -115,14 +192,14 @@ function CmsChineseCourseListing() {
                 />
                 <button
                   className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
+                  onClick={saveContent2}
                 >
                   <FaSave />
                 </button>
               </>
             ) : (
               <>
-                <p className="preserve-whitespace">{paragraph1}</p>
+                <p className="preserve-whitespace">{content2}</p>
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   onClick={() => toggleEdit("paragraph1")}
@@ -133,21 +210,22 @@ function CmsChineseCourseListing() {
             )}
           </div>
         </div>
-        {sections.map((section) => (
+        {sections.map((section, index) => (
           <div key={section.id} className="col-md-4 col-12 mt-3">
             <div className="card h-100 p-3 shadow mb-5 bg-white rounded">
               <div className="p-3">
-                <img src={section.image} alt="..." className="img-fluid"></img>
+                <img
+                  src={section.image}
+                  alt="..."
+                  className="img-fluid fixed-image-size"
+                  style={{ width: "300px", height: "200px" }}
+                />
               </div>
               <h1 className="">{section.title}</h1>
-              {section.content.map((content, index) => (
-                <p key={index} className="headbody">
-                  {content}
-                </p>
-              ))}
+              <p className="headbody preserve-whitespace">{section.content}</p>
               <button
                 className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                onClick={() => handleEdit(section)}
+                onClick={() => handleEdit(section, index)}
               >
                 <FaEdit />
               </button>
@@ -166,14 +244,14 @@ function CmsChineseCourseListing() {
                 />
                 <button
                   className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
+                  onClick={saveFinalContent}
                 >
                   <FaSave />
                 </button>
               </>
             ) : (
               <>
-                <p className="preserve-whitespace">{paragraph2}</p>
+                <p className="preserve-whitespace">{finalContent}</p>
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   onClick={() => toggleEdit("paragraph2")}
@@ -184,7 +262,6 @@ function CmsChineseCourseListing() {
             )}
           </div>
         </div>
-
         <Modal show={!!editingSection} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Edit Section</Modal.Title>
@@ -208,15 +285,8 @@ function CmsChineseCourseListing() {
                   rows={5}
                   placeholder="Enter content"
                   name="content"
-                  value={editingSection?.content?.join("\n") || ""}
-                  onChange={(e) =>
-                    handleChange({
-                      target: {
-                        name: "content",
-                        value: e.target.value.split("\n"),
-                      },
-                    })
-                  }
+                  value={editingSection?.content || ""}
+                  onChange={handleChange}
                 />
               </Form.Group>
               <Form.Group controlId="formSectionImage">

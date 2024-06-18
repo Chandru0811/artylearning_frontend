@@ -1,85 +1,142 @@
-import React, { useState } from "react";
-import Believer from "../../../assets/clientimage/Arty-Believer.png";
-import Dreamer from "../../../assets/clientimage/Arty-Dreamer.png";
-import Pursuer from "../../../assets/clientimage/Arty-Pursuer.png";
+import React, { useEffect, useState } from "react";
 import { FaEdit, FaSave } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { toast } from "react-toastify";
+import api from "../../../config/URL";
 
-function CmsEnglishCourseListing() {
-  const [editingSection, setEditingSection] = useState(null);
+function CmsEnglishCourseListing({
+  card1Image,
+  card1Heading,
+  card1Content,
+  card2Image,
+  card2Heading,
+  card2Content,
+  card3Image,
+  card3Heading,
+  card3Content,
+  finalContent,
+  content2,
+  getData,
+}) {
   const [editingField, setEditingField] = useState(null);
-  const [paragraph1, setParagraph1] = useState(
-    `In our English Enrichment Class, children will embark on an exciting journey to enhance their language skills and foster a deep love for the English language. Through engaging activities, interactive
-discussions, and creative projects, students will develop their vocabulary, grammar, reading, writing, and communication skills. Our
- experienced educators will guide them in exploring various literary genres, analyzing texts, and expressing their thoughts articulately.
-From honing their comprehension abilities to refining their storytelling prowess, this class is designed to provide a holistic
-approach to English proficiency. Through a blend of educational games, multimedia resources, and collaborative exercises, children will not only build a strong foundation in English but also gain the
-confidence to navigate the world of words with enthusiasm and confidence.`
-  );
-  const [paragraph2, setParagraph2] = useState(
-    `Our children are placed into classes according to their language ability and not by standard educational age.
-
-(Therefore we may ask you to bring your child down for a FREE observation/assessment, only if we have available and suitable slot; based on your waitlist questions answered)`
-  );
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [paragraph1, setParagraph1] = useState("");
+  const [paragraph2, setParagraph2] = useState("");
+  const [editingSection, setEditingSection] = useState(null);
   const [sections, setSections] = useState([
     {
       id: "Believer",
-      image: Believer,
-      title: "Arty Believer",
-      content: [
-        "Designed for children beginning their English alphabet journey.",
-        "Focuses on enhancing fine motor skills and pencil grip through engaging activities.",
-        "Main objective is for children to recognize the entire lowercase alphabet from a to z while also fostering interaction and social skills.",
-      ],
+      image: null,
+      title: "",
+      content: "",
     },
     {
       id: "Dreamer",
-      image: Dreamer,
-      title: "Arty Dreamer",
-      content: [
-        "Focuses on beginning sounds, word association, and independent writing skills, all of which are crucial for enhancing children's language development and literacy abilities.",
-        "Provides a solid foundation for young learners to confidently move on towards the next stage and fosters a love for learning through the fun activities provided.",
-      ],
+      image: null,
+      title: "",
+      content: "",
     },
     {
       id: "Pursuer",
-      image: Pursuer,
-      title: "Arty Pursuer",
-      content: [
-        "Designed for children who already possess a strong foundation of the letter sound and independent writing skill.",
-        "Focuses on cultivating essential skills like independent reading, blending, and spelling.",
-        "Will gain the confidence and preparedness to excel in primary school English, building a solid foundation for their language abilities and future education.",
-        "An excellent opportunity to enhance their learning journey and ensure they are well-prepared for the next level of education.",
-      ],
+      image: null,
+      title: "",
+      content: "",
     },
   ]);
 
-  const handleClose = () => setEditingSection(null);
+  useEffect(() => {
+    // Initialize the component state with props data on load
+    setSections([
+      {
+        id: "Believer",
+        image: card1Image || null,
+        title: card1Heading || "",
+        content: card1Content || "",
+      },
+      {
+        id: "Dreamer",
+        image: card2Image || null,
+        title: card2Heading || "",
+        content: card2Content || "",
+      },
+      {
+        id: "Pursuer",
+        image: card3Image || null,
+        title: card3Heading || "",
+        content: card3Content || "",
+      },
+    ]);
+    setParagraph1(content2 || "");
+    setParagraph2(finalContent || "");
+  }, [
+    card1Image,
+    card1Heading,
+    card1Content,
+    card2Image,
+    card2Heading,
+    card2Content,
+    card3Image,
+    card3Heading,
+    card3Content,
+    finalContent,
+    content2,
+  ]);
 
-  const handleSave = () => {
-    // Update sections with edited content
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.id === editingSection.id
-          ? { ...section, ...editingSection }
-          : section
-      )
-    );
-    handleClose();
+  const handleClose = () => {
+    setEditingSection(null);
+    setEditingIndex(null);
   };
 
   const toggleEdit = (field) => {
     setEditingField(field);
   };
 
-  const saveContent = () => {
-    setEditingField(null);
+  const updateData = async (formData) => {
+    try {
+      const response = await api.put(`/updateCourseSaveEnglish`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error updating data: " + error.message);
+    } finally {
+      setEditingField(null);
+      handleClose();
+    }
   };
 
-  const handleEdit = (section) => {
+  const saveContent2 = async () => {
+    const formData = new FormData();
+    formData.append("content2", paragraph1);
+    updateData(formData);
+  };
+
+  const saveFinalContent = async () => {
+    const formData = new FormData();
+    formData.append("finalContent", paragraph2);
+    updateData(formData);
+  };
+
+  const saveCardContent = async (index) => {
+    const formData = new FormData();
+    formData.append(`card${index + 1}Image`, sections[index].image);
+    formData.append(`card${index + 1}Heading`, sections[index].title);
+    formData.append(`card${index + 1}Content`, sections[index].content);
+    updateData(formData);
+  };
+
+  const handleEdit = (section, index) => {
     setEditingSection(section);
+    setEditingIndex(index);
   };
 
   const handleChange = (e) => {
@@ -88,19 +145,35 @@ confidence to navigate the world of words with enthusiasm and confidence.`
       ...prevSection,
       [name]: value,
     }));
+
+    const updatedSections = sections.map((section, idx) =>
+      idx === editingIndex ? { ...section, [name]: value } : section
+    );
+    setSections(updatedSections);
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditingSection((prevSection) => ({
-          ...prevSection,
-          image: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+      setEditingSection((prevSection) => ({
+        ...prevSection,
+        image: file,
+      }));
+
+      const updatedSections = sections.map((section, idx) =>
+        idx === editingIndex ? { ...section, image: file } : section
+      );
+      setSections(updatedSections);
+    }
+  };
+
+  const handleSave = () => {
+    if (editingIndex !== null) {
+      const updatedSections = sections.map((section, index) =>
+        index === editingIndex ? editingSection : section
+      );
+      setSections(updatedSections);
+      saveCardContent(editingIndex);
     }
   };
 
@@ -119,14 +192,14 @@ confidence to navigate the world of words with enthusiasm and confidence.`
                 />
                 <button
                   className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
+                  onClick={saveContent2}
                 >
                   <FaSave />
                 </button>
               </>
             ) : (
               <>
-                <p className="preserve-whitespace">{paragraph1}</p>
+                <p className="preserve-whitespace">{content2}</p>
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   onClick={() => toggleEdit("paragraph1")}
@@ -137,21 +210,22 @@ confidence to navigate the world of words with enthusiasm and confidence.`
             )}
           </div>
         </div>
-        {sections.map((section) => (
+        {sections.map((section, index) => (
           <div key={section.id} className="col-md-4 col-12 mt-3">
             <div className="card h-100 p-3 shadow mb-5 bg-white rounded">
               <div className="p-3">
-                <img src={section.image} alt="..." className="img-fluid"></img>
+                <img
+                  src={section.image}
+                  alt="..."
+                  className="img-fluid fixed-image-size"
+                  style={{ width: "300px", height: "200px" }}
+                />
               </div>
               <h1 className="">{section.title}</h1>
-              {section.content.map((content, index) => (
-                <p key={index} className="headbody preserve-whitespace">
-                  {content}
-                </p>
-              ))}
+              <p className="headbody preserve-whitespace">{section.content}</p>
               <button
                 className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                onClick={() => handleEdit(section)}
+                onClick={() => handleEdit(section, index)}
               >
                 <FaEdit />
               </button>
@@ -170,14 +244,14 @@ confidence to navigate the world of words with enthusiasm and confidence.`
                 />
                 <button
                   className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
+                  onClick={saveFinalContent}
                 >
                   <FaSave />
                 </button>
               </>
             ) : (
               <>
-                <p className="preserve-whitespace">{paragraph2}</p>
+                <p className="preserve-whitespace">{finalContent}</p>
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   onClick={() => toggleEdit("paragraph2")}
@@ -211,15 +285,8 @@ confidence to navigate the world of words with enthusiasm and confidence.`
                   rows={5}
                   placeholder="Enter content"
                   name="content"
-                  value={editingSection?.content?.join("\n") || ""}
-                  onChange={(e) =>
-                    handleChange({
-                      target: {
-                        name: "content",
-                        value: e.target.value.split("\n"),
-                      },
-                    })
-                  }
+                  value={editingSection?.content || ""}
+                  onChange={handleChange}
                 />
               </Form.Group>
               <Form.Group controlId="formSectionImage">
