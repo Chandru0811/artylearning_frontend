@@ -9,17 +9,16 @@ import { useFormik } from "formik";
 // const validationSchema = Yup.object().shape({});
 
 function CmsHome() {
-  const id = 3;
   const [data, setData] = useState({
     heroBackground: "",
     heroTitle: "",
     learningTitle: "",
     learningSubtitle: "",
     learningParagraph: "",
-    learningImage: "",
+    learningImageFile: "",
     childTitle: "",
     childParagraph: "",
-    childImage: "",
+    childImageFile: "",
     childVideo: "",
   });
   const [editingField, setEditingField] = useState(null);
@@ -28,9 +27,9 @@ function CmsHome() {
     setEditingField(field);
   };
 
-  const saveContent = () => {
-    setEditingField(null);
-  };
+  // const saveContent = () => {
+  //   setEditingField(null);
+  // };
 
   const formik = useFormik({
     initialValues: {
@@ -40,11 +39,11 @@ function CmsHome() {
       learningTitle: "",
       learningSubtitle: "",
       learningParagraph: "",
-      learningImage: "",
+      learningImageFile: "",
 
       childTitle: "",
       childParagraph: "",
-      childImage: "",
+      childImageFile: "",
 
       childVideo: "",
     },
@@ -53,22 +52,23 @@ function CmsHome() {
       const formData = new FormData();
       formData.append("heroTitle", values.heroTitle);
       formData.append("heroBackground", values.heroBackground);
+
       formData.append("learningTitle", values.learningTitle);
       formData.append("learningSubtitle", values.learningSubtitle);
       formData.append("learningParagraph", values.learningParagraph);
-      formData.append("learningImage", values.learningImage);
-      formData.append("learningImage", values.learningImage);
+      formData.append("learningImageFile", values.learningImageFile);
 
       formData.append("childTitle", values.childTitle);
       formData.append("childParagraph", values.childParagraph);
-      formData.append("childImage", values.childImage);
+      formData.append("childImageFile", values.childImageFile);
+
       formData.append("childVideo", values.childVideo);
 
       for (let pair of formData.entries()) {
         if (pair[1] instanceof File) {
-          console.log(pair[0] + ': ' + pair[1].name); // Log file name
+          console.log(pair[0] + ": " + pair[1].name); // Log file name
         } else {
-          console.log(pair[0] + ': ' + pair[1]);
+          console.log(pair[0] + ": " + pair[1]);
         }
       }
 
@@ -95,9 +95,39 @@ function CmsHome() {
     },
   });
 
+  // Save content logic for individual fields
+  const saveContent = async (field) => {
+    setEditingField(null);
+    const formData = new FormData();
+
+    // Add the specific field to formData
+    formData.append(field, formik.values[field]);
+
+    try {
+      const response = await api.put(
+        `/updateHomeSaveWithProfileImages`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error.message);
+    }
+  };
+
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllHomeSaveById/${id}`);
+      const response = await api.get(`/getAllHomeSave`);
       setData(response.data);
 
       formik.setValues({
@@ -106,10 +136,10 @@ function CmsHome() {
         learningTitle: response.data.learningTitle,
         learningSubtitle: response.data.learningSubtitle,
         learningParagraph: response.data.learningParagraph,
-        learningImage: response.data.learningImage,
+        learningImageFile: response.data.learningImageFile,
         childTitle: response.data.childTitle,
         childParagraph: response.data.childParagraph,
-        childImage: response.data.childImage,
+        childImageFile: response.data.childImageFile,
         childVideo: response.data.childVideo,
       });
     } catch (error) {
@@ -119,7 +149,28 @@ function CmsHome() {
 
   useEffect(() => {
     getData();
-  }, [id]);
+  }, []);
+
+  const PublishHomeSection = async () => {
+    try {
+      const response = await api.post(`/publishHome`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error.message);
+    }
+  }
 
   return (
     <>
@@ -130,17 +181,18 @@ function CmsHome() {
               <h4>Home</h4>
             </div>
             <div className="col-md-6 col-12 d-flex justify-content-end">
-              <button
+              {/* <button
                 type="submit"
                 className="btn btn-sm btn-outline-primary border ms-2"
               >
                 Save
-              </button>
+              </button> */}
               <button
                 type="button"
+                onClick={PublishHomeSection}
                 className="btn btn-sm btn-outline-danger border ms-2"
               >
-                Save & Publish
+                Publish
               </button>
             </div>
           </div>
@@ -157,13 +209,16 @@ function CmsHome() {
                     name="heroBackground"
                     className="topbar-wordpress form-control-sm w-50"
                     onChange={(e) => {
-                      formik.setFieldValue("heroBackground", e.currentTarget.files[0]);
+                      formik.setFieldValue(
+                        "heroBackground",
+                        e.currentTarget.files[0]
+                      );
                     }}
                   />
                   <button
-                    type="submit"
+                    type="button"
                     className="btn btn-sm btn-outline-primary border ms-2"
-                    onClick={saveContent}
+                    onClick={() => saveContent("heroBackground")}
                   >
                     <FaSave />
                   </button>
@@ -178,7 +233,7 @@ function CmsHome() {
                 </button>
               )}
               <img
-                src={data.childImage}
+                src={data.heroBackground}
                 alt="home-img"
                 style={{
                   width: "100%",
@@ -204,9 +259,6 @@ function CmsHome() {
                 <input
                   name="heroTitle"
                   {...formik.getFieldProps("heroTitle")}
-                  // onChange={(e) => {
-                  //   setTitlemsg(e.target.value);
-                  // }}
                   style={{
                     width: "100%",
                     fontSize: "clamp(18px, 4vw, 48px)",
@@ -220,7 +272,7 @@ function CmsHome() {
                 <button
                   type="button"
                   className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={saveContent}
+                  onClick={() => saveContent("heroTitle")}
                 >
                   <FaSave />
                 </button>
@@ -238,12 +290,6 @@ function CmsHome() {
                     minHeight: "50%",
                   }}
                 >
-                  {/* {data.heroTitle.split("\n").map((line, index) => (
-                    <span key={index}>
-                      {line}
-                      <br />
-                    </span>
-                  ))} */}
                   {data.heroTitle}
                 </h1>
                 <button
@@ -268,13 +314,12 @@ function CmsHome() {
                     type="text"
                     name="learningTitle"
                     {...formik.getFieldProps("learningTitle")}
-                    // onChange={handleChange}
                     className="form-control fw-bold"
                   />
                   <button
                     type="button"
                     className="btn btn-sm btn-outline-primary border ms-2"
-                    onClick={saveContent}
+                    onClick={() => saveContent("learningTitle")}
                   >
                     <FaSave />
                   </button>
@@ -304,7 +349,7 @@ function CmsHome() {
                   <button
                     type="button"
                     className="btn btn-sm btn-outline-primary border ms-2"
-                    onClick={saveContent}
+                    onClick={() => saveContent("learningSubtitle")}
                   >
                     <FaSave />
                   </button>
@@ -329,14 +374,13 @@ function CmsHome() {
                   <textarea
                     name="learningParagraph"
                     {...formik.getFieldProps("learningParagraph")}
-                    // onChange={handleChange}
                     rows="12"
                     className="form-control fs-5 lh-base"
                   />
                   <button
                     type="button"
                     className="btn btn-sm btn-outline-primary border ms-2"
-                    onClick={saveContent}
+                    onClick={() => saveContent("learningParagraph")}
                   >
                     <FaSave />
                   </button>
@@ -344,13 +388,6 @@ function CmsHome() {
               ) : (
                 <>
                   <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base">
-                    {/* {data.learningParagraph.split("\n\n").map((text, index) => (
-                    <span key={index}>
-                      {text}
-                      <br />
-                      <br />
-                    </span>
-                  ))} */}
                     {data.learningParagraph}
                   </p>
                   <button
@@ -364,14 +401,14 @@ function CmsHome() {
               )}
             </div>
             <div className="col-lg-6 col-md-12 col-sm-12 mt-5 p-4">
-              {editingField === "learningImage" ? (
+              {editingField === "learningImageFile" ? (
                 <>
                   <input
                     type="file"
-                    name="learningImage"
+                    name="learningImageFile"
                     onChange={(e) => {
                       formik.setFieldValue(
-                        "learningImage",
+                        "learningImageFile",
                         e.currentTarget.files[0]
                       );
                     }}
@@ -380,7 +417,7 @@ function CmsHome() {
                   <button
                     type="button"
                     className="btn btn-sm btn-outline-primary border ms-2"
-                    onClick={saveContent}
+                    onClick={() => saveContent("learningImageFile")}
                   >
                     <FaSave />
                   </button>
@@ -389,7 +426,7 @@ function CmsHome() {
                 <button
                   type="button"
                   className="btn btn-sm border-transparent ms-2 edit-button"
-                  onClick={() => toggleEdit("learningImage")}
+                  onClick={() => toggleEdit("learningImageFile")}
                   style={{ border: "none !important" }}
                 >
                   <FaEdit />
@@ -413,23 +450,13 @@ function CmsHome() {
             >
               <div className="row">
                 <div className="col-md-5 col-12 d-flex flex-column align-items-center justify-content-center paint">
-                  {editingField === "childImage" ? (
+                  {editingField === "childImageFile" ? (
                     <>
                       <input
                         type="file"
-                        // onChange={(e) => {
-                        //   const file = e.target.files[0];
-                        //   if (file) {
-                        //     const reader = new FileReader();
-                        //     reader.onloadend = () => {
-                        //       setGlassUrl(reader.result);
-                        //     };
-                        //     reader.readAsDataURL(file);
-                        //   }
-                        // }}
                         onChange={(e) => {
                           formik.setFieldValue(
-                            "childImage",
+                            "childImageFile",
                             e.currentTarget.files[0]
                           );
                         }}
@@ -438,7 +465,7 @@ function CmsHome() {
                       <button
                         type="button"
                         className="btn btn-sm btn-outline-primary border ms-2"
-                        onClick={saveContent}
+                        onClick={() => saveContent("childImageFile")}
                       >
                         <FaSave />
                       </button>
@@ -447,7 +474,7 @@ function CmsHome() {
                     <button
                       type="button"
                       className="btn btn-sm border-transparent ms-2 edit-button"
-                      onClick={() => toggleEdit("childImage")}
+                      onClick={() => toggleEdit("childImageFile")}
                       style={{ border: "none !important" }}
                     >
                       <FaEdit />
@@ -456,7 +483,7 @@ function CmsHome() {
                   <img
                     src={data.childImage}
                     style={{ borderRadius: "20px" }}
-                    alt="childImage"
+                    alt="childImageFile"
                     className="img-fluid"
                   />
                 </div>
@@ -481,7 +508,7 @@ function CmsHome() {
                       <button
                         type="button"
                         className="btn btn-sm btn-outline-primary border ms-2"
-                        onClick={saveContent}
+                        onClick={() => saveContent("childTitle")}
                       >
                         <FaSave />
                       </button>
@@ -506,14 +533,13 @@ function CmsHome() {
                       <textarea
                         name="childParagraph"
                         {...formik.getFieldProps("childParagraph")}
-                        // onChange={handleChange}
                         rows="8"
                         className="form-control"
                       />
                       <button
                         type="button"
                         className="btn btn-sm btn-outline-primary border ms-2"
-                        onClick={saveContent}
+                        onClick={() => saveContent("childParagraph")}
                       >
                         <FaSave />
                       </button>
@@ -521,13 +547,6 @@ function CmsHome() {
                   ) : (
                     <>
                       <p className="card-text my-4">
-                        {/* {data.childParagraph.split("\n\n").map((text, index) => (
-                        <span key={index}>
-                          {text}
-                          <br />
-                          <br />
-                        </span>
-                      ))} */}
                         {data.childParagraph}
                         <button
                           type="button"
@@ -560,7 +579,7 @@ function CmsHome() {
                 <button
                   type="button"
                   className="btn btn-sm btn-outline-primary border mt-2"
-                  onClick={saveContent}
+                  onClick={() => saveContent("childVideo")}
                 >
                   <FaSave />
                 </button>
