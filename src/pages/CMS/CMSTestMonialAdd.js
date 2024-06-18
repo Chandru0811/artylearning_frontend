@@ -130,7 +130,7 @@ function CMSTestMonialAdd({ onSuccess }) {
               {selectedFile && (
                 <div>
 
-                  {selectedFile.type.startsWith('parentImage') && (
+                  {selectedFile.type.startsWith('image') && (
                     <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
                   )}
                 </div>

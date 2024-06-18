@@ -6,16 +6,16 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 const validationSchema = Yup.object().shape({
-  logoUrl: Yup.mixed(),
+  file: Yup.mixed(),
   phone: Yup.string(),
-  footer: Yup.string(),
-  hours: Yup.string(),
-  youtubeUrl: Yup.string(),
-  instagramUrl: Yup.string(),
+  copyRight: Yup.string(),
+  dateTime: Yup.string(),
+  facebookLink: Yup.string(),
+  instagramLink: Yup.string(),
 });
 
 const ContactSection = () => {
-  const id = 1; // Assuming this is the ID you are fetching data for
+  
   const [editingField, setEditingField] = useState(null);
   const [data, setData] = useState({
     facebookLink: "",
@@ -25,25 +25,22 @@ const ContactSection = () => {
     copyRight: "",
     artyLogo: "",
   });
+
   const toggleEdit = (field) => {
     setEditingField(field);
   };
 
-  const saveContent = () => {
-    setEditingField(null);
-  };
-
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllHeaderSaveById/${id}`);
+      const response = await api.get(`/getAllHeaderSave`);
       setData(response.data);
       formik.setValues({
-        youtubeUrl: response.data.facebookLink,
-        instagramUrl: response.data.instagramLink,
+        facebookLink: response.data.facebookLink,
+        instagramLink: response.data.instagramLink,
         phone: response.data.phone,
-        footer: response.data.copyRight,
-        hours: response.data.dateTime,
-        logoUrl: response.data.artyLogo,
+        copyRight: response.data.copyRight,
+        dateTime: response.data.dateTime,
+        file: response.data.artyLogo,
       });
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
@@ -52,32 +49,32 @@ const ContactSection = () => {
 
   useEffect(() => {
     getData();
-  }, [id]);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
-      logoUrl: null,
+      file: null || "",
       phone: "",
-      footer: "",
-      hours: "",
-      youtubeUrl: "",
-      instagramUrl: "",
+      copyRight: "",
+      dateTime: "",
+      facebookLink: "",
+      instagramLink: "",
     },
     // validationSchema: validationSchema,
     onSubmit: async (values) => {
       const formData = new FormData();
-      formData.append("facebookLink", values.youtubeUrl);
-      formData.append("instagramLink", values.instagramUrl);
+      formData.append("facebookLink", values.facebookLink);
+      formData.append("instagramLink", values.instagramLink);
       formData.append("dateTime", new Date().toISOString());
       formData.append("phone", values.phone);
-      if (values.logoUrl) {
-        formData.append("file", values.logoUrl); // Append the file object directly
+      if (values.file) {
+        formData.append("file", values.file); // Append the file object directly
       }
-      formData.append("copyRight", values.footer);
+      formData.append("copyRight", values.copyRight);
 
       try {
         const response = await api.put(
-          `/updateHeaderSaveWithProfileImages/${id}`,
+          `/updateHeaderSaveWithProfileImages`,
           formData,
           {
             headers: {
@@ -99,6 +96,55 @@ const ContactSection = () => {
     },
   });
 
+  // Save content logic for individual fields
+  const saveContent = async (field) => {
+    setEditingField(null);
+    const formData = new FormData();
+
+    // Add the specific field to formData
+    formData.append(field, formik.values[field]);
+
+    try {
+      const response = await api.put(
+        `/updateHeaderSaveWithProfileImages`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error.message);
+    }
+  };
+
+  const PublishHeaderSection = async () => {
+    try {
+      const response = await api.post(`/publishHeader`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error.message);
+    }
+  };
+
   return (
     <section>
       <form onSubmit={formik.handleSubmit}>
@@ -109,13 +155,11 @@ const ContactSection = () => {
             </div>
             <div className="col-md-6 col-12 d-flex justify-content-end">
               <button
-                className="btn btn-sm btn-outline-primary border ms-2"
-                type="submit"
+                type="button"
+                className="btn btn-sm btn-outline-danger border ms-2"
+                onClick={PublishHeaderSection}
               >
-                Save
-              </button>
-              <button className="btn btn-sm btn-outline-danger border ms-2">
-                Save & Publish
+                Publish
               </button>
             </div>
           </div>
@@ -125,15 +169,15 @@ const ContactSection = () => {
           <div className="row align-items-center">
             <div className="col-md-5 col-12 d-flex align-items-center">
               <span className="me-2 edit-container">
-                {editingField === "youtubeUrl" ? (
+                {editingField === "facebookLink" ? (
                   <input
                     type="text"
-                    value={formik.values.youtubeUrl}
+                    value={formik.values.facebookLink}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    name="youtubeUrl"
+                    name="facebookLink"
                     className={`form-control ${
-                      formik.touched.youtubeUrl && formik.errors.youtubeUrl
+                      formik.touched.facebookLink && formik.errors.facebookLink
                         ? "is-invalid"
                         : ""
                     }`}
@@ -148,11 +192,11 @@ const ContactSection = () => {
                     <FaYoutube />
                   </a>
                 )}
-                {editingField === "youtubeUrl" ? (
+                {editingField === "facebookLink" ? (
                   <button
                     className="btn btn-sm btn-outline-primary border ms-2"
                     type="button"
-                    onClick={saveContent}
+                    onClick={() => saveContent("facebookLink")}
                   >
                     <FaSave />
                   </button>
@@ -160,22 +204,23 @@ const ContactSection = () => {
                   <button
                     className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                     type="button"
-                    onClick={() => toggleEdit("youtubeUrl")}
+                    onClick={() => toggleEdit("facebookLink")}
                   >
                     <FaEdit />
                   </button>
                 )}
               </span>
               <span className="edit-container">
-                {editingField === "instagramUrl" ? (
+                {editingField === "instagramLink" ? (
                   <input
                     type="text"
-                    value={formik.values.instagramUrl}
+                    value={formik.values.instagramLink}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    name="instagramUrl"
+                    name="instagramLink"
                     className={`form-control ${
-                      formik.touched.instagramUrl && formik.errors.instagramUrl
+                      formik.touched.instagramLink &&
+                      formik.errors.instagramLink
                         ? "is-invalid"
                         : ""
                     }`}
@@ -190,11 +235,11 @@ const ContactSection = () => {
                     <FaInstagram />
                   </a>
                 )}
-                {editingField === "instagramUrl" ? (
+                {editingField === "instagramLink" ? (
                   <button
                     className="btn btn-sm btn-outline-primary border ms-2"
                     type="button"
-                    onClick={saveContent}
+                    onClick={() => saveContent("instagramLink")}
                   >
                     <FaSave />
                   </button>
@@ -202,7 +247,7 @@ const ContactSection = () => {
                   <button
                     className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                     type="button"
-                    onClick={() => toggleEdit("instagramUrl")}
+                    onClick={() => toggleEdit("instagramLink")}
                   >
                     <FaEdit />
                   </button>
@@ -212,15 +257,15 @@ const ContactSection = () => {
             <div className="col-md-7 col-12 d-flex align-items-center justify-content-between">
               <span className="me-3 edit-container">
                 <small>
-                  {editingField === "hours" ? (
+                  {editingField === "dateTime" ? (
                     <input
                       type="text"
-                      value={formik.values.hours}
+                      value={formik.values.dateTime}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      name="hours"
+                      name="dateTime"
                       className={`form-control ${
-                        formik.touched.hours && formik.errors.hours
+                        formik.touched.dateTime && formik.errors.dateTime
                           ? "is-invalid"
                           : ""
                       }`}
@@ -228,11 +273,11 @@ const ContactSection = () => {
                   ) : (
                     data.dateTime
                   )}
-                  {editingField === "hours" ? (
+                  {editingField === "dateTime" ? (
                     <button
                       className="btn btn-sm btn-outline-primary border ms-2"
                       type="button"
-                      onClick={saveContent}
+                      onClick={() => saveContent("dateTime")}
                     >
                       <FaSave />
                     </button>
@@ -240,7 +285,7 @@ const ContactSection = () => {
                     <button
                       className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                       type="button"
-                      onClick={() => toggleEdit("hours")}
+                      onClick={() => toggleEdit("dateTime")}
                     >
                       <FaEdit />
                     </button>
@@ -269,7 +314,7 @@ const ContactSection = () => {
                     <button
                       className="btn btn-sm btn-outline-primary border ms-2"
                       type="button"
-                      onClick={saveContent}
+                      onClick={() => saveContent("phone")}
                     >
                       <FaSave />
                     </button>
@@ -299,15 +344,15 @@ const ContactSection = () => {
                   className="img-fluid"
                 />
               </div>
-              {editingField === "logoUrl" ? (
+              {editingField === "file" ? (
                 <>
                   <input
                     type="file"
                     onChange={(e) => {
-                      formik.setFieldValue("logoUrl", e.currentTarget.files[0]);
+                      formik.setFieldValue("file", e.currentTarget.files[0]);
                     }}
                     className={`form-control w-50 ${
-                      formik.touched.logoUrl && formik.errors.logoUrl
+                      formik.touched.file && formik.errors.file
                         ? "is-invalid"
                         : ""
                     }`}
@@ -315,7 +360,7 @@ const ContactSection = () => {
                   <button
                     className="btn btn-sm btn-outline-primary border ms-2"
                     type="button"
-                    onClick={saveContent}
+                    onClick={() => saveContent("file")}
                   >
                     <FaSave />
                   </button>
@@ -324,7 +369,7 @@ const ContactSection = () => {
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   type="button"
-                  onClick={() => toggleEdit("logoUrl")}
+                  onClick={() => toggleEdit("file")}
                 >
                   <FaEdit />
                 </button>
@@ -334,15 +379,15 @@ const ContactSection = () => {
           <div className="col-6">
             <span className="me-3 edit-container">
               <small>
-                {editingField === "footer" ? (
+                {editingField === "copyRight" ? (
                   <input
                     type="text"
-                    value={formik.values.footer}
+                    value={formik.values.copyRight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    name="footer"
+                    name="copyRight"
                     className={`form-control ${
-                      formik.touched.footer && formik.errors.footer
+                      formik.touched.copyRight && formik.errors.copyRight
                         ? "is-invalid"
                         : ""
                     }`}
@@ -350,11 +395,11 @@ const ContactSection = () => {
                 ) : (
                   data.copyRight
                 )}
-                {editingField === "footer" ? (
+                {editingField === "copyRight" ? (
                   <button
                     className="btn btn-sm btn-outline-primary border ms-2"
                     type="button"
-                    onClick={saveContent}
+                    onClick={() => saveContent("copyRight")}
                   >
                     <FaSave />
                   </button>
@@ -362,7 +407,7 @@ const ContactSection = () => {
                   <button
                     className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                     type="button"
-                    onClick={() => toggleEdit("footer")}
+                    onClick={() => toggleEdit("copyRight")}
                   >
                     <FaEdit />
                   </button>

@@ -68,12 +68,32 @@ const CMSContact = () => {
     setLoading(false);
   };
 
+  const contactPublish = async () => {
+    try {
+      const response = await api.post("/publishContactUs");
+
+      if(response.status === 201){
+        toast.success(response.data.message)
+      }else{
+        toast.warning(response.data.message)
+      }
+    } catch (error) {
+      toast.error("Error refreshing data:", error);
+    }
+  };
 
   return (
  
     <div className="container">
-      <div className="col-12 text-end my-3">
+      <div className="col-12 my-4 text-end gap-3 d-flex align-items-center justify-content-end">
         <CMSContactAdd onSuccess={refreshData}/>
+        <button
+          type="button"
+          className="btn btn-button btn-sm"
+          onClick={contactPublish}
+        >
+          Publish 
+        </button>
       </div>
       {loading ? (
         <div className="loader-container">
