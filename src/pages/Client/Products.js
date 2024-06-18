@@ -28,6 +28,17 @@ function Products() {
     },
   };
   const [data, setData] = useState([]);
+  const [productData, setProductData] = useState([]);
+  const hasData = productData && productData.length > 0;
+
+  const productItemData = async () => {
+    try {
+      const response = await api.get(`/getAllProductImageSavePublish`);
+      setProductData(response.data);
+    } catch (error) {
+      toast.error("Error Fetching Data: " + error.message);
+    }
+  };
 
   const getData = async () => {
     try {
@@ -40,44 +51,48 @@ function Products() {
 
   useEffect(() => {
     getData();
+    productItemData();
   }, []);
+
   return (
     <>
       <div class="container">
         <div className="row">
           <div className="offset-md-3 col-md-6 col-12">
-            <Carousel
-              responsive={responsive}
-              infinite={true}
-              autoPlay={true}
-              autoPlaySpeed={2000}
-              transitionDuration={500}
-              showDots={true}
-              arrows={true}
-              swipeable={false}
-              draggable={false}
-              // ssr={true} // means to render carousel on server-side.
-              customTransition="transform 500ms ease-in-out"
-              keyBoardControl={true}
-              containerClass="carousel-container"
-              removeArrowOnDeviceType={["tablet", "mobile"]}
-              dotListClass="custom-dot-list-style"
-              itemClass="carousel-item-padding-40-px"
-              // customDot={<CustomDot />}
-            >
-              <div>
-                <img className="img-fluid" src={imgs1} alt="Slide 1" />
-              </div>
-              <div>
-                <img className="img-fluid" src={imgs2} alt="Slide 2" />
-              </div>
-              <div>
-                <img className="img-fluid" src={imgs3} alt="Slide 3" />
-              </div>
-              <div>
-                <img className="img-fluid" src={imgs4} alt="Slide 4" />
-              </div>
-            </Carousel>
+            <div>
+              {hasData ? (
+                <Carousel
+                  responsive={responsive}
+                  infinite={true}
+                  autoPlay={true}
+                  autoPlaySpeed={2000}
+                  transitionDuration={500}
+                  showDots={true}
+                  arrows={true}
+                  swipeable={false}
+                  draggable={false}
+                  customTransition="transform 500ms ease-in-out"
+                  keyBoardControl={true}
+                  containerClass="carousel-container"
+                  removeArrowOnDeviceType={["tablet", "mobile"]}
+                  dotListClass="custom-dot-list-style"
+                  itemClass="carousel-item-padding-40-px"
+                  // customDot={<CustomDot />} // Uncomment if you have a custom dot component
+                >
+                  {productData.map((product, index) => (
+                    <div key={index}>
+                      <img
+                        className="img-fluid"
+                        src={product.image || imgs1} // Use a default image if no image is provided
+                        alt={`Product ${index + 1}`}
+                      />
+                    </div>
+                  ))}
+                </Carousel>
+              ) : (
+                <div className="no-data-message"></div>
+              )}
+            </div>
           </div>
         </div>
         <div className="row">
@@ -89,7 +104,11 @@ function Products() {
               {data.boxA || "A-Z Phonics Card"}
             </h1>
             <div className="d-flex justify-content-center align-items-center mt-4">
-              <img className="img-fluid" src={data.imageProduct||imgs5} alt="Slide 4" />
+              <img
+                className="img-fluid"
+                src={data.imageProduct || imgs5}
+                alt="Slide 4"
+              />
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p
@@ -97,7 +116,7 @@ function Products() {
                 style={{ fontSize: "large" }}
               >
                 {data.contentCard ||
-                 "These cards are specially designed for parents to entice and "}
+                  "These cards are specially designed for parents to entice and "}
               </p>
               {/* <button
                 className="m-5 shadow btn btn-danger"

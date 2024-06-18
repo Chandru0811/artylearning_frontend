@@ -70,6 +70,25 @@ const CMSProductsItem = () => {
     setLoading(false);
   };
 
+  const PublishProductImageSection = async () => {
+    try {
+      const response = await api.post(`/publishProductImageSave`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        getData();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error.message);
+    }
+  };
+
   return (
     <div className="container-fluid">
       <div className="container cms-header shadow-sm py-2 mb-5">
@@ -79,7 +98,11 @@ const CMSProductsItem = () => {
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
             <CMSProductsItemAdd />
-            <button className="btn btn-sm btn-outline-danger border ms-2">
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-danger border ms-2"
+              onClick={PublishProductImageSection}
+            >
               Publish
             </button>
           </div>
@@ -109,11 +132,18 @@ const CMSProductsItem = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td><img style={{width:"100px"}} className="rounded-5" src={data.image} alt="product"></img></td>
+                <td>
+                  <img
+                    style={{ width: "100px" }}
+                    className="rounded-5"
+                    src={data.image}
+                    alt="product"
+                  ></img>
+                </td>
                 <td>{data.imageDetails}</td>
                 <td>
                   <div className="d-flex">
-                    <CMSProductsItemEdit id={data.id} getData={getData}/>
+                    <CMSProductsItemEdit id={data.id} getData={getData} />
                     <Delete
                       onSuccess={refreshData}
                       path={`/deleteProductImageSave/${data.id}`}

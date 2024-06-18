@@ -113,7 +113,7 @@ function CMSProducts() {
             </div>
             <div className="col-md-6 col-12 d-flex justify-content-end">
               <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
-                Save & Publish
+                Publish
               </button>
             </div>
           </div>
@@ -129,7 +129,7 @@ function CMSProducts() {
                 onSuccess={refreshData} />
             </div>
             <div className="d-flex justify-content-center align-items-center mt-4">
-              <img className="img-fluid" src={data.imageProduct} alt="Slide 4" />
+              <img className="img-fluid" src={data.imageProduct} alt="gif" />
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p className="text-center fw-small mt-3" style={{ fontSize: "large" }}>

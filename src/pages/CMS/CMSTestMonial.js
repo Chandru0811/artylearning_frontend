@@ -96,7 +96,7 @@ const CMSTestMonail = () => {
           <div className="col-md-6 col-12 d-flex justify-content-end">
             <CMSTestMonialAdd onSuccess={refreshData} />
             <button onClick={testimonialPublish} className="btn btn-sm btn-outline-danger border ms-2" style={{ whiteSpace: 'nowrap' }}>
-              Save & Publish
+              Publish
             </button>
           </div>
         </div>

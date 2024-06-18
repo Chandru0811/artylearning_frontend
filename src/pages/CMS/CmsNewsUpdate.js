@@ -108,7 +108,7 @@ const CmsNewsUpdate = () => {
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
             <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
-              Save & Publish
+              Publish
             </button>
           </div>
         </div>

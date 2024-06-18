@@ -138,7 +138,7 @@ export const CmsTeacher = () => {
             </button> */}
              <CmsTeacherAdd getData={getData}/>
             <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
-              Save & Publish
+              Publish
             </button>
           </div>
         </div>
