@@ -387,7 +387,7 @@ function CmsHome() {
                 </>
               ) : (
                 <>
-                  <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base">
+                  <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base preserve-whitespace">
                     {data.learningParagraph}
                   </p>
                   <button
@@ -546,7 +546,7 @@ function CmsHome() {
                     </>
                   ) : (
                     <>
-                      <p className="card-text my-4">
+                      <p className="card-text my-4 preserve-whitespace">
                         {data.childParagraph}
                         <button
                           type="button"
