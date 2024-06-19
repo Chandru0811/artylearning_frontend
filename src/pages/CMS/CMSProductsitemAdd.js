@@ -9,7 +9,6 @@ import Button from "react-bootstrap/Button";
 
 function CMSProductsItemAdd({ getData }) {
   const [showModal, setShowModal] = useState(false);
-  const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -17,6 +16,12 @@ function CMSProductsItemAdd({ getData }) {
   const handleSaveChanges = () => {
     setShowModal(false);
   };
+
+  const handleShowModal = () => {
+    setShowModal(true);
+    formik.resetForm();
+    setSelectedFile(null);
+  }
 
   const validationSchema = Yup.object().shape({
     // files: Yup.mixed().required("Image file is required"),
@@ -121,12 +126,12 @@ function CMSProductsItemAdd({ getData }) {
                 )}
               </div>
               {selectedFile && (
-                <div>
-                  {selectedFile.type.startsWith("files") && (
+                <div className="mb-2">
+                  {selectedFile.type.startsWith("image") && (
                     <img
                       src={URL.createObjectURL(selectedFile)}
                       alt="Selected File"
-                      style={{ maxWidth: "100%" }}
+                      style={{ maxHeight: "200px" }}
                     />
                   )}
                 </div>

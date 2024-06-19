@@ -16,14 +16,20 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-const CmsTeacherAdd = ({getData}) => {
+const CmsTeacherAdd = ({ getData }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  // const handleCloseModal = () => setShowModal(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  
+
   const handleSaveChanges = () => {
     setShowModal(false);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    formik.resetForm();
+    setSelectedFile(null);
   };
 
   const formik = useFormik({
@@ -38,16 +44,16 @@ const CmsTeacherAdd = ({getData}) => {
     // validationSchema,
     onSubmit: async (data) => {
       console.log(data);
-      const formData =new FormData()
-      formData.append("files",data.files)
-      formData.append("teacherName ",data.teacherName )
-      formData.append("teacherDescription ",data.teacherDescription )
-      formData.append("teacherRoleName ",data.teacherRoleName )
-      formData.append("experience ",data.experience )
-      formData.append("role ",data.role)
+      const formData = new FormData()
+      formData.append("files", data.files)
+      formData.append("teacherName ", data.teacherName)
+      formData.append("teacherDescription ", data.teacherDescription)
+      formData.append("teacherRoleName ", data.teacherRoleName)
+      formData.append("experience ", data.experience)
+      formData.append("role ", data.role)
 
       try {
-        const response = await api.post("/createTeacherSave", formData, 
+        const response = await api.post("/createTeacherSave", formData,
           // headers: {
           //   "Content-Type": "application/json",
           // },
@@ -171,11 +177,11 @@ const CmsTeacherAdd = ({getData}) => {
               </div>
               {selectedFile && (
                 <div>
-                  {selectedFile.type.startsWith("files") && (
+                  {selectedFile.type.startsWith("image") && (
                     <img
                       src={URL.createObjectURL(selectedFile)}
                       alt="Selected File"
-                      style={{ maxWidth: "100%" }}
+                      style={{ maxWidth: "200px" }}
                     />
                   )}
                 </div>
@@ -204,7 +210,7 @@ const CmsTeacherAdd = ({getData}) => {
           <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-          <Button variant="primary" type="" onClick={formik.handleSubmit}>
+          <Button className="btn btn-button btn-sm" type="" onClick={formik.handleSubmit}>
             Save
           </Button>
         </Modal.Footer>

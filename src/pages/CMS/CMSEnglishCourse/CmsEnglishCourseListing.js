@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { FaTimes } from "react-icons/fa";
 
 function CmsEnglishCourseListing({
   card1Image,
@@ -176,6 +177,10 @@ function CmsEnglishCourseListing({
       saveCardContent(editingIndex);
     }
   };
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
+  };
 
   return (
     <div className="container">
@@ -195,6 +200,12 @@ function CmsEnglishCourseListing({
                   onClick={saveContent2}
                 >
                   <FaSave />
+                </button>
+                <button
+                  className="btn btn-sm btn-outline-primary border ms-2"
+                  onClick={cancelEdit}
+                >
+                  <FaTimes />
                 </button>
               </>
             ) : (
@@ -247,6 +258,12 @@ function CmsEnglishCourseListing({
                   onClick={saveFinalContent}
                 >
                   <FaSave />
+                </button>
+                <button
+                  className="btn btn-sm btn-outline-primary border ms-2"
+                  onClick={cancelEdit}
+                >
+                  <FaTimes />
                 </button>
               </>
             ) : (

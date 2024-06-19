@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal} from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { IoMdAdd } from "react-icons/io";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -15,9 +15,12 @@ const CmsNewsUpdate = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentData = new Date().toISOString().split("T")[0];
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleCloseAddModal = () => {
     setShowAddModal(false);
+    formik.resetForm();
+    setSelectedFile(null);
   };
 
   const handleShowAddModal = () => setShowAddModal(true);
@@ -87,7 +90,7 @@ const CmsNewsUpdate = () => {
       const response = await api.post(`/publishNewsUpdated`);
       // formik.setValues(response.data);
       // setDatas(response.data)
-      if(response.status === 201){ 
+      if (response.status === 201) {
         toast.success("successfully Teacher published ");
       }
     } catch (error) {
@@ -95,10 +98,16 @@ const CmsNewsUpdate = () => {
     }
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    formik.setFieldValue("files", file); // Update Formik's form state with the file
+  };
+
   useEffect(() => {
     refreshData()
   }, [])
-  
+
   return (
     <div className="news">
       <div className="container cms-header shadow-sm py-2">
@@ -135,10 +144,10 @@ const CmsNewsUpdate = () => {
                 >
                   {/* {storedScreens?.NewsUpdateUpdate && ( */}
                   {/* <MdEdit /> */}
-                  <NewsUpdateUpdateEdit id={item.id} onSuccess={refreshData}/>
+                  <NewsUpdateUpdateEdit id={item.id} onSuccess={refreshData} />
                   {/* )} */}
                 </span>
-                <img src={item.cardImg} alt="view" style={{height:"45%" , width:"96%"}} className="custom-img-fluid" />
+                <img src={item.cardImg} alt="view" style={{ height: "45%", width: "96%" }} className="custom-img-fluid" />
                 <div className="custom-card-body d-flex flex-column p-2">
                   <div className="custom-content">
                     <h6 className="custom-card-title">
@@ -173,20 +182,15 @@ const CmsNewsUpdate = () => {
           </Modal.Header>
           <Modal.Body>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
+              <div className="mb-2">
+                <label className="form-label">
                   Upload Image File
-                </lable>
-                <div class="input-group mb-3">
+                </label>
+                <div className="input-group mb-3">
                   <input
                     type="file"
-                    className={`form-control   ${formik.touched.file && formik.errors.file
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    onChange={(event) => {
-                      formik.setFieldValue("file", event.currentTarget.files[0]);
-                    }}
+                    className={`form-control ${formik.touched.file && formik.errors.file ? "is-invalid" : ""}`}
+                    onChange={handleFileChange}
                   />
                   {formik.touched.file && formik.errors.file && (
                     <div className="invalid-feedback">
@@ -195,17 +199,25 @@ const CmsNewsUpdate = () => {
                   )}
                 </div>
               </div>
+              {selectedFile && (
+                <div className="mb-2">
+                  {selectedFile.type.startsWith("image") && (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Selected File"
+                      style={{ maxHeight: "200px" }}
+                    />
+                  )}
+                </div>
+              )}
 
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
+              <div className="mb-2">
+                <label className="form-label">
                   Heading
-                </lable>
+                </label>
                 <input
                   type="text"
-                  className={`form-control   ${formik.touched.heading && formik.errors.heading
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control ${formik.touched.heading && formik.errors.heading ? "is-invalid" : ""}`}
                   {...formik.getFieldProps("heading")}
                 />
                 {formik.touched.heading && formik.errors.heading && (
@@ -213,50 +225,13 @@ const CmsNewsUpdate = () => {
                 )}
               </div>
 
-              {/* <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Role
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control   ${formik.touched.role && formik.errors.role
-                    ? "is-invalid"
-                    : ""
-                    }`}
-                  {...formik.getFieldProps("role")}
-                />
-                {formik.touched.role && formik.errors.role && (
-                  <div className="invalid-feedback">{formik.errors.role}</div>
-                )}
-              </div>
-
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Date
-                </lable>
-                <input
-                  type="date"
-                  className={`form-control   ${formik.touched.date && formik.errors.date
-                    ? "is-invalid"
-                    : ""
-                    }`}
-                  {...formik.getFieldProps("date")}
-                />
-                {formik.touched.date && formik.errors.date && (
-                  <div className="invalid-feedback">{formik.errors.date}</div>
-                )}
-              </div> */}
-
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
+              <div className="mb-2">
+                <label className="form-label">
                   Comment
-                </lable>
+                </label>
                 <input
                   type="text"
-                  className={`form-control   ${formik.touched.comment && formik.errors.comment
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control ${formik.touched.comment && formik.errors.comment ? "is-invalid" : ""}`}
                   {...formik.getFieldProps("comment")}
                 />
                 {formik.touched.comment && formik.errors.comment && (
@@ -264,16 +239,12 @@ const CmsNewsUpdate = () => {
                 )}
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
+              <div className="mb-2">
+                <label className="form-label">
                   Paragraph
-                </lable>
+                </label>
                 <textarea
-                  type="text"
-                  className={`form-control   ${formik.touched.para && formik.errors.para
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control ${formik.touched.para && formik.errors.para ? "is-invalid" : ""}`}
                   {...formik.getFieldProps("para")}
                 />
                 {formik.touched.para && formik.errors.para && (
@@ -282,6 +253,7 @@ const CmsNewsUpdate = () => {
               </div>
             </div>
           </Modal.Body>
+
           <Modal.Footer className="mt-5">
             <Button variant="secondary" onClick={handleCloseAddModal}>
               Cancel
