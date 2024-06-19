@@ -4,7 +4,6 @@ import { Collapse, Nav } from "react-bootstrap";
 import Logo from "../../assets/images/Logo.png";
 import api from "../../config/URL";
 
-
 function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
@@ -290,7 +289,7 @@ function Sidebar() {
             access: true,
           },
           {
-            title: "Chiness Course",
+            title: "Chinese Course",
             path: "/cms/chineshcourse",
             access: true,
           },
@@ -299,7 +298,6 @@ function Sidebar() {
             path: "/cms/teacher",
             access: true,
           },
-          
           {
             title: "Products",
             path: "/cms/products",
@@ -358,7 +356,12 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo-details">
         <span className="logo_name">
-          <img src={data.artyLogo || Logo} alt="logo" width={130} className="img-fluid" />
+          <img
+            src={data.artyLogo || Logo}
+            alt="logo"
+            width={130}
+            className="img-fluid"
+          />
         </span>
       </div>
       <ul className="nav-links">
