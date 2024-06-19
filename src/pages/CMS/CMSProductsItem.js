@@ -97,18 +97,18 @@ const CMSProductsItem = () => {
             <h4>Product Item</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-          {storedScreens?.productSaveCreate && (
-            <CMSProductsItemAdd onSuccess={refreshData}/>
-          )}
-           {storedScreens?.productSavePublish && (
-            <button
-              type="button"
-              className="btn btn-sm btn-outline-danger border ms-2"
-              onClick={PublishProductImageSection}
-            >
-              Publish
-            </button>
-           )}
+            {storedScreens?.productImageSaveCreate && (
+              <CMSProductsItemAdd onSuccess={refreshData} />
+            )}
+            {storedScreens?.productImageSavePublish && (
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-danger border ms-2"
+                onClick={PublishProductImageSection}
+              >
+                Publish
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -147,15 +147,15 @@ const CMSProductsItem = () => {
                 <td>{data.imageDetails}</td>
                 <td>
                   <div className="d-flex">
-           {storedScreens?.productSaveUpdate && (
-
-                    <CMSProductsItemEdit id={data.id} getData={getData} />)}
-                    {storedScreens?.productSaveDelete && (
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteProductImageSave/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    />
+                    {storedScreens?.productImageSaveUpdate && (
+                      <CMSProductsItemEdit id={data.id} getData={getData} />
+                    )}
+                    {storedScreens?.productImageSaveDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteProductImageSave/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      />
                     )}
                   </div>
                 </td>
