@@ -1,20 +1,18 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import { FaYoutube, FaInstagram, FaEdit, FaSave } from "react-icons/fa";
+import { FaEdit, FaSave } from "react-icons/fa";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import Delete from "../../../components/common/Delete";
 
-const CmsTeacherEdit = ({id,fetchData}) => {
+const CmsTeacherEdit = ({ id, fetchData }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const handleSaveChanges = () => {
-    setShowModal(false);
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -25,33 +23,32 @@ const CmsTeacherEdit = ({id,fetchData}) => {
       files: null,
       teacherDescription: "",
     },
-    // validationSchema,
+    validationSchema: Yup.object({
+      teacherName: Yup.string().required("Teacher name is required"),
+      role: Yup.string().required("Role is required"),
+      teacherRoleName: Yup.string().required("Role name is required"),
+      experience: Yup.string().required("Experience is required"),
+      teacherDescription: Yup.string().required("Description is required"),
+    }),
     onSubmit: async (data) => {
-      console.log(data);
-      const formData =new FormData()
-      formData.append("files",data.files)
-      formData.append("teacherName ",data.teacherName )
-      formData.append("teacherDescription ",data.teacherDescription )
-      formData.append("teacherRoleName ",data.teacherRoleName )
-      formData.append("experience ",data.experience )
-      formData.append("role ",data.role)
+      const formData = new FormData();
+      formData.append("files", data.files);
+      formData.append("teacherName", data.teacherName);
+      formData.append("teacherDescription", data.teacherDescription);
+      formData.append("teacherRoleName", data.teacherRoleName);
+      formData.append("experience", data.experience);
+      formData.append("role", data.role);
       try {
-        const response = await api.put(`/updateTeacherSave/${id}`, formData, 
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
-      );
+        const response = await api.put(`/updateTeacherSave/${id}`, formData);
         if (response.status === 200) {
           fetchData();
           toast.success(response.data.message);
-          handleCloseModal()
+          handleCloseModal();
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
         toast.error(error);
-      } finally {
-        // setLoadIndicator(false);
       }
     },
   });
@@ -59,25 +56,28 @@ const CmsTeacherEdit = ({id,fetchData}) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue("files", file); // Update Formik's form state with the file
+    formik.setFieldValue("files", file);
   };
+
   const getData = async () => {
     try {
       const response = await api.get(`/getTeacherSaveById/${id}`);
       formik.setValues(response.data);
     } catch (error) {
-      toast.error("Error Fetch Data ", error);
+      toast.error("Error Fetching Data", error);
     }
   };
+
   useEffect(() => {
-    if(showModal){ 
-    getData();
-  }
+    if (showModal) {
+      getData();
+    }
   }, [showModal]);
 
   return (
     <>
-      <button className="btn btn-sm text-end"  onClick={handleShowModal}>
+    <Delete path={`/deleteTeacherSave/${id}`} onSuccess={fetchData} />
+      <button className="btn text-end" onClick={handleShowModal}>
         <FaEdit />
       </button>
       <Modal show={showModal} onHide={handleCloseModal}>
@@ -93,7 +93,7 @@ const CmsTeacherEdit = ({id,fetchData}) => {
                 </label>
                 <input
                   id="teacherName"
-                  name="teacherName "
+                  name="teacherName"
                   className="form-control"
                   {...formik.getFieldProps("teacherName")}
                 />
@@ -111,7 +111,6 @@ const CmsTeacherEdit = ({id,fetchData}) => {
                   className="form-select"
                   {...formik.getFieldProps("role")}
                 >
-                  {" "}
                   <option value="">Select a role</option>
                   <option value="ADMIN">Admin</option>
                   <option value="ENGLISH">English Teacher</option>
@@ -122,12 +121,12 @@ const CmsTeacherEdit = ({id,fetchData}) => {
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="teacherRoleName " className="form-label">
+                <label htmlFor="teacherRoleName" className="form-label">
                   Role Name
                 </label>
                 <input
-                  id="teacherRoleName "
-                  name="teacherRoleName "
+                  id="teacherRoleName"
+                  name="teacherRoleName"
                   className="form-control"
                   {...formik.getFieldProps("teacherRoleName")}
                 />
@@ -180,12 +179,12 @@ const CmsTeacherEdit = ({id,fetchData}) => {
                 </div>
               )}
               <div className="mb-3">
-                <label htmlFor="teacherDescription " className="form-label">
+                <label htmlFor="teacherDescription" className="form-label">
                   Description
                 </label>
                 <textarea
-                  id="teacherDescription "
-                  name="teacherDescription "
+                  id="teacherDescription"
+                  name="teacherDescription"
                   className="form-control"
                   {...formik.getFieldProps("teacherDescription")}
                 />
@@ -198,17 +197,18 @@ const CmsTeacherEdit = ({id,fetchData}) => {
               </div>
             </div>
           </Modal.Body>
+          <Modal.Footer>
+            
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit">
+              Save
+            </Button>
+          </Modal.Footer>
         </form>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
-          <Button variant="primary" type="" onClick={formik.handleSubmit}>
-            Save
-          </Button>
-        </Modal.Footer>
       </Modal>
-      </>
+    </>
   );
 };
 

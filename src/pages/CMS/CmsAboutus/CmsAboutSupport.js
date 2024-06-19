@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaSave } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import Glass from "../../../assets/clientimage/glass-painting.png";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
@@ -22,6 +22,10 @@ function CmsAboutSupport({ getData, datas }) {
 
   const toggleEdit = (field) => {
     setEditingField(field);
+  };
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
   };
 
   // const saveContent = async() => {
@@ -47,7 +51,7 @@ function CmsAboutSupport({ getData, datas }) {
   //       setEditingField(null);
   //     }
   // };
- 
+
   const formik = useFormik({
     initialValues: {
       files: null,
@@ -80,7 +84,7 @@ function CmsAboutSupport({ getData, datas }) {
   //   setContent((prevState) => ({ ...prevState, [name]: value }));
   // };
 
-   const handleFileChange = (event) => {
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     setGlassImgUrl(URL.createObjectURL(file));
     formik.setFieldValue("files", file);
@@ -112,23 +116,32 @@ function CmsAboutSupport({ getData, datas }) {
                           className="topbar-wordpress form-control-sm w-50"
                         /> */}
                         <input
-                        type="file"
-                        id="files"
-                        name="files"
-                        className="form-control"
-                        onChange={handleFileChange}
-                        onBlur={formik.handleBlur}
-                      />
-                        <button  type="submit"
+                          type="file"
+                          id="files"
+                          name="files"
+                          className="form-control"
+                          onChange={handleFileChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        <button
+                          type="submit"
                           className="btn btn-sm btn-outline-primary border ms-2"
                         >
                           <FaSave />
+                        </button>
+                        <button
+                          className="btn btn-sm btn-outline-secondary border ms-2"
+                          type="button"
+                          onClick={cancelEdit}
+                        >
+                          <FaTimes />
                         </button>
                       </>
                     )}
                     {editingField !== "image" && (
                       <div className="text-end">
-                        <button type="button"
+                        <button
+                          type="button"
                           className="btn btn-sm border-transparent ms-2 edit-button"
                           onClick={() => toggleEdit("image")}
                         >
@@ -137,7 +150,7 @@ function CmsAboutSupport({ getData, datas }) {
                       </div>
                     )}
                     <img
-                      src={glassImgUrl ||Glass}
+                      src={glassImgUrl || Glass}
                       style={{
                         borderRight: "10px solid rgba(255, 255, 255, 0.2)",
                         borderRadius: "20px",
@@ -165,11 +178,19 @@ function CmsAboutSupport({ getData, datas }) {
                         rows="12"
                         className="form-control fs-5 lh-base"
                       />
-                      <span   onClick={formik.handleSubmit}
+                      <span
+                        onClick={formik.handleSubmit}
                         className="btn btn-sm btn-outline-primary border ms-2"
                       >
                         <FaSave />
                       </span>
+                      <button
+                        className="btn btn-sm btn-outline-secondary border ms-2"
+                        type="button"
+                        onClick={cancelEdit}
+                      >
+                        <FaTimes />
+                      </button>
                     </>
                   ) : (
                     <>
@@ -184,7 +205,7 @@ function CmsAboutSupport({ getData, datas }) {
                             </span>
                           ))}
                       </p>
-                      <button 
+                      <button
                         className="btn btn-sm border-transparent ms-2 edit-button"
                         onClick={() => toggleEdit("paragraphs")}
                       >
