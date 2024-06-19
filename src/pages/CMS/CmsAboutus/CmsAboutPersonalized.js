@@ -139,7 +139,7 @@ function CmsAboutPersonalized({ getData, datas }) {
                 </>
               ) : (
                 <>
-                  <p style={{ fontSize: "20px" }}>
+                  <p style={{ fontSize: "20px" }} className="preserve-whitespace">
                     {formik.values.paragraph?.split("\n").map((text, index) => (
                       <span key={index}>
                         {text}

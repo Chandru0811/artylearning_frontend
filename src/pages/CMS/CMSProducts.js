@@ -145,7 +145,7 @@ function CMSProducts() {
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p
-                className="text-center fw-small mt-3"
+                className="text-center fw-small mt-3 preserve-whitespace"
                 style={{ fontSize: "large" }}
               >
                 {data.contentCard}

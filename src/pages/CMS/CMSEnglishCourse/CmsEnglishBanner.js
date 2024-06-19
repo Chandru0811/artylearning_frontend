@@ -196,11 +196,12 @@ function CmsEnglishBanner({
           ) : (
             <>
               {content?.paragraphs.split("\n\n").map((paragraph, index) => (
-                <div key={index} className="edit-container mb-3">
+                <div key={index} className="edit-container mb-3 preserve-whitespace">
                   <p
                     className="headbody preserve-whitespace"
                     dangerouslySetInnerHTML={{ __html: content1 }}
                   ></p>
+                  
                 </div>
               ))}
               {storedScreens?.englishCourseUpdate && (

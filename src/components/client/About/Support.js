@@ -29,7 +29,7 @@ function Support({datas}) {
                 borderRight: "10px solid #000",
               }}
             >
-              <p style={{ fontSize: "20px" }}>
+              <p style={{ fontSize: "20px" }} className="preserve-whitespace">
                     {datas.contentOne?.split("\n").map((text, index) => (
                       <span key={index}>
                         {text}

@@ -197,7 +197,7 @@ function CmsAboutSupport({ getData, datas }) {
                     </>
                   ) : (
                     <>
-                      <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base">
+                      <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base preserve-whitespace">
                         {formik.values.paragraphs
                           ?.split("\n\n")
                           .map((text, index) => (

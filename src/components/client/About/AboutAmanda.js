@@ -19,7 +19,7 @@ function AboutAmanda({datas}) {
             >
               {datas.michelleName }
             </h1>
-            <p style={{ fontSize: "20px" }}>
+            <p style={{ fontSize: "20px" }} className="preserve-whitespace">
                     {datas.contentTwo?.split("\n\n").map((text, index) => (
                       <span key={index}>
                         {text}
@@ -56,7 +56,7 @@ function AboutAmanda({datas}) {
             </p> */}
           </div>
           <div className="col-12 mt-2">
-          <p style={{ fontSize: "20px" }}>
+          <p style={{ fontSize: "20px" }} className="preserve-whitespace">
                     {datas.contentThree
                       ?.split("\n\n")
                       .map((text, index) => (
@@ -95,7 +95,7 @@ function AboutAmanda({datas}) {
                 {datas.amandaName||Amanda}
               </h1>
             </div>
-            <p style={{ fontSize: "20px" }}>
+            <p style={{ fontSize: "20px" }} className="preserve-whitespace">
                     {datas.contentFour?.split("\n\n").map((text, index) => (
                       <span key={index}>
                         {text}

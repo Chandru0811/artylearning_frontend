@@ -228,7 +228,7 @@
                   </>
                 ) : (
                   <>
-                    <p style={{ fontSize: "20px" }}>
+                    <p style={{ fontSize: "20px" }} className="preserve-whitespace">
                       {formik.values.michelle
                         ?.split("\n\n")
                         .map((text, index) => (
@@ -272,7 +272,7 @@
                   </>
                 ) : (
                   <>
-                    <p style={{ fontSize: "20px" }}>
+                    <p style={{ fontSize: "20px" }} className="preserve-whitespace">
                       {formik.values.addtionalparagraph
                         ?.split("\n\n")
                         .map((text, index) => (
@@ -366,7 +366,7 @@
                   </>
                 ) : (
                   <>
-                    <p style={{ fontSize: "20px" }}>
+                    <p style={{ fontSize: "20px" }} className="preserve-whitespace">
                       {formik.values.amanda?.split("\n\n").map((text, index) => (
                         <span key={index}>
                           {text}
