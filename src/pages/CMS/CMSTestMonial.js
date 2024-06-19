@@ -16,7 +16,7 @@ import CMSTestMonialEdit from "./CMSTestMonialEdit";
 
 const CMSTestMonail = () => {
   const tableRef = useRef(null);
-
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -94,10 +94,13 @@ const CMSTestMonail = () => {
             <h4>Testimonial</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-            <CMSTestMonialAdd onSuccess={refreshData} />
-            <button onClick={testimonialPublish} className="btn btn-sm btn-outline-danger border ms-2" style={{ whiteSpace: 'nowrap' }}>
-              Publish
-            </button>
+            {storedScreens?.testimonialCreate && (
+              <CMSTestMonialAdd onSuccess={refreshData} />)}
+            {storedScreens?.testimonialIndex && (
+              <button onClick={testimonialPublish} className="btn btn-sm btn-outline-danger border ms-2" style={{ whiteSpace: 'nowrap' }}>
+                Publish
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -136,12 +139,14 @@ const CMSTestMonail = () => {
                 <td className="text-center"> {data.parentName}</td>
                 <td className="text-center">
                   <div className="d-flex">
-                    <CMSTestMonialEdit id={data.id} onSuccess={refreshData} />
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteTestimonialSave/${data.id}`}
-                      style={{ display: "inline-block" }}
-                    />
+                    {storedScreens?.testimonialUpdate && (
+                      <CMSTestMonialEdit id={data.id} onSuccess={refreshData} />)}
+                    {storedScreens?.testimonialDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteTestimonialSave/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      />)}
                   </div>
                 </td>
               </tr>

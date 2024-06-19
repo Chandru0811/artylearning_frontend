@@ -15,6 +15,7 @@ function CmsAboutUs() {
   const [editingField, setEditingField] = useState(null);
   const [datas, setDatas] = useState([]);
   const [adminImgUrl, setAdminImgUrl] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const toggleEdit = (field) => {
     setEditingField(field);
   };
@@ -80,7 +81,7 @@ function CmsAboutUs() {
   const publish = async () => {
     try {
       const response = await api.post(`/publishAboutUs`);
-      if(response.status === 201){ 
+      if (response.status === 201) {
         toast.success("successfully Teacher published ");
       }
     } catch (error) {
@@ -96,9 +97,10 @@ function CmsAboutUs() {
             <h4>About Us</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
+          {storedScreens?.aboutIndex && (
             <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
               Publish
-            </button>
+            </button>)}
           </div>
         </div>
       </div>
@@ -151,25 +153,28 @@ function CmsAboutUs() {
                         <FaSave />
                       </button>
                       <button
-                    className="btn btn-sm btn-outline-secondary border ms-2"
-                    type="button"
-                    onClick={cancelEdit}
-                  >
-                    <FaTimes />
-                  </button>
+                        className="btn btn-sm btn-outline-secondary border ms-2"
+                        type="button"
+                        onClick={cancelEdit}
+                      >
+                        <FaTimes />
+                      </button>
                     </form>
                   </>
                 ) : (
-                  <button
-                    className="btn btn-sm border-transparent ms-2 edit-button"
-                    onClick={() => toggleEdit("AdminImg")}
-                    style={{ border: "none !important" }}
-                  >
-                    <FaEdit />
-                  </button>
+                  <>
+                    {storedScreens?.aboutUpdate && (
+                      <button
+                        className="btn btn-sm border-transparent ms-2 edit-button"
+                        onClick={() => toggleEdit("AdminImg")}
+                        style={{ border: "none !important" }}
+                      >
+                        <FaEdit />
+                      </button>)}
+                  </>
                 )}
                 <img
-                  src={adminImgUrl ||AdminImg}
+                  src={adminImgUrl || AdminImg}
                   alt="Admins"
                   className="img-fluid image_border"
                 />
@@ -183,10 +188,10 @@ function CmsAboutUs() {
       <CmsAboutSupport getData={getData} datas={datas} />
 
       {/* About Michelle and Amanda*/}
-      <CmsAboutMCmsAboutMichelleandAmandaichelle getData={getData} datas={datas}/>
+      <CmsAboutMCmsAboutMichelleandAmandaichelle getData={getData} datas={datas} />
 
       {/* About Personalized */}
-      <CmsAboutPersonalized getData={getData} datas={datas}/>
+      <CmsAboutPersonalized getData={getData} datas={datas} />
     </>
   );
 }

@@ -19,6 +19,8 @@ function CmsHome() {
     childVideo: "",
   });
   const [editingField, setEditingField] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+
 
   const toggleEdit = (field) => {
     setEditingField(field);
@@ -186,13 +188,15 @@ function CmsHome() {
               >
                 Save
               </button> */}
-              <button
-                type="button"
-                onClick={PublishHomeSection}
-                className="btn btn-sm btn-outline-danger border ms-2"
-              >
-                Publish
-              </button>
+              {storedScreens?.homeIndex && (
+                <button
+                  type="button"
+                  onClick={PublishHomeSection}
+                  className="btn btn-sm btn-outline-danger border ms-2"
+                >
+                  Publish
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -230,13 +234,17 @@ function CmsHome() {
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  className="btn btn-sm border-transparent ms-2 edit-button"
-                  onClick={() => toggleEdit("heroBackground")}
-                >
-                  <FaEdit />
-                </button>
+                <>
+                  {storedScreens?.homeIndex && (
+                    <button
+                      type="button"
+                      className="btn btn-sm border-transparent ms-2 edit-button"
+                      onClick={() => toggleEdit("heroBackground")}
+                    >
+                      <FaEdit />
+                    </button>
+                  )}
+                </>
               )}
               <img
                 src={data.heroBackground}
@@ -305,13 +313,15 @@ function CmsHome() {
                 >
                   {data.heroTitle}
                 </h1>
-                <button
-                  type="button"
-                  className="btn btn-sm border-transparent ms-2 edit-button"
-                  onClick={() => toggleEdit("heroTitle")}
-                >
-                  <FaEdit />
-                </button>
+                {storedScreens?.homeIndex && (
+                  <button
+                    type="button"
+                    className="btn btn-sm border-transparent ms-2 edit-button"
+                    onClick={() => toggleEdit("heroTitle")}
+                  >
+                    <FaEdit />
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -348,13 +358,17 @@ function CmsHome() {
                 <>
                   <h1 className="fw-bold d-flex">
                     {data.learningTitle}
-                    <button
-                      type="button"
-                      className="btn btn-sm border-transparent ms-2 edit-button"
-                      onClick={() => toggleEdit("learningTitle")}
-                    >
-                      <FaEdit />
-                    </button>
+                    <>
+                      {storedScreens?.homeIndex && (
+                        <button
+                          type="button"
+                          className="btn btn-sm border-transparent ms-2 edit-button"
+                          onClick={() => toggleEdit("learningTitle")}
+                        >
+                          <FaEdit />
+                        </button>
+                      )}
+                    </>
                   </h1>
                 </>
               )}
@@ -385,13 +399,17 @@ function CmsHome() {
                 <>
                   <h5 className="text-secondary fw-bold d-flex pt-3 pb-3">
                     {data.learningSubtitle}
-                    <button
-                      type="button"
-                      className="btn btn-sm border-transparent ms-2 edit-button"
-                      onClick={() => toggleEdit("learningSubtitle")}
-                    >
-                      <FaEdit />
-                    </button>
+                    <>
+                      {storedScreens?.homeIndex && (
+                        <button
+                          type="button"
+                          className="btn btn-sm border-transparent ms-2 edit-button"
+                          onClick={() => toggleEdit("learningSubtitle")}
+                        >
+                          <FaEdit />
+                        </button>
+                      )}
+                    </>
                   </h5>
                 </>
               )}
@@ -412,25 +430,27 @@ function CmsHome() {
                     <FaSave />
                   </button>
                   <button
-                      className="btn btn-sm btn-outline-secondary border ms-2"
-                      type="button"
-                      onClick={cancelEdit}
-                    >
-                      <FaTimes />
-                    </button>
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
+                  </button>
                 </>
               ) : (
                 <>
                   <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base preserve-whitespace">
                     {data.learningParagraph}
                   </p>
-                  <button
-                    type="button"
-                    className="btn btn-sm border-transparent ms-2 edit-button"
-                    onClick={() => toggleEdit("learningParagraph")}
-                  >
-                    <FaEdit />
-                  </button>
+                  {storedScreens?.homeIndex && (
+                    <button
+                      type="button"
+                      className="btn btn-sm border-transparent ms-2 edit-button"
+                      onClick={() => toggleEdit("learningParagraph")}
+                    >
+                      <FaEdit />
+                    </button>
+                  )}
                 </>
               )}
             </div>
@@ -464,14 +484,18 @@ function CmsHome() {
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  className="btn btn-sm border-transparent ms-2 edit-button"
-                  onClick={() => toggleEdit("learningImageFile")}
-                  style={{ border: "none !important" }}
-                >
-                  <FaEdit />
-                </button>
+                <>
+                  {storedScreens?.homeIndex && (
+                    <button
+                      type="button"
+                      className="btn btn-sm border-transparent ms-2 edit-button"
+                      onClick={() => toggleEdit("learningImageFile")}
+                      style={{ border: "none !important" }}
+                    >
+                      <FaEdit />
+                    </button>
+                  )}
+                </>
               )}
               <img
                 className="rounded paper-draw ShadowLayer mt-2 img-fluid"
@@ -519,14 +543,18 @@ function CmsHome() {
                       </button>
                     </>
                   ) : (
-                    <button
-                      type="button"
-                      className="btn btn-sm border-transparent ms-2 edit-button"
-                      onClick={() => toggleEdit("childImageFile")}
-                      style={{ border: "none !important" }}
-                    >
-                      <FaEdit />
-                    </button>
+                    <>
+                      {storedScreens?.homeIndex && (
+                        <button
+                          type="button"
+                          className="btn btn-sm border-transparent ms-2 edit-button"
+                          onClick={() => toggleEdit("childImageFile")}
+                          style={{ border: "none !important" }}
+                        >
+                          <FaEdit />
+                        </button>
+                      )}
+                    </>
                   )}
                   <img
                     src={data.childImage}
@@ -572,13 +600,17 @@ function CmsHome() {
                     <>
                       <h1 className="card-title">
                         {data.childTitle}
-                        <button
-                          type="button"
-                          className="btn btn-sm border-transparent ms-2 edit-button"
-                          onClick={() => toggleEdit("childTitle")}
-                        >
-                          <FaEdit />
-                        </button>
+                        <>
+                          {storedScreens?.homeIndex && (
+                            <button
+                              type="button"
+                              className="btn btn-sm border-transparent ms-2 edit-button"
+                              onClick={() => toggleEdit("childTitle")}
+                            >
+                              <FaEdit />
+                            </button>
+                          )}
+                        </>
                       </h1>
                     </>
                   )}
@@ -610,13 +642,15 @@ function CmsHome() {
                     <>
                       <p className="card-text my-4 preserve-whitespace">
                         {data.childParagraph}
-                        <button
-                          type="button"
-                          className="btn btn-sm border-transparent ms-2 edit-button"
-                          onClick={() => toggleEdit("childParagraph")}
-                        >
-                          <FaEdit />
-                        </button>
+                        {storedScreens?.homeIndex && (
+                          <button
+                            type="button"
+                            className="btn btn-sm border-transparent ms-2 edit-button"
+                            onClick={() => toggleEdit("childParagraph")}
+                          >
+                            <FaEdit />
+                          </button>
+                        )}
                       </p>
                     </>
                   )}
@@ -655,13 +689,15 @@ function CmsHome() {
               </div>
             ) : (
               <div className="position-relative w-100">
-                <button
-                  type="button"
-                  className="btn btn-sm border-transparent position-absolute top-0 end-0 m-2"
-                  onClick={toggleEdit}
-                >
-                  <FaEdit className="text-warning fs-6" />
-                </button>
+                {storedScreens?.homeIndex && (
+                  <button
+                    type="button"
+                    className="btn btn-sm border-transparent position-absolute top-0 end-0 m-2"
+                    onClick={toggleEdit}
+                  >
+                    <FaEdit className="text-warning fs-6" />
+                  </button>
+                )}
               </div>
             )}
             <ReactPlayer

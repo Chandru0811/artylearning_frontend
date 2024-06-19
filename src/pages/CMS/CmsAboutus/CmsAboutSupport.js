@@ -8,6 +8,8 @@ import { useFormik } from "formik";
 function CmsAboutSupport({ getData, datas }) {
   const [editingField, setEditingField] = useState(null);
   const [glassImgUrl, setGlassImgUrl] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+
   console.log("object", datas);
   // const [content, setContent] = useState({
   //   paragraphs: datas.contentOne,
@@ -140,13 +142,14 @@ function CmsAboutSupport({ getData, datas }) {
                     )}
                     {editingField !== "image" && (
                       <div className="text-end">
-                        <button
-                          type="button"
-                          className="btn btn-sm border-transparent ms-2 edit-button"
-                          onClick={() => toggleEdit("image")}
-                        >
-                          <FaEdit />
-                        </button>
+                        {storedScreens?.aboutUpdate && (
+                          <button
+                            type="button"
+                            className="btn btn-sm border-transparent ms-2 edit-button"
+                            onClick={() => toggleEdit("image")}
+                          >
+                            <FaEdit />
+                          </button>)}
                       </div>
                     )}
                     <img
@@ -205,12 +208,13 @@ function CmsAboutSupport({ getData, datas }) {
                             </span>
                           ))}
                       </p>
-                      <button
-                        className="btn btn-sm border-transparent ms-2 edit-button"
-                        onClick={() => toggleEdit("paragraphs")}
-                      >
-                        <FaEdit />
-                      </button>
+                      {storedScreens?.aboutUpdate && (
+                        <button
+                          className="btn btn-sm border-transparent ms-2 edit-button"
+                          onClick={() => toggleEdit("paragraphs")}
+                        >
+                          <FaEdit />
+                        </button>)}
                     </>
                   )}
                 </div>

@@ -5,8 +5,9 @@ import { toast } from "react-toastify";
 import { useFormik } from "formik";
 
 const ContactSection = () => {
-  
+
   const [editingField, setEditingField] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [data, setData] = useState({
     facebookLink: "",
     instagramLink: "",
@@ -149,13 +150,15 @@ const ContactSection = () => {
               <h4>Header</h4>
             </div>
             <div className="col-md-6 col-12 d-flex justify-content-end">
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-danger border ms-2"
-                onClick={PublishHeaderSection}
-              >
-                Publish
-              </button>
+              {storedScreens?.headerPublish && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-danger border ms-2"
+                  onClick={PublishHeaderSection}
+                >
+                  Publish
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -172,11 +175,10 @@ const ContactSection = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       name="facebookLink"
-                      className={`form-control ${
-                        formik.touched.facebookLink && formik.errors.facebookLink
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-control ${formik.touched.facebookLink && formik.errors.facebookLink
+                        ? "is-invalid"
+                        : ""
+                        }`}
                     />
                     <button
                       className="btn btn-sm btn-outline-primary border ms-2"
@@ -203,13 +205,15 @@ const ContactSection = () => {
                     >
                       <FaYoutube />
                     </a>
-                    <button
-                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                      type="button"
-                      onClick={() => toggleEdit("facebookLink")}
-                    >
-                      <FaEdit />
-                    </button>
+                    {storedScreens?.headerUpdate && (
+                      <button
+                        className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                        type="button"
+                        onClick={() => toggleEdit("facebookLink")}
+                      >
+                        <FaEdit />
+                      </button>
+                    )}
                   </>
                 )}
               </span>
@@ -222,12 +226,11 @@ const ContactSection = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       name="instagramLink"
-                      className={`form-control ${
-                        formik.touched.instagramLink &&
+                      className={`form-control ${formik.touched.instagramLink &&
                         formik.errors.instagramLink
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                        }`}
                     />
                     <button
                       className="btn btn-sm btn-outline-primary border ms-2"
@@ -254,13 +257,15 @@ const ContactSection = () => {
                     >
                       <FaInstagram />
                     </a>
-                    <button
-                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                      type="button"
-                      onClick={() => toggleEdit("instagramLink")}
-                    >
-                      <FaEdit />
-                    </button>
+                    {storedScreens?.headerUpdate && (
+                      <button
+                        className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                        type="button"
+                        onClick={() => toggleEdit("instagramLink")}
+                      >
+                        <FaEdit />
+                      </button>
+                    )}
                   </>
                 )}
               </span>
@@ -276,11 +281,10 @@ const ContactSection = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         name="dateTime"
-                        className={`form-control ${
-                          formik.touched.dateTime && formik.errors.dateTime
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.dateTime && formik.errors.dateTime
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                       <button
                         className="btn btn-sm btn-outline-primary border ms-2"
@@ -300,13 +304,15 @@ const ContactSection = () => {
                   ) : (
                     <>
                       {data.dateTime}
-                      <button
-                        className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                        type="button"
-                        onClick={() => toggleEdit("dateTime")}
-                      >
-                        <FaEdit />
-                      </button>
+                      {storedScreens?.headerUpdate && (
+                        <button
+                          className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                          type="button"
+                          onClick={() => toggleEdit("dateTime")}
+                        >
+                          <FaEdit />
+                        </button>
+                      )}
                     </>
                   )}
                 </small>
@@ -321,11 +327,10 @@ const ContactSection = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         name="phone"
-                        className={`form-control ${
-                          formik.touched.phone && formik.errors.phone
-                            ? "is-invalid"
-                            : ""
-                        }`}
+                        className={`form-control ${formik.touched.phone && formik.errors.phone
+                          ? "is-invalid"
+                          : ""
+                          }`}
                       />
                       <button
                         className="btn btn-sm btn-outline-primary border ms-2"
@@ -345,13 +350,15 @@ const ContactSection = () => {
                   ) : (
                     <>
                       {data.phone}
-                      <button
-                        className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                        type="button"
-                        onClick={() => toggleEdit("phone")}
-                      >
-                        <FaEdit />
-                      </button>
+                      {storedScreens?.headerUpdate && (
+                        <button
+                          className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                          type="button"
+                          onClick={() => toggleEdit("phone")}
+                        >
+                          <FaEdit />
+                        </button>
+                      )}
                     </>
                   )}
                 </small>
@@ -378,11 +385,10 @@ const ContactSection = () => {
                     onChange={(e) => {
                       formik.setFieldValue("file", e.currentTarget.files[0]);
                     }}
-                    className={`form-control w-50 ${
-                      formik.touched.file && formik.errors.file
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control w-50 ${formik.touched.file && formik.errors.file
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   />
                   <button
                     className="btn btn-sm btn-outline-primary border ms-2"
@@ -400,13 +406,17 @@ const ContactSection = () => {
                   </button>
                 </>
               ) : (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  type="button"
-                  onClick={() => toggleEdit("file")}
-                >
-                  <FaEdit />
-                </button>
+                <>
+                  {storedScreens?.headerUpdate && (
+                    <button
+                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                      type="button"
+                      onClick={() => toggleEdit("file")}
+                    >
+                      <FaEdit />
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -421,11 +431,10 @@ const ContactSection = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       name="copyRight"
-                      className={`form-control ${
-                        formik.touched.copyRight && formik.errors.copyRight
-                          ? "is-invalid"
-                          : ""
-                      }`}
+                      className={`form-control ${formik.touched.copyRight && formik.errors.copyRight
+                        ? "is-invalid"
+                        : ""
+                        }`}
                     />
                     <button
                       className="btn btn-sm btn-outline-primary border ms-2"
@@ -445,13 +454,15 @@ const ContactSection = () => {
                 ) : (
                   <>
                     {data.copyRight}
-                    <button
-                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                      type="button"
-                      onClick={() => toggleEdit("copyRight")}
-                    >
-                      <FaEdit />
-                    </button>
+                    {storedScreens?.headerUpdate && (
+                      <button
+                        className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                        type="button"
+                        onClick={() => toggleEdit("copyRight")}
+                      >
+                        <FaEdit />
+                      </button>
+                    )}
                   </>
                 )}
               </small>
