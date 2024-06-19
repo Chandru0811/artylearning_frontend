@@ -117,13 +117,13 @@ function CMSTestMonialEdit({ id, onSuccess }) {
                     <img
                       src={selectedFile}
                       alt="Selected File"
-                      style={{ maxWidth: "100%" }}
+                      style={{ maxHeight: "200px" }}
                     />
                   ) : selectedFile.type.startsWith("image") ? (
                     <img
                       src={URL.createObjectURL(selectedFile)}
                       alt="Selected File"
-                      style={{ maxWidth: "100%" }}
+                      style={{ maxHeight: "200px" }}
                     />
                   ) : null}
                 </div>

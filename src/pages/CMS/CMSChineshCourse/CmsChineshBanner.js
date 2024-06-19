@@ -3,6 +3,7 @@ import Alphabet from "../../../assets/clientimage/Alphabet.png";
 import { FaEdit, FaSave } from "react-icons/fa";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { FaTimes } from "react-icons/fa";
 
 function CmsChineseBanner({
   backgroundImage,
@@ -77,6 +78,12 @@ function CmsChineseBanner({
       paragraphs: e.target.value,
     });
   };
+
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
+  };
+
   return (
     <div className="container-fluid">
       <div className="row remove-padding">
@@ -97,6 +104,12 @@ function CmsChineseBanner({
               >
                 <FaSave />
               </button>
+              <button
+                className="btn btn-sm btn-outline-primary border ms-2"
+                onClick={cancelEdit}
+              >
+                <FaTimes />
+              </button>
             </>
           ) : (
             <>
@@ -111,7 +124,7 @@ function CmsChineseBanner({
         </div>
         <div
           className="col-md-8 col-12 bgimage"
-          style={{ backgroundImage: `url(${backgroundImage})`}}
+          style={{ backgroundImage: `url(${backgroundImage})` }}
         >
           <div className="py-5 firsthead d-flex flex-column justify-content-center align-items-center">
             <div className="edit-container d-flex flex-column justify-content-center align-items-center">
@@ -137,6 +150,12 @@ function CmsChineseBanner({
                   onClick={saveHeadingContent}
                 >
                   <FaSave />
+                </button>
+                <button
+                  className="btn btn-sm btn-outline-primary border ms-2"
+                  onClick={cancelEdit}
+                >
+                  <FaTimes />
                 </button>
               </>
             ) : (
@@ -164,6 +183,12 @@ function CmsChineseBanner({
                 onClick={saveParagraphContent}
               >
                 <FaSave />
+              </button>
+              <button
+                className="btn btn-sm btn-outline-primary border ms-2"
+                onClick={cancelEdit}
+              >
+                <FaTimes />
               </button>
             </>
           ) : (
