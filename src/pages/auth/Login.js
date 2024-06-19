@@ -10,13 +10,13 @@ import api from "../../config/URL";
 function Login({ onLogin }) {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if already logged in, redirect to dashboard
-    const isAuthenticated = sessionStorage.getItem("isAuthenticated");
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   // Check if already logged in, redirect to dashboard
+  //   const isAuthenticated = sessionStorage.getItem("isAuthenticated");
+  //   if (isAuthenticated) {
+  //     navigate("/dashboard");
+  //   }
+  // }, [navigate]);
 
   const validationSchema = Yup.object({
     email: Yup.string()

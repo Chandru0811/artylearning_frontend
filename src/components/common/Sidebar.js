@@ -266,57 +266,57 @@ function Sidebar() {
           {
             title: "Header",
             path: "/cms/header",
-            access: true,
+            access: storedScreens.headerIndex,
           },
           {
             title: "Home",
             path: "/cms/home",
-            access: true,
+            access: storedScreens.homeIndex,
           },
           {
             title: "Testimonial",
             path: "/cms/testimonial",
-            access: true,
+            access: storedScreens.testimonialIndex,
           },
           {
             title: "About",
             path: "/cms/aboutus",
-            access: true,
+            access: storedScreens.aboutIndex,
           },
           {
             title: "English Course",
             path: "/cms/englishcourse",
-            access: true,
+            access: storedScreens.englishCourseIndex,
           },
           {
             title: "Chinese Course",
             path: "/cms/chineshcourse",
-            access: true,
+            access: storedScreens.chineseCourseIndex,
           },
           {
             title: "Teachers",
             path: "/cms/teacher",
-            access: true,
+            access: storedScreens.teacherSaveIndex,
           },
           {
             title: "Products",
             path: "/cms/products",
-            access: true,
+            access: storedScreens.productSaveIndex,
           },
           {
             title: "Products Items",
             path: "/cms/productsitem",
-            access: true,
+            access: storedScreens.productImageSaveIndex,
           },
           {
             title: "News & Updates",
             path: "/cms/newsupdate",
-            access: true,
+            access: storedScreens.newsUpdatesIndex,
           },
           {
             title: "Contact Us",
             path: "/cms/contact",
-            access: true,
+            access: storedScreens.contactUsIndex,
           },
         ],
       },
@@ -357,7 +357,7 @@ function Sidebar() {
       <div className="logo-details">
         <span className="logo_name">
           <img
-            src={data.artyLogo || Logo}
+            src={Logo}
             alt="logo"
             width={130}
             className="img-fluid"
