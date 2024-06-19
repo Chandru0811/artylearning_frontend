@@ -13,19 +13,11 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
   const handleShow = () => setShow(true);
   const currentData = new Date().toISOString().split("T")[0];
 
-  const validationSchema = Yup.object({
-    // file: yup.string().required("*Package Name is required"),
-    // heading: yup.string().required("*Heading is required"),
-    // role: yup.string().required("*Role is required"),
-    // date: yup.string().required("*Date is required"),
-    // comment: yup.string().required("*comment is required"),
-    // para: yup.string().required("*para is required"),
-  });
+ 
 
   const formik = useFormik({
     initialValues: {
@@ -38,7 +30,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
     },
     // validationSchema: validationSchema,
     onSubmit: async (data) => {
-      // console.log(data);
+      console.log("data");
       const formData = new FormData();
       formData.append("file", data.file);
       formData.append("heading ", data.heading);
@@ -88,7 +80,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue("files", file);
+    formik.setFieldValue("file", file);
   };
 
   return (
@@ -206,17 +198,16 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
             Cancel
           </Button>
           <Button
-            type="submit"
-            onSubmit={formik.handleSubmit}
+            onClick={formik.handleSubmit}
             className="btn btn-button btn-sm"
-            disabled={loadIndicator}
+            // disabled={loadIndicator}
           >
-            {loadIndicator && (
+            {/* {loadIndicator && (
               <span
                 className="spinner-border spinner-border-sm me-2"
                 aria-hidden="true"
               ></span>
-            )}
+            )} */}
             Submit
           </Button>
         </Modal.Footer>

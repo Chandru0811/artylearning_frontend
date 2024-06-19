@@ -102,7 +102,7 @@ const CmsNewsUpdate = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue("files", file); // Update Formik's form state with the file
+    formik.setFieldValue("file", file); // Update Formik's form state with the file
   };
 
   useEffect(() => {
