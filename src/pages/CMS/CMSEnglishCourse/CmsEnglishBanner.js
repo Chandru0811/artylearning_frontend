@@ -3,6 +3,7 @@ import img from "../../../assets/clientimage/eng.png";
 import { FaEdit, FaSave } from "react-icons/fa";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { FaTimes } from "react-icons/fa";
 
 function CmsEnglishBanner({
   backgroundImage,
@@ -78,6 +79,10 @@ function CmsEnglishBanner({
       paragraphs: e.target.value,
     });
   };
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
+  };
 
   return (
     <div className="container-fluid">
@@ -99,6 +104,12 @@ function CmsEnglishBanner({
               >
                 <FaSave />
               </button>
+              <button
+                  className="btn btn-sm btn-outline-primary border ms-2"
+                  onClick={cancelEdit}
+                >
+                  <FaTimes />
+                </button>
             </>
           ) : (
             <>
@@ -140,6 +151,12 @@ function CmsEnglishBanner({
                 >
                   <FaSave />
                 </button>
+                <button
+                  className="btn btn-sm btn-outline-primary border ms-2"
+                  onClick={cancelEdit}
+                >
+                  <FaTimes />
+                </button>
               </>
             ) : (
               <>
@@ -167,6 +184,12 @@ function CmsEnglishBanner({
               >
                 <FaSave />
               </button>
+              <button
+                  className="btn btn-sm btn-outline-primary border ms-2"
+                  onClick={cancelEdit}
+                >
+                  <FaTimes />
+                </button>
             </>
           ) : (
             <>

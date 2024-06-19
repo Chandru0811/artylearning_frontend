@@ -16,6 +16,7 @@ function CMSTestMonialAdd({ onSuccess }) {
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
+    setSelectedFile(null);
   };
 
   const handleShow = () => setShow(true);
@@ -131,7 +132,7 @@ function CMSTestMonialAdd({ onSuccess }) {
                 <div>
 
                   {selectedFile.type.startsWith('image') && (
-                    <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxWidth: '100%' }} />
+                    <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxHeight: "200px" }} />
                   )}
                 </div>
               )}
