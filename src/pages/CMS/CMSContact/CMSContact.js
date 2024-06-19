@@ -15,6 +15,7 @@ const CMSContact = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   useEffect(() => {
     const getCenterData = async () => {
@@ -86,14 +87,16 @@ const CMSContact = () => {
  
     <div className="container">
       <div className="col-12 my-4 text-end gap-3 d-flex align-items-center justify-content-end">
-        <CMSContactAdd onSuccess={refreshData}/>
+      {storedScreens?.contactUsCreate && (
+        <CMSContactAdd onSuccess={refreshData}/>)}
+      {storedScreens?.contactUsPublish && (
         <button
           type="button"
           className="btn btn-button btn-sm"
           onClick={contactPublish}
         >
           Publish 
-        </button>
+        </button>)}
       </div>
       {loading ? (
         <div className="loader-container">
@@ -124,11 +127,14 @@ const CMSContact = () => {
               <td className="text-center">{data.email}</td>
               <td className="text-center">{data.mobileNo}</td>
               <td className="text-center">
-                <CMSContactView id={data.id} />
-                <CMSContactEdit id={data.id} onSuccess={refreshData}/>
+              {storedScreens?.contactUsRead && (
+                <CMSContactView id={data.id} />)}
+                {storedScreens?.contactUsUpdate && (
+                  <CMSContactEdit id={data.id} onSuccess={refreshData}/>)}
+                  {storedScreens?.contactUsDelete && (
                 <Delete onSuccess={refreshData}
                   path={`/deleteContactUsSave/${data.id}`}
-                />
+                />)}
               </td>
             </tr>
           ))}
