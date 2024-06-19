@@ -1,18 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaYoutube, FaInstagram, FaEdit, FaSave } from "react-icons/fa";
+import { FaYoutube, FaInstagram, FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import * as Yup from "yup";
 import { useFormik } from "formik";
-
-const validationSchema = Yup.object().shape({
-  file: Yup.mixed(),
-  phone: Yup.string(),
-  copyRight: Yup.string(),
-  dateTime: Yup.string(),
-  facebookLink: Yup.string(),
-  instagramLink: Yup.string(),
-});
 
 const ContactSection = () => {
   
@@ -28,6 +18,11 @@ const ContactSection = () => {
 
   const toggleEdit = (field) => {
     setEditingField(field);
+  };
+
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
   };
 
   const getData = async () => {
@@ -170,87 +165,103 @@ const ContactSection = () => {
             <div className="col-md-5 col-12 d-flex align-items-center">
               <span className="me-2 edit-container">
                 {editingField === "facebookLink" ? (
-                  <input
-                    type="text"
-                    value={formik.values.facebookLink}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    name="facebookLink"
-                    className={`form-control ${
-                      formik.touched.facebookLink && formik.errors.facebookLink
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
+                  <>
+                    <input
+                      type="text"
+                      value={formik.values.facebookLink}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      name="facebookLink"
+                      className={`form-control ${
+                        formik.touched.facebookLink && formik.errors.facebookLink
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                    <button
+                      className="btn btn-sm btn-outline-primary border ms-2"
+                      type="button"
+                      onClick={() => saveContent("facebookLink")}
+                    >
+                      <FaSave />
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-secondary border ms-2"
+                      type="button"
+                      onClick={cancelEdit}
+                    >
+                      <FaTimes />
+                    </button>
+                  </>
                 ) : (
-                  <a
-                    href={data.facebookLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="topbar-wordpress"
-                  >
-                    <FaYoutube />
-                  </a>
-                )}
-                {editingField === "facebookLink" ? (
-                  <button
-                    className="btn btn-sm btn-outline-primary border ms-2"
-                    type="button"
-                    onClick={() => saveContent("facebookLink")}
-                  >
-                    <FaSave />
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                    type="button"
-                    onClick={() => toggleEdit("facebookLink")}
-                  >
-                    <FaEdit />
-                  </button>
+                  <>
+                    <a
+                      href={data.facebookLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="topbar-wordpress"
+                    >
+                      <FaYoutube />
+                    </a>
+                    <button
+                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                      type="button"
+                      onClick={() => toggleEdit("facebookLink")}
+                    >
+                      <FaEdit />
+                    </button>
+                  </>
                 )}
               </span>
               <span className="edit-container">
                 {editingField === "instagramLink" ? (
-                  <input
-                    type="text"
-                    value={formik.values.instagramLink}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    name="instagramLink"
-                    className={`form-control ${
-                      formik.touched.instagramLink &&
-                      formik.errors.instagramLink
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
+                  <>
+                    <input
+                      type="text"
+                      value={formik.values.instagramLink}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      name="instagramLink"
+                      className={`form-control ${
+                        formik.touched.instagramLink &&
+                        formik.errors.instagramLink
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                    <button
+                      className="btn btn-sm btn-outline-primary border ms-2"
+                      type="button"
+                      onClick={() => saveContent("instagramLink")}
+                    >
+                      <FaSave />
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-secondary border ms-2"
+                      type="button"
+                      onClick={cancelEdit}
+                    >
+                      <FaTimes />
+                    </button>
+                  </>
                 ) : (
-                  <a
-                    href={data.instagramLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="topbar-wordpress"
-                  >
-                    <FaInstagram />
-                  </a>
-                )}
-                {editingField === "instagramLink" ? (
-                  <button
-                    className="btn btn-sm btn-outline-primary border ms-2"
-                    type="button"
-                    onClick={() => saveContent("instagramLink")}
-                  >
-                    <FaSave />
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                    type="button"
-                    onClick={() => toggleEdit("instagramLink")}
-                  >
-                    <FaEdit />
-                  </button>
+                  <>
+                    <a
+                      href={data.instagramLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="topbar-wordpress"
+                    >
+                      <FaInstagram />
+                    </a>
+                    <button
+                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                      type="button"
+                      onClick={() => toggleEdit("instagramLink")}
+                    >
+                      <FaEdit />
+                    </button>
+                  </>
                 )}
               </span>
             </div>
@@ -258,74 +269,90 @@ const ContactSection = () => {
               <span className="me-3 edit-container">
                 <small>
                   {editingField === "dateTime" ? (
-                    <input
-                      type="text"
-                      value={formik.values.dateTime}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      name="dateTime"
-                      className={`form-control ${
-                        formik.touched.dateTime && formik.errors.dateTime
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                    />
+                    <>
+                      <input
+                        type="text"
+                        value={formik.values.dateTime}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        name="dateTime"
+                        className={`form-control ${
+                          formik.touched.dateTime && formik.errors.dateTime
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      />
+                      <button
+                        className="btn btn-sm btn-outline-primary border ms-2"
+                        type="button"
+                        onClick={() => saveContent("dateTime")}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        className="btn btn-sm btn-outline-secondary border ms-2"
+                        type="button"
+                        onClick={cancelEdit}
+                      >
+                        <FaTimes />
+                      </button>
+                    </>
                   ) : (
-                    data.dateTime
-                  )}
-                  {editingField === "dateTime" ? (
-                    <button
-                      className="btn btn-sm btn-outline-primary border ms-2"
-                      type="button"
-                      onClick={() => saveContent("dateTime")}
-                    >
-                      <FaSave />
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                      type="button"
-                      onClick={() => toggleEdit("dateTime")}
-                    >
-                      <FaEdit />
-                    </button>
+                    <>
+                      {data.dateTime}
+                      <button
+                        className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                        type="button"
+                        onClick={() => toggleEdit("dateTime")}
+                      >
+                        <FaEdit />
+                      </button>
+                    </>
                   )}
                 </small>
               </span>
               <span className="me-3 edit-container">
                 <small>
                   {editingField === "phone" ? (
-                    <input
-                      type="text"
-                      value={formik.values.phone}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      name="phone"
-                      className={`form-control ${
-                        formik.touched.phone && formik.errors.phone
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                    />
+                    <>
+                      <input
+                        type="text"
+                        value={formik.values.phone}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        name="phone"
+                        className={`form-control ${
+                          formik.touched.phone && formik.errors.phone
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      />
+                      <button
+                        className="btn btn-sm btn-outline-primary border ms-2"
+                        type="button"
+                        onClick={() => saveContent("phone")}
+                      >
+                        <FaSave />
+                      </button>
+                      <button
+                        className="btn btn-sm btn-outline-secondary border ms-2"
+                        type="button"
+                        onClick={cancelEdit}
+                      >
+                        <FaTimes />
+                      </button>
+                    </>
                   ) : (
-                    data.phone
-                  )}
-                  {editingField === "phone" ? (
-                    <button
-                      className="btn btn-sm btn-outline-primary border ms-2"
-                      type="button"
-                      onClick={() => saveContent("phone")}
-                    >
-                      <FaSave />
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                      type="button"
-                      onClick={() => toggleEdit("phone")}
-                    >
-                      <FaEdit />
-                    </button>
+                    <>
+                      {data.phone}
+                      <button
+                        className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                        type="button"
+                        onClick={() => toggleEdit("phone")}
+                      >
+                        <FaEdit />
+                      </button>
+                    </>
                   )}
                 </small>
               </span>
@@ -364,6 +391,13 @@ const ContactSection = () => {
                   >
                     <FaSave />
                   </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
+                  </button>
                 </>
               ) : (
                 <button
@@ -380,37 +414,45 @@ const ContactSection = () => {
             <span className="me-3 edit-container">
               <small>
                 {editingField === "copyRight" ? (
-                  <input
-                    type="text"
-                    value={formik.values.copyRight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    name="copyRight"
-                    className={`form-control ${
-                      formik.touched.copyRight && formik.errors.copyRight
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
+                  <>
+                    <input
+                      type="text"
+                      value={formik.values.copyRight}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      name="copyRight"
+                      className={`form-control ${
+                        formik.touched.copyRight && formik.errors.copyRight
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                    />
+                    <button
+                      className="btn btn-sm btn-outline-primary border ms-2"
+                      type="button"
+                      onClick={() => saveContent("copyRight")}
+                    >
+                      <FaSave />
+                    </button>
+                    <button
+                      className="btn btn-sm btn-outline-secondary border ms-2"
+                      type="button"
+                      onClick={cancelEdit}
+                    >
+                      <FaTimes />
+                    </button>
+                  </>
                 ) : (
-                  data.copyRight
-                )}
-                {editingField === "copyRight" ? (
-                  <button
-                    className="btn btn-sm btn-outline-primary border ms-2"
-                    type="button"
-                    onClick={() => saveContent("copyRight")}
-                  >
-                    <FaSave />
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                    type="button"
-                    onClick={() => toggleEdit("copyRight")}
-                  >
-                    <FaEdit />
-                  </button>
+                  <>
+                    {data.copyRight}
+                    <button
+                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                      type="button"
+                      onClick={() => toggleEdit("copyRight")}
+                    >
+                      <FaEdit />
+                    </button>
+                  </>
                 )}
               </small>
             </span>

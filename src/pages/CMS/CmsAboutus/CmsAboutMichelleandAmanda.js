@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaSave } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import Michelle from "../../../assets/clientimage/Michelle-1-e1691309669627.png";
 import Amanda from "../../../assets/clientimage/Amanda-e1691309466166.png";
 import api from "../../../config/URL";
@@ -33,6 +33,11 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
 
   const toggleEdit = (field) => {
     setEditingField(field);
+  };
+
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
   };
   // console.log("data3", datas);
 
@@ -78,10 +83,7 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
       formData.append("amandaName ", values.name2);
 
       try {
-        const response = await api.put(
-          `/updateAboutUsSaveImage`,
-          formData
-        );
+        const response = await api.put(`/updateAboutUsSaveImage`, formData);
         if (response.status === 200) {
           toast.success(response.data.message);
           getData();
@@ -138,6 +140,13 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   <button className="btn btn-sm btn-outline-primary border ms-2">
                     <FaSave />
                   </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
+                  </button>
                 </>
               ) : (
                 <button
@@ -148,7 +157,11 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   <FaEdit />
                 </button>
               )}
-              <img className="img-fluid" src={michelleimg || Michelle} alt="michelleimg" />
+              <img
+                className="img-fluid"
+                src={michelleimg || Michelle}
+                alt="michelleimg"
+              />
             </div>
             <div className="col-md-6 col-12">
               <h5 className="fw-bold text-white bg text-center mt-5">ABOUT</h5>
@@ -163,6 +176,13 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   />
                   <button className="btn btn-sm btn-outline-primary border ms-2">
                     <FaSave />
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
                   </button>
                 </>
               ) : (
@@ -193,17 +213,26 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   <button className="btn btn-sm btn-outline-primary border ms-2">
                     <FaSave />
                   </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
+                  </button>
                 </>
               ) : (
                 <>
                   <p style={{ fontSize: "20px" }}>
-                    {formik.values.michelle?.split("\n\n").map((text, index) => (
-                      <span key={index}>
-                        {text}
-                        <br />
-                        <br />
-                      </span>
-                    ))}
+                    {formik.values.michelle
+                      ?.split("\n\n")
+                      .map((text, index) => (
+                        <span key={index}>
+                          {text}
+                          <br />
+                          <br />
+                        </span>
+                      ))}
                     <button
                       className="btn btn-sm border-transparent ms-2 edit-button"
                       onClick={() => toggleEdit("michelle")}
@@ -226,6 +255,13 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   />
                   <button className="btn btn-sm btn-outline-primary border ms-2">
                     <FaSave />
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
                   </button>
                 </>
               ) : (
@@ -269,6 +305,13 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                     <button className="btn btn-sm btn-outline-primary border ms-2">
                       <FaSave />
                     </button>
+                    <button
+                      className="btn btn-sm btn-outline-secondary border ms-2"
+                      type="button"
+                      onClick={cancelEdit}
+                    >
+                      <FaTimes />
+                    </button>
                   </>
                 ) : (
                   <>
@@ -296,9 +339,19 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                     rows="20"
                     className="form-control"
                   />
-                  <span className="btn btn-sm btn-outline-primary border ms-2" onClick={formik.handleSubmit}>
+                  <span
+                    className="btn btn-sm btn-outline-primary border ms-2"
+                    onClick={formik.handleSubmit}
+                  >
                     <FaSave />
                   </span>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
+                  </button>
                 </>
               ) : (
                 <>
@@ -348,6 +401,13 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   <button className="btn btn-sm btn-outline-primary border ms-2">
                     <FaSave />
                   </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
+                  </button>
                 </>
               ) : (
                 <div className="text-end">
@@ -360,7 +420,11 @@ function CmsAboutMichelleandAmanda({ datas, getData }) {
                   </button>
                 </div>
               )}
-              <img src={ammandaimg ||Amanda} alt="ammandaimg" className="img-fluid" />
+              <img
+                src={ammandaimg || Amanda}
+                alt="ammandaimg"
+                className="img-fluid"
+              />
             </div>
           </div>
         </form>

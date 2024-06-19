@@ -215,7 +215,21 @@ function RolesAdd() {
       sendNotificationIndex: true,
       sendNotificationCreate: true,
       sendNotificationUpdate: true,
-      account_read : true
+      account_read : true,
+      headerIndex: true,
+      headerView: true,
+      headerUpdate: true,
+      headerPublish: true,
+      homeIndex: true,
+      homeView: true,
+      homeUpdate: true,
+      homePublish: true,
+      testimonialIndex: true,
+      testimonialCreate: true,
+      testimonialUpdate: true,
+      testimonialView: true,
+      testimonialDelete: true,
+      testimonialPublish: true,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -2579,6 +2593,721 @@ function RolesAdd() {
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
                           Time Schedule
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="row mt-4">
+            <div className="clo-12">
+              <div className="table-responsive">
+                <table class="table table-light table-striped table-hover">
+                  <thead className="table-warning">
+                    <tr>
+                      <th scope="col">Content Management</th>
+                      <th scope="col">Index</th>
+                      <th scope="col">Create</th>
+                      <th scope="col">Update</th>
+                      <th scope="col">View</th>
+                      <th scope="col">Delete</th>
+                      <th scope="col">Publish</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* Time Schedule */}
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Header
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td> */}
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td> */}
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td> */}
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Home
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td> */}
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td> */}
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td> */}
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Testimonial
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          About
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td> */}
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          English Course
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td> */}
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Chinese Course
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td> */}
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Teachers
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Products
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      {/* <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td> */}
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Products items
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          News & Update
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleIndex"
+                          checked={formik.values.timeScheduleIndex}
+                          onChange={handleCheckboxChange(`timeScheduleIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleBlock"
+                          checked={formik.values.timeScheduleBlock}
+                          onChange={handleCheckboxChange(`timeScheduleBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleUnBlock"
+                          checked={formik.values.timeScheduleUnBlock}
+                          onChange={handleCheckboxChange(`timeScheduleUnBlock`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleAdd"
+                          checked={formik.values.timeScheduleAdd}
+                          onChange={handleCheckboxChange(`timeScheduleAdd`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleDelete"
+                          checked={formik.values.timeScheduleDelete}
+                          onChange={handleCheckboxChange(`timeScheduleDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="timeScheduleApproved"
+                          checked={formik.values.timeScheduleApproved}
+                          onChange={handleCheckboxChange(
+                            `timeScheduleApproved`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Contact Us
                         </p>
                       </td>
                       <td>
