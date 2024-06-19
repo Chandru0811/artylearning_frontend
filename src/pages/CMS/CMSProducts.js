@@ -14,20 +14,19 @@ const validationSchema = Yup.object().shape({
 });
 
 function CMSProducts() {
-  const id = 1;
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(true);
-
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const handleClose = () => {
     setShow(false);
   };
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getProductSaveById/${id}`);
+      const response = await api.get(`/getAllProductSaves`);
       setData(response.data);
       formik.setValues({
         boxA: response.data.boxA,
@@ -41,7 +40,7 @@ function CMSProducts() {
 
   useEffect(() => {
     getData();
-  }, [id]);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -53,11 +52,11 @@ function CMSProducts() {
     onSubmit: async (data) => {
       const formData = new FormData();
       formData.append("boxA", data.boxA);
-      formData.append("files ", data.imageProduct)
+      formData.append("file", data.imageProduct)
       formData.append("contentCard", data.contentCard)
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateProductSave/${id}`, formData, {
+        const response = await api.put(`/updateFirstProductSave`, formData, {
         });
         if (response.status === 200) {
           setShow(false);
@@ -94,7 +93,7 @@ function CMSProducts() {
       // formik.setValues(response.data);
       // setDatas(response.data)
       if(response.status === 201){ 
-        toast.success("successfully Teacher published ");
+        toast.success(response?.data.message);
       }
     } catch (error) {
       toast.error("Error Fetch Data ", error);
@@ -112,21 +111,27 @@ function CMSProducts() {
               <h4>Products</h4>
             </div>
             <div className="col-md-6 col-12 d-flex justify-content-end">
+            {storedScreens?.productImageSavePublish && (
               <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
                 Publish
               </button>
+            )}
             </div>
           </div>
         </div>
         <div className="row">
           <div className="offset-md-3 col-md-6 col-12">
+            <div className="d-flex align-items-end justify-content-end">
+            {storedScreens?.productImageSaveUpdate && (
+              <FaEdit className="ms-3" size={30} style={{ cursor: "pointer" }}
+                onClick={handleShow}
+                onSuccess={refreshData} />
+              )}
+            </div>
             <div className="d-flex justify-content-between align-items-center">
               <h1 className="text-center fw-bolder mt-5" style={{ fontSize: "xxx-large" }}>
                 {data.boxA}
               </h1>
-              <FaEdit className="ms-3" size={30} style={{ cursor: "pointer" }}
-                onClick={handleShow}
-                onSuccess={refreshData} />
             </div>
             <div className="d-flex justify-content-center align-items-center mt-4">
               <img className="img-fluid" src={data.imageProduct} alt="gif" />

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 export default function CmsEnglish() {
   const [data, setData] = useState([]);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const getData = async () => {
     try {
       const response = await api.get(`/getEnglishCourse`);
@@ -41,9 +42,10 @@ export default function CmsEnglish() {
             <h4>CMS English Course</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
+          {storedScreens?.englishCoursePublish && (
             <button className="btn btn-sm btn-outline-danger border ms-2" onClick={handelPublishEnglishCourse}>
               Publish
-            </button>
+            </button>)}
           </div>
         </div>
       </div>

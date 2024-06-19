@@ -11,7 +11,7 @@ import { FaTrash } from "react-icons/fa6";
 function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  // const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -200,7 +200,8 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
           </form>
         </Modal.Body>
         <Modal.Footer className="mt-5">
-          <Delete path={`/deleteNewsUpdatedSave/${id}`} onSuccess={onSuccess} />
+        {storedScreens?.newsUpdatesDelete && (
+          <Delete path={`/deleteNewsUpdatedSave/${id}`} onSuccess={onSuccess} />)}
           <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>

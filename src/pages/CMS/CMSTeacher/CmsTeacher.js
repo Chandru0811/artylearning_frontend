@@ -28,7 +28,7 @@ export const CmsTeacher = () => {
   const [headingMess, setHeadingMess] =
     useState(`Meet the people who make it all possible, learn about their skills
                   and experience, and see why they're passionate about what they do.`);
-
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const handleChangeHeadgang = (e) => {
     setHeading(e.target.value);
   };
@@ -58,65 +58,12 @@ export const CmsTeacher = () => {
   }, []);
 
   const adminData = datas.filter(data => data.role === "ADMIN");
-
-  console.log("object", adminData);
-  // const adminData = [
-  //   {
-  //     name: "Jannah",
-  //     role: "admin",
-  //     roleName: "Admin Officer",
-  //     image:admin1,
-  //     message: `"Positive thinking is powerful thinking. If you want happiness, fulfillment, success, and inner peace, start thinking you have the power to achieve those things. Focus on the bright side of life and expect positive results." - Germany Kent`,
-  //   },
-  //   {
-  //     name: "Cheryl Lim",
-  //     role: "admin",
-  //     roleName: "Admin Assistant",
-  //     image:admin2,
-  //     message: `"Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful." - Albert Schweitzer`,
-  //   },
-  // ];
   const cTeacherData = datas.filter(data => data.role === "CHINESE");
-  // const cTeacherData = [
-  //   {
-  //     name: "曹老师",
-  //     role: "chinesh teacher",
-  //     roleName: "Centre Manager, Chinese Dept In Charge",
-  //     experience:"10 year experience",
-  //     image:chiteacher,
-  //     message: "学而不厌，诲人不倦。教育应当使所有提供的东西让学生作为一种宝贵的礼物来领受，而不是作为一种艰苦的任务要他去负担。",
-  //   }
-  // ];
   const engTeacherData = datas.filter(data => data.role === "ENGLISH");
-  // const engTeacherData = [
-  //   {
-  //     name: "Teacher Nazreen",
-  //     role: "english teacher",
-  //     roleName: "Senior Teacher",
-  //     image:engteacher3,
-  //     message: "The classroom is a place where both students and teachers inspire each other to reach their fullest potential.",
-  //   },
-  //   {
-  //     name: "Teacher Rina",
-  //     role: "english teacher",
-  //     roleName: "Branch Lead/ Teacher Trainer",
-  //     image:engteacher4,
-  //     message: "Every child is unique, and it's a blessing to uncover their individual strengths and help them flourish.",
-  //   },
-  //   {
-  //     name: "Teacher Julia",
-  //     role: "english teacher",
-  //     roleName: "Branch Lead",
-  //     image:engteacher5,
-  //     message: "A classroom filled with laughter, curiosity, and eagerness to learn is a teacher's dream come true.",
-  //   }
-  // ];
 
   const publish = async () => {
     try {
       const response = await api.post(`/publishTeacherSave`);
-      // formik.setValues(response.data);
-      // setDatas(response.data)
       if(response.status === 201){ 
         toast.success("successfully Teacher published ");
       }
@@ -136,10 +83,14 @@ export const CmsTeacher = () => {
             {/* <button className="btn btn-sm btn-outline-primary border ms-2">
               Save
             </button> */}
+            {storedScreens?.teacherSaveCreate && (
              <CmsTeacherAdd getData={getData}/>
+            )}
+            {storedScreens?.teacherSavePublish && (
             <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
               Publish
             </button>
+            )}
           </div>
         </div>
       </div>
@@ -166,7 +117,9 @@ export const CmsTeacher = () => {
                   </div>
                   <div className="col-md-6 col-12">
                   <div className="d-flex justify-content-end">
+                  {storedScreens?.teacherSaveUpdate && (
                          <CmsTeacherEdit id={data.id} fetchData={getData}/>
+                   )}
                          </div>
                     <div className="mx-2">
                       <h1 className="fw-bold">{data.teacherName}</h1>
@@ -197,7 +150,9 @@ export const CmsTeacher = () => {
                   </div>
                   <div className="col-md-6 col-12">
                     <div className="d-flex justify-content-end">
+                    {storedScreens?.teacherSaveUpdate && (
                          <CmsTeacherEdit id={data.id} fetchData={getData}/>
+                  )}
                          </div>
                     <div className="mx-2">
                       <h1 className="fw-bold">{data.teacherName}</h1>
@@ -232,7 +187,9 @@ export const CmsTeacher = () => {
                         </div>
                         <div className="col-md-6 col-12">
                          <div className="d-flex justify-content-end">
+                         {storedScreens?.teacherSaveUpdate && (
                          <CmsTeacherEdit id={data.id} fetchData={getData}/>
+                  )}
                          </div>
                           <div className="mx-2">
                             <h1 className="fw-bold">{data.teacherName}</h1>
@@ -242,54 +199,6 @@ export const CmsTeacher = () => {
                         </div>
                       </div>
                     </div>
-                    {/* <div className="col-md-6 col-12">
-                    <div className="row">
-                      <div className="col-md-6 col-12">
-                        <img
-                          src={admin2}
-                          alt="Teacher"
-                          style={{ borderRadius: "10px" }}
-                          className="img-fluid"
-                        />
-                      </div>
-                      <div className="col-md-6 col-12">
-                        <div className="mx-2">
-                          <h1 className="fw-bold">Jannah</h1>
-                          <h4 className="text-danger">Admin Officer</h4>
-                          <p style={{ fontSize: "20px" }}>
-                            "Positive thinking is powerful thinking. If you want
-                            happiness, fulfillment, success, and inner peace,
-                            start thinking you have the power to achieve those
-                            things. Focus on the bright side of life and expect
-                            positive results." - Germany Kent
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12"></div>
-                  <div className="col-md-6 col-12">
-                    <div className="row">
-                      <div className="col-md-6 col-12">
-                        <img
-                          src={admin3}
-                          alt="Teacher"
-                          style={{ borderRadius: "10px" }}
-                          className="img-fluid"
-                        />
-                      </div>
-                      <div className="col-md-6 col-12">
-                        <div className="mx-2">
-                          <h1 className="fw-bold">Pawithra</h1>
-                          <h4 className="text-danger">Admin Assistant</h4>
-                          <p style={{ fontSize: "20px" }}>
-                            "A positive attitude can turn a storm into a
-                            sprinkle." - Robert H. Schuller
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
                   </>
                 ))}
             </div>

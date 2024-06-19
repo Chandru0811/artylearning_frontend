@@ -14,7 +14,7 @@ function CmsEnglishBanner({
   const [editingField, setEditingField] = useState(null);
   const [logoUrl, setLogoUrl] = useState(null);
   const [content, setContent] = useState();
-
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   useEffect(() => {
     setContent({
       img: img,
@@ -105,20 +105,21 @@ function CmsEnglishBanner({
                 <FaSave />
               </button>
               <button
-                  className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={cancelEdit}
-                >
-                  <FaTimes />
-                </button>
+                className="btn btn-sm btn-outline-primary border ms-2"
+                onClick={cancelEdit}
+              >
+                <FaTimes />
+              </button>
             </>
           ) : (
             <>
+            {storedScreens?.englishCourseUpdate && (
               <button
                 className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                 onClick={() => handleEdit("bgImg")}
               >
                 <FaEdit />
-              </button>
+              </button>)}
             </>
           )}
         </div>
@@ -161,12 +162,13 @@ function CmsEnglishBanner({
             ) : (
               <>
                 <h3 className="mb-3 headcolor">{heading}</h3>
+                {storedScreens?.englishCourseUpdate && (
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   onClick={() => handleEdit("heading")}
                 >
                   <FaEdit />
-                </button>
+                </button>)}
               </>
             )}
           </div>
@@ -185,11 +187,11 @@ function CmsEnglishBanner({
                 <FaSave />
               </button>
               <button
-                  className="btn btn-sm btn-outline-primary border ms-2"
-                  onClick={cancelEdit}
-                >
-                  <FaTimes />
-                </button>
+                className="btn btn-sm btn-outline-primary border ms-2"
+                onClick={cancelEdit}
+              >
+                <FaTimes />
+              </button>
             </>
           ) : (
             <>
@@ -201,12 +203,14 @@ function CmsEnglishBanner({
                   ></p>
                 </div>
               ))}
+              {storedScreens?.englishCourseUpdate && (
               <button
                 className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                 onClick={toggleEdit}
               >
                 <FaEdit />
               </button>
+              )}
             </>
           )}
         </div>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -7,7 +6,7 @@ import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-function CMSProductsItemAdd({ getData }) {
+function CMSProductsItemAdd({ onSuccess }) {
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -21,11 +20,11 @@ function CMSProductsItemAdd({ getData }) {
     setShowModal(true);
     formik.resetForm();
     setSelectedFile(null);
-  }
+  };
 
   const validationSchema = Yup.object().shape({
-    // files: Yup.mixed().required("Image file is required"),
-    // imageDetails: Yup.string().required("Image details are required"),
+    files: Yup.mixed().required("Image file is required"),
+    imageDetails: Yup.string().required("Image details are required"),
   });
 
   const formik = useFormik({
@@ -35,9 +34,8 @@ function CMSProductsItemAdd({ getData }) {
     },
     // validationSchema,
     onSubmit: async (data) => {
-      console.log(data);
       const formData = new FormData();
-      formData.append("files", data.files);
+      formData.append("file", data.files);
       formData.append("imageDetails ", data.imageDetails);
 
       try {
@@ -48,7 +46,7 @@ function CMSProductsItemAdd({ getData }) {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
-          getData();
+          onSuccess();
           formik.resetForm();
           setShowModal(false);
         } else {

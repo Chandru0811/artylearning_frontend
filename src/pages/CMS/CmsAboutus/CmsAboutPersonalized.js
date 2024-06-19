@@ -14,6 +14,7 @@ function CmsAboutPersonalized({ getData, datas }) {
   const [animation2, setAnimation2] = useState(null);
   const [animation3, setAnimation3] = useState(null);
   const [animation4, setAnimation4] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   // const [paragraph, setParagraph] =
   //   useState(`We take a personalized approach to education, placing children in
@@ -146,12 +147,13 @@ function CmsAboutPersonalized({ getData, datas }) {
                       </span>
                     ))}
                   </p>
-                  <button
-                    className="btn btn-sm border-transparent ms-2 edit-button"
-                    onClick={() => toggleEdit("paragraph")}
-                  >
-                    <FaEdit />
-                  </button>
+                  {storedScreens?.aboutUpdate && (
+                    <button
+                      className="btn btn-sm border-transparent ms-2 edit-button"
+                      onClick={() => toggleEdit("paragraph")}
+                    >
+                      <FaEdit />
+                    </button>)}
                 </>
               )}
             </div>
@@ -199,13 +201,16 @@ function CmsAboutPersonalized({ getData, datas }) {
                         </button>
                       </>
                     ) : (
-                      <button
-                        className="btn btn-sm border-transparent ms-2 edit-button"
-                        onClick={() => toggleEdit("Animation1")}
-                        style={{ border: "none !important" }}
-                      >
-                        <FaEdit />
-                      </button>
+                      <>
+                        {storedScreens?.aboutUpdate && (
+                          <button
+                            className="btn btn-sm border-transparent ms-2 edit-button"
+                            onClick={() => toggleEdit("Animation1")}
+                            style={{ border: "none !important" }}
+                          >
+                            <FaEdit />
+                          </button>)}
+                      </>
                     )}
                     <img
                       className="img-fluid"
@@ -260,13 +265,16 @@ function CmsAboutPersonalized({ getData, datas }) {
                         </button>
                       </>
                     ) : (
-                      <button
-                        className="btn btn-sm border-transparent ms-2 edit-button"
-                        onClick={() => toggleEdit("Animation2")}
-                        style={{ border: "none !important" }}
-                      >
-                        <FaEdit />
-                      </button>
+                      <>
+                        {storedScreens?.aboutUpdate && (
+                          <button
+                            className="btn btn-sm border-transparent ms-2 edit-button"
+                            onClick={() => toggleEdit("Animation2")}
+                            style={{ border: "none !important" }}
+                          >
+                            <FaEdit />
+                          </button>)}
+                      </>
                     )}
                     <img
                       className="img-fluid"
@@ -321,13 +329,16 @@ function CmsAboutPersonalized({ getData, datas }) {
                         </button>
                       </>
                     ) : (
-                      <button
-                        className="btn btn-sm border-transparent ms-2 edit-button"
-                        onClick={() => toggleEdit("Animation3")}
-                        style={{ border: "none !important" }}
-                      >
-                        <FaEdit />
-                      </button>
+                      <>
+                        {storedScreens?.aboutUpdate && (
+                          <button
+                            className="btn btn-sm border-transparent ms-2 edit-button"
+                            onClick={() => toggleEdit("Animation3")}
+                            style={{ border: "none !important" }}
+                          >
+                            <FaEdit />
+                          </button>
+                        )}</>
                     )}
                     <img
                       className="img-fluid"
@@ -382,13 +393,16 @@ function CmsAboutPersonalized({ getData, datas }) {
                         </button>
                       </>
                     ) : (
-                      <button
-                        className="btn btn-sm border-transparent ms-2 edit-button"
-                        onClick={() => toggleEdit("Animation4")}
-                        style={{ border: "none !important" }}
-                      >
-                        <FaEdit />
-                      </button>
+                      <>
+                        {storedScreens?.aboutUpdate && (
+                          <button
+                            className="btn btn-sm border-transparent ms-2 edit-button"
+                            onClick={() => toggleEdit("Animation4")}
+                            style={{ border: "none !important" }}
+                          >
+                            <FaEdit />
+                          </button>
+                        )}</>
                     )}
                     <img
                       className="img-fluid"
