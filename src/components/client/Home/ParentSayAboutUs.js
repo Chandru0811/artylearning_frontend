@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { FaQuoteLeft, FaQuoteRight } from "react-icons/fa";
 
 function ParentSayAboutUs() {
-  const [datas, setDatas] = useState([])
+  const [datas, setDatas] = useState([]);
   console.log(datas);
   const responsive = {
     largeScreen: {
@@ -43,7 +43,6 @@ function ParentSayAboutUs() {
     getTestimonialData();
   }, []);
 
-
   return (
     <>
       <div className="container-fluid carousel_container px-5  m-0">
@@ -66,49 +65,46 @@ function ParentSayAboutUs() {
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px"
         >
-          
-          {datas && datas.map((data) => (
-            <div
-              key={data.id}
-              className="container-fluid h-100 m-0"
-            >
-              <div className="row">
-                <div className="offset-md-1 col-md-10 col-12 px-4 slidePaddings">
-                  <div className="row">
-                    <div class="col-md-3 col-12 d-flex align-items-center jusify-content-center">
-                      <div className="d-flex align-items-center jusify-content-center p-2">
-                        <img
-                          src={data.parentImage}
-                          alt="img1"
-                          className="img-fluid imgWidth"
-                          style={{
-                            borderRadius: "10px",
-                            border: "2px solid yellow",
-                            boxShadow: "3px 3px 4px black !important",
-                          }}
-                        />
-                      </div>
-                    </div>
+          {datas &&
+            datas.map((data) => (
+              <div key={data.id} className="container-fluid m-0">
+                <div className="row">
+                  <div className="offset-md-1 col-md-10 col-12 px-4 slidePaddings">
+                    <div className="row">
+                        <div class="col-md-3 col-12 d-flex align-items-center jusify-content-center">
+                          <div className="d-flex align-items-center jusify-content-center p-2">
+                            <img
+                              src={data.parentImage}
+                              alt="img1"
+                              className="img-fluid imgWidth"
+                              style={{
+                                borderRadius: "10px",
+                                border: "2px solid yellow",
+                                boxShadow: "3px 3px 4px black !important",
+                              }}
+                            />
+                          </div>
+                        </div>
 
-                    <div className="col-md-9 col-12 ">
-                      <span className="text-danger fs-4">
-                        <FaQuoteLeft />
-                      </span>
-                      <p className="fw-bolder paraSize text-start">
-                        {data.parentDescription}
-                        <span className="text-danger fs-4">
-                          <FaQuoteRight />
-                        </span>
-                      </p>
-                      <span className="fw-bolder fs-6 text-danger ">
-                        {data.parentName}
-                      </span>
+                        <div className="col-md-9 col-12 ">
+                          <span className="text-danger fs-4">
+                            <FaQuoteLeft />
+                          </span>
+                          <p className="fw-bolder paraSize text-start preserve-whitespace">
+                            {data.parentDescription}
+                            <span className="text-danger fs-4">
+                              <FaQuoteRight />
+                            </span>
+                          </p>
+                          <span className="fw-bolder fs-6 text-danger ">
+                            {data.parentName}
+                          </span>
+                        </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </Carousel>
 
         {/* <div className="fs-4 text-center my-3">

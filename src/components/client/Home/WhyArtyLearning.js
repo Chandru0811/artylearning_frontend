@@ -45,21 +45,24 @@ function WhyArtyLearning() {
               <h1 className="card-title">
                 {data.childTitle || "Why Arty Learning"}
               </h1>
-              {data.childParagraph || (
-                <>
-                  <p className="card-text">
-                    We provide free academic assessment for every child, to
-                    understand their academic progress and match them to our
-                    enrichment classes that will benefit the child the most.
-                  </p>
-                  <p className="card-text">
-                    Our assessment recognises that each child is unique, and
-                    with our individualised assessments we can help identify
-                    students' diverse learning styles, strengths, and needs.
-                  </p>
-                </>
-              )}
-              <br/>
+              <p className="preserve-whitespace">
+                {data.childParagraph || (
+                  <>
+                    <p className="card-text">
+                      We provide free academic assessment for every child, to
+                      understand their academic progress and match them to our
+                      enrichment classes that will benefit the child the most.
+                    </p>
+                    <p className="card-text">
+                      Our assessment recognises that each child is unique, and
+                      with our individualised assessments we can help identify
+                      students' diverse learning styles, strengths, and needs.
+                    </p>
+                  </>
+                )}
+              </p>
+
+              <br />
               <Link to={"/about"}>
                 <button
                   type="button"

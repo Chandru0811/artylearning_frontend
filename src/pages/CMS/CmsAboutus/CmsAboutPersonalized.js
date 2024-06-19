@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaSave } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import Animation1 from "../../../assets/clientimage/about_animation1.png";
 import Animation2 from "../../../assets/clientimage/about_animation2.png";
 import Animation3 from "../../../assets/clientimage/about_animation3.png";
@@ -22,6 +22,10 @@ function CmsAboutPersonalized({ getData, datas }) {
 
   const toggleEdit = (index) => {
     setEditingField(index);
+  };
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
   };
 
   // const saveContent = () => {
@@ -57,12 +61,10 @@ function CmsAboutPersonalized({ getData, datas }) {
       if (values.animation3) {
         formData.append("imageSeven", values.animation3);
       }
-      if(values.animation2){
-
+      if (values.animation2) {
         formData.append("imageSix ", values.animation2);
       }
-      if(values.animation1){
-
+      if (values.animation1) {
         formData.append("imageFive ", values.animation1);
       }
       formData.append("contentFive ", values.paragraph);
@@ -114,7 +116,7 @@ function CmsAboutPersonalized({ getData, datas }) {
               {editingField === "paragraph" ? (
                 <>
                   <textarea
-                  name="paragraph"
+                    name="paragraph"
                     value={formik.values.paragraph}
                     onChange={formik.handleChange}
                     rows="20"
@@ -125,6 +127,13 @@ function CmsAboutPersonalized({ getData, datas }) {
                     onClick={formik.handleSubmit}
                   >
                     <FaSave />
+                  </span>
+                  <span
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
                   </span>
                 </>
               ) : (
@@ -181,6 +190,13 @@ function CmsAboutPersonalized({ getData, datas }) {
                         >
                           <FaSave />
                         </button>
+                        <button
+                          className="btn btn-sm btn-outline-secondary border ms-2"
+                          type="button"
+                          onClick={cancelEdit}
+                        >
+                          <FaTimes />
+                        </button>
                       </>
                     ) : (
                       <button
@@ -198,7 +214,7 @@ function CmsAboutPersonalized({ getData, datas }) {
                         borderRadius: "20px",
                         width: "200px",
                       }}
-                      src={animation1 ||Animation1}
+                      src={animation1 || Animation1}
                       alt="animation1"
                     />
                   </div>
@@ -235,6 +251,13 @@ function CmsAboutPersonalized({ getData, datas }) {
                         >
                           <FaSave />
                         </button>
+                        <button
+                          className="btn btn-sm btn-outline-secondary border ms-2"
+                          type="button"
+                          onClick={cancelEdit}
+                        >
+                          <FaTimes />
+                        </button>
                       </>
                     ) : (
                       <button
@@ -252,7 +275,7 @@ function CmsAboutPersonalized({ getData, datas }) {
                         borderRadius: "20px",
                         width: "200px",
                       }}
-                      src={animation2 ||Animation2}
+                      src={animation2 || Animation2}
                       alt="animation2"
                     />
                   </div>
@@ -289,6 +312,13 @@ function CmsAboutPersonalized({ getData, datas }) {
                         >
                           <FaSave />
                         </button>
+                        <button
+                          className="btn btn-sm btn-outline-secondary border ms-2"
+                          type="button"
+                          onClick={cancelEdit}
+                        >
+                          <FaTimes />
+                        </button>
                       </>
                     ) : (
                       <button
@@ -306,7 +336,7 @@ function CmsAboutPersonalized({ getData, datas }) {
                         borderRadius: "20px",
                         width: "200px",
                       }}
-                      src={animation3 ||Animation3}
+                      src={animation3 || Animation3}
                       alt="animation3"
                     />
                   </div>
@@ -343,6 +373,13 @@ function CmsAboutPersonalized({ getData, datas }) {
                         >
                           <FaSave />
                         </button>
+                        <button
+                          className="btn btn-sm btn-outline-secondary border ms-2"
+                          type="button"
+                          onClick={cancelEdit}
+                        >
+                          <FaTimes />
+                        </button>
                       </>
                     ) : (
                       <button
@@ -360,7 +397,7 @@ function CmsAboutPersonalized({ getData, datas }) {
                         borderRadius: "20px",
                         width: "200px",
                       }}
-                      src={animation4 ||Animation4}
+                      src={animation4 || Animation4}
                       alt="animation4"
                     />
                   </div>

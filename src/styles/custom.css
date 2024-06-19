@@ -477,3 +477,6 @@ cursor: pointer;
 .preserve-whitespace {
   white-space: pre-wrap;
 }
+.modal-content{
+  box-shadow: 0px 0px 5px 560px #00000066, 0px 20px 5px -15px #00000042, 0px -10px 5px -10px #0000004d, 0px -10px 6px -15px #00000033;
+}

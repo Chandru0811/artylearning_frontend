@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaSave } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ReactPlayer from "react-player";
 import api from "../../../config/URL";
-import * as Yup from "yup";
 import { useFormik } from "formik";
-
-// const validationSchema = Yup.object().shape({});
 
 function CmsHome() {
   const [data, setData] = useState({
@@ -25,6 +22,10 @@ function CmsHome() {
 
   const toggleEdit = (field) => {
     setEditingField(field);
+  };
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
   };
 
   // const saveContent = () => {
@@ -153,13 +154,11 @@ function CmsHome() {
 
   const PublishHomeSection = async () => {
     try {
-      const response = await api.post(`/publishHome`,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await api.post(`/publishHome`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.status === 201) {
         toast.success(response.data.message);
@@ -170,7 +169,7 @@ function CmsHome() {
     } catch (error) {
       console.error("Error saving data:", error.message);
     }
-  }
+  };
 
   return (
     <>
@@ -221,6 +220,13 @@ function CmsHome() {
                     onClick={() => saveContent("heroBackground")}
                   >
                     <FaSave />
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
                   </button>
                 </>
               ) : (
@@ -276,6 +282,13 @@ function CmsHome() {
                 >
                   <FaSave />
                 </button>
+                <button
+                  className="btn btn-sm btn-outline-secondary border ms-2"
+                  type="button"
+                  onClick={cancelEdit}
+                >
+                  <FaTimes />
+                </button>
               </>
             ) : (
               <>
@@ -323,6 +336,13 @@ function CmsHome() {
                   >
                     <FaSave />
                   </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
+                  </button>
                 </>
               ) : (
                 <>
@@ -352,6 +372,13 @@ function CmsHome() {
                     onClick={() => saveContent("learningSubtitle")}
                   >
                     <FaSave />
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
                   </button>
                 </>
               ) : (
@@ -384,10 +411,17 @@ function CmsHome() {
                   >
                     <FaSave />
                   </button>
+                  <button
+                      className="btn btn-sm btn-outline-secondary border ms-2"
+                      type="button"
+                      onClick={cancelEdit}
+                    >
+                      <FaTimes />
+                    </button>
                 </>
               ) : (
                 <>
-                  <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base">
+                  <p className="d-flex flex-column mt-2 mb-0 fs-5 lh-base preserve-whitespace">
                     {data.learningParagraph}
                   </p>
                   <button
@@ -420,6 +454,13 @@ function CmsHome() {
                     onClick={() => saveContent("learningImageFile")}
                   >
                     <FaSave />
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
                   </button>
                 </>
               ) : (
@@ -469,6 +510,13 @@ function CmsHome() {
                       >
                         <FaSave />
                       </button>
+                      <button
+                        className="btn btn-sm btn-outline-secondary border ms-2"
+                        type="button"
+                        onClick={cancelEdit}
+                      >
+                        <FaTimes />
+                      </button>
                     </>
                   ) : (
                     <button
@@ -512,6 +560,13 @@ function CmsHome() {
                       >
                         <FaSave />
                       </button>
+                      <button
+                        className="btn btn-sm btn-outline-secondary border ms-2"
+                        type="button"
+                        onClick={cancelEdit}
+                      >
+                        <FaTimes />
+                      </button>
                     </>
                   ) : (
                     <>
@@ -543,10 +598,17 @@ function CmsHome() {
                       >
                         <FaSave />
                       </button>
+                      <button
+                        className="btn btn-sm btn-outline-secondary border ms-2"
+                        type="button"
+                        onClick={cancelEdit}
+                      >
+                        <FaTimes />
+                      </button>
                     </>
                   ) : (
                     <>
-                      <p className="card-text my-4">
+                      <p className="card-text my-4 preserve-whitespace">
                         {data.childParagraph}
                         <button
                           type="button"
@@ -582,6 +644,13 @@ function CmsHome() {
                   onClick={() => saveContent("childVideo")}
                 >
                   <FaSave />
+                </button>
+                <button
+                  className="btn btn-sm btn-outline-secondary border ms-2"
+                  type="button"
+                  onClick={cancelEdit}
+                >
+                  <FaTimes />
                 </button>
               </div>
             ) : (

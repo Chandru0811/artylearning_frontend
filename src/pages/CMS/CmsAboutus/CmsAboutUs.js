@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from "../../../assets/clientimage/Arty_Learning_Logo-2023-tp-400.png";
 import Glass from "../../../assets/clientimage/glass-painting.png";
 import AdminImg from "../../../assets/clientimage/IMG_6872-scaled.jpg";
-import { FaEdit, FaSave } from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes } from "react-icons/fa";
 import CmsAboutSupport from "./CmsAboutSupport";
 import CmsAboutMCmsAboutMichelleandAmandaichelle from "./CmsAboutMichelleandAmanda";
 import CmsAboutPersonalized from "./CmsAboutPersonalized";
@@ -17,6 +17,10 @@ function CmsAboutUs() {
   const [adminImgUrl, setAdminImgUrl] = useState(null);
   const toggleEdit = (field) => {
     setEditingField(field);
+  };
+  const cancelEdit = () => {
+    setEditingField(null);
+    getData();
   };
 
   useEffect(() => {
@@ -146,6 +150,13 @@ function CmsAboutUs() {
                       >
                         <FaSave />
                       </button>
+                      <button
+                    className="btn btn-sm btn-outline-secondary border ms-2"
+                    type="button"
+                    onClick={cancelEdit}
+                  >
+                    <FaTimes />
+                  </button>
                     </form>
                   </>
                 ) : (

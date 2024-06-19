@@ -745,6 +745,15 @@ input.form-control:hover {
   background-color: #fffdec;
 }
 
+.react-multi-carousel-item{
+    flex: 1 1 auto;
+    position: relative;
+    width: 917px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .react-multiple-carousel__arrow {
   background: transparent !important;
   min-width: 43px;
@@ -777,3 +786,4 @@ input.form-control:hover {
   display: inline-block;
   width: 100%;
 }
+
