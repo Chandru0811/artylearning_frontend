@@ -44,16 +44,18 @@ const CmsTeacherAdd = ({ getData }) => {
     // validationSchema,
     onSubmit: async (data) => {
       console.log(data);
-      const formData = new FormData()
-      formData.append("files", data.files)
-      formData.append("teacherName ", data.teacherName)
-      formData.append("teacherDescription ", data.teacherDescription)
-      formData.append("teacherRoleName ", data.teacherRoleName)
-      formData.append("experience ", data.experience)
-      formData.append("role ", data.role)
+      const formData = new FormData();
+      formData.append("file", data.files);
+      formData.append("teacherName ", data.teacherName);
+      formData.append("teacherDescription ", data.teacherDescription);
+      formData.append("teacherRoleName ", data.teacherRoleName);
+      formData.append("experience ", data.experience);
+      formData.append("role ", data.role);
 
       try {
-        const response = await api.post("/createTeacherSave", formData,
+        const response = await api.post(
+          "/createTeacherSave",
+          formData
           // headers: {
           //   "Content-Type": "application/json",
           // },
@@ -61,8 +63,8 @@ const CmsTeacherAdd = ({ getData }) => {
         if (response.status === 201) {
           toast.success(response.data.message);
           getData();
-          formik.resetForm()
-          setShowModal(false)
+          formik.resetForm();
+          setShowModal(false);
         } else {
           toast.error(response.data.message);
         }
@@ -210,7 +212,11 @@ const CmsTeacherAdd = ({ getData }) => {
           <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-          <Button className="btn btn-button btn-sm" type="" onClick={formik.handleSubmit}>
+          <Button
+            className="btn btn-button btn-sm"
+            type=""
+            onClick={formik.handleSubmit}
+          >
             Save
           </Button>
         </Modal.Footer>

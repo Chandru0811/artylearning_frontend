@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import imgs1 from "../../assets/clientimage/threebookArty.png";
-import imgs2 from "../../assets/clientimage/ntxauso.png";
-import imgs3 from "../../assets/clientimage/antbook.png";
-import imgs4 from "../../assets/clientimage/watermelonfruits.png";
 import imgs5 from "../../assets/clientimage/cards-animated.gif";
-import { IoIosCart } from "react-icons/io";
 import Carousel from "react-multi-carousel";
 import api from "../../config/URL";
 import { toast } from "react-toastify";

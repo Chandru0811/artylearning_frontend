@@ -17,6 +17,7 @@ const CmsNewsUpdate = () => {
   const currentData = new Date().toISOString().split("T")[0];
   const [selectedFile, setSelectedFile] = useState(null);
 
+
   const handleCloseAddModal = () => {
     setShowAddModal(false);
     formik.resetForm();
@@ -116,37 +117,37 @@ const CmsNewsUpdate = () => {
             <h4>News & Updates</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
+          {storedScreens?.newsUpdatesPublish && (
             <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
               Publish
-            </button>
+            </button>)}
           </div>
         </div>
       </div>
 
       <div className="container py-3">
         <div className='d-flex align-content-end justify-content-end'>
-
+        {storedScreens?.newsUpdatesCreate && (
           <button
             className="btn btn-button"
             onClick={handleShowAddModal}
           >
             Add News <IoMdAdd />
-          </button>
+          </button>)}
         </div>
 
         <div className="row">
           {datas.map((item, index) => (
             <div className="col-md-4 col-12 my-2 calendar-item" key={index}>
               <div className="custom-card shadow-lg h-100 d-flex flex-column align-items-center mx-3 mt-2 pt-3 position-relative">
+                {storedScreens?.newsUpdatesUpdate && (
                 <span
                   className="btn custom-edit-button"
                   onClick={handleClose}
                 >
-                  {/* {storedScreens?.NewsUpdateUpdate && ( */}
-                  {/* <MdEdit /> */}
                   <NewsUpdateUpdateEdit id={item.id} onSuccess={refreshData} />
-                  {/* )} */}
                 </span>
+                   )} 
                 <img src={item.cardImg} alt="view" style={{ height: "45%", width: "96%" }} className="custom-img-fluid" />
                 <div className="custom-card-body d-flex flex-column p-2">
                   <div className="custom-content">

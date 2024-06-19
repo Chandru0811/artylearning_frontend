@@ -11,7 +11,7 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [selectedFile, setSelectedFile] = useState(null);
 
   const formik = useFormik({
@@ -32,7 +32,7 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
     }),
     onSubmit: async (data) => {
       const formData = new FormData();
-      formData.append("files", data.files);
+      formData.append("file", data.files);
       formData.append("teacherName", data.teacherName);
       formData.append("teacherDescription", data.teacherDescription);
       formData.append("teacherRoleName", data.teacherRoleName);
@@ -76,7 +76,8 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
 
   return (
     <>
-    <Delete path={`/deleteTeacherSave/${id}`} onSuccess={fetchData} />
+    {storedScreens?.teacherSaveDelete && (
+      <Delete path={`/deleteTeacherSave/${id}`} onSuccess={fetchData} />)}
       <button className="btn text-end" onClick={handleShowModal}>
         <FaEdit />
       </button>

@@ -15,7 +15,6 @@ function CmsEnglishBanner({
   const [logoUrl, setLogoUrl] = useState(null);
   const [content, setContent] = useState();
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-
   useEffect(() => {
     setContent({
       img: img,
@@ -114,13 +113,13 @@ function CmsEnglishBanner({
             </>
           ) : (
             <>
-              {storedScreens?.headerPublish && (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={() => handleEdit("bgImg")}
-                >
-                  <FaEdit />
-                </button>)}
+            {storedScreens?.englishCourseUpdate && (
+              <button
+                className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                onClick={() => handleEdit("bgImg")}
+              >
+                <FaEdit />
+              </button>)}
             </>
           )}
         </div>
@@ -163,13 +162,13 @@ function CmsEnglishBanner({
             ) : (
               <>
                 <h3 className="mb-3 headcolor">{heading}</h3>
-                {storedScreens?.headerPublish && (
-                  <button
-                    className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                    onClick={() => handleEdit("heading")}
-                  >
-                    <FaEdit />
-                  </button>)}
+                {storedScreens?.englishCourseUpdate && (
+                <button
+                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                  onClick={() => handleEdit("heading")}
+                >
+                  <FaEdit />
+                </button>)}
               </>
             )}
           </div>
@@ -204,13 +203,14 @@ function CmsEnglishBanner({
                   ></p>
                 </div>
               ))}
-              {storedScreens?.headerPublish && (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={toggleEdit}
-                >
-                  <FaEdit />
-                </button>)}
+              {storedScreens?.englishCourseUpdate && (
+              <button
+                className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                onClick={toggleEdit}
+              >
+                <FaEdit />
+              </button>
+              )}
             </>
           )}
         </div>

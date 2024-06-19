@@ -26,6 +26,7 @@ function CmsChineseCourseListing({
   const [paragraph1, setParagraph1] = useState("");
   const [paragraph2, setParagraph2] = useState("");
   const [editingSection, setEditingSection] = useState(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [sections, setSections] = useState([
     {
       id: "Believer",
@@ -211,12 +212,14 @@ function CmsChineseCourseListing({
             ) : (
               <>
                 <p className="preserve-whitespace">{content2}</p>
+                {storedScreens?.chineseCourseUpdate && (
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   onClick={() => toggleEdit("paragraph1")}
                 >
+
                   <FaEdit />
-                </button>
+                </button>)}
               </>
             )}
           </div>
@@ -234,12 +237,13 @@ function CmsChineseCourseListing({
               </div>
               <h1 className="">{section.title}</h1>
               <p className="headbody preserve-whitespace">{section.content}</p>
+              {storedScreens?.chineseCourseUpdate && (
               <button
                 className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                 onClick={() => handleEdit(section, index)}
               >
                 <FaEdit />
-              </button>
+              </button>)}
             </div>
           </div>
         ))}
@@ -269,12 +273,13 @@ function CmsChineseCourseListing({
             ) : (
               <>
                 <p className="preserve-whitespace">{finalContent}</p>
+                {storedScreens?.chineseCourseUpdate && (
                 <button
                   className="btn btn-sm btn-outline-warning border ms-2 edit-button"
                   onClick={() => toggleEdit("paragraph2")}
                 >
                   <FaEdit />
-                </button>
+                </button>)}
               </>
             )}
           </div>
