@@ -60,7 +60,7 @@ console.log("object",datas)
           <Tab eventKey="home" title="English Phonics Teachers">
             <div className="row mt-5">
               {engTeacherData && engTeacherData.map((data,i)=>(
-                <div className="col-md-6 col-12">
+                <div className="col-md-6 col-12 mb-3">
                 <div className="row">
                   <div className="col-md-6 col-12">
                     <img
