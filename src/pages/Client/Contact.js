@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import business from "../../assets/clientimage/business.png";
 import gmail from "../../assets/clientimage/gmail.png";
 import telephone from "../../assets/clientimage/telephone.png";
-import Iframe from "react-iframe";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import api from "../../config/URL";
