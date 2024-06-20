@@ -41,8 +41,8 @@ function Contact() {
   return (
     <div className="contact">
       <div className="container">
-        <div className="row py-5">
-          <div className="col-md-6 col-12 py-3">
+        <div className="row pt-5 pb-3">
+          <div className="col-md-6 col-12 pt-3">
             <h1 style={{ fontWeight: "bolder", fontSize: "50px" }}>
               Let's Keep in Touch
             </h1>
@@ -208,10 +208,10 @@ function Contact() {
           </div>
         </div>
 
-        <div className="row py-5">
+        <div className="row">
           {datas &&
             datas.map((data) => (
-              <div className="col-md-4 col-12 p-4">
+              <div className="col-md-4 col-12 p-2">
                 <h4 style={{ fontWeight: "bolder" }}>{data.centerName}</h4>
 
                 <iframe
