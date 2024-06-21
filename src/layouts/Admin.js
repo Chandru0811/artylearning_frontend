@@ -27,6 +27,11 @@ import StudentReport from "../pages/Report/StudentReport";
 import Center from "../pages/Center/Center";
 import CenterAdd from "../pages/Center/CenterAdd";
 import CenterView from "../pages/Center/CenterView";
+
+import CenterManager from "../pages/centerManager/CenterManager";
+import CenterManagerAdd from "../pages/centerManager/CenterManagerAdd";
+
+
 import Staff from "../pages/Staff/Staff";
 import Payment from "../pages/Payment/Payment";
 import Invoice from "../pages/Invoice/Invoice";
@@ -155,6 +160,8 @@ import CMSTestMonialAdd from "../pages/CMS/CMSTestMonialAdd";
 import CMSTestMonialEdit from "../pages/CMS/CMSTestMonialEdit";
 import CmsAboutUs from "../pages/CMS/CmsAboutus/CmsAboutUs";
 import CmsChinesh from "../pages/CMS/CMSChineshCourse/CmsChinesh";
+import CenterManagerEdit from "../pages/centerManager/CenterManagerEdit";
+import CenterManagerView from "../pages/centerManager/CenterManagerView";
 
 
 function Admin({ handleLogout }) {
@@ -228,6 +235,11 @@ function Admin({ handleLogout }) {
               <Route path="/center/add" element={<CenterAdd />} />
               <Route path="/center/view/:id" element={<CenterView />} />
               <Route path="/center/edit/:id" element={<CenterEdit />} />
+
+              <Route path="/centermanager" element={<CenterManager />} />
+              <Route path="/centermanager/add" element={<CenterManagerAdd />} />
+              <Route path="/centermanager/edit" element={<CenterManagerEdit />} />
+              <Route path="/centermanager/view" element={<CenterManagerView />} />
 
               {/* Teacher */}
               <Route path="/teacher" element={<Teacher />} />

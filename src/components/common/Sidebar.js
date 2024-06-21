@@ -36,6 +36,11 @@ function Sidebar() {
             path: "/center",
             access: storedScreens.centerListingIndex,
           },
+          {
+            title: "Centre Manager",
+            path: "/centermanager",
+            access: storedScreens.centerListingIndex,
+          },
         ],
       },
       {
