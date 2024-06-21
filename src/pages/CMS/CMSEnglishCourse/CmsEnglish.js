@@ -21,18 +21,18 @@ export default function CmsEnglish() {
     getData();
   }, []);
 
-  const handelPublishEnglishCourse= async()=>{
-    try{
-      const response = await api.post(`publishCourseSaveEnglish`)
-      if(response.status === 201){
-        toast.success(response.data.message)
-      }else{
-        toast.warning(response.data.message)
+  const handelPublishEnglishCourse = async () => {
+    try {
+      const response = await api.post(`publishCourseSaveEnglish`);
+      if (response.status === 201) {
+        toast.success(response.data.message);
+      } else {
+        toast.warning(response.data.message);
       }
-    }catch(e){
-      toast.warning("Error Publish Data ", e.response.data.message)
+    } catch (e) {
+      toast.warning("Error Publish Data ", e.response.data.message);
     }
-  }
+  };
 
   return (
     <section className="start" style={{ backgroundColor: "#f9fafb" }}>
@@ -42,11 +42,14 @@ export default function CmsEnglish() {
             <h4>CMS English Course</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-          {/* {storedScreens?.englishCoursePublish && ( */}
-            <button className="btn btn-sm btn-outline-danger border ms-2" onClick={handelPublishEnglishCourse}>
-              Publish
-            </button>
-            {/* )} */}
+            {storedScreens?.englishCoursePublish && (
+              <button
+                className="btn btn-sm btn-outline-danger border ms-2"
+                onClick={handelPublishEnglishCourse}
+              >
+                Publish
+              </button>
+            )}
           </div>
         </div>
       </div>

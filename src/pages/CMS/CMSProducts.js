@@ -120,7 +120,7 @@ function CMSProducts() {
           </div>
         </div>
         <div className="row">
-          <div className="offset-md-3 col-md-6 col-12">
+          <div className="offset-md-3 col-md-6 col-12 mt-5">
             <div className="d-flex align-items-end justify-content-end">
               {storedScreens?.productSaveUpdate && (
                 <FaEdit
@@ -134,7 +134,7 @@ function CMSProducts() {
             </div>
             <div className="d-flex justify-content-between align-items-center">
               <h1
-                className="text-center fw-bolder mt-5"
+                className="text-center fw-bolder "
                 style={{ fontSize: "xxx-large" }}
               >
                 {data.boxA}
