@@ -12,6 +12,7 @@ const validationSchema = Yup.object().shape({
   idType: Yup.string().required("*Id Type is required!"),
   idNo: Yup.string().required("*Id No is required!"),
   citizenship: Yup.string().required("*CitizenShip is required!"),
+  file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -22,6 +23,7 @@ const StaffPersonalEdit = forwardRef(
         idType: formData.idType || "",
         idNo: formData.idNo || "",
         citizenship: formData.citizenship || "",
+        file: formData.file || "",
         photo: null || "",
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
@@ -40,6 +42,7 @@ const StaffPersonalEdit = forwardRef(
           formDatas.append("idNo", data.idNo);
           formDatas.append("citizenship", data.citizenship);
           formDatas.append("photo", data.photo);
+          formDatas.append("file", data.file);
           formDatas.append("shortIntroduction", data.shortIntroduction);
           formDatas.append("gender", data.gender);
           formDatas.append("role", data.role);
@@ -184,6 +187,23 @@ const StaffPersonalEdit = forwardRef(
                 </div>
               )}
             </div>
+            <div class="form-group  col-sm ">
+              <label>Photo</label><span className="text-danger">*</span>
+              <input
+                type="file"
+                name="file"
+                className="form-control"
+                onChange={(event) => {
+                  formik.setFieldValue("file", event.target.files[0]);
+                }}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.file && !formik.values.file && (
+                <div className="error text-danger">
+                  <small>Photo is required</small>
+                </div>
+              )}
+            </div>
             {/* <div class="form-group  col-sm ">
               <label>Photo</label>
               <input
@@ -196,7 +216,10 @@ const StaffPersonalEdit = forwardRef(
                 onBlur={formik.handleBlur}
               />
             </div> */}
-            <div class="form-group  col-sm ">
+           
+          </div>
+          <div class="container row d-flex my-4 justify-align-content-around">
+          <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
                 <div className="me-4">
@@ -228,7 +251,7 @@ const StaffPersonalEdit = forwardRef(
                 </label>
               </div>
             </div>
-          </div>
+            </div>
           <div class="container row d-flex justify-content-start align-items-center">
             <div class="form-group  col-sm ">
               <label

@@ -217,7 +217,7 @@ const PersonalAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handl
               <label>
                 Short Introduction<span class="text-danger">*</span>
               </label>
-              <input
+              <textarea
                 type="text"
                 className="form-control"
                 name="shortIntroduction"
