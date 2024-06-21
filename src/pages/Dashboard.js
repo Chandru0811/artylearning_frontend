@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-
+import { Link } from "react-router-dom";
 import { PiStudentFill } from "react-icons/pi";
 import { GiTeacher } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa";
@@ -93,7 +93,9 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
+                  <Link to={`/lead/lead`}>
                     <FaUsers />
+                    </Link>
                   </h5>
                 </span>
                 <h2 className="card-text">
@@ -121,7 +123,7 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
-                    <PiStudentFill />
+                   <Link to={`/student`}> <PiStudentFill /> </Link>
                   </h5>
                 </span>
                 <h2 className="card-text">
@@ -149,7 +151,8 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
-                    <GiTeacher />
+                    <Link to={`/teacher`}>
+                    <GiTeacher /></Link>
                   </h5>
                 </span>
                 <h2 className="card-text">
