@@ -11,17 +11,30 @@ import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../../List/CourseList";
 import { useParams } from "react-router-dom";
 import BlockImg from "../.././../assets/images/Block_Img1.jpg";
+import SignatureCanvas from "react-signature-canvas";
 
 const validationSchema = Yup.object().shape({
-  signatureDate: Yup.string().required("*Signature Date is required")
+  signatureDate: Yup.string().required("*Signature Date is required"),
 });
 
 const EditCourseDetail = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [courseData, setCourseData] = useState(null);
-    
+
     const [data, setData] = useState([]);
     const { id } = useParams();
+
+    const [sign, setSign] = useState();
+    const [url, setUrl] = useState();
+
+    const handleClear = () => {
+      sign.clear();
+      setUrl("");
+    };
+    const handleGenerate = () => {
+      setUrl(sign.getTrimmedCanvas().toDataURL("image/png"));
+      console.log("Sign :", sign);
+    };
 
     const formik = useFormik({
       initialValues: {
@@ -32,7 +45,7 @@ const EditCourseDetail = forwardRef(
         courseDay: formData.courseDay || "",
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
-        signatureDate: formData.signatureDate || ""
+        signatureDate: formData.signatureDate || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -41,12 +54,18 @@ const EditCourseDetail = forwardRef(
           if (data.courseDetailId !== null) {
             // console.log("ID :",data.courseDetailId);
             const formDatas = new FormData();
+
+            // Convert URL to Blob
+            const apiResponse = await fetch(url);
+            const blob = await apiResponse.blob();
+
             formDatas.append("courseName", "Arty Dreamers @ RDI");
             formDatas.append("courseId", data.courseId);
             formDatas.append("courseDay", data.courseDay);
             formDatas.append("startDate", data.startDate);
             formDatas.append("endDate", data.endDate);
             formDatas.append("file", data.file);
+            // formDatas.append("file", blob, "signature.png"); // Append the Blob with a filename
             formDatas.append("startTime", data.startTime);
             formDatas.append("endTime", data.endTime);
             formDatas.append("signatureDate", data.signatureDate);
@@ -100,7 +119,7 @@ const EditCourseDetail = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -272,18 +291,100 @@ const EditCourseDetail = forwardRef(
                           ))}
                         {(!data.studentCourseDetailModels ||
                           data.studentCourseDetailModels.length === 0) && (
-                            <div
-                              id="panelsStayOpen-collapseThree"
-                              class="accordion-collapse collapse"
-                            >
-                              <div class="accordion-body">
-                                <div className="text-muted">
-                                  Parent Signature / not available !
-                                </div>
+                          <div
+                            id="panelsStayOpen-collapseThree"
+                            class="accordion-collapse collapse"
+                          >
+                            <div class="accordion-body">
+                              <div className="text-muted">
+                                Parent Signature / not available !
                               </div>
                             </div>
-                          )}
+                          </div>
+                        )}
                       </div>
+
+                      {/* SignatureCanvas */}
+                      {/* <div className="text-start mt-3">
+                        <label htmlFor="" className="mb-1 fw-medium">
+                          <small>Parent Signature</small>
+                        </label>
+                        <br />
+                        <div
+                          style={{
+                            width: 423,
+                            height: 150,
+                          }}
+                          className="border border-secondary rounded-2"
+                        >
+                          <SignatureCanvas
+                            canvasProps={{
+                              width: 423,
+                              height: 150,
+                              className: "sigCanvas",
+                            }}
+                            name="file"
+                            ref={(data) => setSign(data)}
+                          />
+                        </div>
+                        <br />
+                        <button
+                          type="button"
+                          style={{ height: "30px", width: "60px" }}
+                          onClick={handleClear}
+                          className="btn btn-sm"
+                        >
+                          Clear
+                        </button>
+                        <button
+                          type="button"
+                          style={{ height: "30px", width: "60px" }}
+                          onClick={handleGenerate}
+                          className="btn btn-sm"
+                        >
+                          Save
+                        </button>
+                        <br />
+                        {data.studentCourseDetailModels &&
+                          data.studentCourseDetailModels.length > 0 &&
+                          data.studentCourseDetailModels.map((parent) => (
+                            <div className="container-fluid col-12 p-2">
+                              <p className="my-2 d-flex">
+                                {parent.parentSignature ? (
+                                  <img
+                                    src={parent.parentSignature}
+                                    onError={(e) => {
+                                      e.target.src = BlockImg;
+                                    }}
+                                    className="img-fluid rounded"
+                                    style={{ width: "60%" }}
+                                    alt="Parent Signature Img"
+                                  />
+                                ) : (
+                                  <img
+                                    src={BlockImg}
+                                    className="img-fluid rounded"
+                                    style={{ width: "60%" }}
+                                    alt="Parent Signature Img"
+                                  />
+                                )}
+                              </p>
+                            </div>
+                          ))}
+                        {(!data.studentCourseDetailModels ||
+                          data.studentCourseDetailModels.length === 0) && (
+                          <div
+                            id="panelsStayOpen-collapseThree"
+                            class="accordion-collapse collapse"
+                          >
+                            <div class="accordion-body">
+                              <div className="text-muted">
+                                Parent Signature / not available !
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div> */}
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">
                       <div className="text-start">
@@ -330,7 +431,9 @@ const EditCourseDetail = forwardRef(
                       </div>
                       <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Signature Date<span className="text-danger">*</span></small>
+                          <small>
+                            Signature Date<span className="text-danger">*</span>
+                          </small>
                         </label>
                         <br />
                         <input
@@ -341,11 +444,12 @@ const EditCourseDetail = forwardRef(
                           onBlur={formik.handleBlur}
                           value={formik.values.signatureDate}
                         />
-                        {formik.touched.signatureDate && formik.errors.signatureDate && (
-                          <div className="text-danger">
-                            <small>{formik.errors.signatureDate}</small>
-                          </div>
-                        )}
+                        {formik.touched.signatureDate &&
+                          formik.errors.signatureDate && (
+                            <div className="text-danger">
+                              <small>{formik.errors.signatureDate}</small>
+                            </div>
+                          )}
                       </div>
                     </div>
                   </div>

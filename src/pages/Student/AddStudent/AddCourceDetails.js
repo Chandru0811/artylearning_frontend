@@ -9,15 +9,28 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../../List/CourseList";
+import SignatureCanvas from "react-signature-canvas";
 
 const validationSchema = Yup.object().shape({
-  signatureDate: Yup.string().required("*Signature Date is required")
+  signatureDate: Yup.string().required("*Signature Date is required"),
 });
 
 const AddcourseDetail = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [courseData, setCourseData] = useState(null);
 
+    const [sign, setSign] = useState();
+    const [url, setUrl] = useState();
+
+    const handleClear = () => {
+      sign.clear();
+      setUrl("");
+    };
+    const handleGenerate = () => {
+      setUrl(sign.getTrimmedCanvas().toDataURL("image/png"));
+      console.log("Sign :", sign);
+    };
+    
     const formik = useFormik({
       initialValues: {
         courseId: formData.courseId || "",
@@ -27,7 +40,7 @@ const AddcourseDetail = forwardRef(
         courseDay: formData.courseDay || "",
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
-        signatureDate:formData.signatureDate || ""
+        signatureDate: formData.signatureDate || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -35,12 +48,17 @@ const AddcourseDetail = forwardRef(
         try {
           const formDatas = new FormData();
 
+          // Convert URL to Blob
+          const apiResponse = await fetch(url);
+          const blob = await apiResponse.blob();
+
           // Append each form field to FormData object
           formDatas.append("courseId", data.courseId);
           formDatas.append("courseName", data.courseId);
           formDatas.append("startDate", data.startDate);
           formDatas.append("startTime", data.startTime);
-          formDatas.append("file", data.file);
+          // formDatas.append("file", data.file);
+          formDatas.append("file", blob, "signature.png"); // Append the Blob with a filename
           formDatas.append("courseDay", data.courseDay);
           formDatas.append("endDate", data.endDate);
           formDatas.append("endTime", data.endTime);
@@ -63,7 +81,7 @@ const AddcourseDetail = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -145,7 +163,7 @@ const AddcourseDetail = forwardRef(
                           value={formik.values.startTime}
                         />
                       </div>
-                      <div className="text-start mt-2">
+                      {/* <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>Parent Signature</small>
                         </label>
@@ -162,6 +180,51 @@ const AddcourseDetail = forwardRef(
                           }}
                           onBlur={formik.handleBlur}
                         />
+                      </div> */}
+                      {/* SignatureCanvas */}
+                      <div className="text-start mt-3">
+                        <label htmlFor="" className="mb-1 fw-medium">
+                          <small>Parent Signature</small>
+                        </label>
+                        <br />
+                        <div
+                          style={{
+                            width: 423,
+                            height: 150,
+                          }}
+                          className="border border-secondary rounded-2"
+                        >
+                          <SignatureCanvas
+                            canvasProps={{
+                              width: 423,
+                              height: 150,
+                              className: "sigCanvas",
+                            }}
+                            name="file"
+                            ref={(data) => setSign(data)}
+                          />
+                        </div>
+                        <br />
+                        <button
+                          type="button"
+                          style={{ height: "30px", width: "60px" }}
+                          onClick={handleClear}
+                          className="btn btn-sm"
+                        >
+                          Clear
+                        </button>
+                        <button
+                          type="button"
+                          style={{ height: "30px", width: "60px" }}
+                          onClick={handleGenerate}
+                          className="btn btn-sm"
+                        >
+                          Save
+                        </button>
+
+                        <br />
+                        <br />
+                        <img src={url} />
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">
@@ -209,7 +272,9 @@ const AddcourseDetail = forwardRef(
                       </div>
                       <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Signature Date<span className="text-danger">*</span></small>
+                          <small>
+                            Signature Date<span className="text-danger">*</span>
+                          </small>
                         </label>
                         <br />
                         <input
@@ -220,11 +285,12 @@ const AddcourseDetail = forwardRef(
                           onBlur={formik.handleBlur}
                           value={formik.values.signatureDate}
                         />
-                        {formik.touched.signatureDate && formik.errors.signatureDate && (
-                      <div className="text-danger">
-                        <small>{formik.errors.signatureDate}</small>
-                      </div>
-                    )}
+                        {formik.touched.signatureDate &&
+                          formik.errors.signatureDate && (
+                            <div className="text-danger">
+                              <small>{formik.errors.signatureDate}</small>
+                            </div>
+                          )}
                       </div>
                     </div>
                   </div>
