@@ -1,31 +1,57 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import SignatureCanvas from "react-signature-canvas";
 
 const validationSchema = Yup.object().shape({
-  termsAndConditionSignatureDate: Yup.string().required("*Signature Date is required"),
-  agree: Yup.boolean().oneOf([true], "*Agree Terms and conditions is required").required(),
-  
+  termsAndConditionSignatureDate: Yup.string().required(
+    "*Signature Date is required"
+  ),
+  agree: Yup.boolean()
+    .oneOf([true], "*Agree Terms and conditions is required")
+    .required(),
 });
 
 const AddTermsAndCondition = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
+
+    const [sign, setSign] = useState();
+    const [url, setUrl] = useState();
+
+    const handleClear = () => {
+      sign.clear();
+      setUrl("");
+    };
+    const handleGenerate = () => {
+      setUrl(sign.getTrimmedCanvas().toDataURL("image/png"));
+      console.log("Sign :", sign);
+    };
+
     const formik = useFormik({
       initialValues: {
         file: null || "",
-        termsAndConditionSignatureDate: formData.termsAndConditionSignatureDate || "",
+        termsAndConditionSignatureDate:
+          formData.termsAndConditionSignatureDate || "",
         agree: formData.agree || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         const formDatas = new FormData();
-        formDatas.append("file", data.file);
-        formDatas.append("termsAndConditionSignatureDate", data.termsAndConditionSignatureDate);
+
+        // Convert URL to Blob
+        const apiResponse = await fetch(url);
+        const blob = await apiResponse.blob();
+
+        formDatas.append("file", blob);
+        formDatas.append(
+          "termsAndConditionSignatureDate",
+          data.termsAndConditionSignatureDate
+        );
         formDatas.append("agree", data.agree);
         formDatas.append("studentDetailId", formData.student_id);
 
@@ -48,7 +74,7 @@ const AddTermsAndCondition = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -68,7 +94,7 @@ const AddTermsAndCondition = forwardRef(
                 <div className="container py-3">
                   <div className="row">
                     <div className="col-md-6 col-12">
-                      <div className="text-start">
+                      {/* <div className="text-start">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>Parent Signature</small>
                         </label>
@@ -85,12 +111,59 @@ const AddTermsAndCondition = forwardRef(
                           }}
                           onBlur={formik.handleBlur}
                         />
+                      </div> */}
+                      {/* SignatureCanvas */}
+                      <div className="text-start mt-3">
+                        <label htmlFor="" className="mb-1 fw-medium">
+                          <small>Parent Signature</small>
+                        </label>
+                        <br />
+                        <div
+                          style={{
+                            width: 423,
+                            height: 150,
+                          }}
+                          className="border border-secondary rounded-2"
+                        >
+                          <SignatureCanvas
+                            canvasProps={{
+                              width: 423,
+                              height: 150,
+                              className: "sigCanvas",
+                            }}
+                            name="file"
+                            ref={(data) => setSign(data)}
+                          />
+                        </div>
+                        <br />
+                        <button
+                          type="button"
+                          style={{ height: "30px", width: "60px" }}
+                          onClick={handleClear}
+                          className="btn btn-sm"
+                        >
+                          Clear
+                        </button>
+                        <button
+                          type="button"
+                          style={{ height: "30px", width: "60px" }}
+                          onClick={handleGenerate}
+                          className="btn btn-sm"
+                        >
+                          Save
+                        </button>
+
+                        <br />
+                        <br />
+                        <img src={url} />
                       </div>
                     </div>
                     <div className="col-md-6 col-12">
                       <div className="text-start mt-2">
                         <label className="mb-1 fw-medium">
-                          <small>Signature Date<span className="text-danger">*</span></small>
+                          <small>
+                            Signature Date<span className="text-danger">*</span>
+                          </small>
                         </label>
                         <br />
                         <input
@@ -101,11 +174,14 @@ const AddTermsAndCondition = forwardRef(
                           onBlur={formik.handleBlur}
                           value={formik.values.termsAndConditionSignatureDate}
                         />
-                        {formik.touched.termsAndConditionSignatureDate && formik.errors.termsAndConditionSignatureDate && (
-                      <div className="text-danger">
-                        <small>{formik.errors.termsAndConditionSignatureDate}</small>
-                      </div>
-                    )}
+                        {formik.touched.termsAndConditionSignatureDate &&
+                          formik.errors.termsAndConditionSignatureDate && (
+                            <div className="text-danger">
+                              <small>
+                                {formik.errors.termsAndConditionSignatureDate}
+                              </small>
+                            </div>
+                          )}
                       </div>
                     </div>
                   </div>

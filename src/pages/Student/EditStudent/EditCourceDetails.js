@@ -13,9 +13,7 @@ import { useParams } from "react-router-dom";
 import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 import SignatureCanvas from "react-signature-canvas";
 
-const validationSchema = Yup.object().shape({
-  signatureDate: Yup.string().required("*Signature Date is required"),
-});
+const validationSchema = Yup.object().shape({});
 
 const EditCourseDetail = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -41,11 +39,11 @@ const EditCourseDetail = forwardRef(
         courseId: formData.courseId || "",
         startDate: formData.startDate || "",
         startTime: formData.startTime || "",
-        parentSignature: null || "",
+        file: null || "",
         courseDay: formData.courseDay || "",
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
-        signatureDate: formData.signatureDate || "",
+        // signatureDate: formData.signatureDate || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -64,11 +62,11 @@ const EditCourseDetail = forwardRef(
             formDatas.append("courseDay", data.courseDay);
             formDatas.append("startDate", data.startDate);
             formDatas.append("endDate", data.endDate);
-            formDatas.append("file", data.file);
-            // formDatas.append("file", blob, "signature.png"); // Append the Blob with a filename
+            // formDatas.append("file", data.file);
+            formDatas.append("file", blob); // Append the Blob with a filename
             formDatas.append("startTime", data.startTime);
             formDatas.append("endTime", data.endTime);
-            formDatas.append("signatureDate", data.signatureDate);
+            formDatas.append("signatureDate", "2024-10-10");
             formDatas.append("studentDetailId", id);
             formDatas.append("detailId", data.courseDetailId);
             const response = await api.put(
@@ -249,7 +247,7 @@ const EditCourseDetail = forwardRef(
                           value={formik.values.startTime}
                         />
                       </div>
-                      <div className="text-start mt-2">
+                      {/* <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>Parent Signature</small>
                         </label>
@@ -302,7 +300,7 @@ const EditCourseDetail = forwardRef(
                             </div>
                           </div>
                         )}
-                      </div>
+                      </div> */}
 
                       {/* SignatureCanvas */}
                       {/* <div className="text-start mt-3">
@@ -429,7 +427,7 @@ const EditCourseDetail = forwardRef(
                           value={formik.values.endTime}
                         />
                       </div>
-                      <div className="text-start mt-2">
+                      {/* <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>
                             Signature Date<span className="text-danger">*</span>
@@ -450,7 +448,7 @@ const EditCourseDetail = forwardRef(
                               <small>{formik.errors.signatureDate}</small>
                             </div>
                           )}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

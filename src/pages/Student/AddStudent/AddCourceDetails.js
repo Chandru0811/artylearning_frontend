@@ -11,9 +11,7 @@ import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../../List/CourseList";
 import SignatureCanvas from "react-signature-canvas";
 
-const validationSchema = Yup.object().shape({
-  signatureDate: Yup.string().required("*Signature Date is required"),
-});
+const validationSchema = Yup.object().shape({});
 
 const AddcourseDetail = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -40,7 +38,7 @@ const AddcourseDetail = forwardRef(
         courseDay: formData.courseDay || "",
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
-        signatureDate: formData.signatureDate || "",
+        // signatureDate: formData.signatureDate || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -58,11 +56,11 @@ const AddcourseDetail = forwardRef(
           formDatas.append("startDate", data.startDate);
           formDatas.append("startTime", data.startTime);
           // formDatas.append("file", data.file);
-          formDatas.append("file", blob, "signature.png"); // Append the Blob with a filename
+          formDatas.append("file", blob); // Append the Blob with a filename
           formDatas.append("courseDay", data.courseDay);
           formDatas.append("endDate", data.endDate);
           formDatas.append("endTime", data.endTime);
-          formDatas.append("signatureDate", data.signatureDate);
+          formDatas.append("signatureDate", "2024-10-10");
           formDatas.append("studentDetailId ", formData.student_id); // Assuming formDatas.student_id is defined
 
           // You don't need to set parentSignature to null in formDatas, it's already null if not set
@@ -182,7 +180,7 @@ const AddcourseDetail = forwardRef(
                         />
                       </div> */}
                       {/* SignatureCanvas */}
-                      <div className="text-start mt-3">
+                      {/* <div className="text-start mt-3">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>Parent Signature</small>
                         </label>
@@ -225,7 +223,7 @@ const AddcourseDetail = forwardRef(
                         <br />
                         <br />
                         <img src={url} />
-                      </div>
+                      </div> */}
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">
                       <div className="text-start">
@@ -270,7 +268,7 @@ const AddcourseDetail = forwardRef(
                           value={formik.values.endTime}
                         />
                       </div>
-                      <div className="text-start mt-2">
+                      {/* <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>
                             Signature Date<span className="text-danger">*</span>
@@ -291,7 +289,7 @@ const AddcourseDetail = forwardRef(
                               <small>{formik.errors.signatureDate}</small>
                             </div>
                           )}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>

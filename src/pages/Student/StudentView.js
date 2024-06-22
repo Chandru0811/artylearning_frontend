@@ -1080,7 +1080,7 @@ function StudentView() {
                               {" "}
                               {courseData &&
                                 courseData.map((course) =>
-                                  parseInt(std.course) === course.id
+                                  parseInt(std.courseId) === course.id
                                     ? course.courseNames || "--"
                                     : ""
                                 )}
@@ -1102,17 +1102,17 @@ function StudentView() {
                             </td>
                             <td>{std.startTime || "--"}</td>
                             <td>{std.endTime || "--"}</td>
-                            <td>
+                            {/* <td>
                               {std.signatureDate
                                 ? std.signatureDate.substring(0, 10)
                                 : "--"}
-                            </td>
+                            </td> */}
                           </tr>
                         ))}
                     </tbody>
                   </table>
                 </div>
-                {data.studentCourseDetailModels &&
+                {/* {data.studentCourseDetailModels &&
                   data.studentCourseDetailModels.length > 0 &&
                   data.studentCourseDetailModels.map((parent) => (
                     <div className="container-fluid col-12 p-2">
@@ -1136,7 +1136,7 @@ function StudentView() {
                     style={{ width: "20%" }}
                     alt="Parent Signature Img"
                   />
-                )}
+                )} */}
               </div>
             </div>
           </div>
