@@ -26,19 +26,19 @@ const validationSchema = Yup.object().shape({
     "*Student Chinese Name is required!"
   ),
   // profileImage: Yup.string().required("*Select a Profile Image!"),
-  preAssessmentResult: Yup.string().required(
-    "*Pre-Assessment Result is required!"
-  ),
+  // preAssessmentResult: Yup.string().required(
+  //   "*Pre-Assessment Result is required!"
+  // ),
   medicalCondition: Yup.string().required(
     "*Medical Condition Result is required!"
   ),
-  nationality: Yup.string().required("*Select a Nationality!"),
+  // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguageSpokenEnglish: Yup.string().required(
     "*Primary Language is required!"
   ),
   race: Yup.string().required("*Select a Race!"),
-  referByStudent: Yup.string().required("*Refer By Student is required!"),
-  referByParent: Yup.string().required("*Refer By Parent is required!"),
+  // referByStudent: Yup.string().required("*Refer By Student is required!"),
+  // referByParent: Yup.string().required("*Refer By Parent is required!"),
 });
 
 const Edi = forwardRef(
@@ -337,7 +337,7 @@ const Edi = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Pre-Assessment Result</small>
-                        <span className="text-danger">*</span>
+                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
@@ -358,7 +358,7 @@ const Edi = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Nationality</small>
-                        <span className="text-danger">*</span>
+                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <select
@@ -383,7 +383,7 @@ const Edi = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Refered By Parents</small>
-                        <span className="text-danger">*</span>
+                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
@@ -537,14 +537,19 @@ const Edi = forwardRef(
                         <span className="text-danger">*</span>
                       </label>
                       <br />
-                      <input
-                        className="form-control"
-                        type="text"
+                      <select
                         name="primaryLanguageSpokenEnglish"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.primaryLanguageSpokenEnglish}
-                      />
+                        value={formik.values.race}
+                        className="form-select "
+                        aria-label=". example"
+                      >
+                        <option selected></option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="Malay">English</option>
+                        
+                      </select>
                       {formik.touched.primaryLanguageSpokenEnglish &&
                         formik.errors.primaryLanguageSpokenEnglish && (
                           <div className="error text-danger ">
@@ -557,7 +562,7 @@ const Edi = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Refer By Student</small>
-                        <span className="text-danger">*</span>
+                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
