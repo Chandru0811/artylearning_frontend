@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
@@ -7,24 +7,41 @@ import { useNavigate } from "react-router-dom";
 // import axios from "axios";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
+import fetchAllLevelsWithIds from "../List/LevelList";
 
 function SubjectAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [levelData, setLevelData] = useState(null);
 
 
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
+    setLevelData(null);
   };
   
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (levelId) => {
+    try {
+      const level = await fetchAllLevelsWithIds(levelId);
+      setLevelData(level);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const validationSchema = yup.object().shape({
     subject: yup.string().required("*Subject is required"),
     code: yup.string().required("*Code is required"),
     status: yup.string().required("*Status is required"),
+    // levelId: yup.string().required("*Level is required"),
   });
 
   const formik = useFormik({
@@ -32,11 +49,19 @@ function SubjectAdd({ onSuccess }) {
       subject: "",
       code: "",
       status: "",
+      levelId: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      let selectedLevelName = "";
       // console.log(values);
+
+      levelData.forEach((level) => {
+        if (parseInt(values.levelId) === level.id) {
+          selectedLevelName = level.levels || "--";
+        }
+      });
       try {
         const response = await api.post("/createCourseSubject", values, {
           headers: {
@@ -58,6 +83,14 @@ function SubjectAdd({ onSuccess }) {
       }
     },
   });
+
+  const handleLevelChange = (event) => {
+    setLevelData(null);
+    const levelId = event.target.value;
+    formik.setFieldValue("levelId", levelId);
+    fetchData(levelId); // Fetch class for the selected center
+  };
+
 
   return (
     <>
@@ -156,6 +189,33 @@ function SubjectAdd({ onSuccess }) {
                     )}
                   </div>
                 </div>
+                {/* <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Level<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("levelId")}
+                    class={`form-select  ${
+                      formik.touched.levelId && formik.errors.levelId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={handleLevelChange}
+                  >
+                    <option></option>
+                    {levelData &&
+                      levelData.map((level) => (
+                        <option key={level.id} value={level.id}>
+                          {level.levels}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.levelId && formik.errors.levelId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.levelId}
+                    </div>
+                  )}
+                </div> */}
               </div>
             </div>
           </Modal.Body>

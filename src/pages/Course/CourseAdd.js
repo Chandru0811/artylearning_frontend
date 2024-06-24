@@ -6,8 +6,24 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllLevelsWithIds from "../List/LevelList";
+// import fetchAllLevelsWithIds from "../List/LevelList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
+import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
+
+const validationSchema = Yup.object({
+  centerId: Yup.string().required("*Select the Centre Name"),
+  courseName: Yup.string().required("*Course Name is required"),
+  courseCode: Yup.string().required("*Course Code is required"),
+  subjectId: Yup.string().required("*Select the Subject"),
+  levelId: Yup.string().required("*Select the Level"),
+  minClassSize: Yup.number().typeError("*Must be a Number"),
+  maxClassSize: Yup.number().typeError("*Must be a Number"),
+  courseType: Yup.string().required("*Select the Course Type"),
+  status: Yup.string().required("*Status is required"),
+  classReplacementAllowed: Yup.string().required("*Select the Class Replacement Allowed"),
+  replacementLessonStudentBuffer: Yup.number().typeError("*Must be a Number"),
+});
+
 
 function CourseAdd({ onSuccess }) {
   const navigate = useNavigate();
@@ -16,38 +32,6 @@ function CourseAdd({ onSuccess }) {
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-
-
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      const levelData = await fetchAllLevelsWithIds();
-      const subjectData = await fetchAllSubjectsWithIds();
-      setCenterData(centerData);
-      setLevelData(levelData);
-      setSubjectData(subjectData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Select the Centre Name"),
-    courseName: Yup.string().required("*Course Name is required"),
-    courseCode: Yup.string().required("*Course Code is required"),
-    subjectId: Yup.string().required("*Select the Subject"),
-    levelId: Yup.string().required("*Select the Level"),
-    minClassSize: Yup.number().typeError("*Must be a Number"),
-    maxClassSize: Yup.number().typeError("*Must be a Number"),
-    courseType: Yup.string().required("*Select the Course Type"),
-    status: Yup.string().required("*Status is required"),
-    classReplacementAllowed: Yup.string().required("*Select the Class Replacement Allowed"),
-    replacementLessonStudentBuffer: Yup.number().typeError("*Must be a Number"),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -93,11 +77,43 @@ function CourseAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
   });
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchLevels = async (subjectId) => {
+    try {
+      const subject = await fetchAllLevelBySubjectsWithIds(subjectId);
+      setLevelData(subject);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const handleSubjectChange = (event) => {
+    setLevelData(null);
+    const subjectId = event.target.value;
+    formik.setFieldValue("subjectId", subjectId);
+    fetchLevels(subjectId);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <section className="courseAdd">
@@ -111,14 +127,14 @@ function CourseAdd({ onSuccess }) {
             </Link>
             &nbsp;&nbsp;
             <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                Save
-              </button>
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Save
+            </button>
           </div>
           <div className="container">
             <div className="row">
@@ -129,11 +145,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("centerId")}
-                    className={`form-select  ${
-                      formik.touched.centerId && formik.errors.centerId
+                    className={`form-select  ${formik.touched.centerId && formik.errors.centerId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -157,11 +172,10 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.courseName && formik.errors.courseName
+                  className={`form-control  ${formik.touched.courseName && formik.errors.courseName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("courseName")}
                 />
                 {formik.touched.courseName && formik.errors.courseName && (
@@ -173,44 +187,23 @@ function CourseAdd({ onSuccess }) {
             </div>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
-                  Course Code<span className="text-danger">*</span>
-                </lable>
-                <div className="input-group mb-3">
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.courseCode && formik.errors.courseCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("courseCode")}
-                  />
-                  {formik.touched.courseCode && formik.errors.courseCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.courseCode}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
                 <lable className="">
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select  ${
-                    formik.touched.subjectId && formik.errors.subjectId
+                  className={`form-select  ${formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("subjectId")}
+                  onChange={handleSubjectChange}
                   aria-label="Default select example"
                 >
                   <option selected></option>
                   {subjectData &&
-                    subjectData.map((subjectId) => (
-                      <option key={subjectId.id} value={subjectId.id}>
-                        {subjectId.subjects}
+                    subjectData.map((subject) => (
+                      <option key={subject.subjectId} value={subject.id}>
+                        {subject.subjects}
                       </option>
                     ))}
                 </select>
@@ -220,8 +213,6 @@ function CourseAdd({ onSuccess }) {
                   </div>
                 )}
               </div>
-            </div>
-            <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   Level<span className="text-danger">*</span>
@@ -229,18 +220,17 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    className={`form-select  ${
-                      formik.touched.levelId && formik.errors.levelId
+                    className={`form-select  ${formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
                     {levelData &&
                       levelData.map((levelId) => (
                         <option key={levelId.id} value={levelId.id}>
-                          {levelId.levels}
+                          {levelId.level}
                         </option>
                       ))}
                   </select>
@@ -251,15 +241,36 @@ function CourseAdd({ onSuccess }) {
                   )}
                 </div>
               </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="form-lable">
+                  Course Code<span className="text-danger">*</span>
+                </lable>
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className={`form-control  ${formik.touched.courseCode && formik.errors.courseCode
+                        ? "is-invalid"
+                        : ""
+                      }`}
+                    {...formik.getFieldProps("courseCode")}
+                  />
+                  {formik.touched.courseCode && formik.errors.courseCode && (
+                    <div className="invalid-feedback">
+                      {formik.errors.courseCode}
+                    </div>
+                  )}
+                </div>
+              </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">Min Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.minClassSize && formik.errors.minClassSize
+                  className={`form-control  ${formik.touched.minClassSize && formik.errors.minClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("minClassSize")}
                   placeholder=""
                 />
@@ -275,11 +286,10 @@ function CourseAdd({ onSuccess }) {
                 <lable className="form-lable">Max Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.maxClassSize && formik.errors.maxClassSize
+                  className={`form-control  ${formik.touched.maxClassSize && formik.errors.maxClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("maxClassSize")}
                   placeholder=""
                 />
@@ -293,12 +303,11 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.replacementLessonStudentBuffer &&
-                    formik.errors.replacementLessonStudentBuffer
+                  className={`form-control  ${formik.touched.replacementLessonStudentBuffer &&
+                      formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("replacementLessonStudentBuffer")}
                 />
                 {formik.touched.replacementLessonStudentBuffer && formik.errors.replacementLessonStudentBuffer && (
@@ -406,11 +415,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select  ${
-                      formik.touched.status && formik.errors.status
+                    className={`form-select  ${formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>

@@ -6,15 +6,34 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
+import fetchAllLevelsWithIds from "../List/LevelList";
 
 function SubjectEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [levelData, setLevelData] = useState(null);
 
   const navigate = useState();
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+    setLevelData(null);
+  };
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (levelId) => {
+    try {
+      const level = await fetchAllLevelsWithIds(levelId);
+      setLevelData(level);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const validationSchema = yup.object().shape({
     subject: yup.string().required("*Subject is required"),
@@ -31,6 +50,12 @@ function SubjectEdit({ id, onSuccess }) {
     onSubmit: async (values) => {
       // console.log(values);
       setLoadIndicator(true);
+      let selectedLevelName = "";
+      levelData.forEach((level) => {
+        if (parseInt(values.levelId) === level.id) {
+          selectedLevelName = level.levels || "--";
+        }
+      });
 
       try {
         const response = await api.put(`/updateCourseSubject/${id}`, values, {
@@ -67,6 +92,14 @@ function SubjectEdit({ id, onSuccess }) {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleLevelChange = (event) => {
+    setLevelData(null);
+    const levelId = event.target.value;
+    formik.setFieldValue("levelId", levelId);
+    fetchData(levelId); // Fetch class for the selected center
+  };
+
 
   return (
     <>

@@ -1,101 +1,318 @@
 import React, { useEffect, useState } from "react";
-import Iframe from "react-iframe";
-import { Link, useParams } from "react-router-dom";
-import business from "../../../assets/clientimage/business.png";
-import gmail from "../../../assets/clientimage/gmail.png";
-import telephone from "../../../assets/clientimage/telephone.png";
-// import api from "../../config/URL";
+import axios from "axios";
+import { Button } from "react-bootstrap";
+import { toast } from "react-toastify";
+import api from "../config/URL";
+import fetchAllCentersWithIds from "../pages/List/CenterList";
 
-export default function LevelView() {
-  // const { id } = useParams();
-  const [data, setData] = useState([]);
+function SendAndPublish({ data }) {
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [centerData, setcenterData] = useState(null);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllCourseLevels/${id}`);
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data ", error);
-  //     }
-  //   };
-  //   getData();
-  // }, [id]);
+  const getQRCodeUrl = () => {
+    if (centerData && data.centerId) {
+      const center = centerData.find(
+        (center) => center.id === parseInt(data.centerId)
+      );
+      return center ? center.qrCode : "https://example.com/default-qr.png";
+    }
+    return "https://example.com/default-qr.png";
+  };
 
-  return (
-    <div>
-      <div className="container">
-        <div className="row mt-2 pb-3">
-          <div className="my-3 d-flex justify-content-end mb-5">
-            <Link to={"/cms/contact"}>
-              <button type="button" className="btn btn-sm btn-border">
-                Back
-              </button>
-            </Link>
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoadIndicator(true);
+      try {
+        const centers = await fetchAllCentersWithIds();
+        setcenterData(centers);
+      } catch (error) {
+        toast.error(error.message || "Error fetching data");
+      } finally {
+        setLoadIndicator(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const sendEmail = async () => {
+    try {
+      const mailcontent = `<!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <title>Invoice</title>
+          <style>
+            .invoice-box {
+              font-size: 12px;
+              max-width: 600px;
+              margin: auto;
+              padding: 30px;
+              border: 1px solid #eee;
+              line-height: 24px;
+              font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+              color: #555;
+              min-height: 100vh;
+            }
+
+          .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+          }
+
+          .invoice-box table td {
+            padding: 5px;
+            vertical-align: top;
+          }
+
+          .invoice-box table td.third {
+            text-align: right;
+          }
+
+          .invoice-box table tr.heading td {
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+          }
+
+          .invoice-box table tr.item td {
+            border-bottom: 1px solid #eee;
+          }
+
+          .invoice-box table tr.item.last td {
+            border-bottom: none;
+          }
+
+          .invoice-box table tr.total td:nth-child(2) {
+            border-top: 2px solid #eee;
+            font-weight: bold;
+          }
+
+          #scan {
+            float: right;
+          }
+
+          #scan img {
+            max-width: 100%;
+            height: auto;
+          }
+
+          @media print {
+            .invoice-box {
+              border: 0;
+            }
+          }
+          #LABEL1 label {
+            display: inline-block;
+            width: 15%;
+            padding: 5px;
+          }
+          #LABEL1 span {
+            display: inline-block;
+            width: 20%;
+            padding: 5px;
+          }
+
+          #LABEL2 label {
+            display: inline-block;
+            width: 15%;
+            padding: 5px;
+          }
+          #LABEL2 span {
+            display: inline-block;
+            width: 20%;
+            padding: 5px;
+          }
+        </style>
+        </head>
+        <body>
+          <div class="invoice-box">
+            <table>
+              <tr class="top">
+                <td colspan="2">
+                  <table>
+                    <tr>
+                      <td class="title">
+                        <img
+                          src="https://artylearning.com/static/media/Logo.f01b9cbb8e8f1d1c7792.png"
+                          style="width: 75%; max-width: 180px"
+                          alt="Logo"
+                        />
+                      </td>
+                      <td class="third">
+                        <b>Arty Learning @HG</b><br />
+                        Tel No:87270752<br />
+                        Email:Artylearning@gmail.com
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
+            <div  id="LABEL1" id="LABEL2" style="width: 150% !important;">
+            <strong>Voided Invoice</strong>
+            <br />
+            <div style="display: flex;">
+              <label>Invoice</label>
+              <span>:&nbsp;&nbsp;${data.invoiceNumber}</span>
+      
+              <label>Due Date</label>
+              <span>:&nbsp;&nbsp;${
+                data.dueDate ? data.dueDate.substring(0, 10) : "--"
+              }</span>
+            </div>
+            <div style="display: flex;">
+              <label>Student Name</label>
+              <span>:&nbsp;&nbsp;${data.studentName}</span>
+      
+              <label>Course Name</label>
+              <span>:&nbsp;&nbsp;${data.courseName}</span>
+            </div>
+      
+            <div style="display: flex">
+              <label>Student Id</label>
+              <span>:&nbsp;&nbsp;${data.studentUniqueId}</span>
+      
+              <label>Course Id</label>
+              <span>:&nbsp;&nbsp;${data.courseId}</span>
+            </div>
           </div>
-          <div className="contact">
-            <div className="container">
-              <div className="row pt-5">
-                <div className="col-md-6 col-12 py-3">
-                  <p className="mt-2">Arty Learning @ Hougang</p>
-                  <span className="d-flex my-3">
-                    <img
-                      src={business}
-                      alt="bussiness"
-                      width={"30px"}
-                      height={"30px"}
-                    />
-                    &nbsp;&nbsp;
-                    <span className="mx-2" style={{ fontSize: "18px" }}>
-                      806 Hougang Central, #04-146, Singapore 530806
-                    </span>
-                  </span>
-                  <span className="d-flex mb-3">
-                    <img
-                      src={gmail}
-                      alt="gmail"
-                      width={"30px"}
-                      height={"30px"}
-                    />
-                    &nbsp;&nbsp;
-                    <span
-                      className="text-danger  mx-1"
-                      style={{ fontSize: "18px" }}
-                    >
-                      artylearning@gmail.com
-                    </span>
-                  </span>
-                  <span className="d-flex mb-3">
-                    <img
-                      src={telephone}
-                      alt="telephone"
-                      width={"30px"}
-                      height={"30px"}
-                    />
-                    &nbsp;&nbsp;
-                    <span className="mx-1" style={{ fontSize: "18px" }}>
-                      +65 8821 4153
-                    </span>
-                  </span>
-                </div>
+          <br/>
+       
+          
+            <br />
+
+            <div style="max-width: 590px; overflow: auto">
+              <table>
+                <tr class="heading">
+                  <td style="white-space: nowrap">No</td>
+                  <td style="white-space: nowrap">Item</td>
+                  <td style="white-space: nowrap">Item Amount</td>
+                  <td style="white-space: nowrap">Tax Type</td>
+                  <td style="white-space: nowrap">GST Amount</td>
+                  <td style="white-space: nowrap">Total Amount</td>
+                </tr>
+                ${data.invoiceItemsDtoList
+                  .map(
+                    (product, index) => `
+                              <tr>
+                              <td>${index + 1 || "--"}</td>
+                              <td>${product.item || "--"}</td>
+                              <td>${product.itemAmount || "--"}</td>
+                              <td>${product.taxType || "--"}</td>
+                              
+                              <td>${product.gstAmount || "0"} %</td>
+                              <td>${product.totalAmount}</td>
+                              </tr>
+                              `
+                  )
+                  .join("")}
+              </table>
+            </div>
+
+            <table style="margin-top: 20px; border: 1px solid #eee">
+              <tr>
+                <td style="width: 75%">
+                  <b>Credit Advice Offset</b>
+                </td>
+                <td>${data.creditAdviceOffset || "--"}
+                </td>
+              </tr>
+            </table>
+
+            <table style="margin-top: 20px; border: 1px solid #eee">
+              <tr>
+                <td style="width: 75%">
+                  <b>GST</b>
+                </td>
+                <td>${data.gst || "--"}</td>
+              </tr>
+            </table>
+
+            <table style="margin-top: 20px; border: 1px solid #eee">
+              <tr>
+                <td style="width: 75%">
+                  <b>Grand Total</b>
+                </td>
+                <td>${data.totalAmount || "--"}</td>
+              </tr>
+            </table>
+          
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 20px;
+              "
+            >
+              <div style="width: 50%">
+             <p> <strong style="margin-right: 14px;">Remark</strong></p>
+            
+                <strong style="margin-right: 14px;margin-bottom: 50px; ">Notes : </strong>
+            <p style="margin-top: 0px;margin-left: 10px;">${
+              data.remark || "--"
+            }</p><br />
               </div>
-              <div className="row pb-5">
-                <div className="col-md-6 col-12 p-4">
-                  <Iframe
-                    url="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.6759974761326!2d103.89156087496583!3d1.3710896986159518!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da171a746bd625%3A0x1c735a076971a9a5!2sArty%20Learning%20%40%20Hougang%20%7C%20Enrichment%20Classes%20for%20Kids!5e0!3m2!1sen!2sin!4v1709641787810!5m2!1sen!2sin"
-                    height="450"
-                    width="100%"
-                    style={{ border: "0" }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
+              <div style="width: 50%; text-align: end">
+              <div>
+                  <img
+                    src="https://smsbucket-for-sms.s3.ap-southeast-1.amazonaws.com/qr_code/amk/QR_Code_AMK.jpg"
+                    alt="Advantage"
+                    class="img-fluid"
+                    width="50%"
                   />
+                  <div><strong style="margin-right: 14px;margin-bottom: 10px;">Arty Learning Pte.Ltd.</strong>
+                  </strong><br /></div>
+              <div><strong style="margin-right: 34px;margin-bottom: 10px;">UEN:202042173K</strong>
+                  </strong><br /></div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </body>
+      </html>
+
+    `;
+      const formData = new FormData();
+      // formData.append("from", "keerthickvasan08@gmail.com");
+      // formData.append("to", "keerthickvasan08@gmail.com");
+      formData.append("from", data.parentEmail);
+      formData.append("to", data.parentEmail);
+      formData.append("subject", "Invoice");
+      formData.append("htmlContent", mailcontent);
+      setLoadIndicator(true);
+      const response = await api.post("/sendMailWithAttachment", formData, {
+        // headers: {
+        //   "Content-Type": "multipart/form-data", // Set the content type
+        //   //Authorization: `Bearer ${token}`,
+        // },
+      });
+
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        setLoadIndicator(false);
+      } else {
+        toast.error("Failed to send email");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      toast.error("Error sending email");
+    }
+  };
+
+  return (
+    <button className="btn btn-border btn-sm me-1" onClick={sendEmail}>
+      {loadIndicator && (
+        <span
+          class="spinner-border spinner-border-sm me-2"
+          aria-hidden="true"
+        ></span>
+      )}
+      Send and Publish
+    </button>
   );
 }
+
+export default SendAndPublish;

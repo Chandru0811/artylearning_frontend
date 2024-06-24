@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import SendAndPublish from "../../components/SendAndPublish";
+import fetchAllCentersWithIds from "../List/CenterList";
+import BlockImg from "../.././assets/images/Block_Img1.jpg";
 
 function InvoiceView() {
   const { id } = useParams();
@@ -19,6 +21,7 @@ function InvoiceView() {
   console.log("data", data);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
+  const [centerData, setcenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
@@ -27,8 +30,10 @@ function InvoiceView() {
     try {
       const courseData = await fetchAllCoursesWithIds();
       const studentData = await fetchAllStudentsWithIds();
+      const centerData = await fetchAllCentersWithIds();
       setCourseData(courseData);
       setStudentData(studentData);
+      setcenterData(centerData);
     } catch (error) {
       toast.error(error.message || "Error fetching data");
     } finally {
@@ -53,153 +58,121 @@ function InvoiceView() {
     fetchData();
   }, [id]);
 
-  const generatePDF = () => {
-    const doc = new jsPDF();
-    doc.addImage(Logo, "Logo", 13, 25, 40, 25); // x, y, width, height
+  const qrCodeUrl = centerData
+  ? centerData.reduce((src, center) => {
+      return parseInt(data.centerId) === center.id ? center.qrCode || "--" : src;
+    }, "")
+  : BlockImg;
 
-    doc.setFontSize(15);
-    doc.setFont("helvetica", "bold");
-    doc.text("Arty Learning @HG", 60, 25);
+  const generatePDF = async (qrCodeUrl) => {
+    try {
+      const doc = new jsPDF();
+      doc.addImage(Logo, "PNG", 13, 25, 40, 25); // x, y, width, height
 
-    doc.setFont("helvetica", "normal");
-    doc.text("Tel No:87270752", 60, 35);
-    doc.text("Email:Artylearning@gmail.com", 60, 45);
+      doc.setFontSize(15);
+      doc.setFont("helvetica", "bold");
+      doc.text("Arty Learning @HG", 60, 25);
 
-    doc.line(16, 70, 50, 70); // x, y, width, height
+      doc.setFont("helvetica", "normal");
+      doc.text("Tel No:87270752", 60, 35);
+      doc.text("Email:Artylearning@gmail.com", 60, 45);
 
-    doc.setFontSize(13);
-    // Add invoice data
-    doc.text(`Invoice Number : ${data.invoiceNumber}`, 14, 80);
-    doc.text(`Student Name :${data.studentName}`, 14, 90);
-    doc.text(`Student Id : ${data.studentUniqueId}`, 14, 100);
-    // doc.text(`Being Payment Of : ${data.studentUniqueId}`, 14, 110);
-    doc.text(`Course Name : ${data.courseName}`, 120, 80);
-    doc.text(
-      `Due Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
-      120,
-      90
-    );
+      doc.line(16, 70, 50, 70); // x, y, width, height
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text(`Payment Amount Specification`, 10, 126); // Add x, y coordinates for this line
+      doc.setFontSize(13);
+      doc.text(`Invoice Number : ${data.invoiceNumber}`, 14, 80);
+      doc.text(`Student Name :${data.studentName}`, 14, 90);
+      doc.text(`Student Id : ${data.studentUniqueId}`, 14, 100);
+      doc.text(`Course Name : ${data.courseName}`, 120, 80);
+      doc.text(
+        `Due Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
+        120,
+        90
+      );
 
-    doc.line(10, 120, 200, 120); // x1, y1, x2, y2
-    // doc.line(10, 145, 200, 145); // x1, y1, x2, y2
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text(`Payment Amount Specification`, 10, 126); // Add x, y coordinates for this line
 
-    // doc.text(`NO`, 20, 140);
-    // doc.text(`${invoiceItem + 1 || "-"}`, 20, 155);
+      doc.line(10, 120, 200, 120); // x1, y1, x2, y2
 
-    // doc.text(`Item`, 40, 140);
-    // doc.text(`${data.item || "-"}`, 40, 155);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.text(`Official Receipt`, 14, 70);
 
-    // doc.text(`Item Amount`, 60, 140);
-
-    // doc.text(`${invoiceItem.itemAmount || "-"}`, 65, 155);
-
-    // doc.text(`Tax Type`, 90, 140);
-    // doc.text(`${invoiceItem.taxType || "-"}`, 90, 155);
-
-    // doc.text(`GST Amount`, 148, 140);
-
-    // doc.text(`${invoiceItem.gstAmount || "-"}`, 148, 155);
-
-    // doc.text(`Total Amount`, 175, 140);
-
-    // doc.text(`${invoiceItem.totalAmount || "-"}`, 175, 155);
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text(`Official Receipt`, 14, 70);
-
-    // Add the table
-    const tableData =
-      data.invoiceItemsDtoList &&
-      data.invoiceItemsDtoList.map((invoiceItem, index) => [
-        index + 1,
-        invoiceItem.item,
-        invoiceItem.itemAmount,
-        invoiceItem.taxType,
-        invoiceItem.gstAmount,
-        invoiceItem.totalAmount,
-      ]);
-    doc.autoTable({
-      startY: 130,
-      headStyles: {
-        fillColor: [255, 255, 255],
-        textColor: [0, 0, 0],
-        fontStyle: "underline",
-      },
-      bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
-      head: [
-        ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
-      ],
-      body: tableData,
-      footStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
-      body: tableData,
-      foot: [
-        [
-          "",
-          "",
-          "",
-          "",
-          "Creadit Advice Offset",
-          `${data.creditAdviceOffset || "--"}`,
-          "GST",
-          `${data.gst || "--"}`,
-          "Total",
-          `${data.totalAmount || "--"}`,
+      const tableData =
+        data.invoiceItemsDtoList &&
+        data.invoiceItemsDtoList.map((invoiceItem, index) => [
+          index + 1,
+          invoiceItem.item,
+          invoiceItem.itemAmount,
+          invoiceItem.taxType,
+          invoiceItem.gstAmount,
+          invoiceItem.totalAmount,
+        ]);
+      doc.autoTable({
+        startY: 130,
+        headStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontStyle: "underline",
+        },
+        bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
+        head: [
+          ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
         ],
-        ["", "", "", "", "GST", `${data.gst || "--"}`, "", "", "", ""],
-        [
-          "",
-          "",
-          "",
-          "",
-          "Total",
-          `${data.totalAmount || "--"}`,
-          "",
-          "",
-          "",
-          "",
-        ],
-      ],
+        body: tableData,
+      });
+
+      // Add Credit Advice Offset, GST, Total Amount
+      doc.setFontSize(11);
+      doc.text(
+        `Remark: ${data.remark || "--"}`,
+        14,
+        doc.autoTable.previous.finalY + 10
+      );
+
+      // Load QR code image
+      const qrCodeImage = await loadImage(qrCodeUrl);
+
+      // Add QR code to PDF
+      if (qrCodeImage) {
+        doc.addImage(qrCodeImage, "PNG", 145, doc.autoTable.previous.finalY + 10, 40, 40);
+        doc.text(`Send To Pay`, 175, doc.autoTable.previous.finalY + 55, {
+          align: "right",
+          fontWeight: "bold",
+        });
+      } else {
+        doc.text("QR Code not available", 145, doc.autoTable.previous.finalY + 10);
+      }
+
+      // Save the PDF
+      doc.save("invoice.pdf");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Error generating PDF");
+    }
+  };
+
+  const handleGeneratePDF = async () => {
+    const qrCodeUrl = centerData
+      ? centerData.reduce((src, center) => {
+          return parseInt(data.centerId) === center.id ? center.qrCode || BlockImg : src;
+        }, BlockImg)
+      : BlockImg;
+
+    generatePDF(qrCodeUrl);
+  };
+
+  // Utility function to load image
+  const loadImage = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous"; // Enable CORS if needed
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = url;
     });
-
-    // Add Credit Advice Offset, GST, Total Amount
-    // doc.text(
-    //   `Credit Advice Offset: ${data.creditAdviceOffset || "--"}`,
-    //   145,
-    //   doc.autoTable.previous.finalY + 10
-    // );
-    // doc.text(
-    //   `GST: ${data.gst || "--"}`,
-    //   145,
-    //   doc.autoTable.previous.finalY + 20
-    // );
-    // doc.text(
-    //   `Total Amount: ${data.totalAmount || "--"}`,
-    //   145,
-    //   doc.autoTable.previous.finalY + 30
-    // );
-
-    //   Add Remark
-    doc.setFontSize(11);
-    doc.text(
-      `Remark: ${data.remark || "--"}`,
-      14,
-      doc.autoTable.previous.finalY + 10
-    );
-
-    //Add QR code
-    doc.addImage(QR, "PNG", 145, doc.autoTable.previous.finalY + 10, 40, 40);
-    doc.text(`Send To Pay`, 175, doc.autoTable.previous.finalY + 55, {
-      align: "right",
-      fontWeight: "bold",
-    });
-
-    // Save the PDF
-    doc.save("invoice.pdf");
   };
   // const SendMail = async () => {
   //   try {
@@ -251,7 +224,7 @@ function InvoiceView() {
           <SendAndPublish data={data} id={id} />
           {/* </Link> */}
           <button
-            onClick={generatePDF}
+            onClick={handleGeneratePDF}
             className="btn btn-border btn-sm me-1"
             disabled={loadIndicator}
           >
@@ -285,9 +258,16 @@ function InvoiceView() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 p-3 d-flex justify-content-center flex-column align-items-start">
-              <h5>Arty Learning @HG</h5>
-              <span>Tel No:87270752</span>
-              <span>Email:Artylearning@gmail.com</span>
+              <h5>
+                {centerData &&
+                  centerData.map((center) =>
+                    parseInt(data.centerId) === center.id
+                      ? center.centerNames || "--"
+                      : ""
+                  )}
+              </h5>
+              <span>Tel No : 87270752</span>
+              <span>Email &nbsp;: Artylearning@gmail.com</span>
             </div>
             <div className="card-header my-5">
               <h5>Voided Invoice</h5>
@@ -306,8 +286,7 @@ function InvoiceView() {
                   <p>Student Name </p>
                 </div>
                 <div className="col-6">
-                  - &nbsp;&nbsp;
-                  {data.studentName || "--"}{" "}
+                  - &nbsp; {data.studentName || "--"}
                 </div>
               </div>
               <div className="row my-1">
@@ -402,7 +381,54 @@ function InvoiceView() {
           </div>
           <div className="col-lg-4 col-md-8 col-12">
             <div className="d-flex justify-content-center flex-column align-items-center">
-              <img src={QR} alt=".." />
+              {/* {data.qrCode ? (
+                <img
+                  src={data.qrCode}
+                  onError={(e) => {
+                    e.target.src = BlockImg;
+                  }}
+                  style={{ borderRadius: 70 }}
+                  width="100"
+                  height="100"
+                  alt="Teacher"
+                />
+              ) : (
+                <img
+                  src={BlockImg}
+                  alt="Teacher"
+                  style={{ borderRadius: 70 }}
+                  width="100"
+                  height="100"
+                />
+              )} */}
+              {data.qrCode ? (
+                <img
+                  src={
+                    centerData
+                      ? centerData.reduce((src, center) => {
+                          return parseInt(data.centerId) === center.id
+                            ? center.qrCode || "--"
+                            : src;
+                        }, "")
+                      : BlockImg
+                  }
+                  onError={(e) => {
+                    e.target.src = BlockImg;
+                  }}
+                  style={{ borderRadius: 70 }}
+                  width="100"
+                  height="100"
+                  alt="Teacher"
+                />
+              ) : (
+                <img
+                  src={BlockImg}
+                  alt="Teacher"
+                  style={{ borderRadius: 70 }}
+                  width="100"
+                  height="100"
+                />
+              )}
               <p className="text-center">
                 Arty Learning Pvt.Ltd <br />
                 UEN:202042173K{" "}

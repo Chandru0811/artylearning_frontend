@@ -4,30 +4,34 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../components/common/Delete";
-import api from "../../config/URL";
+import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import Delete from "../../../components/common/Delete";
+import TaxAdd from "./TaxAdd";
+import TaxEdit from "./TaxEdit";
 // import { SCREENS } from "../../config/ScreenFilter";
 
-const CenterManager = () => {
+const Tax = () => {
   const tableRef = useRef(null);
-
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+
+  // const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
 
+
   useEffect(() => {
-    const getCenterData = async () => {
+    const getData = async () => {
       try {
-        const response = await api.get("/getAllCourseClassListings");
+        const response = await api.get("/getAllTaxSetting");
         setDatas(response.data);
-        setLoading(false);
       } catch (error) {
-        toast.error("Error Fetching Data");
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
-    getCenterData();
+    getData();
   }, []);
 
   useEffect(() => {
@@ -60,7 +64,7 @@ const CenterManager = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllCourseClassListings");
+      const response = await api.get("/getAllTaxSetting");
       setDatas(response.data);
       initializeDataTable();
     } catch (error) {
@@ -71,15 +75,9 @@ const CenterManager = () => {
 
   return (
     <div className="container my-4">
-      <div className="my-3 d-flex justify-content-end mb-5">
-        {storedScreens?.classCreate && (
-          <Link to={`/centermanager/add`}>
-            <button type="button" className="btn btn-button btn-sm">
-              Add <i class="bx bx-plus"></i>
-            </button>
-          </Link>
-        )}
-      </div>
+      {/* {storedScreens?.levelCreate &&  */}
+      <TaxAdd onSuccess={refreshData} />
+      {/* } */}
       {loading ? (
         <div className="loader-container">
           <div class="loading">
@@ -94,12 +92,13 @@ const CenterManager = () => {
         <table ref={tableRef} className="display">
           <thead>
             <tr>
-              <th scope="col">S No</th>
-              <th scope="col">Centre Manager Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Phone</th>
-              <th scope="col">Desigination</th>
-
+              <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                S No
+              </th>
+              <th scope="col">Tax Type</th>
+              <th scope="col">Rate</th>
+              <th scope="col">Effective Date</th>
+              <th scope="col">Status</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -107,31 +106,33 @@ const CenterManager = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td>{"artylearning"}</td>
-                <td>{"arty@gmail.com"}</td>
-                <td>{"956789098"}</td>
-                <td>{"Singapore"}</td>
+                <td>{data.taxType}</td>
+                <td>{data.rate}</td>
+                <td>{data.effectiveDate}</td>
+                <td>{data.status === "Active" ? (
+                  <span className="badge badges-Green">Active</span>
+                ) : (
+                  <span className="badge badges-Red">Inactive</span>
+                )}</td>
                 <td>
-                  {storedScreens?.classRead && (
-                    <Link to={`/centermanager/view`}>
+                  <div className="d-flex">
+                    {/* {storedScreens?.invoiceRead && ( */}
+                    {/* <Link to={`/tax/view/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEye />
                       </button>
-                    </Link>
-                  )}
-                  {storedScreens?.classUpdate && (
-                    <Link to={`/centermanager/edit`}>
-                      <button className="btn btn-sm">
-                        <FaEdit />
-                      </button>
-                    </Link>
-                  )}
-                  {storedScreens?.classDelete && (
+                    </Link> */}
+                    {/* )}
+                    {storedScreens?.invoiceUpdate && ( */}
+                    <TaxEdit id={data.id} onSuccess={refreshData} />
+                    {/* )}
+                    {storedScreens?.invoiceDelete && ( */}
                     <Delete
                       onSuccess={refreshData}
-                      path={`/deleteCourseClassListing/${data.id}`}
+                      path={`/deleteTaxSetting/${data.id}`}
                     />
-                  )}
+                    {/* )} */}
+                  </div>
                 </td>
               </tr>
             ))}
@@ -142,4 +143,4 @@ const CenterManager = () => {
   );
 };
 
-export default CenterManager;
+export default Tax;

@@ -162,6 +162,18 @@ import CmsAboutUs from "../pages/CMS/CmsAboutus/CmsAboutUs";
 import CmsChinesh from "../pages/CMS/CMSChineshCourse/CmsChinesh";
 import CenterManagerEdit from "../pages/centerManager/CenterManagerEdit";
 import CenterManagerView from "../pages/centerManager/CenterManagerView";
+import Tax from "../pages/Settings/Tax/Tax";
+import TaxAdd from "../pages/Settings/Tax/TaxAdd";
+import TaxEdit from "../pages/Settings/Tax/TaxEdit";
+import TaxView from "../pages/Settings/Tax/TaxView";
+import Race from "../pages/Settings/Race/Race";
+import RaceAdd from "../pages/Settings/Race/RaceAdd";
+import RaceEdit from "../pages/Settings/Race/RaceEdit";
+import RaceView from "../pages/Settings/Race/RaceView";
+import Country from "../pages/Settings/Country/Country";
+import CountryAdd from "../pages/Settings/Country/CountryAdd";
+import CountryEdit from "../pages/Settings/Country/CountryEdit";
+import CountryView from "../pages/Settings/Country/CountryView";
 
 
 function Admin({ handleLogout }) {
@@ -472,6 +484,26 @@ function Admin({ handleLogout }) {
 
 
               <Route path="/cms/chineshcourse" element={<CmsChinesh />} />
+
+              {/* Setting */}
+              {/* Tax */}
+              <Route path="/tax" element={<Tax/>}/>
+              <Route path="/tax/add" element={<TaxAdd/>}/>
+              <Route path="/tax/edit/:id" element={<TaxEdit/>}/>
+              <Route path="/tax/view/:id" element={<TaxView/>}/>
+
+              {/* Race */}
+              <Route path="/race" element={<Race/>}/>
+              <Route path="/race/add" element={<RaceAdd/>}/>
+              <Route path="/race/edit/:id" element={<RaceEdit/>}/>
+              <Route path="/race/view/:id" element={<RaceView/>}/>
+
+              {/* Countrty */}
+              <Route path="/country" element={<Country/>}/>
+              <Route path="/country/add" element={<CountryAdd/>}/>
+              <Route path="/country/edit/:id" element={<CountryEdit/>}/>
+              <Route path="/country/view/:id" element={<CountryView/>}/>
+
             </Routes>
           </div>
           <Footer />
