@@ -3,9 +3,37 @@ import axios from "axios";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import api from "../config/URL";
+import fetchAllCentersWithIds from "../pages/List/CenterList";
 
 function SendAndPublish({ data }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [centerData, setcenterData] = useState(null);
+
+  const getQRCodeUrl = () => {
+    if (centerData && data.centerId) {
+      const center = centerData.find(
+        (center) => center.id === parseInt(data.centerId)
+      );
+      return center ? center.qrCode : "https://example.com/default-qr.png";
+    }
+    return "https://example.com/default-qr.png";
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoadIndicator(true);
+      try {
+        const centers = await fetchAllCentersWithIds();
+        setcenterData(centers);
+      } catch (error) {
+        toast.error(error.message || "Error fetching data");
+      } finally {
+        setLoadIndicator(false);
+      }
+    };
+    fetchData();
+  }, []);
+
   const sendEmail = async () => {
     try {
       const mailcontent = `<!DOCTYPE html>
@@ -230,7 +258,7 @@ function SendAndPublish({ data }) {
               <div style="width: 50%; text-align: end">
               <div>
                   <img
-                    src="https://www.sgitjobs.com/HomeInsteadFinalUI/public/assets/images/QR.png"
+                    src="https://smsbucket-for-sms.s3.ap-southeast-1.amazonaws.com/qr_code/amk/QR_Code_AMK.jpg"
                     alt="Advantage"
                     class="img-fluid"
                     width="50%"

@@ -95,7 +95,7 @@ const CenterManager = () => {
           <thead>
             <tr>
               <th scope="col">S No</th>
-              <th scope="col">CenterManger Name</th>
+              <th scope="col">Centre Manager Name</th>
               <th scope="col">Email</th>
               <th scope="col">Phone</th>
               <th scope="col">Desigination</th>
