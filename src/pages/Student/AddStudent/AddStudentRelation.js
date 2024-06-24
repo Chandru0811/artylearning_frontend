@@ -115,7 +115,7 @@ const Addrelation = forwardRef(({ formData,setLoadIndicators, setFormData, handl
                     <div className="text-start">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Student Name</small>
-                        <span className="text-danger">*</span>
+                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input

@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
     "*Medical Condition Result is required!"
   ),
   // nationality: Yup.string().required("*Select a Nationality!"),
-  primaryLanguageSpokenEnglish: Yup.string().required(
+  primaryLanguage: Yup.string().required(
     "*Primary Language is required!"
   ),
   race: Yup.string().required("*Select a Race!"),
@@ -85,15 +85,15 @@ const AddStudentDetails = forwardRef(
         preAssessmentResult: formData.preAssessmentResult || "",
         race: formData.race || "",
         nationality: formData.nationality || "",
-        primaryLanguageSpokenEnglish:
-          formData.primaryLanguageSpokenEnglish || "",
+        primaryLanguage:
+          formData.primaryLanguage || "",
         referByParent: formData.referByParent || "",
         referByStudent: formData.referByStudent || "",
         remark: formData.remark || "",
         allowMagazine: formData.allowMagazine || "",
         allowSocialMedia: formData.allowSocialMedia || "",
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
@@ -129,10 +129,9 @@ const AddStudentDetails = forwardRef(
           formData.append("centerId", values.centerId);
           formData.append("center", selectedCenter);
           formData.append(
-            "primaryLanguageSpokenEnglish",
-            values.primaryLanguageSpokenEnglish
+            "primaryLanguage",
+            values.primaryLanguage
           );
-          formData.append("primaryLanguageSpokenChinese", "Chinese");
           formData.append("groupName", values.groupName);
           formData.append("file", values.file);
 
@@ -541,53 +540,26 @@ const AddStudentDetails = forwardRef(
                       </label>
                       <br />
                       <select
-                        name="race"
+                        name="primaryLanguage"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.race}
+                        value={formik.values.primaryLanguage}
                         className="form-select "
                         aria-label=". example"
                       >
                         <option selected></option>
-                        <option value="Chinese">Chinese</option>
-                        <option value="Malay">English</option>
-                        
+                        <option value="CHINESE">Chinese</option>
+                        <option value="ENGLISH">English</option>
                       </select>
-                      {formik.touched.primaryLanguageSpokenEnglish &&
-                        formik.errors.primaryLanguageSpokenEnglish && (
+                      {formik.touched.primaryLanguage &&
+                        formik.errors.primaryLanguage && (
                           <div className="error text-danger ">
                             <small>
-                              {formik.errors.primaryLanguageSpokenEnglish}
+                              {formik.errors.primaryLanguage}
                             </small>
                           </div>
                         )}
                     </div>
-                    {/* <div className="text-start mt-4">
-                      <label htmlFor="" className="mb-1 fw-medium">
-                        <small>Refer By Student</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <select
-                        name="referByStudent"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.referByStudent}
-                        className="form-select "
-                        aria-label=". example"
-                      >
-                        <option value=""></option>
-                        <option value="Jacky">Jacky</option>
-                        <option value="Lee">Lee</option>
-                        <option value="Chan">Chan</option>
-                      </select>
-                      {formik.touched.referByStudent &&
-                        formik.errors.referByStudent && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.referByStudent}</small>
-                          </div>
-                        )}
-                    </div> */}
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Refer By Student</small>
