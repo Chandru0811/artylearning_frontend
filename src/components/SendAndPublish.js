@@ -35,6 +35,8 @@ function SendAndPublish({ data }) {
   }, []);
 
   const sendEmail = async () => {
+    const qrCodeUrl = getQRCodeUrl();
+
     try {
       const mailcontent = `<!DOCTYPE html>
       <html lang="en">
@@ -258,7 +260,7 @@ function SendAndPublish({ data }) {
               <div style="width: 50%; text-align: end">
               <div>
                   <img
-                    src="https://smsbucket-for-sms.s3.ap-southeast-1.amazonaws.com/qr_code/amk/QR_Code_AMK.jpg"
+                    src="${qrCodeUrl}"
                     alt="Advantage"
                     class="img-fluid"
                     width="50%"
