@@ -48,12 +48,12 @@ function Sidebar() {
         icon: "bx bx-book-alt",
         isOpen: false,
         subMenus: [
-          { title: "Level", path: "/level", access: storedScreens.levelIndex },
           {
             title: "Subject",
             path: "/subject",
             access: storedScreens.subjectIndex,
           },
+          { title: "Level", path: "/level", access: storedScreens.levelIndex },
           {
             title: "Course",
             path: "/course",
@@ -325,7 +325,28 @@ function Sidebar() {
           },
         ],
       },
-      // Add other menu items similarly
+      {
+        title: "Settings",
+        icon: "bx bx-cog",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "Tax",
+            path: "/tax",
+            access: true,
+          },
+          {
+            title: "Race",
+            path: "/race",
+            access: true,
+          },
+          {
+            title: "Country & Nationality",
+            path: "/country",
+            access: true,
+          },
+        ],
+      },
     ];
 
     setMenuItems(updatedMenuItems);
