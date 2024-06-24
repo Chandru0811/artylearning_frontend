@@ -33,6 +33,7 @@ const EditTermsAndCondition = forwardRef(
       sign.clear();
       setUrl("");
     };
+    
     const handleGenerate = () => {
       setUrl(sign.getTrimmedCanvas().toDataURL("image/png"));
       console.log("Sign :", sign);
@@ -78,6 +79,7 @@ const EditTermsAndCondition = forwardRef(
             if (response.status === 200) {
               toast.success(response.data.message);
               navigate("/student");
+              // window.location.reload();
             } else {
               toast.error(response.data.message);
             }
@@ -103,6 +105,7 @@ const EditTermsAndCondition = forwardRef(
             if (response.status === 201) {
               toast.success(response.data.message);
               navigate("/student");
+              // window.location.reload();
             } else {
               toast.error(response.data.message);
             }

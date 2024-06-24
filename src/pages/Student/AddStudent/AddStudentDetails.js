@@ -93,7 +93,7 @@ const AddStudentDetails = forwardRef(
         allowMagazine: formData.allowMagazine || "",
         allowSocialMedia: formData.allowSocialMedia || "",
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
@@ -458,6 +458,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.age}
+                        readOnly
                       />
                       {formik.touched.age && formik.errors.age && (
                         <div className="text-danger">

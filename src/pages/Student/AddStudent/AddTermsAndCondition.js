@@ -26,6 +26,7 @@ const AddTermsAndCondition = forwardRef(
       sign.clear();
       setUrl("");
     };
+
     const handleGenerate = () => {
       setUrl(sign.getTrimmedCanvas().toDataURL("image/png"));
       console.log("Sign :", sign);
@@ -45,9 +46,9 @@ const AddTermsAndCondition = forwardRef(
 
         // Convert URL to Blob
         const apiResponse = await fetch(url);
-        const blob = await apiResponse.blob();
+        const file = await apiResponse.blob();
 
-        formDatas.append("file", blob);
+        formDatas.append("file", file);
         formDatas.append(
           "termsAndConditionSignatureDate",
           data.termsAndConditionSignatureDate

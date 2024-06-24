@@ -456,6 +456,7 @@ const Edi = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.age}
+                        readOnly
                       />
                       {formik.touched.age && formik.errors.age && (
                         <div className="text-danger">

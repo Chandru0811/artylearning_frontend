@@ -5,9 +5,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
 
-const validationSchema = Yup.object().shape({
-  studentRelationStudentName: Yup.string().required("*Student Name is required!"),
-});
+const validationSchema = Yup.object().shape({});
 
 const Addrelation = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
 
