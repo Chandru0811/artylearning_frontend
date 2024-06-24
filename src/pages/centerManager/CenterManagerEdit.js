@@ -158,7 +158,7 @@ function CenterManagerEdit() {
             </div> */}
             <div class="col-md-6 col-12 mb-4">
               <label>
-                CenterManager Name<span class="text-danger">*</span>
+               Centre Manager Name<span class="text-danger">*</span>
               </label>
               <input
                 name="className"

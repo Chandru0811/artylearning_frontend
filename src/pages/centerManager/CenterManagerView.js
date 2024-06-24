@@ -52,7 +52,7 @@ function CenterManagerView() {
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">CenterManager Name</p>
+                  <p className="fw-medium">Centre Manager Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {centerData && centerData.map((centerId) =>

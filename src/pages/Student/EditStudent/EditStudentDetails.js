@@ -9,6 +9,8 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllRaceWithIds from "../../List/RaceList";
+import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 
 const validationSchema = Yup.object().shape({
   centerId: Yup.string().required("*Centre is required!"),
@@ -44,14 +46,24 @@ const validationSchema = Yup.object().shape({
 const Edi = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [raceData, setRaceData] = useState(null);
+    const [nationalityData, setNationalityData] = useState(null);
+
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
+
+        const raceData = await fetchAllRaceWithIds();
+        setRaceData(raceData);
+
+        const nationality = await fetchAllNationalityeWithIds();
+        setNationalityData(nationality);
       } catch (error) {
         toast.error(error);
       }
     };
+
     const calculateAge = (dob) => {
       const birthDate = new Date(dob);
       const today = new Date();
@@ -365,12 +377,15 @@ const Edi = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.nationality}
-                        className="form-select "
-                        aria-label=". example"
+                        className="form-select"
                       >
-                        <option value=""></option>
-                        <option value="Singaporean">Singaporean</option>
-                        <option value="Others">Others</option>
+                       <option selected></option>
+                        {nationalityData &&
+                          nationalityData.map((nationalityId) => (
+                            <option key={nationalityId.id} value={nationalityId.id}>
+                              {nationalityId.nationality}
+                            </option>
+                          ))}
                       </select>
                       {formik.touched.nationality &&
                         formik.errors.nationality && (
@@ -516,14 +531,14 @@ const Edi = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.race}
-                        className="form-select "
-                        aria-label=". example"
+                        className="form-select"
                       >
-                        <option selected></option>
-                        <option value="Chinese">Chinese</option>
-                        <option value="Malay">Malay</option>
-                        <option value="Indian ">Indian </option>
-                        <option value="Eurasian ">Eurasian </option>
+                        {raceData &&
+                          raceData.map((raceId) => (
+                            <option key={raceId.id} value={raceId.id}>
+                              {raceId.race}
+                            </option>
+                          ))}
                       </select>
                       {formik.touched.race && formik.errors.race && (
                         <div className="error text-danger ">
