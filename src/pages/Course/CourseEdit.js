@@ -8,6 +8,7 @@ import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllLevelsWithIds from "../List/LevelList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
+import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
 
 function CourseEdit() {
   const { id } = useParams();
@@ -110,6 +111,37 @@ const [loadIndicator, setLoadIndicator] = useState(false);
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const fetchDatas = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchLevels = async (subjectId) => {
+    try {
+      const subject = await fetchAllLevelBySubjectsWithIds(subjectId);
+      setLevelData(subject);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const handleSubjectChange = (event) => {
+    setLevelData(null);
+    const subjectId = event.target.value;
+    formik.setFieldValue("subjectId", subjectId);
+    fetchLevels(subjectId);
+  };
+
+  useEffect(() => {
+    fetchDatas();
+  }, []);
 
   return (
     <section className="courseAdd">
@@ -205,24 +237,24 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                   )}
                 </div>
               </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Subject<span class="text-danger">*</span>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  class={`form-select  ${
-                    formik.touched.subjectId && formik.errors.subjectId
+                  className={`form-select  ${formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("subjectId")}
+                  onChange={handleSubjectChange}
                   aria-label="Default select example"
                 >
                   <option selected></option>
                   {subjectData &&
-                    subjectData.map((subjectId) => (
-                      <option key={subjectId.id} value={subjectId.id}>
-                        {subjectId.subjects}
+                    subjectData.map((subject) => (
+                      <option key={subject.subjectId} value={subject.id}>
+                        {subject.subjects}
                       </option>
                     ))}
                 </select>
@@ -234,18 +266,17 @@ const [loadIndicator, setLoadIndicator] = useState(false);
               </div>
             </div>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Level<span class="text-danger">*</span>
+                  Level<span className="text-danger">*</span>
                 </lable>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    class={`form-select  ${
-                      formik.touched.levelId && formik.errors.levelId
+                    className={`form-select  ${formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>

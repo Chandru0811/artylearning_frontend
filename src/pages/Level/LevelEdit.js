@@ -7,13 +7,32 @@ import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
 
 function Edit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [subjectData, setSubjectData] = useState(null);
   
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+    setSubjectData(null);
+  };
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async (subjectId) => {
+    try {
+      const subject = await fetchAllSubjectsWithIds(subjectId);
+      setSubjectData(subject);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const validationSchema = Yup.object({
     level: Yup.string().required("*Level is required"),
@@ -26,11 +45,23 @@ function Edit({ id, onSuccess }) {
       level: "",
       levelCode: "",
       status: "",
+      subjectId: "",
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       // console.log(values);
       setLoadIndicator(true);
+      let selectedSubjectName = "";
+
+      subjectData.forEach((subject) => {
+        if (parseInt(values.subjectId) === subject.id) {
+          selectedSubjectName = subject.subjects || "--";
+        }
+      });
+
+      let requestBody = {
+        subjectId: values.subjectId
+      }
       try {
         const response = await api.put(`/updateCourseLevel/${id}`, values, {
           headers: {
@@ -67,6 +98,14 @@ function Edit({ id, onSuccess }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleSubjectChange = (event) => {
+    setSubjectData(null);
+    const subjectId = event.target.value;
+    formik.setFieldValue("subjectId", subjectId);
+    fetchData(subjectId); // Fetch class for the selected center
+  };
+
+
   return (
     <>
       <button className="btn btn-sm" onClick={handleShow}>
@@ -86,26 +125,34 @@ function Edit({ id, onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
-                <div className="col-md-6 col-12 mb-2">
+              <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Level<span className="text-danger">*</span>
+                    Subject<span className="text-danger">*</span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder=""
-                    className={`form-control  ${
-                      formik.touched.level && formik.errors.level
+                  <select
+                    {...formik.getFieldProps("subjectId")}
+                    class={`form-select  ${
+                      formik.touched.subjectId && formik.errors.subjectId
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("level")}
-                  />
-                  {formik.touched.level && formik.errors.level && (
+                    onChange={handleSubjectChange}
+                  >
+                    <option></option>
+                    {subjectData &&
+                      subjectData.map((subject) => (
+                        <option key={subject.id} value={subject.id}>
+                          {subject.subjects}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.subjectId && formik.errors.subjectId && (
                     <div className="invalid-feedback">
-                      {formik.errors.level}
+                      {formik.errors.subjectId}
                     </div>
                   )}
                 </div>
+               
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Level Code<span className="text-danger">*</span>
@@ -159,6 +206,26 @@ function Edit({ id, onSuccess }) {
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
                       {formik.errors.status}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Level<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder=""
+                    className={`form-control  ${
+                      formik.touched.level && formik.errors.level
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("level")}
+                  />
+                  {formik.touched.level && formik.errors.level && (
+                    <div className="invalid-feedback">
+                      {formik.errors.level}
                     </div>
                   )}
                 </div>
