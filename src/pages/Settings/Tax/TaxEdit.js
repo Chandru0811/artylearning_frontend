@@ -92,31 +92,14 @@ function TaxEdit({ id, onSuccess }) {
                                     <label className="form-label">
                                         Tax Type<span className="text-danger">*</span>
                                     </label>
-                                    <select
-                                        {...formik.getFieldProps("taxType")}
-                                        class={`form-select  ${formik.touched.taxType && formik.errors.taxType
+                                    <input
+                                        type="text"
+                                        className={`form-control  ${formik.touched.taxType && formik.errors.taxType
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        aria-label="Default select example"
-                                    >
-                                        <option
-                                        // defaultValue={data.taxType === "Active"}
-                                        >
-                                        </option>
-                                        <option
-                                            value="Purchase"
-                                        // defaultValue={data.taxType === "Purchase"}
-                                        >
-                                            Purchase
-                                        </option>
-                                        <option
-                                            value="Inactive"
-                                        // defaultValue={data.taxType === "Inactive"}
-                                        >
-                                            Inactive
-                                        </option>
-                                    </select>
+                                        {...formik.getFieldProps("taxType")}
+                                    />
                                     {formik.touched.taxType && formik.errors.taxType && (
                                         <div className="invalid-feedback">
                                             {formik.errors.taxType}

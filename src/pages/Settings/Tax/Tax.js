@@ -109,7 +109,7 @@ const Tax = () => {
                 <td>{data.taxType}</td>
                 <td>{data.rate}</td>
                 <td>{data.effectiveDate}</td>
-                <td>{data.status === "Active" ? (
+                <td>{data.status === "ACTIVE" ? (
                   <span className="badge badges-Green">Active</span>
                 ) : (
                   <span className="badge badges-Red">Inactive</span>

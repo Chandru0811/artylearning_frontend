@@ -80,18 +80,14 @@ function TaxAdd({ onSuccess }) {
                                     <label className="form-label">
                                         Tax Type<span className="text-danger">*</span>
                                     </label>
-                                    <select
-                                        {...formik.getFieldProps("taxType")}
-                                        class={`form-select  ${formik.touched.taxType && formik.errors.taxType
+                                    <input
+                                        type="text"
+                                        className={`form-control  ${formik.touched.taxType && formik.errors.taxType
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        aria-label="Default select example"
-                                    >
-                                        <option selected></option>
-                                        <option value="Purchase">Purchase</option>
-                                        <option value="Inactive">Inactive</option>
-                                    </select>
+                                        {...formik.getFieldProps("taxType")}
+                                    />
                                     {formik.touched.taxType && formik.errors.taxType && (
                                         <div className="invalid-feedback">
                                             {formik.errors.taxType}
@@ -151,7 +147,7 @@ function TaxAdd({ onSuccess }) {
                                     >
                                         <option selected></option>
                                         <option value="ACTIVE">Active</option>
-                                        <option value="INACTIVE">InActive</option>
+                                        <option value="INACTIVE">Inactive</option>
                                     </select>
                                     {formik.touched.status && formik.errors.status && (
                                         <div className="invalid-feedback">
