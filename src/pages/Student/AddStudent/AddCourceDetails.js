@@ -32,6 +32,7 @@ const AddcourseDetail = forwardRef(
     const formik = useFormik({
       initialValues: {
         courseId: formData.courseId || "",
+        // courseName :formData.courseName || "",
         startDate: formData.startDate || "",
         startTime: formData.startTime || "",
         file: null || "",

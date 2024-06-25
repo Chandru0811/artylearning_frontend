@@ -43,7 +43,7 @@ const validationSchema = Yup.object().shape({
   // referByParent: Yup.string().required("*Refer By Parent is required!"),
 });
 
-const Edi = forwardRef(
+const EditStudentDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [raceData, setRaceData] = useState(null);
@@ -382,14 +382,14 @@ const Edi = forwardRef(
                        <option selected></option>
                         {nationalityData &&
                           nationalityData.map((nationalityId) => (
-                            <option key={nationalityId.id} value={nationalityId.id}>
+                            <option key={nationalityId.id} value={nationalityId.nationality}>
                               {nationalityId.nationality}
                             </option>
                           ))}
                       </select>
                       {formik.touched.nationality &&
                         formik.errors.nationality && (
-                          <div className="error text-danger ">
+                          <div className="error text-danger">
                             <small>{formik.errors.nationality}</small>
                           </div>
                         )}
@@ -535,7 +535,7 @@ const Edi = forwardRef(
                       >
                         {raceData &&
                           raceData.map((raceId) => (
-                            <option key={raceId.id} value={raceId.id}>
+                            <option key={raceId.id} value={raceId.race}>
                               {raceId.race}
                             </option>
                           ))}
@@ -553,12 +553,11 @@ const Edi = forwardRef(
                       </label>
                       <br />
                       <select
-                        name="race"
+                        name="primaryLanguage"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.race}
-                        className="form-select "
-                        aria-label=". example"
+                        value={formik.values.primaryLanguage}
+                        className="form-select"
                       >
                         <option selected></option>
                         <option value="CHINESE">Chinese</option>
@@ -703,4 +702,4 @@ const Edi = forwardRef(
     );
   }
 );
-export default Edi;
+export default EditStudentDetails;
