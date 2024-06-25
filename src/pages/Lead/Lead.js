@@ -156,24 +156,22 @@ const Lead = () => {
                     )}
                   </td>
                   <td>
-                    {data.status === "arranged" ? (
+                    {data.leadStatus === "Arranging assessment" ? (
                       <span className="badge badges-Brown">
-                        Assessment Arranged
+                        Arranging assessment
                       </span>
-                    ) : data.status === "confirm" ? (
-                      <span className="badge badges-Green">Confirmed</span>
-                    ) : data.status === "wait" ? (
-                      <span className="badge badges-Ash">Waitlist</span>
-                    ) : data.status === "called" ? (
-                      <span className="badge badges-Blue">Called</span>
-                    ) : data.status === "pending" ? (
-                      <span className="badge badges-Yellow">
-                        Pending for Payment
+                    ) : data.leadStatus === "Assessment confirmed" ? (
+                      <span className="badge badges-Green">Assessment confirmed</span>
+                    ) : data.leadStatus === "Waiting for payment" ? (
+                      <span className="badge badges-Ash">Waiting for payment</span>
+                    ) : data.leadStatus === "Rejected" ? (
+                      <span className="badge bg-danger">Rejected</span>
+                    ) : data.leadStatus === "KIV" ? (
+                      <span className="badge bg-success">
+                        KIV
                       </span>
-                    ) : data.status === "drop" ? (
-                      <span className="badge badges-Red">Drop</span>
                     ) : (
-                      <span className="badge badges-Red">Completed</span>
+                      <span className="badge bg-warning">Pending</span>
                     )}
                   </td>
 
