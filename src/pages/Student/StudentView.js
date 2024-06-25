@@ -307,7 +307,13 @@ function StudentView() {
                         <div className="col-6">
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>{" "}
-                            {data.primaryLanguageSpokenChinese || "--"}
+                            {data.primaryLanguage
+                              ? data.primaryLanguage === "ENGLISH"
+                                ? "English"
+                                : data.primaryLanguage === "CHINESE"
+                                ? "Chinese"
+                                : "--"
+                              : "--"}
                           </p>
                         </div>
                       </div>
@@ -327,7 +333,7 @@ function StudentView() {
                     </div>
                     <div className="col-md-6 col-12">
                       <div className="row  mb-2">
-                        <div className="col-6  ">
+                        <div className="col-6">
                           <p className="fw-medium">Refer By Student</p>
                         </div>
                         <div className="col-6">
@@ -1009,7 +1015,7 @@ function StudentView() {
                             <td>
                               {centerData &&
                                 centerData.map((center) =>
-                                  parseInt(data.center) === center.id
+                                  parseInt(std.studentRelationCenter) === center.id
                                     ? center.centerNames || "--"
                                     : ""
                                 )}
@@ -1112,31 +1118,71 @@ function StudentView() {
                     </tbody>
                   </table>
                 </div>
-                {/* {data.studentCourseDetailModels &&
-                  data.studentCourseDetailModels.length > 0 &&
-                  data.studentCourseDetailModels.map((parent) => (
-                    <div className="container-fluid col-12 p-2">
-                      <h6>Parent Signature</h6>
+               
+              </div>
+            </div>
+          </div>
+
+          {/* Terms And Conditions Details */}
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed  bg-light fs-5 shadow-none"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#panelsStayOpen-collapseSix"
+                aria-expanded="false"
+                aria-controls="panelsStayOpen-collapseSix"
+              >
+                Terms And Conditions Details
+              </button>
+            </h2>
+            <div
+              id="panelsStayOpen-collapseSix"
+              class="accordion-collapse collapse"
+            >
+              <div class="accordion-body">
+                <div className="row">
+                  <div className="col-md-6 col-12">
+                    {data.studentTermsAndConditions &&
+                      data.studentTermsAndConditions.length > 0 &&
+                      data.studentTermsAndConditions.map((parent) => (
+                        <div className="container-fluid col-12 p-2">
+                          <h6 className="mt-2 mb-4">Parent Signature</h6>
+                          <img
+                            src={parent.parentSignature}
+                            className="img-fluid rounded"
+                            style={{ width: "50%" }}
+                            alt="Parent Signature Img"
+                            onError={(e) => {
+                              e.target.src = BlockImg;
+                            }}
+                          ></img>
+                        </div>
+                      ))}
+                    {(!data.studentTermsAndConditions ||
+                      data.studentTermsAndConditions.length === 0) && (
                       <img
-                        src={parent.parentSignature}
+                        src={BlockImg}
                         className="img-fluid rounded"
-                        style={{ width: "20%" }}
+                        style={{ width: "50%" }}
                         alt="Parent Signature Img"
-                        onError={(e) => {
-                          e.target.src = BlockImg;
-                        }}
-                      ></img>
+                      />
+                    )}
+                  </div>
+                  <div className="col-md-6 col-12">
+                    <div className="container-fluid col-12 p-2">
+                      {data.studentTermsAndConditions &&
+                        data.studentTermsAndConditions.length > 0 &&
+                        data.studentTermsAndConditions.map((parent) => (
+                          <div className="container-fluid col-12 p-2">
+                            <h6 className="mt-2 mb-4">Signature Date</h6>
+                            <span>{parent.termsAndConditionSignatureDate}</span>
+                          </div>
+                        ))}
                     </div>
-                  ))}
-                {(!data.studentCourseDetailModels ||
-                  data.studentCourseDetailModels.length === 0) && (
-                  <img
-                    src={BlockImg}
-                    className="img-fluid rounded"
-                    style={{ width: "20%" }}
-                    alt="Parent Signature Img"
-                  />
-                )} */}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -44,11 +44,13 @@ const AddTermsAndCondition = forwardRef(
         setLoadIndicators(true);
         const formDatas = new FormData();
 
+        // Generate a random number
+        const randomNumber = Math.floor(Math.random() * 1000);
+
         // Convert URL to Blob
         const apiResponse = await fetch(url);
-        const file = await apiResponse.blob();
-
-        formDatas.append("file", file);
+        const blob = await apiResponse.blob();
+        formDatas.append("file", blob, `${randomNumber}Signature.png`);
         formDatas.append(
           "termsAndConditionSignatureDate",
           data.termsAndConditionSignatureDate

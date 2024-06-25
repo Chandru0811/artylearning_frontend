@@ -381,7 +381,7 @@ const AddStudentDetails = forwardRef(
                         <option selected></option>
                         {nationalityData &&
                           nationalityData.map((nationalityId) => (
-                            <option key={nationalityId.id} value={nationalityId.id}>
+                            <option key={nationalityId.id} value={nationalityId.nationality}>
                               {nationalityId.nationality}
                             </option>
                           ))}
@@ -537,7 +537,7 @@ const AddStudentDetails = forwardRef(
                         <option selected></option>
                         {raceData &&
                           raceData.map((raceId) => (
-                            <option key={raceId.id} value={raceId.id}>
+                            <option key={raceId.id} value={raceId.race}>
                               {raceId.race}
                             </option>
                           ))}
@@ -559,8 +559,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.primaryLanguage}
-                        className="form-select "
-                        aria-label=". example"
+                        className="form-select"
                       >
                         <option selected></option>
                         <option value="CHINESE">Chinese</option>

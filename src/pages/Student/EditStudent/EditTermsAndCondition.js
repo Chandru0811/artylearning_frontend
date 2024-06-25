@@ -33,7 +33,7 @@ const EditTermsAndCondition = forwardRef(
       sign.clear();
       setUrl("");
     };
-    
+
     const handleGenerate = () => {
       setUrl(sign.getTrimmedCanvas().toDataURL("image/png"));
       console.log("Sign :", sign);
@@ -53,11 +53,13 @@ const EditTermsAndCondition = forwardRef(
           if (data.stdTermsAndConditionId !== null) {
             const formDatas = new FormData();
 
+            // Generate a random number
+            const randomNumber = Math.floor(Math.random() * 100000);
+
             // Convert URL to Blob
             const apiResponse = await fetch(url);
             const blob = await apiResponse.blob();
-
-            formDatas.append("file", blob);
+            formDatas.append("file", blob, `${randomNumber}Signature.png`);
             formDatas.append(
               "termsAndConditionSignatureDate",
               data.termsAndConditionSignatureDate
@@ -85,12 +87,12 @@ const EditTermsAndCondition = forwardRef(
             }
           } else {
             const formDatas = new FormData();
-
+            // Generate a random number
+            const randomNumber = Math.floor(Math.random() * 1000);
             // Convert URL to Blob
             const apiResponse = await fetch(url);
             const blob = await apiResponse.blob();
-
-            formDatas.append("file", blob);
+            formDatas.append("file", blob, `${randomNumber}Signature.png`);
             formDatas.append("agree", data.agree);
             formDatas.append("studentDetailId", formData.student_id);
             const response = await api.post(
@@ -270,8 +272,8 @@ const EditTermsAndCondition = forwardRef(
                           Save
                         </button>
                         <br />
-                        {/* <img src={url} /> */}
-                        {data.studentTermsAndConditions &&
+                        <img src={url} />
+                        {/* {data.studentTermsAndConditions &&
                           data.studentTermsAndConditions.length > 0 &&
                           data.studentTermsAndConditions.map((parent) => (
                             <div className="container-fluid col-12 p-2">
@@ -309,7 +311,7 @@ const EditTermsAndCondition = forwardRef(
                               </div>
                             </div>
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </div>
                     <div className="col-md-6 col-12">
