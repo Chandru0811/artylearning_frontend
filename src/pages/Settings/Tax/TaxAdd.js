@@ -20,7 +20,10 @@ function TaxAdd({ onSuccess }) {
 
     const validationSchema = Yup.object({
         taxType: Yup.string().required("*Tax Type is required"),
-        rate: Yup.string().required("*Rate is required"),
+        rate: Yup.number()
+            .required("*Rate is required")
+            .min(0, "Rate must be at least 0")
+            .max(100, "Rate must be at most 100"),
         effectiveDate: Yup.string().required("*Effective Date is required"),
         status: Yup.string().required("*Status is required"),
     });
@@ -97,7 +100,7 @@ function TaxAdd({ onSuccess }) {
 
                                 <div className="col-md-6 col-12 mb-2">
                                     <label className="form-label">
-                                        Rate<span className="text-danger">*</span>
+                                        Rate (%)<span className="text-danger">*</span>
                                     </label>
                                     <input
                                         type="text"
