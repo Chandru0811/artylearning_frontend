@@ -1,49 +1,93 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
-import { Link } from "react-router-dom";
+
 import { PiStudentFill } from "react-icons/pi";
 import { GiTeacher } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa";
 import { TbPigMoney } from "react-icons/tb";
+import api from "../config/URL";
+import { toast } from "react-toastify";
 
 function Dashboard() {
   const lineChartRef = useRef(null);
   const pieChartRef = useRef(null);
+  const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/smsDashBoardOverview");
+        setDashboardData(response.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
+
+  console.log("data",dashboardData)
+
+  const filteredChartData = dashboardData?.Data?.filter(
+    (item) => item
+  );
+  console.log("data1",filteredChartData)
+  useEffect(() => {
+ if(dashboardData){
+
+    const lineChartColors = [
+      "rgba(75, 192, 192, 1)",
+      "rgba(255, 99, 132, 1)",
+      "rgba(255, 205, 86, 1)",
+    ];
+
+    const barChartColors = [
+      "rgba(255, 99, 132, 0.6)",
+      "rgba(75, 192, 192, 0.6)",
+      "rgba(255, 205, 86, 0.6)",
+    ];
+
     const lineChartData = {
-      labels: ["January", "February", "March", "April", "May"],
-      datasets: [
-        {
-          label: "Leads",
-          data: [12, 19, 3, 5, 2],
-          borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 2,
-          fill: false,
-        },
-        {
-          label: "Deals",
-          data: [8, 12, 6, 9, 4],
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 2,
-          fill: false,
-        },
-        {
-          label: "Products",
-          data: [5, 10, 15, 8, 3],
-          borderColor: "rgba(255, 205, 86, 1)",
-          borderWidth: 2,
-          fill: false,
-        },
-      ],
+      labels: dashboardData.month,
+      datasets: filteredChartData.map((data,index) => ({
+        label: data.label,
+        data: data.data,
+        borderColor: lineChartColors[index % lineChartColors.length],
+        borderWidth: 2,
+        fill: false,
+      })),
+
+      // [
+      //   {
+      //     label: "Leads",
+      //     data: [12, 19, 3, 5, 2],
+      //     borderColor: "rgba(75, 192, 192, 1)",
+      //     borderWidth: 2,
+      //     fill: false,
+      //   },
+      //   {
+      //     label: "Students",
+      //     data: [8, 12, 6, 9, 4],
+      //     borderColor: "rgba(255, 99, 132, 1)",
+      //     borderWidth: 2,
+      //     fill: false,
+      //   },
+      //   {
+      //     label: "Teacher",
+      //     data: [5, 10, 15, 8, 3],
+      //     borderColor: "rgba(255, 205, 86, 1)",
+      //     borderWidth: 2,
+      //     fill: false,
+      //   },
+      // ],
     };
 
-    // Sample data for pie chart
     const pieChartData = {
-      labels: ["Leads", "Deals", "Products"],
+      labels: ["Leads", "Students", "Teacher"],
       datasets: [
         {
-          data: [30, 35, 60],
+          data: [dashboardData.totalLead
+            ,dashboardData.totalStudent, dashboardData.totalTeachers
+          ],
           backgroundColor: [
             "rgba(255, 99, 132, 0.6)",
             "rgba(75, 192, 192, 0.6)",
@@ -61,16 +105,29 @@ function Dashboard() {
 
     const pieChartCtx = document.getElementById("pieChart").getContext("2d");
     pieChartRef.current = new Chart(pieChartCtx, {
-      type: "pie", // Change the type to 'pie'
+      type: "pie", 
       data: pieChartData,
     });
-
+  
+  }
     return () => {
       if (lineChartRef.current) lineChartRef.current.destroy();
       if (pieChartRef.current) pieChartRef.current.destroy();
     };
-  }, []);
+  }, [dashboardData]);
 
+  const previousMonthRevenue = dashboardData?.totalRevenueOfPreviousMonth;
+  const currentMonthRevenue = dashboardData?.totalRevenueOfMonth;
+ 
+  let salesIncreasePercentage;
+  if (previousMonthRevenue === 0) {
+    // Handle division by zero case
+    salesIncreasePercentage = 100;
+  } else {
+    salesIncreasePercentage =
+      ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) *
+      100;
+  }
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
       <div className="container">
@@ -93,15 +150,13 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
-                  <Link to={`/lead/lead`}>
                     <FaUsers />
-                    </Link>
                   </h5>
                 </span>
                 <h2 className="card-text">
-                  <strong>100</strong>
+                  <strong>{dashboardData?.totalLead}</strong>
                 </h2>
-                <h6 className="card-text text-secondary">50 converted</h6>
+                <h6 className="card-text text-secondary">{dashboardData?.leadCountByMonth} Lead In This Month</h6>
               </div>
             </div>
           </div>
@@ -123,13 +178,13 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
-                   <Link to={`/student`}> <PiStudentFill /> </Link>
+                    <PiStudentFill />
                   </h5>
                 </span>
                 <h2 className="card-text">
-                  <strong>50</strong>
+                  <strong>{dashboardData?.totalStudent}</strong>
                 </h2>
-                <h6 className="card-text text-secondary">Revenue Generated</h6>
+                <h6 className="card-text text-secondary">{dashboardData?.studentCountByMonth} Students In This Month</h6>
               </div>
             </div>
           </div>
@@ -151,14 +206,13 @@ function Dashboard() {
                       borderRadius: "5px",
                     }}
                   >
-                    <Link to={`/teacher`}>
-                    <GiTeacher /></Link>
+                    <GiTeacher />
                   </h5>
                 </span>
                 <h2 className="card-text">
-                  <strong>75</strong>
+                  <strong>{dashboardData?.totalTeachers}</strong>
                 </h2>
-                <h6 className="card-text text-secondary">25 Newly Added</h6>
+                <h6 className="card-text text-secondary">{dashboardData?.totalStaffs} Staff</h6>
               </div>
             </div>
           </div>
@@ -185,10 +239,10 @@ function Dashboard() {
                 </span>
                 <h2 className="card-text">
                   <strong>
-                    <span style={{ color: "#624bff" }}>$</span> 25,300
+                    <span style={{ color: "#624bff" }}>$</span> {dashboardData?.totalRevenueOfMonth}
                   </strong>
                 </h2>
-                <h6 className="card-text text-secondary">Sales Increse 6%</h6>
+                <h6 className="card-text text-secondary">Sales {salesIncreasePercentage <= 0 ? "Decrease" : "Increase"} {salesIncreasePercentage?.toString().split(".")[0]}%</h6>
               </div>
             </div>
           </div>

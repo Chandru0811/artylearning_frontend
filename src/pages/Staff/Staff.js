@@ -30,7 +30,7 @@ const Staff = () => {
     };
     getData();
   }, []);
-
+  console.log("staff", datas);
   useEffect(() => {
     if (!loading) {
       initializeDataTable();
@@ -102,6 +102,7 @@ const Staff = () => {
                 <th scope="col">Staff Id</th>
                 <th scope="col">Staff Name</th>
                 <th scope="col">Staff Type</th>
+                <th scope="col">Role</th>
                 <th scope="col">Mobile</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -120,6 +121,15 @@ const Staff = () => {
                   <td>
                     {data.userAccountInfo.length > 0 &&
                       data.userAccountInfo[0].teacherType}
+                  </td>
+                  <td>
+                    {data.role === "branch_admin" ? (
+                      <span className="badge badges-red">Branch Admin</span>
+                    ) : data.role === "staff_admin" ? (
+                      <span className="badge badges-blue">Staff Admin</span>
+                    ) : (
+                      <span className="badge badges-Green">Staff</span>
+                    )}
                   </td>
                   <td>
                     {data.userContactInfo.length > 0 &&

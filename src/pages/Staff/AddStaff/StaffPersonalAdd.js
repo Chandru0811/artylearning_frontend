@@ -14,6 +14,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[0-9]+$/, "*Id No Must be numbers")
     .required("*Id No is required!"),
   citizenship: Yup.string().required("*Citizenship is required!"),
+  role: Yup.string().required("*Role is required!"),
   file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalAdd = forwardRef(
@@ -29,35 +30,16 @@ const StaffPersonalAdd = forwardRef(
         file: formData.file || "",
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
+        role:formData.role
       },
       validationSchema: validationSchema,
-      // onSubmit: async (values) => {
-      //   // values.dateOfBirth = "2024-02-22T09:46:22.412Z";
-      //   try {
-      //     const response = await api.post(`/createUser`, values, {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     });
-      //     if (response.status === 201) {
-      //       const user_id = response.data.user_id;
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...values, user_id }));
-      //       handleNext();
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
           const formData = new FormData();
 
           // Add each data field manually to the FormData object
-          formData.append("role", "staff");
+          formData.append("role", values.role);
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
           formData.append("idType", values.idType);
@@ -210,6 +192,28 @@ const StaffPersonalAdd = forwardRef(
             </div>
           </div>
           <div class="container row d-flex my-4 justify-align-content-around">
+          <div class="form-group col-sm">
+              <label>Role</label>
+              <span className="text-danger">*</span>
+              <select
+                type="text"
+                class="form-select"
+                name="role"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.role}
+              >
+                <option value={""}>select the Role</option>
+                <option value={"staff"}>Staff</option>
+                <option value={"branch_admin"}>Branch Admin</option>
+                <option value={"staff_admin"}>Staff Admin</option>
+              </select>
+              {formik.touched.role && formik.errors.role && (
+                <div className="error text-danger ">
+                  <small>{formik.errors.role}</small>
+                </div>
+              )}
+            </div>
             <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
