@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
+import { toast } from "react-toastify";
 
 export default function LevelView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [subjectData, setSubjectData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -16,6 +28,7 @@ export default function LevelView() {
       }
     };
     getData();
+    fetchData();
   }, [id]);
 
   return (
@@ -28,6 +41,24 @@ export default function LevelView() {
                 Back
               </button>
             </Link>
+          </div>
+          <div className="col-md-6 col-12">
+            <div className="row  mb-2">
+              <div className="col-6  ">
+                <p className="fw-medium">Subject</p>
+              </div>
+              <div className="col-6">
+                <p className="text-muted text-sm">
+                  :{" "}
+                  {subjectData &&
+                    subjectData.map((subjectId) =>
+                      parseInt(data.subjectId) === subjectId.id
+                        ? subjectId.subjects || "--"
+                        : ""
+                    )}
+                </p>
+              </div>
+            </div>
           </div>
           <div className="col-md-6 col-12">
             <div className="row   mb-2">
