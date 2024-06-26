@@ -107,7 +107,7 @@ const Tax = () => {
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{data.taxType}</td>
-                <td>{data.rate}</td>
+                <td>{data.rate} %</td>
                 <td>{data.effectiveDate}</td>
                 <td>{data.status === "ACTIVE" ? (
                   <span className="badge badges-Green">Active</span>
