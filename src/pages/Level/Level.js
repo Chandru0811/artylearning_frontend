@@ -8,12 +8,15 @@ import LevelAdd from "./LevelAdd";
 import LevelEdit from "./LevelEdit";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
+import { toast } from "react-toastify";
 
 const Level = () => {
   const tableRef = useRef(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [subjectData, setSubjectData] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -27,6 +30,7 @@ const Level = () => {
       }
     };
     getData();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -46,6 +50,15 @@ const Level = () => {
     $(tableRef.current).DataTable({
       responsive: true,
     });
+  };
+
+  const fetchData = async () => {
+    try {
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const destroyDataTable = () => {
@@ -80,6 +93,7 @@ const Level = () => {
             <span></span>
             <span></span>
             <span></span>
+            <span></span>
           </div>
         </div>
       ) : (
@@ -87,6 +101,7 @@ const Level = () => {
           <thead>
             <tr>
               <th scope="col">S No</th>
+              <th scope="col">Subject</th>
               <th scope="col">Level</th>
               <th scope="col">Code</th>
               <th scope="col">Status</th>
@@ -97,6 +112,14 @@ const Level = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
+                <td>
+                  {subjectData &&
+                    subjectData.map((subjectId) =>
+                      parseInt(data.subjectId) === subjectId.id
+                        ? subjectId.subjects || ""
+                        : ""
+                    )}
+                </td>
                 <td>{data.level}</td>
                 <td>{data.levelCode}</td>
                 <td>
@@ -107,13 +130,13 @@ const Level = () => {
                   )}
                 </td>
                 <td>
-                  {storedScreens?.levelRead && (
+                  {/* {storedScreens?.levelRead && (
                     <Link to={`/level/view/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEye />
                       </button>
                     </Link>
-                  )}
+                  )} */}
                   {storedScreens?.levelUpdate && (
                     <LevelEdit id={data.id} onSuccess={refreshData} />
                   )}

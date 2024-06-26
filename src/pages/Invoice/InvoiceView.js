@@ -35,6 +35,7 @@ function InvoiceView() {
       setStudentData(studentData);
       setcenterData(centerData);
     } catch (error) {
+      console.error("Error fetching data:", error);
       toast.error(error.message || "Error fetching data");
     } finally {
       setLoadIndicator(false);
