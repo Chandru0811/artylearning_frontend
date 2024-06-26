@@ -8,6 +8,7 @@ import EditClass from "./Edit/EditClass";
 import EditPackage from "./Edit/EditPackage";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import fetchAllUserList from "../List/UserList";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -53,7 +54,20 @@ function CenterEdit() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [teacherData, setTeacherData] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchTeacher();
+  }, []);
+  const fetchTeacher = async () => {
+    try {
+      const teacher = await fetchAllUserList();
+      setTeacherData(teacher);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
   const formik = useFormik({
     initialValues: {
       centerName: "",
@@ -72,14 +86,47 @@ function CenterEdit() {
       bankAccountNumber: "",
       bankAccountName: "",
       invoiceNotes: "",
+      file: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      // let selectedTeacherName = "";
+      setLoadIndicator(true);
+      // teacherData.forEach((teacher) => {
+      //   if (parseInt(values.centerManager) === teacher.id) {
+      //     selectedTeacherName = teacher.userNames || "--";
+      //   }
+      // });
+
+      // Convert gst value to boolean
+      values.gst = values.gst === "true";
+      const formData = new FormData();
+      formData.append("centerName", values.centerName);
+      formData.append("code", values.code);
+      formData.append("centerManager", values.centerManager);
+      formData.append("address", values.address);
+      formData.append("zipCode", values.zipCode);
+      formData.append("mobile", values.mobile);
+      formData.append("email", values.email);
+      formData.append("openingDate", values.openingDate);
+      formData.append("uenNumber", values.uenNumber);
+      formData.append("gst", values.gst);
+      formData.append("taxRegistrationNumber", values.taxRegistrationNumber);
+      formData.append("bankName", values.bankName);
+      formData.append("bankBranch", values.bankBranch);
+      formData.append("bankAccountNumber", values.bankAccountNumber);
+      formData.append("bankAccountName", values.bankAccountName);
+      formData.append("invoiceNotes", values.invoiceNotes);
+      formData.append("file", values.file);
+
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(`${key}: ${value}`);
+      // }
       try {
-        const response = await api.put(`/updateCenter/${id}`, values, {
+        const response = await api.put(`/updateCenters/${id}`, formData, {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         });
         if (response.status === 200) {
@@ -90,9 +137,9 @@ function CenterEdit() {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
-      }  
+      }
     },
   });
   useEffect(() => {
@@ -109,6 +156,7 @@ function CenterEdit() {
     };
 
     getData();
+    fetchTeacher();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -131,15 +179,19 @@ function CenterEdit() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                Update
-              </button>
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Update
+          </button>
         </div>
         <div className="container">
           <div className="row">
@@ -189,7 +241,7 @@ function CenterEdit() {
             </div>
             <div className="col-md-6 col-12">
               <div className="mb-3">
-                <label for="exampleFormControlInput1" className="form-label">
+                <label htmlFor="exampleFormControlInput1" className="form-label">
                   Centre Manager<span className="text-danger">*</span>
                 </label>
                 <select
@@ -202,9 +254,12 @@ function CenterEdit() {
                   aria-label="Default select example"
                 >
                   <option selected></option>
-                  <option value="Ang Peng Siong">Ang Peng Siong</option>
-                  <option value="Jeanette Aw">Jeanette Aw</option>
-                  <option value="Baey Yam Keng">Baey Yam Keng</option>
+                  {teacherData &&
+                    teacherData.map((teacher) => (
+                      <option key={teacher.id} value={teacher.id}>
+                        {teacher.userNames}
+                      </option>
+                    ))}
                 </select>
                 {formik.touched.centerManager &&
                   formik.errors.centerManager && (
@@ -483,6 +538,28 @@ function CenterEdit() {
                       {formik.errors.bankAccountNumber}
                     </div>
                   )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="text-start mt-2">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  <small>QR Code</small>
+                </label>
+                <br />
+                <input
+                  type="file"
+                  name="file"
+                  className="form-control"
+                  onChange={(event) => {
+                    formik.setFieldValue("file", event.target.files[0]);
+                  }}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.file && formik.errors.file && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.file}</small>
+                  </div>
+                )}
               </div>
             </div>
             <div className="col-12">

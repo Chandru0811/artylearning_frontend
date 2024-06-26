@@ -103,7 +103,9 @@ function TaxAdd({ onSuccess }) {
                                         Rate (%)<span className="text-danger">*</span>
                                     </label>
                                     <input
-                                        type="text"
+                                        type="number"
+                                        min={0}
+                                        max={100}
                                         className={`form-control  ${formik.touched.rate && formik.errors.rate
                                             ? "is-invalid"
                                             : ""

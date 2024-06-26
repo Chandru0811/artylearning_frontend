@@ -12,6 +12,7 @@ import AddPackage from "./Add/AddPackage";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import fetchAllUserList from "../List/UserList";
 
 const Center = () => {
   const tableRef = useRef(null);
@@ -20,19 +21,16 @@ const Center = () => {
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [centerManagerData, setCenterManagerData] = useState(null);
 
-  useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllCenter");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
-    getCenterData();
-  }, []);
+  const fetchData = async () => {
+    try {
+      const centerManagerData = await fetchAllUserList();
+      setCenterManagerData(centerManagerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
     if (!loading) {
@@ -72,6 +70,20 @@ const Center = () => {
     }
     setLoading(false);
   };
+  
+  useEffect(() => {
+    const getCenterData = async () => {
+      try {
+        const response = await api.get("/getAllCenter");
+        setDatas(response.data);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Error Fetching Data : ", error);
+      }
+    };
+    getCenterData();
+    fetchData();
+  }, []);
 
   return (
     <div className="container my-4 center">
@@ -110,9 +122,7 @@ const Center = () => {
               <th scope="col">Code</th>
               <th scope="col">UEN Number</th>
               <th scope="col">Mobile</th>
-              <th className="text-center">
-                Action
-              </th>
+              <th className="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -120,7 +130,14 @@ const Center = () => {
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{data.centerName}</td>
-                <td>{data.centerManager}</td>
+                <td>
+                  {centerManagerData &&
+                    centerManagerData.map((Cmanager) =>
+                      parseInt(data.centerManager) === Cmanager.id
+                        ? Cmanager.userNames || "--"
+                        : ""
+                    )}
+                </td>
                 <td>{data.code}</td>
                 <td>{data.uenNumber}</td>
                 <td>{data.mobile}</td>

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Collapse, Nav } from "react-bootstrap";
-import Logo from "../../assets/images/Logo.png";
+import Logo from "../../assets/images/Logo-Portal_Access.png";
 import api from "../../config/URL";
 
 function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
   const [data, setData] = useState({});
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   useEffect(() => {
     const getData = async () => {
@@ -382,12 +383,7 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo-details">
         <span className="logo_name">
-          <img
-            src={Logo}
-            alt="logo"
-            width={130}
-            className="img-fluid"
-          />
+          <img src={Logo} alt="logo" width={130} className="img-fluid" />
         </span>
       </div>
       <ul className="nav-links">
@@ -454,13 +450,17 @@ function Sidebar() {
               </li>
             )
         )}
-
-        <li>
-          <NavLink to="/sendNotification" onClick={() => handleMenuClick(null)}>
-            <i class="bx bx-send"></i>
-            <span className="links_name">Send Notification</span>
-          </NavLink>
-        </li>
+        {storedScreens?.sendNotificationIndex && (
+          <li>
+            <NavLink
+              to="/sendNotification"
+              onClick={() => handleMenuClick(null)}
+            >
+              <i class="bx bx-send"></i>
+              <span className="links_name">Send Notification</span>
+            </NavLink>
+          </li>
+        )}
       </ul>
     </div>
   );
