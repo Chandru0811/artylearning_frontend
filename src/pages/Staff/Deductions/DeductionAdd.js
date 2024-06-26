@@ -172,7 +172,7 @@ function DeductionAdd() {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Employee Name</label>
+                <label className="form-label">Employee Name</label> <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
                   class={`form-select  ${
