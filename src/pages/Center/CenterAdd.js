@@ -1,9 +1,10 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import fetchAllUserList from "../List/UserList";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -49,6 +50,19 @@ const validationSchema = Yup.object().shape({
 function CenterAdd() {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [teacherData, setTeacherData] = useState(null);
+
+  useEffect(() => {
+    fetchTeacher();
+  }, []);
+  const fetchTeacher = async () => {
+    try {
+      const teacher = await fetchAllUserList();
+      setTeacherData(teacher);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -67,17 +81,46 @@ function CenterAdd() {
       bankBranch: "",
       bankAccountNumber: "",
       bankAccountName: "",
+      file: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      // let selectedTeacherName = "";
       setLoadIndicator(true);
+      // teacherData.forEach((teacher) => {
+      //   if (parseInt(values.centerManager) === teacher.id) {
+      //     selectedTeacherName = teacher.userNames || "--";
+      //   }
+      // });
 
       // Convert gst value to boolean
       values.gst = values.gst === "true";
+      const formData = new FormData();
+      formData.append("centerName", values.centerName);
+      formData.append("code", values.code);
+      formData.append("centerManager", values.centerManager);
+      formData.append("address", values.address);
+      formData.append("zipCode", values.zipCode);
+      formData.append("mobile", values.mobile);
+      formData.append("email", values.email);
+      formData.append("openingDate", values.openingDate);
+      formData.append("uenNumber", values.uenNumber);
+      formData.append("gst", values.gst);
+      formData.append("taxRegistrationNumber", values.taxRegistrationNumber);
+      formData.append("bankName", values.bankName);
+      formData.append("bankBranch", values.bankBranch);
+      formData.append("bankAccountNumber", values.bankAccountNumber);
+      formData.append("bankAccountName", values.bankAccountName);
+      formData.append("invoiceNotes  ", values.invoiceNotes);
+      formData.append("file", values.file);
+
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(`${key}: ${value}`);
+      // }
       try {
-        const response = await api.post("/createCenter", values, {
+        const response = await api.post("/createCenters", formData, {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         });
         if (response.status === 201) {
@@ -163,32 +206,32 @@ function CenterAdd() {
                 )}
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="mb-3">
-                <label for="exampleFormControlInput1" className="form-label">
-                  Centre Manager<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("centerManager")}
-                  className={`form-select    ${
-                    formik.touched.centerManager && formik.errors.centerManager
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                >
-                  <option selected></option>
-                  <option value="Ang Peng Siong">Ang Peng Siong</option>
-                  <option value="Jeanette Aw">Jeanette Aw</option>
-                  <option value="Baey Yam Keng">Baey Yam Keng</option>
-                </select>
-                {formik.touched.centerManager &&
-                  formik.errors.centerManager && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerManager}
-                    </div>
-                  )}
-              </div>
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">
+                Center Manager<span className="text-danger">*</span>
+              </label>
+              <select
+                {...formik.getFieldProps("centerManager")}
+                name="centerManager"
+                className={`form-select  ${
+                  formik.touched.centerManager && formik.errors.centerManager
+                    ? "is-invalid"
+                    : ""
+                }`}
+              >
+                <option selected></option>
+                {teacherData &&
+                  teacherData.map((teacher) => (
+                    <option key={teacher.id} value={teacher.id}>
+                      {teacher.userNames}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.centerManager && formik.errors.centerManager && (
+                <div className="invalid-feedback">
+                  {formik.errors.centerManager}
+                </div>
+              )}
             </div>
             <div className="col-md-6 col-12">
               <div className="mb-3">
@@ -459,6 +502,28 @@ function CenterAdd() {
                       {formik.errors.bankAccountNumber}
                     </div>
                   )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="text-start mt-2">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  <small>QR Code</small>
+                </label>
+                <br />
+                <input
+                  type="file"
+                  name="file"
+                  className="form-control"
+                  onChange={(event) => {
+                    formik.setFieldValue("file", event.target.files[0]);
+                  }}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.file && formik.errors.file && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.file}</small>
+                  </div>
+                )}
               </div>
             </div>
             <div className="col-12">

@@ -2,11 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import fetchAllUserList from "../List/UserList";
 
 function CenterView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  console.log(data);
+  const [centerManagerData, setCenterManagerData] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const centerManagerData = await fetchAllUserList();
+      setCenterManagerData(centerManagerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -18,6 +28,7 @@ function CenterView() {
       }
     };
     getData();
+    fetchData();
   }, [id]);
   return (
     <div className="container ">
@@ -61,7 +72,12 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.centerManager || "--"}
+                    : {centerManagerData &&
+                    centerManagerData.map((Cmanager) =>
+                      parseInt(data.centerManager) === Cmanager.id
+                        ? Cmanager.userNames || "--"
+                        : ""
+                    )}
                   </p>
                 </div>
               </div>
