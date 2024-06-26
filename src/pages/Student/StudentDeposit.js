@@ -11,7 +11,7 @@ const StudentDeposit = () => {
           </button>
         </Link>
         &nbsp;&nbsp;
-        <Link to={"/student/view"}>
+        <Link to={`/student`}>
           <button type="button" className="btn btn-button btn-sm">
             Save
           </button>
@@ -38,7 +38,7 @@ const StudentDeposit = () => {
             <div class="input-group mb-3">
               <input
                 type="text"
-                className={`form-control iconInput `}
+                className={`form-control iconInput`}
                 value={"S000377"}
               />
             </div>
