@@ -9,7 +9,6 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../../List/CourseList";
-import SignatureCanvas from "react-signature-canvas";
 
 const validationSchema = Yup.object().shape({});
 
@@ -17,59 +16,22 @@ const AddcourseDetail = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [courseData, setCourseData] = useState(null);
 
-    const [sign, setSign] = useState();
-    const [url, setUrl] = useState();
-
-    const handleClear = () => {
-      sign.clear();
-      setUrl("");
-    };
-    const handleGenerate = () => {
-      setUrl(sign.getTrimmedCanvas().toDataURL("image/png"));
-      console.log("Sign :", sign);
-    };
-    
     const formik = useFormik({
       initialValues: {
         courseId: formData.courseId || "",
-        // courseName :formData.courseName || "",
         startDate: formData.startDate || "",
         startTime: formData.startTime || "",
-        file: null || "",
         courseDay: formData.courseDay || "",
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
-        // signatureDate: formData.signatureDate || "",
+	      studentId :formData.student_id || "", 
+	
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         try {
-          const formDatas = new FormData();
-
-          // Convert URL to Blob
-          const apiResponse = await fetch(url);
-          const blob = await apiResponse.blob();
-
-          // Append each form field to FormData object
-          formDatas.append("courseId", data.courseId);
-          formDatas.append("courseName", data.courseId);
-          formDatas.append("startDate", data.startDate);
-          formDatas.append("startTime", data.startTime);
-          // formDatas.append("file", data.file);
-          formDatas.append("file", blob); // Append the Blob with a filename
-          formDatas.append("courseDay", data.courseDay);
-          formDatas.append("endDate", data.endDate);
-          formDatas.append("endTime", data.endTime);
-          formDatas.append("signatureDate", "2024-10-10");
-          formDatas.append("studentDetailId ", formData.student_id); // Assuming formDatas.student_id is defined
-
-          // You don't need to set parentSignature to null in formDatas, it's already null if not set
-
-          const response = await api.post(
-            `/createStudentCourseDetails`,
-            formDatas
-          );
+          const response = await api.post(`/createStudentCourseDetail`, data);
 
           if (response.status === 201) {
             toast.success(response.data.message);
@@ -162,84 +124,30 @@ const AddcourseDetail = forwardRef(
                           value={formik.values.startTime}
                         />
                       </div>
-                      {/* <div className="text-start mt-2">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Parent Signature</small>
-                        </label>
-                        <br />
-                        <input
-                          type="file"
-                          className="form-control"
-                          name="file"
-                          onChange={(event) => {
-                            formik.setFieldValue(
-                              "file",
-                              event.currentTarget.files[0]
-                            );
-                          }}
-                          onBlur={formik.handleBlur}
-                        />
-                      </div> */}
-                      {/* SignatureCanvas */}
-                      {/* <div className="text-start mt-3">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Parent Signature</small>
-                        </label>
-                        <br />
-                        <div
-                          style={{
-                            width: 423,
-                            height: 150,
-                          }}
-                          className="border border-secondary rounded-2"
-                        >
-                          <SignatureCanvas
-                            canvasProps={{
-                              width: 423,
-                              height: 150,
-                              className: "sigCanvas",
-                            }}
-                            name="file"
-                            ref={(data) => setSign(data)}
-                          />
-                        </div>
-                        <br />
-                        <button
-                          type="button"
-                          style={{ height: "30px", width: "60px" }}
-                          onClick={handleClear}
-                          className="btn btn-sm"
-                        >
-                          Clear
-                        </button>
-                        <button
-                          type="button"
-                          style={{ height: "30px", width: "60px" }}
-                          onClick={handleGenerate}
-                          className="btn btn-sm"
-                        >
-                          Save
-                        </button>
-
-                        <br />
-                        <br />
-                        <img src={url} />
-                      </div> */}
                     </div>
                     <div className="col-lg-6 col-md-6 col-12 px-5">
                       <div className="text-start">
                         <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Course Date</small>
+                          <small>Course Day</small>
                         </label>
                         <br />
-                        <input
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.courseDay}
-                          name="courseDay"
-                          className="form-control "
-                          type="date"
-                        />
+                        <select
+                          {...formik.getFieldProps("courseDay")}
+                          class={`form-select  ${
+                            formik.touched.courseDay && formik.errors.courseDay
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                        >
+                          <option></option>
+                          <option value="MONDAY">MONDAY</option>
+                          <option value="TUESDAY">TUESDAY</option>
+                          <option value="WEDNESDAY">WEDNESDAY</option>
+                          <option value="THURSDAY">THURSDAY</option>
+                          <option value="FRIDAY">FRIDAY</option>
+                          <option value="SATURDAY">SATURDAY</option>
+                          <option value="SUNDAY">SUNDAY</option>
+                        </select>
                       </div>
                       <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
@@ -269,28 +177,6 @@ const AddcourseDetail = forwardRef(
                           value={formik.values.endTime}
                         />
                       </div>
-                      {/* <div className="text-start mt-2">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>
-                            Signature Date<span className="text-danger">*</span>
-                          </small>
-                        </label>
-                        <br />
-                        <input
-                          className="form-control  form-contorl-sm"
-                          name="signatureDate"
-                          type="date"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.signatureDate}
-                        />
-                        {formik.touched.signatureDate &&
-                          formik.errors.signatureDate && (
-                            <div className="text-danger">
-                              <small>{formik.errors.signatureDate}</small>
-                            </div>
-                          )}
-                      </div> */}
                     </div>
                   </div>
                 </div>

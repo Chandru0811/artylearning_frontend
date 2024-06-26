@@ -174,40 +174,7 @@ function InvoiceView() {
       img.src = url;
     });
   };
-  // const SendMail = async () => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("from", "keerthickvasan08@gmail.com");
-  //     formData.append("to", "keerthickvasan08@gmail.com");
-  //     formData.append("from", "keerthickvasan08@gmail.com");
-  //     formData.append("from", "keerthickvasan08@gmail.com");
-
-  //     const payload = {
-  //       from: "keerthickvasan08@gmail.com",
-  //       to: "premvp24@gmail.com",
-  //       subject: "string",
-  //       body: "string"
-  //       // files: []
-  //     };
-  //     const response = await api.post("/sendMailWithAttachment",  {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     if (response.status === 201) {
-  //       toast.success(response.data.message);
-  //       // navigate("/invoice");
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     toast.error(
-  //       error.message || "An error occurred while submitting the form"
-  //     );
-  //   }
-  // };
-
+  
   return (
     <div className="container-fluid mb-2 minHeight">
       <div className=" row">
