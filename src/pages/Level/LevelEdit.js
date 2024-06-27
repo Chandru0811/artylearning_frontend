@@ -16,18 +16,20 @@ function Edit({ id, onSuccess }) {
   
   const handleClose = () => {
     setShow(false);
-    // formik.resetForm();
     setSubjectData(null);
   };
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    fetchData();
+    setShow(true);
+  }
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async (subjectId) => {
+  const fetchData = async () => {
     try {
-      const subject = await fetchAllSubjectsWithIds(subjectId);
+      const subject = await fetchAllSubjectsWithIds();
       setSubjectData(subject);
     } catch (error) {
       toast.error(error);
@@ -51,17 +53,7 @@ function Edit({ id, onSuccess }) {
     onSubmit: async (values) => {
       // console.log(values);
       setLoadIndicator(true);
-      let selectedSubjectName = "";
-
-      subjectData.forEach((subject) => {
-        if (parseInt(values.subjectId) === subject.id) {
-          selectedSubjectName = subject.subjects || "--";
-        }
-      });
-
-      let requestBody = {
-        subjectId: values.subjectId
-      }
+    
       try {
         const response = await api.put(`/updateCourseLevel/${id}`, values, {
           headers: {
@@ -98,13 +90,6 @@ function Edit({ id, onSuccess }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubjectChange = (event) => {
-    setSubjectData(null);
-    const subjectId = event.target.value;
-    formik.setFieldValue("subjectId", subjectId);
-    fetchData(subjectId); // Fetch class for the selected center
-  };
-
 
   return (
     <>
@@ -136,7 +121,6 @@ function Edit({ id, onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={handleSubjectChange}
                   >
                     <option></option>
                     {subjectData &&

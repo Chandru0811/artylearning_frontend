@@ -19,15 +19,18 @@ function LevelAdd({ onSuccess }) {
     setSubjectData(null);
   };
 
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    fetchData();
+    setShow(true);
+  }
 
   useEffect(() => {
     fetchData();
   }, [show]);
 
-  const fetchData = async (subjectId) => {
+  const fetchData = async () => {
     try {
-      const subject = await fetchAllSubjectsWithIds(subjectId);
+      const subject = await fetchAllSubjectsWithIds();
       setSubjectData(subject);
     } catch (error) {
       toast.error(error);
@@ -51,21 +54,9 @@ function LevelAdd({ onSuccess }) {
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      let selectedSubjectName = "";
 
-      subjectData.forEach((subject) => {
-        if (parseInt(values.subjectId) === subject.id) {
-          selectedSubjectName = subject.subjects || "--";
-        }
-      });
-
-      let requestBody = {
-        subjectId: values.subjectId
-      }
-      // console.log(values);
       try {
         const response = await api.post("/createCourseLevels", values, {
-          requestBody,
           headers: {
             "Content-Type": "application/json",
           },
@@ -84,13 +75,6 @@ function LevelAdd({ onSuccess }) {
       }
     },
   });
-  console.log("subject",subjectData)
-  const handleSubjectChange = (event) => {
-    setSubjectData(null);
-    const subjectId = event.target.value;
-    formik.setFieldValue("subjectId", subjectId);
-    fetchData(subjectId); // Fetch class for the selected center
-  };
 
 
   return (
@@ -112,7 +96,7 @@ function LevelAdd({ onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
-              <div className="col-md-6 col-12 mb-2">
+                <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Subject<span className="text-danger">*</span>
                   </label>
@@ -123,7 +107,6 @@ function LevelAdd({ onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={handleSubjectChange}
                   >
                     <option></option>
                     {subjectData &&
@@ -139,7 +122,7 @@ function LevelAdd({ onSuccess }) {
                     </div>
                   )}
                 </div>
-              
+
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Level Code<span className="text-danger">*</span>
@@ -156,6 +139,25 @@ function LevelAdd({ onSuccess }) {
                   {formik.touched.levelCode && formik.errors.levelCode && (
                     <div className="invalid-feedback">
                       {formik.errors.levelCode}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Level<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.level && formik.errors.level
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("level")}
+                  />
+                  {formik.touched.level && formik.errors.level && (
+                    <div className="invalid-feedback">
+                      {formik.errors.level}
                     </div>
                   )}
                 </div>
@@ -179,25 +181,6 @@ function LevelAdd({ onSuccess }) {
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
                       {formik.errors.status}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Level<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.level && formik.errors.level
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("level")}
-                  />
-                  {formik.touched.level && formik.errors.level && (
-                    <div className="invalid-feedback">
-                      {formik.errors.level}
                     </div>
                   )}
                 </div>
