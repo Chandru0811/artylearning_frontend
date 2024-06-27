@@ -151,7 +151,7 @@ function TeacherView() {
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
-                : {data.shortIntroduction || "--"}
+                : {data.shortIntroduction === "undefined" ? "--" : data.shortIntroduction || "--"}
               </p>
             </div>
           </div>

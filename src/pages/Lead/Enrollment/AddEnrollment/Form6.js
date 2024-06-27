@@ -93,7 +93,7 @@ const Form6 = forwardRef(
             </div>
             {/* <div className="d-flex"> */}
             <div className="col-md-12 col-12 mb-2">
-              <div className="form-check">
+              <div className="form-check d-flex" >
                 <input
                   className="form-check-input mx-2"
                   id="consentScrapbook"
@@ -120,7 +120,7 @@ const Form6 = forwardRef(
 
             <div className="row">
               <div className="col-md-12 col-12 mb-2">
-                <div className="form-check">
+                <div className="form-check d-flex">
                   <input
                     className="form-check-input  mx-2"
                     id="consentPhotos"
@@ -147,7 +147,7 @@ const Form6 = forwardRef(
             </div>
 
             <div className="col-mb-12 col-12 mb-3">
-              <div className="form-check">
+              <div className="form-check d-flex">
                 <input
                   className="form-check-input mx-2"
                   id="declare"

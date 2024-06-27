@@ -97,7 +97,7 @@ function StudentView() {
                 </button>
               </Link>
             )}
-            {storedScreens?.deductDepositCreate && (
+            {/* {storedScreens?.deductDepositCreate && (
               <Link to={"/student/view/deposit"}>
                 <button
                   className="btn btn-border btn-sm ms-2 stdViewBtn"
@@ -106,7 +106,7 @@ function StudentView() {
                   Deduct Deposit
                 </button>
               </Link>
-            )}
+            )} */}
             <StudentSummary className="ms-2" data={data} />
             <Link to={"/student"}>
               <button

@@ -15,10 +15,10 @@ const validationSchema = Yup.object({
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   modeOfWorking: Yup.string().required("*Mode of working is required"),
   checkIn: Yup.string().required("*Check-in is required"),
-  checkOut: Yup.string().required("*Check-out is required"),
-  otStartTime: Yup.string().required("*OT start time is required"),
-  otEndTime: Yup.string().required("*OT end time is required"),
-  attendanceRemark: Yup.string().required("*Attendance remark is required"),
+  // checkOut: Yup.string().required("*Check-out is required"),
+  // otStartTime: Yup.string().required("*OT start time is required"),
+  // otEndTime: Yup.string().required("*OT end time is required"),
+  // attendanceRemark: Yup.string().required("*Attendance remark is required"),
 });
 
 function StaffingAttendanceAdd() {
@@ -288,7 +288,7 @@ function StaffingAttendanceAdd() {
               </div>
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Check Out</lable>
-                <span className="text-danger">*</span>
+                {/* <span className="text-danger">*</span> */}
                 <input
                   type="time"
                   className={`form-control ${
@@ -350,7 +350,7 @@ function StaffingAttendanceAdd() {
               </div> */}
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">OT Start Time</lable>
-                <span className="text-danger">*</span>
+                {/* <span className="text-danger">*</span> */}
                 <input
                   type="time"
                   className={`form-control ${
@@ -368,7 +368,7 @@ function StaffingAttendanceAdd() {
               </div>
               <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">OT End Time</lable>
-                <span className="text-danger">*</span>
+                {/* <span className="text-danger">*</span> */}
                 <input
                   type="time"
                   className={`form-control  ${
@@ -387,7 +387,7 @@ function StaffingAttendanceAdd() {
               <div className="col-md-6 col-12">
                 <div className="text-start mt-2">
                   <lable className="form-lable">Attendance Remark</lable>
-                  <span className="text-danger">*</span>
+                  {/* <span className="text-danger">*</span> */}
                   <br />
                   <textarea
                     id="floatingTextarea2"

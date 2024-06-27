@@ -137,11 +137,11 @@ const Staff = () => {
                   </td>
                   <td>
                     {data.userAccountInfo.length > 0 &&
-                    data.userAccountInfo[0].status === "Active" ? (
+                    data.userAccountInfo[0]?.status === "Active" ? (
                       <span className="badge badges-Green">Active</span>
-                    ) : (
-                      <span className="badge badges-Red ">Inactive</span>
-                    )}
+                    ) :data.userAccountInfo[0]?.status === "Pending" ? (
+                      <span className="badge badges-Yellow ">Pending</span>
+                    ):(<span className="badge badges-Red ">In Active</span>)}
                   </td>
                   <td>
                     <div className="d-flex">

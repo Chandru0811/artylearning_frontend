@@ -185,7 +185,7 @@ const AssessmentPursuers = forwardRef(
             }
           } catch (error) {
             toast.error(error);
-          }finally {
+          } finally {
             setLoadIndicators(false);
           }
         }
@@ -465,8 +465,8 @@ const AssessmentPursuers = forwardRef(
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row"></th>
-                    <td>
+                    <th></th>
+                    <td colSpan="3">
                       {formik.touched.sightWords && formik.errors.sightWords ? (
                         <div className="text-danger">
                           {formik.errors.sightWords}
@@ -2069,7 +2069,7 @@ const AssessmentPursuers = forwardRef(
                   </tr>
                   <tr>
                     <th scope="row"></th>
-                    <td>
+                    <td colSpan="5">
                       {formik.touched.hbrothersSightWords &&
                       formik.errors.hbrothersSightWords ? (
                         <div className="text-danger">

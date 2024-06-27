@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
   // shgAmount: Yup.string()
   //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
   //   .required("*SHG amount is required!"),
-  status: Yup.string().required("*Status is required!"),
+  // status: Yup.string().required("*Status is required!"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required!"
   ),
@@ -171,6 +171,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           response.data.userAccountInfo.length > 0
         ) {
           const data = response.data.userAccountInfo[0];
+          console.log("data",data)
           formik.setValues({
             ...response.data.userAccountInfo[0],
             accountId: response.data.userAccountInfo[0].id,
@@ -178,6 +179,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
             endDate: data.endDate.substring(0, 10),
             approvelContentRequired:
               data.approvelContentRequired === true ? "Yes" : "No",
+              status: data.status || "",
           });
         } else {
           formik.setValues({
@@ -326,7 +328,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
             />
           </div>
 
-          <div class="col-md-6 col-12 mb-2 mt-3">
+          {/* <div class="col-md-6 col-12 mb-2 mt-3">
             <lable class="">
               Status<span class="text-danger">*</span>
             </lable>
@@ -339,14 +341,14 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
             >
               <option value=""></option>
               <option value="Active">Active</option>
-              <option value="In Acitve">Inacitve</option>
+              <option value="Inactive">In Acitve</option>
             </select>
             {formik.touched.status && formik.errors.status && (
               <div className="error text-danger ">
                 <small>{formik.errors.status}</small>
               </div>
             )}
-          </div>
+          </div> */}
           <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
               End Date

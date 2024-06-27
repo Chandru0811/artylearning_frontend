@@ -64,6 +64,25 @@ function DocumentFile() {
       toast.error(error);
     }
   };
+  const FILE_SIZE = 100 * 1024 * 1024; // 100MB in bytes
+  // const SUPPORTED_FORMATS = [
+  //   "image/jpeg", 
+  //   "image/png", 
+  //   "application/pdf", 
+  //   "video/mp4", 
+  //   "video/quicktime", 
+  //   "video/x-msvideo", 
+  //   "video/x-matroska"
+  // ]; // Example supported formats including videos
+const fileSchema = Yup.mixed()
+  .test("fileSize", "Each file must be less than or equal to 100MB in size", value => {
+    return value && value.size <= FILE_SIZE;
+  })
+  // .test("fileFormat", "Unsupported Format", value => {
+  //   return value && SUPPORTED_FORMATS.includes(value.type);
+  // });
+  
+
 
   const validationSchema = Yup.object().shape({
     centerName: Yup.string().required("Centre is required"),
@@ -71,8 +90,9 @@ function DocumentFile() {
     classListing: Yup.string().required("Class is required"),
     folder: Yup.string().required("Folder Name is required"),
     files: Yup.array()
-      .min(1, "At least one file is required")
-      .required("Files are required"),
+    .of(fileSchema)
+    .min(1, "At least one file is required")
+    .required("Files are required")
   });
 
   const formik = useFormik({
