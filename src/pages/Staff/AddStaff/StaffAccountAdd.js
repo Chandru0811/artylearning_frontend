@@ -12,14 +12,14 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
-  colorCode: Yup.string().required("*Color Code is required"),
+  // colorCode: Yup.string().required("*Color Code is required"),
   teacherId: Yup.string().required("*Staff Id is required"),
   teacherType: Yup.string().required("*Staff Type is required"),
   // shgType: Yup.string().required("*Shg Type is required"),
   // shgAmount: Yup.string()
   //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
   //   .required("*SHG amount is required"),
-  status: Yup.string().required("*Status is required"),
+  // status: Yup.string().required("*Status is required"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required"
   ),
@@ -49,8 +49,8 @@ const StaffAccountAdd = forwardRef(
     const formik = useFormik({
       initialValues: {
         startDate: formData.startDate,
-        colorCode: formData.colorCode,
         teacherId: formData.teacherId,
+        colorCode: formData.colorCode,
         teacherType: formData.teacherType,
         shgType: formData.shgType,
         shgAmount: formData.shgAmount,
@@ -124,20 +124,19 @@ const StaffAccountAdd = forwardRef(
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
-                Color Code<span class="text-danger">*</span>
+                Color Code
               </label>
               <div class="input-group mb-3 courseAdd">
                 <div class="input-group-text inputGroup">
                   <input
                     type="color"
-                    className="form-control-color  circle"
                     {...formik.getFieldProps("colorCode")}
+                    className="form-control-color  circle"
                   />
                 </div>
                 <input
                   type="text"
                   className={`form-control form-control-sm iconInput `}
-                  {...formik.getFieldProps("colorCode")}
                   value={formik.values.colorCode}
                   placeholder=""
                 />
@@ -201,7 +200,6 @@ const StaffAccountAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.shgType}
               />
-              
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
@@ -217,12 +215,12 @@ const StaffAccountAdd = forwardRef(
               />
             </div>
 
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            {/* <div class="col-md-6 col-12 mb-2 mt-3">
               <lable class="">
                 Status<span class="text-danger">*</span>
               </lable>
               <select
-                class="form-select "
+                class="form-select"
                 name="status"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -230,17 +228,17 @@ const StaffAccountAdd = forwardRef(
               >
                 <option value=""></option>
                 <option value="Active">Active</option>
-                <option value="In Active">Inactive</option>
+                <option value="Inactive">Inactive</option>
               </select>
               {formik.touched.status && formik.errors.status && (
                 <div className="error text-danger ">
                   <small>{formik.errors.status}</small>
                 </div>
               )}
-            </div>
+            </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
-                End Date
+                End Date<span class="text-danger">*</span>
               </label>
               <input
                 type="date"

@@ -23,7 +23,7 @@ function LevelAdd({ onSuccess }) {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [show]);
 
   const fetchData = async (subjectId) => {
     try {
@@ -84,6 +84,7 @@ function LevelAdd({ onSuccess }) {
       }
     },
   });
+  console.log("subject",subjectData)
   const handleSubjectChange = (event) => {
     setSubjectData(null);
     const subjectId = event.target.value;

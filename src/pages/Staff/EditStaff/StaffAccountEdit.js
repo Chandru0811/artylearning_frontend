@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
   // shgAmount: Yup.string()
   //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
   //   .required("*SHG amount is required!"),
-  status: Yup.string().required("*Status is required!"),
+  // status: Yup.string().required("*Status is required!"),
   endDate: Yup.string().required("*End Date is required!"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required!"
@@ -328,7 +328,7 @@ const StaffAccountEdit = forwardRef(
               />
             </div>
 
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            {/* <div class="col-md-6 col-12 mb-2 mt-3">
               <lable class="">
                 Status<span class="text-danger">*</span>
               </lable>
@@ -348,7 +348,7 @@ const StaffAccountEdit = forwardRef(
                   <small>{formik.errors.status}</small>
                 </div>
               )}
-            </div>
+            </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 End Date<span class="text-danger">*</span>

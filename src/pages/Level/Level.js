@@ -70,6 +70,7 @@ const Level = () => {
 
   const refreshData = async () => {
     destroyDataTable();
+    fetchData();
     setLoading(true);
     try {
       const response = await api.get("/getAllCourseLevels");
