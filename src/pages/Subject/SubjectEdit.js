@@ -17,7 +17,7 @@ function SubjectEdit({ id, onSuccess }) {
 
   const handleClose = () => {
     setShow(false);
-    formik.resetForm();
+    // formik.resetForm();
     setLevelData(null);
   };
   const handleShow = () => setShow(true);

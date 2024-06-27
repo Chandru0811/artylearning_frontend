@@ -224,7 +224,7 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
 
           <div className="col-md-6 col-12 mb-2 mt-3">
             <label>
-              End Date<span className="text-danger">*</span>
+              End Date
             </label>
             <input
               type="date"

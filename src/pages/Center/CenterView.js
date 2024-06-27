@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllUserList from "../List/UserList";
+import BlockImg from "../../assets/images/Block_Img1.jpg";
 
 function CenterView() {
   const { id } = useParams();
@@ -72,12 +73,13 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {centerManagerData &&
-                    centerManagerData.map((Cmanager) =>
-                      parseInt(data.centerManager) === Cmanager.id
-                        ? Cmanager.userNames || "--"
-                        : ""
-                    )}
+                    :{" "}
+                    {centerManagerData &&
+                      centerManagerData.map((Cmanager) =>
+                        parseInt(data.centerManager) === Cmanager.id
+                          ? Cmanager.userNames || "--"
+                          : ""
+                      )}
                   </p>
                 </div>
               </div>
@@ -118,7 +120,16 @@ function CenterView() {
                   <p className="fw-medium">Email</p>
                 </div>
                 <div className="col-6">
-                  <div className="text-muted text-sm" style={{ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden"  }}>: {data.email || "--"}</div>
+                  <div
+                    className="text-muted text-sm"
+                    style={{
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                    }}
+                  >
+                    : {data.email || "--"}
+                  </div>
                 </div>
               </div>
             </div>
@@ -129,7 +140,8 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.openingDate
+                    :{" "}
+                    {data.openingDate
                       ? data.openingDate.substring(0, 10)
                       : "--"}
                   </p>
@@ -221,6 +233,33 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.invoiceNotes}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">QR Code :</p>
+                </div>
+                <div className="col-6">
+                  <p className="my-2 d-flex">
+                    {data.qrCode ? (
+                      <img
+                        src={data.qrCode}
+                        onError={(e) => {
+                          e.target.src = BlockImg;
+                        }}
+                        className="img-fluid ms-2 w-100 rounded"
+                        alt="Profile Image"
+                      />
+                    ) : (
+                      <img
+                        src={BlockImg}
+                        className="img-fluid ms-2 w-100 rounded"
+                        alt="Profile Image"
+                      />
+                    )}
+                  </p>
                 </div>
               </div>
             </div>

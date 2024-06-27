@@ -20,7 +20,6 @@ const validationSchema = Yup.object().shape({
   //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
   //   .required("*SHG amount is required!"),
   status: Yup.string().required("*Status is required!"),
-  endDate: Yup.string().required("*End Date is required!"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required!"
   ),
@@ -350,7 +349,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           </div>
           <div class="col-md-6 col-12 mb-2 mt-3">
             <label>
-              End Date<span class="text-danger">*</span>
+              End Date
             </label>
             <input
               type="date"

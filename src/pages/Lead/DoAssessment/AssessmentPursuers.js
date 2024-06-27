@@ -149,6 +149,7 @@ const AssessmentPursuers = forwardRef(
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...data, leadId }));
               navigate("/lead/lead");
+              // handleNext();
             } else {
               toast.error(response.data.message);
             }
@@ -177,8 +178,8 @@ const AssessmentPursuers = forwardRef(
                 ...data,
                 assesmentId,
               }));
-
-              handleNext();
+              navigate("/lead/lead");
+              // handleNext();
             } else {
               toast.error(response.data.message);
             }

@@ -34,7 +34,7 @@ const ContractAdd = forwardRef(({ formData,setLoadIndicators, setFormData }, ref
       userContractStartDate: formData.userContractStartDate || "",
       contactPeriod: formData.contactPeriod || "",
       probation: formData.probation || "",
-      workingDays: formData.workingDays || [],
+      workingDays: formData.workingDays || "",
       userContractSalary: formData.userContractSalary || "",
       salaryStartDate: formData.salaryStartDate || "",
       userContractEndDate: formData.userContractEndDate || "",
@@ -255,24 +255,7 @@ const ContractAdd = forwardRef(({ formData,setLoadIndicators, setFormData }, ref
                 value={formik.values.probation}
               />
             </div>
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Working Days<span className="text-danger">*</span>
-              </label>
-              <input
-                type="date"
-                className="form-control"
-                name="workingDays"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.workingDays}
-              />
-              {formik.touched.workingDays && formik.errors.workingDays && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.workingDays}</small>
-                </div>
-              )}
-            </div> */}
+           
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Working Days<span className="text-danger">*</span>
@@ -288,7 +271,7 @@ const ContractAdd = forwardRef(({ formData,setLoadIndicators, setFormData }, ref
                 onBlur={formik.handleBlur}
                 value={formik.values.workingDays}
               >
-                <option></option>
+                <option value=""></option>
                 <option value="Sunday">Sunday</option>
                 <option value="Monday">Monday</option>
                 <option value="Tuesday">Tuesday</option>

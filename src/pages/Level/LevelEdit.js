@@ -16,7 +16,7 @@ function Edit({ id, onSuccess }) {
   
   const handleClose = () => {
     setShow(false);
-    formik.resetForm();
+    // formik.resetForm();
     setSubjectData(null);
   };
   const handleShow = () => setShow(true);

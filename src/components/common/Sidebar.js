@@ -266,7 +266,7 @@ function Sidebar() {
       },
       {
         title: "Content Management",
-        icon: "bx bx-cog",
+        icon: "bx bx-message-edit",
         isOpen: false,
         subMenus: [
           {
