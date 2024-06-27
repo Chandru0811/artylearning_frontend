@@ -8,6 +8,9 @@ import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
   workingDays: Yup.string().required("*Working Days is required"),
+  // workingDays: Yup.array()
+  //   .of(Yup.string().required("*Working Days is required!"))
+  //   .min(1, "*Working Days is required!"),
   userContractSalary: Yup.number()
     .typeError("*Salary Must be numbers")
     .notRequired(),
@@ -16,370 +19,356 @@ const validationSchema = Yup.object().shape({
   allowance: Yup.number().typeError("*Allowance Must be numbers").notRequired(),
 });
 
-const StaffContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, ref) => {
-  const navigate = useNavigate();
-  const formik = useFormik({
-    initialValues: {
-      employer: "",
-      uen: "",
-      addressOfEmployment: "",
-      employee: "",
-      nric: "",
-      userContractAddress: "",
-      jobTitle: "",
-      mainDuties: "",
-      startDateOfEmployment: "",
-      training: "",
-      allowance: "",
-      userContractStartDate: "",
-      contactPeriod: "",
-      probation: "",
-      workingDays: "",
-      userContractSalary: "",
-      salaryStartDate: "",
-      userContractEndDate: "",
-      payNow: "",
-      internetBanking: "",
-      contractDate: "",
-      terminationNotice: "",
-    },
-    // onSubmit: async (data) => {
-    //   try {
-    //     const response = await api.put(
-    //       `/updateUserContractCreation/${data.contractId}`,
-    //       data,
-    //       {
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     );
-    //     if (response.status === 200) {
-    //       toast.success(response.data.message);
-    //       setFormData((prv) => ({ ...prv, ...data }));
-    //       navigate("/staff");
-    //     } else {
-    //       toast.error(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }
-    // },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      setLoadIndicators(true);
-      // console.log("Api Data:", values);
-      try {
-        if (values.contractId !== null) {
-          const response = await api.put(
-            `/updateUserContractCreation/${values.contractId}`,
-            values,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
+const StaffContractEdit = forwardRef(
+  ({ formData, setLoadIndicators, setFormData }, ref) => {
+    const navigate = useNavigate();
+    const formik = useFormik({
+      initialValues: {
+        employer: "",
+        uen: "",
+        addressOfEmployment: "",
+        employee: "",
+        nric: "",
+        userContractAddress: "",
+        jobTitle: "",
+        mainDuties: "",
+        startDateOfEmployment: "",
+        training: "",
+        allowance: "",
+        userContractStartDate: "",
+        contactPeriod: "",
+        probation: "",
+        workingDays: [] || "",
+        userContractSalary: "",
+        salaryStartDate: "",
+        userContractEndDate: "",
+        payNow: "",
+        internetBanking: "",
+        contractDate: "",
+        terminationNotice: "",
+      },
+      // onSubmit: async (data) => {
+      //   try {
+      //     const response = await api.put(
+      //       `/updateUserContractCreation/${data.contractId}`,
+      //       data,
+      //       {
+      //         headers: {
+      //           "Content-Type": "application/json",
+      //         },
+      //       }
+      //     );
+      //     if (response.status === 200) {
+      //       toast.success(response.data.message);
+      //       setFormData((prv) => ({ ...prv, ...data }));
+      //       navigate("/staff");
+      //     } else {
+      //       toast.error(response.data.message);
+      //     }
+      //   } catch (error) {
+      //     toast.error(error);
+      //   }
+      // },
+      validationSchema: validationSchema,
+      onSubmit: async (values) => {
+        setLoadIndicators(true);
+        // console.log("Api Data:", values);
+        try {
+          if (values.contractId !== null) {
+            const response = await api.put(
+              `/updateUserContractCreation/${values.contractId}`,
+              values,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...values }));
+              navigate("/staff");
+            } else {
+              toast.error(response.data.message);
             }
-          );
-          if (response.status === 200) {
-            toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...values }));
-            navigate("/staff");
           } else {
-            toast.error(response.data.message);
-          }
-        } else {
-          const response = await api.post(
-            `/createUserContractCreation/${formData.staff_id}`,
-            values,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
+            const response = await api.post(
+              `/createUserContractCreation/${formData.staff_id}`,
+              values,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...values }));
+              navigate("/staff");
+            } else {
+              toast.error(response.data.message);
             }
-          );
-          if (response.status === 201) {
-            toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...values }));
-            navigate("/staff");
-          } else {
-            toast.error(response.data.message);
           }
+        } catch (error) {
+          toast.error(error);
+        } finally {
+          setLoadIndicators(false);
         }
-      } catch (error) {
-        toast.error(error);
-      }finally{
-        setLoadIndicators(false);
-      }
-    },
-  });
+      },
+    });
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
-        if (
-          response.data.userContractCreationModels &&
-          response.data.userContractCreationModels.length > 0
-        ) {
-          const contractData = response.data.userContractCreationModels[0];
-          formik.setValues({
-            ...contractData,
-            contractId: contractData.id,
-            startDateOfEmployment: contractData.startDateOfEmployment
-              ? contractData.startDateOfEmployment.substring(0, 10)
-              : "",
-            userContractStartDate: contractData.userContractStartDate
-              ? contractData.userContractStartDate.substring(0, 10)
-              : "",
-            userContractEndDate: contractData.userContractEndDate
-              ? contractData.userContractEndDate.substring(0, 10)
-              : "",
-            contractDate: contractData.contractDate
-              ? contractData.contractDate.substring(0, 10)
-              : "",
-            salaryStartDate: contractData.salaryStartDate
-              ? contractData.salaryStartDate.substring(0, 10)
-              : "",
-          });
-        } else {
-          formik.setValues({
-            contractId: null,
-            employer: "",
-            uen: "",
-            addressOfEmployment: "",
-            employee: "",
-            nric: "",
-            userContractAddress: "",
-            jobTitle: "",
-            mainDuties: "",
-            startDateOfEmployment: "",
-            training: "",
-            allowance: "",
-            userContractStartDate: "",
-            contactPeriod: "",
-            probation: "",
-            workingDays: "",
-            userContractSalary: "",
-            salaryStartDate: "",
-            userContractEndDate: "",
-            payNow: "",
-            internetBanking: "",
-            contractDate: "",
-            terminationNotice: "",
-          });
-          console.log("Contract ID:", formik.values.contractId);
+    useEffect(() => {
+      const getData = async () => {
+        try {
+          const response = await api.get(
+            `/getAllUsersById/${formData.staff_id}`
+          );
+          if (
+            response.data.userContractCreationModels &&
+            response.data.userContractCreationModels.length > 0
+          ) {
+            const contractData = response.data.userContractCreationModels[0];
+            formik.setValues({
+              ...contractData,
+              contractId: contractData.id,
+              startDateOfEmployment: contractData.startDateOfEmployment
+                ? contractData.startDateOfEmployment.substring(0, 10)
+                : "",
+              userContractStartDate: contractData.userContractStartDate
+                ? contractData.userContractStartDate.substring(0, 10)
+                : "",
+              userContractEndDate: contractData.userContractEndDate
+                ? contractData.userContractEndDate.substring(0, 10)
+                : "",
+              contractDate: contractData.contractDate
+                ? contractData.contractDate.substring(0, 10)
+                : "",
+              salaryStartDate: contractData.salaryStartDate
+                ? contractData.salaryStartDate.substring(0, 10)
+                : "",
+            });
+          } else {
+            formik.setValues({
+              contractId: null,
+              employer: "",
+              uen: "",
+              addressOfEmployment: "",
+              employee: "",
+              nric: "",
+              userContractAddress: "",
+              jobTitle: "",
+              mainDuties: "",
+              startDateOfEmployment: "",
+              training: "",
+              allowance: "",
+              userContractStartDate: "",
+              contactPeriod: "",
+              probation: "",
+              workingDays: [] || "",
+              userContractSalary: "",
+              salaryStartDate: "",
+              userContractEndDate: "",
+              payNow: "",
+              internetBanking: "",
+              contractDate: "",
+              terminationNotice: "",
+            });
+            console.log("Contract ID:", formik.values.contractId);
+          }
+        } catch (error) {
+          toast.error("Error Fetching Data");
         }
-      } catch (error) {
-        toast.error("Error Fetching Data");
-      }
-    };
-    console.log(formik.values);
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      };
+      console.log(formik.values);
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-  useImperativeHandle(ref, () => ({
-    staffContractEdit: formik.handleSubmit,
-  }));
+    useImperativeHandle(ref, () => ({
+      staffContractEdit: formik.handleSubmit,
+    }));
 
-  return (
-    <form onSubmit={formik.handleSubmit}>
-      <div className="container">
-        <p className="headColor my-4">Contract Information</p>
-        <div className="container mt-5" style={{ minHeight: "95vh" }}>
-          <span className="mt-3 fw-bold">Details of EMPLOYER</span>
-          <div class="row mt-4">
+    return (
+      <form onSubmit={formik.handleSubmit}>
+        <div className="container">
+          <p className="headColor my-4">Contract Information</p>
+          <div className="container mt-5" style={{ minHeight: "95vh" }}>
+            <span className="mt-3 fw-bold">Details of EMPLOYER</span>
+            <div class="row mt-4">
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Employer</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="employer"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.employer}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>UEN</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="uen"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.uen}
+                />
+                {formik.touched.uen && formik.errors.uen && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.uen}</small>
+                  </div>
+                )}
+              </div>
+            </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Employer</label>
+              <label>Address of Employment</label>
               <input
                 type="text"
                 className="form-control"
-                name="employer"
+                name="addressOfEmployment"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.employer}
+                value={formik.values.addressOfEmployment}
               />
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>UEN</label>
-              <input
-                type="text"
-                className="form-control"
-                name="uen"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.uen}
-              />
-              {formik.touched.uen && formik.errors.uen && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.uen}</small>
-                </div>
-              )}
-            </div>
-          </div>
-          <div class="col-md-6 col-12 mb-2 mt-3">
-            <label>Address of Employment</label>
-            <input
-              type="text"
-              className="form-control"
-              name="addressOfEmployment"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.addressOfEmployment}
-            />
-          </div>
-          <div class="row mt-3 ">
-            <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Employee</label>
-              <input
-                type="text"
-                className="form-control"
-                name="employee"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.employee}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>NRIC</label>
-              <input
-                type="text"
-                className="form-control"
-                name="nric"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.nric}
-              />
-              {formik.touched.nric && formik.errors.nric && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.nric}</small>
-                </div>
-              )}
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Address</label>
-              <input
-                type="text"
-                className="form-control"
-                name="userContractAddress"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.userContractAddress}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Job Title</label>
-              <input
-                type="text"
-                className="form-control"
-                name="jobTitle"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.jobTitle}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Main Duties</label>
-              <input
-                type="text"
-                className="form-control"
-                name="mainDuties"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.mainDuties}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Start Date of Employment</label>
-              <input
-                type="date"
-                className="form-control"
-                name="startDateOfEmployment"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.startDateOfEmployment}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Training</label>
-              <input
-                type="text"
-                className="form-control"
-                name="training"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.training}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Allowance</label>
-              <input
-                type="text"
-                className="form-control"
-                name="allowance"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.allowance}
-              />
-              {formik.touched.allowance && formik.errors.allowance && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.allowance}</small>
-                </div>
-              )}
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Contract Start Date</label>
-              <input
-                type="date"
-                className="form-control"
-                name="userContractStartDate"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.userContractStartDate}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Contract Period</label>
-              <input
-                type="text"
-                className="form-control"
-                name="contactPeriod"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.contactPeriod}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Porbation</label>
-              <input
-                type="text"
-                className="form-control"
-                name="probation"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.probation}
-              />
-            </div>
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Working Days<span className="text-danger">*</span>
-              </label>
-              <input
-                type="date"
-                className="form-control"
-                name="workingDays"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.workingDays}
-              />
-              {formik.touched.workingDays && formik.errors.workingDays && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.workingDays}</small>
-                </div>
-              )}
-            </div> */}
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div class="row mt-3 ">
+              <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Employee</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="employee"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.employee}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>NRIC</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="nric"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.nric}
+                />
+                {formik.touched.nric && formik.errors.nric && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.nric}</small>
+                  </div>
+                )}
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Address</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="userContractAddress"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.userContractAddress}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Job Title</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="jobTitle"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.jobTitle}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Main Duties</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="mainDuties"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.mainDuties}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Start Date of Employment</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  name="startDateOfEmployment"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.startDateOfEmployment}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Training</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="training"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.training}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Allowance</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="allowance"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.allowance}
+                />
+                {formik.touched.allowance && formik.errors.allowance && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.allowance}</small>
+                  </div>
+                )}
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Contract Start Date</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  name="userContractStartDate"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.userContractStartDate}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Contract Period</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="contactPeriod"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.contactPeriod}
+                />
+              </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Porbation</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="probation"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.probation}
+                />
+              </div>
+
+              <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Working Days<span className="text-danger">*</span>
               </label>
@@ -409,97 +398,259 @@ const StaffContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData 
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Salary</label>
-              <input
-                type="text"
-                className="form-control"
-                name="userContractSalary"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.userContractSalary}
-              />
-              {formik.touched.userContractSalary &&
-                formik.errors.userContractSalary && (
+
+              {/* <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>
+                  Working Days<span class="text-danger">*</span>
+                </label>
+                <div class="mt-2 d-flex justify-content-between mt-3">
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox1"
+                      value="MONDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("MONDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox1" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox1" className="mx-1">
+                      Mon
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox2"
+                      value="TUESDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("TUESDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox2" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox2" className="mx-1">
+                      Tue
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox3"
+                      value="WEDNESDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("WEDNESDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox3" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox3" className="mx-1">
+                      Wed
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox4"
+                      value="THURSDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("THURSDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox4" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox4" className="mx-1">
+                      Thu
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox5"
+                      value="FRIDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("FRIDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox5" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox5" className="mx-1">
+                      Fri
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox6"
+                      value="SATURDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("SATURDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox6" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox6" className="mx-1">
+                      Sat
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox7"
+                      value="SUNDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("SUNDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox7" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox7" className="mx-1">
+                      Sun
+                    </label>
+                  </div>
+                </div>
+                {formik.touched.workingDays && formik.errors.workingDays && (
                   <div className="error text-danger ">
-                    <small>{formik.errors.userContractSalary}</small>
+                    <small>{formik.errors.workingDays}</small>
                   </div>
                 )}
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Salary Start Date</label>
-              <input
-                type="date"
-                className="form-control"
-                name="salaryStartDate"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.salaryStartDate}
-              />
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Contract End Date</label>
-              <input
-                type="date"
-                className="form-control"
-                name="userContractEndDate"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.userContractEndDate}
-              />
-            </div>
-            <div class="row mt-3">
-              <span className="mt-3 fw-bold">Bank Account Details</span>
+              </div> */}
+
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Pay Now</label>
+                <label>Salary</label>
                 <input
                   type="text"
                   className="form-control"
-                  name="payNow"
+                  name="userContractSalary"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.payNow}
+                  value={formik.values.userContractSalary}
                 />
+                {formik.touched.userContractSalary &&
+                  formik.errors.userContractSalary && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.userContractSalary}</small>
+                    </div>
+                  )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Internet Banking</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="internetBanking"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.internetBanking}
-                />
-              </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Contract Date</label>
+                <label>Salary Start Date</label>
                 <input
                   type="date"
                   className="form-control"
-                  name="contractDate"
+                  name="salaryStartDate"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.contractDate}
+                  value={formik.values.salaryStartDate}
                 />
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Termination Notice</label>
+                <label>Contract End Date</label>
                 <input
-                  type="text"
+                  type="date"
                   className="form-control"
-                  name="terminationNotice"
+                  name="userContractEndDate"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.terminationNotice}
+                  value={formik.values.userContractEndDate}
                 />
+              </div>
+              <div class="row mt-3">
+                <span className="mt-3 fw-bold">Bank Account Details</span>
+                <div class="col-md-6 col-12 mb-2 mt-3">
+                  <label>Pay Now</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="payNow"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.payNow}
+                  />
+                </div>
+                <div class="col-md-6 col-12 mb-2 mt-3">
+                  <label>Internet Banking</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="internetBanking"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.internetBanking}
+                  />
+                </div>
+                <div class="col-md-6 col-12 mb-2 mt-3">
+                  <label>Contract Date</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    name="contractDate"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.contractDate}
+                  />
+                </div>
+                <div class="col-md-6 col-12 mb-2 mt-3">
+                  <label>Termination Notice</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="terminationNotice"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.terminationNotice}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </form>
-  );
-});
+      </form>
+    );
+  }
+);
 
 export default StaffContractEdit;

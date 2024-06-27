@@ -7,6 +7,9 @@ import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
   workingDays: Yup.string().required("*Working Days is required"),
+  // workingDays: Yup.array()
+  //   .of(Yup.string().required("*Working Days is required!"))
+  //   .min(1, "*Working Days is required!"),
   userContractSalary: Yup.number()
     .typeError("*Salary Must be numbers")
     .notRequired(),
@@ -35,7 +38,7 @@ const StaffContractAdd = forwardRef(
         userContractStartDate: formData.userContractStartDate || "",
         contactPeriod: formData.contactPeriod || "",
         probation: formData.probation || "",
-        workingDays: formData.workingDays || "",
+        workingDays: formData.workingDays || [],
         userContractSalary: formData.userContractSalary || "",
         salaryStartDate: formData.salaryStartDate || "",
         userContractEndDate: formData.userContractEndDate || "",
@@ -254,24 +257,7 @@ const StaffContractAdd = forwardRef(
                   value={formik.values.probation}
                 />
               </div>
-              {/* <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>
-                  Working Days<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="date"
-                  className="form-control"
-                  name="workingDays"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.workingDays}
-                />
-                {formik.touched.workingDays && formik.errors.workingDays && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.workingDays}</small>
-                  </div>
-                )}
-              </div> */}
+
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Working Days<span className="text-danger">*</span>
@@ -302,6 +288,167 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
+
+               {/* <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>
+                  Working Days<span class="text-danger">*</span>
+                </label>
+                <div class="mt-2 d-flex justify-content-between mt-3">
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox1"
+                      value="MONDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("MONDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox1" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox1" className="mx-1">
+                      Mon
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox2"
+                      value="TUESDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("TUESDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox2" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox2" className="mx-1">
+                      Tue
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox3"
+                      value="WEDNESDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("WEDNESDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox3" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox3" className="mx-1">
+                      Wed
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox4"
+                      value="THURSDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("THURSDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox4" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox4" className="mx-1">
+                      Thu
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox5"
+                      value="FRIDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("FRIDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox5" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox5" className="mx-1">
+                      Fri
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox6"
+                      value="SATURDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("SATURDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox6" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox6" className="mx-1">
+                      Sat
+                    </label>
+                  </div>
+                  <div class="checkbox-container">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="myCheckbox7"
+                      value="SUNDAY"
+                      name="workingDays"
+                      checked={
+                        formik.values.workingDays &&
+                        formik.values.workingDays.includes("SUNDAY")
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <label for="myCheckbox7" class="custom-checkbox">
+                      <div class="inner-square"></div>
+                    </label>
+                    <label for="myCheckbox7" className="mx-1">
+                      Sun
+                    </label>
+                  </div>
+                </div>
+                {formik.touched.workingDays && formik.errors.workingDays && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.workingDays}</small>
+                  </div>
+                )}
+              </div> */}
+
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Salary</label>
                 <input

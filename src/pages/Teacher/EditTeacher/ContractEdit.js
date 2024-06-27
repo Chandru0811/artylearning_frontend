@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 const validationSchema = Yup.object().shape({
   workingDays: Yup.string().required("*Working Days is required"),
+  // workingDays: Yup.array()
+  //   .of(Yup.string().required("*Working Days is required!"))
+  //   .min(1, "*Working Days is required!"),
   userContractSalary: Yup.number()
     .typeError("*Salary Must be numbers")
     .notRequired(),
@@ -33,7 +36,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
       userContractStartDate: "",
       contactPeriod: "",
       probation: "",
-      workingDays: "",
+      workingDays: [] || "",
       userContractSalary: "",
       salaryStartDate: "",
       userContractEndDate: "",
