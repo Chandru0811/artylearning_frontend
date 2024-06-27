@@ -260,7 +260,7 @@ const Form3 = forwardRef(
                   </div>
                 )}
             </div>
-            <div className="col-12 mb-3">
+            <div className="col-12 mb-3 mt-4">
               <div className="row">
                 <div className="col-6">
                   <h6>Father's Info</h6>

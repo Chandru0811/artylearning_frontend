@@ -240,7 +240,7 @@ const StaffAccountAdd = forwardRef(
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
-                End Date<span class="text-danger">*</span>
+                End Date
               </label>
               <input
                 type="date"
