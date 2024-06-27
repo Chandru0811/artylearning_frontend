@@ -15,7 +15,6 @@ const EditForm6 = forwardRef(
       // consentScrapbook:Yup.string().required("*ConsentScrapbook is required"),
       declare: Yup.string().required("*Declare is required"),
     });
-
     const formik = useFormik({
       initialValues: {
         addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
@@ -55,6 +54,7 @@ const EditForm6 = forwardRef(
     useEffect(() => {
       const getData = async () => {
         const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
+        console.log("api",response.data)
         formik.setValues(response.data);
       };
       getData();
@@ -104,14 +104,16 @@ const EditForm6 = forwardRef(
             </div>
             <div className="row">
               <div className="col-md-12 col-12 mb-2">
-                <div className="form-check">
+                <div className="form-check d-flex">
                   <input
                     className="form-check-input mx-2"
                     id="consentScrapbook"
                     name="consentScrapbook"
                     type="checkbox"
+                    value={formik.values.consentScrapbook}
                     checked={formik.values.consentScrapbook}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                   <label
                     className="form-check-label"
@@ -142,14 +144,16 @@ const EditForm6 = forwardRef(
 
             <div className="row">
               <div className="col-md-12 col-12 mb-3">
-                <div className="form-check">
+                <div className="form-check d-flex">
                   <input
                     className="form-check-input mx-2"
                     id="consentPhotos"
                     name="consentPhotos"
                     type="checkbox"
+                    value={formik.values.consentPhotos}
                     checked={formik.values.consentPhotos}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                   <label className="form-check-label" htmlFor="consentPhotos">
                     I hereby provide my consent to Arty Learning Pte Ltd for the
@@ -174,16 +178,16 @@ const EditForm6 = forwardRef(
             </div>
 
             <div className="col-mb-12 col-12 mb-3">
-              <div className="form-check">
+              <div className="form-check d-flex">
                 <input
                   className="form-check-input mx-2"
                   id="declare"
                   name="declare"
                   type="checkbox"
                   checked={formik.values.declare}
+                  value={formik.values.declare}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.declare}
                 />
                 <label className="form-check-label" htmlFor="declare">
                   I agree that the information provided is true to my abilities.

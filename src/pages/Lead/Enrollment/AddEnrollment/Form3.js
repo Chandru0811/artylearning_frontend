@@ -31,8 +31,8 @@ const validationSchema = Yup.object().shape({
     .required("*Email is required"),
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
   primaryContact: Yup.string()
-    .oneOf(["father", "mother"])
-    .required("*Primary Contact is required"),
+    .oneOf(["father", "mother"], "*Primary Contact must be either 'father' or 'mother'")
+    .required("*Primary Contact is required")
 });
 
 const Form3 = forwardRef(

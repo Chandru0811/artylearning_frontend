@@ -11,7 +11,7 @@ const validationSchema = Yup.object({
   leaveType: Yup.string().required("*Select a Leave Type"),
   fromDate: Yup.string().required("*From Date is required"),
   toDate: Yup.string().required("*To Date is required"),
-  dayType: Yup.string().required("*Leave Status is required"),
+  dayType: Yup.string().required("*Day Type is required"),
   leaveReason: Yup.string().required("*Leave Reason is required"),
 });
 

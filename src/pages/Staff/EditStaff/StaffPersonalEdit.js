@@ -12,7 +12,7 @@ const validationSchema = Yup.object().shape({
   idType: Yup.string().required("*Id Type is required!"),
   idNo: Yup.string().required("*Id No is required!"),
   citizenship: Yup.string().required("*CitizenShip is required!"),
-  file: Yup.string().required("*Photo is required!"),
+  // file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
