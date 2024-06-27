@@ -64,35 +64,30 @@ function DocumentFile() {
       toast.error(error);
     }
   };
-  const FILE_SIZE = 100 * 1024 * 1024; // 100MB in bytes
-  // const SUPPORTED_FORMATS = [
-  //   "image/jpeg", 
-  //   "image/png", 
-  //   "application/pdf", 
-  //   "video/mp4", 
-  //   "video/quicktime", 
-  //   "video/x-msvideo", 
-  //   "video/x-matroska"
-  // ]; // Example supported formats including videos
-const fileSchema = Yup.mixed()
-  .test("fileSize", "Each file must be less than or equal to 100MB in size", value => {
-    return value && value.size <= FILE_SIZE;
-  })
-  // .test("fileFormat", "Unsupported Format", value => {
-  //   return value && SUPPORTED_FORMATS.includes(value.type);
-  // });
+  const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB in bytes
+
+  const fileSchema = Yup.mixed()
+    .test("fileSize", "Each file must be less than or equal to 1GB in size", value => {
+      return value && value.size <= MAX_FILE_SIZE;
+    });
   
-
-
+  const filesSchema = Yup.array()
+    .of(fileSchema)
+    .test("totalSize", "Total size of all files must be less than or equal to 1GB", values => {
+      if (values && values.length) {
+        const totalSize = values.reduce((acc, file) => acc + file.size, 0);
+        return totalSize <= MAX_FILE_SIZE;
+      }
+      return true;
+    })
+    .min(1, "At least one file is required")
+    .required("Files are required");
   const validationSchema = Yup.object().shape({
     centerName: Yup.string().required("Centre is required"),
     course: Yup.string().required("Course is required"),
     classListing: Yup.string().required("Class is required"),
     folder: Yup.string().required("Folder Name is required"),
-    files: Yup.array()
-    .of(fileSchema)
-    .min(1, "At least one file is required")
-    .required("Files are required")
+    files: filesSchema,
   });
 
   const formik = useFormik({

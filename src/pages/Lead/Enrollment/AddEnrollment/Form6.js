@@ -161,12 +161,13 @@ const Form6 = forwardRef(
                 <label className="form-check-label" htmlFor="declare">
                   I agree that the information provided is true to my abilities.
                 </label>
-                {formik.touched.declare && formik.errors.declare && (
-                  <div className="error text-danger ">
+               
+              </div>
+              {formik.touched.declare && formik.errors.declare && (
+                  <div className="error text-danger ms-5">
                     <small>{formik.errors.declare}</small>
                   </div>
                 )}
-              </div>
             </div>
           </div>
         </form>
