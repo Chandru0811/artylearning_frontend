@@ -19,10 +19,10 @@ const Teacher = () => {
 
   useEffect(() => {
     const getData = async () => {
-      try{
+      try {
         const response = await api.get("/getAllUsersByRole/teacher");
         setDatas(response.data);
-      }catch (error) {
+      } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
@@ -85,13 +85,13 @@ const Teacher = () => {
       ) : (
         <div className="container my-4">
           <div className="my-3 d-flex justify-content-end mb-5">
-          {storedScreens?.teacherCreate && (
-            <Link to="/teacher/add">
-              <button type="button" className="btn btn-button btn-sm">
-                Add <i class="bx bx-plus"></i>
-              </button>
-            </Link>
-          )}
+            {storedScreens?.teacherCreate && (
+              <Link to="/teacher/add">
+                <button type="button" className="btn btn-button btn-sm">
+                  Add <i class="bx bx-plus"></i>
+                </button>
+              </Link>
+            )}
           </div>
           <table ref={tableRef} className="display">
             <thead>
@@ -127,35 +127,36 @@ const Teacher = () => {
                   </td>
                   <td>
                     {data.userAccountInfo.length > 0 &&
-                    data.userAccountInfo[0].status === "Active" ? (
+                    data.userAccountInfo[0]?.status === "Active" ? (
                       <span className="badge badges-Green">Active</span>
+                    ) : data.userAccountInfo[0]?.status === "Pending" ? (
+                      <span className="badge badges-Yellow ">Pending</span>
                     ) : (
-                      <span className="badge badges-Red ">Resigned</span>
+                      <span className="badge badges-Red ">In Active</span>
                     )}
                   </td>
                   <td>
                     <div className="d-flex">
-                    {storedScreens?.teacherRead && (
-                      <Link to={`/teacher/view/${data.id}`}>
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                    )}
-                    {storedScreens?.teacherUpdate && (
-                      <Link to={`/teacher/edit/${data.id}`}>
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                    )}
-                    {storedScreens?.teacherDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteUser/${data.id}`}
-                      />
-                    )}
-
+                      {storedScreens?.teacherRead && (
+                        <Link to={`/teacher/view/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEye />
+                          </button>
+                        </Link>
+                      )}
+                      {storedScreens?.teacherUpdate && (
+                        <Link to={`/teacher/edit/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                      )}
+                      {storedScreens?.teacherDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteUser/${data.id}`}
+                        />
+                      )}
                     </div>
                   </td>
                 </tr>
