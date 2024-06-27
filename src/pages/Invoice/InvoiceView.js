@@ -5,7 +5,6 @@ import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllStudentsWithIds from "../List/StudentList";
-import { BsFillSendFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -60,10 +59,12 @@ function InvoiceView() {
   }, [id]);
 
   const qrCodeUrl = centerData
-  ? centerData.reduce((src, center) => {
-      return parseInt(data.centerId) === center.id ? center.qrCode || "--" : src;
-    }, "")
-  : BlockImg;
+    ? centerData.reduce((src, center) => {
+        return parseInt(data.centerId) === center.id
+          ? center.qrCode || "--"
+          : src;
+      }, "")
+    : BlockImg;
 
   const generatePDF = async (qrCodeUrl) => {
     try {
@@ -72,11 +73,11 @@ function InvoiceView() {
 
       doc.setFontSize(15);
       doc.setFont("helvetica", "bold");
-      doc.text("Arty Learning @HG", 60, 25);
+      doc.text("Arty Learning @HG", 130, 25);
 
       doc.setFont("helvetica", "normal");
-      doc.text("Tel No:87270752", 60, 35);
-      doc.text("Email:Artylearning@gmail.com", 60, 45);
+      doc.text("Tel No:87270752", 130, 35);
+      doc.text("Email:Artylearning@gmail.com", 130, 45);
 
       doc.line(16, 70, 50, 70); // x, y, width, height
 
@@ -120,7 +121,14 @@ function InvoiceView() {
         },
         bodyStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] },
         head: [
-          ["NO", "Item", "Item Amount", "Tax Type", "GST Amount", "Total Amount"],
+          [
+            "NO",
+            "Item",
+            "Item Amount",
+            "Tax Type",
+            "GST Amount",
+            "Total Amount",
+          ],
         ],
         body: tableData,
       });
@@ -138,13 +146,28 @@ function InvoiceView() {
 
       // Add QR code to PDF
       if (qrCodeImage) {
-        doc.addImage(qrCodeImage, "PNG", 145, doc.autoTable.previous.finalY + 10, 40, 40);
+        doc.addImage(
+          qrCodeImage,
+          "PNG",
+          145,
+          doc.autoTable.previous.finalY + 10,
+          40,
+          40
+        );
         doc.text(`Send To Pay`, 175, doc.autoTable.previous.finalY + 55, {
           align: "right",
           fontWeight: "bold",
         });
       } else {
-        doc.text("QR Code not available", 145, doc.autoTable.previous.finalY + 10);
+        doc.addImage(
+          QR,
+          "PNG",
+          145,
+          doc.autoTable.previous.finalY + 10,
+          40,
+          40
+        );
+        // doc.text("QR Code not available", 145, doc.autoTable.previous.finalY + 10);
       }
 
       // Save the PDF
@@ -158,7 +181,9 @@ function InvoiceView() {
   const handleGeneratePDF = async () => {
     const qrCodeUrl = centerData
       ? centerData.reduce((src, center) => {
-          return parseInt(data.centerId) === center.id ? center.qrCode || BlockImg : src;
+          return parseInt(data.centerId) === center.id
+            ? center.qrCode || BlockImg
+            : src;
         }, BlockImg)
       : BlockImg;
 
@@ -175,7 +200,7 @@ function InvoiceView() {
       img.src = url;
     });
   };
-  
+
   return (
     <div className="container-fluid mb-2 minHeight">
       <div className=" row">
@@ -189,7 +214,7 @@ function InvoiceView() {
             </button>
           </Link>
           {/* <Link to="/sendAndPublish"> */}
-          <SendAndPublish data={data} id={id} />
+          <SendAndPublish data={data} id={id} qr={qrCodeUrl} />
           {/* </Link> */}
           <button
             onClick={handleGeneratePDF}
@@ -204,14 +229,6 @@ function InvoiceView() {
             )}
             Generate PDF
           </button>
-          {/* <button className="btn btn-border btn-sm me-1 " onClick={generatePDF}>
-            Generate Pdf
-          </button> */}
-          {/* {storedScreens?.paymentCreate && (
-            <Link to="/invoice/payment">
-              <button className="btn btn-button btn-sm">Pay Now</button>
-            </Link>
-          )} */}
         </div>
       </div>
       <div className="card shadow border-0 minHeight">
@@ -253,9 +270,7 @@ function InvoiceView() {
                 <div className="col-6 ">
                   <p>Student Name </p>
                 </div>
-                <div className="col-6">
-                  - &nbsp; {data.studentName || "--"}
-                </div>
+                <div className="col-6">- &nbsp; {data.studentName || "--"}</div>
               </div>
               <div className="row my-1">
                 <div className="col-6 ">
@@ -349,27 +364,13 @@ function InvoiceView() {
           </div>
           <div className="col-lg-4 col-md-8 col-12">
             <div className="d-flex justify-content-center flex-column align-items-center">
+              <img
+                src={qrCodeUrl || BlockImg}
+                alt="Teacher"
+                width="100"
+                height="100"
+              />
               {/* {data.qrCode ? (
-                <img
-                  src={data.qrCode}
-                  onError={(e) => {
-                    e.target.src = BlockImg;
-                  }}
-                  style={{ borderRadius: 70 }}
-                  width="100"
-                  height="100"
-                  alt="Teacher"
-                />
-              ) : (
-                <img
-                  src={BlockImg}
-                  alt="Teacher"
-                  style={{ borderRadius: 70 }}
-                  width="100"
-                  height="100"
-                />
-              )} */}
-              {data.qrCode ? (
                 <img
                   src={
                     centerData
@@ -396,18 +397,13 @@ function InvoiceView() {
                   width="100"
                   height="100"
                 />
-              )}
+              )} */}
               <p className="text-center">
                 Arty Learning Pvt.Ltd <br />
                 UEN:202042173K{" "}
               </p>
             </div>
           </div>
-          {/* <div className="col-12 text-end my-5 pe-3">
-            <button className="btn btn-sm  btn-danger me-5">
-              Generate PDF
-            </button>
-          </div> */}
         </div>
       </div>
     </div>

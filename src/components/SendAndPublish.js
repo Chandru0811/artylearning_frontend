@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import api from "../config/URL";
 import fetchAllCentersWithIds from "../pages/List/CenterList";
 
-function SendAndPublish({ data }) {
+function SendAndPublish({ data ,qr }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setcenterData] = useState(null);
+
+  // console.log("QR:" ,qr);
 
   const getQRCodeUrl = () => {
     if (centerData && data.centerId) {
@@ -136,7 +136,7 @@ function SendAndPublish({ data }) {
                     <tr>
                       <td class="title">
                         <img
-                          src="https://artylearning.com/static/media/Logo.f01b9cbb8e8f1d1c7792.png"
+                          src="https://arty-cms-bucket.s3.ap-southeast-1.amazonaws.com/cms/Logo.png"
                           style="width: 75%; max-width: 180px"
                           alt="Logo"
                         />
@@ -260,7 +260,7 @@ function SendAndPublish({ data }) {
               <div style="width: 50%; text-align: end">
               <div>
                   <img
-                    src="${qrCodeUrl}"
+                    src="${qr}"
                     alt="Advantage"
                     class="img-fluid"
                     width="50%"
@@ -278,10 +278,8 @@ function SendAndPublish({ data }) {
 
     `;
       const formData = new FormData();
-      // formData.append("from", "keerthickvasan08@gmail.com");
-      // formData.append("to", "keerthickvasan08@gmail.com");
       formData.append("from", data.parentEmail);
-      formData.append("to", data.parentEmail);
+      formData.append("to", "ragulecs1@gmail.com");
       formData.append("subject", "Invoice");
       formData.append("htmlContent", mailcontent);
       setLoadIndicator(true);

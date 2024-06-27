@@ -239,11 +239,11 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">QR Code :</p>
+                  <p className="fw-medium">QR Code </p>
                 </div>
                 <div className="col-6">
                   <p className="my-2 d-flex">
-                    {data.qrCode ? (
+                    : {data.qrCode ? (
                       <img
                         src={data.qrCode}
                         onError={(e) => {
