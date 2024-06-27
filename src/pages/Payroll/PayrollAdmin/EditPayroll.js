@@ -261,7 +261,7 @@ function EditPayroll() {
               )}
             </div>
             <div className="col-md-6 col-12 mb-3 ">
-              <lable className="">Employee Name</lable>
+              <lable className="">Employee Name</lable> <span className="text-danger">*</span>
               <select
                 {...formik.getFieldProps("userId")}
                 class={`form-select  ${

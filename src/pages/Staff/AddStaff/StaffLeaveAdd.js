@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  year: Yup.string().required("*year is required!"),
+  year: Yup.string().required("*Year is required!"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Annual Leave Must be numbers")

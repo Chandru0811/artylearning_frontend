@@ -8,7 +8,7 @@ const validationSchema = Yup.object().shape({
   address: Yup.string().required("*Address is required"),
   postalCode: Yup.string()
     .matches(/^\d+$/, "Must be a Number")
-    .required("*Code is required"),
+    .required("*Postal Code is required"),
   nameOfEmergency: Yup.string().required(
     "*Emergency Contact Person is required"
   ),

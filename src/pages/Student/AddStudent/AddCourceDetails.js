@@ -31,7 +31,7 @@ const AddcourseDetail = forwardRef(
       onSubmit: async (data) => {
         setLoadIndicators(true);
         try {
-          const response = await api.post(`/createStudentCourseDetail`, data);
+          const response = await api.post(`/createStudentCourseDetails`, data);
 
           if (response.status === 201) {
             toast.success(response.data.message);

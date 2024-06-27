@@ -17,6 +17,9 @@ const validationSchema = Yup.object().shape({
   preferredDay: Yup.array()
     .min(1, "*Select at least one preferred day")
     .required("*Select Preferred day"),
+    preferredTimeSlot: Yup.array()
+    .min(1, "*Select at least one preferredTimeSlot")
+    .required("*Select preferredTimeSlot"),
   enquiryDate: Yup.string().required("*Enquiry Date is required"),
 });
 
@@ -278,7 +281,9 @@ const Form5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
             </div>
 
             <div className="col-md-6 col-12 mb-3">
-              <label>Preferred Timeslot</label>
+              <label>Preferred Timeslot
+              <span className="text-danger">*</span>
+              </label>
               <div className="mt-2 d-flex">
                 <div className="checkbox-container ">
                   <input
@@ -322,6 +327,7 @@ const Form5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
                     6PM - 9PM
                   </label>
                 </div>
+                
               </div>
 
               <div className="d-flex">
@@ -389,6 +395,11 @@ const Form5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
                   </label>
                 </div>
               </div>
+              {formik.touched.preferredTimeSlot && formik.errors.preferredTimeSlot && (
+                <div className="error text-danger ">
+                  <small>{formik.errors.preferredTimeSlot}</small>
+                </div>
+              )}
             </div>
 
             <div className="col-md-6 col-12 mb-2"></div>
