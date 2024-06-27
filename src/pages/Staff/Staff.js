@@ -21,7 +21,7 @@ const Staff = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllUsersByRole/staff");
+        const response = await api.get("/getAllUserListExceptTeacher");
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
@@ -61,7 +61,7 @@ const Staff = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllUsersByRole/staff");
+      const response = await api.get("/getAllUserListExceptTeacher");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -124,13 +124,14 @@ const Staff = () => {
                   </td>
                   <td>
                     {data.role === "branch_admin" ? (
-                      <span className="badge badges-red">Branch Admin</span>
+                      <span className="badge badges-Red">Branch Admin</span>
                     ) : data.role === "staff_admin" ? (
-                      <span className="badge badges-blue">Staff Admin</span>
+                      <span className="badge badges-Blue">Staff Admin</span>
                     ) : (
                       <span className="badge badges-Green">Staff</span>
                     )}
                   </td>
+
                   <td>
                     {data.userContactInfo.length > 0 &&
                       data.userContactInfo[0].contactNumber}
@@ -139,9 +140,11 @@ const Staff = () => {
                     {data.userAccountInfo.length > 0 &&
                     data.userAccountInfo[0]?.status === "Active" ? (
                       <span className="badge badges-Green">Active</span>
-                    ) :data.userAccountInfo[0]?.status === "Pending" ? (
+                    ) : data.userAccountInfo[0]?.status === "Pending" ? (
                       <span className="badge badges-Yellow ">Pending</span>
-                    ):(<span className="badge badges-Red ">In Active</span>)}
+                    ) : (
+                      <span className="badge badges-Red ">In Active</span>
+                    )}
                   </td>
                   <td>
                     <div className="d-flex">
