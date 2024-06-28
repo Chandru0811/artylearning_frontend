@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -19,19 +19,24 @@ const validationSchema = Yup.object({
   minClassSize: Yup.number().typeError("*Must be a Number"),
   maxClassSize: Yup.number().typeError("*Must be a Number"),
   courseType: Yup.string().required("*Select the Course Type"),
+  durationInHrs: Yup.string().required("*Select the Duration In Hrs"),
+  durationInMins: Yup.string().required("*Select the Duration In Mins"),
   status: Yup.string().required("*Status is required"),
-  classReplacementAllowed: Yup.string().required("*Select the Class Replacement Allowed"),
+  classReplacementAllowed: Yup.string().required(
+    "*Select the Class Replacement Allowed"
+  ),
   replacementLessonStudentBuffer: Yup.number().typeError("*Must be a Number"),
 });
-
 
 function CourseAdd({ onSuccess }) {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   console.log("Center Data", centerData);
   const [levelData, setLevelData] = useState(null);
-  const [subjectData, setSubjectData] = useState(null);
+  // const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const location = useLocation();
+  const subjectData = location.state?.subjectData;
 
   const formik = useFormik({
     initialValues: {
@@ -87,9 +92,6 @@ function CourseAdd({ onSuccess }) {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
-
-      const subjectData = await fetchAllSubjectsWithIds();
-      setSubjectData(subjectData);
     } catch (error) {
       toast.error(error);
     }
@@ -126,7 +128,11 @@ function CourseAdd({ onSuccess }) {
               </button>
             </Link>
             &nbsp;&nbsp;
-            <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
               {loadIndicator && (
                 <span
                   className="spinner-border spinner-border-sm me-2"
@@ -145,10 +151,11 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("centerId")}
-                    className={`form-select  ${formik.touched.centerId && formik.errors.centerId
+                    className={`form-select  ${
+                      formik.touched.centerId && formik.errors.centerId
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -167,15 +174,35 @@ function CourseAdd({ onSuccess }) {
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
+                <lable className="form-lable">Color Code</lable>
+                <div className="input-group mb-3">
+                  <div className="input-group-text inputGroup">
+                    <input
+                      type="color"
+                      {...formik.getFieldProps("colorCode")}
+                      className="form-control-color circle"
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    className={`form-control iconInput `}
+                    value={formik.values.colorCode}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2">
                 <lable className="">
                   Course Name<span className="text-danger">*</span>
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${formik.touched.courseName && formik.errors.courseName
+                  className={`form-control  ${
+                    formik.touched.courseName && formik.errors.courseName
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("courseName")}
                 />
                 {formik.touched.courseName && formik.errors.courseName && (
@@ -184,6 +211,27 @@ function CourseAdd({ onSuccess }) {
                   </div>
                 )}
               </div>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="form-lable">
+                  Course Code<span className="text-danger">*</span>
+                </lable>
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.courseCode && formik.errors.courseCode
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("courseCode")}
+                  />
+                  {formik.touched.courseCode && formik.errors.courseCode && (
+                    <div className="invalid-feedback">
+                      {formik.errors.courseCode}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
@@ -191,10 +239,11 @@ function CourseAdd({ onSuccess }) {
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select  ${formik.touched.subjectId && formik.errors.subjectId
+                  className={`form-select  ${
+                    formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("subjectId")}
                   onChange={handleSubjectChange}
                   aria-label="Default select example"
@@ -220,10 +269,11 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    className={`form-select  ${formik.touched.levelId && formik.errors.levelId
+                    className={`form-select  ${
+                      formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -244,52 +294,14 @@ function CourseAdd({ onSuccess }) {
             </div>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
-                  Course Code<span className="text-danger">*</span>
-                </lable>
-                <div className="input-group mb-3">
-                  <input
-                    type="text"
-                    className={`form-control  ${formik.touched.courseCode && formik.errors.courseCode
-                        ? "is-invalid"
-                        : ""
-                      }`}
-                    {...formik.getFieldProps("courseCode")}
-                  />
-                  {formik.touched.courseCode && formik.errors.courseCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.courseCode}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Min Class Size</lable>
-                <input
-                  type="text"
-                  className={`form-control  ${formik.touched.minClassSize && formik.errors.minClassSize
-                      ? "is-invalid"
-                      : ""
-                    }`}
-                  {...formik.getFieldProps("minClassSize")}
-                  placeholder=""
-                />
-                {formik.touched.minClassSize && formik.errors.minClassSize && (
-                  <div className="text-danger" style={{ fontSize: ".875em" }}>
-                    {formik.errors.minClassSize}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">Max Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${formik.touched.maxClassSize && formik.errors.maxClassSize
+                  className={`form-control  ${
+                    formik.touched.maxClassSize && formik.errors.maxClassSize
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("maxClassSize")}
                   placeholder=""
                 />
@@ -303,37 +315,40 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
                   type="text"
-                  className={`form-control  ${formik.touched.replacementLessonStudentBuffer &&
-                      formik.errors.replacementLessonStudentBuffer
+                  className={`form-control  ${
+                    formik.touched.replacementLessonStudentBuffer &&
+                    formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("replacementLessonStudentBuffer")}
                 />
-                {formik.touched.replacementLessonStudentBuffer && formik.errors.replacementLessonStudentBuffer && (
-                  <div className="text-danger" style={{ fontSize: ".875em" }}>
-                    {formik.errors.replacementLessonStudentBuffer}
-                  </div>
-                )}
+                {formik.touched.replacementLessonStudentBuffer &&
+                  formik.errors.replacementLessonStudentBuffer && (
+                    <div className="text-danger" style={{ fontSize: ".875em" }}>
+                      {formik.errors.replacementLessonStudentBuffer}
+                    </div>
+                  )}
               </div>
             </div>
             <div className="row mt-3">
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Color Code</lable>
-                <div className="input-group mb-3">
-                  <div className="input-group-text inputGroup">
-                    <input
-                      type="color"
-                      {...formik.getFieldProps("colorCode")}
-                      className="form-control-color circle"
-                    />
+                <lable className="form-lable">Min Class Size</lable>
+                <input
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.minClassSize && formik.errors.minClassSize
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("minClassSize")}
+                  placeholder=""
+                />
+                {formik.touched.minClassSize && formik.errors.minClassSize && (
+                  <div className="text-danger" style={{ fontSize: ".875em" }}>
+                    {formik.errors.minClassSize}
                   </div>
-                  <input
-                    type="text"
-                    className={`form-control iconInput `}
-                    value={formik.values.colorCode}
-                  />
-                </div>
+                )}
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
@@ -375,7 +390,8 @@ function CourseAdd({ onSuccess }) {
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">Duration(Hr)</lable>
-                <div className="input-group mb-3">
+                <span className=" text-danger">*</span>
+                <div className="input-group ">
                   <select
                     {...formik.getFieldProps("durationInHrs")}
                     className="form-select iconInput "
@@ -389,10 +405,17 @@ function CourseAdd({ onSuccess }) {
                     <option value="05">05</option>
                   </select>
                 </div>
+                {formik.errors.durationInHrs &&
+                  formik.touched.durationInHrs && (
+                    <div className="text-danger" style={{ fontSize: ".875em" }}>
+                      {formik.errors.durationInHrs}
+                    </div>
+                  )}
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">Duration(Mins)</lable>
-                <div className="input-group mb-3">
+                <span className="text-danger">*</span>
+                <div className="input-group">
                   <select
                     {...formik.getFieldProps("durationInMins")}
                     className="form-select iconInput "
@@ -405,6 +428,12 @@ function CourseAdd({ onSuccess }) {
                     <option value="45">45</option>
                   </select>
                 </div>
+                {formik.errors.durationInMins &&
+                  formik.touched.durationInMins && (
+                    <div className="text-danger" style={{ fontSize: ".875em" }}>
+                      {formik.errors.durationInMins}
+                    </div>
+                  )}
               </div>
             </div>
             <div className="row">
@@ -415,10 +444,11 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select  ${formik.touched.status && formik.errors.status
+                    className={`form-select  ${
+                      formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>

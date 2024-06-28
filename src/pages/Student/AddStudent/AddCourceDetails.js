@@ -10,7 +10,10 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../../List/CourseList";
 
-const validationSchema = Yup.object().shape({});
+const validationSchema = Yup.object().shape({
+  courseId:Yup.string().required("*Course is required"),
+  courseDay:Yup.string().required("*CourseDay is required")
+});
 
 const AddcourseDetail = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -77,7 +80,7 @@ const AddcourseDetail = forwardRef(
                     <div className="col-lg-6 col-md-6 col-12">
                       <div className="text-start">
                         <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Course</small>
+                          <small>Course</small><span className=" text-danger">*</span>
                         </label>
                         <br />
                         <select
@@ -86,6 +89,7 @@ const AddcourseDetail = forwardRef(
                           onBlur={formik.handleBlur}
                           value={formik.values.courseId}
                           className="form-select"
+                          {...formik.getFieldProps("courseId")}
                         >
                           <option selected></option>
                           {courseData &&
@@ -95,6 +99,14 @@ const AddcourseDetail = forwardRef(
                               </option>
                             ))}
                         </select>
+                        {formik.touched.courseId &&
+                          formik.errors.courseId && (
+                            <div className="text-danger">
+                              <small>
+                                {formik.errors.courseId}
+                              </small>
+                            </div>
+                          )}
                       </div>
                       <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
@@ -128,7 +140,7 @@ const AddcourseDetail = forwardRef(
                     <div className="col-lg-6 col-md-6 col-12 px-5">
                       <div className="text-start">
                         <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Course Day</small>
+                          <small>Course Day</small><span className=" text-danger">*</span>
                         </label>
                         <br />
                         <select
@@ -148,6 +160,14 @@ const AddcourseDetail = forwardRef(
                           <option value="SATURDAY">SATURDAY</option>
                           <option value="SUNDAY">SUNDAY</option>
                         </select>
+                        {formik.touched.courseDay &&
+                          formik.errors.courseDay && (
+                            <div className="text-danger">
+                              <small>
+                                {formik.errors.courseDay}
+                              </small>
+                            </div>
+                          )}
                       </div>
                       <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">

@@ -9,12 +9,14 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllStudentListByCenter from "../../List/StudentListByCenter";
 
 const validationSchema = Yup.object().shape({});
 
 const EditStudentRelation = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [studentData, setStudentData] = useState(null);
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
@@ -23,7 +25,20 @@ const EditStudentRelation = forwardRef(
         toast.error(error);
       }
     };
-
+    const fetchStudent = async (centerId) => {
+      try {
+        const student = await fetchAllStudentListByCenter(centerId);
+        setStudentData(student);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+    const handleCenterChange = (event) => {
+      const newStudentRelationCenter = event.target.value;
+      setStudentData([]);
+      formik.setFieldValue("studentRelationCenter", newStudentRelationCenter);
+      fetchStudent(newStudentRelationCenter);
+    };
     useEffect(() => {
       fetchData();
     }, []);
@@ -38,10 +53,14 @@ const EditStudentRelation = forwardRef(
             response.data.studentRelationModels &&
             response.data.studentRelationModels.length > 0
           ) {
+            const data = response.data.studentRelationModels[0];
             formik.setValues({
-              ...response.data.studentRelationModels[0],
-              stdRealtionId: response.data.studentRelationModels[0].id,
+              ...data,
+              stdRealtionId: data.id,
             });
+            if (data.studentRelationCenter) {
+              fetchStudent(data.studentRelationCenter);
+            }
           } else {
             // If there are no emergency contacts, set default values or handle the case as needed
             formik.setValues({
@@ -131,11 +150,16 @@ const EditStudentRelation = forwardRef(
                         </label>
                         <br />
                         <select
+                          {...formik.getFieldProps("studentRelationCenter")}
                           name="studentRelationCenter"
-                          onChange={formik.handleChange}
+                          className={`form-select ${
+                            formik.touched.studentRelationCenter &&
+                            formik.errors.studentRelationCenter
+                              ? "is-invalid"
+                              : ""
+                          }`}
                           onBlur={formik.handleBlur}
-                          value={formik.values.studentRelationCenter}
-                          className="form-select "
+                          onChange={handleCenterChange}
                         >
                           <option selected></option>
                           {centerData &&
@@ -176,13 +200,25 @@ const EditStudentRelation = forwardRef(
                           {/* <span className="text-danger">*</span> */}
                         </label>
                         <br />
-                        <input
-                          name="studentRelationStudentName"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.studentRelationStudentName}
-                          className="form-control "
-                        />
+                        <select
+                          {...formik.getFieldProps(
+                            "studentRelationStudentName"
+                          )}
+                          className={`form-select ${
+                            formik.touched.studentRelationStudentName &&
+                            formik.errors.studentRelationStudentName
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                        >
+                          <option selected></option>
+                          {studentData &&
+                            studentData.map((student) => (
+                              <option key={student.id} value={student.id}>
+                                {student.studentNames}
+                              </option>
+                            ))}
+                        </select>
                         {formik.touched.studentRelationStudentName &&
                           formik.errors.studentRelationStudentName && (
                             <div className="text-danger">

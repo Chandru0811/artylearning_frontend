@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
 import { IoMdDownload } from "react-icons/io";
 import BlockImg from "../.././assets/images/Block_Img1.jpg";
-// import { SCREENS } from "../../config/ScreenFilter";
+import AddContact from "../.././assets/images/AddContact.png";
 
 function DocumentView() {
   const { id } = useParams();
-  // console.log(id)
   const [data, setData] = useState([]);
+  const [folderName, setFolderName] = useState("");
+  const [images] = useState([AddContact, BlockImg]);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-  // console.log("Screens : ", SCREENS);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,12 +27,89 @@ function DocumentView() {
     };
 
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    const fetchFolderName = async () => {
+      try {
+        const response = await api.get(`/getAllDocumentFolderById/${id}`);
+        setFolderName(response.data.folderName);
+      } catch (error) {
+        console.error("Error fetching folder name:", error);
+      }
+    };
+
+    fetchFolderName();
+  }, [id]);
 
   const refreshData = async () => {
-    const response = await api.get(`getAllDocumentFilesByDocumentId/${id}`);
-    setData(response.data);
+    try {
+      const response = await api.get(`getAllDocumentFilesByDocumentId/${id}`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+  };
+
+  const downloadAllFiles = async () => {
+    const zip = new JSZip();
+
+    // Create a folder in the zip
+    const folder = zip.folder(folderName);
+
+    // Promises array to collect all file fetching promises
+    const promises = [];
+
+    // Fetch and add each document file to the zip
+    // data.forEach((item, index) => {
+    //   const promise = new Promise(async (resolve, reject) => {
+    //     try {
+    //       const response = await fetch(item.fileAttachment);
+    //       if (!response.ok) {
+    //         throw new Error(`Failed to fetch ${item.fileAttachment}`);
+    //       }
+    //       const arrayBuffer = await response.arrayBuffer();
+    //       const filename = item.fileAttachment.split("/").pop();
+    //       folder.file(filename, arrayBuffer);
+    //       resolve(); // Resolve the promise after adding the file to the zip
+    //     } catch (error) {
+    //       console.error(error);
+    //       reject(error);
+    //     }
+    //   });
+    //   promises.push(promise);
+    // });
+
+    // Fetch and add additional images to the zip
+    images.forEach((image, index) => {
+      const promise = new Promise(async (resolve, reject) => {
+        try {
+          const response = await fetch(image);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${image}`);
+          }
+          const arrayBuffer = await response.arrayBuffer();
+          const filename = image.split("/").pop();
+          folder.file(filename, arrayBuffer);
+          resolve(); // Resolve the promise after adding the image to the zip
+        } catch (error) {
+          console.error(error);
+          reject(error);
+        }
+      });
+      promises.push(promise);
+    });
+
+    // Wait for all promises to resolve before generating the zip
+    try {
+      await Promise.all(promises);
+      
+      // Generate the zip file and trigger download
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, `${folderName}.zip`);
+    } catch (error) {
+      console.error("Error downloading files:", error);
+    }
   };
 
   return (
@@ -41,10 +120,13 @@ function DocumentView() {
             Back
           </button>
         </Link>
+        <button className="btn btn-primary ml-2" onClick={downloadAllFiles}>
+          Download All
+        </button>
       </div>
 
       <div className="container my-4">
-        <div className="mb-5 mt-3 d-flex justify-content-end">
+        <div className="mb-5 mt-3 d-flex justify-content-between">
           <table className="table table-striped">
             <thead>
               <tr>
