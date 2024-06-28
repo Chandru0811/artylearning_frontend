@@ -8,8 +8,7 @@ import fetchAllUserList from "../List/UserList";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
-  code: Yup.number()
-    .typeError("*Enter a valid number")
+  code: Yup.string()
     .required("*Code is required"),
   centerManager: Yup.string().required("*Select the Center Manager"),
   zipCode: Yup.number()

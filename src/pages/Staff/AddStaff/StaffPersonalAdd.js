@@ -11,7 +11,6 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), "*Date of Birth cannot be in the future"),
   idType: Yup.string().required("*Id Type is required!"),
   idNo: Yup.string()
-    .matches(/^[0-9]+$/, "*Id No Must be numbers")
     .required("*Id No is required!"),
   citizenship: Yup.string().required("*Citizenship is required!"),
   role: Yup.string().required("*Role is required!"),

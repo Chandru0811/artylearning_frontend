@@ -9,6 +9,8 @@ import api from "../../config/URL";
 import { FaFileInvoice } from "react-icons/fa";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { SCREENS } from "../../config/ScreenFilter";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
+import { toast } from "react-toastify";
 
 const Course = () => {
   console.log("Screens : ", SCREENS);
@@ -16,6 +18,7 @@ const Course = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [subjectData, setSubjectData] = useState(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -57,6 +60,15 @@ const Course = () => {
     }
   };
 
+  const fetchSubData = async () => {
+    try {
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
@@ -69,12 +81,19 @@ const Course = () => {
     }
     setLoading(false);
   };
+    useEffect(() => {
+    fetchSubData();
+  }, [loading]);
+
 
   return (
     <div className="container my-4">
       <div className="my-3 d-flex justify-content-end mb-5">
         {storedScreens?.courseCreate && (
-          <Link to="/course/add">
+          <Link to={{
+            pathname: "/course/add",
+            state: { subjectData }
+          }}>
             <button type="button" className="btn btn-button btn-sm">
               Add <i class="bx bx-plus"></i>
             </button>
