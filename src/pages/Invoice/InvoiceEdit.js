@@ -201,7 +201,8 @@ export default function InvoiceEdit() {
   };
 
   const handleSelectChange = (index, value) => {
-    const selectedTax = taxData.find((tax) => tax.taxType === value);
+    // const selectedTax = taxData.find((tax) => tax.taxType === value);
+    const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const itemAmount = formik.values.invoiceItems[index]?.itemAmount || 0;
 
@@ -734,7 +735,7 @@ export default function InvoiceEdit() {
                             <option value=""></option>
                             {taxData &&
                               taxData.map((tax) => (
-                                <option key={tax.id} value={tax.taxType}>
+                                <option key={tax.id} value={tax.id}>
                                   {tax.taxType}
                                 </option>
                               ))}

@@ -151,7 +151,10 @@ function TeacherView() {
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
-                : {data.shortIntroduction === "undefined" ? "--" : data.shortIntroduction || "--"}
+                :{" "}
+                {data.shortIntroduction === "undefined"
+                  ? "--"
+                  : data.shortIntroduction || "--"}
               </p>
             </div>
           </div>
@@ -868,7 +871,7 @@ function TeacherView() {
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].workingDays
-                  ? data.userContractCreationModels[0].workingDays
+                  ? data.userContractCreationModels[0].workingDays.join(", ")
                   : "--"}
               </p>{" "}
             </div>
