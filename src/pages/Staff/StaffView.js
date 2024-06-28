@@ -10,7 +10,7 @@ import BlockImg from "../.././assets/images/Block_Img1.jpg";
 function StaffView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  console.log("Api Staff data:",data);
+  console.log("Api Staff data:", data);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -880,9 +880,9 @@ function StaffView() {
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].workingDays
-                  ? data.userContractCreationModels[0].workingDays
+                  ? data.userContractCreationModels[0].workingDays.join(", ")
                   : "--"}
-              </p>{" "}
+              </p>
             </div>
           </div>
         </div>
