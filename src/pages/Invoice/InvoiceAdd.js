@@ -35,13 +35,14 @@ export default function InvoiceAdd() {
   const [packageData, setPackageData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-
   const [taxData, setTaxData] = useState([]);
+  // console.log("Tax Type:",taxData);
 
   const fetchTaxData = async () => {
     try {
       const response = await api.get("getAllTaxSetting");
       setTaxData(response.data);
+   
     } catch (error) {
       toast.error("Error fetching tax data:", error);
     }
@@ -179,7 +180,8 @@ export default function InvoiceAdd() {
   };
   
   const handleSelectChange = (index, value) => {
-    const selectedTax = taxData.find((tax) => tax.taxType === value);
+    // const selectedTax = taxData.find((tax) => tax.id === value);
+    const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const itemAmount = formik.values.invoiceItems[index]?.itemAmount || 0;
   
@@ -664,7 +666,7 @@ export default function InvoiceAdd() {
                             <option value=""></option>
                             {taxData &&
                               taxData.map((tax) => (
-                                <option key={tax.id} value={tax.taxType}>
+                                <option key={tax.id} value={tax.id}>
                                   {tax.taxType}
                                 </option>
                               ))}

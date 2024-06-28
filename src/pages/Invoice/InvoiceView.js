@@ -23,6 +23,8 @@ function InvoiceView() {
   const [centerData, setcenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const [taxData, setTaxData] = useState([]);
+  console.log("Tax Type:", taxData);
 
   const fetchData = async () => {
     setLoadIndicator(true);
@@ -41,22 +43,14 @@ function InvoiceView() {
     }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getGenerateInvoiceById/${id}`);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        toast.error("Error fetching data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getData();
-    fetchData();
-  }, [id]);
+  const fetchTaxData = async () => {
+    try {
+      const response = await api.get("getAllTaxSetting");
+      setTaxData(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
+    }
+  };
 
   const qrCodeUrl = centerData
     ? centerData.reduce((src, center) => {
@@ -108,7 +102,8 @@ function InvoiceView() {
           index + 1,
           invoiceItem.item,
           invoiceItem.itemAmount,
-          invoiceItem.taxType,
+          // invoiceItem.taxType,
+          taxData.find((tax) => parseInt(invoiceItem.taxType) === tax.id)?.taxType || "--",
           invoiceItem.gstAmount,
           invoiceItem.totalAmount,
         ]);
@@ -200,6 +195,24 @@ function InvoiceView() {
       img.src = url;
     });
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getGenerateInvoiceById/${id}`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Error fetching data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getData();
+    fetchData();
+    fetchTaxData();
+  }, [id]);
 
   return (
     <div className="container-fluid mb-2 minHeight">
@@ -324,7 +337,15 @@ function InvoiceView() {
                     <th scope="row">{index + 1}</th>
                     <td>{InvoiceItemRow.item}</td>
                     <td>{InvoiceItemRow.itemAmount}</td>
-                    <td>{InvoiceItemRow.taxType}</td>
+                    <td>
+                      {taxData &&
+                        taxData.map((tax) =>
+                          parseInt(InvoiceItemRow.taxType) === tax.id
+                            ? tax.taxType || "--"
+                            : ""
+                        )}
+                    </td>
+
                     <td>{InvoiceItemRow.gstAmount}</td>
                     <td>{InvoiceItemRow.totalAmount}</td>
                   </tr>

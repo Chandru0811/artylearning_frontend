@@ -6,15 +6,28 @@ import api from "../../../config/URL";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  workingDays: Yup.string().required("*Working Days is required"),
-  // workingDays: Yup.array()
-  //   .of(Yup.string().required("*Working Days is required!"))
-  //   .min(1, "*Working Days is required!"),
+  employer:Yup.string().required("*Employer is required"),
+  employee: Yup.string().required("*Employee is required"),
+  uen: Yup.number().typeError("*UEN Must be numbers").required("*UEN is required"),
+  addressOfEmployment:Yup.string().required("*Address is required"),  
+  nric: Yup.number().typeError("*NRIC Must be numbers").required("*NRIC is required"),
+  userContractAddress:Yup.string().required("*Address is required"),
+  jobTitle:Yup.string().required("*Job Title is required"),
+  mainDuties:Yup.string().required("*Main Duties is required"),
+  startDateOfEmployment:Yup.string().required("*Date is required"),
+  training:Yup.string().required("*Training is required"),
+  userContractStartDate:Yup.string().required("*Date is required"),
+  contactPeriod:Yup.string().required("*Contact is required"),
+  workingDays: Yup.array()
+    .min(1, '*Working days are required')
+    .required('*Working days are required'),
   userContractSalary: Yup.number()
     .typeError("*Salary Must be numbers")
-    .notRequired(),
-  uen: Yup.number().typeError("*UEN Must be numbers").notRequired(),
-  nric: Yup.number().typeError("*NRIC Must be numbers").notRequired(),
+    .required("*Salary is required"),
+  salaryStartDate:Yup.string().required("*Start Date is required"),
+  userContractEndDate:Yup.string().required("*End Date is required"),
+  contractDate:Yup.string().required("*Contract Date is required"),
+  terminationNotice:Yup.string().required("*Notice is required"), 
   allowance: Yup.number().typeError("*Allowance Must be numbers").notRequired(),
 });
 
@@ -38,7 +51,7 @@ const StaffContractAdd = forwardRef(
         userContractStartDate: formData.userContractStartDate || "",
         contactPeriod: formData.contactPeriod || "",
         probation: formData.probation || "",
-        workingDays: formData.workingDays || [],
+        workingDays: formData.workingDays || "",
         userContractSalary: formData.userContractSalary || "",
         salaryStartDate: formData.salaryStartDate || "",
         userContractEndDate: formData.userContractEndDate || "",
@@ -86,7 +99,7 @@ const StaffContractAdd = forwardRef(
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Employer</label>
+                <label>Employer</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -95,9 +108,14 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.employer}
                 />
+                {formik.touched.employer && formik.errors.employer && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.employer}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>UEN</label>
+                <label>UEN</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -114,7 +132,7 @@ const StaffContractAdd = forwardRef(
               </div>
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>Address of Employment</label>
+              <label>Address of Employment</label><span className="text-danger">*</span>
               <input
                 type="text"
                 className="form-control"
@@ -123,11 +141,16 @@ const StaffContractAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.addressOfEmployment}
               />
+              {formik.touched.addressOfEmployment && formik.errors.addressOfEmployment && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.addressOfEmployment}</small>
+                  </div>
+                )}
             </div>
             <div class="row mt-3 ">
               <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Employee</label>
+                <label>Employee</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -136,9 +159,14 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.employee}
                 />
+                {formik.touched.employee && formik.errors.employee && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.employee}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>NRIC</label>
+                <label>NRIC</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -154,7 +182,7 @@ const StaffContractAdd = forwardRef(
                 )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Address</label>
+                <label>Address</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -163,9 +191,14 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractAddress}
                 />
+                {formik.touched.userContractAddress && formik.errors.userContractAddress && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.userContractAddress}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Job Title</label>
+                <label>Job Title</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -174,9 +207,14 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.jobTitle}
                 />
+                {formik.touched.jobTitle && formik.errors.jobTitle && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.jobTitle}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Main Duties</label>
+                <label>Main Duties</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -185,9 +223,14 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.mainDuties}
                 />
+                {formik.touched.mainDuties && formik.errors.mainDuties && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.mainDuties}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Start Date of Employment</label>
+                <label>Start Date of Employment</label><span className="text-danger">*</span>
                 <input
                   type="date"
                   className="form-control"
@@ -196,9 +239,14 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.startDateOfEmployment}
                 />
+                {formik.touched.startDateOfEmployment && formik.errors.startDateOfEmployment && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.startDateOfEmployment}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Training</label>
+                <label>Training</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -207,6 +255,11 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.training}
                 />
+                {formik.touched.training && formik.errors.training && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.training}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Allowance</label>
@@ -225,7 +278,7 @@ const StaffContractAdd = forwardRef(
                 )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Contract Start Date</label>
+                <label>Contract Start Date</label><span className="text-danger">*</span>
                 <input
                   type="date"
                   className="form-control"
@@ -234,9 +287,14 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractStartDate}
                 />
+                {formik.touched.userContractStartDate && formik.errors.userContractStartDate && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.userContractStartDate}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Contract Period</label>
+                <label>Contract Period</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -245,6 +303,11 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.contactPeriod}
                 />
+                {formik.touched.contactPeriod && formik.errors.contactPeriod && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.contactPeriod}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Porbation</label>
@@ -258,38 +321,7 @@ const StaffContractAdd = forwardRef(
                 />
               </div>
 
-              <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>
-                  Working Days<span className="text-danger">*</span>
-                </label>
-                <select
-                  className={`form-select  ${
-                    formik.touched.workingDays && formik.errors.workingDays
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  name="workingDays"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.workingDays}
-                >
-                  <option></option>
-                  <option value="Sunday">Sunday</option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-                  <option value="Saturday">Saturday</option>
-                </select>
-                {formik.touched.workingDays && formik.errors.workingDays && (
-                  <div className="invalid-feedback">
-                    {formik.errors.workingDays}
-                  </div>
-                )}
-              </div>
-
-               {/* <div class="col-md-6 col-12 mb-2 mt-3">
+               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Working Days<span class="text-danger">*</span>
                 </label>
@@ -447,10 +479,10 @@ const StaffContractAdd = forwardRef(
                     <small>{formik.errors.workingDays}</small>
                   </div>
                 )}
-              </div> */}
+              </div>
 
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Salary</label>
+                <label>Salary</label><span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
@@ -467,7 +499,7 @@ const StaffContractAdd = forwardRef(
                   )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Salary Start Date</label>
+                <label>Salary Start Date</label><span className="text-danger">*</span>
                 <input
                   type="date"
                   className="form-control"
@@ -476,9 +508,15 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.salaryStartDate}
                 />
+                {formik.touched.salaryStartDate &&
+                  formik.errors.salaryStartDate && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.salaryStartDate}</small>
+                    </div>
+                  )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Contract End Date</label>
+                <label>Contract End Date</label><span className="text-danger">*</span>
                 <input
                   type="date"
                   className="form-control"
@@ -487,6 +525,12 @@ const StaffContractAdd = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractEndDate}
                 />
+                {formik.touched.userContractEndDate &&
+                  formik.errors.userContractEndDate && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.userContractEndDate}</small>
+                    </div>
+                  )}
               </div>
               <div class="row mt-3">
                 <span className="mt-3 fw-bold">Bank Account Details</span>
@@ -513,7 +557,7 @@ const StaffContractAdd = forwardRef(
                   />
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
-                  <label>Contract Date</label>
+                  <label>Contract Date</label><span className="text-danger">*</span>
                   <input
                     type="date"
                     className="form-control"
@@ -522,9 +566,15 @@ const StaffContractAdd = forwardRef(
                     onBlur={formik.handleBlur}
                     value={formik.values.contractDate}
                   />
+                  {formik.touched.contractDate &&
+                  formik.errors.contractDate && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.contractDate}</small>
+                    </div>
+                  )}
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
-                  <label>Termination Notice</label>
+                  <label>Termination Notice</label><span className="text-danger">*</span>
                   <input
                     type="text"
                     className="form-control"
@@ -533,6 +583,12 @@ const StaffContractAdd = forwardRef(
                     onBlur={formik.handleBlur}
                     value={formik.values.terminationNotice}
                   />
+                  {formik.touched.terminationNotice &&
+                  formik.errors.terminationNotice && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.terminationNotice}</small>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
