@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "Invalid Phone Number"
     )
-    .required("*Emergency Contact Number is Required!"),
+    .notRequired(""),
   contactNo: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
     .notRequired(""),
@@ -126,30 +126,11 @@ const AddEmergencyContact = forwardRef(
                                 value={formik.values.emergencyContactName}
                               />
                             </div>
-                            <div className="text-start mt-4">
-                              <label htmlFor="" className="mb-1 fw-medium">
-                                <small>Relation</small>&nbsp;
-                              </label>
-                              <br />
-                              <select
-                                name="emergencyRelation"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.emergencyRelation}
-                                className="form-select "
-                                aria-label="example"
-                              >
-                                <option value=""></option>
-                                <option value="Mother">Mother</option>
-                                <option value="Father">Father</option>
-                              </select>
-                            </div>
                           </div>
                           <div className="col-lg-6 col-md-6 col-12 px-5">
                             <div className="text-start mt-4">
                               <label htmlFor="" className="mb-1 fw-medium">
                                 <small>Emergency Contact No</small>
-                                <span className="text-danger">*</span>
                               </label>
                               <br />
                               <input

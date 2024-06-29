@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
   code: Yup.string()
     .required("*Code is required"),
-  centerManager: Yup.string().required("*Select the Center Manager"),
+  centerManager: Yup.string().required("*Select the Centre Manager"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
     .required("*Zip Code is required")
