@@ -13,7 +13,7 @@ function Edit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
-  
+
   const handleClose = () => {
     setShow(false);
     setSubjectData(null);
@@ -21,7 +21,7 @@ function Edit({ id, onSuccess }) {
   const handleShow = () => {
     fetchData();
     setShow(true);
-  }
+  };
 
   useEffect(() => {
     fetchData();
@@ -53,7 +53,7 @@ function Edit({ id, onSuccess }) {
     onSubmit: async (values) => {
       // console.log(values);
       setLoadIndicator(true);
-    
+
       try {
         const response = await api.put(`/updateCourseLevel/${id}`, values, {
           headers: {
@@ -69,10 +69,9 @@ function Edit({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
-
     },
   });
 
@@ -89,7 +88,6 @@ function Edit({ id, onSuccess }) {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   return (
     <>
@@ -110,7 +108,7 @@ function Edit({ id, onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
-              <div className="col-md-6 col-12 mb-2">
+                <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Subject<span className="text-danger">*</span>
                   </label>
@@ -136,27 +134,6 @@ function Edit({ id, onSuccess }) {
                     </div>
                   )}
                 </div>
-               
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Level Code<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder=""
-                    className={`form-control  ${
-                      formik.touched.levelCode && formik.errors.levelCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("levelCode")}
-                  />
-                  {formik.touched.levelCode && formik.errors.levelCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.levelCode}
-                    </div>
-                  )}
-                </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Status<span className="text-danger">*</span>
@@ -170,22 +147,9 @@ function Edit({ id, onSuccess }) {
                     }`}
                     aria-label="Default select example"
                   >
-                    <option
-                      // defaultValue={data.status === "Active"}
-                    > 
-                    </option>
-                    <option
-                      value="Active"
-                      // defaultValue={data.status === "Active"}
-                    >
-                      Active
-                    </option>
-                    <option
-                      value="Inactive"
-                      // defaultValue={data.status === "Inactive"}
-                    >
-                      Inactive
-                    </option>
+                    <option selected></option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
@@ -199,7 +163,6 @@ function Edit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    placeholder=""
                     className={`form-control  ${
                       formik.touched.level && formik.errors.level
                         ? "is-invalid"
@@ -210,6 +173,25 @@ function Edit({ id, onSuccess }) {
                   {formik.touched.level && formik.errors.level && (
                     <div className="invalid-feedback">
                       {formik.errors.level}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Level Code<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.levelCode && formik.errors.levelCode
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("levelCode")}
+                  />
+                  {formik.touched.levelCode && formik.errors.levelCode && (
+                    <div className="invalid-feedback">
+                      {formik.errors.levelCode}
                     </div>
                   )}
                 </div>

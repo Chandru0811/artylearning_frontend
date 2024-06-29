@@ -10,6 +10,25 @@ import fetchAllLevelsWithIds from "../List/LevelList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
 
+const validationSchema = Yup.object({
+  centerId: Yup.string().required("*Select the Centre Name"),
+  courseName: Yup.string().required("*Course Name is required"),
+  courseCode: Yup.string().required("*Course Code is required"),
+  subjectId: Yup.string().required("*Select the Subject"),
+  levelId: Yup.string().required("*Select the Level"),
+  minClassSize: Yup.number().typeError("*Must be a Number"),
+  maxClassSize: Yup.number().typeError("*Must be a Number"),
+  durationInHrs: Yup.string().required("*Select the Duration In Hrs"),
+  durationInMins: Yup.string().required("*Select the Duration In Mins"),
+  courseType: Yup.string().required("*Select the Course Type"),
+  status: Yup.string().required("*Status is required"),
+  classReplacementAllowed: Yup.string().required(
+    "*Select the Class Replacement Allowed"
+  ),
+  replacementLessonStudentBuffer: Yup.number().notRequired(""),
+});
+
+
 function CourseEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -17,41 +36,11 @@ function CourseEdit() {
   const [centerData, setCenterData] = useState(null);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
-const [loadIndicator, setLoadIndicator] = useState(false);
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      const levelData = await fetchAllLevelsWithIds();
-      const subjectData = await fetchAllSubjectsWithIds();
-      setCenterData(centerData);
-      setLevelData(levelData);
-      setSubjectData(subjectData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Select the Centre Name"),
-    courseName: Yup.string().required("*Course Name is required"),
-    courseCode: Yup.string().required("*Course Code is required"),
-    subjectId: Yup.string().required("*Select the Subject"),
-    levelId: Yup.string().required("*Select the Level"),
-    minClassSize: Yup.number().typeError("*Must be a Number"),
-    maxClassSize: Yup.number().typeError("*Must be a Number"),
-    durationInHrs: Yup.string().required("*Select the Duration In Hrs"),
-    durationInMins: Yup.string().required("*Select the Duration In Mins"),
-    courseType: Yup.string().required("*Select the Course Type"),
-    status: Yup.string().required("*Status is required"),
-    classReplacementAllowed: Yup.string().required(
-      "*Select the Class Replacement Allowed"
-    ),
-    replacementLessonStudentBuffer: Yup.number().notRequired(""),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -105,6 +94,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
           classReplacementAllowed:
             response.data.classReplacementAllowed || false,
         });
+        fetchLevels(response.data.subjectId)
       } catch (error) {
         toast.error("Error fetching data:", error);
       }
@@ -113,11 +103,18 @@ const [loadIndicator, setLoadIndicator] = useState(false);
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const fetchDatas = async () => {
+
+  const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
+  const fetchSubject = async () => {
+    try {
       const subjectData = await fetchAllSubjectsWithIds();
       setSubjectData(subjectData);
     } catch (error) {
@@ -136,13 +133,14 @@ const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleSubjectChange = (event) => {
     setLevelData(null);
-    const subjectId = event.target.value;
-    formik.setFieldValue("subjectId", subjectId);
-    fetchLevels(subjectId);
+    const subject = event.target.value;
+    formik.setFieldValue("subjectId", subject);
+    fetchLevels(subject);
   };
 
   useEffect(() => {
-    fetchDatas();
+    fetchData();
+    fetchSubject();
   }, []);
 
   return (
@@ -302,9 +300,8 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="Default select example"
                   >
-                    <option selected></option>
+                    <option></option>
                     {levelData &&
                       levelData.map((levelId) => (
                         <option key={levelId.id} value={levelId.id}>
@@ -415,9 +412,9 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                 )}
               </div>
             </div>
-            <div className="row">
+            <div className="row mt-2">
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Duration(Hr)</lable>
+                <lable className="form-lable">Duration(Hrs)</lable>
                 <span className=" text-danger">*</span>
                 <div className="input-group ">
                   <select
@@ -464,7 +461,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                   )}
               </div>
             </div>
-            <div className="row">
+            <div className="row mt-2">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   Status<span className="text-danger">*</span>

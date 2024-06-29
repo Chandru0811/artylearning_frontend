@@ -120,13 +120,13 @@ const Subject = () => {
                 </td>
                 <td>
                   <div className="d-flex">
-                    {storedScreens?.subjectRead && (
+                    {/* {storedScreens?.subjectRead && (
                       <Link to={`/subject/view/${data.id}`}>
                         <button className="btn btn-sm">
                           <FaEye />
                         </button>
                       </Link>
-                    )}
+                    )} */}
 
                     {storedScreens?.subjectUpdate && (
                       <SubjectEdit id={data.id} onSuccess={refreshData} />
