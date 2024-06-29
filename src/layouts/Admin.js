@@ -174,6 +174,14 @@ import Country from "../pages/Settings/Country/Country";
 import CountryAdd from "../pages/Settings/Country/CountryAdd";
 import CountryEdit from "../pages/Settings/Country/CountryEdit";
 import CountryView from "../pages/Settings/Country/CountryView";
+import Shg from "../pages/Settings/Shg/Shg";
+import ShgAdd from "../pages/Settings/Shg/ShgAdd";
+import ShgEdit from "../pages/Settings/Shg/ShgEdit";
+import ShgView from "../pages/Settings/Shg/ShgView";
+import SettingLeave from "../pages/Settings/Leave/Leave";
+import SettingLeaveAdd from "../pages/Settings/Leave/LeaveAdd";
+import SettingLeaveEdit from "../pages/Settings/Leave/LeaveEdit";
+import SettingLeaveView from "../pages/Settings/Leave/LeaveView";
 
 
 function Admin({ handleLogout }) {
@@ -491,6 +499,18 @@ function Admin({ handleLogout }) {
               <Route path="/tax/add" element={<TaxAdd/>}/>
               <Route path="/tax/edit/:id" element={<TaxEdit/>}/>
               <Route path="/tax/view/:id" element={<TaxView/>}/>
+
+              {/* Shg */}
+              <Route path="/shg" element={<Shg/>}/>
+              <Route path="/shg/add" element={<ShgAdd/>}/>
+              <Route path="/shg/edit/:id" element={<ShgEdit/>}/>
+              <Route path="/shg/view/:id" element={<ShgView/>}/>
+
+              {/* LeaveType */}
+              <Route path="/leavetype" element={<SettingLeave/>}/>
+              <Route path="/leavetype/add" element={<SettingLeaveAdd/>}/>
+              <Route path="/leavetype/edit/:id" element={<SettingLeaveEdit/>}/>
+              <Route path="/leavetype/view/:id" element={<SettingLeaveView/>}/>
 
               {/* Race */}
               <Route path="/race" element={<Race/>}/>

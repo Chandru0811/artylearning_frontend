@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
@@ -6,8 +6,14 @@ import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import StudentSummary from "./StudentSummary";
 import BlockImg from "../../assets/images/Block_Img1.jpg";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 function StudentView() {
+  const table1Ref = useRef(null);
+  const table2Ref = useRef(null);
+  const table3Ref = useRef(null);
+
   const { id } = useParams();
   const [data, setData] = useState({});
   console.log("Student Datas:", data);
@@ -41,6 +47,57 @@ function StudentView() {
     getData();
     fetchData();
   }, [id]);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllStudentDetails/${id}`);
+        setData(response.data);
+        console.log("StudentDetails", response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getData();
+    fetchData();
+  }, [id]);
+
+  const handleGeneratePDF = async () => {
+    const pdf = new jsPDF();
+
+    // Helper function to capture table as image and add to PDF
+    const addTableToPDF = async (tableRef, pageNumber) => {
+      const table = tableRef.current;
+
+      try {
+        // Generate canvas from table
+        const canvas = await html2canvas(table, { scale: 2 });
+
+        // Convert canvas to PNG image data
+        const imgData = canvas.toDataURL('image/png');
+
+        // Calculate PDF dimensions based on canvas
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        // Add image to PDF
+        if (pageNumber > 1) {
+          pdf.addPage();
+        }
+        pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, pdfHeight);
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+      }
+    };
+
+    // Add each table to PDF
+    await addTableToPDF(table1Ref, 1); // Add first table
+    await addTableToPDF(table2Ref, 2); // Add second table
+    await addTableToPDF(table3Ref, 3); // Add second table
+
+    // Save PDF
+    pdf.save('student-details.pdf');
+  };
+
 
   return (
     <>
@@ -116,9 +173,17 @@ function StudentView() {
                 Back
               </button>
             </Link>
+            <button
+              onClick={handleGeneratePDF}
+              className="btn btn-border btn-sm mx-3"
+              style={{ padding: "7px" }}
+            >
+              Generate PDF
+            </button>
           </div>
 
           {/* Student Details */}
+
           <div className="accordion-item">
             <h2 className="accordion-header">
               <button
@@ -1015,7 +1080,8 @@ function StudentView() {
                             <td>
                               {centerData &&
                                 centerData.map((center) =>
-                                  parseInt(std.studentRelationCenter) === center.id
+                                  parseInt(std.studentRelationCenter) ===
+                                  center.id
                                     ? center.centerNames || "--"
                                     : ""
                                 )}
@@ -1118,7 +1184,6 @@ function StudentView() {
                     </tbody>
                   </table>
                 </div>
-               
               </div>
             </div>
           </div>
@@ -1187,6 +1252,228 @@ function StudentView() {
             </div>
           </div>
         </div>
+        <div ref={table1Ref}>
+          <div className="accordion-item">
+            <div>
+              <div className="accordion-body">
+                <div className="container ">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <table
+                        className="table table-bordered"
+                        id="studentDetailsTable"
+                      >
+                        <thead className="">
+                          <th className=" pb-3">Student Details</th>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="col-6 fw-medium">Centre Name</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {centerData &&
+                                  centerData.map((center) =>
+                                    parseInt(data.centerId) === center.id
+                                      ? center.centerNames || "--"
+                                      : ""
+                                  )}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">
+                              Student Name / as per ID
+                            </td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.studentName || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">
+                              Student Chinese Name
+                            </td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.studentChineseName || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">Date Of Birth</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.dateOfBirth
+                                  ? data.dateOfBirth.substring(0, 10)
+                                  : "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">Age</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.age || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">Gender</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.gender ? "Male" : "Female"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">
+                              Medical Condition
+                            </td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.medicalCondition || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">School Type</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.schoolType || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">School Name</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.schoolName || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">
+                              Pre-Assessment Result
+                            </td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.preAssessmentResult || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">Race</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.race || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">Nationality</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.nationality || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">
+                              Primary Language Spoken
+                            </td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.primaryLanguage
+                                  ? data.primaryLanguage === "ENGLISH"
+                                    ? "English"
+                                    : data.primaryLanguage === "CHINESE"
+                                    ? "Chinese"
+                                    : "--"
+                                  : "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">Refer By Parent</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.referByParent || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">
+                              Refer By Student
+                            </td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.referByStudent || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">Remark</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.remark || "--"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">Profile Image</td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.profileImage ? (
+                                  <img
+                                    src={data.profileImage}
+                                    onError={(e) => {
+                                      e.target.src = BlockImg;
+                                    }}
+                                    className="img-fluid ms-2 w-100 rounded"
+                                    alt="Profile Image"
+                                  />
+                                ) : (
+                                  <img
+                                    src={BlockImg}
+                                    className="img-fluid ms-2 w-100 rounded"
+                                    alt="Profile Image"
+                                  />
+                                )}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">
+                              Allow display in Facility Bulletin / Magazine /
+                              Advert
+                            </td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.allowMagazine ? "Yes" : "No"}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="col-6 fw-medium">
+                              Allow display on Social Media
+                            </td>
+                            <td className="col-6 bg-light">
+                              <p className="text-muted text-sm">
+                                {data.allowSocialMedia ? "Yes" : "No"}
+                              </p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
     </>
   );

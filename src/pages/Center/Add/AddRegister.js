@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
@@ -9,14 +9,27 @@ import api from "../../../config/URL";
 function AddRegister({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [taxData, setTaxData] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const fetchTaxData = async () => {
+    try {
+      const response = await api.get("getAllTaxSetting");
+      setTaxData(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
+    }
+  };
+
   const validationSchema = yup.object().shape({
     registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
-    amount: yup.string().typeError("Amount must be a number").required("*Amount is required"),
+    amount: yup
+      .string()
+      .typeError("Amount must be a number")
+      .required("*Amount is required"),
     taxType: yup.string().required("*Tax Type is required"),
   });
   const formik = useFormik({
@@ -50,12 +63,14 @@ function AddRegister({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
   });
-
+  useEffect(() => {
+    fetchTaxData();
+  }, []);
   return (
     <>
       <button
@@ -150,16 +165,17 @@ function AddRegister({ id, onSuccess }) {
                   Tax Type<span class="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select    ${
-                    formik.touched.taxType && formik.errors.taxType
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className="form-select"
                   {...formik.getFieldProps("taxType")}
+                  style={{ width: "100%" }}
                 >
-                  <option selected></option>
-                  <option value="Taxable">Taxable</option>
-                  <option value="Non-Taxable">Non-Taxable</option>
+                  <option value=""></option>
+                  {taxData &&
+                    taxData.map((tax) => (
+                      <option key={tax.id} value={tax.taxType}>
+                        {tax.taxType}
+                      </option>
+                    ))}
                 </select>
                 {formik.touched.taxType && formik.errors.taxType && (
                   <div className="invalid-feedback">
@@ -174,18 +190,18 @@ function AddRegister({ id, onSuccess }) {
               Cancel
             </Button>
             <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
+            </Button>
           </Modal.Footer>
         </form>
       </Modal>

@@ -10,9 +10,19 @@ import { toast } from "react-toastify";
 function EditRegisteration({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [taxData, setTaxData] = useState([]);
   
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const fetchTaxData = async () => {
+    try {
+      const response = await api.get("getAllTaxSetting");
+      setTaxData(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
+    }
+  };
 
   const validationSchema = yup.object().shape({
     registrationDate: yup.string().required("*Registeration Date is required"),
@@ -74,6 +84,7 @@ function EditRegisteration({ id, onSuccess }) {
     };
 
     getData();
+    fetchTaxData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -167,16 +178,17 @@ function EditRegisteration({ id, onSuccess }) {
                   Tax Type<span class="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select    ${
-                    formik.touched.taxType && formik.errors.taxType
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className="form-select"
                   {...formik.getFieldProps("taxType")}
+                  style={{ width: "100%" }}
                 >
-                  <option selected></option>
-                  <option value="Taxable">Taxable</option>
-                  <option value="Non-Taxable">Non-Taxable</option>
+                  <option value=""></option>
+                  {taxData &&
+                    taxData.map((tax) => (
+                      <option key={tax.id} value={tax.taxType}>
+                        {tax.taxType}
+                      </option>
+                    ))}
                 </select>
                 {formik.touched.taxType && formik.errors.taxType && (
                   <div className="invalid-feedback">

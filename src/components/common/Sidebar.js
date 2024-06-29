@@ -346,6 +346,16 @@ function Sidebar() {
             path: "/country",
             access: true,
           },
+          {
+            title: "SHG",
+            path: "/shg",
+            access: true,
+          },
+          {
+            title: "Leave Type",
+            path: "/leavetype",
+            access: true,
+          },
         ],
       },
     ];
