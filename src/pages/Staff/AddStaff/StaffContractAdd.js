@@ -37,24 +37,24 @@ const StaffContractAdd = forwardRef(
     const formik = useFormik({
       initialValues: {
         employer: formData.employer || "",
-        employee: formData.employee || "",
+        employee: formData.teacherName || "",
         uen: formData.uen || "",
         addressOfEmployment: formData.addressOfEmployment || "",
         detailsEmployee: formData.detailsEmployee || "",
         nric: formData.nric || "",
-        userContractAddress: formData.userContractAddress || "",
+        userContractAddress: formData.address || "",
         jobTitle: formData.jobTitle || "",
         mainDuties: formData.mainDuties || "",
-        startDateOfEmployment: formData.startDateOfEmployment || "",
+        startDateOfEmployment: formData.startDate || "",
         training: formData.training || "",
         allowance: formData.allowance || "",
-        userContractStartDate: formData.userContractStartDate || "",
+        userContractStartDate: formData.startDate || "",
         contactPeriod: formData.contactPeriod || "",
         probation: formData.probation || "",
         workingDays: formData.workingDays || "",
-        userContractSalary: formData.userContractSalary || "",
-        salaryStartDate: formData.salaryStartDate || "",
-        userContractEndDate: formData.userContractEndDate || "",
+        userContractSalary: formData.salary || "",
+        salaryStartDate: formData.effectiveDate || "",
+        userContractEndDate: formData.endDate || "",
         payNow: formData.payNow || "",
         internetBanking: formData.internetBanking || "",
         contractDate: formData.contractDate || "",
@@ -130,8 +130,7 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div class="col-md-6 col-12 mb-2 mt-3 " >
               <label>Address of Employment</label><span className="text-danger">*</span>
               <input
                 type="text"
@@ -146,6 +145,7 @@ const StaffContractAdd = forwardRef(
                     <small>{formik.errors.addressOfEmployment}</small>
                   </div>
                 )}
+            </div>
             </div>
             <div class="row mt-3 ">
               <span className="mt-3 fw-bold ">Details of EMPLOYEE</span>

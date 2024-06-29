@@ -50,66 +50,21 @@ function DocumentView() {
       console.error("Error refreshing data:", error);
     }
   };
+  console.log("data",data)
 
-  const downloadAllFiles = async () => {
+  const downloadFiles = async () => {
     const zip = new JSZip();
 
-    // Create a folder in the zip
-    const folder = zip.folder(folderName);
-
-    // Promises array to collect all file fetching promises
-    const promises = [];
-
-    // Fetch and add each document file to the zip
-    // data.forEach((item, index) => {
-    //   const promise = new Promise(async (resolve, reject) => {
-    //     try {
-    //       const response = await fetch(item.fileAttachment);
-    //       if (!response.ok) {
-    //         throw new Error(`Failed to fetch ${item.fileAttachment}`);
-    //       }
-    //       const arrayBuffer = await response.arrayBuffer();
-    //       const filename = item.fileAttachment.split("/").pop();
-    //       folder.file(filename, arrayBuffer);
-    //       resolve(); // Resolve the promise after adding the file to the zip
-    //     } catch (error) {
-    //       console.error(error);
-    //       reject(error);
-    //     }
-    //   });
-    //   promises.push(promise);
-    // });
-
-    // Fetch and add additional images to the zip
-    images.forEach((image, index) => {
-      const promise = new Promise(async (resolve, reject) => {
-        try {
-          const response = await fetch(image);
-          if (!response.ok) {
-            throw new Error(`Failed to fetch ${image}`);
-          }
-          const arrayBuffer = await response.arrayBuffer();
-          const filename = image.split("/").pop();
-          folder.file(filename, arrayBuffer);
-          resolve(); // Resolve the promise after adding the image to the zip
-        } catch (error) {
-          console.error(error);
-          reject(error);
-        }
-      });
-      promises.push(promise);
-    });
-
-    // Wait for all promises to resolve before generating the zip
-    try {
-      await Promise.all(promises);
-      
-      // Generate the zip file and trigger download
-      const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, `${folderName}.zip`);
-    } catch (error) {
-      console.error("Error downloading files:", error);
+    for (const img of data) {
+      const response = await fetch(img.fileAttachment);
+      const blob = await response.blob();
+      const fileName = img.fileAttachment.split('/').pop();
+      zip.file(fileName, blob);
     }
+
+    // Generate ZIP file and trigger download
+    const content = await zip.generateAsync({ type: 'blob' });
+    saveAs(content, folderName);
   };
 
   return (
@@ -120,7 +75,7 @@ function DocumentView() {
             Back
           </button>
         </Link>
-        <button className="btn btn-primary ml-2" onClick={downloadAllFiles}>
+        <button className="btn btn-button btn-sm ms-1" onClick={downloadFiles}>
           Download All
         </button>
       </div>

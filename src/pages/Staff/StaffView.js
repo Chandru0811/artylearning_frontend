@@ -6,6 +6,8 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import TeacherSummary from "../Teacher/TeacherSummary";
 import BlockImg from "../.././assets/images/Block_Img1.jpg";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 function StaffView() {
   const { id } = useParams();
@@ -25,6 +27,189 @@ function StaffView() {
     getData();
   }, [id]);
 
+  // const generatePDF = () => {
+  //   const doc = new jsPDF();
+
+  //   // Add text to the PDF
+  //   doc.text('Hello world!', 10, 10);
+
+  //   // Add more content as needed
+  //   doc.text('This is a generated PDF document.', 10, 20);
+
+  //   // Save the PDF
+  //   doc.save('generated.pdf');
+  // };
+  const mailContent = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Information</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      .section-header {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+        color: #333;
+      }
+      .section-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .section-content div {
+        display: flex;
+        justify-content: space-between;
+      }
+      .section-content div label {
+        padding-top: 20px;
+        flex: 2;
+      }
+      .section-content div p {
+        flex: 2;
+        
+      }
+      .text-muted {
+        color: #6c757d;
+      }
+      .fw-medium {
+        font-weight: 500;
+      }
+      .text-sm {
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="section">
+        <div class="section-header">Student Details:</div>
+        <div class="section-content">
+          <div>
+            <label>Centre Name:</label>
+            <p class="text-muted text-sm" id="centerName">--</p>
+          </div>
+          <div>
+            <label>Student Name / as per ID:</label>
+            <p class="text-muted text-sm" id="studentName">--</p>
+          </div>
+          <div>
+            <label>Student Chinese Name:</label>
+            <p class="text-muted text-sm" id="studentChineseName">--</p>
+          </div>
+          <div>
+            <label>Date Of Birth:</label>
+            <p class="text-muted text-sm" id="dateOfBirth">--</p>
+          </div>
+          <div>
+            <label>Age:</label>
+            <p class="text-muted text-sm" id="age">--</p>
+          </div>
+          <div>
+            <label>Gender:</label>
+            <p class="text-muted text-sm" id="gender">--</p>
+          </div>
+          <div>
+            <label>Medical Condition:</label>
+            <p class="text-muted text-sm" id="medicalCondition">--</p>
+          </div>
+          <div>
+            <label>School Type:</label>
+            <p class="text-muted text-sm" id="schoolType">--</p>
+          </div>
+          <div>
+            <label>School Name:</label>
+            <p class="text-muted text-sm" id="schoolName">--</p>
+          </div>
+          <div>
+            <label>Pre-Assessment Result:</label>
+            <p class="text-muted text-sm" id="preAssessmentResult">--</p>
+          </div>
+          <div>
+            <label>Race:</label>
+            <p class="text-muted text-sm" id="race">--</p>
+          </div>
+          <div>
+            <label>Nationality:</label>
+            <p class="text-muted text-sm" id="nationality">--</p>
+          </div>
+          <div>
+            <label>Primary Language Spoken:</label>
+            <p class="text-muted text-sm" id="primaryLanguage">--</p>
+          </div>
+          <div>
+            <label>Refer By Parent:</label>
+            <p class="text-muted text-sm" id="referByParent">--</p>
+          </div>
+          <div>
+            <label>Refer By Student:</label>
+            <p class="text-muted text-sm" id="referByStudent">--</p>
+          </div>
+          <div>
+            <label>Remark:</label>
+            <p class="text-muted text-sm" id="remark">--</p>
+          </div>
+          <div>
+            <label>Profile Image:</label>
+            <div class="text-muted text-sm" id="profileImageContainer">
+              <img src="placeholder.jpg" class="img-fluid rounded" alt="Profile Image" id="profileImage" />
+            </div>
+          </div>
+          <div>
+            <label>Allow display in Facility Bulletin / Magazine / Advert:</label>
+            <p class="text-muted text-sm" id="allowMagazine">--</p>
+          </div>
+          <div>
+            <label>Allow display on Social Media:</label>
+            <p class="text-muted text-sm" id="allowSocialMedia">--</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
+`;
+const generatePDF = async () => {
+  try {
+    const tempElem = document.createElement('div');
+    tempElem.innerHTML = mailContent;
+
+    // Append tempElem to document.body to ensure it's fully rendered
+    document.body.appendChild(tempElem);
+
+    // Delay execution slightly to ensure elements are fully rendered
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const canvas = await html2canvas(tempElem);
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF();
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('generated.pdf');
+
+    // Remove tempElem from document.body after capturing
+    document.body.removeChild(tempElem);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    toast.error('Error generating PDF');
+  }
+};
+
   return (
     <div class="container-fluid minHeight mb-5">
       <div class="container-fluid py-4">
@@ -33,7 +218,13 @@ function StaffView() {
             <div class="d-flex align-items-center gap-4"></div>
           </div>
           <div class="col-auto">
-            <div class="hstack gap-2 justify-content-end">
+            <div class="hstack gap-2 justify-content-end" >
+              <button
+                className="btn btn-button btn-sm ms-1"
+                onClick={generatePDF}
+              >
+                Download pdf
+              </button>
               <Link to="/staff">
                 <button type="button" class="btn btn-border">
                   <span>Back</span>
@@ -59,7 +250,7 @@ function StaffView() {
         </div>
       </div>
       <p class="headColor mt-3">Personal Information</p>
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center" >
         <p className="my-2 d-flex">
           {data.photo ? (
             <img
