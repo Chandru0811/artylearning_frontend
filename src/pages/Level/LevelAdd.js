@@ -122,23 +122,26 @@ function LevelAdd({ onSuccess }) {
                     </div>
                   )}
                 </div>
-
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Level Code<span className="text-danger">*</span>
+                    Status<span className="text-danger">*</span>
                   </label>
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.levelCode && formik.errors.levelCode
+                  <select
+                    {...formik.getFieldProps("status")}
+                    class={`form-select  ${
+                      formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("levelCode")}
-                  />
-                  {formik.touched.levelCode && formik.errors.levelCode && (
+                    aria-label="Default select example"
+                  >
+                    <option selected></option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                  {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
-                      {formik.errors.levelCode}
+                      {formik.errors.status}
                     </div>
                   )}
                 </div>
@@ -163,27 +166,23 @@ function LevelAdd({ onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Status<span className="text-danger">*</span>
+                    Level Code<span className="text-danger">*</span>
                   </label>
-                  <select
-                    {...formik.getFieldProps("status")}
-                    class={`form-select  ${
-                      formik.touched.status && formik.errors.status
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.levelCode && formik.errors.levelCode
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="Default select example"
-                  >
-                    <option selected></option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
-                  {formik.touched.status && formik.errors.status && (
+                    {...formik.getFieldProps("levelCode")}
+                  />
+                  {formik.touched.levelCode && formik.errors.levelCode && (
                     <div className="invalid-feedback">
-                      {formik.errors.status}
+                      {formik.errors.levelCode}
                     </div>
                   )}
-                </div>
+                </div>    
               </div>
             </div>
             <Modal.Footer>

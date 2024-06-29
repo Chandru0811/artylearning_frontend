@@ -220,7 +220,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
             </div>
             <div class="col-md-6 col-12 mb-4">
               <label>
-                Duration<span class="text-danger">*</span>
+                Duration(Hrs)<span class="text-danger">*</span>
               </label>
               <select
                {...formik.getFieldProps("durationInHrs")}

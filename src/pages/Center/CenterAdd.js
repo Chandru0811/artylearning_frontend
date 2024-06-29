@@ -10,7 +10,7 @@ const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
   code: Yup.string()
     .required("*Code is required"),
-  centerManager: Yup.string().required("*Select the Center Manager"),
+  centerManager: Yup.string().required("*Select the Centre Manager"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
     .required("*Zip Code is required")
@@ -207,7 +207,7 @@ function CenterAdd() {
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
-                Center Manager<span className="text-danger">*</span>
+                Centre Manager<span className="text-danger">*</span>
               </label>
               <select
                 {...formik.getFieldProps("centerManager")}

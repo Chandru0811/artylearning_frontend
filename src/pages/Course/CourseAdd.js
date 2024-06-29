@@ -6,9 +6,9 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
-// import fetchAllLevelsWithIds from "../List/LevelList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
+import fetchAllLevelsWithIds from "../List/LevelList";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Select the Centre Name"),
@@ -33,10 +33,10 @@ function CourseAdd({ onSuccess }) {
   const [centerData, setCenterData] = useState(null);
   console.log("Center Data", centerData);
   const [levelData, setLevelData] = useState(null);
-  // const [subjectData, setSubjectData] = useState(null);
+  const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const location = useLocation();
-  const subjectData = location.state?.subjectData;
+  // const subjectData = location.state?.subjectData;
 
   const formik = useFormik({
     initialValues: {
@@ -97,6 +97,15 @@ function CourseAdd({ onSuccess }) {
     }
   };
 
+  const fetchSubject = async () => {
+    try {
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   const fetchLevels = async (subjectId) => {
     try {
       const subject = await fetchAllLevelBySubjectsWithIds(subjectId);
@@ -108,13 +117,14 @@ function CourseAdd({ onSuccess }) {
 
   const handleSubjectChange = (event) => {
     setLevelData(null);
-    const subjectId = event.target.value;
-    formik.setFieldValue("subjectId", subjectId);
-    fetchLevels(subjectId);
+    const subject = event.target.value;
+    formik.setFieldValue("subjectId", subject);
+    fetchLevels(subject);
   };
 
   useEffect(() => {
     fetchData();
+    fetchSubject();
   }, []);
 
   return (
@@ -387,9 +397,9 @@ function CourseAdd({ onSuccess }) {
                 )}
               </div>
             </div>
-            <div className="row">
+            <div className="row mt-2">
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Duration(Hr)</lable>
+                <lable className="form-lable">Duration(Hrs)</lable>
                 <span className=" text-danger">*</span>
                 <div className="input-group ">
                   <select
@@ -436,7 +446,7 @@ function CourseAdd({ onSuccess }) {
                   )}
               </div>
             </div>
-            <div className="row">
+            <div className="row mt-3">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   Status<span className="text-danger">*</span>
