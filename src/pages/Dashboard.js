@@ -253,12 +253,15 @@ function Dashboard() {
                 <h2 className="card-text">
                   <strong>
                     <span style={{ color: "#624bff" }}>$</span>{" "}
-                    {dashboardData?.totalRevenueOfMonth}
+                    {dashboardData?.totalRevenueOfMonth || 0}
                   </strong>
                 </h2>
                 <h6 className="card-text text-secondary">
                   Sales {salesIncreasePercentage <= 0 ? "Decrease" : "Increase"}{" "}
-                  {salesIncreasePercentage?.toString().split(".")[0]}%
+                  {isNaN(salesIncreasePercentage)
+                    ? 0
+                    : salesIncreasePercentage.toFixed(0)}
+                  %
                 </h6>
               </div>
             </div>
