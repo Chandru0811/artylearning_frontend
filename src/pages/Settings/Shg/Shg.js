@@ -90,8 +90,8 @@ const Shg = () => {
                     <thead>
                         <tr>
                             <th scope="col" style={{ whiteSpace: "nowrap" }}>S No</th>
-                            <th scope="col" className="text-center">Shg Type</th>
-                            <th scope="col" className="text-center">Shg Amount</th>
+                            <th scope="col" className="text-center">SHG Type</th>
+                            <th scope="col" className="text-center">SHG Amount</th>
                             <th scope="col" className="text-center">Action</th>
                         </tr>
                     </thead>
@@ -103,11 +103,11 @@ const Shg = () => {
                                 <td className="text-center">{data.shgAmount}</td>
                                 <td className="text-center">
                                     {/* {storedScreens?.levelRead && ( */}
-                                    <Link to={`/shg/view/${data.id}`}>
+                                    {/* <Link to={`/shg/view/${data.id}`}>
                                         <button className="btn btn-sm">
                                             <FaEye />
                                         </button>
-                                    </Link>
+                                    </Link> */}
                                     {/* )} */}
                                     {/* {storedScreens?.levelUpdate && ( */}
                                     <ShgEdit id={data.id} onSuccess={refreshData} />

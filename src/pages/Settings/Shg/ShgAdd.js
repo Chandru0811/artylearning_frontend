@@ -63,7 +63,7 @@ function ShgAdd({ onSuccess }) {
             </div>
             <Modal show={show} size="lg" onHide={handleClose} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Add Shg</Modal.Title>
+                    <Modal.Title className="headColor">Add SHG</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>
@@ -71,7 +71,7 @@ function ShgAdd({ onSuccess }) {
                             <div className="row py-4">
                                 <div className="col-md-6 col-12 mb-2">
                                     <label className="form-label">
-                                        shg Type<span className="text-danger">*</span>
+                                        SHG Type<span className="text-danger">*</span>
                                     </label>
                                     <input
                                         type="text"
@@ -89,7 +89,7 @@ function ShgAdd({ onSuccess }) {
                                 </div>
                                 <div className="col-md-6 col-12 mb-2">
                                     <label className="form-label">
-                                        shg Amount<span className="text-danger">*</span>
+                                        SHG Amount<span className="text-danger">*</span>
                                     </label>
                                     <input
                                         type="text"

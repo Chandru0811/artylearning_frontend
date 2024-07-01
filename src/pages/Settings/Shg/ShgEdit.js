@@ -77,7 +77,7 @@ function ShgEdit({ id, onSuccess }) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Shg Edit</Modal.Title>
+          <Modal.Title className="headColor">SHG Edit</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
@@ -85,7 +85,7 @@ function ShgEdit({ id, onSuccess }) {
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    shg Type<span className="text-danger">*</span>
+                    SHG Type<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -104,7 +104,7 @@ function ShgEdit({ id, onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    shg Amount<span className="text-danger">*</span>
+                    SHG Amount<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
