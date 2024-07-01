@@ -31,7 +31,6 @@ import CenterView from "../pages/Center/CenterView";
 import CenterManager from "../pages/centerManager/CenterManager";
 import CenterManagerAdd from "../pages/centerManager/CenterManagerAdd";
 
-
 import Staff from "../pages/Staff/Staff";
 import Payment from "../pages/Payment/Payment";
 import Invoice from "../pages/Invoice/Invoice";
@@ -182,7 +181,10 @@ import SettingLeave from "../pages/Settings/Leave/Leave";
 import SettingLeaveAdd from "../pages/Settings/Leave/LeaveAdd";
 import SettingLeaveEdit from "../pages/Settings/Leave/LeaveEdit";
 import SettingLeaveView from "../pages/Settings/Leave/LeaveView";
-
+import SalaryType from "../pages/Settings/Salary/SalaryType";
+import SalaryTypeEdit from "../pages/Settings/Salary/SalaryTypeEdit";
+import SalaryTypeView from "../pages/Settings/Salary/SalaryTypeView";
+import SalaryTypeAdd from "../pages/Settings/Salary/SalaryTypeAdd";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -258,8 +260,14 @@ function Admin({ handleLogout }) {
 
               <Route path="/centermanager" element={<CenterManager />} />
               <Route path="/centermanager/add" element={<CenterManagerAdd />} />
-              <Route path="/centermanager/edit" element={<CenterManagerEdit />} />
-              <Route path="/centermanager/view" element={<CenterManagerView />} />
+              <Route
+                path="/centermanager/edit"
+                element={<CenterManagerEdit />}
+              />
+              <Route
+                path="/centermanager/view"
+                element={<CenterManagerView />}
+              />
 
               {/* Teacher */}
               <Route path="/teacher" element={<Teacher />} />
@@ -479,7 +487,6 @@ function Admin({ handleLogout }) {
               <Route path="/cms/home" element={<CmsHome />} />
               <Route path="/cms/aboutus" element={<CmsAboutUs />} />
 
-
               {/* CMS Contact  */}
               <Route path="/cms/contact" element={<CMSContact />} />
               <Route path="/cms/contact/add" element={<CMSContactAdd />} />
@@ -487,43 +494,59 @@ function Admin({ handleLogout }) {
               <Route path="/cms/contact/view" element={<CMSContactView />} />
 
               <Route path="/cms/testimonial" element={<CMSTestMonail />} />
-              <Route path="/cms/testmonial/addtestmonial" element={<CMSTestMonialAdd />} />
-              <Route path="/cms/testmonial/editmonial" element={<CMSTestMonialEdit />} />
-
+              <Route
+                path="/cms/testmonial/addtestmonial"
+                element={<CMSTestMonialAdd />}
+              />
+              <Route
+                path="/cms/testmonial/editmonial"
+                element={<CMSTestMonialEdit />}
+              />
 
               <Route path="/cms/chineshcourse" element={<CmsChinesh />} />
 
               {/* Setting */}
               {/* Tax */}
-              <Route path="/tax" element={<Tax/>}/>
-              <Route path="/tax/add" element={<TaxAdd/>}/>
-              <Route path="/tax/edit/:id" element={<TaxEdit/>}/>
-              <Route path="/tax/view/:id" element={<TaxView/>}/>
+              <Route path="/tax" element={<Tax />} />
+              <Route path="/tax/add" element={<TaxAdd />} />
+              <Route path="/tax/edit/:id" element={<TaxEdit />} />
+              <Route path="/tax/view/:id" element={<TaxView />} />
 
               {/* Shg */}
-              <Route path="/shg" element={<Shg/>}/>
-              <Route path="/shg/add" element={<ShgAdd/>}/>
-              <Route path="/shg/edit/:id" element={<ShgEdit/>}/>
-              <Route path="/shg/view/:id" element={<ShgView/>}/>
+              <Route path="/shg" element={<Shg />} />
+              <Route path="/shg/add" element={<ShgAdd />} />
+              <Route path="/shg/edit/:id" element={<ShgEdit />} />
+              <Route path="/shg/view/:id" element={<ShgView />} />
 
               {/* LeaveType */}
-              <Route path="/leavetype" element={<SettingLeave/>}/>
-              <Route path="/leavetype/add" element={<SettingLeaveAdd/>}/>
-              <Route path="/leavetype/edit/:id" element={<SettingLeaveEdit/>}/>
-              <Route path="/leavetype/view/:id" element={<SettingLeaveView/>}/>
+              <Route path="/leavetype" element={<SettingLeave />} />
+              <Route path="/leavetype/add" element={<SettingLeaveAdd />} />
+              <Route
+                path="/leavetype/edit/:id"
+                element={<SettingLeaveEdit />}
+              />
+              <Route
+                path="/leavetype/view/:id"
+                element={<SettingLeaveView />}
+              />
 
               {/* Race */}
-              <Route path="/race" element={<Race/>}/>
-              <Route path="/race/add" element={<RaceAdd/>}/>
-              <Route path="/race/edit/:id" element={<RaceEdit/>}/>
-              <Route path="/race/view/:id" element={<RaceView/>}/>
+              <Route path="/race" element={<Race />} />
+              <Route path="/race/add" element={<RaceAdd />} />
+              <Route path="/race/edit/:id" element={<RaceEdit />} />
+              <Route path="/race/view/:id" element={<RaceView />} />
 
               {/* Countrty */}
-              <Route path="/country" element={<Country/>}/>
-              <Route path="/country/add" element={<CountryAdd/>}/>
-              <Route path="/country/edit/:id" element={<CountryEdit/>}/>
-              <Route path="/country/view/:id" element={<CountryView/>}/>
+              <Route path="/country" element={<Country />} />
+              <Route path="/country/add" element={<CountryAdd />} />
+              <Route path="/country/edit/:id" element={<CountryEdit />} />
+              <Route path="/country/view/:id" element={<CountryView />} />
 
+              {/* Salary */}
+              <Route path="/salarytype" element={<SalaryType />} />
+              <Route path="/salarytype/add" element={<SalaryTypeAdd />} />
+              <Route path="/salarytype/edit/:id" element={<SalaryTypeEdit />} />
+              <Route path="/salarytype/view/:id" element={<SalaryTypeView />} />
             </Routes>
           </div>
           <Footer />

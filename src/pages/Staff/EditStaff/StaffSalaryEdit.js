@@ -1,17 +1,35 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
+import fetchAllSalaryTypeWithIds from "../../List/SalaryTypeList";
 
 const validationSchema = Yup.object().shape({
-  salary: Yup.number()
-    .typeError("*Salary Must be numbers")
-    .notRequired()
+  salary: Yup.number().typeError("*Salary Must be numbers").notRequired(),
 });
 
 const StaffSalaryEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const [salaryTypeData, setSalaryTypeData] = useState(null);
+    const fetchData = async () => {
+      try {
+        const salarytype = await fetchAllSalaryTypeWithIds();
+        setSalaryTypeData(salarytype);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
+    useEffect(() => {
+      fetchData();
+    }, []);
+
     const formik = useFormik({
       initialValues: {
         salary: "",
@@ -83,7 +101,7 @@ const StaffSalaryEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally{
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -173,9 +191,12 @@ const StaffSalaryEdit = forwardRef(
                   value={formik.values.salaryType}
                 >
                   <option value=""></option>
-                  <option value="Basic">Basic</option>
-                  <option value="DA">DA</option>
-                  <option value="HRA">HRA</option>
+                  {salaryTypeData &&
+                    salaryTypeData.map((salaryId) => (
+                      <option key={salaryId.id} value={salaryId.salaryType}>
+                        {salaryId.salaryType}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
