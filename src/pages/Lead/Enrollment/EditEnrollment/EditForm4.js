@@ -105,7 +105,7 @@ const EditForm4 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Postal Code <span className="text-danger">*</span>
+                Postal Code<span className="text-danger">*</span>
               </label>
               <input
                 type="text"

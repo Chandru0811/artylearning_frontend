@@ -13,14 +13,16 @@ const EditForm6 = forwardRef(
       addressOfAuthorisedPerson: Yup.string().required("*Address is required"),
       // consentPhotos:Yup.string().required("*ConsentPhotos is required"),
       // consentScrapbook:Yup.string().required("*ConsentScrapbook is required"),
-      declare: Yup.string().required("*Declare is required"),
+      agreeConditionOne: Yup.string().required("*Declare is required"),
+      agreeConditionTwo: Yup.string().required("*Declare is required"),
+      agreeConditionThree: Yup.string().required("*Declare is required"),
     });
     const formik = useFormik({
       initialValues: {
         addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
-        consentScrapbook: "",
-        consentPhotos: "",
-        declare: "",
+        agreeConditionOne: "",
+        agreeConditionTwo: "",
+        agreeConditionThree: "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -54,7 +56,7 @@ const EditForm6 = forwardRef(
     useEffect(() => {
       const getData = async () => {
         const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
-        console.log("api",response.data)
+        console.log("api", response.data);
         formik.setValues(response.data);
       };
       getData();
@@ -128,16 +130,22 @@ const EditForm6 = forwardRef(
                     information will be displayed on the company’s website.
                   </label>
                 </div>
+                {formik.touched.agreeConditionOne &&
+                  formik.errors.agreeConditionOne && (
+                    <div className="error text-danger ms-5">
+                      <small>{formik.errors.agreeConditionOne}</small>
+                    </div>
+                  )}
               </div>
               {/* <div className="col-md-11 col-10 mb-3">
                 <div className="form-check"> */}
 
-              {formik.touched.consentScrapbook &&
+              {/* {formik.touched.consentScrapbook &&
                 formik.errors.consentScrapbook && (
                   <div className="error text-danger ">
                     <small>{formik.errors.consentScrapbook}</small>
                   </div>
-                )}
+                )} */}
               {/* </div>
               </div> */}
             </div>
@@ -164,15 +172,21 @@ const EditForm6 = forwardRef(
                     which will be shown to the public.
                   </label>
                 </div>
+                {formik.touched.agreeConditionTwo &&
+                  formik.errors.agreeConditionTwo && (
+                    <div className="error text-danger ms-5">
+                      <small>{formik.errors.agreeConditionTwo}</small>
+                    </div>
+                  )}
               </div>
               {/* <div className="col-md-11 col-10 mb-3">
                 <div className="form-check"> */}
 
-              {formik.touched.consentPhotos && formik.errors.consentPhotos && (
+              {/* {formik.touched.consentPhotos && formik.errors.consentPhotos && (
                 <div className="error text-danger ">
                   <small>{formik.errors.consentPhotos}</small>
                 </div>
-              )}
+              )} */}
               {/* </div>
               </div> */}
             </div>
@@ -192,12 +206,13 @@ const EditForm6 = forwardRef(
                 <label className="form-check-label" htmlFor="declare">
                   I agree that the information provided is true to my abilities.
                 </label>
-                {formik.touched.declare && formik.errors.declare && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.declare}</small>
+              </div>
+              {formik.touched.agreeConditionThree &&
+                formik.errors.agreeConditionThree && (
+                  <div className="error text-danger ms-5">
+                    <small>{formik.errors.agreeConditionThree}</small>
                   </div>
                 )}
-              </div>
             </div>
           </div>
         </form>

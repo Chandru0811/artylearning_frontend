@@ -9,7 +9,7 @@ export default function RaceView() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllLeaveSettingById/${id}`);
+        const response = await api.get(`/getAllSalarySettingById/${id}`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data ", error);
@@ -23,7 +23,7 @@ export default function RaceView() {
       <div className="container">
         <div className="row mt-2 pb-3">
           <div className="my-3 d-flex justify-content-end mb-5">
-            <Link to={"/leavetype"}>
+            <Link to={"/salarytype"}>
               <button type="button" className="btn btn-sm btn-border">
                 Back
               </button>
@@ -32,10 +32,10 @@ export default function RaceView() {
           <div className="col-md-6 col-12">
             <div className="row  mb-2 ">
               <div className="col-6  ">
-                <p className="fw-medium">Leave Type</p>
+                <p className="fw-medium">Salary Type</p>
               </div>
               <div className="col-6">
-                <p className="text-muted text-sm">: {data.leaveType}</p>
+                <p className="text-muted text-sm">: {data.salaryType}</p>
               </div>
             </div>
           </div>

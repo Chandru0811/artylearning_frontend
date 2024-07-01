@@ -17,14 +17,15 @@ const Shg = () => {
 
     useEffect(() => {
         const getData = async () => {
+            
             try {
-                const response = await api.get("/getAllRaceSetting");
+                const response = await api.get("/getAllSHGSetting");
                 setDatas(response.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
                 setLoading(false);
-            }
+              }
         };
         getData();
     }, []);
@@ -59,7 +60,7 @@ const Shg = () => {
         destroyDataTable();
         setLoading(true);
         try {
-            const response = await api.get("/getAllRaceSetting");
+            const response = await api.get("/getAllSHGSetting");
             setDatas(response.data);
             initializeDataTable(); // Reinitialize DataTable after successful data update
         } catch (error) {
@@ -89,8 +90,8 @@ const Shg = () => {
                     <thead>
                         <tr>
                             <th scope="col" style={{ whiteSpace: "nowrap" }}>S No</th>
-                            <th scope="col" className="text-center">Shg Type</th>
-                            <th scope="col" className="text-center">Shg Amount</th>
+                            <th scope="col" className="text-center">SHG Type</th>
+                            <th scope="col" className="text-center">SHG Amount</th>
                             <th scope="col" className="text-center">Action</th>
                         </tr>
                     </thead>
@@ -102,11 +103,11 @@ const Shg = () => {
                                 <td className="text-center">{data.shgAmount}</td>
                                 <td className="text-center">
                                     {/* {storedScreens?.levelRead && ( */}
-                                    <Link to={`/shg/view/${data.id}`}>
+                                    {/* <Link to={`/shg/view/${data.id}`}>
                                         <button className="btn btn-sm">
                                             <FaEye />
                                         </button>
-                                    </Link>
+                                    </Link> */}
                                     {/* )} */}
                                     {/* {storedScreens?.levelUpdate && ( */}
                                     <ShgEdit id={data.id} onSuccess={refreshData} />
@@ -114,7 +115,7 @@ const Shg = () => {
                                     {/* {storedScreens?.levelDelete && ( */}
                                     <Delete
                                         onSuccess={refreshData}
-                                        path={`/deleteRaceSetting/${data.id}`}
+                                        path={`/deleteSHGSetting/${data.id}`}
                                     />
                                     {/* )} */}
                                 </td>

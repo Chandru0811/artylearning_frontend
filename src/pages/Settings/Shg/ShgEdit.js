@@ -30,7 +30,7 @@ function ShgEdit({ id, onSuccess }) {
       // console.log(values);
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateRaceSetting/${id}`, values, {
+        const response = await api.put(`/updateSHGSetting/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -53,7 +53,7 @@ function ShgEdit({ id, onSuccess }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllRaceSettingById/${id}`);
+        const response = await api.get(`/getAllSHGSettingById/${id}`);
         formik.setValues(response.data);
       } catch (error) {
         console.error("Error fetching data ", error);
@@ -77,7 +77,7 @@ function ShgEdit({ id, onSuccess }) {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Shg Edit</Modal.Title>
+          <Modal.Title className="headColor">SHG Edit</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
@@ -85,26 +85,7 @@ function ShgEdit({ id, onSuccess }) {
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    shg Type<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.shgAmount && formik.errors.shgAmount
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("shgAmount")}
-                  />
-                  {formik.touched.shgAmount && formik.errors.shgAmount && (
-                    <div className="invalid-feedback">
-                      {formik.errors.shgAmount}
-                    </div>
-                  )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    shg Amount<span className="text-danger">*</span>
+                    SHG Type<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -118,6 +99,25 @@ function ShgEdit({ id, onSuccess }) {
                   {formik.touched.shgType && formik.errors.shgType && (
                     <div className="invalid-feedback">
                       {formik.errors.shgType}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    SHG Amount<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.shgAmount && formik.errors.shgAmount
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("shgAmount")}
+                  />
+                  {formik.touched.shgAmount && formik.errors.shgAmount && (
+                    <div className="invalid-feedback">
+                      {formik.errors.shgAmount}
                     </div>
                   )}
                 </div>

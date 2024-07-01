@@ -11,15 +11,17 @@ const Form6 = forwardRef(
 
     const validationSchema = Yup.object().shape({
       addressOfAuthorisedPerson: Yup.string().required("*Address is required"),
-      declare: Yup.string().required("*Declare is required"),
+      agreeConditionOne: Yup.string().required("*Declare is required"),
+      agreeConditionTwo: Yup.string().required("*Declare is required"),
+      agreeConditionThree: Yup.string().required("*Declare is required"),
     });
 
     const formik = useFormik({
       initialValues: {
         addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
-        consentScrapbook: false,
-        consentPhotos: false,
-        declare: "",
+        agreeConditionOne: false,
+        agreeConditionTwo: false,
+        agreeConditionThree: false,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -96,13 +98,13 @@ const Form6 = forwardRef(
               <div className="form-check d-flex" >
                 <input
                   className="form-check-input mx-2"
-                  id="consentScrapbook"
-                  name="consentScrapbook"
+                  id="agreeConditionOne"
+                  name="agreeConditionOne"
                   type="checkbox"
-                  checked={formik.values.consentScrapbook}
+                  checked={formik.values.agreeConditionOne}
                   onChange={formik.handleChange}
                 />
-                <label className="form-check-label" htmlFor="consentScrapbook">
+                <label className="form-check-label" htmlFor="agreeConditionOne">
                   I hereby provide my consent to Arty Learning Pte Ltd for the
                   display my child’s name, limited to first names and
                   potentially last initials (in cases where there are multiple
@@ -112,9 +114,14 @@ const Form6 = forwardRef(
                   information will be displayed on the company’s website.
                 </label>
               </div>
+              {formik.touched.agreeConditionOne && formik.errors.agreeConditionOne && (
+                  <div className="error text-danger ms-5">
+                    <small>{formik.errors.agreeConditionOne}</small>
+                  </div>
+                )}
               {/* </div> */}
               {/* <div className="col-md-11 col-10 mb-3"> */}
-              <div className="form-check"></div>
+              {/* <div className="form-check"></div> */}
               {/* </div> */}
             </div>
 
@@ -123,13 +130,13 @@ const Form6 = forwardRef(
                 <div className="form-check d-flex">
                   <input
                     className="form-check-input  mx-2"
-                    id="consentPhotos"
-                    name="consentPhotos"
+                    id="agreeConditionTwo"
+                    name="agreeConditionTwo"
                     type="checkbox"
-                    checked={formik.values.consentPhotos}
+                    checked={formik.values.agreeConditionTwo}
                     onChange={formik.handleChange}
                   />
-                  <label className="form-check-label" htmlFor="consentPhotos">
+                  <label className="form-check-label" htmlFor="agreeConditionTwo">
                     I hereby provide my consent to Arty Learning Pte Ltd for the
                     display my child’s name, limited to first names and
                     potentially last initials (in cases where there are multiple
@@ -138,6 +145,11 @@ const Form6 = forwardRef(
                     which will be shown to the public.
                   </label>
                 </div>
+                {formik.touched.agreeConditionTwo && formik.errors.agreeConditionTwo && (
+                  <div className="error text-danger ms-5">
+                    <small>{formik.errors.agreeConditionTwo}</small>
+                  </div>
+                )}
               </div>
               {/* <div className="col-md-11 col-10 mb-3">
     <div className="form-check">
@@ -150,22 +162,21 @@ const Form6 = forwardRef(
               <div className="form-check d-flex">
                 <input
                   className="form-check-input mx-2"
-                  id="declare"
-                  name="declare"
+                  id="agreeConditionThree"
+                  name="agreeConditionThree"
                   type="checkbox"
-                  checked={formik.values.declare}
+                  checked={formik.values.agreeConditionThree}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.declare}
+                  value={formik.values.agreeConditionThree}
                 />
-                <label className="form-check-label" htmlFor="declare">
+                <label className="form-check-label" htmlFor="agreeConditionThree">
                   I agree that the information provided is true to my abilities.
                 </label>
-               
               </div>
-              {formik.touched.declare && formik.errors.declare && (
+              {formik.touched.agreeConditionThree && formik.errors.agreeConditionThree && (
                   <div className="error text-danger ms-5">
-                    <small>{formik.errors.declare}</small>
+                    <small>{formik.errors.agreeConditionThree}</small>
                   </div>
                 )}
             </div>

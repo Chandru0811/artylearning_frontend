@@ -356,6 +356,11 @@ function Sidebar() {
             path: "/leavetype",
             access: true,
           },
+          {
+            title: "Salary Type",
+            path: "/salarytype",
+            access: true,
+          },
         ],
       },
     ];

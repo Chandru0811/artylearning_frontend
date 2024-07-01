@@ -6,10 +6,13 @@ import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import api from "../../../config/URL";
 import Delete from "../../../components/common/Delete";
-import LeaveAdd from "./LeaveAdd";
-import LeaveEdit from "./LeaveEdit";
+// import SalaryTypeAdd from "../../Teacher/AddTeacher/SalaryTypeAdd";
+import SalaryTypeEdit from "./SalaryTypeEdit";
+import SalaryTypeAdd from "./SalaryTypeAdd";
+// import LeaveAdd from "./LeaveAdd";
+// import LeaveEdit from "./LeaveEdit";
 
-const Leave = () => {
+const Salary = () => {
   const tableRef = useRef(null);
   // const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
@@ -18,7 +21,7 @@ const Leave = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllLeaveSetting");
+        const response = await api.get("/getAllSalarySetting");
         setDatas(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -59,7 +62,7 @@ const Leave = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllLeaveSetting");
+      const response = await api.get("/getAllSalarySetting");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -71,7 +74,7 @@ const Leave = () => {
   return (
     <div className="container my-4">
       {/* {storedScreens?.levelCreate &&  */}
-      <LeaveAdd onSuccess={refreshData} />
+      <SalaryTypeAdd onSuccess={refreshData} />
       {/* } */}
 
       {loading ? (
@@ -92,7 +95,7 @@ const Leave = () => {
                 S No
               </th>
               <th scope="col" className="text-center">
-                Leave Type
+                Salary Type
               </th>
               <th scope="col" className="text-center">
                 Action
@@ -103,22 +106,23 @@ const Leave = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td className="text-center">{data.leaveType}</td>
+                <td className="text-center">{data.salaryType}</td>
                 <td className="text-center">
                   {/* {storedScreens?.levelRead && ( */}
-                  {/* <Link to={`/leavetype/view/${data.id}`}>
+                  <Link to={`/salarytype/view/${data.id}`}>
                     <button className="btn btn-sm">
                       <FaEye />
                     </button>
-                  </Link> */}
+                  </Link>
                   {/* )} */}
                   {/* {storedScreens?.levelUpdate && ( */}
-                  <LeaveEdit id={data.id} onSuccess={refreshData} />
+                  {/* <LeaveEdit id={data.id} onSuccess={refreshData} /> */}
+                  <SalaryTypeEdit id={data.id} onSuccess={refreshData} />
                   {/* )} */}
                   {/* {storedScreens?.levelDelete && ( */}
                   <Delete
                     onSuccess={refreshData}
-                    path={`/deleteLeaveSetting/${data.id}`}
+                    path={`/deleteSalarySetting/${data.id}`}
                   />
                   {/* )} */}
                 </td>
@@ -131,4 +135,4 @@ const Leave = () => {
   );
 };
 
-export default Leave;
+export default Salary;

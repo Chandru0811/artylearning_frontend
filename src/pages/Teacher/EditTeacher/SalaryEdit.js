@@ -1,9 +1,10 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 import * as Yup from "yup";
+import fetchAllSalaryTypeWithIds from "../../List/SalaryTypeList";
 
 const validationSchema = Yup.object().shape({
   salary: Yup.number()
@@ -13,6 +14,21 @@ const validationSchema = Yup.object().shape({
 
 
 const SalaryEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+
+  const [salaryTypeData, setSalaryTypeData] = useState(null);
+  const fetchData = async () => {
+    try {
+      const salarytype = await fetchAllSalaryTypeWithIds();
+      setSalaryTypeData(salarytype);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       salary: "",
@@ -191,9 +207,12 @@ const SalaryEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                 value={formik.values.salaryType}
               >
                 <option value=""></option>
-                <option value="Basic">Basic</option>
-                <option value="DA">DA</option>
-                <option value="HRA">HRA</option>
+                {salaryTypeData &&
+                    salaryTypeData.map((salaryId) => (
+                      <option key={salaryId.id} value={salaryId.salaryType}>
+                        {salaryId.salaryType}
+                      </option>
+                    ))}
               </select>
             </div>
           </div>
