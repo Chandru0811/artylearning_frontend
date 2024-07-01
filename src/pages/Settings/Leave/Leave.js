@@ -18,7 +18,7 @@ const Leave = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllRaceSetting");
+        const response = await api.get("/getAllLeaveSetting");
         setDatas(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -59,7 +59,7 @@ const Leave = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllRaceSetting");
+      const response = await api.get("/getAllLeaveSetting");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -106,11 +106,11 @@ const Leave = () => {
                 <td className="text-center">{data.leaveType}</td>
                 <td className="text-center">
                   {/* {storedScreens?.levelRead && ( */}
-                  <Link to={`/leavetype/view/${data.id}`}>
+                  {/* <Link to={`/leavetype/view/${data.id}`}>
                     <button className="btn btn-sm">
                       <FaEye />
                     </button>
-                  </Link>
+                  </Link> */}
                   {/* )} */}
                   {/* {storedScreens?.levelUpdate && ( */}
                   <LeaveEdit id={data.id} onSuccess={refreshData} />
@@ -118,7 +118,7 @@ const Leave = () => {
                   {/* {storedScreens?.levelDelete && ( */}
                   <Delete
                     onSuccess={refreshData}
-                    path={`/deleteRaceSetting/${data.id}`}
+                    path={`/deleteLeaveSetting/${data.id}`}
                   />
                   {/* )} */}
                 </td>

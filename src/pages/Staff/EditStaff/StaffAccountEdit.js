@@ -33,6 +33,7 @@ const validationSchema = Yup.object().shape({
 const StaffAccountEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [shgData, setShgData] = useState([]);
 
     const fetchData = async () => {
       try {
@@ -142,6 +143,20 @@ const StaffAccountEdit = forwardRef(
         }
       },
     });
+    useEffect(() => {
+      const getData = async () => {
+          
+          try {
+              const response = await api.get("/getAllSHGSetting");
+              setShgData(response.data);
+              console.log("shgdata",shgData)
+          } catch (error) {
+              console.error("Error fetching data:", error);
+          } 
+      };
+      
+      getData();
+  }, []);
 
     // useEffect(() => {
     //   const getData = async () => {
@@ -211,7 +226,14 @@ const StaffAccountEdit = forwardRef(
     useImperativeHandle(ref, () => ({
       staffAccountEdit: formik.handleSubmit,
     }));
-
+    const handleSubjectChange = (event) => {
+      const shgTypeId = parseInt(event.target.value, 10); 
+      formik.setFieldValue("shgType", shgTypeId);
+      const shg = shgData.find((shg) => shg.id === shgTypeId)
+      if (shg) {
+        formik.setFieldValue("shgAmount", shg.shgAmount); 
+      }
+    };
     return (
       <form onSubmit={formik.handleSubmit}>
         <div className="container courseAdd">
@@ -305,26 +327,35 @@ const StaffAccountEdit = forwardRef(
               <label>
                 SHG(s) Type
               </label>
-              <input
+              <select
                 type="text"
-                className="form-control"
+                className="form-select"
                 name="shgType"
-                onChange={formik.handleChange}
+                {...formik.getFieldProps("shgType")}
+                onChange={handleSubjectChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.shgType}
-              />
+              > <option selected></option>
+              {shgData &&
+                shgData.map((shg) => (
+                  <option key={shg.id} value={shg.id}>
+                    {shg.shgType}
+                  </option>
+                ))}
+                </select>
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 SHG Amount
               </label>
               <input
-                type="text"
+                type="readOnly"
                 className="form-control"
                 name="shgAmount"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.shgAmount}
+                readOnly
               />
             </div>
 
