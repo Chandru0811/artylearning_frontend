@@ -10,9 +10,10 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 
 function StudentView() {
-  const table1Ref = useRef(null);
-  const table2Ref = useRef(null);
-  const table3Ref = useRef(null);
+  const table1Ref = useRef();
+  const table2Ref = useRef();
+  const table3Ref = useRef();
+
 
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -73,7 +74,7 @@ function StudentView() {
         const canvas = await html2canvas(table, { scale: 2 });
 
         // Convert canvas to PNG image data
-        const imgData = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL();
 
         // Calculate PDF dimensions based on canvas
         const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -83,21 +84,28 @@ function StudentView() {
         if (pageNumber > 1) {
           pdf.addPage();
         }
-        pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, pdfHeight);
+        pdf.addImage(imgData, 10, 10, pdfWidth - 20, pdfHeight);
       } catch (error) {
-        console.error('Error generating PDF:', error);
+        console.error("Error generating PDF:", error);
       }
     };
 
+    // Array of table references
+    const tableRefs = [
+      table1Ref,
+      table2Ref,
+      table3Ref,
+
+    ];
+
     // Add each table to PDF
-    await addTableToPDF(table1Ref, 1); // Add first table
-    await addTableToPDF(table2Ref, 2); // Add second table
-    await addTableToPDF(table3Ref, 3); // Add second table
+    for (let i = 0; i < tableRefs.length; i++) {
+      await addTableToPDF(tableRefs[i], i + 1);
+    }
 
     // Save PDF
-    pdf.save('student-details.pdf');
+    pdf.save("student-details.pdf");
   };
-
 
   return (
     <>
@@ -183,7 +191,6 @@ function StudentView() {
           </div>
 
           {/* Student Details */}
-
           <div className="accordion-item">
             <h2 className="accordion-header">
               <button
@@ -487,7 +494,6 @@ function StudentView() {
               </div>
             </div>
           </div>
-
           {/* Emergency Contact */}
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -702,7 +708,6 @@ function StudentView() {
               </div>
             </div>
           </div>
-
           {/* Parent Details */}
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -1034,7 +1039,6 @@ function StudentView() {
               </div>
             )}
           </div>
-
           {/* Relation */}
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -1096,7 +1100,6 @@ function StudentView() {
               </div>
             </div>
           </div>
-
           {/* Course Details */}
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -1187,7 +1190,6 @@ function StudentView() {
               </div>
             </div>
           </div>
-
           {/* Terms And Conditions Details */}
           <div class="accordion-item">
             <h2 class="accordion-header">
@@ -1252,228 +1254,165 @@ function StudentView() {
             </div>
           </div>
         </div>
-        <div ref={table1Ref}>
-          <div className="accordion-item">
-            <div>
-              <div className="accordion-body">
-                <div className="container ">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <table
-                        className="table table-bordered"
-                        id="studentDetailsTable"
-                      >
-                        <thead className="">
-                          <th className=" pb-3">Student Details</th>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className="col-6 fw-medium">Centre Name</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {centerData &&
-                                  centerData.map((center) =>
-                                    parseInt(data.centerId) === center.id
-                                      ? center.centerNames || "--"
-                                      : ""
-                                  )}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">
-                              Student Name / as per ID
-                            </td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.studentName || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">
-                              Student Chinese Name
-                            </td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.studentChineseName || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">Date Of Birth</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.dateOfBirth
-                                  ? data.dateOfBirth.substring(0, 10)
-                                  : "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">Age</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.age || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">Gender</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.gender ? "Male" : "Female"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">
-                              Medical Condition
-                            </td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.medicalCondition || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">School Type</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.schoolType || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">School Name</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.schoolName || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">
-                              Pre-Assessment Result
-                            </td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.preAssessmentResult || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">Race</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.race || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">Nationality</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.nationality || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">
-                              Primary Language Spoken
-                            </td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.primaryLanguage
-                                  ? data.primaryLanguage === "ENGLISH"
-                                    ? "English"
-                                    : data.primaryLanguage === "CHINESE"
-                                    ? "Chinese"
-                                    : "--"
-                                  : "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">Refer By Parent</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.referByParent || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">
-                              Refer By Student
-                            </td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.referByStudent || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">Remark</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.remark || "--"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">Profile Image</td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.profileImage ? (
-                                  <img
-                                    src={data.profileImage}
-                                    onError={(e) => {
-                                      e.target.src = BlockImg;
-                                    }}
-                                    className="img-fluid ms-2 w-100 rounded"
-                                    alt="Profile Image"
-                                  />
-                                ) : (
-                                  <img
-                                    src={BlockImg}
-                                    className="img-fluid ms-2 w-100 rounded"
-                                    alt="Profile Image"
-                                  />
-                                )}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">
-                              Allow display in Facility Bulletin / Magazine /
-                              Advert
-                            </td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.allowMagazine ? "Yes" : "No"}
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="col-6 fw-medium">
-                              Allow display on Social Media
-                            </td>
-                            <td className="col-6 bg-light">
-                              <p className="text-muted text-sm">
-                                {data.allowSocialMedia ? "Yes" : "No"}
-                              </p>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+
+        {/* <div
+          ref={table1Ref}
+          className="container mt-4 border p-3 rounded bg-light"
+        >
+          <div className="row">
+            <h3>Student Details</h3>
+            <div className="">
+              <div className="d-flex gap-5">
+                <div className="mb-2 d-flex ">
+                  <div className="fw-bold">Centre Name : </div>
+                  <div className="text-muted">
+                    {centerData &&
+                      centerData.map((center) =>
+                        parseInt(data.centerId) === center.id
+                          ? center.centerNames || "--"
+                          : ""
+                      )}
                   </div>
+                </div>
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">Student Chinese Name :</div>
+                  <div className="text-muted">
+                    {data.studentChineseName || "--"}
+                  </div>
+                </div>
+              </div>
+              <div className="mb-2 d-flex ">
+                <div className="fw-bold">Profile Image</div>
+                <div>
+                  {data.profileImage ? (
+                    <img
+                      src={data.profileImage}
+                      onError={(e) => {
+                        e.target.src = BlockImg;
+                      }}
+                      className="img-fluid rounded w-25"
+                      alt="Profile Image"
+                    />
+                  ) : (
+                    <img
+                      src={BlockImg}
+                      className="img-fluid rounded"
+                      alt="Profile Image"
+                    />
+                  )}
+                </div>
+              </div>
+              <div className=" d-flex  gap-5">
+                <div className="mb-2  d-flex">
+                  <div className="fw-bold">Date Of Birth :</div>
+                  <div className="text-muted">
+                    {data.dateOfBirth
+                      ? data.dateOfBirth.substring(0, 10)
+                      : "--"}
+                  </div>
+                </div>
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">Age :</div>
+                  <div className="text-muted">{data.age || "--"}</div>
+                </div>
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">Gender :</div>
+                  <div className="text-muted">
+                    {data.gender ? "Male" : "Female"}
+                  </div>
+                </div>
+              </div>
+              <div className=" d-flex  gap-3">
+                <div className="mb-2 d-flex ">
+                  <div className="fw-bold">Medical Condition :</div>
+                  <div className="text-muted">
+                    {data.medicalCondition || "--"}
+                  </div>
+                </div>
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">School Name :</div>
+                  <div className="text-muted">{data.schoolName || "--"}</div>
+                </div>
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">School Type :</div>
+                  <div className="text-muted">{data.schoolType || "--"}</div>
+                </div>
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">Pre-Assessment Result</div>
+                  <div className="text-muted">
+                    {data.preAssessmentResult || "--"}
+                  </div>
+                </div>
+              </div>
+
+              <div className=" mb-2 d-flex gap-5">
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">Race:</div>
+                  <div className="text-muted">{data.race || "--"}</div>
+                </div>
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">Nationality:</div>
+                  <div className="text-muted">{data.nationality || "--"}</div>
+                </div>
+                <div className="mb-2 d-flex">
+                  <div className="fw-bold">Primary Language Spoken :</div>
+                  <div className="text-muted">
+                    {data.primaryLanguage
+                      ? data.primaryLanguage === "ENGLISH"
+                        ? "English"
+                        : data.primaryLanguage === "CHINESE"
+                        ? "Chinese"
+                        : "--"
+                      : "--"}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-2 ">
+                <div className="fw-bold">Refer By Student</div>
+                <div className="text-muted">{data.referByStudent || "--"}</div>
+              </div>
+              <div className="mb-2 ">
+                <div className="fw-bold">Remark</div>
+                <div className="text-muted">{data.remark || "--"}</div>
+              </div>
+
+              <div className="mb-2  ">
+                <div className="fw-bold">Key</div>
+                <div className="text-muted">{data.keyValue || "--"}</div>
+              </div>
+            </div>
+            <div className="">
+              <div className="mb-2 ">
+                <div className="fw-bold">Student Name / as per ID</div>
+                <div className="text-muted">{data.studentName || "--"}</div>
+              </div>
+
+              <div className="mb-2 ">
+                <div className="fw-bold">Refer By Parent</div>
+                <div className="text-muted">{data.referByParent || "--"}</div>
+              </div>
+              <div className="mb-2 ">
+                <div className="fw-bold">Remark</div>
+                <div className="text-muted">{data.remark || "--"}</div>
+              </div>
+              <div className="mb-2 ">
+                <div className="fw-bold">
+                  Allow display in Facility Bulletin / Magazine / Advert
+                </div>
+                <div className="text-muted">
+                  {data.allowMagazine ? "Yes" : "No"}
+                </div>
+              </div>
+              <div className="mb-2 ">
+                <div className="fw-bold">Allow display on Social Media</div>
+                <div className="text-muted">
+                  {data.allowSocialMedia ? "Yes" : "No"}
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
+        </div> */}
       </section>
     </>
   );
