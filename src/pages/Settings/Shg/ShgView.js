@@ -9,7 +9,7 @@ export default function ShgView() {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get(`/getAllRaceSettingById/${id}`);
+                const response = await api.get(`/getAllSHGSettingById/${id}`);
                 setData(response.data);
             } catch (error) {
                 console.error("Error fetching data ", error);

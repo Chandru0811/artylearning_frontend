@@ -25,12 +25,12 @@ function ShgAdd({ onSuccess }) {
             shgType: "",
             shgAmount: "",
         },
-        validationSchema: validationSchema, // Assign the validation schema
+        validationSchema: validationSchema, 
         onSubmit: async (values) => {
             setLoadIndicator(true);
             // console.log(values);
             try {
-                const response = await api.post("/createRaceSetting", values, {
+                const response = await api.post("/createSHGSetting", values, {
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -75,24 +75,6 @@ function ShgAdd({ onSuccess }) {
                                     </label>
                                     <input
                                         type="text"
-                                        className={`form-control  ${formik.touched.shgAmount && formik.errors.shgAmount
-                                            ? "is-invalid"
-                                            : ""
-                                            }`}
-                                        {...formik.getFieldProps("shgAmount")}
-                                    />
-                                    {formik.touched.shgAmount && formik.errors.shgAmount && (
-                                        <div className="invalid-feedback">
-                                            {formik.errors.shgAmount}
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="col-md-6 col-12 mb-2">
-                                    <label className="form-label">
-                                        shg Amount<span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
                                         className={`form-control  ${formik.touched.shgType && formik.errors.shgType
                                             ? "is-invalid"
                                             : ""
@@ -102,6 +84,24 @@ function ShgAdd({ onSuccess }) {
                                     {formik.touched.shgType && formik.errors.shgType && (
                                         <div className="invalid-feedback">
                                             {formik.errors.shgType}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="col-md-6 col-12 mb-2">
+                                    <label className="form-label">
+                                        shg Amount<span className="text-danger">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className={`form-control  ${formik.touched.shgAmount && formik.errors.shgAmount
+                                            ? "is-invalid"
+                                            : ""
+                                            }`}
+                                        {...formik.getFieldProps("shgAmount")}
+                                    />
+                                    {formik.touched.shgAmount && formik.errors.shgAmount && (
+                                        <div className="invalid-feedback">
+                                            {formik.errors.shgAmount}
                                         </div>
                                     )}
                                 </div>

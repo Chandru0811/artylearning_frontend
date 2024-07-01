@@ -28,7 +28,7 @@ function LeaveEdit({ id, onSuccess }) {
       // console.log(values);
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateRaceSetting/${id}`, values, {
+        const response = await api.put(`/updateLeaveSetting/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -51,7 +51,7 @@ function LeaveEdit({ id, onSuccess }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllRaceSettingById/${id}`);
+        const response = await api.get(`/getAllLeaveSettingById/${id}`);
         formik.setValues(response.data);
       } catch (error) {
         console.error("Error fetching data ", error);
