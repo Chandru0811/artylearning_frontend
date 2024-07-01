@@ -28,7 +28,7 @@ function LeaveAdd({ onSuccess }) {
       setLoadIndicator(true);
       // console.log(values);
       try {
-        const response = await api.post("/createRaceSetting", values, {
+        const response = await api.post("/createLeaveSetting", values, {
           headers: {
             "Content-Type": "application/json",
           },
