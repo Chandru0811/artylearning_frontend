@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
+import { data } from "jquery";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
@@ -32,6 +33,7 @@ const validationSchema = Yup.object().shape({
 const StaffAccountAdd = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [shgData, setShgData] = useState([]);
 
     const fetchData = async () => {
       try {
@@ -45,6 +47,21 @@ const StaffAccountAdd = forwardRef(
     useEffect(() => {
       fetchData();
     }, []);
+    useEffect(() => {
+      const getData = async () => {
+          
+          try {
+              const response = await api.get("/getAllSHGSetting");
+              setShgData(response.data);
+              console.log("shgdata",shgData)
+          } catch (error) {
+              console.error("Error fetching data:", error);
+          } 
+      };
+      
+      getData();
+  }, []);
+
 
     const formik = useFormik({
       initialValues: {
@@ -98,6 +115,15 @@ const StaffAccountAdd = forwardRef(
     useImperativeHandle(ref, () => ({
       staffAccountAdd: formik.handleSubmit,
     }));
+
+    const handleSubjectChange = (event) => {
+      const shgTypeId = parseInt(event.target.value, 10); 
+      formik.setFieldValue("shgType", shgTypeId);
+      const shg = shgData.find((shg) => shg.id === shgTypeId)
+      if (shg) {
+        formik.setFieldValue("shgAmount", shg.shgAmount); 
+      }
+    };
 
     return (
       <form onSubmit={formik.handleSubmit}>
@@ -192,26 +218,33 @@ const StaffAccountAdd = forwardRef(
               <label>
                 SHG(s) Type
               </label>
-              <input
+              <select
                 type="text"
-                className="form-control"
+                className="form-select"
                 name="shgType"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.shgType}
-              />
+                {...formik.getFieldProps("shgType")}
+                onChange={handleSubjectChange}
+              > <option selected></option>
+              {shgData &&
+                shgData.map((shg) => (
+                  <option key={shg.id} value={shg.id}>
+                    {shg.shgType}
+                  </option>
+                ))}
+                </select>
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 SHG Amount
               </label>
               <input
-                type="text"
+                type="readOnly"
                 className="form-control"
                 name="shgAmount"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.shgAmount}
+                readOnly
               />
             </div>
 

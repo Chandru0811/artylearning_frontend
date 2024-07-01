@@ -17,14 +17,15 @@ const Shg = () => {
 
     useEffect(() => {
         const getData = async () => {
+            
             try {
-                const response = await api.get("/getAllRaceSetting");
+                const response = await api.get("/getAllSHGSetting");
                 setDatas(response.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
                 setLoading(false);
-            }
+              }
         };
         getData();
     }, []);
@@ -59,7 +60,7 @@ const Shg = () => {
         destroyDataTable();
         setLoading(true);
         try {
-            const response = await api.get("/getAllRaceSetting");
+            const response = await api.get("/getAllSHGSetting");
             setDatas(response.data);
             initializeDataTable(); // Reinitialize DataTable after successful data update
         } catch (error) {
@@ -114,7 +115,7 @@ const Shg = () => {
                                     {/* {storedScreens?.levelDelete && ( */}
                                     <Delete
                                         onSuccess={refreshData}
-                                        path={`/deleteRaceSetting/${data.id}`}
+                                        path={`/deleteSHGSetting/${data.id}`}
                                     />
                                     {/* )} */}
                                 </td>

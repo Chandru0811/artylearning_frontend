@@ -30,7 +30,7 @@ function ShgEdit({ id, onSuccess }) {
       // console.log(values);
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateRaceSetting/${id}`, values, {
+        const response = await api.put(`/updateSHGSetting/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -53,7 +53,7 @@ function ShgEdit({ id, onSuccess }) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllRaceSettingById/${id}`);
+        const response = await api.get(`/getAllSHGSettingById/${id}`);
         formik.setValues(response.data);
       } catch (error) {
         console.error("Error fetching data ", error);
@@ -90,15 +90,15 @@ function ShgEdit({ id, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.shgAmount && formik.errors.shgAmount
+                      formik.touched.shgType && formik.errors.shgType
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("shgAmount")}
+                    {...formik.getFieldProps("shgType")}
                   />
-                  {formik.touched.shgAmount && formik.errors.shgAmount && (
+                  {formik.touched.shgType && formik.errors.shgType && (
                     <div className="invalid-feedback">
-                      {formik.errors.shgAmount}
+                      {formik.errors.shgType}
                     </div>
                   )}
                 </div>
@@ -109,15 +109,15 @@ function ShgEdit({ id, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.shgType && formik.errors.shgType
+                      formik.touched.shgAmount && formik.errors.shgAmount
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("shgType")}
+                    {...formik.getFieldProps("shgAmount")}
                   />
-                  {formik.touched.shgType && formik.errors.shgType && (
+                  {formik.touched.shgAmount && formik.errors.shgAmount && (
                     <div className="invalid-feedback">
-                      {formik.errors.shgType}
+                      {formik.errors.shgAmount}
                     </div>
                   )}
                 </div>
