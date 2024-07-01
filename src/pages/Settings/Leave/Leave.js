@@ -106,11 +106,11 @@ const Leave = () => {
                 <td className="text-center">{data.leaveType}</td>
                 <td className="text-center">
                   {/* {storedScreens?.levelRead && ( */}
-                  <Link to={`/leavetype/view/${data.id}`}>
+                  {/* <Link to={`/leavetype/view/${data.id}`}>
                     <button className="btn btn-sm">
                       <FaEye />
                     </button>
-                  </Link>
+                  </Link> */}
                   {/* )} */}
                   {/* {storedScreens?.levelUpdate && ( */}
                   <LeaveEdit id={data.id} onSuccess={refreshData} />
