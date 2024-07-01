@@ -39,7 +39,11 @@ function StaffView() {
   //   // Save the PDF
   //   doc.save('generated.pdf');
   // };
-  const mailContent = `<!DOCTYPE html>
+
+  
+const generatePDF = async () => {
+  const mailContent = `
+ <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -49,149 +53,83 @@ function StaffView() {
       body {
         font-family: Arial, sans-serif;
       }
-      .container {
-        width: 80%;
+      .container{
+        margin-top: 3rem !important;
+        width: 100%;
         margin: auto;
-        border: 1px solid #ccc;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
       .section {
         margin-bottom: 20px;
       }
       .section-header {
-        font-size: 1.2em;
+        font-size: 5vw;
         margin-bottom: 10px;
         color: #333;
-      }
-      .section-content {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
-      .section-content div {
         display: flex;
-        justify-content: space-between;
-      }
-      .section-content div label {
-        padding-top: 20px;
-        flex: 2;
-      }
-      .section-content div p {
-        flex: 2;
+        justify-content: center;
+        align-items: center;
         
       }
-      .text-muted {
-        color: #6c757d;
+      .section-content{
+        width: 80%;
+        margin: auto;
       }
-      .fw-medium {
-        font-weight: 500;
+      .section-content p{
+        margin-top: 2rem;
+        font-size: 2vw;
       }
-      .text-sm {
-        font-size: 0.875rem;
+      .signature{
+        width: 80%;
+        margin-top: 4rem;
+        display: flex;
+        justify-content: end;
+        font-size: 2vw;
       }
+      
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="section">
-        <div class="section-header">Student Details:</div>
-        <div class="section-content">
-          <div>
-            <label>Centre Name:</label>
-            <p class="text-muted text-sm" id="centerName">--</p>
-          </div>
-          <div>
-            <label>Student Name / as per ID:</label>
-            <p class="text-muted text-sm" id="studentName">--</p>
-          </div>
-          <div>
-            <label>Student Chinese Name:</label>
-            <p class="text-muted text-sm" id="studentChineseName">--</p>
-          </div>
-          <div>
-            <label>Date Of Birth:</label>
-            <p class="text-muted text-sm" id="dateOfBirth">--</p>
-          </div>
-          <div>
-            <label>Age:</label>
-            <p class="text-muted text-sm" id="age">--</p>
-          </div>
-          <div>
-            <label>Gender:</label>
-            <p class="text-muted text-sm" id="gender">--</p>
-          </div>
-          <div>
-            <label>Medical Condition:</label>
-            <p class="text-muted text-sm" id="medicalCondition">--</p>
-          </div>
-          <div>
-            <label>School Type:</label>
-            <p class="text-muted text-sm" id="schoolType">--</p>
-          </div>
-          <div>
-            <label>School Name:</label>
-            <p class="text-muted text-sm" id="schoolName">--</p>
-          </div>
-          <div>
-            <label>Pre-Assessment Result:</label>
-            <p class="text-muted text-sm" id="preAssessmentResult">--</p>
-          </div>
-          <div>
-            <label>Race:</label>
-            <p class="text-muted text-sm" id="race">--</p>
-          </div>
-          <div>
-            <label>Nationality:</label>
-            <p class="text-muted text-sm" id="nationality">--</p>
-          </div>
-          <div>
-            <label>Primary Language Spoken:</label>
-            <p class="text-muted text-sm" id="primaryLanguage">--</p>
-          </div>
-          <div>
-            <label>Refer By Parent:</label>
-            <p class="text-muted text-sm" id="referByParent">--</p>
-          </div>
-          <div>
-            <label>Refer By Student:</label>
-            <p class="text-muted text-sm" id="referByStudent">--</p>
-          </div>
-          <div>
-            <label>Remark:</label>
-            <p class="text-muted text-sm" id="remark">--</p>
-          </div>
-          <div>
-            <label>Profile Image:</label>
-            <div class="text-muted text-sm" id="profileImageContainer">
-              <img src="placeholder.jpg" class="img-fluid rounded" alt="Profile Image" id="profileImage" />
-            </div>
-          </div>
-          <div>
-            <label>Allow display in Facility Bulletin / Magazine / Advert:</label>
-            <p class="text-muted text-sm" id="allowMagazine">--</p>
-          </div>
-          <div>
-            <label>Allow display on Social Media:</label>
-            <p class="text-muted text-sm" id="allowSocialMedia">--</p>
-          </div>
-        </div>
+      <div class="section-header">EMPLOYMENT CONTRACT</div>
+      <hr />
+      <div class="section-content">
+        <p>This Employment Agreement is made as of this 20 day of August, 2024 by
+            and between Employee and Employer .The Parties agree and convert to be 
+            bound by the terms set forth in this Agreement as follows
+        </p>
+        <P><strong>1.Employment : </strong><br>
+            Employer shall employ Employee as a <b>${data.userContractCreationModels[0]?.jobTitle}</b> on a full time basis under 
+            this Agreement. In this capacity, Employee shall have the following duties 
+            and undertake the Responsibilities. 
+        </P>
+        <p><strong>2.Performance of Duties :</strong><br>
+            Employee shall perform assigned duties and Responsibilities in a professional
+            manner, in good faith , and to the best of Employee's skills, abilities, talents
+            and experience.
+        </p>
+        <p><strong>3.Term :</strong><br>
+          Fixed Term Employee's employment under this Agreement shall begin ${data.userContractCreationModels[0]?.userContractStartDate?.substring(0,10)}
+          and will terminate on ${data.userContractCreationModels[0]?.userContractEndDate?.substring(0,10)}
+      </p>
+        <p><strong>4.Compensation : </strong><br>
+          As compensation for the services provided by Employee under this Agreement,
+          Employer will pay Employee ${data.userContractCreationModels[0]?.userContractSalary} per month. The Amount will be paid to employee 
+        </p
+       
       </div>
+      <p class="signature">
+        <strong>Signature</strong>
+      </p>
     </div>
-
   </body>
 </html>
 `;
-const generatePDF = async () => {
   try {
     const tempElem = document.createElement('div');
     tempElem.innerHTML = mailContent;
 
-    // Append tempElem to document.body to ensure it's fully rendered
     document.body.appendChild(tempElem);
 
-    // Delay execution slightly to ensure elements are fully rendered
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const canvas = await html2canvas(tempElem);
@@ -202,7 +140,6 @@ const generatePDF = async () => {
     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
     pdf.save('generated.pdf');
 
-    // Remove tempElem from document.body after capturing
     document.body.removeChild(tempElem);
   } catch (error) {
     console.error('Error generating PDF:', error);
