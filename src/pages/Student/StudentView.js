@@ -5,10 +5,9 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import StudentSummary from "./StudentSummary";
-import BlockImg from "../../assets/images/Block_Img1.jpg";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-import Logo from "../../assets/images/Logo.png"
+import Logo from "../../assets/images/Logo.png";
 
 function StudentView() {
   const table1Ref = useRef();
@@ -79,7 +78,7 @@ function StudentView() {
         const canvas = await html2canvas(table, { scale: 2 });
 
         // Convert canvas to PNG image data
-        const imgData = canvas.toDataURL("image/png");
+        const imgData = canvas.toDataURL();
 
         // Calculate PDF dimensions based on canvas
         const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -90,6 +89,8 @@ function StudentView() {
           pdf.addPage();
         }
         pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
+        table.style.visibility = "hidden";
+        table.style.display = "none";
       } catch (error) {
         console.error("Error generating PDF:", error);
       }
@@ -379,8 +380,8 @@ function StudentView() {
                               ? data.primaryLanguage === "ENGLISH"
                                 ? "English"
                                 : data.primaryLanguage === "CHINESE"
-                                  ? "Chinese"
-                                  : "--"
+                                ? "Chinese"
+                                : "--"
                               : "--"}
                           </p>
                         </div>
@@ -455,7 +456,7 @@ function StudentView() {
                         </div>
                       </div>
                     </div>
-                   
+
                     <div className="col-md-6 col-12">
                       <div className="row  mb-2">
                         <div className="col-6  ">
@@ -468,16 +469,12 @@ function StudentView() {
                               {data.profileImage ? (
                                 <img
                                   src={data.profileImage}
-                                  onError={(e) => {
-                                    e.target.src = BlockImg;
-                                  }}
+                                 
                                   className="img-fluid ms-2 w-100 rounded"
-                                  alt="Profile Image"
+                                  alt=""
                                 />
                               ) : (
-                                <div>
-
-                                </div>
+                                <div></div>
                               )}
                             </p>
                           </p>
@@ -519,11 +516,11 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                              data.studentEmergencyContacts.length > 0 &&
-                              data.studentEmergencyContacts[0]
-                                .emergencyContactName
+                            data.studentEmergencyContacts.length > 0 &&
+                            data.studentEmergencyContacts[0]
+                              .emergencyContactName
                               ? data.studentEmergencyContacts[0]
-                                .emergencyContactName
+                                  .emergencyContactName
                               : "--"}
                           </p>
                         </div>
@@ -538,10 +535,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                              data.studentEmergencyContacts.length > 0 &&
-                              data.studentEmergencyContacts[0].emergencyContactNo
+                            data.studentEmergencyContacts.length > 0 &&
+                            data.studentEmergencyContacts[0].emergencyContactNo
                               ? data.studentEmergencyContacts[0]
-                                .emergencyContactNo
+                                  .emergencyContactNo
                               : "--"}
                           </p>
                         </div>
@@ -556,10 +553,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                              data.studentEmergencyContacts.length > 0 &&
-                              data.studentEmergencyContacts[0].emergencyRelation
+                            data.studentEmergencyContacts.length > 0 &&
+                            data.studentEmergencyContacts[0].emergencyRelation
                               ? data.studentEmergencyContacts[0]
-                                .emergencyRelation
+                                  .emergencyRelation
                               : "--"}
                           </p>
                         </div>
@@ -669,20 +666,13 @@ function StudentView() {
                                     {emergency.personProfile ? (
                                       <img
                                         src={emergency.personProfile}
-                                        onError={(e) => {
-                                          e.target.src = BlockImg;
-                                        }}
+                                       
                                         name="personProfile"
                                         className="img-fluid ms-2 w-100 rounded"
-                                        alt="Person Profile"
+                                        alt=""
                                       />
                                     ) : (
-                                      <img
-                                        src={BlockImg}
-                                        name="personProfile"
-                                        className="img-fluid ms-2 w-100 rounded"
-                                        alt="Person Profile"
-                                      />
+                                     <></>
                                     )}
                                   </p>
                                 </p>
@@ -810,7 +800,7 @@ function StudentView() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-6 col-12">
+                      {/* <div className="col-md-6 col-12">
                         <div className="row  mb-2">
                           <div className="col-6  ">
                             <p className="fw-medium">Relation</p>
@@ -822,7 +812,7 @@ function StudentView() {
                             </p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col-md-6 col-12">
                         <div className="row  mb-2">
                           <div className="col-6  ">
@@ -848,16 +838,12 @@ function StudentView() {
                                 {parent.profileImage ? (
                                   <img
                                     src={parent.profileImage}
-                                    onError={(e) => {
-                                      e.target.src = BlockImg;
-                                    }}
+                                   
                                     className="img-fluid ms-2 w-100 rounded"
-                                    alt="Profile Image"
+                                    alt=""
                                   />
                                 ) : (
-                                  <div>
-
-                                  </div>
+                                  <div></div>
                                 )}
                               </p>
                               {/* {data.studentParentsDetails &&
@@ -878,8 +864,8 @@ function StudentView() {
                             <p className="text-muted text-sm">
                               <b className="mx-2">:</b>
                               {data.studentParentsDetails &&
-                                data.studentParentsDetails.length > 0 &&
-                                data.studentParentsDetails[0].address
+                              data.studentParentsDetails.length > 0 &&
+                              data.studentParentsDetails[0].address
                                 ? data.studentParentsDetails[0].address
                                 : "--"}
                             </p>
@@ -889,23 +875,22 @@ function StudentView() {
                     </div>
 
                     <br />
-
                   </div>
                 </div>
               ))}
             {(!data.studentParentsDetails ||
               data.studentParentsDetails.length === 0) && (
-                <div
-                  id="panelsStayOpen-collapseThree"
-                  class="accordion-collapse collapse"
-                >
-                  <div class="accordion-body">
-                    <div className="text-muted">
-                      No parent/guardian information available
-                    </div>
+              <div
+                id="panelsStayOpen-collapseThree"
+                class="accordion-collapse collapse"
+              >
+                <div class="accordion-body">
+                  <div className="text-muted">
+                    No parent/guardian information available
                   </div>
                 </div>
-              )}
+              </div>
+            )}
           </div>
           {/* Relation */}
           <div class="accordion-item">
@@ -953,7 +938,7 @@ function StudentView() {
                               {centerData &&
                                 centerData.map((center) =>
                                   parseInt(std.studentRelationCenter) ===
-                                    center.id
+                                  center.id
                                     ? center.centerNames || "--"
                                     : ""
                                 )}
@@ -1089,21 +1074,14 @@ function StudentView() {
                             className="img-fluid rounded"
                             style={{ width: "50%" }}
                             alt="Parent Signature Img"
-                            onError={(e) => {
-                              e.target.src = BlockImg;
-                            }}
+                           
                           ></img>
                         </div>
                       ))}
                     {(!data.studentTermsAndConditions ||
                       data.studentTermsAndConditions.length === 0) && (
-                        <img
-                          src={BlockImg}
-                          className="img-fluid rounded"
-                          style={{ width: "50%" }}
-                          alt="Parent Signature Img"
-                        />
-                      )}
+                     <></>
+                    )}
                   </div>
                   <div className="col-md-6 col-12">
                     <div className="container-fluid col-12 p-2">
@@ -1284,11 +1262,9 @@ function StudentView() {
                 <div className="fw-medium">Profile Image :</div>
                 <img
                   src={data.profileImage}
-                  onError={(e) => {
-                    e.target.src = BlockImg;
-                  }}
+                 
                   className="img-fluid rounded w-25"
-                  alt="Profile Image"
+                  alt=""
                 />
               </div>
             </div>
@@ -1319,7 +1295,7 @@ function StudentView() {
                   : "--"}
               </div>
             </div>
-            <div className="mb-2 d-flex col-md-4">
+            {/* <div className="mb-2 d-flex col-md-4">
               <div className="fw-medium">Relation:</div>
               <div className="text-muted ms-2">
                 {data.studentEmergencyContacts &&
@@ -1328,20 +1304,21 @@ function StudentView() {
                   ? data.studentEmergencyContacts[0].emergencyRelation
                   : "--"}
               </div>
-            </div>
+            </div> */}
           </div>
           <h5 className="mt-3">Authorized Person to take Child From Home</h5>
           <div>
             <table className="table">
               <thead>
                 <tr>
-                  <th className="fw-medium">Contact</th>
+                  <th className="fw-medium">S.No</th>
+                  <th className="fw-medium">Person Profile</th>
                   <th className="fw-medium">Name</th>
                   <th className="fw-medium">Contact No</th>
                   <th className="fw-medium">Relation</th>
                   <th className="fw-medium">Postal Code</th>
                   <th className="fw-medium">Address</th>
-                  <th className="fw-medium">Person Profile</th>
+                 
                 </tr>
               </thead>
               <tbody>
@@ -1349,22 +1326,22 @@ function StudentView() {
                   data.studentEmergencyContacts.length > 0 &&
                   data.studentEmergencyContacts[0].emergencyAuthorizedContactModels.map(
                     (emergency, index) => (
-                      <tr
-                        key={index}>
+                      <tr key={index}>
                         <td>{index + 1}</td>
+                        <td>
+                          <img
+                            src={emergency.personProfile || ""}
+                            alt=""
+                            style={{ width: "50px", height: "auto" }}
+                            className="rounded"
+                          />
+                        </td>
                         <td>{emergency.name || "--"}</td>
                         <td>{emergency.contactNo || "--"}</td>
                         <td>{emergency.authorizedRelation || "--"}</td>
                         <td>{emergency.postalCode || "--"}</td>
                         <td>{emergency.emergencyContactAddress || "--"}</td>
-                        <td>
-                          <img
-                            src={emergency.personProfile || "__"}
-                            alt={`Profile ${index + 1}`}
-                            style={{ width: "50px", height: "auto" }}
-                            className="rounded"
-                          />
-                        </td>
+                       
                       </tr>
                     )
                   )}
@@ -1377,65 +1354,60 @@ function StudentView() {
           <div className="row">
             <div className="col-md-12">
               {data.studentParentsDetails &&
-                data.studentParentsDetails.length > 0 &&
-                data.studentParentsDetails.map((parent, index) => (
-                  <div id={`panelsStayOpen-collapseThree-${index}`} key={index}>
-                    <div className="">
-                      <div className="table-responsive">
-                        <table className="table">
-                          <thead>
-                            <tr>
-                              <th className="fw-medium">Profile Image</th>
-                              <th className="fw-medium">Name</th>
-                              <th className="fw-medium">Occupation</th>
-                              <th className="fw-medium">DOB</th>
-                              <th className="fw-medium">Email</th>
-                              <th className="fw-medium">Mobile</th>
-                              <th className="fw-medium">Relation</th>
-                              <th className="fw-medium">Postal Code</th>
-
-                              <th className="fw-medium">Address</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                {parent.profileImage ? (
-                                  <img
-                                    src={parent.profileImage}
-                                    onError={(e) => {
-                                      e.target.src = BlockImg;
-                                    }}
-                                    className="img-fluid rounded-5"
-                                    alt="Profile"
-                                    style={{ width: "10px" }}
-                                  />
-                                ) : (
-                                  <></>
-                                )}
-                              </td>
-                              <td>{parent.parentName || "--"}</td>
-                              <td>{parent.occupation || "--"}</td>
-                              <td>
-                                {(parent.parentDateOfBirth &&
-                                  parent.parentDateOfBirth.substring(0, 10)) ||
-                                  "--"}
-                              </td>
-                              <td>{parent.email || "--"}</td>
-                              <td>{parent.mobileNumber || "--"}</td>
-                              <td>{parent.relation || "--"}</td>
-                              <td>{parent.postalCode || "--"}</td>
-
-                              <td>{parent.address || "--"}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              {(!data.studentParentsDetails ||
-                data.studentParentsDetails.length === 0) && (
+              data.studentParentsDetails.length > 0 ? (
+                <div className="table-responsive">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th className="fw-medium">
+                          S.No
+                        </th>
+                        <th className="fw-medium">Profile Image</th>
+                        <th className="fw-medium">Name</th>
+                        <th className="fw-medium">Occupation</th>
+                        <th className="fw-medium">DOB</th>
+                        <th className="fw-medium">Email</th>
+                        <th className="fw-medium">Mobile</th>
+                        <th className="fw-medium">Relation</th>
+                        <th className="fw-medium">Postal Code</th>
+                        <th className="fw-medium">Address</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.studentParentsDetails.map((parent, index) => (
+                        <tr key={index}>
+                           <td>{index + 1}</td>
+                          <td>
+                            {parent.profileImage ? (
+                              <img
+                                src={parent.profileImage}
+                               
+                                className="img-fluid rounded-5"
+                                alt=""
+                                style={{ width: "10px" }}
+                              />
+                            ) : (
+                              <></>
+                            )}
+                          </td>
+                          <td>{parent.parentName || "--"}</td>
+                          <td>{parent.occupation || "--"}</td>
+                          <td>
+                            {(parent.parentDateOfBirth &&
+                              parent.parentDateOfBirth.substring(0, 10)) ||
+                              "--"}
+                          </td>
+                          <td>{parent.email || "--"}</td>
+                          <td>{parent.mobileNumber || "--"}</td>
+                          <td>{parent.relation || "--"}</td>
+                          <td>{parent.postalCode || "--"}</td>
+                          <td>{parent.address || "--"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
                 <div
                   id="panelsStayOpen-collapseThree"
                   className="accordion-collapse"
@@ -1497,7 +1469,7 @@ function StudentView() {
         </div>
         <div
           ref={table2Ref}
-          className="container rounded mb-5"
+          className="container rounded mb-5 p-5"
           style={{
             visibility: "hidden",
             position: "absolute",
@@ -1582,21 +1554,14 @@ function StudentView() {
                         src={parent.parentSignature}
                         className="img-fluid rounded"
                         style={{ width: "50%" }}
-                        alt="Parent Signature Img"
-                        onError={(e) => {
-                          e.target.src = BlockImg;
-                        }}
+                        alt=""
+                       
                       />
                     </div>
                   ))}
                 {(!data.studentTermsAndConditions ||
                   data.studentTermsAndConditions.length === 0) && (
-                  <img
-                    src={BlockImg}
-                    className="img-fluid rounded"
-                    style={{ width: "50%" }}
-                    alt="Parent Signature Img"
-                  />
+                  <></>
                 )}
               </div>
               <div className="col-md-6 col-12">

@@ -170,7 +170,7 @@ const Addrelation = forwardRef(
                           <option selected></option>
                           {studentData &&
                             studentData.map((student) => (
-                              <option key={student.id} value={student.id}>
+                              <option key={student.id} value={student.studentNames}>
                                 {student.studentNames}
                               </option>
                             ))}
