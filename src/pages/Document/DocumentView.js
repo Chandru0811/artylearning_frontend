@@ -78,7 +78,7 @@ function DocumentView() {
             Back
           </button>
         </Link>
-        <button className="btn btn-button btn-sm ms-1" onClick={downloadFiles} disabled={loadIndicator}>
+        {/* <button className="btn btn-button btn-sm ms-1" onClick={downloadFiles} disabled={loadIndicator}>
         {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
@@ -86,7 +86,7 @@ function DocumentView() {
                     ></span>
                   )}
           Download All
-        </button>
+        </button> */}
       </div>
 
       <div className="container my-4">
