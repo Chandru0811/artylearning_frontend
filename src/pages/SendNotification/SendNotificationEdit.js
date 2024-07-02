@@ -17,10 +17,8 @@ function SendNotificationEdit({ id, onSuccess }) {
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({
-    messageTitle: Yup.string().required("*messageTitle is required"),
-    messageDescription: Yup.string().required(
-      "*messageDescription is required"
-    ),
+    messageTitle: Yup.string().required("*Message Title is required"),
+    messageDescription: Yup.string().required("*Message Description is required"),
   });
 
   const formik = useFormik({
