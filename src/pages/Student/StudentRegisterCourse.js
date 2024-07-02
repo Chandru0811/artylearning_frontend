@@ -71,9 +71,11 @@ function StudentRegisterCourse() {
           formData.append("endDate", values.endDate);
           formData.append("startTime", values.startTime);
           formData.append("endTime", values.endTime);
-          formData.append("signatureDate", values.signatureDate);
+          formData.append("signatureDate", values.signatureDate || "");
           formData.append("studentDetailId", values.studentId);
           formData.append("courseId", values.courseId);
+          const detailId = data.studentCourseDetailModels[0].id;
+          formData.append("detailId ", detailId);
           const response = await api.put(
             `/updateStudentCourseDetail/${data.studentCourseDetailModels[0].id}`,
             formData,

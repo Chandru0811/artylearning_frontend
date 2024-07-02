@@ -8,7 +8,7 @@ import * as Yup from "yup";
 const validationSchema = Yup.object().shape({
   employer:Yup.string().required("*Employer is required"),
   employee: Yup.string().required("*Employee is required"),
-  uen: Yup.number().typeError("*UEN Must be numbers").required("*UEN is required"),
+  uen: Yup.string().required("*UEN is required"),
   addressOfEmployment:Yup.string().required("*Address is required"),  
   nric: Yup.number().typeError("*NRIC Must be numbers").required("*NRIC is required"),
   userContractAddress:Yup.string().required("*Address is required"),

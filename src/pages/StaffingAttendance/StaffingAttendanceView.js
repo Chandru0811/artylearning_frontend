@@ -96,6 +96,18 @@ function StaffingAttendanceView() {
                 </div>
               </div>
             </div>
+            
+            <div className="col-md-6 col-12">
+              <div className="row    mb-2">
+                <div className="col-6 ">
+                  <p className="fw-medium">Mode Of Working</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.modeOfWorking || "--"}</p>
+                </div>
+              </div>
+            </div>
+
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
@@ -106,16 +118,18 @@ function StaffingAttendanceView() {
                 </div>
               </div>
             </div>
+
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Check Out</p>
+                  <p className="fw-medium">OT Start Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.checkOut || "--"}</p>
+                  <p className="text-muted text-sm">: {data.otStartTime || "--"}</p>
                 </div>
               </div>
             </div>
+
             {/* <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
@@ -136,23 +150,14 @@ function StaffingAttendanceView() {
                 </div>
               </div>
             </div> */}
-             <div className="col-md-6 col-12">
-              <div className="row    mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Mode Of Working</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: {data.modeOfWorking || "--"}</p>
-                </div>
-              </div>
-            </div>
+
             <div className="col-md-6 col-12">
               <div className="row    mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">OT Start Time</p>
+                  <p className="fw-medium">Check Out</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.otStartTime || "--"}</p>
+                  <p className="text-muted text-sm">: {data.checkOut || "--"}</p>
                 </div>
               </div>
             </div>

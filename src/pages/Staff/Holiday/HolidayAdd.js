@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 function HolidayAdd() {
   const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Center Name is required"),
+    centerId: Yup.string().required("*Centre Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
     startDate: Yup.string().required("*Select the start date"),
     endDate: Yup.string().required("*Select the end date"),
@@ -101,7 +101,7 @@ function HolidayAdd() {
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
                   <label className="form-label">
-                    Center Name<span className="text-danger">*</span>
+                    Centre Name<span className="text-danger">*</span>
                   </label>
                   <select
                   {...formik.getFieldProps("centerId")}

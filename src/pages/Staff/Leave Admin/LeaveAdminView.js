@@ -11,7 +11,7 @@ function LeaveAdminView() {
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
   // const [teacherData, setTeacherData] = useState(null);
-  
+
 
   const fetchData = async () => {
     try {
@@ -147,7 +147,8 @@ function LeaveAdminView() {
             </div>
           </div>
         </div>
-        <div className="col-md-6 col-12">
+
+        {/* <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex ">
               <p className="text-sm fw-medium">Approver Name</p>
@@ -158,7 +159,8 @@ function LeaveAdminView() {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
+
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex ">

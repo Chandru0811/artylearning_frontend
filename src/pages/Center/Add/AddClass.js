@@ -16,7 +16,7 @@ function AddClass({ id, onSuccess }) {
   const validationSchema = yup.object().shape({
     classRoomName: yup.string().required("*Classroom Name is required"),
     classRoomType: yup.string().required("*Classroom Type is required"),
-    classRoomCode: yup.number().typeError("*Enter a valid number").required("*Classroom Code is required"),
+    classRoomCode: yup.string().required("*Classroom Code is required"),
     capacity: yup.string().required("*Capacity is required"),
   });
   const formik = useFormik({
@@ -50,7 +50,7 @@ function AddClass({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -88,12 +88,11 @@ function AddClass({ id, onSuccess }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control   ${
-                      formik.touched.classRoomName &&
+                    className={`form-control   ${formik.touched.classRoomName &&
                       formik.errors.classRoomName
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("classRoomName")}
                   />
                   {formik.touched.classRoomName &&
@@ -110,11 +109,10 @@ function AddClass({ id, onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control   ${
-                    formik.touched.classRoomCode && formik.errors.classRoomCode
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control   ${formik.touched.classRoomCode && formik.errors.classRoomCode
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("classRoomCode")}
                 />
                 {formik.touched.classRoomCode &&
@@ -130,12 +128,11 @@ function AddClass({ id, onSuccess }) {
                 </lable>
                 <div class="input-group mb-3">
                   <select
-                    className={`form-select   ${
-                      formik.touched.classRoomType &&
+                    className={`form-select   ${formik.touched.classRoomType &&
                       formik.errors.classRoomType
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("classRoomType")}
                   >
                     <option></option>
@@ -157,11 +154,10 @@ function AddClass({ id, onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control   ${
-                    formik.touched.capacity && formik.errors.capacity
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control   ${formik.touched.capacity && formik.errors.capacity
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("capacity")}
                 />
                 {formik.touched.capacity && formik.errors.capacity && (
@@ -188,18 +184,18 @@ function AddClass({ id, onSuccess }) {
               Cancel
             </Button>
             <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
+            </Button>
           </Modal.Footer>
         </form>
       </Modal>

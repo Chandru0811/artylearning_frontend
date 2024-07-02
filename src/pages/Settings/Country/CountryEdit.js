@@ -77,7 +77,7 @@ function CountryEdit({ id, onSuccess }) {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Race Edit</Modal.Title>
+                    <Modal.Title className="headColor">Country & Nationality Edit</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>

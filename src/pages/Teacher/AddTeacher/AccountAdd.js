@@ -11,19 +11,19 @@ import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
-  startDate: Yup.string().required("*Start Date is required!"),
-  teacherId: Yup.string().required("*Teacher Id is required!"),
-  teacherType: Yup.string().required("*Teacher Type is required!"),
-  // shgType: Yup.string().required("*Shg Type is required!"),
-  // shgAmount: Yup.string().required("*Shg Amount is required!"),
-  // status: Yup.string().required("*Status is required!"),
+  startDate: Yup.string().required("*Start Date is required"),
+  teacherId: Yup.string().required("*Teacher Id is required"),
+  teacherType: Yup.string().required("*Teacher Type is required"),
+  // shgType: Yup.string().required("*Shg Type is required"),
+  // shgAmount: Yup.string().required("*Shg Amount is required"),
+  // status: Yup.string().required("*Status is required"),
   approvelContentRequired: Yup.string().required(
-    "*Approval Required is required!"
+    "*Approval Required is required"
   ),
   workingDays: Yup.array()
-    .of(Yup.string().required("*Working Days is required!"))
-    .min(1, "*Working Days is required!"),
-  centerId: Yup.string().required("*Centre is required!"),
+    .of(Yup.string().required("*Working Days is required"))
+    .min(1, "*Working Days is required"),
+  centerId: Yup.string().required("*Centre is required"),
 });
 const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
   const [centerData, setCenterData] = useState(null);
@@ -50,7 +50,6 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
       shgType: formData.shgType || "",
       shgAmount: formData.shgAmount || "",
       status: formData.status || "",
-      endDate: formData.endDate || "",
       approvelContentRequired: formData.approvelContentRequired || "",
       workingDays: formData.workingDays || [],
       centerId: formData.centerId || "",
@@ -222,7 +221,7 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
             )}
           </div> */}
 
-          <div className="col-md-6 col-12 mb-2 mt-3">
+          {/* <div className="col-md-6 col-12 mb-2 mt-3">
             <label>
               End Date
             </label>
@@ -234,7 +233,8 @@ const AccountAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
               onBlur={formik.handleBlur}
               value={formik.values.endDate}
             />
-          </div>
+          </div> */}
+          
           <div className="col-lg-6 col-md-6 col-12 mb-2 mt-3">
             <label>
               Approval Required for photos / videos upload

@@ -66,7 +66,7 @@ function CountryAdd({ onSuccess }) {
             </div>
             <Modal show={show} size="lg" onHide={handleClose} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Add Race</Modal.Title>
+                    <Modal.Title className="headColor">Add Country & Nationality</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>

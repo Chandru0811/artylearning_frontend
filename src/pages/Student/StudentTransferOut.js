@@ -13,6 +13,8 @@ function StudentTransferOut() {
   const navigate = useNavigate();
   const [courseData, setCourseData] = useState(null);
   const [centerData, setCenterData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
   const validationSchema = Yup.object({
     courseId: Yup.string().required("Current Course is required"),
     // currentClass: Yup.string().required("Current Class is required"),
@@ -35,7 +37,6 @@ function StudentTransferOut() {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formik = useFormik({
@@ -54,6 +55,7 @@ function StudentTransferOut() {
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
+      setLoadIndicator(true);
       // console.log(values);
       try {
         const response = await api.put(`/updateStudentDetail/${id}`, values, {
@@ -87,6 +89,8 @@ function StudentTransferOut() {
         }
       } catch (error) {
         toast.error("Error Fetching Form Data");
+      } finally {
+        setLoadIndicator(false);
       }
     };
 
@@ -103,7 +107,17 @@ function StudentTransferOut() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm ">
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
             Save
           </button>
         </div>
@@ -116,11 +130,10 @@ function StudentTransferOut() {
               <select
                 {...formik.getFieldProps("courseId")}
                 name="courseId"
-                className={`form-control   ${
-                  formik.touched.courseId && formik.errors.courseId
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control   ${formik.touched.courseId && formik.errors.courseId
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -170,11 +183,10 @@ function StudentTransferOut() {
                 type="date"
                 {...formik.getFieldProps("lastLessonDate")}
                 name="lastLessonDate"
-                className={`form-control   ${
-                  formik.touched.lastLessonDate && formik.errors.lastLessonDate
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control   ${formik.touched.lastLessonDate && formik.errors.lastLessonDate
+                  ? "is-invalid"
+                  : ""
+                  }`}
               />
               {formik.touched.lastLessonDate &&
                 formik.errors.lastLessonDate && (
@@ -190,11 +202,10 @@ function StudentTransferOut() {
               <select
                 {...formik.getFieldProps("centerId")}
                 name="centerId"
-                className={`form-control   ${
-                  formik.touched.centerId && formik.errors.centerId
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control   ${formik.touched.centerId && formik.errors.centerId
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -219,7 +230,7 @@ function StudentTransferOut() {
                 type="time"
               />
             </div>
-            <div class="col-md-6 col-12 mb-2 ">
+            {/* <div class="col-md-6 col-12 mb-2 ">
               <label>Prefer Days </label>
               <input
                 class="form-control "
@@ -227,7 +238,37 @@ function StudentTransferOut() {
                 {...formik.getFieldProps("preferDays")}
                 type="text"
               />
+            </div> */}
+            <div class="col-md-6 col-12 mb-2">
+              <lable class="">
+                Prefer Days
+              </lable>
+              <select
+                {...formik.getFieldProps("preferDays")}
+                name="preferDays"
+                className={`form-select ${formik.touched.preferDays && formik.errors.preferDays
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                aria-label="Default select example"
+                class="form-select "
+              >
+                <option selected></option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+              </select>
+              {formik.touched.preferDays && formik.errors.preferDays && (
+                <div className="invalid-feedback">
+                  {formik.errors.preferDays}
+                </div>
+              )}
             </div>
+
             <div class="col-md-6 col-12 mb-2">
               <label>Prefer Start date</label>
               <input
@@ -244,11 +285,10 @@ function StudentTransferOut() {
               <select
                 {...formik.getFieldProps("reason")}
                 name="reason"
-                className={`form-select   ${
-                  formik.touched.reason && formik.errors.reason
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-select   ${formik.touched.reason && formik.errors.reason
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -284,11 +324,10 @@ function StudentTransferOut() {
                 type="text"
                 rows="4"
                 name="centerRemark"
-                className={`form-control  ${
-                  formik.touched.centerRemark && formik.errors.centerRemark
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.centerRemark && formik.errors.centerRemark
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 {...formik.getFieldProps("centerRemark")}
               />
               {formik.touched.centerRemark && formik.errors.centerRemark && (

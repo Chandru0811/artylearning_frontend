@@ -103,7 +103,7 @@ const Teacher = () => {
                 <th scope="col">Teacher Name</th>
                 <th scope="col">Teacher Type</th>
                 <th scope="col">Mobile</th>
-                <th scope="col">Status</th>
+                {/* <th scope="col">Status</th> */}
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -125,7 +125,7 @@ const Teacher = () => {
                     {data.userContactInfo.length > 0 &&
                       data.userContactInfo[0].contactNumber}
                   </td>
-                  <td>
+                  {/* <td>
                     {data.userAccountInfo.length > 0 &&
                     data.userAccountInfo[0]?.status === "Active" ? (
                       <span className="badge badges-Green">Active</span>
@@ -134,7 +134,7 @@ const Teacher = () => {
                     ) : (
                       <span className="badge badges-Red ">In Active</span>
                     )}
-                  </td>
+                  </td> */}
                   <td>
                     <div className="d-flex">
                       {storedScreens?.teacherRead && (

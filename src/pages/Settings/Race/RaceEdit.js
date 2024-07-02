@@ -16,7 +16,7 @@ function RaceEdit({ id, onSuccess }) {
     const handleShow = () => setShow(true);
 
     const validationSchema = Yup.object({
-        race: Yup.string().required("*race is required"),
+        race: Yup.string().required("*Race is required"),
     });
 
     const formik = useFormik({
