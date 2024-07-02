@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllUserList from "../List/UserList";
-import BlockImg from "../../assets/images/Block_Img1.jpg";
 
 function CenterView() {
   const { id } = useParams();
@@ -246,18 +245,12 @@ function CenterView() {
                     : {data.qrCode ? (
                       <img
                         src={data.qrCode}
-                        onError={(e) => {
-                          e.target.src = BlockImg;
-                        }}
+                        
                         className="img-fluid ms-2 w-100 rounded"
                         alt="Profile Image"
                       />
                     ) : (
-                      <img
-                        src={BlockImg}
-                        className="img-fluid ms-2 w-100 rounded"
-                        alt="Profile Image"
-                      />
+                      <></>
                     )}
                   </p>
                 </div>

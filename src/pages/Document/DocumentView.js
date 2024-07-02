@@ -5,14 +5,13 @@ import { saveAs } from "file-saver";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
 import { IoMdDownload } from "react-icons/io";
-import BlockImg from "../.././assets/images/Block_Img1.jpg";
 import AddContact from "../.././assets/images/AddContact.png";
 
 function DocumentView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [folderName, setFolderName] = useState("");
-  const [images] = useState([AddContact, BlockImg]);
+  const [images] = useState([AddContact]);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
@@ -113,9 +112,7 @@ function DocumentView() {
                       <video
                         controls
                         style={{ width: "200px", height: "auto" }}
-                        onError={(e) => {
-                          e.target.src = BlockImg;
-                        }}
+                        
                       >
                         <source src={item.fileAttachment} type="video/mp4" />
                         Your browser does not support the video tag.
@@ -125,20 +122,13 @@ function DocumentView() {
                         {item.fileAttachment ? (
                           <img
                             src={item.fileAttachment}
-                            onError={(e) => {
-                              e.target.src = BlockImg;
-                            }}
+                            
                             width="200"
                             height="auto"
-                            alt="img"
+                            alt=""
                           />
                         ) : (
-                          <img
-                            src={BlockImg}
-                            alt="img"
-                            width="200"
-                            height="auto"
-                          />
+                          <></>
                         )}
                       </p>
                     )}

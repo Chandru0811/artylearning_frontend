@@ -5,7 +5,6 @@ import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import TeacherSummary from "../Teacher/TeacherSummary";
-import BlockImg from "../.././assets/images/Block_Img1.jpg";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -192,22 +191,14 @@ const generatePDF = async () => {
           {data.photo ? (
             <img
               src={data.photo}
-              onError={(e) => {
-                e.target.src = BlockImg;
-              }}
+              
               style={{ borderRadius: 70 }}
               width="100"
               height="100"
-              alt="Staff"
+              alt=""
             />
           ) : (
-            <img
-              src={BlockImg}
-              alt="Staff"
-              style={{ borderRadius: 70 }}
-              width="100"
-              height="100"
-            />
+            <></>
           )}
         </p>
       </div>
