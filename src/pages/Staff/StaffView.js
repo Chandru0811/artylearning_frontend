@@ -160,7 +160,7 @@ const generatePDF = async () => {
                 className="btn btn-button btn-sm ms-1"
                 onClick={generatePDF}
               >
-                Download pdf
+                Download Contract
               </button>
               <Link to="/staff">
                 <button type="button" class="btn btn-border">

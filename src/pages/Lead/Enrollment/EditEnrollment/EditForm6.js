@@ -20,9 +20,9 @@ const EditForm6 = forwardRef(
     const formik = useFormik({
       initialValues: {
         addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
-        agreeConditionOne: "",
-        agreeConditionTwo: "",
-        agreeConditionThree: "",
+        agreeConditionOne: false,
+        agreeConditionTwo: false,
+        agreeConditionThree: false,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -104,66 +104,54 @@ const EditForm6 = forwardRef(
                 </div>
               </div>
             </div>
+            {/* <div className="d-flex"> */}
+            <div className="col-md-12 col-12 mb-2">
+              <div className="form-check d-flex">
+                <input
+                  className="form-check-input mx-2"
+                  id="agreeConditionOne"
+                  name="agreeConditionOne"
+                  type="checkbox"
+                  checked={formik.values.agreeConditionOne}
+                  onChange={formik.handleChange}
+                />
+                <label className="form-check-label" htmlFor="agreeConditionOne">
+                  I hereby provide my consent to Arty Learning Pte Ltd for the
+                  display my child’s name, limited to first names and
+                  potentially last initials (in cases where there are multiple
+                  children with the same first name), in the facility’s
+                  scrapbook and bulletin board which may be shown to both
+                  current and potential clients. Please note that only limited
+                  information will be displayed on the company’s website.
+                </label>
+              </div>
+              {formik.touched.agreeConditionOne &&
+                formik.errors.agreeConditionOne && (
+                  <div className="error text-danger ms-5">
+                    <small>{formik.errors.agreeConditionOne}</small>
+                  </div>
+                )}
+              {/* </div> */}
+              {/* <div className="col-md-11 col-10 mb-3"> */}
+              {/* <div className="form-check"></div> */}
+              {/* </div> */}
+            </div>
+
             <div className="row">
               <div className="col-md-12 col-12 mb-2">
                 <div className="form-check d-flex">
                   <input
-                    className="form-check-input mx-2"
-                    id="consentScrapbook"
-                    name="consentScrapbook"
+                    className="form-check-input  mx-2"
+                    id="agreeConditionTwo"
+                    name="agreeConditionTwo"
                     type="checkbox"
-                    value={formik.values.consentScrapbook}
-                    checked={formik.values.consentScrapbook}
+                    checked={formik.values.agreeConditionTwo}
                     onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
                   />
                   <label
                     className="form-check-label"
-                    htmlFor="consentScrapbook"
+                    htmlFor="agreeConditionTwo"
                   >
-                    I hereby provide my consent to Arty Learning Pte Ltd for the
-                    display my child’s name, limited to first names and
-                    potentially last initials (in cases where there are multiple
-                    children with the same first name), in the facility’s
-                    scrapbook and bulletin board which may be shown to both
-                    current and potential clients. Please note that only limited
-                    information will be displayed on the company’s website.
-                  </label>
-                </div>
-                {formik.touched.agreeConditionOne &&
-                  formik.errors.agreeConditionOne && (
-                    <div className="error text-danger ms-5">
-                      <small>{formik.errors.agreeConditionOne}</small>
-                    </div>
-                  )}
-              </div>
-              {/* <div className="col-md-11 col-10 mb-3">
-                <div className="form-check"> */}
-
-              {/* {formik.touched.consentScrapbook &&
-                formik.errors.consentScrapbook && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.consentScrapbook}</small>
-                  </div>
-                )} */}
-              {/* </div>
-              </div> */}
-            </div>
-
-            <div className="row">
-              <div className="col-md-12 col-12 mb-3">
-                <div className="form-check d-flex">
-                  <input
-                    className="form-check-input mx-2"
-                    id="consentPhotos"
-                    name="consentPhotos"
-                    type="checkbox"
-                    value={formik.values.consentPhotos}
-                    checked={formik.values.consentPhotos}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label className="form-check-label" htmlFor="consentPhotos">
                     I hereby provide my consent to Arty Learning Pte Ltd for the
                     display my child’s name, limited to first names and
                     potentially last initials (in cases where there are multiple
@@ -180,30 +168,28 @@ const EditForm6 = forwardRef(
                   )}
               </div>
               {/* <div className="col-md-11 col-10 mb-3">
-                <div className="form-check"> */}
-
-              {/* {formik.touched.consentPhotos && formik.errors.consentPhotos && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.consentPhotos}</small>
-                </div>
-              )} */}
-              {/* </div>
-              </div> */}
+    <div className="form-check">
+      
+    </div>
+  </div> */}
             </div>
 
             <div className="col-mb-12 col-12 mb-3">
               <div className="form-check d-flex">
                 <input
                   className="form-check-input mx-2"
-                  id="declare"
-                  name="declare"
+                  id="agreeConditionThree"
+                  name="agreeConditionThree"
                   type="checkbox"
-                  checked={formik.values.declare}
-                  value={formik.values.declare}
+                  checked={formik.values.agreeConditionThree}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  value={formik.values.agreeConditionThree}
                 />
-                <label className="form-check-label" htmlFor="declare">
+                <label
+                  className="form-check-label"
+                  htmlFor="agreeConditionThree"
+                >
                   I agree that the information provided is true to my abilities.
                 </label>
               </div>

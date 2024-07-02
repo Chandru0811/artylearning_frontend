@@ -67,26 +67,26 @@ function DocumentFile() {
   const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB in bytes
 
   const fileSchema = Yup.mixed()
-    .test("fileSize", "Each file must be less than or equal to 1GB in size", value => {
+    .test("fileSize", "*Each file must be less than or equal to 1GB in size", value => {
       return value && value.size <= MAX_FILE_SIZE;
     });
   
   const filesSchema = Yup.array()
     .of(fileSchema)
-    .test("totalSize", "Total size of all files must be less than or equal to 1GB", values => {
+    .test("totalSize", "*Total size of all files must be less than or equal to 1GB", values => {
       if (values && values.length) {
         const totalSize = values.reduce((acc, file) => acc + file.size, 0);
         return totalSize <= MAX_FILE_SIZE;
       }
       return true;
     })
-    .min(1, "At least one file is required")
-    .required("Files are required");
+    .min(1, "*At least one file is required")
+    .required("*Files are required");
   const validationSchema = Yup.object().shape({
-    centerName: Yup.string().required("Centre is required"),
-    course: Yup.string().required("Course is required"),
-    classListing: Yup.string().required("Class is required"),
-    folder: Yup.string().required("Folder Name is required"),
+    centerName: Yup.string().required("*Centre is required"),
+    course: Yup.string().required("*Course is required"),
+    classListing: Yup.string().required("*Class is required"),
+    folder: Yup.string().required("*Folder Name is required"),
     files: filesSchema,
   });
 
@@ -166,7 +166,7 @@ function DocumentFile() {
             </div>
 
             <div className="col-md-6 col-12 mb-2">
-              <label>Centre</label>
+              <label>Centre<span class="text-danger">*</span></label>
               <div className="input-group">
                 <select
                   className="form-select"
@@ -184,12 +184,12 @@ function DocumentFile() {
                 </select>
               </div>
               {formik.touched.centerName && formik.errors.centerName && (
-                <div className="text-danger">{formik.errors.centerName}</div>
+                <small className="text-danger">{formik.errors.centerName}</small>
               )}
             </div>
 
             <div className="col-md-6 col-12 mb-2 ">
-              <label>Course</label>
+              <label>Course<span class="text-danger">*</span></label>
               <div className="input-group">
                 <select
                   className="form-select"
@@ -207,13 +207,13 @@ function DocumentFile() {
                 </select>
               </div>
               {formik.touched.course && formik.errors.course && (
-                <div className="text-danger">{formik.errors.course}</div>
+                <small className="text-danger">{formik.errors.course}</small>
               )}
             </div>
 
             <div className="col-md-6 col-12 mb-2 ">
               <div className="row">
-                <label>Class</label>
+                <label>Class<span class="text-danger">*</span></label>
                 <div className="input-group">
                   <select
                     className="form-select"
@@ -232,13 +232,13 @@ function DocumentFile() {
                 </div>
               </div>
               {formik.touched.classListing && formik.errors.classListing && (
-                <div className="text-danger">{formik.errors.classListing}</div>
+                <small className="text-danger">{formik.errors.classListing}</small>
               )}
             </div>
 
             <div className="col-md-6 col-12 mb-2 ">
               <div>
-                <label>Folder Name</label>
+                <label>Folder Name<span class="text-danger">*</span></label>
                 <div className="input-group">
                   <select
                     className="form-select"
@@ -255,14 +255,14 @@ function DocumentFile() {
                   </select>
                 </div>
                 {formik.touched.folder && formik.errors.folder && (
-                  <div className="text-danger">{formik.errors.folder}</div>
+                  <small className="text-danger">{formik.errors.folder}</small>
                 )}
               </div>
             </div>
 
             <div className="col-md-6 col-12 mb-2 ">
               <div className="row">
-                <label>Files</label>
+                <label>Files<span class="text-danger">*</span></label>
                 <div className="input-group">
                   <input
                     className="form-control"
@@ -278,7 +278,7 @@ function DocumentFile() {
                   ></input>
                 </div>
                 {formik.touched.files && formik.errors.files && (
-                  <div className="text-danger">{formik.errors.files}</div>
+                  <small className="text-danger">{formik.errors.files}</small>
                 )}
                 <label className="text-muted">
                   Note:Files Must Be JPG,PNG,MP4 And The Maximum Total Size is

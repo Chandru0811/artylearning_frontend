@@ -442,7 +442,7 @@ function Leadview() {
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">
-                              Number Of Children In Total
+                              Name Of Children In Total
                             </p>
                           </div>
                           <div className="col-6">

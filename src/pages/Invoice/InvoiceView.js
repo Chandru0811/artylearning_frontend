@@ -309,12 +309,12 @@ function InvoiceView() {
                 </div>
                 <div className="col-6">- &nbsp; {data.courseName || "--"}</div>
               </div>
-              <div className="row my-1">
+              {/* <div className="row my-1">
                 <div className="col-6 ">
                   <p>Course Id</p>
                 </div>
                 <div className="col-6">- &nbsp; {data.courseId || "--"}</div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
