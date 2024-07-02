@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const validationSchema = Yup.object().shape({
   address: Yup.string().required("*Address is required"),
   postalCode: Yup.string()
-    .matches(/^\d+$/, "Must be a Number")
+    .matches(/^\d+$/, "*Must be a Number")
     .required("*Postal Code is required"),
   nameOfEmergency: Yup.string().required(
     "*Emergency Contact Person is required"
@@ -16,7 +16,7 @@ const validationSchema = Yup.object().shape({
   emergencyContact: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "Invalid Phone Number"
+      "*Invalid Phone Number"
     )
     .required("*Emergency Person Contact Number is required"),
   relationToChild: Yup.string().required("*Relationship is required"),
