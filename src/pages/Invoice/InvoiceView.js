@@ -10,7 +10,6 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import SendAndPublish from "../../components/SendAndPublish";
 import fetchAllCentersWithIds from "../List/CenterList";
-import BlockImg from "../.././assets/images/Block_Img1.jpg";
 
 function InvoiceView() {
   const { id } = useParams();
@@ -58,7 +57,7 @@ function InvoiceView() {
           ? center.qrCode || "--"
           : src;
       }, "")
-    : BlockImg;
+    : "";
 
   const generatePDF = async (qrCodeUrl) => {
     try {
@@ -177,10 +176,10 @@ function InvoiceView() {
     const qrCodeUrl = centerData
       ? centerData.reduce((src, center) => {
           return parseInt(data.centerId) === center.id
-            ? center.qrCode || BlockImg
+            ? center.qrCode
             : src;
-        }, BlockImg)
-      : BlockImg;
+        })
+      : "";
 
     generatePDF(qrCodeUrl);
   };
@@ -386,7 +385,7 @@ function InvoiceView() {
           <div className="col-lg-4 col-md-8 col-12">
             <div className="d-flex justify-content-center flex-column align-items-center">
               <img
-                src={qrCodeUrl || BlockImg}
+                src={qrCodeUrl}
                 alt="Teacher"
                 width="100"
                 height="100"

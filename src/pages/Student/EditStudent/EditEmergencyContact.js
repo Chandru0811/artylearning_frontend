@@ -8,7 +8,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 
 const validationSchema = Yup.object().shape({
   emergencyContactNo: Yup.string()
@@ -447,20 +446,13 @@ const EditEmergencyContact = forwardRef(
                                 {row.personProfile ? (
                                   <img
                                     src={row.personProfile}
-                                    onError={(e) => {
-                                      e.target.src = BlockImg;
-                                    }}
-                                    alt="Person Profile"
+                                    
+                                    alt=""
                                     style={{ width: "60%" }}
                                     className="img-fluid rounded"
                                   />
                                 ) : (
-                                  <img
-                                    src={BlockImg}
-                                    alt="Person Profile"
-                                    style={{ width: "60%" }}
-                                    className="img-fluid rounded"
-                                  />
+                                  <></>
                                 )}
                               </p>
                             </div>

@@ -8,7 +8,6 @@ import api from "../../../config/URL";
 import EditParentDetailModel from "./EditParentDetailModel";
 import AddParentDetailModel from "./AddParentDetailModel";
 import { GoDotFill } from "react-icons/go";
-import BlockImg from "../../../assets/images/Block_Img1.jpg";
 import { FaEdit } from "react-icons/fa";
 
 const EditParentGuardian = forwardRef(
@@ -77,20 +76,13 @@ const EditParentGuardian = forwardRef(
                               {parent.profileImage ? (
                                 <img
                                   src={parent.profileImage}
-                                  onError={(e) => {
-                                    e.target.src = BlockImg;
-                                  }}
+                                  
                                   className="rounded-5 mx-1"
                                   style={{ width: "30px", height: "40px" }}
-                                  alt="Img"
+                                  alt=""
                                 />
                               ) : (
-                                <img
-                                  src={BlockImg}
-                                  className="rounded-5 mx-1"
-                                  style={{ width: "40px", height: "40px" }}
-                                  alt="Img"
-                                />
+                                <></>
                               )}
 
                               {parent.parentName}

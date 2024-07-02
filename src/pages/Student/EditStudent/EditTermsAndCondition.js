@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import BlockImg from "../.././../assets/images/Block_Img1.jpg";
 import SignatureCanvas from "react-signature-canvas";
 
 const validationSchema = Yup.object().shape({
