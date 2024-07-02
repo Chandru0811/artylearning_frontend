@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "Invalid Phone Number"
     )
-    .required("*Emergency Contact Number is Required!"),
+    .required("*Emergency Contact Number is Required"),
   contactNo: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
     .notRequired(""),

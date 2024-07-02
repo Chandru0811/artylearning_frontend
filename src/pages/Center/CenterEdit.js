@@ -23,9 +23,9 @@ const validationSchema = Yup.object().shape({
   mobile: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number!"
+      "*Invalid Phone Number"
     )
-    .required("*Mobile Number is required!"),
+    .required("*Mobile Number is required"),
   email: Yup.string()
     .matches(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,

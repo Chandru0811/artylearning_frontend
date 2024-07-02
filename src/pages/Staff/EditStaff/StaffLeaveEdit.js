@@ -9,16 +9,16 @@ const validationSchema = Yup.object().shape({
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Annual Leave Must be numbers")
-    .required("*Annual Leave is required!"),
+    .required("*Annual Leave is required"),
   medicalLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Medical Leave Must be numbers")
-    .required("*Medical Leave is required!"),
+    .required("*Medical Leave is required"),
   otherLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Other Leave Must be numbers")
-    .required("*Other Leave is required!"),
+    .required("*Other Leave is required"),
   carryForwardLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Carry Forward Leave Must be numbers")
-    .required("*Carry Forward Leave is required!"),
+    .required("*Carry Forward Leave is required"),
 });
 const StaffLeaveEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -167,7 +167,7 @@ const StaffLeaveEdit = forwardRef(
                   Year<span class="text-danger">*</span>
                 </label>
                 <input
-                  type="date"
+                  type="month"
                   class="form-control mt-3"
                   name="year"
                   onChange={formik.handleChange}

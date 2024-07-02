@@ -13,32 +13,32 @@ import fetchAllRaceWithIds from "../../List/RaceList";
 import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Centre is required!"),
-  studentName: Yup.string().required("*Student Name is required!"),
+  centerId: Yup.string().required("*Centre is required"),
+  studentName: Yup.string().required("*Student Name is required"),
   dateOfBirth: Yup.date()
-    .required("*Date of Birth is required!")
-    .max(new Date(), "*Date of Birth cannot be in the future!"),
-  age: Yup.string().required("*Age is required!"),
-  gender: Yup.string().required("*Gender is required!"),
-  schoolType: Yup.string().required("*School Type is required!"),
-  schoolName: Yup.string().required("*School Name is required!"),
-  allowMagazine: Yup.string().required("*Select a filed!"),
-  allowSocialMedia: Yup.string().required("*Select a filed!"),
+    .required("*Date of Birth is required")
+    .max(new Date(), "*Date of Birth cannot be in the future"),
+  age: Yup.string().required("*Age is required"),
+  gender: Yup.string().required("*Gender is required"),
+  schoolType: Yup.string().required("*School Type is required"),
+  schoolName: Yup.string().required("*School Name is required"),
+  allowMagazine: Yup.string().required("*Select a filed"),
+  allowSocialMedia: Yup.string().required("*Select a filed"),
   studentChineseName: Yup.string().required(
-    "*Student Chinese Name is required!"
+    "*Student Chinese Name is required"
   ),
   // profileImage: Yup.string().required("*Select a Profile Image!"),
   // preAssessmentResult: Yup.string().required(
   //   "*Pre-Assessment Result is required!"
   // ),
   medicalCondition: Yup.string().required(
-    "*Medical Condition Result is required!"
+    "*Medical Condition Result is required"
   ),
   // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguage: Yup.string().required(
-    "*Primary Language is required!"
+    "*Primary Language is required"
   ),
-  race: Yup.string().required("*Select a Race!"),
+  race: Yup.string().required("*Select a Race"),
   // referByStudent: Yup.string().required("*Refer By Student is required!"),
   // referByParent: Yup.string().required("*Refer By Parent is required!"),
 });

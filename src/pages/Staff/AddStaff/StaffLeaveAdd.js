@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  year: Yup.string().required("*Year is required!"),
+  year: Yup.string().required("*Year is required"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Annual Leave Must be numbers")
@@ -15,10 +15,10 @@ const validationSchema = Yup.object().shape({
     .required("*Medical Leave is required!"),
   otherLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Other Leave Must be numbers")
-    .required("*Other Leave is required!"),
+    .required("*Other Leave is required"),
   carryForwardLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Carry Forward Leave Must be numbers")
-    .required("*Carry Forward Leave is required!"),
+    .required("*Carry Forward Leave is required"),
 });
 const StaffLeaveAdd = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -73,8 +73,8 @@ const StaffLeaveAdd = forwardRef(
                   Year<span class="text-danger">*</span>
                 </label>
                 <input
-                  type="date"
-                  class="form-control    mt-3 "
+                  type="month"
+                  class="form-control mt-3"
                   name="year"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

@@ -5,13 +5,13 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  teacherName: Yup.string().required("*Staff Name is required!"),
+  teacherName: Yup.string().required("*Staff Name is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
-  idType: Yup.string().required("*Id Type is required!"),
-  idNo: Yup.string().required("*Id No is required!"),
-  citizenship: Yup.string().required("*CitizenShip is required!"),
+  idType: Yup.string().required("*Id Type is required"),
+  idNo: Yup.string().required("*Id No is required"),
+  citizenship: Yup.string().required("*CitizenShip is required"),
   // file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalEdit = forwardRef(
@@ -187,7 +187,7 @@ const StaffPersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div class="form-group  col-sm ">
+            {/* <div class="form-group  col-sm ">
               <label>Photo</label><span className="text-danger">*</span>
               <input
                 type="file"
@@ -203,7 +203,7 @@ const StaffPersonalEdit = forwardRef(
                   <small>Photo is required</small>
                 </div>
               )}
-            </div>
+            </div> */}
             {/* <div class="form-group  col-sm ">
               <label>Photo</label>
               <input

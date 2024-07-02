@@ -5,7 +5,10 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("*Invalid Email").required("*Email is required"),
+  email: Yup.string()
+  .email('Invalid email format')
+  .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Invalid Email')
+  .required('Email is required'),
   contactNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,

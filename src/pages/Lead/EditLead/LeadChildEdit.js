@@ -10,8 +10,8 @@ const validationSchema = Yup.object().shape({
   recognizeAToZ: Yup.string().required("*Select recognizeAToZ A to Z"),
   writeUpperAToZ: Yup.string().required("*Written writeUpperAToZ is required"),
   writeLowerAToZ: Yup.string().required("*Written LowerCace is required"),
-  soundOfAToZ: Yup.string().required("*Choose One!"),
-  canReadSimpleSentence: Yup.string().required("*Choose One!"),
+  soundOfAToZ: Yup.string().required("*Choose One"),
+  canReadSimpleSentence: Yup.string().required("*Choose One"),
 });
 
 const LeadChildEdit = forwardRef(

@@ -9,21 +9,21 @@ import { FaEdit } from "react-icons/fa";
 import { data } from "jquery";
 
 const validationSchema = Yup.object().shape({
-  parentName: Yup.string().required("*Guardian Name is required!"),
+  parentName: Yup.string().required("*Guardian Name is required"),
   parentDateOfBirth: Yup.date()
-    .required("*Date Of Birth is required!")
-    .max(new Date(), "*Date Of Birth cannot be in the future!"),
-  email: Yup.string().required("*Email is required!"),
-  relation: Yup.string().required("*Relation is required!"),
+    .required("*Date Of Birth is required")
+    .max(new Date(), "*Date Of Birth cannot be in the future"),
+  email: Yup.string().required("*Email is required"),
+  relation: Yup.string().required("*Relation is required"),
   mobileNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "Invalid Phone Number!"
+      "Invalid Phone Number"
     )
-    .required("Phone Number is required!"),
+    .required("Phone Number is required"),
   postalCode: Yup.string()
     .matches(/^\d+$/, "Invalid Postal Code")
-    .required("*Postal code is required!"),
+    .required("*Postal code is required"),
   address: Yup.string().required("*Address is required"),
 });
 

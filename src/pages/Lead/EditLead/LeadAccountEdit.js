@@ -12,12 +12,12 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
-  center: Yup.string().required("*Centre is required!"),
+  center: Yup.string().required("*Centre is required"),
   // preferredDay: Yup.array().of(Yup.string().required("*Select Days")),
   preferredDay: Yup.array()
-    .min(1, "*Select at least one preferred day!")
+    .min(1, "*Select at least one preferred day")
     .required("Select Preferred day"),
-  enquiryDate: Yup.string().required("*Enquiry Date is required!"),
+  enquiryDate: Yup.string().required("*Enquiry Date is required"),
 });
 
 const LeadAccountEdit = forwardRef(({ formData, setFormData }, ref) => {

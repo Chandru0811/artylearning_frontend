@@ -104,7 +104,7 @@ const Staff = () => {
                 <th scope="col">Staff Type</th>
                 <th scope="col">Role</th>
                 <th scope="col">Mobile</th>
-                <th scope="col">Status</th>
+                {/* <th scope="col">Status</th> */}
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -136,7 +136,7 @@ const Staff = () => {
                     {data.userContactInfo.length > 0 &&
                       data.userContactInfo[0].contactNumber}
                   </td>
-                  <td>
+                  {/* <td>
                     {data.userAccountInfo.length > 0 &&
                     data.userAccountInfo[0]?.status === "Active" ? (
                       <span className="badge badges-Green">Active</span>
@@ -145,7 +145,7 @@ const Staff = () => {
                     ) : (
                       <span className="badge badges-Red ">In Active</span>
                     )}
-                  </td>
+                  </td> */}
                   <td>
                     <div className="d-flex">
                       {storedScreens?.staffRead && (

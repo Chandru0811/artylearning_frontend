@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
     "*Signature Date is required"
   ),
   agree: Yup.boolean()
-    .oneOf([true], "*Agree Terms and conditions is required")
+    .oneOf([true], "*You Must Accept Terms and conditions is required")
     .required(),
 });
 
