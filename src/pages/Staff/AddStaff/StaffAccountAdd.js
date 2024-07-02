@@ -269,7 +269,7 @@ const StaffAccountAdd = forwardRef(
                 </div>
               )}
             </div> */}
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            {/* <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 End Date<span class="text-danger">*</span>
               </label>
@@ -281,7 +281,7 @@ const StaffAccountAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.endDate}
               />
-            </div>
+            </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-2 mt-3">
               <label>
                 Approval Required for photos / videos upload

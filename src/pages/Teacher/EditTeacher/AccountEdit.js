@@ -11,22 +11,22 @@ import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
-  startDate: Yup.string().required("*Start Date is required!"),
+  startDate: Yup.string().required("*Start Date is required"),
   // colorCode: Yup.string().required("*Color Code Of is required!"),
-  teacherId: Yup.string().required("*Teacher Id is required!"),
-  teacherType: Yup.string().required("*Teacher Type is required!"),
+  teacherId: Yup.string().required("*Teacher Id is required"),
+  teacherType: Yup.string().required("*Teacher Type is require"),
   // shgType: Yup.string().required("*Shg Type is required!"),
   // shgAmount: Yup.string()
   //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
   //   .required("*SHG amount is required!"),
   // status: Yup.string().required("*Status is required!"),
   approvelContentRequired: Yup.string().required(
-    "*Approval Required is required!"
+    "*Approval Required is required"
   ),
   workingDays: Yup.array()
-    .of(Yup.string().required("*Working Days is required!"))
-    .min(1, "*Working Days is required!"),
-  centerId: Yup.string().required("*Centres is required!"),
+    .of(Yup.string().required("*Working Days is required"))
+    .min(1, "*Working Days is required"),
+  centerId: Yup.string().required("*Centres is required"),
 });
 
 const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {

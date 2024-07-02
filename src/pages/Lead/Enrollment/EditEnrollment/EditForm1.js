@@ -17,11 +17,13 @@ const validationSchema = Yup.object().shape({
   dateOfBirth: Yup.date()
     .required("Date of Birth is required")
     .max(new Date(), "Date of Birth cannot be in the future"),
-  medicalCondition: Yup.string().required("*Allergy is required"),
+  medicalCondition: Yup.string().required("*Medical Condition is required"),
   ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
   nameOfSchool: Yup.string().required("*School Name is required"),
-  nameOfChildrenInTotal: Yup.string().required("*Name of Children is required"),
+  nameOfChildrenInTotal: Yup.number()
+    .typeError("*Enter a valid number")
+    .required("*Name of Children is required"),
   // fathersFullName: Yup.string().required("*Father Name is required"),
   leadStatus: Yup.string().required("*Status is required"),
 });
@@ -422,7 +424,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Number Of Children In Total
+                Name Of Children In Total
                 <span className="text-danger">*</span>
               </label>
               <input

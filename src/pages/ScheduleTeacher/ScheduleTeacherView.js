@@ -11,15 +11,13 @@ function ScheduleTeacherView({ id, onSuccess }) {
   const handleClose = () => setShow(false);
 
   const handleShow = async () => {
-    try{
+    try {
       const response = await api.get(`/getAllScheduleTeacherById/${id}`);
       setData(response.data);
       setShow(true);
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error fetching data:", error);
-    }
-    finally{
+    } finally {
       setShow(true);
     }
   };
@@ -66,8 +64,8 @@ function ScheduleTeacherView({ id, onSuccess }) {
                   </div>
                 </div>
               </div>
-              </div>
-              <div className="row">
+            </div>
+            <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <div className="row">
                   <div className="col-5">
@@ -98,6 +96,20 @@ function ScheduleTeacherView({ id, onSuccess }) {
                     <p>:&nbsp;{data.teacher}</p>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2">
+                <div className="row">
+                  <div className="col-5">
+                    <p className="fw-bold">Days</p>
+                  </div>
+                  <div className="col-7">
+                    <p>:&nbsp;{data.days}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
               </div>
             </div>
           </div>

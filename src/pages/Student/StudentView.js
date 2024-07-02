@@ -8,12 +8,11 @@ import StudentSummary from "./StudentSummary";
 import BlockImg from "../../assets/images/Block_Img1.jpg";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import Logo from "../../assets/images/Logo.png"
 
 function StudentView() {
   const table1Ref = useRef();
   const table2Ref = useRef();
-  const table3Ref = useRef();
-
 
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -63,18 +62,24 @@ function StudentView() {
   }, [id]);
 
   const handleGeneratePDF = async () => {
-    const pdf = new jsPDF();
+    const pdf = new jsPDF({
+      orientation: "p", // 'p' for portrait, 'l' for landscape
+      unit: "px",
+      format: "a3", // page format
+    });
 
     // Helper function to capture table as image and add to PDF
     const addTableToPDF = async (tableRef, pageNumber) => {
       const table = tableRef.current;
 
       try {
+        table.style.visibility = "visible";
+        table.style.display = "block";
         // Generate canvas from table
         const canvas = await html2canvas(table, { scale: 2 });
 
         // Convert canvas to PNG image data
-        const imgData = canvas.toDataURL();
+        const imgData = canvas.toDataURL("image/png");
 
         // Calculate PDF dimensions based on canvas
         const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -84,24 +89,15 @@ function StudentView() {
         if (pageNumber > 1) {
           pdf.addPage();
         }
-        pdf.addImage(imgData, 10, 10, pdfWidth - 20, pdfHeight);
+        pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
       } catch (error) {
         console.error("Error generating PDF:", error);
       }
     };
 
-    // Array of table references
-    const tableRefs = [
-      table1Ref,
-      table2Ref,
-      table3Ref,
-
-    ];
-
     // Add each table to PDF
-    for (let i = 0; i < tableRefs.length; i++) {
-      await addTableToPDF(tableRefs[i], i + 1);
-    }
+    await addTableToPDF(table1Ref, 1); // Add first table
+    await addTableToPDF(table2Ref, 2); // Add second table
 
     // Save PDF
     pdf.save("student-details.pdf");
@@ -183,7 +179,7 @@ function StudentView() {
             </Link>
             <button
               onClick={handleGeneratePDF}
-              className="btn btn-border btn-sm mx-3"
+              className="btn btn-border btn-sm"
               style={{ padding: "7px" }}
             >
               Generate PDF
@@ -383,8 +379,8 @@ function StudentView() {
                               ? data.primaryLanguage === "ENGLISH"
                                 ? "English"
                                 : data.primaryLanguage === "CHINESE"
-                                ? "Chinese"
-                                : "--"
+                                  ? "Chinese"
+                                  : "--"
                               : "--"}
                           </p>
                         </div>
@@ -431,29 +427,14 @@ function StudentView() {
                     <div className="col-md-6 col-12">
                       <div className="row  mb-2">
                         <div className="col-6  ">
-                          <p className="fw-medium">Profile Image</p>
+                          <p className="fw-medium">
+                            Allow display on Social Media
+                          </p>
                         </div>
                         <div className="col-6">
                           <p className="text-muted text-sm">
-                            <b className="mx-2">:</b>
-                            <p className="my-2 d-flex">
-                              {data.profileImage ? (
-                                <img
-                                  src={data.profileImage}
-                                  onError={(e) => {
-                                    e.target.src = BlockImg;
-                                  }}
-                                  className="img-fluid ms-2 w-100 rounded"
-                                  alt="Profile Image"
-                                />
-                              ) : (
-                                <img
-                                  src={BlockImg}
-                                  className="img-fluid ms-2 w-100 rounded"
-                                  alt="Profile Image"
-                                />
-                              )}
-                            </p>
+                            <b className="mx-2">:</b>{" "}
+                            {data.allowSocialMedia ? "Yes" : "No"}
                           </p>
                         </div>
                       </div>
@@ -474,17 +455,31 @@ function StudentView() {
                         </div>
                       </div>
                     </div>
+                   
                     <div className="col-md-6 col-12">
                       <div className="row  mb-2">
                         <div className="col-6  ">
-                          <p className="fw-medium">
-                            Allow display on Social Media
-                          </p>
+                          <p className="fw-medium">Profile Image</p>
                         </div>
                         <div className="col-6">
                           <p className="text-muted text-sm">
-                            <b className="mx-2">:</b>{" "}
-                            {data.allowSocialMedia ? "Yes" : "No"}
+                            <b className="mx-2">:</b>
+                            <p className="my-2 d-flex">
+                              {data.profileImage ? (
+                                <img
+                                  src={data.profileImage}
+                                  onError={(e) => {
+                                    e.target.src = BlockImg;
+                                  }}
+                                  className="img-fluid ms-2 w-100 rounded"
+                                  alt="Profile Image"
+                                />
+                              ) : (
+                                <div>
+
+                                </div>
+                              )}
+                            </p>
                           </p>
                         </div>
                       </div>
@@ -524,11 +519,11 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0]
-                              .emergencyContactName
+                              data.studentEmergencyContacts.length > 0 &&
+                              data.studentEmergencyContacts[0]
+                                .emergencyContactName
                               ? data.studentEmergencyContacts[0]
-                                  .emergencyContactName
+                                .emergencyContactName
                               : "--"}
                           </p>
                         </div>
@@ -543,10 +538,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0].emergencyContactNo
+                              data.studentEmergencyContacts.length > 0 &&
+                              data.studentEmergencyContacts[0].emergencyContactNo
                               ? data.studentEmergencyContacts[0]
-                                  .emergencyContactNo
+                                .emergencyContactNo
                               : "--"}
                           </p>
                         </div>
@@ -561,10 +556,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0].emergencyRelation
+                              data.studentEmergencyContacts.length > 0 &&
+                              data.studentEmergencyContacts[0].emergencyRelation
                               ? data.studentEmergencyContacts[0]
-                                  .emergencyRelation
+                                .emergencyRelation
                               : "--"}
                           </p>
                         </div>
@@ -860,11 +855,9 @@ function StudentView() {
                                     alt="Profile Image"
                                   />
                                 ) : (
-                                  <img
-                                    src={BlockImg}
-                                    className="img-fluid ms-2 w-100 rounded"
-                                    alt="Profile Image"
-                                  />
+                                  <div>
+
+                                  </div>
                                 )}
                               </p>
                               {/* {data.studentParentsDetails &&
@@ -885,8 +878,8 @@ function StudentView() {
                             <p className="text-muted text-sm">
                               <b className="mx-2">:</b>
                               {data.studentParentsDetails &&
-                              data.studentParentsDetails.length > 0 &&
-                              data.studentParentsDetails[0].address
+                                data.studentParentsDetails.length > 0 &&
+                                data.studentParentsDetails[0].address
                                 ? data.studentParentsDetails[0].address
                                 : "--"}
                             </p>
@@ -897,147 +890,22 @@ function StudentView() {
 
                     <br />
 
-                    {/* <div className="row pb-3">
-                  <div>
-                    <button
-                      className="btn btn-sm border-none text-primary px-3 my-3 fw-bold fs-4"
-                      style={{ backgroundColor: "#b2d3df" }}
-                    >
-                      2
-                    </button>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Parents / Guardian Name</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b>Zheng Zhenjing
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Occupation</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b> --
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Date of Birth</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b>--
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Email</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b>z-j_zheng@hotmail.com
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Mobile No</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b> +91 96652675
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Relation</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b> Father
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Postal Code</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b> Grandfather
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Profile Image</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b>
-                          <img
-                            src={Profile2}
-                            className="img-fluid ms-2 w-100 rounded"
-                            alt="234"
-                          ></img>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="row  mb-2">
-                      <div className="col-6  ">
-                        <p className="fw-medium">Address</p>
-                      </div>
-                      <div className="col-6">
-                        <p className="text-muted text-sm">
-                          <b className="mx-2">:</b>
-                          22 Anchorvale Lane Rivercove Residences #15-06
-                          Sinapore 544585
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
                   </div>
                 </div>
               ))}
             {(!data.studentParentsDetails ||
               data.studentParentsDetails.length === 0) && (
-              <div
-                id="panelsStayOpen-collapseThree"
-                class="accordion-collapse collapse"
-              >
-                <div class="accordion-body">
-                  <div className="text-muted">
-                    No parent/guardian information available
+                <div
+                  id="panelsStayOpen-collapseThree"
+                  class="accordion-collapse collapse"
+                >
+                  <div class="accordion-body">
+                    <div className="text-muted">
+                      No parent/guardian information available
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
           {/* Relation */}
           <div class="accordion-item">
@@ -1085,7 +953,7 @@ function StudentView() {
                               {centerData &&
                                 centerData.map((center) =>
                                   parseInt(std.studentRelationCenter) ===
-                                  center.id
+                                    center.id
                                     ? center.centerNames || "--"
                                     : ""
                                 )}
@@ -1229,13 +1097,13 @@ function StudentView() {
                       ))}
                     {(!data.studentTermsAndConditions ||
                       data.studentTermsAndConditions.length === 0) && (
-                      <img
-                        src={BlockImg}
-                        className="img-fluid rounded"
-                        style={{ width: "50%" }}
-                        alt="Parent Signature Img"
-                      />
-                    )}
+                        <img
+                          src={BlockImg}
+                          className="img-fluid rounded"
+                          style={{ width: "50%" }}
+                          alt="Parent Signature Img"
+                        />
+                      )}
                   </div>
                   <div className="col-md-6 col-12">
                     <div className="container-fluid col-12 p-2">
@@ -1254,165 +1122,498 @@ function StudentView() {
             </div>
           </div>
         </div>
-
-        {/* <div
+        <div
           ref={table1Ref}
-          className="container mt-4 border p-3 rounded bg-light"
+          className="container p-5 rounded mb-5"
+          style={{
+            visibility: "hidden",
+            position: "absolute",
+            left: "-9999px",
+            display: "none",
+          }}
         >
-          <div className="row">
-            <h3>Student Details</h3>
-            <div className="">
-              <div className="d-flex gap-5">
-                <div className="mb-2 d-flex ">
-                  <div className="fw-bold">Centre Name : </div>
-                  <div className="text-muted">
-                    {centerData &&
-                      centerData.map((center) =>
-                        parseInt(data.centerId) === center.id
-                          ? center.centerNames || "--"
-                          : ""
-                      )}
-                  </div>
-                </div>
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">Student Chinese Name :</div>
-                  <div className="text-muted">
-                    {data.studentChineseName || "--"}
-                  </div>
-                </div>
-              </div>
-              <div className="mb-2 d-flex ">
-                <div className="fw-bold">Profile Image</div>
-                <div>
-                  {data.profileImage ? (
-                    <img
-                      src={data.profileImage}
-                      onError={(e) => {
-                        e.target.src = BlockImg;
-                      }}
-                      className="img-fluid rounded w-25"
-                      alt="Profile Image"
-                    />
-                  ) : (
-                    <img
-                      src={BlockImg}
-                      className="img-fluid rounded"
-                      alt="Profile Image"
-                    />
+          <div className="col-lg-6 col-md-6 col-12 p-3">
+            <div className="d-flex justify-content-center flex-column align-items-start">
+              <img src={Logo} className="img-fluid" width={190} alt=".." />
+            </div>
+          </div>
+          <hr />
+          <h3>Student Details</h3>
+          <div className="row mt-3">
+            <div className="mb-2 d-flex col-md-4">
+              <div className=" fw-medium">Centre Name : </div>
+              <div className="text-muted">
+                {centerData &&
+                  centerData.map((center) =>
+                    parseInt(data.centerId) === center.id
+                      ? center.centerNames || "--"
+                      : ""
                   )}
-                </div>
-              </div>
-              <div className=" d-flex  gap-5">
-                <div className="mb-2  d-flex">
-                  <div className="fw-bold">Date Of Birth :</div>
-                  <div className="text-muted">
-                    {data.dateOfBirth
-                      ? data.dateOfBirth.substring(0, 10)
-                      : "--"}
-                  </div>
-                </div>
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">Age :</div>
-                  <div className="text-muted">{data.age || "--"}</div>
-                </div>
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">Gender :</div>
-                  <div className="text-muted">
-                    {data.gender ? "Male" : "Female"}
-                  </div>
-                </div>
-              </div>
-              <div className=" d-flex  gap-3">
-                <div className="mb-2 d-flex ">
-                  <div className="fw-bold">Medical Condition :</div>
-                  <div className="text-muted">
-                    {data.medicalCondition || "--"}
-                  </div>
-                </div>
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">School Name :</div>
-                  <div className="text-muted">{data.schoolName || "--"}</div>
-                </div>
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">School Type :</div>
-                  <div className="text-muted">{data.schoolType || "--"}</div>
-                </div>
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">Pre-Assessment Result</div>
-                  <div className="text-muted">
-                    {data.preAssessmentResult || "--"}
-                  </div>
-                </div>
-              </div>
-
-              <div className=" mb-2 d-flex gap-5">
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">Race:</div>
-                  <div className="text-muted">{data.race || "--"}</div>
-                </div>
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">Nationality:</div>
-                  <div className="text-muted">{data.nationality || "--"}</div>
-                </div>
-                <div className="mb-2 d-flex">
-                  <div className="fw-bold">Primary Language Spoken :</div>
-                  <div className="text-muted">
-                    {data.primaryLanguage
-                      ? data.primaryLanguage === "ENGLISH"
-                        ? "English"
-                        : data.primaryLanguage === "CHINESE"
-                        ? "Chinese"
-                        : "--"
-                      : "--"}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-2 ">
-                <div className="fw-bold">Refer By Student</div>
-                <div className="text-muted">{data.referByStudent || "--"}</div>
-              </div>
-              <div className="mb-2 ">
-                <div className="fw-bold">Remark</div>
-                <div className="text-muted">{data.remark || "--"}</div>
-              </div>
-
-              <div className="mb-2  ">
-                <div className="fw-bold">Key</div>
-                <div className="text-muted">{data.keyValue || "--"}</div>
               </div>
             </div>
-            <div className="">
-              <div className="mb-2 ">
-                <div className="fw-bold">Student Name / as per ID</div>
+            <div className="mb-2 d-flex col-md-4">
+              <div className="fw-medium">Student Chinese Name :</div>
+              <div className="text-muted">
+                {data.studentChineseName || "--"}
+              </div>
+            </div>
+            <div className="mb-2 d-flex col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Student Name / as per ID :</div>
                 <div className="text-muted">{data.studentName || "--"}</div>
               </div>
+            </div>
+          </div>
 
-              <div className="mb-2 ">
-                <div className="fw-bold">Refer By Parent</div>
-                <div className="text-muted">{data.referByParent || "--"}</div>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="mb-2  d-flex">
+                <div className="fw-medium">Date Of Birth :</div>
+                <div className="text-muted">
+                  {data.dateOfBirth ? data.dateOfBirth.substring(0, 10) : "--"}
+                </div>
               </div>
-              <div className="mb-2 ">
-                <div className="fw-bold">Remark</div>
-                <div className="text-muted">{data.remark || "--"}</div>
+            </div>
+            <div className="col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Age :</div>
+                <div className="text-muted">{data.age || "--"}</div>
               </div>
-              <div className="mb-2 ">
-                <div className="fw-bold">
-                  Allow display in Facility Bulletin / Magazine / Advert
+            </div>
+            <div className="col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Gender :</div>
+                <div className="text-muted">
+                  {data.gender ? "Male" : "Female"}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="mb-2 d-flex ">
+                <div className="fw-medium">Medical Condition :</div>
+                <div className="text-muted">
+                  {data.medicalCondition || "--"}
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">School Name :</div>
+                <div className="text-muted">{data.schoolName || "--"}</div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">School Type :</div>
+                <div className="text-muted">{data.schoolType || "--"}</div>
+              </div>
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Pre-Assessment Result :</div>
+                <div className="text-muted">
+                  {data.preAssessmentResult || "--"}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className=" mb-2 col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Race:</div>
+                <div className="text-muted">{data.race || "--"}</div>
+              </div>
+            </div>
+            <div className=" mb-2 col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Nationality:</div>
+                <div className="text-muted">{data.nationality || "--"}</div>
+              </div>
+            </div>
+            <div className=" mb-2 col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Primary Language Spoken :</div>
+                <div className="text-muted">
+                  {data.primaryLanguage
+                    ? data.primaryLanguage === "ENGLISH"
+                      ? "English"
+                      : data.primaryLanguage === "CHINESE"
+                      ? "Chinese"
+                      : "--"
+                    : "--"}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="mb-2 col-md-8">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">
+                  Allow display in Facility Bulletin / Magazine / Advert :
                 </div>
                 <div className="text-muted">
                   {data.allowMagazine ? "Yes" : "No"}
                 </div>
               </div>
-              <div className="mb-2 ">
-                <div className="fw-bold">Allow display on Social Media</div>
+            </div>
+            <div className="mb-2 col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Allow display on Social Media :</div>
                 <div className="text-muted">
                   {data.allowSocialMedia ? "Yes" : "No"}
                 </div>
               </div>
             </div>
           </div>
-        </div> */}
+          <div className="row">
+            <div className="mb-2 col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Refer By Parent :</div>
+                <div className="text-muted">{data.referByParent || "--"}</div>
+              </div>
+            </div>
+            <div className="mb-2 col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Refer By Student :</div>
+                <div className="text-muted">{data.referByStudent || "--"}</div>
+              </div>
+            </div>
+
+            <div className="mb-2 col-md-4">
+              <div className="mb-2 d-flex">
+                <div className="fw-medium">Profile Image :</div>
+                <img
+                  src={data.profileImage}
+                  onError={(e) => {
+                    e.target.src = BlockImg;
+                  }}
+                  className="img-fluid rounded w-25"
+                  alt="Profile Image"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mb-2 d-flex ">
+            <div className="fw-medium">Remark :</div>
+            <div className="text-muted">{data.remark || "--"}</div>
+          </div>
+          <h3 className="mt-5 mb-5">Emergency Contact</h3>
+          <div className="row ">
+            <div className="mb-2 d-flex col-md-4">
+              <div className="fw-medium">Emergency Contact Name:</div>
+              <div className="text-muted ms-2">
+                {data.studentEmergencyContacts &&
+                data.studentEmergencyContacts.length > 0 &&
+                data.studentEmergencyContacts[0].emergencyContactName
+                  ? data.studentEmergencyContacts[0].emergencyContactName
+                  : "--"}
+              </div>
+            </div>
+            <div className="mb-2 d-flex col-md-4">
+              <div className="fw-medium">Emergency Contact No:</div>
+              <div className="text-muted ms-2">
+                {data.studentEmergencyContacts &&
+                data.studentEmergencyContacts.length > 0 &&
+                data.studentEmergencyContacts[0].emergencyContactNo
+                  ? data.studentEmergencyContacts[0].emergencyContactNo
+                  : "--"}
+              </div>
+            </div>
+            <div className="mb-2 d-flex col-md-4">
+              <div className="fw-medium">Relation:</div>
+              <div className="text-muted ms-2">
+                {data.studentEmergencyContacts &&
+                data.studentEmergencyContacts.length > 0 &&
+                data.studentEmergencyContacts[0].emergencyRelation
+                  ? data.studentEmergencyContacts[0].emergencyRelation
+                  : "--"}
+              </div>
+            </div>
+          </div>
+          <h5 className="mt-3">Authorized Person to take Child From Home</h5>
+          <div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th className="fw-medium">Contact</th>
+                  <th className="fw-medium">Name</th>
+                  <th className="fw-medium">Contact No</th>
+                  <th className="fw-medium">Relation</th>
+                  <th className="fw-medium">Postal Code</th>
+                  <th className="fw-medium">Address</th>
+                  <th className="fw-medium">Person Profile</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.studentEmergencyContacts &&
+                  data.studentEmergencyContacts.length > 0 &&
+                  data.studentEmergencyContacts[0].emergencyAuthorizedContactModels.map(
+                    (emergency, index) => (
+                      <tr
+                        key={index}>
+                        <td>{index + 1}</td>
+                        <td>{emergency.name || "--"}</td>
+                        <td>{emergency.contactNo || "--"}</td>
+                        <td>{emergency.authorizedRelation || "--"}</td>
+                        <td>{emergency.postalCode || "--"}</td>
+                        <td>{emergency.emergencyContactAddress || "--"}</td>
+                        <td>
+                          <img
+                            src={emergency.personProfile || "__"}
+                            alt={`Profile ${index + 1}`}
+                            style={{ width: "50px", height: "auto" }}
+                            className="rounded"
+                          />
+                        </td>
+                      </tr>
+                    )
+                  )}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="mt-5 mb-3">Parent /Guardian</h3>
+
+          <div className="row">
+            <div className="col-md-12">
+              {data.studentParentsDetails &&
+                data.studentParentsDetails.length > 0 &&
+                data.studentParentsDetails.map((parent, index) => (
+                  <div id={`panelsStayOpen-collapseThree-${index}`} key={index}>
+                    <div className="">
+                      <div className="table-responsive">
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th className="fw-medium">Profile Image</th>
+                              <th className="fw-medium">Name</th>
+                              <th className="fw-medium">Occupation</th>
+                              <th className="fw-medium">DOB</th>
+                              <th className="fw-medium">Email</th>
+                              <th className="fw-medium">Mobile</th>
+                              <th className="fw-medium">Relation</th>
+                              <th className="fw-medium">Postal Code</th>
+
+                              <th className="fw-medium">Address</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                {parent.profileImage ? (
+                                  <img
+                                    src={parent.profileImage}
+                                    onError={(e) => {
+                                      e.target.src = BlockImg;
+                                    }}
+                                    className="img-fluid rounded-5"
+                                    alt="Profile"
+                                    style={{ width: "10px" }}
+                                  />
+                                ) : (
+                                  <></>
+                                )}
+                              </td>
+                              <td>{parent.parentName || "--"}</td>
+                              <td>{parent.occupation || "--"}</td>
+                              <td>
+                                {(parent.parentDateOfBirth &&
+                                  parent.parentDateOfBirth.substring(0, 10)) ||
+                                  "--"}
+                              </td>
+                              <td>{parent.email || "--"}</td>
+                              <td>{parent.mobileNumber || "--"}</td>
+                              <td>{parent.relation || "--"}</td>
+                              <td>{parent.postalCode || "--"}</td>
+
+                              <td>{parent.address || "--"}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              {(!data.studentParentsDetails ||
+                data.studentParentsDetails.length === 0) && (
+                <div
+                  id="panelsStayOpen-collapseThree"
+                  className="accordion-collapse"
+                >
+                  <div className="accordion-body">
+                    <div className="text-muted">
+                      No parent/guardian information available
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <h3 className="mt-5 mb-2">Student Relation</h3>
+          <div id="panelsStayOpen-collapseFour">
+            <div class="accordion-body">
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" className="fw-medium">
+                        S.No
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Centre
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Student Name
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Relation
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.studentRelationModels &&
+                      data.studentRelationModels.map((std, index) => (
+                        <tr key={std.id}>
+                          <td>{index + 1}</td>
+                          <td>
+                            {centerData &&
+                              centerData.map((center) =>
+                                parseInt(std.studentRelationCenter) ===
+                                center.id
+                                  ? center.centerNames || "--"
+                                  : ""
+                              )}
+                          </td>
+                          <td>{std.studentRelationStudentName || "--"}</td>
+                          <td>{std.studentRelation || "--"}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          ref={table2Ref}
+          className="container rounded mb-5"
+          style={{
+            visibility: "hidden",
+            position: "absolute",
+            left: "-9999px",
+            display: "none",
+          }}
+        >
+          <h3 className="mt-5 mb-2">Course Details</h3>
+          <div id="panelsStayOpen-collapseFive">
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col" className="fw-medium">
+                      S.No
+                    </th>
+                    <th scope="col" className="fw-medium">
+                      Course
+                    </th>
+                    <th scope="col" className="fw-medium">
+                      Day
+                    </th>
+                    <th scope="col" className="fw-medium">
+                      Start Date
+                    </th>
+                    <th scope="col" className="fw-medium">
+                      End Date
+                    </th>
+                    <th scope="col" className="fw-medium">
+                      Start Time
+                    </th>
+                    <th scope="col" className="fw-medium">
+                      End Time
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.studentCourseDetailModels &&
+                    data.studentCourseDetailModels.map((std, index) => (
+                      <tr key={std.id}>
+                        <td>{index + 1}</td>
+                        <td>
+                          {courseData &&
+                            courseData.map((course) =>
+                              parseInt(std.courseId) === course.id
+                                ? course.courseNames || "--"
+                                : ""
+                            )}
+                        </td>
+                        <td>
+                          {std.courseDay
+                            ? std.courseDay.substring(0, 10)
+                            : "--"}
+                        </td>
+                        <td>
+                          {std.startDate
+                            ? std.startDate.substring(0, 10)
+                            : "--"}
+                        </td>
+                        <td>
+                          {std.endDate ? std.endDate.substring(0, 10) : "--"}
+                        </td>
+                        <td>{std.startTime || "--"}</td>
+                        <td>{std.endTime || "--"}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <h3 className="mt-5 mb-3">Terms&Condition</h3>
+          <div id="panelsStayOpen-collapseSix">
+            <div className="row">
+              <div className="col-md-6 col-12">
+                {data.studentTermsAndConditions &&
+                  data.studentTermsAndConditions.length > 0 &&
+                  data.studentTermsAndConditions.map((parent, index) => (
+                    <div key={index} className="col-12 p-2">
+                      <h6 className="mt-2 mb-4">Parent Signature</h6>
+                      <img
+                        src={parent.parentSignature}
+                        className="img-fluid rounded"
+                        style={{ width: "50%" }}
+                        alt="Parent Signature Img"
+                        onError={(e) => {
+                          e.target.src = BlockImg;
+                        }}
+                      />
+                    </div>
+                  ))}
+                {(!data.studentTermsAndConditions ||
+                  data.studentTermsAndConditions.length === 0) && (
+                  <img
+                    src={BlockImg}
+                    className="img-fluid rounded"
+                    style={{ width: "50%" }}
+                    alt="Parent Signature Img"
+                  />
+                )}
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="container-fluid col-12 p-2">
+                  {data.studentTermsAndConditions &&
+                    data.studentTermsAndConditions.length > 0 &&
+                    data.studentTermsAndConditions.map((parent, index) => (
+                      <div key={index} className="container-fluid col-12 p-2">
+                        <h6 className="mt-2 mb-4">Signature Date</h6>
+                        <span>{parent.termsAndConditionSignatureDate}</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </>
   );

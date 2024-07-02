@@ -5,13 +5,13 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  teacherName: Yup.string().required("*Teacher Name is required!"),
+  teacherName: Yup.string().required("*Teacher Name is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
-  idType: Yup.string().required("*Id Type is required!"),
-  idNo: Yup.string().required("*Id No is required!"),
-  citizenship: Yup.string().required("*CitizenShip is required!"),
+  idType: Yup.string().required("*Id Type is required"),
+  idNo: Yup.string().required("*Id No is required"),
+  citizenship: Yup.string().required("*CitizenShip is required"),
 });
 const PersonalEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {

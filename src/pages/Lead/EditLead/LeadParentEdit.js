@@ -5,17 +5,17 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  parentName: Yup.string().required("*Parent Name is required!"),
+  parentName: Yup.string().required("*Parent Name is required"),
   parentEmail: Yup.string()
     .email("*Invalid Email")
-    .required("*Email is required!"),
+    .required("*Email is required"),
   parentMobileNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "Invalid Phone Number"
     )
-    .required("Phone Number is required!"),
-  relation: Yup.string().required("*Select Relation!"),
+    .required("Phone Number is required"),
+  relation: Yup.string().required("*Select Relation"),
 });
 
 const LeadParentEdit = forwardRef(

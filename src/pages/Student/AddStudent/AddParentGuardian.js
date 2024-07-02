@@ -7,21 +7,24 @@ import { toast } from "react-toastify";
 const validationSchema = Yup.object().shape({
   parentInformation: Yup.array().of(
     Yup.object().shape({
-      parentNames: Yup.string().required("*Guardian Name is required!"),
+      parentNames: Yup.string().required("*Guardian Name is required"),
       parentDateOfBirths: Yup.date()
-        .required("*Date Of Birth is required!")
-        .max(new Date(), "*Date Of Birth cannot be in the future!"),
-      emails: Yup.string().required("*Email is required!"),
-      relations: Yup.string().required("*Relation is required!"),
+        .required("*Date Of Birth is required")
+        .max(new Date(), "*Date Of Birth cannot be in the future"),
+        email: Yup.string()
+        .email('Invalid email format')
+        .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Invalid Email')
+        .required('Email is required'),
+      relations: Yup.string().required("*Relation is required"),
       mobileNumbers: Yup.string()
         .matches(
           /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-          "Invalid Phone Number!"
+          "Invalid Phone Number"
         )
-        .required("Phone Number is required!"),
+        .required("Phone Number is required"),
       postalCodes: Yup.string()
         .matches(/^\d+$/, "Invalid Postal Code")
-        .required("*Postal code is required!"),
+        .required("*Postal code is required"),
       addresses: Yup.string().required("*Address is required"),
     })
   ),

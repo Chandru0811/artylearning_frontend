@@ -10,7 +10,7 @@ const validationSchema = Yup.object().shape({
      /^\d+$/ ,
     "Must be a number"
   )
-  .required("Registration Fees is required!"),
+  .required("Registration Fees is required"),
   depositAmount: Yup.string()
   .matches(
      /^\d+$/ ,

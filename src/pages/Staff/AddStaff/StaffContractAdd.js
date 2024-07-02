@@ -8,26 +8,26 @@ import * as Yup from "yup";
 const validationSchema = Yup.object().shape({
   employer:Yup.string().required("*Employer is required"),
   employee: Yup.string().required("*Employee is required"),
-  uen: Yup.number().typeError("*UEN Must be numbers").required("*UEN is required"),
+  uen: Yup.string().required("*UEN is required"),
   addressOfEmployment:Yup.string().required("*Address is required"),  
   nric: Yup.number().typeError("*NRIC Must be numbers").required("*NRIC is required"),
   userContractAddress:Yup.string().required("*Address is required"),
   jobTitle:Yup.string().required("*Job Title is required"),
   mainDuties:Yup.string().required("*Main Duties is required"),
-  startDateOfEmployment:Yup.string().required("*Date is required"),
+  startDateOfEmployment:Yup.string().required("*StartDate Of Employment is required"),
   training:Yup.string().required("*Training is required"),
-  userContractStartDate:Yup.string().required("*Date is required"),
-  contactPeriod:Yup.string().required("*Contact is required"),
-  workingDays: Yup.array()
+  userContractStartDate:Yup.string().required("*Start Date Of Contract is required"),
+  contactPeriod:Yup.string().required("*Contract Period is required"),
+    workingDays: Yup.array()
     .min(1, '*Working days are required')
     .required('*Working days are required'),
   userContractSalary: Yup.number()
     .typeError("*Salary Must be numbers")
     .required("*Salary is required"),
-  salaryStartDate:Yup.string().required("*Start Date is required"),
-  userContractEndDate:Yup.string().required("*End Date is required"),
+  salaryStartDate:Yup.string().required("*Start Date Of Salary is required"),
+  userContractEndDate:Yup.string().required("*End Date Of Contract is required"),
   contractDate:Yup.string().required("*Contract Date is required"),
-  terminationNotice:Yup.string().required("*Notice is required"), 
+  terminationNotice:Yup.string().required("*Termination Notice is required"), 
   allowance: Yup.number().typeError("*Allowance Must be numbers").notRequired(),
 });
 

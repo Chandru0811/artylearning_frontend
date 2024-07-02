@@ -20,14 +20,14 @@ const validationSchema = Yup.object().shape({
   //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
   //   .required("*SHG amount is required!"),
   // status: Yup.string().required("*Status is required!"),
-  endDate: Yup.string().required("*End Date is required!"),
+  // endDate: Yup.string().required("*End Date is required"),
   approvelContentRequired: Yup.string().required(
-    "*Approval Required is required!"
+    "*Approval Required is required"
   ),
   workingDays: Yup.array()
-    .of(Yup.string().required("*Working Days is required!"))
-    .min(1, "*Working Days is required!"),
-  centerId: Yup.string().required("*Centres is required!"),
+    .of(Yup.string().required("*Working Days is required"))
+    .min(1, "*Working Days is required"),
+  centerId: Yup.string().required("*Centres is required"),
 });
 
 const StaffAccountEdit = forwardRef(
@@ -382,7 +382,7 @@ const StaffAccountEdit = forwardRef(
             </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
-                End Date<span class="text-danger">*</span>
+                End Date
               </label>
               <input
                 type="date"
