@@ -16,12 +16,12 @@ function StudentTransferOut() {
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const validationSchema = Yup.object({
-    courseId: Yup.string().required("Current Course is required"),
-    // currentClass: Yup.string().required("Current Class is required"),
-    lastLessonDate: Yup.string().required("Last Lesson Date  is required"),
-    centerId: Yup.string().required("Transfer To is required"),
-    reason: Yup.string().required("Reason is required"),
-    centerRemark: Yup.string().required("Centre Remark is required"),
+    courseId: Yup.string().required("*Current Course is required"),
+    // currentClass: Yup.string().required("*Current Class is required"),
+    lastLessonDate: Yup.string().required("*Last Lesson Date  is required"),
+    centerId: Yup.string().required("*Transfer To is required"),
+    reason: Yup.string().required("*Reason is required"),
+    centerRemark: Yup.string().required("*Centre Remark is required"),
   });
 
   const fetchData = async () => {
