@@ -14,12 +14,12 @@ const validationSchema = Yup.object().shape({
   centerId: Yup.string().required("*Center is required!"),
   // preferredDay: Yup.array().of(Yup.string().required("*Select Days")),
   preferredDay: Yup.array()
-    .min(1, "*Select at least one preferred day!")
+    .min(1, "*Select at least one preferred day")
     .required("Select Preferred day"),
     preferredTimeSlot: Yup.array()
-    .min(1, "*Select at least one preferredTimeSlot!")
-    .required("SelectpreferredTimeSlot"),
-  enquiryDate: Yup.string().required("*Enquiry Date is required!"),
+    .min(1, "*Select at least one preferred time slot")
+    .required("Select preferred time slot"),
+  enquiryDate: Yup.string().required("*Enquiry Date is required"),
 });
 
 const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -420,7 +420,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
                   onBlur={formik.handleBlur}
                   value={formik.values.marketingSource}
                 >
-                  <option selected>--Select--</option>
+                  <option selected></option>
                   <option value="Friends or Relatives">
                     Friends or Relatives
                   </option>
@@ -495,7 +495,7 @@ const EditForm5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
 
             <div className="col-md-6 col-12 mb-3">
               <label>Refer Student Center</label>
-              <div className="input-group ">
+              <div className="input-group">
                 <select
                   className="form-select"
                   name="referedStudentCenterNameId"

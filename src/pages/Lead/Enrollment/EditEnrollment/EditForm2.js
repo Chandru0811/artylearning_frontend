@@ -113,7 +113,7 @@ const EditForm2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
                   onBlur={formik.handleBlur}
                   value={formik.values.pencilGrip}
                 >
-                  <option selected>--Select--</option>
+                  <option selected></option>
                   <option value="Steady">Steady</option>
                   <option value="Loose">Loose</option>
                   {/* <option value="Unable">Unable</option> */}
@@ -139,7 +139,7 @@ const EditForm2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
                     onBlur={formik.handleBlur}
                     value={formik.values.writing}
                   >
-                    <option selected>--Select--</option>
+                    <option selected></option>
                     <option value="Straight & Firm Lines">Straight & Firm Lines</option>
                     <option value="Crooked & Light Lines">Crooked & Light Lines</option>
                     <option value="Scribbles">Scribbles</option>
@@ -166,7 +166,7 @@ const EditForm2 = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
                     onBlur={formik.handleBlur}
                     value={formik.values.recognizeAToZ}
                   >
-                    <option selected>--Select--</option>
+                    <option selected></option>
                     <option value="Uppercase">Uppercase</option>
                     <option value="Lowercase">Lowercase</option>
                     <option value="Both">Both</option>

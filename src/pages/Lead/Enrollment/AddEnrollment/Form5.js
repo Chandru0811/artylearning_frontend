@@ -9,7 +9,6 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../../List/CenterList";
 import api from "../../../../config/URL";
-import { logDOM } from "@testing-library/react";
 
 const validationSchema = Yup.object().shape({
   centerId: Yup.string().required("*Centre is required"),
@@ -18,8 +17,8 @@ const validationSchema = Yup.object().shape({
     .min(1, "*Select at least one preferred day")
     .required("*Select Preferred day"),
     preferredTimeSlot: Yup.array()
-    .min(1, "*Select at least one preferredTimeSlot")
-    .required("*Select preferredTimeSlot"),
+    .min(1, "*Select at least one preferred time slot")
+    .required("*Select Preferred Time Slot"),
   enquiryDate: Yup.string().required("*Enquiry Date is required"),
 });
 
@@ -414,7 +413,7 @@ const Form5 = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext 
                   onBlur={formik.handleBlur}
                   value={formik.values.marketingSource}
                 >
-                  <option selected>--Select--</option>
+                  <option selected></option>
                   <option value="Friends or Relatives">
                     Friends or Relatives
                   </option>

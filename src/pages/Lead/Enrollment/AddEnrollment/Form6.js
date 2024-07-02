@@ -11,9 +11,9 @@ const Form6 = forwardRef(
 
     const validationSchema = Yup.object().shape({
       addressOfAuthorisedPerson: Yup.string().required("*Address is required"),
-      agreeConditionOne: Yup.string().required("*Declare is required"),
-      agreeConditionTwo: Yup.string().required("*Declare is required"),
-      agreeConditionThree: Yup.string().required("*Declare is required"),
+      agreeConditionOne: Yup.string().required("*Condition are required"),
+      agreeConditionTwo: Yup.string().required("*Condition are required"),
+      agreeConditionThree: Yup.string().required("*Condition are required"),
     });
 
     const formik = useFormik({
