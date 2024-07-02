@@ -11,6 +11,19 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 
+const invoiceItemSchema = Yup.object().shape({
+  item: Yup.string().required("Item name is required"),
+  itemAmount: Yup.number()
+    .required("Item amount is required")
+    .positive("Item amount must be a positive number"),
+  taxType: Yup.string().required("Tax type is required"),
+  gstAmount: Yup.number()
+    .required("GST amount is required")
+    .positive("GST amount must be a positive number"),
+  totalAmount: Yup.number()
+    .required("Total amount is required")
+    .positive("Total amount must be a positive number"),
+});
 const validationSchema = Yup.object({
   center: Yup.string().required("*Select a Centre"),
   parent: Yup.string().required("*Parent is required"),
@@ -25,6 +38,10 @@ const validationSchema = Yup.object({
   receiptAmount: Yup.number()
     .required("*Receipt Amount is required")
     .typeError("*Must be a Number"),
+  invoiceItems: Yup.array()
+    .of(invoiceItemSchema)
+    // .min(1, "At least one invoice item is required")
+    .required("Invoice items are required"),
 });
 
 export default function InvoiceAdd() {
@@ -42,7 +59,6 @@ export default function InvoiceAdd() {
     try {
       const response = await api.get("getAllTaxSetting");
       setTaxData(response.data);
-   
     } catch (error) {
       toast.error("Error fetching tax data:", error);
     }
@@ -178,21 +194,21 @@ export default function InvoiceAdd() {
     fetchPackage(center); // Fetch courses for the selected center
     fetchStudent(center);
   };
-  
+
   const handleSelectChange = (index, value) => {
     // const selectedTax = taxData.find((tax) => tax.id === value);
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const itemAmount = formik.values.invoiceItems[index]?.itemAmount || 0;
-  
+
     // Calculate GST amount
     const gstAmount = (parseFloat(itemAmount) * parseFloat(gstRate)) / 100;
     const validGstAmount = isNaN(gstAmount) ? 0 : gstAmount;
-  
+
     // Calculate total amount
     const totalAmount = parseFloat(itemAmount) + validGstAmount;
     const validTotalAmount = isNaN(totalAmount) ? 0 : totalAmount;
-  
+
     // Update rows state
     const updatedRows = [...rows];
     updatedRows[index] = {
@@ -202,27 +218,33 @@ export default function InvoiceAdd() {
       totalAmount: validTotalAmount,
     };
     setRows(updatedRows);
-  
+
     // Update formik values
     formik.setFieldValue(`invoiceItems[${index}].taxType`, value);
-    formik.setFieldValue(`invoiceItems[${index}].gstAmount`, validGstAmount.toFixed(2));
-    formik.setFieldValue(`invoiceItems[${index}].totalAmount`, validTotalAmount.toFixed(2));
+    formik.setFieldValue(
+      `invoiceItems[${index}].gstAmount`,
+      validGstAmount.toFixed(2)
+    );
+    formik.setFieldValue(
+      `invoiceItems[${index}].totalAmount`,
+      validTotalAmount.toFixed(2)
+    );
   };
-  
+
   const handleItemAmountChange = (index, value) => {
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
     const selectedTax = taxData.find((tax) => tax.taxType === selectedTaxType);
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const itemAmount = parseFloat(value);
-  
+
     // Calculate GST amount
     const gstAmount = (itemAmount * parseFloat(gstRate)) / 100;
     const validGstAmount = isNaN(gstAmount) ? 0 : gstAmount;
-  
+
     // Calculate total amount
     const totalAmount = itemAmount + validGstAmount;
     const validTotalAmount = isNaN(totalAmount) ? 0 : totalAmount;
-  
+
     // Update rows state
     const updatedRows = [...rows];
     updatedRows[index] = {
@@ -232,13 +254,19 @@ export default function InvoiceAdd() {
       totalAmount: validTotalAmount,
     };
     setRows(updatedRows);
-  
+
     // Update formik values
     formik.setFieldValue(`invoiceItems[${index}].itemAmount`, itemAmount);
-    formik.setFieldValue(`invoiceItems[${index}].gstAmount`, validGstAmount.toFixed(2));
-    formik.setFieldValue(`invoiceItems[${index}].totalAmount`, validTotalAmount.toFixed(2));
+    formik.setFieldValue(
+      `invoiceItems[${index}].gstAmount`,
+      validGstAmount.toFixed(2)
+    );
+    formik.setFieldValue(
+      `invoiceItems[${index}].totalAmount`,
+      validTotalAmount.toFixed(2)
+    );
   };
-  
+
   useEffect(() => {
     fetchData();
     fetchTaxData();
@@ -633,17 +661,34 @@ export default function InvoiceAdd() {
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].item`
                             )}
-                            className="form-control"
+                            className={`form-control ${
+                              formik.touched.invoiceItems?.[index]?.item &&
+                              formik.errors.invoiceItems?.[index]?.item
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             type="text"
                             style={{ width: "80%" }}
                           />
+                          {formik.touched.invoiceItems?.[index]?.item &&
+                            formik.errors.invoiceItems?.[index]?.item && (
+                              <div className="invalid-feedback">
+                                {formik.errors.invoiceItems[index].item}
+                              </div>
+                            )}
                         </td>
                         <td>
                           <input
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].itemAmount`
                             )}
-                            className="form-control"
+                            className={`form-control ${
+                              formik.touched.invoiceItems?.[index]
+                                ?.itemAmount &&
+                              formik.errors.invoiceItems?.[index]?.itemAmount
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             type="number"
                             min={0}
                             style={{ width: "80%" }}
@@ -651,10 +696,21 @@ export default function InvoiceAdd() {
                               handleItemAmountChange(index, e.target.value)
                             }
                           />
+                          {formik.touched.invoiceItems?.[index]?.itemAmount &&
+                            formik.errors.invoiceItems?.[index]?.itemAmount && (
+                              <div className="invalid-feedback">
+                                {formik.errors.invoiceItems[index].itemAmount}
+                              </div>
+                            )}
                         </td>
                         <td>
                           <select
-                            className="form-select"
+                            className={`form-select ${
+                              formik.touched.invoiceItems?.[index]?.taxType &&
+                              formik.errors.invoiceItems?.[index]?.taxType
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].taxType`
                             )}
@@ -671,6 +727,12 @@ export default function InvoiceAdd() {
                                 </option>
                               ))}
                           </select>
+                          {formik.touched.invoiceItems?.[index]?.taxType &&
+                            formik.errors.invoiceItems?.[index]?.taxType && (
+                              <div className="invalid-feedback">
+                                {formik.errors.invoiceItems[index].taxType}
+                              </div>
+                            )}
                         </td>
                         <td>
                           <input

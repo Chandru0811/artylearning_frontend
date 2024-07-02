@@ -13,6 +13,7 @@ function DocumentView() {
   const [data, setData] = useState([]);
   const [folderName, setFolderName] = useState("");
   const [images] = useState([AddContact, BlockImg]);
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
@@ -53,6 +54,7 @@ function DocumentView() {
   console.log("data",data)
 
   const downloadFiles = async () => {
+    setLoadIndicator(true)
     const zip = new JSZip();
 
     for (const img of data) {
@@ -65,6 +67,7 @@ function DocumentView() {
     // Generate ZIP file and trigger download
     const content = await zip.generateAsync({ type: 'blob' });
     saveAs(content, folderName);
+    setLoadIndicator(false)
   };
 
   return (
@@ -75,7 +78,13 @@ function DocumentView() {
             Back
           </button>
         </Link>
-        <button className="btn btn-button btn-sm ms-1" onClick={downloadFiles}>
+        <button className="btn btn-button btn-sm ms-1" onClick={downloadFiles} disabled={loadIndicator}>
+        {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
           Download All
         </button>
       </div>

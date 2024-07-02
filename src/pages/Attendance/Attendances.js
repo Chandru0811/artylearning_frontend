@@ -114,6 +114,7 @@ function Attendances() {
   };
 
   const handleSubmit = async (teacherIndex, attendanceItem) => {
+    console.log("object",teacherIndex,teacherIndex)
     try {
       const teacherAttendanceData = attendanceData[teacherIndex];
       const flattenedData = teacherAttendanceData.students
@@ -444,6 +445,7 @@ function Attendances() {
                               onClick={() =>
                                 handleSubmit(attendanceIndex, attendanceItem)
                               }
+                              disabled={attendanceData[attendanceIndex].students.length ===0}
                             >
                               Submit
                             </button>
