@@ -20,6 +20,7 @@ const validationSchema = Yup.object().shape({
     .matches(/^[0-9]+$/, "*Postal Code Must be numbers")
     .required("*Postal Code is required"),
 });
+
 const StaffContactEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({

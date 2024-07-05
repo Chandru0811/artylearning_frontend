@@ -1,33 +1,127 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import api from "../../../config/URL";
 
 const StaffRequiredEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    // const formik = useFormik({
+    //   initialValues: {
+    //     resume: null || "",
+    //     educationCertificate: null || "",
+    //   },
+
+    //   onSubmit: (data) => {
+    //     setLoadIndicators(true);
+    //     // setFormData((prv) => ({ ...prv, ...data }));
+    //     // console.log("form parent",formData );
+    //     // console.log("data", data);
+    //     setLoadIndicators(false);
+    //   },
+    // });
+
+    
     const formik = useFormik({
       initialValues: {
         resume: null || "",
         educationCertificate: null || "",
       },
-
-      onSubmit: (data) => {
+      onSubmit: async (values) => {
         setLoadIndicators(true);
-        // setFormData((prv) => ({ ...prv, ...data }));
-        // console.log("form parent",formData );
-        // console.log("data", data);
-        setLoadIndicators(false);
+        try {
+          if (values.userEnquireId !== null) {
+            const formDatas = new FormData();
+          // Add each data field manually to the FormData object
+          formDatas.append("resume", values.resume);
+          formDatas.append("educationCertificate", values.educationCertificate);
+
+          const response = await api.put(
+            `/updateUserRequireInformation/${values.userEnquireId}`,
+            formDatas,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...values }));
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          } else {
+            const formDatas = new FormData();
+
+            // Add each data field manually to the FormData object
+            const userId = formData.user_id;
+            formDatas.append("userId", userId);
+            formDatas.append("resume", values.resume);
+            formDatas.append("educationCertificate", values.educationCertificate);
+            
+            const response = await api.post(
+              `/createUserRequireInformation`,
+              formDatas,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...values }));
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          }
+        } catch (error) {
+          if(error?.response?.status === 409){
+            toast.warning(error?.response?.data?.message)
+          } else {
+            toast.error("Error Submiting data " ,error?.response?.data?.message )
+          }
+        }finally{
+          setLoadIndicators(false);
+        }
       },
     });
-    const handleNextStep = () => {
-      // e.preventDefault()
-      formik.validateForm().then((errors) => {
-        formik.handleSubmit();
-        if (Object.keys(errors).length === 0) {
-          handleNext();
+
+    useEffect(() => {
+      const getData = async () => {
+        try {
+          const response = await api.get(
+            `/getAllUsersById/${formData.staff_id}`
+          );
+          if (
+            response.data.userRequireInformationModels &&
+            response.data.userRequireInformationModels.length > 0
+          ) {
+            formik.setValues({
+              ...response.data.userRequireInformationModels[0],
+              userEnquireId: response.data.userRequireInformationModels[0].id,
+            });
+          } else {
+            formik.setValues({
+              userEnquireId: null,
+              resume:null || "",
+              educationCertificate: null || ""
+            });
+            // console.log("Contact ID:", formik.values.contactId);
+          }
+        } catch (error) {
+          toast.error("Error Fetching Data");
         }
-      });
-    };
+      };
+      // console.log(formik.values);
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useImperativeHandle(ref, () => ({
-      staffRequireEdit: handleNextStep,
+      staffRequireEdit: formik.handleSubmit,
     }));
 
     return (
@@ -40,7 +134,7 @@ const StaffRequiredEdit = forwardRef(
               <input
                 type="file"
                 class="form-control mt-3"
-                accept=".pdf"
+                // accept=".pdf"
                 name="resume"
                 onChange={(event) => {
                   formik.setFieldValue("resume", event.currentTarget.files[0]);
@@ -54,7 +148,7 @@ const StaffRequiredEdit = forwardRef(
               <input
                 type="file"
                 class="form-control mt-3"
-                accept=".pdf"
+                // accept=".pdf"
                 name="educationCertificate"
                 onChange={(event) => {
                   formik.setFieldValue(

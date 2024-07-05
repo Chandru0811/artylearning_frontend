@@ -136,14 +136,7 @@ const Leave = () => {
               {datas.employeeData.map((data, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
-                  <td>
-                    {centerData &&
-                      centerData.map((centerId) =>
-                        parseInt(data.centerId) === centerId.id
-                          ? centerId.centerNames || "--"
-                          : ""
-                      )}
-                  </td>
+                  <td>{data.centerName} </td>
                   <td>{data.employeeName}</td>
                   <td>{data.leaveType}</td>
                   <td>

@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllTeachersWithIds from "../../List/TeacherList";
 
-function LeaveView() {
 
+function LeaveView() {
   const [data, setData] = useState([]);
-  console.log('Leave Datas:',data);
+  console.log("Leave Datas:", data);
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
@@ -58,13 +57,7 @@ function LeaveView() {
               <p className="text-sm fw-medium">Centre Name</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">
-                : {centerData &&
-                      centerData.map((centerId) =>
-                        parseInt(data.centerId) === centerId.id
-                          ? centerId.centerNames || "--"
-                          : ""
-                      )}</p>
+              <p className="text-muted text-sm">: {data.centerName}</p>
             </div>
           </div>
         </div>
@@ -75,13 +68,8 @@ function LeaveView() {
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
-                {/* : {teacherData &&
-                      teacherData.map((teacher) =>
-                        parseInt(data.teacher) === teacher.id
-                          ? teacher.teacherNames || "--"
-                          : ""
-                      )}*/}
-                      : {data.employeeName || "--"}</p> 
+                : {data.employeeName || "--"}
+              </p>
             </div>
           </div>
         </div>
@@ -101,7 +89,9 @@ function LeaveView() {
               <p className="text-sm fw-medium">No.Of.Days</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: {data.noOfDays || "--"}</p>
+              <p className="text-muted text-sm">
+                : {data.noOfDays || "0"} Days
+              </p>
             </div>
           </div>
         </div>
@@ -135,7 +125,7 @@ function LeaveView() {
             </div>
           </div>
         </div>
-        <div className="col-md-6 col-12">
+        {/* <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
               <p className="text-sm fw-medium">Request Date</p>
@@ -144,8 +134,9 @@ function LeaveView() {
               <p className="text-muted text-sm">: {data.requestDate || "--"}</p>
             </div>
           </div>
-        </div>
-        <div className="col-md-6 col-12">
+        </div> */}
+
+        {/* <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex ">
               <p className="text-sm fw-medium">Approver Name</p>
@@ -154,7 +145,7 @@ function LeaveView() {
               <p className="text-muted text-sm">: {data.approverName || "--"}</p>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex ">
@@ -176,57 +167,17 @@ function LeaveView() {
           </div>
         </div>
       </div>
-      {/* <p class="headColor mt-5">Attachment</p>
-      <hr></hr>
+
+      <div>
+      <p className="headColor mt-5">Attachment</p>
+      <hr />
       <div className="row mt-4">
-        <div className="">
-          <div className="row mb-3 d-flex">
-            <div className="col-4 ">
-              <p className="text-sm fw-medium">File Type</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm fw-medium">File Name</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm fw-medium">Action</p>
-            </div>
-          </div>
+        <div className="container p-2">
+          
         </div>
       </div>
-      <div className="row ">
-        <div className="">
-          <div className="row mb-3 d-flex">
-            <div className="col-4 ">
-              <p className="text-sm text-muted">Leave Attendance</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">evelynchiasiting.pdf</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">
-                <FaCloudDownloadAlt />
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row ">
-        <div className="">
-          <div className="row mb-3 d-flex">
-            <div className="col-4 ">
-              <p className="text-sm text-muted">Medical Certificates</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">evelynchiasiting.pdf</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">
-                <FaCloudDownloadAlt />
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
+    </div>
+      
     </div>
   );
 }

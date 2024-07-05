@@ -1,35 +1,64 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useFormik } from "formik";
+import api from "../../../config/URL";
+import { toast } from "react-toastify";
 
 const RequiredAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+
     const formik = useFormik({
       initialValues: {
         resume: null || "",
         educationCertificate: null || "",
       },
-
-      onSubmit: (data) => {
+      onSubmit: async (values) => {
         setLoadIndicators(true);
-        setFormData((prv) => ({ ...prv, ...data }));
+        try {
+          const formDatas = new FormData();
 
-        setLoadIndicators(false);
+          // Add each data field manually to the FormData object
+          const userId = formData.user_id;
+          formDatas.append("userId", userId);
+          formDatas.append("resume", values.resume);
+          formDatas.append("educationCertificate", values.educationCertificate);
+          
+          const response = await api.post(
+            `/createUserRequireInformation`,
+            formDatas,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
 
-        // console.log("form parent",formData );
-        // console.log("data", data);
+          if (response.status === 201) {
+            toast.success(response.data.message);
+            setFormData((prv) => ({ ...prv, ...values }));
+            handleNext();
+          } else {
+            toast.error(response.data.message);
+          }
+        } catch (error) {
+          toast.error(error);
+        } finally {
+          setLoadIndicators(false);
+        }
       },
     });
-    const handleNextStep = () => {
-      // e.preventDefault()
-      formik.validateForm().then((errors) => {
-        formik.handleSubmit();
-        if (Object.keys(errors).length === 0) {
-          handleNext();
-        }
-      });
-    };
+
+    // const handleNextStep = () => {
+    //   // e.preventDefault()
+    //   formik.validateForm().then((errors) => {
+    //     formik.handleSubmit();
+    //     if (Object.keys(errors).length === 0) {
+    //       handleNext();
+    //     }
+    //   });
+    // };
+
     useImperativeHandle(ref, () => ({
-      requireAdd: handleNextStep,
+      requireAdd: formik.handleSubmit,
     }));
 
     return (
@@ -41,8 +70,8 @@ const RequiredAdd = forwardRef(
               <label>Resume / CV</label>
               <input
                 type="file"
-                class="form-control    mt-3"
-                accept=".pdf"
+                class="form-control mt-3"
+                // accept=".pdf"
                 name="resume"
                 onChange={(event) => {
                   formik.setFieldValue("resume", event.currentTarget.files[0]);
@@ -55,8 +84,8 @@ const RequiredAdd = forwardRef(
               <label>Education Certificate</label>
               <input
                 type="file"
-                class="form-control    mt-3"
-                accept=".pdf"
+                class="form-control mt-3"
+                // accept=".pdf"
                 name="educationCertificate"
                 onChange={(event) => {
                   formik.setFieldValue(

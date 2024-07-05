@@ -20,6 +20,8 @@ const ScheduleTeacher = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  console.log("courseId pass ScheduleTeacher:",datas.courseId);
+
   const [show, setShow] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
@@ -172,7 +174,7 @@ const ScheduleTeacher = () => {
                         )}
                         {storedScreens?.timeScheduleIndex && (
                           <Link
-                            to={`/scheduleteacher/scheduletime/${data.userId}?centerId=${data.centerId}`}
+                            to={`/scheduleteacher/scheduletime/${data.userId}?centerId=${data.centerId}&courseId=${data.courseId}`}
                           >
                             <button className="btn">
                               <BsTable className="text-dark" />

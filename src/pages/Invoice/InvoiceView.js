@@ -102,7 +102,8 @@ function InvoiceView() {
           invoiceItem.item,
           invoiceItem.itemAmount,
           // invoiceItem.taxType,
-          taxData.find((tax) => parseInt(invoiceItem.taxType) === tax.id)?.taxType || "--",
+          taxData.find((tax) => parseInt(invoiceItem.taxType) === tax.id)
+            ?.taxType || "--",
           invoiceItem.gstAmount,
           invoiceItem.totalAmount,
         ]);
@@ -175,13 +176,29 @@ function InvoiceView() {
   const handleGeneratePDF = async () => {
     const qrCodeUrl = centerData
       ? centerData.reduce((src, center) => {
-          return parseInt(data.centerId) === center.id
-            ? center.qrCode
-            : src;
+          return parseInt(data.centerId) === center.id ? center.qrCode : src;
         })
       : "";
 
     generatePDF(qrCodeUrl);
+  };
+
+  const VoidInvoice = async () => {
+    try {
+      const response = await api.put(`/convertToVoidInvoiceByInvoiceId/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // toast.success(response.data.message);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.message || "Can't be Cancelled");
+    }
   };
 
   // Utility function to load image
@@ -220,11 +237,15 @@ function InvoiceView() {
           <Link to="/invoice">
             <button className="btn btn-border btn-sm me-1 ">Back</button>
           </Link>
-          <Link to="#">
-            <button className="btn btn-border btn-sm me-1 ">
-              Void Invoice
-            </button>
-          </Link>
+
+          <button
+            type="button"
+            className="btn btn-border btn-sm me-1"
+            onClick={VoidInvoice}
+          >
+            Void Invoice
+          </button>
+          
           {/* <Link to="/sendAndPublish"> */}
           <SendAndPublish data={data} id={id} qr={qrCodeUrl} />
           {/* </Link> */}
@@ -384,12 +405,7 @@ function InvoiceView() {
           </div>
           <div className="col-lg-4 col-md-8 col-12">
             <div className="d-flex justify-content-center flex-column align-items-center">
-              <img
-                src={qrCodeUrl}
-                alt="Teacher"
-                width="100"
-                height="100"
-              />
+              <img src={qrCodeUrl} alt="Teacher" width="100" height="100" />
               {/* {data.qrCode ? (
                 <img
                   src={

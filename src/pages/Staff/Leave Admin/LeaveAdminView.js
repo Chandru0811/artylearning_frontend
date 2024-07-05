@@ -58,13 +58,7 @@ function LeaveAdminView() {
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
-                :{" "}
-                {centerData &&
-                  centerData.map((centerId) =>
-                    parseInt(data.centerId) === centerId.id
-                      ? centerId.centerNames || "--"
-                      : ""
-                  )}
+                :{data.centerName || "--"}
               </p>
             </div>
           </div>
@@ -103,7 +97,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">No.Of.Days</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: {data.noOfDays || "--"}</p>
+              <p className="text-muted text-sm">: {data.noOfDays || "0"} Days</p>
             </div>
           </div>
         </div>
@@ -137,7 +131,8 @@ function LeaveAdminView() {
             </div>
           </div>
         </div>
-        <div className="col-md-6 col-12">
+
+        {/* <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
               <p className="text-sm fw-medium">Request Date</p>
@@ -146,7 +141,7 @@ function LeaveAdminView() {
               <p className="text-muted text-sm">: {data.requestDate || "--"}</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* <div className="col-md-6 col-12">
           <div className="row mb-3">

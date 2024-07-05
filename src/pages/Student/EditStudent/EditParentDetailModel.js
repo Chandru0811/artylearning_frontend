@@ -214,7 +214,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                       src={data.profileImage}
                       className="img-fluid rounded"
                       style={{ width: "60%" }}
-                      alt="Parent Signature Img"
+                      alt=" "
                     ></img>
                   </div>
                 </div>

@@ -125,6 +125,7 @@ const Invoice = () => {
               <th scope="col">Centre</th>
               <th scope="col">Student</th>
               <th scope="col">Package</th>
+              <th scope="col">Status</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -162,6 +163,15 @@ const Invoice = () => {
                       parseInt(data.packageId) === packages.id
                         ? packages.packageNames || "--"
                         : ""
+                    )}
+                </td>
+                <td>
+                  {data.invoiceStatus === "PAID" ? (
+                      <span className="badge badges-Green">Paid</span>
+                    ) : data.invoiceStatus === "CANCELLED" ? (
+                      <span className="badge badges-Red">Cancelled</span>
+                    ) : (
+                      <span className="badge badges-Yellow">Pending</span>
                     )}
                 </td>
                 <td>

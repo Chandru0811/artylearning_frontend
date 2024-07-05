@@ -20,7 +20,7 @@ const StaffPersonalAdd = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const formik = useFormik({
       initialValues: {
-        role: "staff",
+        role: formData.role || "",
         teacherName: formData.teacherName || "",
         dateOfBirth: formData.dateOfBirth || "",
         idType: formData.idType || "",
@@ -28,8 +28,7 @@ const StaffPersonalAdd = forwardRef(
         citizenship: formData.citizenship || "",
         file: formData.file || "",
         shortIntroduction: formData.shortIntroduction || "",
-        gender: formData.gender || "",
-        role:formData.role
+        gender: formData.gender || ""
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -73,6 +72,7 @@ const StaffPersonalAdd = forwardRef(
         }
       },
     });
+
     useImperativeHandle(ref, () => ({
       staffPersonalAdd: formik.handleSubmit,
     }));
@@ -202,10 +202,11 @@ const StaffPersonalAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.role}
               >
-                <option value={""}>select the Role</option>
+                <option disabled selected>select the Role</option>
                 <option value={"staff"}>Staff</option>
                 <option value={"branch_admin"}>Branch Admin</option>
                 <option value={"staff_admin"}>Staff Admin</option>
+                <option value={"center_manager"}>Centre Manager</option>
               </select>
               {formik.touched.role && formik.errors.role && (
                 <div className="error text-danger ">

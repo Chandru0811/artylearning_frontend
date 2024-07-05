@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const StaffAccountEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [shgData, setShgData] = useState([]);
 
@@ -138,42 +138,21 @@ const StaffAccountEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally{
+        } finally {
           setLoadIndicators(false);
         }
       },
     });
-    useEffect(() => {
-      const getData = async () => {
-          
-          try {
-              const response = await api.get("/getAllSHGSetting");
-              setShgData(response.data);
-              console.log("shgdata",shgData)
-          } catch (error) {
-              console.error("Error fetching data:", error);
-          } 
-      };
-      
-      getData();
-  }, []);
 
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     const response = await api.get(`/getAllUsersById/${formData.user_id}`);
-    //     const data = response.data.userAccountInfo[0];
-    //     formik.setValues({
-    //       ...data,
-    //       startDate: data.startDate.substring(0, 10),
-    //       endDate: data.endDate.substring(0, 10),
-    //       accountId: data.id,
-    //       approvelContentRequired:
-    //         data.approvelContentRequired === true ? "Yes" : "No",
-    //     });
-    //   };
-    //   getData();
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+    const ShgType = async () => {
+      try {
+        const response = await api.get("/getAllSHGSetting");
+        setShgData(response.data);
+        console.log("shgdata", shgData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
     useEffect(() => {
       const getData = async () => {
@@ -220,6 +199,7 @@ const StaffAccountEdit = forwardRef(
       // console.log(formik.values);
       getData();
       fetchData();
+      ShgType();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -227,11 +207,11 @@ const StaffAccountEdit = forwardRef(
       staffAccountEdit: formik.handleSubmit,
     }));
     const handleSubjectChange = (event) => {
-      const shgTypeId = parseInt(event.target.value, 10); 
+      const shgTypeId = parseInt(event.target.value, 10);
       formik.setFieldValue("shgType", shgTypeId);
-      const shg = shgData.find((shg) => shg.id === shgTypeId)
+      const shg = shgData.find((shg) => shg.id === shgTypeId);
       if (shg) {
-        formik.setFieldValue("shgAmount", shg.shgAmount); 
+        formik.setFieldValue("shgAmount", shg.shgAmount);
       }
     };
     return (
@@ -324,9 +304,7 @@ const StaffAccountEdit = forwardRef(
               )}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                SHG(s) Type
-              </label>
+              <label>SHG(s) Type</label>
               <select
                 type="text"
                 className="form-select"
@@ -335,19 +313,19 @@ const StaffAccountEdit = forwardRef(
                 onChange={handleSubjectChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.shgType}
-              > <option selected></option>
-              {shgData &&
-                shgData.map((shg) => (
-                  <option key={shg.id} value={shg.id}>
-                    {shg.shgType}
-                  </option>
-                ))}
-                </select>
+              >
+                {" "}
+                <option selected></option>
+                {shgData &&
+                  shgData.map((shg) => (
+                    <option key={shg.id} value={shg.id}>
+                      {shg.shgType}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                SHG Amount
-              </label>
+              <label>SHG Amount</label>
               <input
                 type="readOnly"
                 className="form-control"
@@ -381,9 +359,7 @@ const StaffAccountEdit = forwardRef(
               )}
             </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                End Date
-              </label>
+              <label>End Date</label>
               <input
                 type="date"
                 className="form-control"

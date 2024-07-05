@@ -127,7 +127,9 @@ const Staff = () => {
                       <span className="badge badges-Red">Branch Admin</span>
                     ) : data.role === "staff_admin" ? (
                       <span className="badge badges-Blue">Staff Admin</span>
-                    ) : (
+                    ) : data.role === "center_manager" ? (
+                      <span className="badge badges-Yellow">Centre Manager</span>
+                    ):(
                       <span className="badge badges-Green">Staff</span>
                     )}
                   </td>

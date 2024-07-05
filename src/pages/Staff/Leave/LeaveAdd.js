@@ -18,14 +18,84 @@ const validationSchema = Yup.object({
 function LeaveAdd() {
   const [centerData, setCenterData] = useState(null);
   const [datas, setDatas] = useState([]);
+  console.log("Datas:", datas);
   const userId = sessionStorage.getItem("userId");
   const centerId = sessionStorage.getItem("centerId");
   const navigate = useNavigate();
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [daysDifference, setDaysDifference] = useState(0);
+  const [leaveTypeData, setLeaveTypeData] = useState([]);
+
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
 
-  const [daysDifference, setDaysDifference] = useState(0);
+  const formik = useFormik({
+    initialValues: {
+      userId: userId,
+      centerId: "",
+      centerName: "",
+      employeeName: "",
+      leaveType: "",
+      noOfDays: "",
+      fromDate: "",
+      toDate: "",
+      requestDate: "",
+      approverName: "",
+      dayType: "",
+      leaveStatus: "",
+      leaveReason: "",
+      file: "",
+    },
+    validationSchema: validationSchema,
+
+    onSubmit: async (data) => {
+      setLoadIndicator(true);
+      let selectedCenterName = "";
+
+      if (centerData) {
+        centerData.forEach((center) => {
+          if (parseInt(centerId) === center.id) {
+            selectedCenterName = center.centerNames || "--";
+          }
+        });
+      }
+      try {
+        const formDatas = new FormData();
+        formDatas.append("userId", userId);
+        formDatas.append("centerName", selectedCenterName);
+        formDatas.append("employeeName", datas && datas.employeeName);
+        formDatas.append("leaveType", data.leaveType);
+        formDatas.append("noOfDays", data.noOfDays);
+        formDatas.append("fromDate", data.fromDate);
+        formDatas.append("toDate", data.toDate);
+        formDatas.append("dayType", data.dayType);
+        formDatas.append("leaveReason", data.leaveReason);
+        formDatas.append("leaveStatus", "PENDING");
+        formDatas.append("file", data.file);
+
+        const response = await api.post(
+          `/createUserLeaveRequestWithAttachment`,
+          formDatas,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/leave");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
+    },
+  });
 
   const calculateDays = (fromDate, toDate) => {
     const fromDateObj = new Date(fromDate);
@@ -44,75 +114,20 @@ function LeaveAdd() {
       toast.error(error);
     }
   };
-
+  
+  const fetchLeaveType = async () => {
+    try {
+      const response = await api.get(`getAllLeaveSetting`);
+      setLeaveTypeData(response.data); // Assuming response.data is an array
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  
   useEffect(() => {
     fetchData();
+    fetchLeaveType();
   }, []);
-
-  const formik = useFormik({
-    initialValues: {
-      centerId: "",
-      centerName: "",
-      employeeName: "",
-      userId: "",
-      leaveType: "",
-      noOfDays: "",
-      fromDate: "",
-      toDate: "",
-      requestDate: "",
-      dayType: "",
-      attachment: "",
-      leaveStatus: "",
-      leaveReason: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log("Leave Data:", values);
-
-      let selectedCenterName = "";
-
-      if (centerData) {
-        centerData.forEach((center) => {
-          if (parseInt(centerId) === center.id) {
-            selectedCenterName = center.centerNames || "--";
-          }
-        });
-      }
-      const payload = {
-        userId: userId,
-        centerId: centerId,
-        centerName: selectedCenterName,
-        employeeName: datas.employeeName,
-        leaveType: values.leaveType,
-        noOfDays: daysDifference,
-        fromDate: values.fromDate,
-        toDate: values.toDate,
-        requestDate: selectedDate,
-        dayType: values.dayType,
-        attachment: values.attachment,
-        leaveStatus: "PENDING",
-        leaveReason: values.leaveReason,
-      };
-
-      console.log("Request Date is", payload);
-
-      try {
-        const response = await api.post("/createUserLeaveRequest", payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.status === 201) {
-          toast.success(response.data.message);
-          navigate("/leave");
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error) {
-        toast.error(error);
-      }
-    },
-  });
 
   useEffect(() => {
     const getData = async () => {
@@ -140,7 +155,18 @@ function LeaveAdd() {
                 </button>
               </Link>
               &nbsp;&nbsp;
-              <button type="submit" className="btn btn-sm btn-button">
+              <button
+                type="submit"
+                onSubmit={formik.handleSubmit}
+                className="btn btn-sm btn-button"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Save
               </button>
             </div>
@@ -155,7 +181,6 @@ function LeaveAdd() {
                 name="employeeName"
                 className="form-control"
                 value={datas && datas.employeeName}
-                // {...formik.getFieldProps("employeeName")}
                 readOnly
               />
               <input
@@ -179,9 +204,12 @@ function LeaveAdd() {
                 {...formik.getFieldProps("leaveType")}
               >
                 <option selected></option>
-                <option value="SICK_LEAVE">Sick Leave</option>
-                <option value="CASUAL_LEAVE">Casual Leave</option>
-                <option value="PRIVILEGE_LEAVE">Privilege Leave</option>
+                {leaveTypeData &&
+                  leaveTypeData.map((leave) => (
+                    <option key={leave.id} value={leave.leaveType}>
+                      {leave.leaveType}
+                    </option>
+                  ))}
               </select>
               {formik.touched.leaveType && formik.errors.leaveType && (
                 <div className="invalid-feedback">
@@ -284,7 +312,12 @@ function LeaveAdd() {
               <input
                 type="file"
                 className="form-control"
-                {...formik.getFieldProps("attachment")}
+                name="file"
+                // {...formik.getFieldProps("file")}
+                onChange={(event) => {
+                  formik.setFieldValue("file", event.currentTarget.files[0]);
+                }}
+                onBlur={formik.handleBlur}
               />
             </div>
             <div className="col-md-6 col-12 mb-3">

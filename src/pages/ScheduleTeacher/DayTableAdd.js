@@ -7,36 +7,18 @@ import Modal from "react-bootstrap/Modal";
 import { FaPlusCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
-import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+// import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+import fetchAllStudentListByCenterAndCourse from "../List/StudentListByCenterAndCourse";
 
-function DayTableAdd({ onSuccess, id, centerId, day }) {
+function DayTableAdd({ onSuccess, id, centerId, courseId, day }) {
   const [show, setShow] = useState(false);
-  const [studentData, setStudentData] = useState(false);
-
-  const fetchData = async () => {
-    try {
-      const studentData = await fetchAllStudentListByCenter(centerId);
-      setStudentData(studentData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-  };
-  const handleShow = () => setShow(true);
+  const [studentData, setStudentData] = useState([false]);
 
   const validationSchema = Yup.object({
     studentId: Yup.string().required("*Student is required"),
   });
 
+  
   const formik = useFormik({
     initialValues: {
       studentId: "",
@@ -70,6 +52,28 @@ function DayTableAdd({ onSuccess, id, centerId, day }) {
       }
     },
   });
+
+
+  const fetchData = async () => {
+    try {
+      const studentData = await fetchAllStudentListByCenterAndCourse(centerId ,courseId);
+      setStudentData(studentData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+  };
+
+  const handleShow = () => setShow(true);
 
   return (
     <>

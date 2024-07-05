@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const StaffAccountAdd = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [shgData, setShgData] = useState([]);
 
@@ -47,21 +47,20 @@ const StaffAccountAdd = forwardRef(
     useEffect(() => {
       fetchData();
     }, []);
+
     useEffect(() => {
       const getData = async () => {
-          
-          try {
-              const response = await api.get("/getAllSHGSetting");
-              setShgData(response.data);
-              console.log("shgdata",shgData)
-          } catch (error) {
-              console.error("Error fetching data:", error);
-          } 
+        try {
+          const response = await api.get("/getAllSHGSetting");
+          setShgData(response.data);
+          console.log("shgdata", shgData);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
       };
-      
-      getData();
-  }, []);
 
+      getData();
+    }, []);
 
     const formik = useFormik({
       initialValues: {
@@ -106,7 +105,7 @@ const StaffAccountAdd = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -117,11 +116,11 @@ const StaffAccountAdd = forwardRef(
     }));
 
     const handleSubjectChange = (event) => {
-      const shgTypeId = parseInt(event.target.value, 10); 
+      const shgTypeId = parseInt(event.target.value, 10);
       formik.setFieldValue("shgType", shgTypeId);
-      const shg = shgData.find((shg) => shg.id === shgTypeId)
+      const shg = shgData.find((shg) => shg.id === shgTypeId);
       if (shg) {
-        formik.setFieldValue("shgAmount", shg.shgAmount); 
+        formik.setFieldValue("shgAmount", shg.shgAmount);
       }
     };
 
@@ -149,9 +148,7 @@ const StaffAccountAdd = forwardRef(
               )}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Color Code
-              </label>
+              <label>Color Code</label>
               <div class="input-group mb-3 courseAdd">
                 <div class="input-group-text inputGroup">
                   <input
@@ -215,28 +212,26 @@ const StaffAccountAdd = forwardRef(
               )}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                SHG(s) Type
-              </label>
+              <label>SHG(s) Type</label>
               <select
                 type="text"
                 className="form-select"
                 name="shgType"
                 {...formik.getFieldProps("shgType")}
                 onChange={handleSubjectChange}
-              > <option selected></option>
-              {shgData &&
-                shgData.map((shg) => (
-                  <option key={shg.id} value={shg.id}>
-                    {shg.shgType}
-                  </option>
-                ))}
-                </select>
+              >
+                {" "}
+                <option selected></option>
+                {shgData &&
+                  shgData.map((shg) => (
+                    <option key={shg.id} value={shg.id}>
+                      {shg.shgType}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                SHG Amount
-              </label>
+              <label>SHG Amount</label>
               <input
                 type="readOnly"
                 className="form-control"

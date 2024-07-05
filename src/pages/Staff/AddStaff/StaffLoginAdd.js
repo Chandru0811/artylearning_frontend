@@ -24,8 +24,9 @@ const StaffLoginAdd = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
+          const userId = formData.user_id
           const response = await api.post(
-            `/createUserLoginInfo/${formData.user_id}`,
+            `/createUserLoginInfo/${userId}`,
             values,
             {
               headers: {

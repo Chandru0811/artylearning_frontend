@@ -15,7 +15,9 @@ export default function ScheduleTime() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const centerId = searchParams.get("centerId");
+  const courseId = searchParams.get("courseId");
 
+  console.log("courseId pass ScheduleTime:",courseId);
   // const [selectedDay, setSelectedDay] = useState(null);
   // const [selectedClass, setSelectedClass] = useState(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
@@ -205,6 +207,7 @@ export default function ScheduleTime() {
                                               id={student.id}
                                               onSuccess={refreshData}
                                               centerId={centerId}
+                                              courseId={courseId}
                                               day={data.day}
                                             />
                                           )}
@@ -221,6 +224,7 @@ export default function ScheduleTime() {
                                             <DayTableAdd
                                               onSuccess={refreshData}
                                               centerId={centerId}
+                                              courseId={courseId}
                                               day={data.day}
                                             />
                                           )}
