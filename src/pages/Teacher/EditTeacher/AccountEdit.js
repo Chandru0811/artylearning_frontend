@@ -12,17 +12,9 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
-  // colorCode: Yup.string().required("*Color Code Of is required!"),
   teacherId: Yup.string().required("*Teacher Id is required"),
   teacherType: Yup.string().required("*Teacher Type is require"),
-  // shgType: Yup.string().required("*Shg Type is required!"),
-  // shgAmount: Yup.string()
-  //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
-  //   .required("*SHG amount is required!"),
-  // status: Yup.string().required("*Status is required!"),
-  approvelContentRequired: Yup.string().required(
-    "*Approval Required is required"
-  ),
+  approvelContentRequired: Yup.string().required("*Approval Required is required"),
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
@@ -30,7 +22,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+
   const [centerData, setCenterData] = useState(null);
+  const [shgData, setShgData] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -40,6 +34,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
       toast.error(error);
     }
   };
+
   const formik = useFormik({
     initialValues: {
       startDate: "",
@@ -55,6 +50,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
       centerId: "",
     },
     validationSchema: validationSchema,
+
     // onSubmit: async (values) => {
     //   values.approvelContentRequired = values.approvelContentRequired === "Yes";
 
@@ -139,28 +135,24 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
     },
   });
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
-  //       const data = response.data.userAccountInfo[0];
-  //       formik.setValues({
-  //         ...data,
-  //         startDate: data.startDate ? data.startDate.substring(0, 10) : "",
-  //         endDate: data.endDate.substring(0, 10),
-  //         accountId: data.id,
-  //         approvelContentRequired: data.approvelContentRequired === true ? "Yes" : "No",
-  //       });
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //       // Handle error here, e.g., show a message to the user
-  //       // You can set default values or leave fields empty as needed
-  //     }
-  //   };
-  //   getData();
-  //  fetchData();
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  const ShgType = async () => {
+    try {
+      const response = await api.get("/getAllSHGSetting");
+      setShgData(response.data);
+      console.log("shgdata", shgData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleSubjectChange = (event) => {
+    const shgTypeId = parseInt(event.target.value, 10);
+    formik.setFieldValue("shgType", shgTypeId);
+    const shg = shgData.find((shg) => shg.id === shgTypeId);
+    if (shg) {
+      formik.setFieldValue("shgAmount", shg.shgAmount);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -176,10 +168,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
             ...response.data.userAccountInfo[0],
             accountId: response.data.userAccountInfo[0].id,
             startDate: data.startDate.substring(0, 10),
-            endDate: data.endDate.substring(0, 10),
-            approvelContentRequired:
-              data.approvelContentRequired === true ? "Yes" : "No",
-              status: data.status || "",
+            approvelContentRequired: data.approvelContentRequired === true ? "Yes" : "No",
           });
         } else {
           formik.setValues({
@@ -202,10 +191,9 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
         console.error("Error fetching data:", error);
       }
     };
-    // console.log(formik.values);
     getData();
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ShgType();
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -302,31 +290,38 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
             )}
           </div>
           <div class="col-md-6 col-12 mb-2 mt-3">
-            <label>
-              SHG(s) Type
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="shgType"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.shgType}
-            />
-          </div>
-          <div class="col-md-6 col-12 mb-2 mt-3">
-            <label>
-              SHG Amount
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="shgAmount"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.shgAmount}
-            />
-          </div>
+              <label>SHG(s) Type</label>
+              <select
+                type="text"
+                className="form-select"
+                name="shgType"
+                {...formik.getFieldProps("shgType")}
+                onChange={handleSubjectChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.shgType}
+              >
+                {" "}
+                <option selected></option>
+                {shgData &&
+                  shgData.map((shg) => (
+                    <option key={shg.id} value={shg.id}>
+                      {shg.shgType}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div class="col-md-6 col-12 mb-2 mt-3">
+              <label>SHG Amount</label>
+              <input
+                type="readOnly"
+                className="form-control"
+                name="shgAmount"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.shgAmount}
+                readOnly
+              />
+            </div>
 
           {/* <div class="col-md-6 col-12 mb-2 mt-3">
             <lable class="">

@@ -12,15 +12,8 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required!"),
-  // colorCode: Yup.string().required("*Color Code Of is required!"),
   teacherId: Yup.string().required("*Staff Id is required!"),
   teacherType: Yup.string().required("*Staff Type is required!"),
-  // shgType: Yup.string().required("*Shg Type is required!"),
-  // shgAmount: Yup.string()
-  //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
-  //   .required("*SHG amount is required!"),
-  // status: Yup.string().required("*Status is required!"),
-  // endDate: Yup.string().required("*End Date is required"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required"
   ),
@@ -52,13 +45,13 @@ const StaffAccountEdit = forwardRef(
         teacherType: "",
         shgType: "",
         shgAmount: "",
-        status: "",
         endDate: "",
         approvelContentRequired: "",
         workingDays: [],
         centerId: "",
       },
       validationSchema: validationSchema,
+
       // onSubmit: async (values) => {
       //   values.approvelContentRequired =
       //     values.approvelContentRequired === "Yes";
@@ -84,6 +77,7 @@ const StaffAccountEdit = forwardRef(
       //     toast.error(error);
       //   }
       // },
+      
       onSubmit: async (values) => {
         // console.log("Api Data:", values);
         setLoadIndicators(true);
@@ -165,14 +159,12 @@ const StaffAccountEdit = forwardRef(
             response.data.userAccountInfo.length > 0
           ) {
             const data = response.data.userAccountInfo[0];
+            console.log("data", data);
             formik.setValues({
               ...response.data.userAccountInfo[0],
               accountId: response.data.userAccountInfo[0].id,
               startDate: data.startDate.substring(0, 10),
-              endDate: data.endDate.substring(0, 10),
-              // accountId: data.id,
-              approvelContentRequired:
-                data.approvelContentRequired === true ? "Yes" : "No",
+              approvelContentRequired: data.approvelContentRequired === true ? "Yes" : "No",
             });
           } else {
             formik.setValues({
@@ -183,29 +175,25 @@ const StaffAccountEdit = forwardRef(
               teacherType: "",
               shgType: "",
               shgAmount: "",
-              status: "",
               endDate: "",
               approvelContentRequired: "",
               workingDays: [],
               centerId: "",
             });
-            // console.log("Account ID:", formik.values.accountId);
           }
         } catch (error) {
-          toast.error("Error Fetching Data");
+          console.error("Error fetching data:", error);
         }
       };
-
-      // console.log(formik.values);
       getData();
       fetchData();
       ShgType();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useImperativeHandle(ref, () => ({
       staffAccountEdit: formik.handleSubmit,
     }));
+
     const handleSubjectChange = (event) => {
       const shgTypeId = parseInt(event.target.value, 10);
       formik.setFieldValue("shgType", shgTypeId);
@@ -214,6 +202,7 @@ const StaffAccountEdit = forwardRef(
         formik.setFieldValue("shgAmount", shg.shgAmount);
       }
     };
+
     return (
       <form onSubmit={formik.handleSubmit}>
         <div className="container courseAdd">
@@ -337,27 +326,6 @@ const StaffAccountEdit = forwardRef(
               />
             </div>
 
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
-              <lable class="">
-                Status<span class="text-danger">*</span>
-              </lable>
-              <select
-                class="form-select"
-                name="status"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.status}
-              >
-                <option value=""></option>
-                <option value="Active">Active</option>
-                <option value="In Active">Inactive</option>
-              </select>
-              {formik.touched.status && formik.errors.status && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.status}</small>
-                </div>
-              )}
-            </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>End Date</label>
               <input

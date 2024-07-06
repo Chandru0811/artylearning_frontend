@@ -86,7 +86,8 @@ function StaffingAttendanceAdd() {
           },
         });
         if (response.status === 201) {
-          toast.success(response.data.message);
+          // toast.success(response.data.message);
+          toast.success("user attendance created successfully");
           navigate("/staffing/attendance");
         } else {
           toast.error(response.data.message);
