@@ -117,6 +117,18 @@ const AddParentGuardian = forwardRef(
       ParentGuardian: formik.handleSubmit,
     }));
 
+    const handleRemoveRow = (index) => {
+      setRows((prevRows) => prevRows - 1);
+      const updatedParentInformation = [...formik.values.parentInformation];
+      updatedParentInformation.splice(index, 1);
+      formik.setFieldValue('parentInformation', updatedParentInformation);
+      if (selectedPrimaryContactIndex === index) {
+        setSelectedPrimaryContactIndex(null);
+      } else if (selectedPrimaryContactIndex > index) {
+        setSelectedPrimaryContactIndex(selectedPrimaryContactIndex - 1);
+      }
+    };
+
     return (
       <div className="container-fluid">
         {[...Array(rows)].map((_, index) => (
@@ -475,7 +487,8 @@ const AddParentGuardian = forwardRef(
             {rows > 1 && (
               <button
                 type="button"
-                onClick={() => setRows((prevRows) => prevRows - 1)}
+                // onClick={() => setRows((prevRows) => prevRows - 1)}
+                onClick={() => handleRemoveRow(rows)}
                 className="btn btn-outline-danger"
               >
                 Delete

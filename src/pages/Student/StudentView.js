@@ -544,7 +544,7 @@ function StudentView() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-6 col-12">
+                    {/* <div className="col-md-6 col-12">
                       <div className="row  mb-2">
                         <div className="col-6  ">
                           <p className="fw-medium">Relation</p>
@@ -561,9 +561,9 @@ function StudentView() {
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="col-md-6 col-12 mt-5">
+                    <div className="col-md-6 col-12 ">
                       <div className="row  mb-2">
                         <div className="col-6  ">
                           <p className="fw-medium"></p>

@@ -109,7 +109,7 @@ function TeacherSummary({ data }) {
                     </li>
                   </div>
                   <div className="d-flex align-items-center mb-3">
-                    {data.userDocumentInfo.length === 0 ? (
+                    {data.userRequireInformationModels.length === 0 ? (
                       <box-icon
                         name="x-circle"
                         type="solid"

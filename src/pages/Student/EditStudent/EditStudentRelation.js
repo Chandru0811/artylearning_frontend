@@ -173,7 +173,7 @@ const EditStudentRelation = forwardRef(
                             ))}
                         </select>
                       </div>
-                      {/* <div className="text-start mt-2">
+                      <div className="text-start mt-2">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>Relation</small>
                         </label>
@@ -191,7 +191,7 @@ const EditStudentRelation = forwardRef(
                           <option value="Brother">Brother</option>
                           <option value="Sister">Sister</option>
                         </select>
-                      </div> */}
+                      </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-12">
                       <div className="text-start">

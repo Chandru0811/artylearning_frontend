@@ -50,23 +50,23 @@ function DocumentView() {
       console.error("Error refreshing data:", error);
     }
   };
-  console.log("data",data)
+  console.log("data", data);
 
   const downloadFiles = async () => {
-    setLoadIndicator(true)
+    setLoadIndicator(true);
     const zip = new JSZip();
 
     for (const img of data) {
       const response = await fetch(img.fileAttachment);
       const blob = await response.blob();
-      const fileName = img.fileAttachment.split('/').pop();
+      const fileName = img.fileAttachment.split("/").pop();
       zip.file(fileName, blob);
     }
 
     // Generate ZIP file and trigger download
-    const content = await zip.generateAsync({ type: 'blob' });
+    const content = await zip.generateAsync({ type: "blob" });
     saveAs(content, folderName);
-    setLoadIndicator(false)
+    setLoadIndicator(false);
   };
 
   return (
@@ -102,55 +102,62 @@ function DocumentView() {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  <th scope="row" className="p-4 align-item-center">
-                    {index + 1}
-                  </th>
-                  <td>
-                    {item.fileExtension === "mp4" ? (
-                      <video
-                        controls
-                        style={{ width: "200px", height: "auto" }}
-                        
+              {data && data.length > 0 ? (
+                data.map((item, index) => (
+                  <tr key={index}>
+                    <th scope="row" className="p-4 align-item-center">
+                      {index + 1}
+                    </th>
+                    <td>
+                      {item.fileExtension === "mp4" ? (
+                        <video
+                          controls
+                          style={{ width: "200px", height: "auto" }}
+                        >
+                          <source src={item.fileAttachment} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : (
+                        <p className="my-2 d-flex">
+                          {item.fileAttachment ? (
+                            <img
+                              src={item.fileAttachment}
+                              width="200"
+                              height="auto"
+                              alt=""
+                            />
+                          ) : (
+                            <></>
+                          )}
+                        </p>
+                      )}
+                    </td>
+                    <td className="p-4">{item.fileExtension}</td>
+                    <td className="p-4">
+                      {storedScreens?.documentListingDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteDocumentFiles/${item.id}`}
+                        />
+                      )}
+                      <button
+                        className="btn"
+                        onClick={() =>
+                          window.open(item.fileAttachment, "_blank")
+                        }
                       >
-                        <source src={item.fileAttachment} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    ) : (
-                      <p className="my-2 d-flex">
-                        {item.fileAttachment ? (
-                          <img
-                            src={item.fileAttachment}
-                            
-                            width="200"
-                            height="auto"
-                            alt=""
-                          />
-                        ) : (
-                          <></>
-                        )}
-                      </p>
-                    )}
-                  </td>
-                  <td className="p-4">{item.fileExtension}</td>
-                  <td className="p-4">
-                    {storedScreens?.documentListingDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteDocumentFiles/${item.id}`}
-                      />
-                    )}
-
-                    <button
-                      className="btn"
-                      onClick={() => window.open(item.fileAttachment, "_blank")}
-                    >
-                      <IoMdDownload />
-                    </button>
+                        <IoMdDownload />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center">
+                    No Record's Found
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
