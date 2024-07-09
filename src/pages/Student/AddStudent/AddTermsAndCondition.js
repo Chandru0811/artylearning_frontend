@@ -12,7 +12,7 @@ const validationSchema = Yup.object().shape({
   ),
   agree: Yup.boolean()
     .oneOf([true], "*You Must Accept Terms and conditions is required")
-    .required(),
+    .required("*You Must Accept Terms and conditions is required"),
 });
 
 const AddTermsAndCondition = forwardRef(
