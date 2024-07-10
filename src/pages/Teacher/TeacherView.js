@@ -7,7 +7,7 @@ import TeacherSummary from "./TeacherSummary";
 function TeacherView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  // console.log(data);
+  console.log("Api data:", data);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -21,6 +21,29 @@ function TeacherView() {
     };
     getData();
   }, [id]);
+
+  const getFileNameFromUrl = (url) => {
+    if (url) {
+      const parts = url.split("/");
+      return parts[parts.length - 1];
+    }
+    return "--";
+  };
+
+  // Safely accessing the first element of userRequireInformationModels array
+  const userRequireInfo = data?.userRequireInformationModels?.[0];
+  const resumeFileName = userRequireInfo
+    ? getFileNameFromUrl(userRequireInfo.resume)
+    : "--";
+  const educationalCertificates = userRequireInfo
+    ? getFileNameFromUrl(userRequireInfo.educationCertificate)
+    : "--";
+
+  // Construct the full URL to the resume and educational certificates file
+  const resumeFileNameUrl = userRequireInfo ? userRequireInfo.resume : "#";
+  const educationCertificateUrl = userRequireInfo
+    ? userRequireInfo.educationCertificate
+    : "#";
 
   return (
     <div class="container-fluid minHeight mb-5">
@@ -61,7 +84,6 @@ function TeacherView() {
           {data.photo ? (
             <img
               src={data.photo}
-              
               style={{ borderRadius: 70 }}
               width="100"
               height="100"
@@ -416,36 +438,52 @@ function TeacherView() {
             </div>
           </div>
         </div>
-        <div className="row ">
+        {/* Resume/CV Section */}
+        <div className="row">
           <div className="">
             <div className="row mb-3 d-flex">
               <div className="col-4 ">
                 <p className="text-sm text-muted">Resume/Cv</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{data.subject || "--"}</p>
+                <p className="text-sm text-muted">{resumeFileName || "--"}</p>
               </div>
-              <div className="col-4">
-                <p className="text-sm ">
-                  <FaCloudDownloadAlt />
-                </p>
+              <div className="col-4 ">
+                {userRequireInfo && (
+                  <p className="text-sm ms-3">
+                    <a href={resumeFileNameUrl} download={resumeFileName}>
+                      <FaCloudDownloadAlt />
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className="row ">
+
+        {/* Educational Certificates Section */}
+        <div className="row">
           <div className="">
             <div className="row mb-3 d-flex">
               <div className="col-4 ">
                 <p className="text-sm text-muted">Educational Certificates</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{data.subject || "--"}</p>
+                <p className="text-sm text-muted">
+                  {educationalCertificates || "--"}
+                </p>
               </div>
               <div className="col-4">
-                <p className="text-sm">
-                  <FaCloudDownloadAlt />
-                </p>
+                {userRequireInfo && (
+                  <p className="text-sm ms-3">
+                    <a
+                      href={educationCertificateUrl}
+                      download={educationalCertificates}
+                    >
+                      <FaCloudDownloadAlt />
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>

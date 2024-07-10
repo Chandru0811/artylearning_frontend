@@ -75,10 +75,10 @@ function InvoiceView() {
       doc.line(16, 70, 50, 70); // x, y, width, height
 
       doc.setFontSize(13);
-      doc.text(`Invoice Number : ${data.invoiceNumber}`, 14, 80);
-      doc.text(`Student Name :${data.studentName}`, 14, 90);
-      doc.text(`Student Id : ${data.studentUniqueId}`, 14, 100);
-      doc.text(`Course Name : ${data.courseName}`, 120, 80);
+      doc.text(`Invoice Number : ${data.invoiceNumber || " "}`, 14, 80);
+      doc.text(`Student Name :${data.studentName || " "}`, 14, 90);
+      doc.text(`Student Id : ${data.studentUniqueId || " "}`, 14, 100);
+      doc.text(`Course Name : ${data.courseName || " "}`, 120, 80);
       doc.text(
         `Due Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
         120,

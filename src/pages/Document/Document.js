@@ -109,7 +109,7 @@ const Document = () => {
               <th scope="col">Course</th>
               <th scope="col">Class</th>
               <th scope="col">Batch</th>
-              {/* <th scope="col">Status</th> */}
+              <th scope="col">Status</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -129,17 +129,17 @@ const Document = () => {
                 <td>{data.course}</td>
                 <td>{data.classListing}</td>
                 <td>{data.batchTime}</td>
-                {/* <td>
-                  {data.status === "Active" ? (
-                    <span className="badge badges-Green">Active</span>
+                <td>
+                  {data.approveStatus === true ? (
+                    <span className="badge badges-Yellow">Pending</span>
                   ) : (
-                    <span className="badge badges-Red">In Active</span>
+                    <span className="badge badges-Green">Approval</span>
                   )}
-                </td> */}
+                </td>
                 <td>
                   <div className="d-flex">
                     {storedScreens?.documentListingRead && (
-                      <Link to={`/document/view/${data.id}`}>
+                      <Link to={`/document/view/${data.id}?approveStatus=${data.approveStatus}`}>
                         <button className="btn btn-sm">
                           <FaEye />
                         </button>

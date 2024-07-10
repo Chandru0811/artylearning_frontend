@@ -39,9 +39,8 @@ function StaffView() {
   //   doc.save('generated.pdf');
   // };
 
-  
-const generatePDF = async () => {
-  const mailContent = `
+  const generatePDF = async () => {
+    const mailContent = `
  <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -97,7 +96,9 @@ const generatePDF = async () => {
             bound by the terms set forth in this Agreement as follows
         </p>
         <P><strong>1.Employment : </strong><br>
-            Employer shall employ Employee as a <b>${data.userContractCreationModels[0]?.jobTitle}</b> on a full time basis under 
+            Employer shall employ Employee as a <b>${
+              data.userContractCreationModels[0]?.jobTitle
+            }</b> on a full time basis under 
             this Agreement. In this capacity, Employee shall have the following duties 
             and undertake the Responsibilities. 
         </P>
@@ -107,12 +108,20 @@ const generatePDF = async () => {
             and experience.
         </p>
         <p><strong>3.Term :</strong><br>
-          Fixed Term Employee's employment under this Agreement shall begin ${data.userContractCreationModels[0]?.userContractStartDate?.substring(0,10)}
-          and will terminate on ${data.userContractCreationModels[0]?.userContractEndDate?.substring(0,10)}
+          Fixed Term Employee's employment under this Agreement shall begin ${data.userContractCreationModels[0]?.userContractStartDate?.substring(
+            0,
+            10
+          )}
+          and will terminate on ${data.userContractCreationModels[0]?.userContractEndDate?.substring(
+            0,
+            10
+          )}
       </p>
         <p><strong>4.Compensation : </strong><br>
           As compensation for the services provided by Employee under this Agreement,
-          Employer will pay Employee ${data.userContractCreationModels[0]?.userContractSalary} per month. The Amount will be paid to employee 
+          Employer will pay Employee ${
+            data.userContractCreationModels[0]?.userContractSalary
+          } per month. The Amount will be paid to employee 
         </p
        
       </div>
@@ -123,28 +132,51 @@ const generatePDF = async () => {
   </body>
 </html>
 `;
-  try {
-    const tempElem = document.createElement('div');
-    tempElem.innerHTML = mailContent;
+    try {
+      const tempElem = document.createElement("div");
+      tempElem.innerHTML = mailContent;
 
-    document.body.appendChild(tempElem);
+      document.body.appendChild(tempElem);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const canvas = await html2canvas(tempElem);
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF();
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('generated.pdf');
+      const canvas = await html2canvas(tempElem);
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("generated.pdf");
 
-    document.body.removeChild(tempElem);
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    toast.error('Error generating PDF');
-  }
-};
+      document.body.removeChild(tempElem);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Error generating PDF");
+    }
+  };
+
+  const getFileNameFromUrl = (url) => {
+    if (url) {
+      const parts = url.split("/");
+      return parts[parts.length - 1];
+    }
+    return "--";
+  };
+
+  // Safely accessing the first element of userRequireInformationModels array
+  const userRequireInfo = data?.userRequireInformationModels?.[0];
+  const resumeFileName = userRequireInfo
+    ? getFileNameFromUrl(userRequireInfo.resume)
+    : "--";
+  const educationalCertificates = userRequireInfo
+    ? getFileNameFromUrl(userRequireInfo.educationCertificate)
+    : "--";
+
+  // Construct the full URL to the resume and educational certificates file
+  const resumeFileNameUrl = userRequireInfo ? userRequireInfo.resume : "#";
+  const educationCertificateUrl = userRequireInfo
+    ? userRequireInfo.educationCertificate
+    : "#";
 
   return (
     <div class="container-fluid minHeight mb-5">
@@ -154,7 +186,7 @@ const generatePDF = async () => {
             <div class="d-flex align-items-center gap-4"></div>
           </div>
           <div class="col-auto">
-            <div class="hstack gap-2 justify-content-end" >
+            <div class="hstack gap-2 justify-content-end">
               <button
                 className="btn btn-button btn-sm ms-1"
                 onClick={generatePDF}
@@ -186,12 +218,11 @@ const generatePDF = async () => {
         </div>
       </div>
       <p class="headColor mt-3">Personal Information</p>
-      <div className="d-flex justify-content-center" >
+      <div className="d-flex justify-content-center">
         <p className="my-2 d-flex">
           {data.photo ? (
             <img
               src={data.photo}
-              
               style={{ borderRadius: 70 }}
               width="100"
               height="100"
@@ -553,36 +584,52 @@ const generatePDF = async () => {
             </div>
           </div>
         </div>
-        <div className="row ">
+        {/* Resume/CV Section */}
+        <div className="row">
           <div className="">
             <div className="row mb-3 d-flex">
               <div className="col-4 ">
                 <p className="text-sm text-muted">Resume/Cv</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{data.subject || "--"}</p>
+                <p className="text-sm text-muted">{resumeFileName || "--"}</p>
               </div>
               <div className="col-4">
-                <p className="text-sm ">
-                  <FaCloudDownloadAlt />
-                </p>
+                {userRequireInfo && (
+                  <p className="text-sm ms-3">
+                    <a href={resumeFileNameUrl} download={resumeFileName}>
+                      <FaCloudDownloadAlt />
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className="row ">
+
+        {/* Educational Certificates Section */}
+        <div className="row">
           <div className="">
             <div className="row mb-3 d-flex">
               <div className="col-4 ">
                 <p className="text-sm text-muted">Educational Certificates</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{data.subject || "--"}</p>
+                <p className="text-sm text-muted">
+                  {educationalCertificates || "--"}
+                </p>
               </div>
               <div className="col-4">
-                <p className="text-sm">
-                  <FaCloudDownloadAlt />
-                </p>
+                {userRequireInfo && (
+                  <p className="text-sm ms-3">
+                    <a
+                      href={educationCertificateUrl}
+                      download={educationalCertificates}
+                    >
+                      <FaCloudDownloadAlt />
+                    </a>
+                  </p>
+                )}
               </div>
             </div>
           </div>

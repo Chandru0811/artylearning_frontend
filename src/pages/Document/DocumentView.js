@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
 import { IoMdDownload } from "react-icons/io";
 import AddContact from "../.././assets/images/AddContact.png";
+import { toast } from "react-toastify";
 
 function DocumentView() {
   const { id } = useParams();
+  const location = useLocation();
+  // Extract the query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const approveStatus = queryParams.get('approveStatus') === 'true';
+  console.log("Approval Status:", approveStatus);
+  
   const [data, setData] = useState([]);
   const [folderName, setFolderName] = useState("");
   const [images] = useState([AddContact]);
@@ -69,9 +76,39 @@ function DocumentView() {
     setLoadIndicator(false);
   };
 
+  const ApproveStatus = async () => {
+    try {
+      const response = await api.put(`/approveUser/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // toast.success(response.data.message);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.message || "Can't be Cancelled");
+    }
+  };
+
   return (
     <div className="container">
       <div className="d-flex justify-content-end align-item-end mt-4">
+        {approveStatus === true ? (
+          <button
+            type="button"
+            onClick={ApproveStatus}
+            className="btn btn-sm btn-border mx-2"
+          >
+            Approval User
+          </button>
+        ) : (
+          <></>
+        )}
+
         <Link to="/document">
           <button type="button" className="btn btn-sm btn-border">
             Back
