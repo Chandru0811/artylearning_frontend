@@ -334,32 +334,32 @@ function Sidebar() {
           {
             title: "Tax",
             path: "/tax",
-            access: true,
+            access: storedScreens.taxSettingIndex,
           },
           {
             title: "Race",
             path: "/race",
-            access: true,
+            access: storedScreens.raceSettingIndex,
           },
           {
             title: "Country & Nationality",
             path: "/country",
-            access: true,
+            access: storedScreens.countrySettingIndex,
           },
           {
             title: "SHG",
             path: "/shg",
-            access: true,
+            access: storedScreens.shgSettingIndex,
           },
           {
             title: "Leave Type",
             path: "/leavetype",
-            access: true,
+            access: storedScreens.leaveSettingIndex,
           },
           {
             title: "Salary Type",
             path: "/salarytype",
-            access: true,
+            access: storedScreens.salarySettingIndex,
           },
         ],
       },
