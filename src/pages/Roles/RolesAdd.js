@@ -282,6 +282,37 @@ function RolesAdd() {
       contactUsUpdate: true,
       contactUsDelete: true,
       contactUsPublish: true,
+      taxSettingIndex: true,
+      taxSettingRead: true,
+      taxSettingCreate: true,
+      taxSettingUpdate: true,
+      taxSettingDelete: true,
+      raceSettingIndex: true,
+      raceSettingRead: true,
+      raceSettingCreate: true,
+      raceSettingUpdate: true,
+      raceSettingDelete: true,
+      countrySettingIndex: true,
+      countrySettingRead: true,
+      countrySettingCreate: true,
+      countrySettingUpdate: true,
+      countrySettingDelete: true,
+      shgSettingIndex: true,
+      shgSettingRead: true,
+      shgSettingCreate: true,
+      shgSettingUpdate: true,
+      shgSettingDelete: true,
+      leaveSettingIndex: true,
+      leaveSettingRead: true,
+      leaveSettingCreate: true,
+      leaveSettingUpdate: true,
+      leaveSettingDelete: true,
+      salarySettingIndex: true,
+      salarySettingRead: true,
+      salarySettingCreate: true,
+      salarySettingUpdate: true,
+      salarySettingDelete: true,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -349,6 +380,7 @@ function RolesAdd() {
                   <option value="4">Staff</option>
                   <option value="5">Staff Admin</option>
                   <option value="6">Teacher</option>
+                  <option value="11">Centre Manager</option>
                 </select>
               </div>
             </div>
@@ -2069,71 +2101,6 @@ function RolesAdd() {
                       </td>
                     </tr>
 
-                    {/* Send Notification */}
-                    <tr>
-                      <th colspan="6">Send Notification</th>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
-                          Send Notification
-                        </p>
-                      </td>
-                      <td>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          name="sendNotificationIndex"
-                          checked={formik.values.sendNotificationIndex}
-                          onChange={handleCheckboxChange(
-                            `sendNotificationIndex`
-                          )}
-                        />
-                      </td>
-                      <td>
-                        {/* <input
-                          class="form-check-input"
-                          type="checkbox"
-                          name="notificationRead"
-                          checked={formik.values.notificationRead}
-                          onChange={handleCheckboxChange(`notificationRead`)}
-                        /> */}
-                      </td>
-                      <td>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          name="sendNotificationCreate"
-                          checked={formik.values.sendNotificationCreate}
-                          onChange={handleCheckboxChange(
-                            `sendNotificationCreate`
-                          )}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          name="sendNotificationUpdate"
-                          checked={formik.values.sendNotificationUpdate}
-                          onChange={handleCheckboxChange(
-                            `sendNotificationUpdate`
-                          )}
-                        />
-                      </td>
-                      <td>
-                        {/* <input
-                          class="form-check-input"
-                          type="checkbox"
-                          name="notificationDelete"
-                          checked={formik.values.notificationDelete}
-                          onChange={handleCheckboxChange(
-                            `notificationDelete`
-                          )}
-                        /> */}
-                      </td>
-                    </tr>
-
                     {/* Report Management  */}
                     <tr>
                       <th colspan="6">Report Management</th>
@@ -2190,6 +2157,7 @@ function RolesAdd() {
                         /> */}
                       </td>
                     </tr>
+
                     <tr>
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
@@ -2620,6 +2588,437 @@ function RolesAdd() {
                         /> */}
                       </td>
                     </tr>
+
+                    {/* Send Notification */}
+                    <tr>
+                      <th colspan="6">Send Notification</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Send Notification
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="sendNotificationIndex"
+                          checked={formik.values.sendNotificationIndex}
+                          onChange={handleCheckboxChange(
+                            `sendNotificationIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        {/* <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="notificationRead"
+                          checked={formik.values.notificationRead}
+                          onChange={handleCheckboxChange(`notificationRead`)}
+                        /> */}
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="sendNotificationCreate"
+                          checked={formik.values.sendNotificationCreate}
+                          onChange={handleCheckboxChange(
+                            `sendNotificationCreate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="sendNotificationUpdate"
+                          checked={formik.values.sendNotificationUpdate}
+                          onChange={handleCheckboxChange(
+                            `sendNotificationUpdate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        {/* <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="notificationDelete"
+                          checked={formik.values.notificationDelete}
+                          onChange={handleCheckboxChange(
+                            `notificationDelete`
+                          )}
+                        /> */}
+                      </td>
+                    </tr>
+
+                    {/* Settings */}
+                    <tr>
+                      <th colspan="6">Settings</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Tax
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="taxSettingIndex"
+                          checked={formik.values.taxSettingIndex}
+                          onChange={handleCheckboxChange(
+                            `taxSettingIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="taxSettingRead"
+                          checked={formik.values.taxSettingRead}
+                          onChange={handleCheckboxChange(`taxSettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="taxSettingCreate"
+                          checked={formik.values.taxSettingCreate}
+                          onChange={handleCheckboxChange(
+                            `taxSettingCreate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="taxSettingUpdate"
+                          checked={formik.values.taxSettingUpdate}
+                          onChange={handleCheckboxChange(
+                            `taxSettingUpdate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="taxSettingDelete"
+                          checked={formik.values.taxSettingDelete}
+                          onChange={handleCheckboxChange(
+                            `taxSettingDelete`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Race
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="raceSettingIndex"
+                          checked={formik.values.raceSettingIndex}
+                          onChange={handleCheckboxChange(
+                            `raceSettingIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="raceSettingRead"
+                          checked={formik.values.raceSettingRead}
+                          onChange={handleCheckboxChange(`raceSettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="raceSettingCreate"
+                          checked={formik.values.raceSettingCreate}
+                          onChange={handleCheckboxChange(
+                            `raceSettingCreate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="raceSettingUpdate"
+                          checked={formik.values.raceSettingUpdate}
+                          onChange={handleCheckboxChange(
+                            `raceSettingUpdate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="raceSettingDelete"
+                          checked={formik.values.raceSettingDelete}
+                          onChange={handleCheckboxChange(
+                            `raceSettingDelete`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Country & Nationality
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="countrySettingIndex"
+                          checked={formik.values.countrySettingIndex}
+                          onChange={handleCheckboxChange(
+                            `countrySettingIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="countrySettingRead"
+                          checked={formik.values.countrySettingRead}
+                          onChange={handleCheckboxChange(`countrySettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="countrySettingCreate"
+                          checked={formik.values.countrySettingCreate}
+                          onChange={handleCheckboxChange(
+                            `countrySettingCreate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="countrySettingUpdate"
+                          checked={formik.values.countrySettingUpdate}
+                          onChange={handleCheckboxChange(
+                            `countrySettingUpdate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="countrySettingDelete"
+                          checked={formik.values.countrySettingDelete}
+                          onChange={handleCheckboxChange(
+                            `countrySettingDelete`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          SHG
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="shgSettingIndex"
+                          checked={formik.values.shgSettingIndex}
+                          onChange={handleCheckboxChange(
+                            `shgSettingIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="shgSettingRead"
+                          checked={formik.values.shgSettingRead}
+                          onChange={handleCheckboxChange(`shgSettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="shgSettingCreate"
+                          checked={formik.values.shgSettingCreate}
+                          onChange={handleCheckboxChange(
+                            `shgSettingCreate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="shgSettingUpdate"
+                          checked={formik.values.shgSettingUpdate}
+                          onChange={handleCheckboxChange(
+                            `shgSettingUpdate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="shgSettingDelete"
+                          checked={formik.values.shgSettingDelete}
+                          onChange={handleCheckboxChange(
+                            `shgSettingDelete`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Leave Type
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="leaveSettingIndex"
+                          checked={formik.values.leaveSettingIndex}
+                          onChange={handleCheckboxChange(
+                            `leaveSettingIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="leaveSettingRead"
+                          checked={formik.values.leaveSettingRead}
+                          onChange={handleCheckboxChange(`leaveSettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="leaveSettingCreate"
+                          checked={formik.values.leaveSettingCreate}
+                          onChange={handleCheckboxChange(
+                            `leaveSettingCreate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="leaveSettingUpdate"
+                          checked={formik.values.leaveSettingUpdate}
+                          onChange={handleCheckboxChange(
+                            `leaveSettingUpdate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="leaveSettingDelete"
+                          checked={formik.values.leaveSettingDelete}
+                          onChange={handleCheckboxChange(
+                            `leaveSettingDelete`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Salary Type
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="salarySettingIndex"
+                          checked={formik.values.salarySettingIndex}
+                          onChange={handleCheckboxChange(
+                            `salarySettingIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="salarySettingRead"
+                          checked={formik.values.salarySettingRead}
+                          onChange={handleCheckboxChange(`salarySettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="salarySettingCreate"
+                          checked={formik.values.salarySettingCreate}
+                          onChange={handleCheckboxChange(
+                            `salarySettingCreate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="salarySettingUpdate"
+                          checked={formik.values.salarySettingUpdate}
+                          onChange={handleCheckboxChange(
+                            `salarySettingUpdate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="salarySettingDelete"
+                          checked={formik.values.salarySettingDelete}
+                          onChange={handleCheckboxChange(
+                            `salarySettingDelete`
+                          )}
+                        />
+                      </td>
+                    </tr>
+
                   </tbody>
                 </table>
               </div>
@@ -3083,7 +3482,7 @@ function RolesAdd() {
                           )}
                         />
                       </td>
-                       <td>
+                      <td>
                         {/* <input
                           class="form-check-input"
                           type="checkbox"
