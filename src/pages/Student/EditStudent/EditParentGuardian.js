@@ -24,6 +24,8 @@ const EditParentGuardian = forwardRef(
         // console.log("Response data", response.data.studentParentsDetails.length)
         if (response.data.studentParentsDetails.length === 0) {
           setPrimaryContact(true);
+        }else{
+          setPrimaryContact(false)
         }
       } catch (error) {
         console.error("Error fetching data:", error);
