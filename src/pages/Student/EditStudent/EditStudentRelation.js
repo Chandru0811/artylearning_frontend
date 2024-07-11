@@ -14,9 +14,11 @@ import fetchAllStudentListByCenter from "../../List/StudentListByCenter";
 const validationSchema = Yup.object().shape({});
 
 const EditStudentRelation = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setFormData, setLoadIndicators, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
+
+    console.log("Formdata ID:", formData.id);
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
@@ -25,6 +27,7 @@ const EditStudentRelation = forwardRef(
         toast.error(error);
       }
     };
+
     const fetchStudent = async (centerId) => {
       try {
         const student = await fetchAllStudentListByCenter(centerId);
@@ -33,12 +36,73 @@ const EditStudentRelation = forwardRef(
         toast.error(error);
       }
     };
+
     const handleCenterChange = (event) => {
       const newStudentRelationCenter = event.target.value;
       setStudentData([]);
       formik.setFieldValue("studentRelationCenter", newStudentRelationCenter);
       fetchStudent(newStudentRelationCenter);
     };
+
+    const formik = useFormik({
+      initialValues: {
+        studentRelationCenter: formData.studentRelationCenter || "",
+        studentRelation: formData.studentRelation || "",
+        studentRelationStudentName: formData.studentRelationStudentName || "",
+        studentId: formData.id || "",
+      },
+      validationSchema: validationSchema,
+      onSubmit: async (data) => {
+        setLoadIndicators(true);
+        try {
+          if (data.stdRealtionId !== null) {
+            const response = await api.put(
+              `/updateStudentRelation/${data.stdRealtionId}`,
+              data,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          } else {
+            const payload = {
+              studentRelationCenter: data.studentRelationCenter,
+              studentRelation: data.studentRelation,
+              studentRelationStudentName: data.studentRelationStudentName,
+              studentId: formData.id || "",
+            };
+            const response = await api.post(
+              `/createStudentRelations`,
+              payload,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...data }));
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
+          }
+        } catch (error) {
+          toast.error(error);
+        } finally {
+          setLoadIndicators(false);
+        }
+      },
+    });
+
     useEffect(() => {
       fetchData();
     }, []);
@@ -49,6 +113,7 @@ const EditStudentRelation = forwardRef(
           const response = await api.get(
             `/getAllStudentDetails/${formData.id}`
           );
+          // console.log(response.data.studentRelationModels)
           if (
             response.data.studentRelationModels &&
             response.data.studentRelationModels.length > 0
@@ -77,63 +142,12 @@ const EditStudentRelation = forwardRef(
       // console.log(formik.values);
       getData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const formik = useFormik({
-      initialValues: {
-        studentRelationCenter: formData.studentRelationCenter || "",
-        studentRelation: formData.studentRelation || "",
-        studentRelationStudentName: formData.studentRelationStudentName || "",
-      },
-      validationSchema: validationSchema,
-      onSubmit: async (data) => {
-        setLoadIndicators(true);
-        try {
-          if (data.stdRealtionId !== null) {
-            const response = await api.put(
-              `/updateStudentRelation/${data.stdRealtionId}`,
-              data,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            if (response.status === 200) {
-              toast.success(response.data.message);
-              handleNext();
-              // window.location.reload();
-            } else {
-              toast.error(response.data.message);
-            }
-          } else {
-            const response = await api.post(
-              `/createStudentRelations/${data.id}`,
-              data,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            if (response.status === 201) {
-              toast.success(response.data.message);
-              handleNext();
-            } else {
-              toast.error(response.data.message);
-            }
-          }
-        } catch (error) {
-          toast.error(error);
-        } finally {
-          setLoadIndicators(false);
-        }
-      },
-    });
+    }, [formData.id]);
 
     useImperativeHandle(ref, () => ({
       Studentrelation: formik.handleSubmit,
     }));
+
     return (
       <div className="container-fluid">
         <form onSubmit={formik.handleSubmit}>
@@ -214,7 +228,10 @@ const EditStudentRelation = forwardRef(
                           <option selected></option>
                           {studentData &&
                             studentData.map((student) => (
-                              <option key={student.id} value={student.studentNames}>
+                              <option
+                                key={student.id}
+                                value={student.studentNames}
+                              >
                                 {student.studentNames}
                               </option>
                             ))}

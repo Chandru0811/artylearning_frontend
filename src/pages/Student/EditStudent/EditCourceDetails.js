@@ -14,6 +14,7 @@ const validationSchema = Yup.object().shape({});
 
 const EditCourseDetail = forwardRef(
   ({ formData, setLoadIndicators, handleNext }, ref) => {
+    // console.log("FormData is ", formData.student_id)
     const [courseData, setCourseData] = useState(null);
 
     const formik = useFormik({
@@ -24,10 +25,11 @@ const EditCourseDetail = forwardRef(
         courseDay: formData.courseDay || "",
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
-        studentId: formData.student_id || "",
+        studentId: formData.id || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
+        console.log("Data is ", data)
         setLoadIndicators(true);
         try {
           if (data.courseDetailId !== null) {
@@ -48,7 +50,7 @@ const EditCourseDetail = forwardRef(
             }
           } else {
             const response = await api.post(
-              `/createStudentCourseDetails/${data.id}`,
+              `/createStudentCourseDetails`,
               data,
               {
                 headers: {
@@ -83,6 +85,7 @@ const EditCourseDetail = forwardRef(
     const getData = async () => {
       try {
         const response = await api.get(`/getAllStudentDetails/${formData.id}`);
+        console.log(response.data)
         if (
           response.data.studentCourseDetailModels &&
           response.data.studentCourseDetailModels.length > 0
@@ -123,7 +126,7 @@ const EditCourseDetail = forwardRef(
           });
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        // console.error("Error fetching data:", error);
       }
     };
 

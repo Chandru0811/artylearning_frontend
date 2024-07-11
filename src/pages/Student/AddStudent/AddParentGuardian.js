@@ -38,8 +38,6 @@ const AddParentGuardian = forwardRef(
     const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
       useState(0);
 
-
-
     const formik = useFormik({
       initialValues: {
         parentInformation: formData.parentInformation
@@ -360,6 +358,7 @@ const AddParentGuardian = forwardRef(
                               );
                             }}
                             onBlur={formik.handleBlur}
+                            accept=".jpg, .jpeg, .png"
                           />
                           <p>
                             <small>

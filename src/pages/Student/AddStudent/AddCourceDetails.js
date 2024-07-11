@@ -28,7 +28,6 @@ const AddcourseDetail = forwardRef(
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
 	      studentId :formData.student_id || "", 
-	
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {

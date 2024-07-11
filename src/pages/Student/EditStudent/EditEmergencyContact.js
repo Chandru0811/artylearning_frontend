@@ -25,11 +25,8 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditEmergencyContact = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData,setLoadIndicators, handleNext }, ref) => {
     const [rows, setRows] = useState([{}]);
-    const [data, setData] = useState([]);
-    console.log("Data is", rows);
-
     const handleDelete = () => {
       formik.setFieldValue(
         "emergencyAuthorizedContactModels",
@@ -79,7 +76,7 @@ const EditEmergencyContact = forwardRef(
             // console.log("ID :",data.emergencyContactId);
             const formDatas = new FormData();
             formDatas.append("emergencyContactName", data.emergencyContactName);
-            formDatas.append("emergencyRelation", data.emergencyRelation);
+            formDatas.append("emergencyRelation", "Father");
             formDatas.append("emergencyContactNo", data.emergencyContactNo);
             data.emergencyAuthorizedContactModels.forEach((contact) => {
               if (contact.id) {
@@ -118,7 +115,7 @@ const EditEmergencyContact = forwardRef(
           } else {
             const formDatas = new FormData();
             formDatas.append("emergencyContactName", data.emergencyContactName);
-            formDatas.append("emergencyRelation", data.emergencyRelation);
+            formDatas.append("emergencyRelation", " ");
             formDatas.append("emergencyContactNo", data.emergencyContactNo);
             data.emergencyAuthorizedContactModels.forEach((contact) => {
               formDatas.append("name", contact.name);
@@ -132,7 +129,7 @@ const EditEmergencyContact = forwardRef(
                 "emergencyContactAddress",
                 contact.emergencyContactAddress
               );
-              formDatas.append("files", contact.files || undefined);
+              formDatas.append("files", contact.files);
             });
             const response = await api.post(
               `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.id}`,
@@ -206,32 +203,9 @@ const EditEmergencyContact = forwardRef(
       }
       // console.log("Emergency Contact ID:", response.data.emergencyContactId);
     };
-
-    // const fetchEmergencyData = async () => {
-    //   try {
-    //     const response = await api.get(
-    //       `/getAllStudentEmergencyContactsById/${formData.id}`
-    //     );
-    //     let EmergencyData = response.data.emergencyAuthorizedContactModels;
-    //     console.log(response.data);
-    //     EmergencyData.forEach((emergency) => {
-    //       if (parseInt(id) === emergency.id) {
-    //         console.log("emergency", emergency);
-    //         formik.setValues(emergency || "");
-    //         setData(emergency);
-    //       }
-    //     });
-    //     console.log("getAllStudentEmergencyContactsById",EmergencyData);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-
-    console.log("Formik values is ", formik.values);
-
+    
     useEffect(() => {
       fetchData();
-      // fetchEmergencyData();
     }, [formData.id]);
 
     // const handleNextStep = () => {

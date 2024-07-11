@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditTermsAndCondition = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setFormData, setLoadIndicators }, ref) => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
 
@@ -33,6 +33,7 @@ const EditTermsAndCondition = forwardRef(
       setUrl("");
     };
 
+    // console.log("StudentDetailId Data:",formData.id);
     const handleGenerate = () => {
       setUrl(sign.getTrimmedCanvas().toDataURL("image/png"));
       console.log("Sign :", sign);
@@ -44,6 +45,7 @@ const EditTermsAndCondition = forwardRef(
         termsAndConditionSignatureDate:
           formData.termsAndConditionSignatureDate || "",
         agree: formData.agree || "",
+        studentDetailId: formData.id || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -93,9 +95,13 @@ const EditTermsAndCondition = forwardRef(
             const blob = await apiResponse.blob();
             formDatas.append("file", blob, `${randomNumber}Signature.png`);
             formDatas.append("agree", data.agree);
-            formDatas.append("studentDetailId", formData.student_id);
+            formDatas.append(
+              "termsAndConditionSignatureDate",
+              data.termsAndConditionSignatureDate
+            );
+            formDatas.append("studentDetailId", formData.id);
             const response = await api.post(
-              `/createStudentTermsAndConditions/${data.id}`,
+              `/createStudentTermsAndConditions`,
               formDatas,
               {
                 headers: {
@@ -105,8 +111,8 @@ const EditTermsAndCondition = forwardRef(
             );
             if (response.status === 201) {
               toast.success(response.data.message);
+              setFormData((prv) => ({ ...prv, ...data }));
               navigate("/student");
-              // window.location.reload();
             } else {
               toast.error(response.data.message);
             }
@@ -134,6 +140,7 @@ const EditTermsAndCondition = forwardRef(
           const response = await api.get(
             `/getAllStudentDetails/${formData.id}`
           );
+          console.log("Response is ", response.data);
           if (
             response.data.studentTermsAndConditions &&
             response.data.studentTermsAndConditions.length > 0

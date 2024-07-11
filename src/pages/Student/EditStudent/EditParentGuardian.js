@@ -11,18 +11,23 @@ import { GoDotFill } from "react-icons/go";
 import { FaEdit } from "react-icons/fa";
 
 const EditParentGuardian = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [data, setData] = useState({});
-    console.log("Api Datas:",data);
+    const [primaryContact, setPrimaryContact] = useState(false);
+    // console.log("Api Datas:",data);
 
     const getData = async () => {
       setLoadIndicators(true);
       try {
         const response = await api.get(`/getAllStudentDetails/${formData.id}`);
         setData(response.data);
+        // console.log("Response data", response.data.studentParentsDetails.length)
+        if (response.data.studentParentsDetails.length === 0) {
+          setPrimaryContact(true);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
-      }finally {
+      } finally {
         setLoadIndicators(false);
       }
     };
@@ -68,6 +73,7 @@ const EditParentGuardian = forwardRef(
                   </thead>
                   <tbody>
                     {data.studentParentsDetails &&
+                    data.studentParentsDetails.length > 0 ? (
                       data.studentParentsDetails.map((parent, index) => (
                         <tr key={index}>
                           <td>{index + 1}</td>
@@ -76,7 +82,6 @@ const EditParentGuardian = forwardRef(
                               {parent.profileImage ? (
                                 <img
                                   src={parent.profileImage}
-                                  
                                   className="rounded-5 mx-1"
                                   style={{ width: "30px", height: "40px" }}
                                   alt=""
@@ -101,7 +106,8 @@ const EditParentGuardian = forwardRef(
                             {parent.primaryContact ? (
                               <button
                                 className="btn border-white"
-                                type="button" disabled
+                                type="button"
+                                disabled
                               >
                                 <FaEdit className="text-secondary" />
                               </button>
@@ -113,14 +119,24 @@ const EditParentGuardian = forwardRef(
                             )}
                           </td>
                         </tr>
-                      ))}
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="7" className="text-center">
+                          No records found
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
             <div className="row">
               <div className="col-md-2 col-12 text-strat">
-                <AddParentDetailModel />
+                <AddParentDetailModel
+                  primaryContact={primaryContact}
+                  onSuccess={getData}
+                />
               </div>
             </div>
           </div>

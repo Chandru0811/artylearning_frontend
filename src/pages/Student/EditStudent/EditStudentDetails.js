@@ -35,9 +35,7 @@ const validationSchema = Yup.object().shape({
     "*Medical Condition Result is required"
   ),
   // nationality: Yup.string().required("*Select a Nationality!"),
-  primaryLanguage: Yup.string().required(
-    "*Primary Language is required"
-  ),
+  primaryLanguage: Yup.string().required("*Primary Language is required"),
   race: Yup.string().required("*Select a Race"),
   // referByStudent: Yup.string().required("*Refer By Student is required!"),
   // referByParent: Yup.string().required("*Refer By Parent is required!"),
@@ -379,10 +377,13 @@ const EditStudentDetails = forwardRef(
                         value={formik.values.nationality}
                         className="form-select"
                       >
-                       <option selected></option>
+                        <option selected></option>
                         {nationalityData &&
                           nationalityData.map((nationalityId) => (
-                            <option key={nationalityId.id} value={nationalityId.nationality}>
+                            <option
+                              key={nationalityId.id}
+                              value={nationalityId.nationality}
+                            >
                               {nationalityId.nationality}
                             </option>
                           ))}
@@ -566,9 +567,7 @@ const EditStudentDetails = forwardRef(
                       {formik.touched.primaryLanguage &&
                         formik.errors.primaryLanguage && (
                           <div className="error text-danger ">
-                            <small>
-                              {formik.errors.primaryLanguage}
-                            </small>
+                            <small>{formik.errors.primaryLanguage}</small>
                           </div>
                         )}
                     </div>
