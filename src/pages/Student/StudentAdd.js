@@ -26,7 +26,7 @@ export default function StudentAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
-  console.log("Form Data:", formData);
+  // console.log("Form Data:", formData);
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);

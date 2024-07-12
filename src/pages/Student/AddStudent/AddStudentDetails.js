@@ -451,6 +451,7 @@ const AddStudentDetails = forwardRef(
                           formik.setFieldValue("file", event.target.files[0]);
                         }}
                         onBlur={formik.handleBlur}
+                        accept=".jpg, .jpeg, .png"
                       />
                       {formik.touched.file && formik.errors.file && (
                         <div className="error text-danger ">
