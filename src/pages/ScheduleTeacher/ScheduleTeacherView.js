@@ -110,6 +110,36 @@ function ScheduleTeacherView({ id, onSuccess }) {
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
+              <div className="row">
+                  <div className="col-5">
+                    <p className="fw-bold">Class Room</p>
+                  </div>
+                  <div className="col-7">
+                    <p>:&nbsp;{data.classRoom}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2">
+                <div className="row">
+                  <div className="col-5">
+                    <p className="fw-bold">Start Date</p>
+                  </div>
+                  <div className="col-7">
+                    <p>:&nbsp;{data.startDate}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+              <div className="row">
+                  <div className="col-5">
+                    <p className="fw-bold">End Date</p>
+                  </div>
+                  <div className="col-7">
+                    <p>:&nbsp;{data.endDate}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

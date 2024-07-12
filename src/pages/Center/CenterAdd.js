@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllUserList from "../List/UserList";
+import fetchAllCentreManager from "../List/CentreMangerList";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -49,15 +49,15 @@ const validationSchema = Yup.object().shape({
 function CenterAdd() {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [teacherData, setTeacherData] = useState(null);
+  const [managerData, setmanagerData] = useState(null);
 
   useEffect(() => {
     fetchTeacher();
   }, []);
   const fetchTeacher = async () => {
     try {
-      const teacher = await fetchAllUserList();
-      setTeacherData(teacher);
+      const manager = await fetchAllCentreManager();
+      setmanagerData(manager);
     } catch (error) {
       toast.error(error);
     }
@@ -86,7 +86,7 @@ function CenterAdd() {
     onSubmit: async (values) => {
       // let selectedTeacherName = "";
       setLoadIndicator(true);
-      // teacherData.forEach((teacher) => {
+      // managerData.forEach((teacher) => {
       //   if (parseInt(values.centerManager) === teacher.id) {
       //     selectedTeacherName = teacher.userNames || "--";
       //   }
@@ -219,10 +219,10 @@ function CenterAdd() {
                 }`}
               >
                 <option selected></option>
-                {teacherData &&
-                  teacherData.map((teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.userNames}
+                {managerData &&
+                  managerData.map((manager) => (
+                    <option key={manager.id} value={manager.id}>
+                      {manager.userNames}
                     </option>
                   ))}
               </select>

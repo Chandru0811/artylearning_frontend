@@ -12,7 +12,7 @@ import AddPackage from "./Add/AddPackage";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllUserList from "../List/UserList";
+import fetchAllCentreManager from "../List/CentreMangerList";
 
 const Center = () => {
   const tableRef = useRef(null);
@@ -25,7 +25,7 @@ const Center = () => {
 
   const fetchData = async () => {
     try {
-      const centerManagerData = await fetchAllUserList();
+      const centerManagerData = await fetchAllCentreManager();
       setCenterManagerData(centerManagerData);
     } catch (error) {
       toast.error(error);

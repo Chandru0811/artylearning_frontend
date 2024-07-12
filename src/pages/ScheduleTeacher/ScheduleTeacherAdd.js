@@ -10,6 +10,7 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import api from "../../config/URL";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
+import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 
 function ScheduleTeacherAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
@@ -17,6 +18,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
+  const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => {
@@ -25,6 +27,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
     setCourseData(null);
     setClassData(null);
     setTeacherData(null);
+    setClassRoomData(null);
   };
 
   const handleShow = () => {
@@ -40,7 +43,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
       const centers = await fetchAllCentersWithIds();
       setCenterData(centers);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -49,7 +52,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
       const courses = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courses);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -58,7 +61,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
       const teacher = await fetchAllTeacherListByCenter(centerId);
       setTeacherData(teacher);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
     }
   };
 
@@ -67,7 +70,16 @@ function ScheduleTeacherAdd({ onSuccess }) {
       const classes = await fetchAllClassesWithIdsC(courseId);
       setClassData(classes);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
+    }
+  };
+  const fetchClassRoom = async (centerId) => {
+    try {
+      const classRoom = await fetchAllClassRoomWithCenterIds(centerId);
+      setClassRoomData(classRoom);
+      console.log("first",setClassRoomData)
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -86,6 +98,9 @@ function ScheduleTeacherAdd({ onSuccess }) {
     classId: Yup.string().required("*Class is required"),
     days: Yup.string().required("*Days is required"),
     userId: Yup.string().required("*Teacher is required"),
+    classRoom: Yup.string().required("*Class Room is required"),
+    startDate: Yup.string().required("*Start Date is required"),
+    endDate: Yup.string().required("*End Date is required"),
     // batch: Yup.string().required("*From Time is required"),
   });
 
@@ -96,6 +111,9 @@ function ScheduleTeacherAdd({ onSuccess }) {
       classId: "",
       days: "",
       userId: "",
+      startDate:"",
+      endDate:"",
+      classRoom:"",
       // batch: "",
     },
     validationSchema: validationSchema,
@@ -107,6 +125,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
       let selectedClassName = "";
       let selectedCourseName = "";
       let selectedTeacherName = "";
+      let selectedClassRoomName = "";
 
       centerData.forEach((center) => {
         if (parseInt(values.centerId) === center.id) {
@@ -133,6 +152,11 @@ function ScheduleTeacherAdd({ onSuccess }) {
           selectedTeacherName = teacher.teacherNames || "--";
         }
       });
+      classRoomData.forEach((classRoom) => {
+        if (parseInt(values.classRoom) === classRoom.id) {
+          selectedClassRoomName = classRoom.classRoomName || "--";
+        }
+      });
 
       let requestBody = {
         centerId: values.centerId,
@@ -145,6 +169,9 @@ function ScheduleTeacherAdd({ onSuccess }) {
         userId: values.userId,
         teacher: selectedTeacherName,
         days: values.days,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        classRoom: selectedClassRoomName,
       };
 
       // console.log(requestBody);
@@ -166,7 +193,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       }finally {
         setLoadIndicator(false);
       }
@@ -181,6 +208,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
     formik.setFieldValue("centerId", centerId);
     fetchCourses(centerId);
     fetchTeacher(centerId); // Fetch courses for the selected center
+    fetchClassRoom(centerId); 
   };
 
   const handleCourseChange = (event) => {
@@ -382,6 +410,70 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   {formik.touched.userId && formik.errors.userId && (
                     <div className="invalid-feedback">
                       {formik.errors.userId}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Class Room<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("classRoom")}
+                    class={`form-select  ${
+                      formik.touched.classRoom && formik.errors.classRoom
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option></option>
+                    {classRoomData &&
+                      classRoomData.map((classRoom) => (
+                        <option key={classRoom.id} value={classRoom.id}>
+                          {classRoom.classRoomName}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.classRoom && formik.errors.classRoom && (
+                    <div className="invalid-feedback">
+                      {formik.errors.classRoom}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Start Date<span className="text-danger">*</span>
+                  </label>
+                  <input
+                  type="date"
+                    {...formik.getFieldProps("startDate")}
+                    class={`form-control  ${
+                      formik.touched.startDate && formik.errors.startDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.startDate && formik.errors.startDate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.startDate}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    End Date<span className="text-danger">*</span>
+                  </label>
+                  <input
+                  type="date"
+                    {...formik.getFieldProps("endDate")}
+                    class={`form-control  ${
+                      formik.touched.endDate && formik.errors.endDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.endDate && formik.errors.endDate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.endDate}
                     </div>
                   )}
                 </div>

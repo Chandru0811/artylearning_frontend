@@ -8,7 +8,7 @@ import EditClass from "./Edit/EditClass";
 import EditPackage from "./Edit/EditPackage";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllUserList from "../List/UserList";
+import fetchAllCentreManager from "../List/CentreMangerList";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -61,8 +61,8 @@ function CenterEdit() {
   }, []);
   const fetchTeacher = async () => {
     try {
-      const teacher = await fetchAllUserList();
-      setTeacherData(teacher);
+      const manager = await fetchAllCentreManager();
+      setTeacherData(manager);
     } catch (error) {
       toast.error(error);
     }
@@ -255,9 +255,9 @@ function CenterEdit() {
                 >
                   <option selected></option>
                   {teacherData &&
-                    teacherData.map((teacher) => (
-                      <option key={teacher.id} value={teacher.id}>
-                        {teacher.userNames}
+                    teacherData.map((manager) => (
+                      <option key={manager.id} value={manager.id}>
+                        {manager.userNames}
                       </option>
                     ))}
                 </select>

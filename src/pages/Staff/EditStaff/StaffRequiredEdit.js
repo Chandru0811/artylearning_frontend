@@ -19,8 +19,8 @@ const StaffRequiredEdit = forwardRef(
     //     setLoadIndicators(false);
     //   },
     // });
-
     
+    console.log("object",formData)
     const formik = useFormik({
       initialValues: {
         resume: null || "",
@@ -29,7 +29,7 @@ const StaffRequiredEdit = forwardRef(
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
-          if (values.userEnquireId !== null) {
+          if (values.userEnquireId !== null || undefined) {
             const formDatas = new FormData();
           // Add each data field manually to the FormData object
           formDatas.append("resume", values.resume);
@@ -55,7 +55,7 @@ const StaffRequiredEdit = forwardRef(
             const formDatas = new FormData();
 
             // Add each data field manually to the FormData object
-            const userId = formData.user_id;
+            const userId = formData.staff_id;
             formDatas.append("userId", userId);
             formDatas.append("resume", values.resume);
             formDatas.append("educationCertificate", values.educationCertificate);

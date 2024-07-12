@@ -4,7 +4,7 @@ import api from '../../../config/URL';
 import { toast } from 'react-toastify';
 
 const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref)=>{
-
+  console.log("required",formData)
   const formik = useFormik({
     initialValues: {
       resume: null || "",
@@ -37,9 +37,8 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
           }
         } else {
           const formDatas = new FormData();
-
           // Add each data field manually to the FormData object
-          const userId = formData.user_id;
+          const userId = formData.staff_id;
           formDatas.append("userId", userId);
           formDatas.append("resume", values.resume);
           formDatas.append("educationCertificate", values.educationCertificate);
