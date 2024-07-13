@@ -469,7 +469,6 @@ function StudentView() {
                               {data.profileImage ? (
                                 <img
                                   src={data.profileImage}
-                                 
                                   className="img-fluid ms-2 w-100 rounded"
                                   alt=""
                                 />
@@ -666,13 +665,12 @@ function StudentView() {
                                     {emergency.personProfile ? (
                                       <img
                                         src={emergency.personProfile}
-                                       
                                         name="personProfile"
                                         className="img-fluid ms-2 w-100 rounded"
                                         alt=""
                                       />
                                     ) : (
-                                     <></>
+                                      <></>
                                     )}
                                   </p>
                                 </p>
@@ -838,7 +836,6 @@ function StudentView() {
                                 {parent.profileImage ? (
                                   <img
                                     src={parent.profileImage}
-                                   
                                     className="img-fluid ms-2 w-100 rounded"
                                     alt=""
                                   />
@@ -972,73 +969,157 @@ function StudentView() {
               class="accordion-collapse collapse"
             >
               <div class="accordion-body">
-                <div className="table-responsive">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col" className="fw-medium">
-                          S.No
-                        </th>
-                        <th scope="col" className="fw-medium">
-                          Course
-                        </th>
-                        <th scope="col" className="fw-medium">
-                          Day
-                        </th>
-                        <th scope="col" className="fw-medium">
-                          Start Date
-                        </th>
-                        <th scope="col" className="fw-medium">
-                          End Date
-                        </th>
-                        <th scope="col" className="fw-medium">
-                          Start Time
-                        </th>
-                        <th scope="col" className="fw-medium">
-                          End Time
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.studentCourseDetailModels &&
-                        data.studentCourseDetailModels.map((std, index) => (
-                          <tr key={std.id}>
-                            <td>{index + 1}</td>
-                            <td>
-                              {" "}
-                              {courseData &&
-                                courseData.map((course) =>
-                                  parseInt(std.courseId) === course.id
-                                    ? course.courseNames || "--"
-                                    : ""
-                                )}
-                            </td>
-                            <td>
-                              {std.courseDay
-                                ? std.courseDay.substring(0, 10)
-                                : "--"}
-                            </td>
-                            <td>
-                              {std.startDate
-                                ? std.startDate.substring(0, 10)
-                                : "--"}
-                            </td>
-                            <td>
-                              {std.endDate
-                                ? std.endDate.substring(0, 10)
-                                : "--"}
-                            </td>
-                            <td>{std.startTime || "--"}</td>
-                            <td>{std.endTime || "--"}</td>
-                            {/* <td>
-                              {std.signatureDate
-                                ? std.signatureDate.substring(0, 10)
-                                : "--"}
-                            </td> */}
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
+                <div className="">
+                  {data.studentCourseDetailModels &&
+                    data.studentCourseDetailModels.map((std) => (
+                      <div className="container p-3">
+                        <div className="row pb-3">
+                          <div className="col-md-6 col-12">
+                            <div className="row mt-3  mb-2">
+                              <div className="col-6 ">
+                                <p className="fw-medium">Centre Name</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {std.centerName || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2 mt-3">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Course</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {std.course || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Class</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>{" "}
+                                  {std.className || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Class Room</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {std.classRoom || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Batch</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {std.batch || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Day</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b> {std.days || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Start Date</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>{" "}
+                                  {std.startDate || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">End Date</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>{" "}
+                                  {std.endDate || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Lesson Start Date</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>{" "}
+                                  {std.lessonName || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Teacher</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {std.teacher || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12">
+                            <div className="row  mb-2">
+                              <div className="col-6  ">
+                                <p className="fw-medium">Package Name</p>
+                              </div>
+                              <div className="col-6">
+                                <p className="text-muted text-sm">
+                                  <b className="mx-2">:</b>
+                                  {std.packageName || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
@@ -1074,14 +1155,11 @@ function StudentView() {
                             className="img-fluid rounded"
                             style={{ width: "50%" }}
                             alt="Parent Signature Img"
-                           
                           ></img>
                         </div>
                       ))}
                     {(!data.studentTermsAndConditions ||
-                      data.studentTermsAndConditions.length === 0) && (
-                     <></>
-                    )}
+                      data.studentTermsAndConditions.length === 0) && <></>}
                   </div>
                   <div className="col-md-6 col-12">
                     <div className="container-fluid col-12 p-2">
@@ -1262,7 +1340,6 @@ function StudentView() {
                 <div className="fw-medium">Profile Image :</div>
                 <img
                   src={data.profileImage}
-                 
                   className="img-fluid rounded w-25"
                   alt=""
                 />
@@ -1318,7 +1395,6 @@ function StudentView() {
                   <th className="fw-medium">Relation</th>
                   <th className="fw-medium">Postal Code</th>
                   <th className="fw-medium">Address</th>
-                 
                 </tr>
               </thead>
               <tbody>
@@ -1341,7 +1417,6 @@ function StudentView() {
                         <td>{emergency.authorizedRelation || "--"}</td>
                         <td>{emergency.postalCode || "--"}</td>
                         <td>{emergency.emergencyContactAddress || "--"}</td>
-                       
                       </tr>
                     )
                   )}
@@ -1359,9 +1434,7 @@ function StudentView() {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th className="fw-medium">
-                          S.No
-                        </th>
+                        <th className="fw-medium">S.No</th>
                         <th className="fw-medium">Profile Image</th>
                         <th className="fw-medium">Name</th>
                         <th className="fw-medium">Occupation</th>
@@ -1376,12 +1449,11 @@ function StudentView() {
                     <tbody>
                       {data.studentParentsDetails.map((parent, index) => (
                         <tr key={index}>
-                           <td>{index + 1}</td>
+                          <td>{index + 1}</td>
                           <td>
                             {parent.profileImage ? (
                               <img
                                 src={parent.profileImage}
-                               
                                 className="img-fluid rounded-5"
                                 alt=""
                                 style={{ width: "10px" }}
@@ -1555,14 +1627,11 @@ function StudentView() {
                         className="img-fluid rounded"
                         style={{ width: "50%" }}
                         alt=""
-                       
                       />
                     </div>
                   ))}
                 {(!data.studentTermsAndConditions ||
-                  data.studentTermsAndConditions.length === 0) && (
-                  <></>
-                )}
+                  data.studentTermsAndConditions.length === 0) && <></>}
               </div>
               <div className="col-md-6 col-12">
                 <div className="container-fluid col-12 p-2">

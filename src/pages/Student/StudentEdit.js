@@ -19,7 +19,7 @@ const steps = [
   { tooltip: "Student Details" },
   { tooltip: "Parents/Guardian" },
   { tooltip: "Emergency Contact" },
-  { tooltip: "Course Details" },
+  // { tooltip: "Course Details" },
   { tooltip: "Student Relation" },
   { tooltip: "Terms and Conditions" },
 ];
@@ -61,17 +61,17 @@ export default function StudentAdd() {
           childRef.current.emergencyContact();
         }
         break;
+      // case "3":
+      //   if (childRef.current) {
+      //     childRef.current.coursedetail();
+      //   }
+      //   break;
       case "3":
-        if (childRef.current) {
-          childRef.current.coursedetail();
-        }
-        break;
-      case "4":
         if (childRef.current) {
           childRef.current.Studentrelation();
         }
         break;
-      case "5":
+      case "4":
         if (childRef.current) {
           childRef.current.termsAndCondition();
         }
@@ -142,7 +142,7 @@ export default function StudentAdd() {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-          {activeStep === 3 && (
+          {/* {activeStep === 3 && (
             <EditCourseDetail
               formData={formData}
               ref={childRef}
@@ -150,8 +150,8 @@ export default function StudentAdd() {
               handleNext={handleNext}
               setLoadIndicators={setLoadIndicator}
             />
-          )}
-          {activeStep === 4 && (
+          )} */}
+          {activeStep === 3 && (
             <EditStudentRelation
               formData={formData}
               ref={childRef}
@@ -160,7 +160,7 @@ export default function StudentAdd() {
               setLoadIndicators={setLoadIndicator}
             />
           )}
-          {activeStep === 5 && (
+          {activeStep === 4 && (
             <EditTermsAndCondition
               formData={formData}
               ref={childRef}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
@@ -7,112 +7,163 @@ import { useNavigate } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllPackageListByCenter from "../List/PackageListByCenter";
+import $ from "jquery";
+
 
 function StudentRegisterCourse() {
-  const validationSchema = Yup.object({
-    courseId: Yup.string().required("*Select the courseId"),
-    courseDay: Yup.string().required("*Course day is required"),
-    startDate: Yup.string().required("*Start date is required"),
-    endDate: Yup.string().required("*End date is required"),
-    startTime: Yup.string().required("*Start time is required"),
-    endTime: Yup.string().required("*End time is required"),
-  });
   const [data, setData] = useState({});
   const [courseData, setCourseData] = useState(null);
-
   const { id } = useParams();
-  //   const id = 38;
   const navigate = useNavigate();
+  const [packageData, setPackageData] = useState(null);
+  const [availableDays, setAvailableDays] = useState([]); // State for available days in select
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCoursesWithIds();
-      setCourseData(centers);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  const tableRef = useRef(null);
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [selectedRow, setSelectedRow] = useState(null); // Add state for selected row
+  const [selectedRowData, setSelectedRowData] = useState({}); // State for selected row data
 
   const formik = useFormik({
     initialValues: {
       courseId: "",
-      courseDay: "",
+      batchId: "",
+      days: "",
+      packageName: "",
       startDate: "",
       endDate: "",
-      startTime: "",
-      endTime: "",
+      lessonName: "",
+      studentId: "",
     },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log("Registration values", values);
-
-      let selectedOptionName = "";
-
-      courseData.forEach((course) => {
-        if (parseInt(values.courseId) === course.id) {
-          selectedOptionName = course.courseNames || "--";
-        }
-      });
+    // validationSchema: validationSchema,
+    onSubmit: async (data) => {
+      const payload = {
+        ...data,
+        ...selectedRowData, // Merge selected row data with form data
+      };
+      console.log("Payload Data:", payload);
       try {
-        if (
-          data &&
-          data.studentCourseDetailModels &&
-          data.studentCourseDetailModels.length > 0
-        ) {
-          const formData = new FormData();
-          formData.append("courseName", selectedOptionName);
-          formData.append("courseDay", values.courseDay);
-          formData.append("startDate", values.startDate);
-          formData.append("endDate", values.endDate);
-          formData.append("startTime", values.startTime);
-          formData.append("endTime", values.endTime);
-          formData.append("signatureDate", values.signatureDate || "");
-          formData.append("studentDetailId", values.studentId);
-          formData.append("courseId", values.courseId);
-          const detailId = data.studentCourseDetailModels[0].id;
-          formData.append("detailId ", detailId);
-          const response = await api.put(
-            `/updateStudentCourseDetail/${data.studentCourseDetailModels[0].id}`,
-            formData,
-          );
-          if (response.status === 200) {
-            toast.success(response.data.message);
-            navigate("/student");
-          } else {
-            toast.error(response.data.message);
-          }
+        const response = await api.post(
+          `/createStudentCourseDetails`,
+          payload
+        );
+
+        if (response.status === 201) {
+          toast.success(response.data.message);
         } else {
-          const formData = new FormData();
-          formData.append("courseName", selectedOptionName);
-          formData.append("courseDay", values.courseDay);
-          formData.append("startDate", values.startDate);
-          formData.append("endDate", values.endDate);
-          formData.append("startTime", values.startTime);
-          formData.append("endTime", values.endTime);
-          formData.append("signatureDate", values.startDate);
-          formData.append("studentDetailId", id);
-          formData.append("courseId", values.courseId);
-          const response = await api.post(
-            `/createStudentCourseDetails`,
-            formData,
-          );
-          if (response.status === 201) {
-            toast.success(response.data.message);
-            navigate("/student");
-          } else {
-            toast.error(response.data.message);
-          }
+          toast.error(response.data.message);
         }
       } catch (error) {
         toast.error(error);
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
+
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
+
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      return;
+    }
+    $(tableRef.current).DataTable();
+  };
+
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
+
+  const getData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    let params = {};
+
+    if (formik.values.courseId !== "") {
+      params.courseId = formik.values.courseId;
+    }
+
+    if (formik.values.days !== "") {
+      params.day = formik.values.days;
+    }
+
+    if (formik.values.batchId !== "") {
+      params.batchId = formik.values.batchId;
+    }
+
+    try {
+      const response = await api.get("/getAllScheduleTeachers", { params });
+      setDatas(response.data);
+      initializeDataTable();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, [formik.values.courseId, formik.values.batchId, formik.values.days]);
+
+ 
+  const handleRowSelect = (data) => {
+    if (data.availableSlots === 0) {
+      toast.error("Class is Full");
+      return; // Prevent further actions
+    }
+    setSelectedRow(data.id);
+    console.log("Selected Row Data:", data);
+    // setFormData((prev) => ({ ...prev, ...data })); // Store selected row data in formData
+    // Calculate days between startDate and endDate
+    // if (data.startDate && data.endDate) {
+    //   const days = calculateDays(data.startDate, data.endDate, data.days);
+    //   setAvailableDays(days);
+    // } else {
+    //   setAvailableDays([]);
+    // }
+  };
+
+  // const calculateDays = (startDate, endDate, selectedDay) => {
+  //   const start = new Date(startDate);
+  //   const end = new Date(endDate);
+  //   const days = [];
+
+  //   // Get the numeric representation of the selected day (0 for Sunday, 1 for Monday, etc.)
+  //   const targetDay = new Date(
+  //     `${selectedDay}, ${start.toDateString()}`
+  //   ).getDay();
+
+  //   for (
+  //     let date = new Date(start);
+  //     date <= end;
+  //     date.setDate(date.getDate() + 1)
+  //   ) {
+  //     if (date.getDay() === targetDay) {
+  //       days.push({
+  //         value: date.toISOString().split("T")[0],
+  //         label: date.toDateString(),
+  //       });
+  //     }
+  //   }
+
+  //   return days;
+  // };
 
   useEffect(() => {
     const getData = async () => {
@@ -146,186 +197,126 @@ function StudentRegisterCourse() {
         toast.error("Error Fetching Form Data");
       }
     };
-
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <section>
-      <div className="container">
-        <form onSubmit={formik.handleSubmit}>
-          <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-            <Link to={`/student/view/${id}`}>
-              <button type="button" className="btn btn-sm btn-border   ">
-                Back
-              </button>
-            </Link>
-            &nbsp;&nbsp;
-            <button type="submit" className="btn btn-button btn-sm ">
-              Save
-            </button>
-          </div>
-          <div className="container">
-            <div className="row">
-              <div class="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
-                  Course<span class="text-danger">*</span>
-                </lable>
-                <select
-                  {...formik.getFieldProps("courseId")}
-                  class={`form-select  ${
-                    formik.touched.courseId && formik.errors.courseId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                >
-                  <option disabled></option>
-                  {courseData &&
-                    courseData.map((course) => (
-                      <option key={course.id} value={course.id}>
-                        {course.courseNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.courseId && formik.errors.courseId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.courseId}
-                  </div>
-                )}
+    <div className="container-fluid">
+      <form onSubmit={formik.handleSubmit}>
+        <div className="border-0 mb-5">
+          <div className="mb-5">
+            <div className="border-0 my-2 px-2">
+              <p class="headColor">Course Detail</p>
+              <div className="row mt-2">
+                <table className="table table-border-solid">
+                  <thead>
+                    <tr>
+                      <th scope="col" className="fw-medium">
+                        S.No
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Course
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Batch
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Days
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Package
+                      </th>
+                      <th scope="col" className="fw-medium">
+                        Lesson Start Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.studentCourseDetailModels &&
+                      data.studentCourseDetailModels.map((stdCourse, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{stdCourse.course || "--"}</td>
+                          <td>{stdCourse.batch || "--"}</td>
+                          <td>{stdCourse.days || "--"}</td>
+                          <td>{stdCourse.packageName || "--"}</td>
+                          <td>{stdCourse.lessonName || "--"}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
               </div>
-              {/* <div class="col-md-6 col-12 mb-2">
-                <lable class="form-lable">
-                  Course Day<span class="text-danger">*</span>
-                </lable>
-                <input
-                  type="date"
-                  className={`form-control  ${
-                    formik.touched.courseDay && formik.errors.courseDay
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("courseDay")}
-                />
-                {formik.touched.courseDay && formik.errors.courseDay && (
-                  <div className="invalid-feedback">
-                    {formik.errors.courseDay}
+
+              <div className="container my-4">
+                {loading ? (
+                  <div className="loader-container">
+                    <div className="loading">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
                   </div>
-                )}
-              </div> */}
-              <div className="col-md-6 col-12 mb-2">
-                <label className="form-label m-0">
-                  Course Day<span className="text-danger">*</span>
-                </label>
-                <select
-                  {...formik.getFieldProps("courseDay")}
-                  class={`form-select  ${
-                    formik.touched.courseDay && formik.errors.courseDay
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option></option>
-                  <option value="MONDAY">MONDAY</option>
-                  <option value="TUESDAY">TUESDAY</option>
-                  <option value="WEDNESDAY">WEDNESDAY</option>
-                  <option value="THURSDAY">THURSDAY</option>
-                  <option value="FRIDAY">FRIDAY</option>
-                  <option value="SATURDAY">SATURDAY</option>
-                  <option value="SUNDAY">SUNDAY</option>
-                </select>
-                {formik.touched.courseDay && formik.errors.courseDay && (
-                  <div className="invalid-feedback">
-                    {formik.errors.courseDay}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="row">
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="form-lable">
-                  Start Date<span class="text-danger">*</span>
-                </lable>
-                <input
-                  type="date"
-                  className={`form-control  ${
-                    formik.touched.startDate && formik.errors.startDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("startDate")}
-                />
-                {formik.touched.startDate && formik.errors.startDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.startDate}
-                  </div>
-                )}
-              </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="form-lable">
-                  End Date<span class="text-danger">*</span>
-                </lable>
-                <input
-                  type="date"
-                  class={`form-control  ${
-                    formik.touched.endDate && formik.errors.endDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("endDate")}
-                />
-                {formik.touched.endDate && formik.errors.endDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.endDate}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="row">
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="form-lable">
-                  Start Time<span class="text-danger">*</span>
-                </lable>
-                <input
-                  type="time"
-                  class={`form-control  ${
-                    formik.touched.startTime && formik.errors.startTime
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("startTime")}
-                />
-                {formik.touched.startTime && formik.errors.startTime && (
-                  <div className="invalid-feedback">
-                    {formik.errors.startTime}
-                  </div>
-                )}
-              </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="form-lable">
-                  End Time<span class="text-danger">*</span>
-                </lable>
-                <input
-                  type="time"
-                  class={`form-control  ${
-                    formik.touched.endTime && formik.errors.endTime
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("endTime")}
-                />
-                {formik.touched.endTime && formik.errors.endTime && (
-                  <div className="invalid-feedback">
-                    {formik.errors.endTime}
-                  </div>
+                ) : (
+                  <>
+                    <div className="table-responsive">
+                      <table ref={tableRef} className="display">
+                        {/* Table Header */}
+                        <thead>
+                          <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Batch</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">End Date</th>
+                            <th scope="col">Day</th>
+                            <th scope="col">Available Slot</th>
+                          </tr>
+                        </thead>
+                        {/* Table Body */}
+                        <tbody>
+                          {datas.map((data, index) => (
+                            <tr
+                              key={index}
+                              onClick={() => handleRowSelect(data)} // Add onClick handler
+                              className={
+                                selectedRow === data.id ? "selected-row" : ""
+                              }
+                              style={{ cursor: "pointer" }}
+                            >
+                              <th scope="row" className="text-center">
+                                <input
+                                  type="radio"
+                                  className="form-check-input"
+                                  checked={selectedRow === data.id} // Check if this row is selected
+                                  onChange={() => handleRowSelect(data)} // Call handler on change
+                                />
+                              </th>
+                              <td>{data.course}</td>
+                              <td>{data.batch}</td>
+                              <td>{data.startDate}</td>
+                              <td>{data.endDate}</td>
+                              <td>{data.days}</td>
+                              <td className="text-center">
+                                <span className="badge rounded-pill text-bg-success">
+                                  {data.availableSlots}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
           </div>
-        </form>
-      </div>
-    </section>
+        </div>
+      </form>
+    </div>
   );
 }
 
