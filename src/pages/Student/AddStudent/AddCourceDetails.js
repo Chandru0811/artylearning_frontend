@@ -9,12 +9,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import $ from "jquery";
+import $, { data } from "jquery";
 import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../../List/PackageListByCenter";
 
 const AddcourseDetail = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+
+    console.log("Student Id:",formData.student_id);
     const [courseData, setCourseData] = useState(null);
     const [packageData, setPackageData] = useState(null);
     const [availableDays, setAvailableDays] = useState([]); // State for available days in select
@@ -30,21 +32,30 @@ const AddcourseDetail = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        courseId: formData.courseId || "",
-        batchId: formData.batchId || "",
-        days: formData.days || "",
-        packageName: formData.packageName || "",
-        startDate: formData.startDate || "",
-        endDate: formData.endDate || "",
         lessonName:formData.lessonName || "",
-        studentId: formData.student_id || "",
+        // studentId: formData.student_id || "",
       },
       // validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         const payload = {
           ...data,
-          ...selectedRowData, // Merge selected row data with form data
+          studentId: formData.student_id,
+          centerId: selectedRowData.centerId,
+          centerName:selectedRowData.centerName,
+          classId: selectedRowData.classId,
+          className:selectedRowData.className,
+          course:selectedRowData.course,
+          courseId: selectedRowData.courseId,
+          batchId: selectedRowData.batchId,
+          batch: selectedRowData.batch,
+          days: selectedRowData.days,
+          classRoom: selectedRowData.classRoom,
+          startDate: selectedRowData.startDate,
+          endDate: selectedRowData.endDate,
+          studentCount: selectedRowData.studentCount,
+          teacher:selectedRowData.teacher,
+          userId: selectedRowData.userId,
         };
         console.log("Payload Data:", payload);
         try {
@@ -68,7 +79,7 @@ const AddcourseDetail = forwardRef(
       },
     });
 
-    const fetchData = async () => {
+    const fetchCourseData = async () => {
       try {
         const courseData = await fetchAllCoursesWithIdsC(formData.centerId);
         setCourseData(courseData);
@@ -89,7 +100,7 @@ const AddcourseDetail = forwardRef(
     };
 
     useEffect(() => {
-      fetchData();
+      fetchCourseData();
       fetchPackageData();
     }, []);
 
@@ -121,7 +132,9 @@ const AddcourseDetail = forwardRef(
       }
     };
 
+
     useEffect(() => {
+      formik.setFieldValue("studentId", formData.student_id); 
       getData();
     }, [formik.values.courseId, formik.values.batchId, formik.values.days]);
 

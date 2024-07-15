@@ -11,10 +11,7 @@ const validationSchema = Yup.object().shape({
       parentDateOfBirths: Yup.date()
         .required("*Date Of Birth is required")
         .max(new Date(), "*Date Of Birth cannot be in the future"),
-        emails: Yup.string()
-        .email('*Invalid email format')
-        .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, '*Invalid Email')
-        .required('*Email is required'),
+        emails: Yup.string().email('*Invalid email format').required('*Email is required'),
       relations: Yup.string().required("*Relation is required"),
       mobileNumbers: Yup.string()
         .matches(
