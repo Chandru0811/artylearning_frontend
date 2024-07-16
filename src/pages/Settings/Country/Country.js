@@ -89,8 +89,9 @@ const Country = () => {
                         <tr>
                             <th scope="col">S No</th>
                             <th scope="col">Country</th>
-                            <th scope="col" className="text-center">Nationality</th>
-                            <th scope="col" className="text-end">Action</th>
+                            <th scope="col">Nationality</th>
+                            <th scope="col">Citizenship</th>
+                            <th scope="col" className="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,8 +99,9 @@ const Country = () => {
                             <tr key={index}>
                                 <th scope="row">{index + 1}</th>
                                 <td>{data.country}</td>
-                                <td className="text-center">{data.nationality}</td>
-                                <td className="text-end">
+                                <td>{data.nationality}</td>
+                                <td>{data.citizenship}</td>
+                                <td className="text-center">
                                     {/* {storedScreens?.levelRead && ( */}
                                     {/* <Link to={`/country/view/${data.id}`}>
                                         <button className="btn btn-sm">

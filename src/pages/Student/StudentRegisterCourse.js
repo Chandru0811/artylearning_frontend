@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
 import api from "../../config/URL";
@@ -9,6 +9,12 @@ import "datatables.net-dt/css/jquery.dataTables.css";
 import "datatables.net";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllPackageList from "../List/PackageList";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  packageName: Yup.string().required("Package Name is required"),
+  lessonName: Yup.string().required("Lesson Name is required"),
+});
 
 function StudentRegisterCourse() {
   const { id } = useParams();
@@ -23,22 +29,28 @@ function StudentRegisterCourse() {
   const [packageData, setPackageData] = useState(null);
   const [availableDays, setAvailableDays] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      lessonName:"",
+      lessonName: "",
+      packageName:""
     },
-    // validationSchema: validationSchema, 
+    validationSchema: validationSchema,
     onSubmit: async (data) => {
+      if (!selectedRow) {
+        toast.warning("Please select a course");
+        return;
+      }
       setLoadIndicator(true);
       const payload = {
         ...data,
         studentId: id,
         centerId: selectedRowData.centerId,
-        centerName:selectedRowData.centerName,
+        centerName: selectedRowData.centerName,
         classId: selectedRowData.classId,
-        className:selectedRowData.className,
-        course:selectedRowData.course,
+        className: selectedRowData.className,
+        course: selectedRowData.course,
         courseId: selectedRowData.courseId,
         batchId: selectedRowData.batchId,
         batch: selectedRowData.batch,
@@ -47,7 +59,7 @@ function StudentRegisterCourse() {
         startDate: selectedRowData.startDate,
         endDate: selectedRowData.endDate,
         studentCount: selectedRowData.studentCount,
-        teacher:selectedRowData.teacher,
+        teacher: selectedRowData.teacher,
         userId: selectedRowData.userId,
       };
       console.log("Payload Data:", payload);
@@ -59,6 +71,7 @@ function StudentRegisterCourse() {
 
         if (response.status === 200) {
           toast.success(response.data.message);
+          navigate("/student");
         } else {
           toast.error(response.data.message);
         }
@@ -436,6 +449,11 @@ function StudentRegisterCourse() {
                         </option>
                       ))}
                   </select>
+                  {formik.touched.packageName && formik.errors.packageName && (
+                    <div className="invalid-feedback">
+                      {formik.errors.packageName}
+                    </div>
+                  )}
                 </div>
                 {availableDays.length > 0 && (
                   <div className="col-md-4">
@@ -453,6 +471,11 @@ function StudentRegisterCourse() {
                         </option>
                       ))}
                     </select>
+                    {formik.touched.lessonName && formik.errors.lessonName && (
+                      <div className="invalid-feedback">
+                        {formik.errors.lessonName}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

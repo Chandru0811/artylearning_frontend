@@ -13,10 +13,14 @@ import $, { data } from "jquery";
 import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../../List/PackageListByCenter";
 
+const validationSchema = Yup.object().shape({
+  packageName: Yup.string().required("Package Name is required"),
+  lessonName: Yup.string().required("Lesson Name is required"),
+});
+
 const AddcourseDetail = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-
-    console.log("Student Id:",formData.student_id);
+    console.log("Student Id:", formData.student_id);
     const [courseData, setCourseData] = useState(null);
     const [packageData, setPackageData] = useState(null);
     const [availableDays, setAvailableDays] = useState([]); // State for available days in select
@@ -32,20 +36,24 @@ const AddcourseDetail = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        lessonName:formData.lessonName || "",
-        // studentId: formData.student_id || "",
+        lessonName: formData.lessonName || "",
+        packageName: "",
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (data) => {
+        if (!selectedRow) {
+          toast.warning("Please select a course");
+          return;
+        }
         setLoadIndicators(true);
         const payload = {
           ...data,
           studentId: formData.student_id,
           centerId: selectedRowData.centerId,
-          centerName:selectedRowData.centerName,
+          centerName: selectedRowData.centerName,
           classId: selectedRowData.classId,
-          className:selectedRowData.className,
-          course:selectedRowData.course,
+          className: selectedRowData.className,
+          course: selectedRowData.course,
           courseId: selectedRowData.courseId,
           batchId: selectedRowData.batchId,
           batch: selectedRowData.batch,
@@ -54,7 +62,7 @@ const AddcourseDetail = forwardRef(
           startDate: selectedRowData.startDate,
           endDate: selectedRowData.endDate,
           studentCount: selectedRowData.studentCount,
-          teacher:selectedRowData.teacher,
+          teacher: selectedRowData.teacher,
           userId: selectedRowData.userId,
         };
         console.log("Payload Data:", payload);
@@ -132,9 +140,8 @@ const AddcourseDetail = forwardRef(
       }
     };
 
-
     useEffect(() => {
-      formik.setFieldValue("studentId", formData.student_id); 
+      formik.setFieldValue("studentId", formData.student_id);
       getData();
     }, [formik.values.courseId, formik.values.batchId, formik.values.days]);
 
@@ -363,16 +370,29 @@ const AddcourseDetail = forwardRef(
                       </option>
                       {packageData &&
                         packageData.map((packages) => (
-                          <option key={packages.id} value={packages.packageNamesas}>
+                          <option
+                            key={packages.id}
+                            value={packages.packageNamesas}
+                          >
                             {packages.packageNames}
                           </option>
                         ))}
                     </select>
+                    {formik.touched.packageName &&
+                      formik.errors.packageName && (
+                        <div className="invalid-feedback">
+                          {formik.errors.packageName}
+                        </div>
+                      )}
                   </div>
                   {availableDays.length > 0 && (
                     <div className="col-md-4">
-                      <select className="form-select" name="lessonName" {...formik.getFieldProps("lessonName")}>
-                        <option value=""  disabled selected>
+                      <select
+                        className="form-select"
+                        name="lessonName"
+                        {...formik.getFieldProps("lessonName")}
+                      >
+                        <option value="" disabled selected>
                           Select Date
                         </option>
                         {availableDays.map((day) => (
@@ -381,6 +401,12 @@ const AddcourseDetail = forwardRef(
                           </option>
                         ))}
                       </select>
+                      {formik.touched.lessonName &&
+                        formik.errors.lessonName && (
+                          <div className="invalid-feedback">
+                            {formik.errors.lessonName}
+                          </div>
+                        )}
                     </div>
                   )}
                 </div>

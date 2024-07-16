@@ -1,8 +1,10 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import fetchAllIDTypeWithIds from "../../List/IDTypeList";
+import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 
 const validationSchema = Yup.object().shape({
   teacherName: Yup.string().required("*Staff Name is required"),
@@ -16,6 +18,10 @@ const validationSchema = Yup.object().shape({
 });
 const StaffPersonalEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+
+    const [idTypeData, setIdTypeData] = useState(null);
+    const [citizenShipData, setCitizenShipData] = useState(null);
+
     const formik = useFormik({
       initialValues: {
         teacherName: formData.teacherName || "",
@@ -69,6 +75,31 @@ const StaffPersonalEdit = forwardRef(
         }
       },
     });
+
+
+    const fetchIDTypeData = async () => {
+      try {
+        const idTypeData = await fetchAllIDTypeWithIds();
+        setIdTypeData(idTypeData);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
+    const fetchCitizenShipData = async () => {
+      try {
+        const citizenShipData = await fetchAllNationalityeWithIds();
+        setCitizenShipData(citizenShipData);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
+    useEffect(() => {
+      fetchIDTypeData();
+      fetchCitizenShipData();
+    }, []);
+
 
     useEffect(() => {
       const getData = async () => {
@@ -134,17 +165,25 @@ const StaffPersonalEdit = forwardRef(
             </div>
           </div>
           <div class="container row d-flex my-4 justify-align-content-around">
-            <div class="form-group  col-sm ">
+          <div class="form-group col-sm">
               <label>ID Type</label>
               <span className="text-danger">*</span>
-              <input
+              <select
                 type="text"
-                class="form-control "
+                className="form-select"
                 name="idType"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.idType}
-              />
+              >
+                <option value=""></option>
+                {idTypeData &&
+                  idTypeData.map((idType) => (
+                    <option key={idType.id} value={idType.idType}>
+                      {idType.idType}
+                    </option>
+                  ))}
+              </select>
               {formik.touched.idType && formik.errors.idType && (
                 <div className="error text-danger ">
                   <small>{formik.errors.idType}</small>
@@ -170,19 +209,27 @@ const StaffPersonalEdit = forwardRef(
             </div>
           </div>
           <div class="container row d-flex my-4 justify-align-content-around">
-            <div class="form-group  col-sm ">
+          <div class="form-group col-sm">
               <label>Citizenship</label>
               <span className="text-danger">*</span>
-              <input
+              <select
                 type="text"
-                class="form-control"
+                className="form-select"
                 name="citizenship"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.citizenship}
-              />
+              >
+                <option value=""></option>
+                {citizenShipData &&
+                  citizenShipData.map((citizen) => (
+                    <option key={citizen.id} value={citizen.citizenship}>
+                      {citizen.citizenship}
+                    </option>
+                  ))}
+              </select>
               {formik.touched.citizenship && formik.errors.citizenship && (
-                <div className="error text-danger ">
+                <div className="error text-danger">
                   <small>{formik.errors.citizenship}</small>
                 </div>
               )}
@@ -216,10 +263,7 @@ const StaffPersonalEdit = forwardRef(
                 onBlur={formik.handleBlur}
               />
             </div> */}
-           
-          </div>
-          <div class="container row d-flex my-4 justify-align-content-around">
-          <div class="form-group  col-sm ">
+             <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
                 <div className="me-4">
@@ -251,6 +295,9 @@ const StaffPersonalEdit = forwardRef(
                 </label>
               </div>
             </div>
+           
+          </div>
+          <div class="container row d-flex my-4 justify-align-content-around">
             </div>
           <div class="container row d-flex justify-content-start align-items-center">
             <div class="form-group  col-sm ">

@@ -7,35 +7,28 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-function CountryAdd({ onSuccess }) {
+function IDTypeAdd({ onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
-
     const handleClose = () => {
         setShow(false);
         formik.resetForm();
     };
-
     const handleShow = () => setShow(true);
-
     const validationSchema = Yup.object({
-        country: Yup.string().required("*Country is required"),
-        nationality: Yup.string().required("*Nationality is required"),
-        citizenship: Yup.string().required("*Citizenship is required"),
+        idType: Yup.string().required("*ID Type is required"),
     });
 
     const formik = useFormik({
         initialValues: {
-            country: "",
-            nationality: "",
-            citizenship:""
+            idType: "",
         },
-        validationSchema: validationSchema,
+        validationSchema: validationSchema, // Assign the validation schema
         onSubmit: async (values) => {
             setLoadIndicator(true);
             // console.log(values);
             try {
-                const response = await api.post("/createCountrySetting", values, {
+                const response = await api.post("/createIdTypeSetting", values, {
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -68,7 +61,7 @@ function CountryAdd({ onSuccess }) {
             </div>
             <Modal show={show} size="lg" onHide={handleClose} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Add Country & Nationality</Modal.Title>
+                    <Modal.Title className="headColor">Add ID Type</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>
@@ -76,57 +69,19 @@ function CountryAdd({ onSuccess }) {
                             <div className="row py-4">
                                 <div className="col-md-6 col-12 mb-2">
                                     <label className="form-label">
-                                        Country<span className="text-danger">*</span>
+                                        ID Type<span className="text-danger">*</span>
                                     </label>
                                     <input
                                         type="text"
-                                        className={`form-control  ${formik.touched.country && formik.errors.country
+                                        className={`form-control  ${formik.touched.idType && formik.errors.idType
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        {...formik.getFieldProps("country")}
+                                        {...formik.getFieldProps("idType")}
                                     />
-                                    {formik.touched.country && formik.errors.country && (
+                                    {formik.touched.idType && formik.errors.idType && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.country}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="col-md-6 col-12 mb-2">
-                                    <label className="form-label">
-                                        Nationality<span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control  ${formik.touched.nationality && formik.errors.nationality
-                                            ? "is-invalid"
-                                            : ""
-                                            }`}
-                                        {...formik.getFieldProps("nationality")}
-                                    />
-                                    {formik.touched.nationality && formik.errors.nationality && (
-                                        <div className="invalid-feedback">
-                                            {formik.errors.nationality}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="col-md-6 col-12 mb-2">
-                                    <label className="form-label">
-                                        Citizenship<span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control  ${formik.touched.citizenship && formik.errors.citizenship
-                                            ? "is-invalid"
-                                            : ""
-                                            }`}
-                                        {...formik.getFieldProps("citizenship")}
-                                    />
-                                    {formik.touched.citizenship && formik.errors.citizenship && (
-                                        <div className="invalid-feedback">
-                                            {formik.errors.citizenship}
+                                            {formik.errors.idType}
                                         </div>
                                     )}
                                 </div>
@@ -157,4 +112,4 @@ function CountryAdd({ onSuccess }) {
     );
 }
 
-export default CountryAdd;
+export default IDTypeAdd;

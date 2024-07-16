@@ -185,6 +185,9 @@ import SalaryType from "../pages/Settings/Salary/SalaryType";
 import SalaryTypeEdit from "../pages/Settings/Salary/SalaryTypeEdit";
 import SalaryTypeView from "../pages/Settings/Salary/SalaryTypeView";
 import SalaryTypeAdd from "../pages/Settings/Salary/SalaryTypeAdd";
+import IDType from "../pages/Settings/IdType/IDType";
+import IDTypeAdd from "../pages/Settings/IdType/IDTypeAdd";
+import IDTypeEdit from "../pages/Settings/IdType/IDTypeEdit";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -530,6 +533,11 @@ function Admin({ handleLogout }) {
                 element={<SettingLeaveView />}
               />
 
+              {/* ID Type */}
+              <Route path="/idType" element={<IDType />} />
+              <Route path="/idType/add" element={<IDTypeAdd />} />
+              <Route path="/idType/edit/:id" element={<IDTypeEdit />} />
+             
               {/* Race */}
               <Route path="/race" element={<Race />} />
               <Route path="/race/add" element={<RaceAdd />} />

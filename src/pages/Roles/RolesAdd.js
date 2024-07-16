@@ -4,11 +4,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 
+const validationSchema = Yup.object().shape({});
+
 function RolesAdd() {
   const [role, setRole] = useState("1");
-
-  const validationSchema = Yup.object().shape({});
-
   const formik = useFormik({
     initialValues: {
       courseIndex: true,
@@ -307,6 +306,13 @@ function RolesAdd() {
       leaveSettingCreate: true,
       leaveSettingUpdate: true,
       leaveSettingDelete: true,
+
+      idTypeSettingIndex: true,
+      idTypeSettingRead: true,
+      idTypeSettingCreate: true,
+      idTypeSettingUpdate: true,
+      idTypeSettingDelete: true,
+
       salarySettingIndex: true,
       salarySettingRead: true,
       salarySettingCreate: true,
@@ -2954,6 +2960,66 @@ function RolesAdd() {
                           checked={formik.values.leaveSettingDelete}
                           onChange={handleCheckboxChange(
                             `leaveSettingDelete`
+                          )}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          ID Type
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="idTypeSettingIndex"
+                          checked={formik.values.idTypeSettingIndex}
+                          onChange={handleCheckboxChange(
+                            `idTypeSettingIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="idTypeSettingRead"
+                          checked={formik.values.idTypeSettingRead}
+                          onChange={handleCheckboxChange(`idTypeSettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="idTypeSettingCreate"
+                          checked={formik.values.idTypeSettingCreate}
+                          onChange={handleCheckboxChange(
+                            `idTypeSettingCreate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="idTypeSettingUpdate"
+                          checked={formik.values.idTypeSettingUpdate}
+                          onChange={handleCheckboxChange(
+                            `idTypeSettingUpdate`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="idTypeSettingDelete"
+                          checked={formik.values.idTypeSettingDelete}
+                          onChange={handleCheckboxChange(
+                            `idTypeSettingDelete`
                           )}
                         />
                       </td>

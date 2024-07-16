@@ -357,6 +357,11 @@ function Sidebar() {
             access: storedScreens.leaveSettingIndex,
           },
           {
+            title: "ID Type",
+            path: "/idType",
+            access: storedScreens.idTypeSettingIndex,
+          },
+          {
             title: "Salary Type",
             path: "/salarytype",
             access: storedScreens.salarySettingIndex,

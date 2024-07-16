@@ -1,8 +1,10 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import fetchAllIDTypeWithIds from "../../List/IDTypeList";
+import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 
 const validationSchema = Yup.object().shape({
   teacherName: Yup.string().required("*Teacher Name is required"),
@@ -19,6 +21,9 @@ const validationSchema = Yup.object().shape({
 });
 const PersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const [idTypeData, setIdTypeData] = useState(null);
+    const [citizenShipData, setCitizenShipData] = useState(null);
+
     const formik = useFormik({
       initialValues: {
         role: "teacher",
@@ -95,6 +100,29 @@ const PersonalAdd = forwardRef(
       },
     });
 
+    const fetchIDTypeData = async () => {
+      try {
+        const idTypeData = await fetchAllIDTypeWithIds();
+        setIdTypeData(idTypeData);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
+    const fetchCitizenShipData = async () => {
+      try {
+        const citizenShipData = await fetchAllNationalityeWithIds();
+        setCitizenShipData(citizenShipData);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
+    useEffect(() => {
+      fetchIDTypeData();
+      fetchCitizenShipData();
+    }, []);
+
     useImperativeHandle(ref, () => ({
       personalAdd: formik.handleSubmit,
     }));
@@ -142,17 +170,24 @@ const PersonalAdd = forwardRef(
                 )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>
-                  ID Type<span class="text-danger">*</span>
-                </label>
-                <input
+                <label>ID Type</label>
+                <span className="text-danger">*</span>
+                <select
                   type="text"
-                  className="form-control"
+                  className="form-select"
                   name="idType"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.idType}
-                />
+                >
+                  <option value=""></option>
+                  {idTypeData &&
+                    idTypeData.map((idType) => (
+                      <option key={idType.id} value={idType.idType}>
+                        {idType.idType}
+                      </option>
+                    ))}
+                </select>
                 {formik.touched.idType && formik.errors.idType && (
                   <div className="error text-danger ">
                     <small>{formik.errors.idType}</small>
@@ -177,18 +212,26 @@ const PersonalAdd = forwardRef(
                   </div>
                 )}
               </div>
+
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>
-                  Citizenship<span class="text-danger">*</span>
-                </label>
-                <input
+                <label>Citizenship</label>
+                <span className="text-danger">*</span>
+                <select
                   type="text"
-                  className="form-control"
+                  className="form-select"
                   name="citizenship"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.citizenship}
-                />
+                >
+                  <option value=""></option>
+                  {citizenShipData &&
+                    citizenShipData.map((citizen) => (
+                      <option key={citizen.id} value={citizen.citizenship}>
+                        {citizen.citizenship}
+                      </option>
+                    ))}
+                </select>
                 {formik.touched.citizenship && formik.errors.citizenship && (
                   <div className="error text-danger">
                     <small>{formik.errors.citizenship}</small>

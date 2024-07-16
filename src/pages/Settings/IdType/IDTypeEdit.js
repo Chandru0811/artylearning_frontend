@@ -8,31 +8,27 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-const validationSchema = Yup.object({
-    country: Yup.string().required("*Country is required"),
-    nationality: Yup.string().required("*Nationality is required"),
-    citizenship: Yup.string().required("*Citizenship is required"),
-});
-
-function CountryEdit({ id, onSuccess }) {
+function IDTypeEdit({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const validationSchema = Yup.object({
+        race: Yup.string().required("*Race is required"),
+    });
+
     const formik = useFormik({
         initialValues: {
-            country: "",
-            nationality: "",
-            citizenship:""
+            race: "",
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             // console.log(values);
             setLoadIndicator(true);
             try {
-                const response = await api.put(`/updateCountrySetting/${id}`, values, {
+                const response = await api.put(`/updateIdTypeSetting/${id}`, values, {
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -56,7 +52,7 @@ function CountryEdit({ id, onSuccess }) {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get(`/getAllCountrySettingById/${id}`);
+                const response = await api.get(`/getAllIdTypeSettingById/${id}`);
                 formik.setValues(response.data);
             } catch (error) {
                 console.error("Error fetching data ", error);
@@ -64,6 +60,7 @@ function CountryEdit({ id, onSuccess }) {
         };
 
         getData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -79,66 +76,28 @@ function CountryEdit({ id, onSuccess }) {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Country & Nationality Edit</Modal.Title>
+                    <Modal.Title className="headColor">Race Edit</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>
                         <div className="container">
                             <div className="row py-4">
-
+                                
                                 <div className="col-md-6 col-12 mb-2">
                                     <label className="form-label">
-                                        Country<span className="text-danger">*</span>
+                                        race<span className="text-danger">*</span>
                                     </label>
                                     <input
                                         type="text"
-                                        className={`form-control  ${formik.touched.country && formik.errors.country
+                                        className={`form-control  ${formik.touched.race && formik.errors.race
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        {...formik.getFieldProps("country")}
+                                        {...formik.getFieldProps("race")}
                                     />
-                                    {formik.touched.country && formik.errors.country && (
+                                    {formik.touched.race && formik.errors.race && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.country}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="col-md-6 col-12 mb-2">
-                                    <label className="form-label">
-                                        Nationality<span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control  ${formik.touched.nationality && formik.errors.nationality
-                                            ? "is-invalid"
-                                            : ""
-                                            }`}
-                                        {...formik.getFieldProps("nationality")}
-                                    />
-                                    {formik.touched.nationality && formik.errors.nationality && (
-                                        <div className="invalid-feedback">
-                                            {formik.errors.nationality}
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="col-md-6 col-12 mb-2">
-                                    <label className="form-label">
-                                        Citizenship<span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control  ${formik.touched.citizenship && formik.errors.citizenship
-                                            ? "is-invalid"
-                                            : ""
-                                            }`}
-                                        {...formik.getFieldProps("citizenship")}
-                                    />
-                                    {formik.touched.citizenship && formik.errors.citizenship && (
-                                        <div className="invalid-feedback">
-                                            {formik.errors.citizenship}
+                                            {formik.errors.race}
                                         </div>
                                     )}
                                 </div>
@@ -170,4 +129,4 @@ function CountryEdit({ id, onSuccess }) {
     );
 }
 
-export default CountryEdit;
+export default IDTypeEdit;

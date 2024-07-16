@@ -48,7 +48,7 @@ const AddEmergencyContact = forwardRef(
 
         // Append fields for emergency contact
         formDatas.append("emergencyContactName", data.emergencyContactName);
-        formDatas.append("emergencyRelation", data.emergencyRelation);
+        formDatas.append("emergencyRelation", " ");
         formDatas.append("emergencyContactNo", data.emergencyContactNo);
 
         // Append fields for each emergency contact information

@@ -17,7 +17,7 @@ function EditClass({ id, onSuccess }) {
   const validationSchema = yup.object().shape({
     classRoomName: yup.string().required("*Classroom name is required"),
     classRoomType: yup.string().required("*Classroom type is required"),
-    classRoomCode: yup.number().typeError("*Enter a valid number").required("*Classroom code is required"),
+    classRoomCode: yup.string().required("*Classroom Code is required"),
     capacity: yup.string().required("*Capacity is required"),
   });
   const formik = useFormik({
