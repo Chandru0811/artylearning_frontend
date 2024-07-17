@@ -109,11 +109,11 @@ const Salary = () => {
                 <td className="text-center">{data.salaryType}</td>
                 <td className="text-center">
                   {/* {storedScreens?.levelRead && ( */}
-                  <Link to={`/salarytype/view/${data.id}`}>
+                  {/* <Link to={`/salarytype/view/${data.id}`}>
                     <button className="btn btn-sm">
                       <FaEye />
                     </button>
-                  </Link>
+                  </Link> */}
                   {/* )} */}
                   {/* {storedScreens?.levelUpdate && ( */}
                   {/* <LeaveEdit id={data.id} onSuccess={refreshData} /> */}

@@ -16,12 +16,12 @@ function IDTypeEdit({ id, onSuccess }) {
     const handleShow = () => setShow(true);
 
     const validationSchema = Yup.object({
-        race: Yup.string().required("*Race is required"),
+        idType: Yup.string().required("*ID Type is required"),
     });
 
     const formik = useFormik({
         initialValues: {
-            race: "",
+            idType: "",
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
@@ -76,7 +76,7 @@ function IDTypeEdit({ id, onSuccess }) {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Race Edit</Modal.Title>
+                    <Modal.Title className="headColor">Edit ID Type</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>
@@ -85,19 +85,19 @@ function IDTypeEdit({ id, onSuccess }) {
                                 
                                 <div className="col-md-6 col-12 mb-2">
                                     <label className="form-label">
-                                        race<span className="text-danger">*</span>
+                                        ID Type<span className="text-danger">*</span>
                                     </label>
                                     <input
                                         type="text"
-                                        className={`form-control  ${formik.touched.race && formik.errors.race
+                                        className={`form-control ${formik.touched.idType && formik.errors.idType
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        {...formik.getFieldProps("race")}
+                                        {...formik.getFieldProps("idType")}
                                     />
-                                    {formik.touched.race && formik.errors.race && (
+                                    {formik.touched.idType && formik.errors.idType && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.race}
+                                            {formik.errors.idType}
                                         </div>
                                     )}
                                 </div>
