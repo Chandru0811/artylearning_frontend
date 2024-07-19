@@ -70,11 +70,11 @@ const EditForm6 = forwardRef(
     return (
       <div className="Container py-4">
         <div className="py-3">
-          <p className="headColor">Authorised Person Address</p>
+          <p className="headColor">Permission for Medias Posting</p>
         </div>
         <form onSubmit={formik.handleSubmit}>
           <div className="row">
-            <div className="col-md-12 col-12 mb-3">
+            {/* <div className="col-md-12 col-12 mb-3">
               <div className="mb-3">
                 <div>
                   <label
@@ -103,7 +103,7 @@ const EditForm6 = forwardRef(
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* <div className="d-flex"> */}
             <div className="col-md-12 col-12 mb-2">
               <div className="form-check d-flex">

@@ -9,6 +9,7 @@ import EditPackage from "./Edit/EditPackage";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
+import Delete from "../../components/common/Delete";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
@@ -145,6 +146,7 @@ function CenterEdit() {
   useEffect(() => {
     const getData = async () => {
       const response = await api.get(`/getAllCenterById/${id}`);
+      console.log("response",response.data)
       const formattedData = {
         ...response.data,
         openingDate: response.data.openingDate
@@ -203,11 +205,10 @@ function CenterEdit() {
                 <input
                   type="text"
                   name="centerName"
-                  className={`form-control  ${
-                    formik.touched.centerName && formik.errors.centerName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control  ${formik.touched.centerName && formik.errors.centerName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                   {...formik.getFieldProps("centerName")}
@@ -227,11 +228,10 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("code")}
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.code && formik.errors.code
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control  ${formik.touched.code && formik.errors.code
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   placeholder=""
                 />
                 {formik.touched.code && formik.errors.code && (
@@ -246,11 +246,10 @@ function CenterEdit() {
                 </label>
                 <select
                   {...formik.getFieldProps("centerManager")}
-                  className={`form-select    ${
-                    formik.touched.centerManager && formik.errors.centerManager
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select    ${formik.touched.centerManager && formik.errors.centerManager
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   aria-label="Default select example"
                 >
                   <option selected></option>
@@ -290,11 +289,10 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("zipCode")}
                   type="text"
-                  className={`form-control    ${
-                    formik.touched.zipCode && formik.errors.zipCode
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control    ${formik.touched.zipCode && formik.errors.zipCode
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 />
                 {formik.touched.zipCode && formik.errors.zipCode && (
                   <div className="invalid-feedback">
@@ -311,11 +309,10 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("mobile")}
                   type="text"
-                  className={`form-control   ${
-                    formik.touched.mobile && formik.errors.mobile
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control   ${formik.touched.mobile && formik.errors.mobile
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 />
                 {formik.touched.mobile && formik.errors.mobile && (
                   <div className="invalid-feedback">{formik.errors.mobile}</div>
@@ -330,11 +327,10 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("email")}
                   type="text"
-                  className={`form-control   ${
-                    formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control   ${formik.touched.email && formik.errors.email
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                 />
@@ -351,11 +347,10 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("openingDate")}
                   type="date"
-                  className={`form-control   ${
-                    formik.touched.openingDate && formik.errors.openingDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control   ${formik.touched.openingDate && formik.errors.openingDate
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                 />
@@ -416,11 +411,10 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("uenNumber")}
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.uenNumber && formik.errors.uenNumber
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control  ${formik.touched.uenNumber && formik.errors.uenNumber
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 />
                 {formik.touched.uenNumber && formik.errors.uenNumber && (
                   <div className="invalid-feedback">
@@ -437,12 +431,11 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("taxRegistrationNumber")}
                   type="text"
-                  className={`form-control   ${
-                    formik.touched.taxRegistrationNumber &&
+                  className={`form-control   ${formik.touched.taxRegistrationNumber &&
                     formik.errors.taxRegistrationNumber
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 />
                 {formik.touched.taxRegistrationNumber &&
                   formik.errors.taxRegistrationNumber && (
@@ -460,11 +453,10 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("bankName")}
                   type="text"
-                  className={`form-control    ${
-                    formik.touched.bankName && formik.errors.bankName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control    ${formik.touched.bankName && formik.errors.bankName
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 />
                 {formik.touched.bankName && formik.errors.bankName && (
                   <div className="invalid-feedback">
@@ -481,11 +473,10 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("bankBranch")}
                   type="text"
-                  className={`form-control   ${
-                    formik.touched.bankBranch && formik.errors.bankBranch
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control   ${formik.touched.bankBranch && formik.errors.bankBranch
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 />
                 {formik.touched.bankBranch && formik.errors.bankBranch && (
                   <div className="invalid-feedback">
@@ -502,12 +493,11 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("bankAccountName")}
                   type="text"
-                  className={`form-control    ${
-                    formik.touched.bankAccountName &&
+                  className={`form-control    ${formik.touched.bankAccountName &&
                     formik.errors.bankAccountName
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 />
                 {formik.touched.bankAccountName &&
                   formik.errors.bankAccountName && (
@@ -525,12 +515,11 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("bankAccountNumber")}
                   type="text"
-                  className={`form-control    ${
-                    formik.touched.bankAccountNumber &&
+                  className={`form-control    ${formik.touched.bankAccountNumber &&
                     formik.errors.bankAccountNumber
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                    }`}
                 />
                 {formik.touched.bankAccountNumber &&
                   formik.errors.bankAccountNumber && (
@@ -602,7 +591,8 @@ function CenterEdit() {
                   <th scope="col" className="fw-medium">
                     Tax Type
                   </th>
-                  <th>Edit</th>
+                  <th scope="col" className="fw-medium">Edit</th>
+                  <th scope="col" className="fw-medium">Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -618,6 +608,12 @@ function CenterEdit() {
                         <EditRegisteration
                           id={registration.id}
                           onSuccess={refreshData}
+                        />
+                      </td>
+                      <td>
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCenterRegistrations/${data.id}`}
                         />
                       </td>
                     </tr>
@@ -646,6 +642,9 @@ function CenterEdit() {
                   <th scope="col" className="fw-medium">
                     Edit
                   </th>
+                  <th scope="col" className="fw-medium">
+                    Delete
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -660,6 +659,12 @@ function CenterEdit() {
                         <EditBreak
                           id={centerBreak.id}
                           onSuccess={refreshData}
+                        />
+                      </td>
+                      <td>
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCenterBreaks/${data.id}`}
                         />
                       </td>
                     </tr>
@@ -714,6 +719,9 @@ function CenterEdit() {
                   <th scope="col" className="fw-medium">
                     Edit
                   </th>
+                  <th scope="col" className="fw-medium">
+                    Delete
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -730,6 +738,12 @@ function CenterEdit() {
                         <EditClass
                           id={centerClassRoom.id}
                           onSuccess={refreshData}
+                        />
+                      </td>
+                      <td>
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCenterClassRooms/${data.id}`}
                         />
                       </td>
                     </tr>
@@ -755,6 +769,9 @@ function CenterEdit() {
                   <th scope="col" className="fw-medium">
                     Edit
                   </th>
+                  <th scope="col" className="fw-medium">
+                    Delete
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -768,6 +785,12 @@ function CenterEdit() {
                         <EditPackage
                           id={centerPackage.id}
                           onSuccess={refreshData}
+                        />
+                      </td>
+                      <td>
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCenterPackages/${data.id}`}
                         />
                       </td>
                     </tr>

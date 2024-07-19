@@ -96,7 +96,7 @@ function AddRegister({ id, onSuccess }) {
           </Modal.Header>
           <Modal.Body>
             <div className="row">
-              <div className="col-md-6 col-12 mb-2">
+              {/* <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
                   Registration Date<span className="text-danger">*</span>
                 </lable>
@@ -118,7 +118,7 @@ function AddRegister({ id, onSuccess }) {
                       </div>
                     )}
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
                   Effective Date<span class="text-danger">*</span>

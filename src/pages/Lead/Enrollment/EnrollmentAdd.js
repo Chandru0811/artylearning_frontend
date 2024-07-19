@@ -20,7 +20,7 @@ const steps = [
   { tooltip: "Parent Information" },
   { tooltip: "Address" },
   { tooltip: "Account Information" },
-  { tooltip: "Authorised Person Address" },
+  { tooltip: "Permission for Medias Posting" },
 ];
 
 export default function EnrollmentAdd() {
