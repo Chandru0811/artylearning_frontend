@@ -282,24 +282,33 @@ export default function InvoiceAdd() {
           console.log("Student Data:", studentData);
 
           // Uncomment and update this section if you want to set values in a form
-          // formik.setValues({
-          //   center: studentData.center,
-          //   parent: studentData.parent,
-          //   student: studentData.student,
-          //   course: studentData.course,
-          //   schedule: studentData.schedule,
-          //   noOfLessons: studentData.noOfLessons,
-          //   remark: studentData.remark,
-          //   invoiceDate: studentData.invoiceDate,
-          //   dueDate: studentData.dueDate,
-          //   packageId: null,
-          //   invoicePeriodTo: studentData.invoicePeriodTo,
-          //   invoicePeriodFrom: studentData.invoicePeriodFrom,
-          //   receiptAmount: studentData.receiptAmount,
-          //   creditAdviceOffset: studentData.creditAdviceOffset,
-          //   gst: studentData.gst,
-          //   totalAmount: studentData.totalAmount,
-          // });
+          formik.setValues({
+            center: studentData.centerId || "",
+            parent: studentData?.studentParentsDetails[0]?.parentName || "",
+            student: studentData.studentName,
+            course: studentData?.studentCourseDetailModels[0]?.courseId,
+            packageId: studentData.studentCourseDetailModels[0].packageName,
+            schedule: studentData.studentCourseDetailModels[0].batch,
+            noOfLessons: studentData.noOfLessons,
+            remark: studentData.remark,
+            invoiceDate: "",
+            dueDate: "",
+            invoicePeriodTo: "",
+            invoicePeriodFrom: "",
+            receiptAmount: "",
+            creditAdviceOffset: "",
+            gst: "",
+            totalAmount:"",
+          });
+          formik.setFieldValue("invoiceItems", [
+            {
+              item: "",
+              itemAmount: "",
+              taxType: "",
+              gstAmount: "",
+              totalAmount: "",
+            },
+          ]);
         } catch (error) {
           console.error("Error fetching Student Data:", error);
           toast.error("Error fetching Student Data");
