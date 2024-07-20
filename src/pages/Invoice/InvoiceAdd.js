@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -24,6 +24,7 @@ const invoiceItemSchema = Yup.object().shape({
     .required("Total amount is required")
     .positive("Total amount must be a positive number"),
 });
+
 const validationSchema = Yup.object({
   center: Yup.string().required("*Select a Centre"),
   parent: Yup.string().required("*Parent is required"),
@@ -46,6 +47,12 @@ const validationSchema = Yup.object({
 
 export default function InvoiceAdd() {
   const [rows, setRows] = useState([{}]);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const studentID = searchParams.get("studentID");
+
+  console.log("Stdent ID:",studentID);
+
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -53,7 +60,6 @@ export default function InvoiceAdd() {
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
-  // console.log("Tax Type:",taxData);
 
   const fetchTaxData = async () => {
     try {
@@ -266,6 +272,42 @@ export default function InvoiceAdd() {
       validTotalAmount.toFixed(2)
     );
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      if (studentID) {
+        try {
+          const response = await api.get(`/getAllStudentDetails/${studentID}`);
+          const studentData = response.data;
+          console.log("Student Data:", studentData);
+
+          // Uncomment and update this section if you want to set values in a form
+          // formik.setValues({
+          //   center: studentData.center,
+          //   parent: studentData.parent,
+          //   student: studentData.student,
+          //   course: studentData.course,
+          //   schedule: studentData.schedule,
+          //   noOfLessons: studentData.noOfLessons,
+          //   remark: studentData.remark,
+          //   invoiceDate: studentData.invoiceDate,
+          //   dueDate: studentData.dueDate,
+          //   packageId: null,
+          //   invoicePeriodTo: studentData.invoicePeriodTo,
+          //   invoicePeriodFrom: studentData.invoicePeriodFrom,
+          //   receiptAmount: studentData.receiptAmount,
+          //   creditAdviceOffset: studentData.creditAdviceOffset,
+          //   gst: studentData.gst,
+          //   totalAmount: studentData.totalAmount,
+          // });
+        } catch (error) {
+          console.error("Error fetching Student Data:", error);
+          toast.error("Error fetching Student Data");
+        }
+      }
+    };
+    getData();
+  }, [studentID]);
 
   useEffect(() => {
     fetchData();

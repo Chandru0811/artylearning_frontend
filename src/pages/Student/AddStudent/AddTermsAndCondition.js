@@ -71,7 +71,8 @@ const AddTermsAndCondition = forwardRef(
           if (response.status === 201) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
-            navigate("/student");
+            const studentId = formData.student_id;
+            navigate(`/invoice/add?studentID=${studentId}`);
           } else {
             toast.error(response.data.message);
           }
