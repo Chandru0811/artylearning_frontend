@@ -9,6 +9,7 @@ import Delete from "../../components/common/Delete";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
+import { Button, Modal } from "react-bootstrap";
 // import { SCREENS } from "../../config/ScreenFilter";
 
 const Lead = () => {
@@ -16,6 +17,15 @@ const Lead = () => {
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
+    centerNames: "",
+    studentName: "",
+    assessment: "",
+    assessmentDate: "",
+    startTime: "",
+    remark: ""
+  });
   const navigate = useNavigate();
 
 
@@ -106,35 +116,48 @@ const Lead = () => {
 
   const handleStatusChange = async (event, data) => {
     const newStatus = event.target.getAttribute("data-value");
-    try {
-      const response = await api.put(
-        `/updateLeadInfo/${data.id}`,
-        { ...data, leadStatus: newStatus },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        // Update the local state to reflect the new status
-        setDatas((prevDatas) =>
-          prevDatas.map((item) =>
-            item.id === data.id ? { ...item, leadStatus: newStatus } : item
-          )
-        );
-        if (newStatus === "Assessment confirmed") {
-          navigate(`/student/add?LeadId=${data.id}`);
-        }
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error(error.message || "An error occurred");
+    if (newStatus === "Arranging assessment") {
+      const center = centerData?.find((c) => c.id === parseInt(data.centerId));
+
+      setFormData({
+        centerNames: center?.centerNames || "",
+        studentName: data.studentName || "",
+        assessment: "",
+        assessmentDate: new Date().toISOString().slice(0, 10),
+        startTime: '09:00',
+        remark: ""
+      });
+      setShowModal(true);
+    } else {
+      // try {
+      //   const response = await api.put(
+      //     `/updateLeadInfo/${data.id}`,
+      //     { ...data, leadStatus: newStatus },
+      //     {
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //     }
+      //   );
+      //   if (response.status === 200) {
+      //     toast.success(response.data.message);
+      //     // Update the local state to reflect the new status
+      //     setDatas((prevDatas) =>
+      //       prevDatas.map((item) =>
+      //         item.id === data.id ? { ...item, leadStatus: newStatus } : item
+      //       )
+      //     );
+      //     if (newStatus === "Assessment confirmed") {
+      //       navigate(`/student/add?LeadId=${data.id}`);
+      //     }
+      //   } else {
+      //     toast.error(response.data.message);
+      //   }
+      // } catch (error) {
+      //   console.error(error.message || "An error occurred");
+      // }
     }
   };
-
 
   const getStatusBadgeClass = (status) => {
     switch (status) {
@@ -168,6 +191,29 @@ const Lead = () => {
     }
     setLoading(false);
   };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    // try {
+    //   // You can replace the below URL with the appropriate API endpoint for form submission
+    //   const response = await api.post("/submitAssessmentDetails", formData, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   if (response.status === 200) {
+    //     toast.success("Assessment details submitted successfully");
+    //     setShowModal(false);
+    //     refreshData();
+    //   } else {
+    //     toast.error("Failed to submit assessment details");
+    //   }
+    // } catch (error) {
+    //   console.error("Error submitting form:", error);
+    //   toast.error("An error occurred while submitting the form");
+    // }
+  };
+
   return (
     <div>
       {loading ? (
@@ -227,24 +273,25 @@ const Lead = () => {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                       >
-                        <span className="text-white fw-bold" style={{textWrap:"nowrap"}}>{data.leadStatus}</span>
+                        <span className="text-white fw-bold" style={{ textWrap: "nowrap" }}>{data.leadStatus}</span>
                       </button>
                       <ul className="dropdown-menu text-center leadStatuslist">
-                        {["New WaitList", "Arranging assessment", "Assessment confirmed", "Waiting for payment", "Rejected", "KIV"].map(
-                          (status) => (
+                        {["New WaitList", "Arranging assessment", "Assessment confirmed", "Waiting for payment", "Rejected", "KIV"]
+                          .filter(status => status !== data.leadStatus) // Filter out the selected status
+                          .map(status => (
                             <li
                               key={status}
-                              // className={`dropdown-item text-white ${getStatusBadgeClass(status)}`}
-                              className ="dropdown-item text-dark"
+                              className="dropdown-item text-dark"
                               data-value={status}
                               onClick={(event) => handleStatusChange(event, data)}
                             >
                               {status}
                             </li>
-                          )
-                        )}
+                          ))
+                        }
                       </ul>
                     </div>
+
                   </td>
                   <td>
                     {data.paymentStatus === "REJECTED" ? (
@@ -285,6 +332,43 @@ const Lead = () => {
           </table>
         </div>
       )}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Arranging Assessment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleFormSubmit}>
+            <div className="mb-3">
+              <label htmlFor="centerNames" className="form-label">Center Name</label>
+              <input type="text" className="form-control" id="centerNames" value={formData.centerNames} onChange={(e) => setFormData({ ...formData, centerNames: e.target.value })} required />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="studentName" className="form-label">Student Name</label>
+              <input type="text" className="form-control" id="studentName" value={formData.studentName} onChange={(e) => setFormData({ ...formData, studentName: e.target.value })} required />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="assessment" className="form-label">Assessment</label>
+              <input type="text" className="form-control" id="assessment" value={formData.assessment} onChange={(e) => setFormData({ ...formData, assessment: e.target.value })} required />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="assessmentDate" className="form-label">Assessment Date</label>
+              <input type="date" className="form-control" id="assessmentDate" value={formData.assessmentDate} onChange={(e) => setFormData({ ...formData, assessmentDate: e.target.value })} required />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="startTime" className="form-label">Start Time</label>
+              <input type="time" className="form-control" id="startTime" value={formData.startTime} onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} required />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="remark" className="form-label">Remark</label>
+              <textarea className="form-control" id="remark" value={formData.remark} onChange={(e) => setFormData({ ...formData, remark: e.target.value })} />
+            </div>
+            <div className="d-flex justify-content-end">
+              <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
+              <Button type="submit" variant="success" className="ms-2">Confirm</Button>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
