@@ -112,7 +112,7 @@ const Lead = () => {
               }
             );
             if (response.status === 200) {
-              toast.success(response.data.message);
+              toast.success("Lead Status Updated");
               // Update the local state to reflect the new status
               setDatas((prevDatas) =>
                 prevDatas.map((item) =>
@@ -128,6 +128,9 @@ const Lead = () => {
           } catch (error) {
             console.error(error.message || "An error occurred");
           }
+    }else if (newStatus === "Do Assessment") {
+      navigate(`/lead/lead/assessment/${currentLead.id}`);
+      return;
     }
     setNewStatus(newStatus);
     setCurrentLead(data);
@@ -202,7 +205,7 @@ const Lead = () => {
         );
         
         if (response.status === 200) {
-          toast.success(response.data.message);
+          toast.success("Lead Status Updated");
           
           // Update the local state to reflect the new status
           setDatas((prevDatas) =>

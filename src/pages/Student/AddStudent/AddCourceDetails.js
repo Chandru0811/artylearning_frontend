@@ -372,7 +372,7 @@ const AddcourseDetail = forwardRef(
                         packageData.map((packages) => (
                           <option
                             key={packages.id}
-                            value={packages.packageNamesas}
+                            value={packages.id}
                           >
                             {packages.packageNames}
                           </option>

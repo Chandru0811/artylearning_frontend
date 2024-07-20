@@ -8,6 +8,8 @@ import StudentSummary from "./StudentSummary";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import Logo from "../../assets/images/Logo.png";
+import fetchAllPackageListByCenter from "../List/PackageListByCenter";
+import fetchAllPackageList from "../List/PackageList";
 
 function StudentView() {
   const table1Ref = useRef();
@@ -19,14 +21,18 @@ function StudentView() {
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
   const [centerData, setCenterData] = useState(null);
+  const [packageData, setPackageData] = useState(null);
+
   const [courseData, setCourseData] = useState(null);
 
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       const courseData = await fetchAllCoursesWithIds();
+      const packageData = await fetchAllPackageList();
       setCenterData(centerData);
       setCourseData(courseData);
+      setPackageData(packageData);
     } catch (error) {
       toast.error(error);
     }
@@ -1100,7 +1106,13 @@ function StudentView() {
                               <div className="col-6">
                                 <p className="text-muted text-sm">
                                   <b className="mx-2">:</b>
-                                  {std.packageName || "--"}
+                                  {/* {std.packageName || "--"} */}
+                                  {packageData &&
+                                    packageData.map((packages) =>
+                                      parseInt(data.packageId) === packages.id
+                                        ? packages.packageName || "--"
+                                        : ""
+                                    )}
                                 </p>
                               </div>
                             </div>
@@ -1678,7 +1690,13 @@ function StudentView() {
                           <div className="col-6">
                             <p className="text-muted text-sm">
                               <b className="mx-2">:</b>
-                              {std.packageName || "--"}
+                              {/* {std.packageName || "--"} */}
+                              {packageData &&
+                                packageData.map((packages) =>
+                                  parseInt(data.packageId) === packages.id
+                                    ? packages.packageName || "--"
+                                    : ""
+                                )}
                             </p>
                           </div>
                         </div>

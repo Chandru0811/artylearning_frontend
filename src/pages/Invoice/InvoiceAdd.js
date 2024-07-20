@@ -285,8 +285,8 @@ export default function InvoiceAdd() {
           formik.setValues({
             center: studentData.centerId || "",
             parent: studentData?.studentParentsDetails[0]?.parentName || "",
-            student: studentData.studentName,
-            course: studentData?.studentCourseDetailModels[0]?.courseId,
+            student: studentID,
+            course: studentData.studentCourseDetailModels[0].courseId,
             packageId: studentData.studentCourseDetailModels[0].packageName,
             schedule: studentData.studentCourseDetailModels[0].batch,
             noOfLessons: studentData.noOfLessons,
@@ -300,6 +300,8 @@ export default function InvoiceAdd() {
             gst: "",
             totalAmount:"",
           });
+
+          formik.setFieldValue('center',studentData.centerId);
           formik.setFieldValue("invoiceItems", [
             {
               item: "",
