@@ -18,6 +18,8 @@ const Lead = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [newStatus, setNewStatus] = useState("");
+  const [currentLead, setCurrentLead] = useState(null);
   const [formData, setFormData] = useState({
     centerNames: "",
     studentName: "",
@@ -27,7 +29,6 @@ const Lead = () => {
     remark: ""
   });
   const navigate = useNavigate();
-
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
@@ -86,34 +87,6 @@ const Lead = () => {
     }
   };
 
-  // const handleStatusChange = async (event, data) => {
-  //   const newStatus = event.target.getAttribute("data-value");
-  //   try {
-  //     const response = await api.put(
-  //       `/updateLeadInfo/${data.id}`,
-  //       { ...data, leadStatus: newStatus },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     if (response.status === 200) {
-  //       toast.success(response.data.message);
-  //       // Update the local state to reflect the new status
-  //       setDatas((prevDatas) =>
-  //         prevDatas.map((item) =>
-  //           item.id === data.id ? { ...item, leadStatus: newStatus } : item
-  //         )
-  //       );
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error(error.message || "An error occurred");
-  //   }
-  // };
-
   const handleStatusChange = async (event, data) => {
     const newStatus = event.target.getAttribute("data-value");
     if (newStatus === "Arranging assessment") {
@@ -127,36 +100,131 @@ const Lead = () => {
         startTime: '09:00',
         remark: ""
       });
-      setShowModal(true);
-    } else {
-      // try {
-      //   const response = await api.put(
-      //     `/updateLeadInfo/${data.id}`,
-      //     { ...data, leadStatus: newStatus },
-      //     {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
-      //   if (response.status === 200) {
-      //     toast.success(response.data.message);
-      //     // Update the local state to reflect the new status
-      //     setDatas((prevDatas) =>
-      //       prevDatas.map((item) =>
-      //         item.id === data.id ? { ...item, leadStatus: newStatus } : item
-      //       )
-      //     );
-      //     if (newStatus === "Assessment confirmed") {
-      //       navigate(`/student/add?LeadId=${data.id}`);
-      //     }
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   console.error(error.message || "An error occurred");
-      // }
+    }else if (newStatus === "Assessment confirmed"){
+      try {
+            const response = await api.put(
+              `/updateLeadInfo/${currentLead.id}`,
+              { ...currentLead, leadStatus: newStatus },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            if (response.status === 200) {
+              toast.success(response.data.message);
+              // Update the local state to reflect the new status
+              setDatas((prevDatas) =>
+                prevDatas.map((item) =>
+                  item.id === currentLead.id ? { ...item, leadStatus: newStatus } : item
+                )
+              );
+              if (newStatus === "Assessment confirmed") {
+                navigate(`/student/add?LeadId=${currentLead.id}`);
+              }
+            } else {
+              toast.error(response.data.message);
+            }
+          } catch (error) {
+            console.error(error.message || "An error occurred");
+          }
     }
+    setNewStatus(newStatus);
+    setCurrentLead(data);
+    setShowModal(true);
+  };
+
+  // const handleStatusChange = async (event, data) => {
+  //   const newStatus = event.target.getAttribute("data-value");
+  
+  //   if (newStatus === "Arranging assessment") {
+  //     const center = centerData?.find((c) => c.id === parseInt(data.centerId));
+  
+  //     setFormData({
+  //       centerNames: center?.centerNames || "",
+  //       studentName: data.studentName || "",
+  //       assessment: "",
+  //       assessmentDate: new Date().toISOString().slice(0, 10),
+  //       startTime: '09:00',
+  //       remark: ""
+  //     });
+  
+  //   } else if (newStatus === "Assessment confirmed") {
+  //     try {
+  //       const response = await api.put(
+  //         `/updateLeadInfo/${data.id}`, // Using data.id instead of currentLead.id
+  //         { ...data, leadStatus: newStatus }, // Using data instead of currentLead
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  
+  //       if (response.status === 200) {
+  //         toast.success(response.data.message);
+  //         // Update the local state to reflect the new status
+  //         setDatas((prevDatas) =>
+  //           prevDatas.map((item) =>
+  //             item.id === data.id ? { ...item, leadStatus: newStatus } : item
+  //           )
+  //         );
+  //         navigate(`/student/add?LeadId=${data.id}`);
+  //       } else {
+  //         toast.error(response.data.message);
+  //       }
+  //     } catch (error) {
+  //       console.error(error.message || "An error occurred");
+  //     }
+  //     return; // Early return to avoid setting the modal for "Assessment confirmed"
+  //   }
+  
+  //   // For other statuses, update the state and show the modal
+  //   setNewStatus(newStatus);
+  //   setCurrentLead(data);
+  //   setShowModal(true);
+  // };
+  
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    if (currentLead) {
+      try {
+        // Update the lead status in the backend
+        const response = await api.put(
+          `/updateLeadInfo/${currentLead.id}`,
+          { ...currentLead, leadStatus: newStatus },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        
+        if (response.status === 200) {
+          toast.success(response.data.message);
+          
+          // Update the local state to reflect the new status
+          setDatas((prevDatas) =>
+            prevDatas.map((item) =>
+              item.id === currentLead.id ? { ...item, leadStatus: newStatus } : item
+            )
+          );
+  
+          // Navigate to the student page if needed
+          if (newStatus === "Assessment confirmed") {
+            navigate(`/student/add?LeadId=${currentLead.id}`);
+          }
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        console.error(error.message || "An error occurred");
+      }
+    }
+    
+    // Close the modal after form submission
+    setShowModal(false);
   };
 
   const getStatusBadgeClass = (status) => {
@@ -178,7 +246,6 @@ const Lead = () => {
     }
   };
 
-
   const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
@@ -192,33 +259,11 @@ const Lead = () => {
     setLoading(false);
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    // try {
-    //   // You can replace the below URL with the appropriate API endpoint for form submission
-    //   const response = await api.post("/submitAssessmentDetails", formData, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-    //   if (response.status === 200) {
-    //     toast.success("Assessment details submitted successfully");
-    //     setShowModal(false);
-    //     refreshData();
-    //   } else {
-    //     toast.error("Failed to submit assessment details");
-    //   }
-    // } catch (error) {
-    //   console.error("Error submitting form:", error);
-    //   toast.error("An error occurred while submitting the form");
-    // }
-  };
-
   return (
     <div>
       {loading ? (
         <div className="loader-container">
-          <div class="loading">
+          <div className="loading">
             <span></span>
             <span></span>
             <span></span>
@@ -232,7 +277,7 @@ const Lead = () => {
             {storedScreens?.leadListingCreate && (
               <Link to="/lead/lead/add">
                 <button type="button" className="btn btn-button btn-sm">
-                  Add <i class="bx bx-plus"></i>
+                  Add <i className="bx bx-plus"></i>
                 </button>
               </Link>
             )}
@@ -246,8 +291,8 @@ const Lead = () => {
                 <th scope="col">Centre</th>
                 <th scope="col">Student Name</th>
                 <th scope="col">Subject</th>
+                <th scope="col">Father Name</th>
                 <th scope="col">Status</th>
-                <th scope="col">Enrollment Status</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -265,6 +310,9 @@ const Lead = () => {
                   </td>
                   <td>{data.studentName}</td>
                   <td>{data.subject}</td>
+                  <td>
+                    {data.fathersFullName}
+                  </td>
                   <td>
                     <div className="dropdown">
                       <button
@@ -292,15 +340,6 @@ const Lead = () => {
                       </ul>
                     </div>
 
-                  </td>
-                  <td>
-                    {data.paymentStatus === "REJECTED" ? (
-                      <span className="badge bg-danger">Rejected</span>
-                    ) : data.paymentStatus === "PAID" ? (
-                      <span className="badge bg-success">Paid</span>
-                    ) : (
-                      <span className="badge bg-warning">Pending</span>
-                    )}
                   </td>
                   <td>
                     <div className="d-flex">
@@ -334,39 +373,53 @@ const Lead = () => {
       )}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Arranging Assessment</Modal.Title>
+          <Modal.Title>Confirm Status Change</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleFormSubmit}>
-            <div className="mb-3">
-              <label htmlFor="centerNames" className="form-label">Center Name</label>
-              <input type="text" className="form-control" id="centerNames" value={formData.centerNames} onChange={(e) => setFormData({ ...formData, centerNames: e.target.value })} required />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="studentName" className="form-label">Student Name</label>
-              <input type="text" className="form-control" id="studentName" value={formData.studentName} onChange={(e) => setFormData({ ...formData, studentName: e.target.value })} required />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="assessment" className="form-label">Assessment</label>
-              <input type="text" className="form-control" id="assessment" value={formData.assessment} onChange={(e) => setFormData({ ...formData, assessment: e.target.value })} required />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="assessmentDate" className="form-label">Assessment Date</label>
-              <input type="date" className="form-control" id="assessmentDate" value={formData.assessmentDate} onChange={(e) => setFormData({ ...formData, assessmentDate: e.target.value })} required />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="startTime" className="form-label">Start Time</label>
-              <input type="time" className="form-control" id="startTime" value={formData.startTime} onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} required />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="remark" className="form-label">Remark</label>
-              <textarea className="form-control" id="remark" value={formData.remark} onChange={(e) => setFormData({ ...formData, remark: e.target.value })} />
-            </div>
-            <div className="d-flex justify-content-end">
-              <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
-              <Button type="submit" variant="success" className="ms-2">Confirm</Button>
-            </div>
-          </form>
+          <p>Are you sure you want to change the status to "{newStatus}"?</p>
+          {newStatus === "Arranging assessment" && (
+            <form onSubmit={handleFormSubmit}>
+              <div className="mb-3">
+                <label htmlFor="centerNames" className="form-label">Center Name</label>
+                <input type="text" className="form-control" id="centerNames" value={formData.centerNames} onChange={(e) => setFormData({ ...formData, centerNames: e.target.value })} required />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="studentName" className="form-label">Student Name</label>
+                <input type="text" className="form-control" id="studentName" value={formData.studentName} onChange={(e) => setFormData({ ...formData, studentName: e.target.value })} required />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="assessment" className="form-label">Assessment</label>
+                <select
+                  className="form-select"
+                  id="assessment"
+                  value={formData.assessment}
+                  onChange={(e) => setFormData({ ...formData, assessment: e.target.value })}
+                  required
+                >
+                  <option></option>
+                  <option value="English Assessment">English Assessment</option>
+                  <option value="Chinese Assessment">Chinese Assessment</option>
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="assessmentDate" className="form-label">Assessment Date</label>
+                <input type="date" className="form-control" id="assessmentDate" value={formData.assessmentDate} onChange={(e) => setFormData({ ...formData, assessmentDate: e.target.value })} required />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="startTime" className="form-label">Start Time</label>
+                <input type="time" className="form-control" id="startTime" value={formData.startTime} onChange={(e) => setFormData({ ...formData, startTime: e.target.value })} required />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="remark" className="form-label">Remark</label>
+                <textarea className="form-control" id="remark" value={formData.remark} onChange={(e) => setFormData({ ...formData, remark: e.target.value })} />
+              </div>
+            </form>
+          )}
+          <div className="d-flex justify-content-end">
+            <Button variant="secondary" onClick={() => setShowModal(false)}>Close</Button>
+            <Button type="submit" variant="success" className="ms-2" onClick={handleFormSubmit}>Confirm</Button>
+          </div>
         </Modal.Body>
       </Modal>
     </div>
