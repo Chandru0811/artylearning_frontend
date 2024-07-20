@@ -44,10 +44,12 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData ,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
+
+    console.log("Lead Id in Form 1:",formData.LeadId);
 
     const fetchData = async () => {
       try {
@@ -64,9 +66,6 @@ const AddStudentDetails = forwardRef(
       }
     };
 
-    useEffect(() => {
-      fetchData();
-    }, []);
     const calculateAge = (dob) => {
       const birthDate = new Date(dob);
       const today = new Date();
@@ -81,6 +80,7 @@ const AddStudentDetails = forwardRef(
 
       return `${years} years, ${months} months`;
     };
+
     const formik = useFormik({
       initialValues: {
         centerId: formData.centerId || "",
@@ -96,8 +96,7 @@ const AddStudentDetails = forwardRef(
         preAssessmentResult: formData.preAssessmentResult || "",
         race: formData.race || "",
         nationality: formData.nationality || "",
-        primaryLanguage:
-          formData.primaryLanguage || "",
+        primaryLanguage: formData.primaryLanguage || "",
         referByParent: formData.referByParent || "",
         referByStudent: formData.referByStudent || "",
         remark: formData.remark || "",
@@ -171,12 +170,37 @@ const AddStudentDetails = forwardRef(
         }
       },
     });
+
+    const fetchLeadData = async () => {
+      if (!formData.LeadId) {
+        console.error("LeadId is not available");
+        return;
+      }
+    
+      try {
+        const response = await api.get(`/getAllLeadInfoById/${formData.LeadId}`);
+        const dateOfBirth = response.data.dateOfBirth && response.data.dateOfBirth.substring(0, 10);
+        formik.setValues({
+          ...response.data,
+          dateOfBirth: dateOfBirth,
+        });
+      } catch (error) {
+        console.error("Error fetching lead data:", error);
+        toast.error("Error fetching lead data");
+      }
+    };
+    
     useEffect(() => {
       if (formik.values.dateOfBirth) {
         formik.setFieldValue("age", calculateAge(formik.values.dateOfBirth));
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formik.values.dateOfBirth]);
+
+    useEffect(() => {
+      fetchData();
+      fetchLeadData();
+    }, [formData.LeadId]);
 
     useImperativeHandle(ref, () => ({
       StudentDetails: formik.handleSubmit,

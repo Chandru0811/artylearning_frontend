@@ -28,7 +28,6 @@ const validationSchema = Yup.object({
   replacementLessonStudentBuffer: Yup.number().notRequired(""),
 });
 
-
 function CourseEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -79,7 +78,7 @@ function CourseEdit() {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -94,7 +93,7 @@ function CourseEdit() {
           classReplacementAllowed:
             response.data.classReplacementAllowed || false,
         });
-        fetchLevels(response.data.subjectId)
+        fetchLevels(response.data.subjectId);
       } catch (error) {
         toast.error("Error fetching data:", error);
       }
@@ -220,48 +219,6 @@ function CourseEdit() {
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
-                  Course Name<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.courseName && formik.errors.courseName
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("courseName")}
-                />
-                {formik.touched.courseName && formik.errors.courseName && (
-                  <div className="invalid-feedback">
-                    {formik.errors.courseName}
-                  </div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
-                  Course Code<span className="text-danger">*</span>
-                </lable>
-                <div className="input-group mb-3">
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.courseCode && formik.errors.courseCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("courseCode")}
-                  />
-                  {formik.touched.courseCode && formik.errors.courseCode && (
-                    <div className="invalid-feedback">
-                      {formik.errors.courseCode}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6 col-12 mb-2">
-                <lable className="">
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
@@ -317,6 +274,49 @@ function CourseEdit() {
                 </div>
               </div>
             </div>
+            <div className="row">
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Course Name<span className="text-danger">*</span>
+                </lable>
+                <input
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.courseName && formik.errors.courseName
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("courseName")}
+                />
+                {formik.touched.courseName && formik.errors.courseName && (
+                  <div className="invalid-feedback">
+                    {formik.errors.courseName}
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="form-lable">
+                  Course Code<span className="text-danger">*</span>
+                </lable>
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className={`form-control  ${
+                      formik.touched.courseCode && formik.errors.courseCode
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("courseCode")}
+                  />
+                  {formik.touched.courseCode && formik.errors.courseCode && (
+                    <div className="invalid-feedback">
+                      {formik.errors.courseCode}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">Max Class Size</lable>

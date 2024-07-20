@@ -438,7 +438,7 @@ function Leadview() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-6 col-12">
+                      {/* <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">
@@ -451,7 +451,7 @@ function Leadview() {
                             </p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">

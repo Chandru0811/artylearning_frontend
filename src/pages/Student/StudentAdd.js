@@ -11,6 +11,7 @@ import AddStudentRelation from "./AddStudent/AddStudentRelation";
 import AddTermsAndCondition from "./AddStudent/AddTermsAndCondition";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
+import { useSearchParams } from "react-router-dom";
 
 const steps = [
   { tooltip: "Student Details" },
@@ -22,7 +23,10 @@ const steps = [
 ];
 export default function StudentAdd() {
   const [activeStep, setActiveStep] = useState(0);
-  const [formData, setFormData] = useState({});
+  const [searchParams] = useSearchParams();
+  const LeadId = searchParams.get("LeadId");
+  console.log("LeadId is ", LeadId);
+  const [formData, setFormData] = useState({ LeadId });
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
@@ -150,16 +154,16 @@ export default function StudentAdd() {
           )}
 
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-          {activeStep > 0 && (
-            <button
-              className="btn btn-border btn-sm"
-              style={{ padding: "7px" }}
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              Back
-            </button>
-          )}
+            {activeStep > 0 && (
+              <button
+                className="btn btn-border btn-sm"
+                style={{ padding: "7px" }}
+                disabled={activeStep === 0}
+                onClick={handleBack}
+              >
+                Back
+              </button>
+            )}
 
             <div style={{ flex: "1 1 auto" }}></div>
 

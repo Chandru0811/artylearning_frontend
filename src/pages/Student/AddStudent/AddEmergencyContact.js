@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -94,6 +94,29 @@ const AddEmergencyContact = forwardRef(
     //     }
     //   });
     // };
+
+    const fetchLeadData = async () => {
+      if (!formData.LeadId) {
+        console.error("LeadId is not available");
+        return;
+      }
+    
+      try {
+        const response = await api.get(`/getAllLeadInfoById/${formData.LeadId}`);
+        const dateOfBirth = response.data.dateOfBirth && response.data.dateOfBirth.substring(0, 10);
+        formik.setValues({
+          ...response.data,
+          // dateOfBirth: dateOfBirth,
+        });
+      } catch (error) {
+        console.error("Error fetching lead data:", error);
+        toast.error("Error fetching lead data");
+      }
+    };
+
+    useEffect(() => {
+      fetchLeadData();
+    }, [formData.LeadId]);
 
     useImperativeHandle(ref, () => ({
       EmergencyContact: formik.handleSubmit,

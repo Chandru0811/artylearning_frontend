@@ -10,7 +10,7 @@ const validationSchema = Yup.object().shape({
   employee: Yup.string().required("*Employee is required"),
   uen: Yup.number().typeError("*UEN Must be numbers").required("*UEN is required"),
   addressOfEmployment:Yup.string().required("*Address is required"),  
-  nric: Yup.number().typeError("*NRIC Must be numbers").required("*NRIC is required"),
+  nric: Yup.string().required("*NRIC is required"),
   userContractAddress:Yup.string().required("*Address is required"),
   jobTitle:Yup.string().required("*Job Title is required"),
   mainDuties:Yup.string().required("*Main Duties is required"),

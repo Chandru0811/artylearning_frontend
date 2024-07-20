@@ -619,6 +619,7 @@ function LeadForm() {
               )}
             </div>
           </div>
+
           <div className="col-md-6 col-12 mb-3">
             <label className="form-label">Preferred Day / 首选日期</label>
             <div>
@@ -727,12 +728,12 @@ function LeadForm() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id="SATURADAY"
+                  id="SATURDAY"
                   name="preferredDay"
-                  value="SATURADAY"
+                  value="SATURDAY"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  checked={formik.values.preferredDay.includes("SATURADAY")}
+                  checked={formik.values.preferredDay.includes("SATURDAY")}
                 />
                 <label className="form-check-label">Saturday</label>
               </div>
@@ -801,6 +802,7 @@ function LeadForm() {
               </div>
             </div>
           </div>
+
           <div className="col-12 mb-3">
             <label className="form-label">Remarks /附注</label>
             <textarea

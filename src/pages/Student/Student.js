@@ -7,6 +7,7 @@ import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { SCREENS } from "../../config/ScreenFilter";
+import Lead from "../Lead/Lead";
 
 const Student = () => {
   const tableRef = useRef(null);

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
@@ -16,6 +16,8 @@ const Lead = () => {
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
@@ -74,6 +76,86 @@ const Lead = () => {
     }
   };
 
+  // const handleStatusChange = async (event, data) => {
+  //   const newStatus = event.target.getAttribute("data-value");
+  //   try {
+  //     const response = await api.put(
+  //       `/updateLeadInfo/${data.id}`,
+  //       { ...data, leadStatus: newStatus },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (response.status === 200) {
+  //       toast.success(response.data.message);
+  //       // Update the local state to reflect the new status
+  //       setDatas((prevDatas) =>
+  //         prevDatas.map((item) =>
+  //           item.id === data.id ? { ...item, leadStatus: newStatus } : item
+  //         )
+  //       );
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message || "An error occurred");
+  //   }
+  // };
+
+  const handleStatusChange = async (event, data) => {
+    const newStatus = event.target.getAttribute("data-value");
+    try {
+      const response = await api.put(
+        `/updateLeadInfo/${data.id}`,
+        { ...data, leadStatus: newStatus },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        // Update the local state to reflect the new status
+        setDatas((prevDatas) =>
+          prevDatas.map((item) =>
+            item.id === data.id ? { ...item, leadStatus: newStatus } : item
+          )
+        );
+        if (newStatus === "Assessment confirmed") {
+          navigate(`/student/add?LeadId=${data.id}`);
+        }
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error.message || "An error occurred");
+    }
+  };
+
+
+  const getStatusBadgeClass = (status) => {
+    switch (status) {
+      case "Pending":
+        return "bg-warning";
+      case "Arranging assessment":
+        return "bg-info";
+      case "Assessment confirmed":
+        return "bg-success";
+      case "Waiting for payment":
+        return "bg-primary";
+      case "Rejected":
+        return "bg-danger";
+      case "KIV":
+        return "bg-secondary";
+      default:
+        return "bg-info";
+    }
+  };
+
+
   const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
@@ -117,15 +199,10 @@ const Lead = () => {
                 </th>
                 <th scope="col">Centre</th>
                 <th scope="col">Student Name</th>
-                <th scope="col">Enquiry Date</th>
-
-                {/* <th scope="col">Parent Name</th> */}
-                <th scope="col">Payment Status</th>
+                <th scope="col">Subject</th>
                 <th scope="col">Status</th>
+                <th scope="col">Enrollment Status</th>
                 <th scope="col">Action</th>
-                {/* <th scope="col" className="text-center">
-                  Pending
-                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -133,7 +210,6 @@ const Lead = () => {
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   <td>
-                    {" "}
                     {centerData &&
                       centerData.map((center) =>
                         parseInt(data.centerId) === center.id
@@ -142,10 +218,34 @@ const Lead = () => {
                       )}
                   </td>
                   <td>{data.studentName}</td>
-                  <td>{data.enquiryDate?.substring(0, 10)}</td>
-
-
-                  {/* <td>{data.fathersFullName}</td> */}
+                  <td>{data.subject}</td>
+                  <td>
+                    <div className="dropdown">
+                      <button
+                        className={`btn btn-sm leadStatus ${getStatusBadgeClass(data.leadStatus)}`}
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        <span className="text-white fw-bold" style={{textWrap:"nowrap"}}>{data.leadStatus}</span>
+                      </button>
+                      <ul className="dropdown-menu text-center leadStatuslist">
+                        {["New WaitList", "Arranging assessment", "Assessment confirmed", "Waiting for payment", "Rejected", "KIV"].map(
+                          (status) => (
+                            <li
+                              key={status}
+                              // className={`dropdown-item text-white ${getStatusBadgeClass(status)}`}
+                              className ="dropdown-item text-dark"
+                              data-value={status}
+                              onClick={(event) => handleStatusChange(event, data)}
+                            >
+                              {status}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  </td>
                   <td>
                     {data.paymentStatus === "REJECTED" ? (
                       <span className="badge bg-danger">Rejected</span>
@@ -155,26 +255,6 @@ const Lead = () => {
                       <span className="badge bg-warning">Pending</span>
                     )}
                   </td>
-                  <td>
-                    {data.leadStatus === "Arranging assessment" ? (
-                      <span className="badge badges-Brown">
-                        Arranging assessment
-                      </span>
-                    ) : data.leadStatus === "Assessment confirmed" ? (
-                      <span className="badge badges-Green">Assessment confirmed</span>
-                    ) : data.leadStatus === "Waiting for payment" ? (
-                      <span className="badge badges-Ash">Waiting for payment</span>
-                    ) : data.leadStatus === "Rejected" ? (
-                      <span className="badge bg-danger">Rejected</span>
-                    ) : data.leadStatus === "KIV" ? (
-                      <span className="badge bg-success">
-                        KIV
-                      </span>
-                    ) : (
-                      <span className="badge bg-warning">Pending</span>
-                    )}
-                  </td>
-
                   <td>
                     <div className="d-flex">
                       {storedScreens?.leadListingRead && (
@@ -199,17 +279,6 @@ const Lead = () => {
                       )}
                     </div>
                   </td>
-                  {/* <td className="text-center">
-                    {data.leadUniqueID !== null ? (
-                      <button className="btn">
-                        <div className="circle green"></div>
-                      </button>
-                    ) : (
-                      <button className="btn">
-                        <div className="circle red"></div>
-                      </button>
-                    )}
-                  </td> */}
                 </tr>
               ))}
             </tbody>

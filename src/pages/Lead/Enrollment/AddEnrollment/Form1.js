@@ -21,11 +21,11 @@ const validationSchema = Yup.object().shape({
   ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
   nameOfSchool: Yup.string().required("*School Name is required"),
-  nameOfChildrenInTotal: Yup.number()
-    .typeError("*Enter a valid number")
-    .required("*Name of Children is required"),
+  // nameOfChildrenInTotal: Yup.number()
+  //   .typeError("*Enter a valid number")
+  //   .required("*Name of Children is required"),
   // fathersFullName: Yup.string().required("*Father Name is required"),
-  leadStatus: Yup.string().required("*Status is required"),
+  // leadStatus: Yup.string().required("*Status is required"),
 });
 
 const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
@@ -41,9 +41,9 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       ethnicGroup: formData.ethnicGroup || "",
       schoolType: formData.schoolType || "",
       nameOfSchool: formData.nameOfSchool || "",
-      nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
+      // nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
       fathersFullName: formData.fathersFullName || "",
-      leadStatus: formData.leadStatus || "",
+      leadStatus: "New WaitList" || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -68,7 +68,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
   });
 
-  const fetchData = async () => {
+  const fetchSubjectData = async () => {
     try {
       const subjectData = await fetchAllSubjectsWithIds();
       setSubjectData(subjectData);
@@ -77,8 +77,18 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     }
   };
 
+  // const fetchEthnicGroupData = async () => {
+  //   try {
+  //     const subjectData = await fetchAllSubjectsWithIds();
+  //     setSubjectData(subjectData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
+
   useEffect(() => {
-    fetchData();
+    fetchSubjectData();
+    // fetchEthnicGroupData();
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -123,7 +133,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <option selected></option>
               {subjectData &&
                 subjectData.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
+                  <option key={subject.id} value={subject.subjects}>
                     {subject.subjects}
                   </option>
                 ))}
@@ -222,10 +232,34 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               </div>
             </div>
           </div>
+          {/* <div class="col-md-6 col-12 mb-2">
+            <label className="form-label">Ethnic Group</label>
+            <span className="text-danger">*</span>
+            <select
+              className="form-select"
+              name="subject"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.subject}
+            >
+              <option selected></option>
+              {subjectData &&
+                subjectData.map((subject) => (
+                  <option key={subject.id} value={subject.id}>
+                    {subject.subjects}
+                  </option>
+                ))}
+            </select>
+            {formik.touched.subject && formik.errors.subject && (
+              <div className="text-danger">
+                <small>{formik.errors.subject}</small>
+              </div>
+            )}
+          </div> */}
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <div>
-                <label for="exampleFormControlInpu  t1" className="form-label">
+                <label for="exampleFormControlInpu t1" className="form-label">
                   Ethnic Group<span className="text-danger">*</span>
                 </label>
               </div>
@@ -306,7 +340,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               )}
             </div>
           </div>
-          <div class="col-md-6 col-12 mb-4">
+          {/* <div class="col-md-6 col-12 mb-4">
             <label>
               Status<span class="text-danger">*</span>
             </label>
@@ -332,7 +366,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             {formik.touched.leadStatus && formik.errors.leadStatus && (
               <div className="invalid-feedback">{formik.errors.leadStatus}</div>
             )}
-          </div>
+          </div> */}
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <div>
@@ -409,7 +443,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               )}
             </div>
           </div>
-          <div className="col-md-6 col-12 ">
+          {/* <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
                 Name Of Children In Total
@@ -430,7 +464,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                   </div>
                 )}
             </div>
-          </div>
+          </div> */}
           {/* <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">

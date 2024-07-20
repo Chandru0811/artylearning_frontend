@@ -17,9 +17,7 @@ const validationSchema = Yup.object().shape({
   //   .email("*Invalid Email")
   //   .required("*Email is required"),
   fathersEmailAddress: Yup.string()
-    .email("*Invalid Email")
-    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "*Invalid Email format")
-    .required("*Email is required"),
+    .email("*Invalid Email").required("*Email is required"),
   monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
 
   mothersFullName: Yup.string().required("*Mother Name is required"),
@@ -34,9 +32,7 @@ const validationSchema = Yup.object().shape({
   //   .email("*Invalid Email")
   //   .required("*Email is required"),
     mothersEmailAddress: Yup.string()
-    .email("*Invalid Email")
-    .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "*Invalid Email format")
-    .required("*Email is required"),
+    .email("*Invalid Email").required("*Email is required"),
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
   primaryContact: Yup.string()
     .oneOf(["father", "mother"], "*Primary Contact must be either 'father' or 'mother'")

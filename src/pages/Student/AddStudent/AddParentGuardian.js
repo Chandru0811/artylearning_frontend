@@ -108,6 +108,29 @@ const AddParentGuardian = forwardRef(
       formik.setFieldValue(`parentInformation[0].primaryContacts`, true);
     }, []);
 
+    const fetchLeadData = async () => {
+      if (!formData.LeadId) {
+        console.error("LeadId is not available");
+        return;
+      }
+    
+      try {
+        const response = await api.get(`/getAllLeadInfoById/${formData.LeadId}`);
+        const dateOfBirth = response.data.dateOfBirth && response.data.dateOfBirth.substring(0, 10);
+        formik.setValues({
+          ...response.data,
+          // dateOfBirth: dateOfBirth,
+        });
+      } catch (error) {
+        console.error("Error fetching lead data:", error);
+        toast.error("Error fetching lead data");
+      }
+    };
+
+    useEffect(() => {
+      fetchLeadData();
+    }, [formData.LeadId]);
+
     useImperativeHandle(ref, () => ({
       ParentGuardian: formik.handleSubmit,
     }));

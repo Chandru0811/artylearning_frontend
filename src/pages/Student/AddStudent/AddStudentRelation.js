@@ -17,6 +17,7 @@ const Addrelation = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
+
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
@@ -39,12 +40,6 @@ const Addrelation = forwardRef(
       formik.setFieldValue("studentRelationCenter", newStudentRelationCenter);
       fetchStudent(newStudentRelationCenter);
     };
-
-    useEffect(() => {
-      fetchData();
-      
-    }, []);
-
 
     const formik = useFormik({
       initialValues: {
@@ -81,6 +76,31 @@ const Addrelation = forwardRef(
         }
       },
     });
+
+    const fetchLeadData = async () => {
+      if (!formData.LeadId) {
+        console.error("LeadId is not available");
+        return;
+      }
+    
+      try {
+        const response = await api.get(`/getAllLeadInfoById/${formData.LeadId}`);
+        const dateOfBirth = response.data.dateOfBirth && response.data.dateOfBirth.substring(0, 10);
+        formik.setValues({
+          ...response.data,
+          // dateOfBirth: dateOfBirth,
+        });
+      } catch (error) {
+        console.error("Error fetching lead data:", error);
+        toast.error("Error fetching lead data");
+      }
+    };
+
+    useEffect(() => {
+      fetchData();
+      fetchLeadData();
+    }, [formData.LeadId]);
+
     useEffect(() => {
       if (formik.values.studentRelationCenter) {
         fetchStudent(formik.values.studentRelationCenter);
@@ -90,6 +110,7 @@ const Addrelation = forwardRef(
     useImperativeHandle(ref, () => ({
       StudentRelation: formik.handleSubmit,
     }));
+
     return (
       <div className="container-fluid">
         <form onSubmit={formik.handleSubmit}>
