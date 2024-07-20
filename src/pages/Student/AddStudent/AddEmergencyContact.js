@@ -27,7 +27,7 @@ const AddEmergencyContact = forwardRef(
     const formik = useFormik({
       initialValues: {
         emergencyContactName: formData.emergencyContactName || "",
-        authorizedRelation: formData.authorizedRelation || "",
+        authorizedRelation: "",
         emergencyContactNo: formData.emergencyContactNo || "",
         emergencyContactInformation: [
           {
@@ -95,28 +95,47 @@ const AddEmergencyContact = forwardRef(
     //   });
     // };
 
-    const fetchLeadData = async () => {
-      if (!formData.LeadId) {
-        console.error("LeadId is not available");
-        return;
-      }
-    
-      try {
-        const response = await api.get(`/getAllLeadInfoById/${formData.LeadId}`);
-        const dateOfBirth = response.data.dateOfBirth && response.data.dateOfBirth.substring(0, 10);
-        formik.setValues({
-          ...response.data,
-          // dateOfBirth: dateOfBirth,
-        });
-      } catch (error) {
-        console.error("Error fetching lead data:", error);
-        toast.error("Error fetching lead data");
-      }
-    };
-
     useEffect(() => {
-      fetchLeadData();
-    }, [formData.LeadId]);
+      const getData = async () => {
+        // console.log(formData.LeadId)
+        if (formData.LeadId) {
+          try {
+            const response = await api.get(
+              `/getAllLeadInfoById/${formData.LeadId}`
+            );
+
+            const leadData = response.data;
+            console.log("Lead Data ", leadData)
+            formik.setValues({
+              emergencyContactName: "",
+              emergencyContactNo: leadData.emergencyContact || "",
+              authorizedRelation :""
+            });
+            if (!formData.emergencyContactInformation) {
+
+              formik.setFieldValue("emergencyContactInformation", [
+                {
+                  name: leadData.fathersFullName || "",
+                  emergencyRelation: "Father",
+                  contactNo: leadData.emergencyContact || "",
+                  postalCode: leadData.postalCode || "",
+                  emergencyContactAddress: leadData.addressOfAuthorisedPerson || "",
+                  files: null || "",
+                },
+              ]);
+              // setRows(2);
+            }
+          } catch (error) {
+            console.error("Error fetching lead data:", error);
+            toast.error("Error fetching lead data");
+          }
+        }
+      };
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
 
     useImperativeHandle(ref, () => ({
       EmergencyContact: formik.handleSubmit,

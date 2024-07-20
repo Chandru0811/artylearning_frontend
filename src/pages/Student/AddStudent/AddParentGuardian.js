@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -11,7 +16,9 @@ const validationSchema = Yup.object().shape({
       parentDateOfBirths: Yup.date()
         .required("*Date Of Birth is required")
         .max(new Date(), "*Date Of Birth cannot be in the future"),
-        emails: Yup.string().email('*Invalid email format').required('*Email is required'),
+      emails: Yup.string()
+        .email("*Invalid email format")
+        .required("*Email is required"),
       relations: Yup.string().required("*Relation is required"),
       mobileNumbers: Yup.string()
         .matches(
@@ -34,6 +41,8 @@ const AddParentGuardian = forwardRef(
     ); // Initially one row for one parent
     const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
       useState(0);
+
+    console.log("FormData is ", formData);
 
     const formik = useFormik({
       initialValues: {
@@ -108,28 +117,56 @@ const AddParentGuardian = forwardRef(
       formik.setFieldValue(`parentInformation[0].primaryContacts`, true);
     }, []);
 
-    const fetchLeadData = async () => {
-      if (!formData.LeadId) {
-        console.error("LeadId is not available");
-        return;
-      }
-    
-      try {
-        const response = await api.get(`/getAllLeadInfoById/${formData.LeadId}`);
-        const dateOfBirth = response.data.dateOfBirth && response.data.dateOfBirth.substring(0, 10);
-        formik.setValues({
-          ...response.data,
-          // dateOfBirth: dateOfBirth,
-        });
-      } catch (error) {
-        console.error("Error fetching lead data:", error);
-        toast.error("Error fetching lead data");
-      }
-    };
-
     useEffect(() => {
-      fetchLeadData();
-    }, [formData.LeadId]);
+      const getData = async () => {
+        // console.log(formData.LeadId)
+        if (formData.LeadId) {
+          try {
+            const response = await api.get(
+              `/getAllLeadInfoById/${formData.LeadId}`
+            );
+
+            const leadData = response.data;
+            console.log("Lead Data", leadData)
+            if (!formData.parentInformation) {
+              formik.setFieldValue("parentInformation", [
+                {
+                  parentNames: leadData.fathersFullName || "",
+                  parentDateOfBirths:
+                    leadData?.fathersDateOfBirth?.substring(0, 10) || "",
+                  emails: leadData.fathersEmailAddress || "",
+                  relations: "Father" || "",
+                  occupations: leadData.fathersOccupation || "",
+                  files: null || "",
+                  mobileNumbers: leadData.fathersMobileNumber || "",
+                  addresses: "",
+                  primaryContacts: leadData.primaryContactFather || "",
+                },
+                {
+                  parentNames: leadData.mothersFullName || "",
+                  parentDateOfBirths:
+                    leadData?.mothersDateOfBirth?.substring(0, 10) || "",
+                  emails: leadData.mothersEmailAddress || "",
+                  relations: "Mother" || "",
+                  occupations: leadData.mothersOccupation || "",
+                  files: null || "",
+                  mobileNumbers: leadData.mothersMobileNumber || "",
+                  addresses: "",
+                  primaryContacts: leadData.primaryContactMother || "",
+                },
+              ]);
+              setRows(2);
+              setSelectedPrimaryContactIndex(leadData.primaryContactFather ? 0 : 1)
+            }
+          } catch (error) {
+            console.error("Error fetching lead data:", error);
+            toast.error("Error fetching lead data");
+          }
+        }
+      };
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useImperativeHandle(ref, () => ({
       ParentGuardian: formik.handleSubmit,
@@ -139,7 +176,7 @@ const AddParentGuardian = forwardRef(
       setRows((prevRows) => prevRows - 1);
       const updatedParentInformation = [...formik.values.parentInformation];
       updatedParentInformation.splice(index, 1);
-      formik.setFieldValue('parentInformation', updatedParentInformation);
+      formik.setFieldValue("parentInformation", updatedParentInformation);
       if (selectedPrimaryContactIndex === index) {
         setSelectedPrimaryContactIndex(null);
       } else if (selectedPrimaryContactIndex > index) {

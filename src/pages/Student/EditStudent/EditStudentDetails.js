@@ -458,27 +458,7 @@ const EditStudentDetails = forwardRef(
                         onBlur={formik.handleBlur}
                       />
                     </div> */}
-                    <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Age</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        className="form-control "
-                        type="text"
-                        name="age"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.age}
-                        readOnly
-                      />
-                      {formik.touched.age && formik.errors.age && (
-                        <div className="text-danger">
-                          <small>{formik.errors.age}</small>
-                        </div>
-                      )}
-                    </div>
+
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Medical Condition</small>
@@ -499,6 +479,27 @@ const EditStudentDetails = forwardRef(
                             <small>{formik.errors.medicalCondition}</small>
                           </div>
                         )}
+                    </div>
+                    <div className="text-start mt-4">
+                      <label htmlFor="" className=" fw-medium">
+                        <small>Age</small>
+                        <span className="text-danger">*</span>
+                      </label>
+                      <br />
+                      <input
+                        className="form-control "
+                        type="text"
+                        name="age"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.age}
+                        readOnly
+                      />
+                      {formik.touched.age && formik.errors.age && (
+                        <div className="text-danger">
+                          <small>{formik.errors.age}</small>
+                        </div>
+                      )}
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">

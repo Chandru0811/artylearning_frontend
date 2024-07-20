@@ -35,21 +35,17 @@ const validationSchema = Yup.object().shape({
     "*Medical Condition Result is required"
   ),
   // nationality: Yup.string().required("*Select a Nationality!"),
-  primaryLanguage: Yup.string().required(
-    "*Primary Language is required"
-  ),
+  primaryLanguage: Yup.string().required("*Primary Language is required"),
   race: Yup.string().required("*Select a Race"),
   // referByStudent: Yup.string().required("*Refer By Student is required!"),
   // referByParent: Yup.string().required("*Refer By Parent is required!"),
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData ,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-
-    console.log("Lead Id in Form 1:",formData.LeadId);
 
     const fetchData = async () => {
       try {
@@ -67,19 +63,24 @@ const AddStudentDetails = forwardRef(
     };
 
     const calculateAge = (dob) => {
+      if (!dob) return "0 years, 0 months"; // Default value if dob is not provided
+    
       const birthDate = new Date(dob);
       const today = new Date();
-
+    
+      if (isNaN(birthDate.getTime())) return "0 years, 0 months"; // Handle invalid date
+    
       let years = today.getFullYear() - birthDate.getFullYear();
       let months = today.getMonth() - birthDate.getMonth();
-
+    
       if (months < 0) {
         years--;
         months += 12;
       }
-
+    
       return `${years} years, ${months} months`;
     };
+    
 
     const formik = useFormik({
       initialValues: {
@@ -138,12 +139,13 @@ const AddStudentDetails = forwardRef(
           formData.append("allowSocialMedia", values.allowSocialMedia);
           formData.append("centerId", values.centerId);
           formData.append("center", selectedCenter);
-          formData.append(
-            "primaryLanguage",
-            values.primaryLanguage
-          );
+          formData.append("primaryLanguage", values.primaryLanguage);
           formData.append("groupName", values.groupName);
           formData.append("file", values.file);
+
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+          }
 
           const response = await api.post(
             "/createStudentDetailsWithProfileImageLatest",
@@ -171,25 +173,48 @@ const AddStudentDetails = forwardRef(
       },
     });
 
-    const fetchLeadData = async () => {
-      if (!formData.LeadId) {
-        console.error("LeadId is not available");
-        return;
-      }
-    
-      try {
-        const response = await api.get(`/getAllLeadInfoById/${formData.LeadId}`);
-        const dateOfBirth = response.data.dateOfBirth && response.data.dateOfBirth.substring(0, 10);
-        formik.setValues({
-          ...response.data,
-          dateOfBirth: dateOfBirth,
-        });
-      } catch (error) {
-        console.error("Error fetching lead data:", error);
-        toast.error("Error fetching lead data");
-      }
-    };
-    
+    useEffect(() => {
+      const getData = async () => {
+        // console.log(formData.LeadId)
+        if (formData.LeadId) {
+          try {
+            const response = await api.get(
+              `/getAllLeadInfoById/${formData.LeadId}`
+            );
+           
+            const leadData = response.data;
+            formik.setValues({
+              centerId: leadData.centerId || "",
+              studentName: leadData.studentName || "",
+              studentChineseName: leadData.studentChineseName || "",
+              file: null || "",
+              age: leadData.dateOfBirth ? calculateAge(leadData.dateOfBirth) : "0 years, 0 months",
+              medicalCondition: leadData.medicalCondition || "",
+              dateOfBirth: leadData.dateOfBirth.substring(0, 10) || "",
+              gender: leadData.gender || "",
+              schoolType: leadData.schoolType || "",
+              schoolName: leadData.nameOfSchool || "",
+              preAssessmentResult: "Assesment Not Performed" || "",
+              race: leadData.race || "",
+              nationality: leadData.nationality || "",
+              primaryLanguage: leadData.primaryLanguage || "",
+              referByParent: leadData.referByParent || "",
+              referByStudent: leadData.referByStudent || "",
+              remark: leadData.remark || "",
+              allowMagazine: leadData.allowMagazine || "",
+              allowSocialMedia: leadData.allowSocialMedia || "",
+            });
+            console.log("Lead Data:", response.data);
+          } catch (error) {
+            console.error("Error fetching lead data:", error);
+            toast.error("Error fetching lead data");
+          }
+        }
+      };
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useEffect(() => {
       if (formik.values.dateOfBirth) {
         formik.setFieldValue("age", calculateAge(formik.values.dateOfBirth));
@@ -199,8 +224,7 @@ const AddStudentDetails = forwardRef(
 
     useEffect(() => {
       fetchData();
-      fetchLeadData();
-    }, [formData.LeadId]);
+    }, []);
 
     useImperativeHandle(ref, () => ({
       StudentDetails: formik.handleSubmit,
@@ -405,7 +429,10 @@ const AddStudentDetails = forwardRef(
                         <option selected></option>
                         {nationalityData &&
                           nationalityData.map((nationalityId) => (
-                            <option key={nationalityId.id} value={nationalityId.nationality}>
+                            <option
+                              key={nationalityId.id}
+                              value={nationalityId.nationality}
+                            >
                               {nationalityId.nationality}
                             </option>
                           ))}
@@ -593,9 +620,7 @@ const AddStudentDetails = forwardRef(
                       {formik.touched.primaryLanguage &&
                         formik.errors.primaryLanguage && (
                           <div className="error text-danger ">
-                            <small>
-                              {formik.errors.primaryLanguage}
-                            </small>
+                            <small>{formik.errors.primaryLanguage}</small>
                           </div>
                         )}
                     </div>
