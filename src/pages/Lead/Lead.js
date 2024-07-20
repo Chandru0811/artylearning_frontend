@@ -324,19 +324,41 @@ const Lead = () => {
                         <span className="text-white fw-bold" style={{ textWrap: "nowrap" }}>{data.leadStatus}</span>
                       </button>
                       <ul className="dropdown-menu text-center leadStatuslist">
-                        {["New WaitList", "Arranging assessment", "Assessment confirmed", "Waiting for payment", "Rejected", "KIV"]
-                          .filter(status => status !== data.leadStatus) // Filter out the selected status
-                          .map(status => (
+                        {data.leadStatus === "Arranging assessment" ? (
+                          <>
                             <li
-                              key={status}
                               className="dropdown-item text-dark"
-                              data-value={status}
-                              onClick={(event) => handleStatusChange(event, data)}
+                              onClick={(event) => handleStatusChange({ target: { getAttribute: () => "Edit Assessment" } }, data)}
                             >
-                              {status}
+                              Edit Assessment
                             </li>
-                          ))
-                        }
+                            <li
+                              className="dropdown-item text-dark"
+                              onClick={(event) => handleStatusChange({ target: { getAttribute: () => "Do Assessment" } }, data)}
+                            >
+                              Do Assessment
+                            </li>
+                            <li
+                              className="dropdown-item text-dark"
+                              onClick={(event) => handleStatusChange({ target: { getAttribute: () => "Drop" } }, data)}
+                            >
+                              Drop
+                            </li>
+                          </>
+                        ) : (
+                          ["New WaitList", "Arranging assessment", "Assessment confirmed", "Waiting for payment", "Rejected", "KIV"]
+                            .filter(status => status !== data.leadStatus)
+                            .map(status => (
+                              <li
+                                key={status}
+                                className="dropdown-item text-dark"
+                                data-value={status}
+                                onClick={(event) => handleStatusChange(event, data)}
+                              >
+                                {status}
+                              </li>
+                            ))
+                        )}
                       </ul>
                     </div>
 
