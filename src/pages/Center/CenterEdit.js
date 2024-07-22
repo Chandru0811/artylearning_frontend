@@ -613,7 +613,7 @@ function CenterEdit() {
                       <td>
                         <Delete
                           onSuccess={refreshData}
-                          path={`/deleteCenterRegistrations/${data.id}`}
+                          path={`/deleteCenterRegistrations/${registration.id}`}
                         />
                       </td>
                     </tr>
@@ -664,7 +664,7 @@ function CenterEdit() {
                       <td>
                         <Delete
                           onSuccess={refreshData}
-                          path={`/deleteCenterBreaks/${data.id}`}
+                          path={`/deleteCenterBreaks/${centerBreak.id}`}
                         />
                       </td>
                     </tr>
@@ -743,7 +743,7 @@ function CenterEdit() {
                       <td>
                         <Delete
                           onSuccess={refreshData}
-                          path={`/deleteCenterClassRooms/${data.id}`}
+                          path={`/deleteCenterClassRooms/${centerClassRoom.id}`}
                         />
                       </td>
                     </tr>
@@ -790,7 +790,7 @@ function CenterEdit() {
                       <td>
                         <Delete
                           onSuccess={refreshData}
-                          path={`/deleteCenterPackages/${data.id}`}
+                          path={`/deleteCenterPackages/${centerPackage.id}`}
                         />
                       </td>
                     </tr>
