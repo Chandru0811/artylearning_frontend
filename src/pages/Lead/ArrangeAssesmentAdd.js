@@ -7,9 +7,7 @@ import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 
-const validationSchema = Yup.object({
-
-});
+const validationSchema = Yup.object({});
 
 function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
   const [show, setShow] = useState(false);
@@ -42,73 +40,67 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
     initialValues: {
       centerId: centerId || "",
       studentName: studentNames || "",
-      assessmentDate: new Date().toISOString().split('T')[0] || "",
+      studentId:0,
+      assessmentDate: new Date().toISOString().split("T")[0] || "",
       assessment: "ENGLISH_ASSESSMENT",
-      startTime: "09:00",
+      time: "09:00",
       remarks: "",
     },
     // validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
-      console.log("Arrangeing Assement:", values);
       setLoadIndicator(true);
       const payload = {
         centerId: centerId,
         studentName: studentNames,
+        studentId:0,
+        leadId:leadId,
         assessment: values.assessment,
-        assessmentDate: values.assessmentDate,
-        startTime: values.startTime,
+        assessmentDate: `${values.assessmentDate}T15:55:13.386Z`,
+        time: values.time,
         remarks: values.remarks,
+
+        createdAt:"2024-07-23T15:55:13.386Z",
+        createdBy:"",
+        updatedAt:"2024-07-23T15:55:13.386Z",
+        updatedBy:"",
       };
       console.log("Payload:", payload);
-      // try {
-      //   const response = await api.put(`/updateLeadInfo/${leadId}`, {
-      //     leadStatus: "ARRANGING_ASSESSMENT",
-      //   });
-      //   if (response.status === 200) {
-      //     console.log("Lead Status ARRANGING ASSESSMENT");
-      //     onSuccess();
-      //     handleClose();
-      //   } else {
-      //     console.log("Lead Status Not ARRANGING ASSESSMENT");
-      //   }
-      // } catch {
-      //   console.log("Lead Status Not ARRANGING ASSESSMENT");
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
-
-      // setLoadIndicator(true);
-      // try {
-      //   const response = await api.post("/createCourseLevels", values, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   if (response.status === 201) {
-      //     onSuccess();
-      //     handleClose();
-      //     toast.success(response.data.message);
-      // try{
-      //   const response = await api.put(`/updateLeadInfo/${leadId}`, {
-      //     leadStatus: "ARRANGING_ASSESSMENT",
-      //   });
-      //   if(response.status === 200){
-      //     console.log("Lead Status ARRANGING ASSESSMENT");
-      //     onSuccess();
-      //   }else{
-      //     console.log("Lead Status Not ARRANGING ASSESSMENT");
-      //   }
-      // }catch{
-      //   console.log("Lead Status Not ARRANGING ASSESSMENT");
-      // };
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
+      setLoadIndicator(true);
+      try {
+        const response = await api.post(
+          `/createAssessment/${leadId}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 201) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+          try {
+            const response = await api.put(`/updateLeadInfo/${leadId}`, {
+              leadStatus: "ARRANGING_ASSESSMENT",
+            });
+            if (response.status === 200) {
+              console.log("Lead Status ARRANGING ASSESSMENT");
+              onSuccess();
+            } else {
+              console.log("Lead Status Not ARRANGING ASSESSMENT");
+            }
+          } catch {
+            console.log("Lead Status Not ARRANGING ASSESSMENT");
+          }
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
@@ -146,7 +138,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
                 <select
                   className="form-control"
                   value={formik.values.centerId}
-                   name="centerId"
+                  name="centerId"
                   {...formik.getFieldProps("centerId")}
                   disabled
                 >
@@ -200,15 +192,15 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
                 />
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <label htmlFor="startTime" className="form-label">
+                <label htmlFor="time" className="form-label">
                   Start Time
                 </label>
                 <input
                   type="time"
                   className="form-control"
-                  id="startTime"
-                  name="startTime"
-                  {...formik.getFieldProps("startTime")}
+                  id="time"
+                  name="time"
+                  {...formik.getFieldProps("time")}
                 />
               </div>
               <div className="col-md-12 col-12 mb-2">
@@ -233,7 +225,13 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
               >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-button">
+              <button type="submit" className="btn btn-button" disabled={loadIndicator}>
+              {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Submit
               </button>
             </div>

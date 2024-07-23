@@ -504,7 +504,7 @@ cursor: pointer;
 
 .status-txt:hover {
   color: white !important;
-  background-color: #e60504 !important; /* Removed quotes */
+  background-color: #e60504 !important;
 }
 
 .status-txt.active {

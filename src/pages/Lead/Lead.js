@@ -23,7 +23,6 @@ const Lead = () => {
   const [newStatus, setNewStatus] = useState("");
   const [selectedId, setSelectedId] = useState("");
   const [activeButton, setActiveButton] = useState("All");
-  const [filteredDatas, setFilteredDatas] = useState([]);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
@@ -126,7 +125,7 @@ const Lead = () => {
     initialValues: {
       centerId: "",
       subjectId: "",
-      leadStatus: "",
+      leadStatus: "ALL",
     },
     onSubmit: async (data) => {
       console.log("Selected Values :", data);
@@ -146,6 +145,7 @@ const Lead = () => {
     setLoading(false);
   };
 
+  // Get filtered data based on Formik values
   const getData = async () => {
     destroyDataTable();
     setLoading(true);
@@ -167,7 +167,32 @@ const Lead = () => {
       const response = await api.get("/getAllLeadInfo", { params });
       setDatas(response.data);
       initializeDataTable();
-      setActiveButton(activeButton)
+      // Update activeButton state to reflect the current leadStatus
+      setActiveButton(
+        formik.values.leadStatus === "ALL"
+          ? "All"
+          : [
+              { displayName: "New / Waitlist", backendName: "NEW_WAITLIST" },
+              {
+                displayName: "Assessment Arranged",
+                backendName: "ARRANGING_ASSESSMENT",
+              },
+              { displayName: "KIV", backendName: "KIV" },
+              {
+                displayName: "Waiting for Payment",
+                backendName: "WAITING_FOR_PAYMENT",
+              },
+              { displayName: "Confirmed", backendName: "CONFIRMED" },
+              {
+                displayName: "Assessment Done",
+                backendName: "ASSESSMENT_DONE",
+              },
+              { displayName: "Enrolled", backendName: "ENROLLED" },
+              { displayName: "Drop", backendName: "DROP" },
+              { displayName: "All", backendName: "ALL" },
+            ].find((status) => status.backendName === formik.values.leadStatus)
+              ?.displayName || "All"
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -201,7 +226,7 @@ const Lead = () => {
             <div className="row my-3 mb-5">
               <div className="col-12 d-flex flex-wrap justify-content-center">
                 <div
-                  className="btn-group"
+                  className="btn-group bg-light"
                   role="group"
                   aria-label="Status buttons"
                 >
@@ -227,23 +252,19 @@ const Lead = () => {
                     { displayName: "Enrolled", backendName: "ENROLLED" },
                     { displayName: "Drop", backendName: "DROP" },
                     { displayName: "All", backendName: "ALL" },
-                  ].map((displayStatus, index) => (
+                  ].map((status, index) => (
                     <button
                       key={index}
                       type="button"
-                      className={`btn btn-light status-txt ${
-                        activeButton === displayStatus.displayName
-                          ? "active"
-                          : ""
+                      className={`btn btn-white status-txt ${
+                        activeButton === status.displayName ? "active" : ""
                       }`}
-                      onClick={() =>
-                        formik.setFieldValue(
-                          "leadStatus",
-                          displayStatus.backendName
-                        )
-                      }
+                      onClick={() => {
+                        formik.setFieldValue("leadStatus", status.backendName);
+                        setActiveButton(status.displayName);
+                      }}
                     >
-                      {displayStatus.displayName}
+                      {status.displayName}
                     </button>
                   ))}
                 </div>
@@ -282,8 +303,12 @@ const Lead = () => {
                         </option>
                       ))}
                   </select>
+                  {/* <button type="button" className="btn btn-sm border-secondary ms-3">
+                    Clear
+                  </button> */}
                 </div>
               </div>
+
               <div className="col-md-3 d-flex justify-content-end align-items-center">
                 {storedScreens?.leadListingCreate && (
                   <Link to="/lead/lead/add">
