@@ -195,7 +195,7 @@ const AddStudentDetails = forwardRef(
               schoolType: leadData.schoolType || "",
               schoolName: leadData.nameOfSchool || "",
               preAssessmentResult: "Assesment Not Performed" || "",
-              race: leadData.race || "",
+              race: leadData.ethnicGroup || "",
               nationality: leadData.nationality || "",
               primaryLanguage: leadData.primaryLanguage || "",
               referByParent: leadData.referByParent || "",

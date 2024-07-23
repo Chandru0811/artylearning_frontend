@@ -9,10 +9,11 @@ import * as Yup from "yup";
 import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../../../List/SubjectList";
+import fetchAllRaceWithIds from "../../../List/RaceList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
-  subject: Yup.string().required("*Subject is required"), // Adding validation for subject field
+  subjectId: Yup.string().required("*Subject is required"), // Adding validation for subject field
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
@@ -30,11 +31,12 @@ const validationSchema = Yup.object().shape({
 
 const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
+  const [raceData, setRaceData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
       studentName: formData.studentName || "",
-      subject: formData.subject,
+      subjectId: formData.subjectId,
       gender: formData.gender || "",
       dateOfBirth: formData.dateOfBirth || "",
       medicalCondition: formData.medicalCondition || "",
@@ -43,7 +45,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       nameOfSchool: formData.nameOfSchool || "",
       // nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
       fathersFullName: formData.fathersFullName || "",
-      leadStatus: "New WaitList" || "",
+      leadStatus: "NEW_WAITLIST" || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -68,27 +70,19 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
   });
 
-  const fetchSubjectData = async () => {
+  const fetchData = async () => {
     try {
       const subjectData = await fetchAllSubjectsWithIds();
+      const raceData = await fetchAllRaceWithIds();
+      setRaceData(raceData);
       setSubjectData(subjectData);
     } catch (error) {
       toast.error(error);
     }
   };
 
-  // const fetchEthnicGroupData = async () => {
-  //   try {
-  //     const subjectData = await fetchAllSubjectsWithIds();
-  //     setSubjectData(subjectData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
   useEffect(() => {
-    fetchSubjectData();
-    // fetchEthnicGroupData();
+    fetchData();
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -125,22 +119,22 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <span className="text-danger">*</span>
             <select
               className="form-select"
-              name="subject"
+              name="subjectId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.subject}
+              value={formik.values.subjectId}
             >
               <option selected></option>
               {subjectData &&
                 subjectData.map((subject) => (
-                  <option key={subject.id} value={subject.subjects}>
+                  <option key={subject.id} value={subject.id}>
                     {subject.subjects}
                   </option>
                 ))}
             </select>
-            {formik.touched.subject && formik.errors.subject && (
+            {formik.touched.subjectId && formik.errors.subjectId && (
               <div className="text-danger">
-                <small>{formik.errors.subject}</small>
+                <small>{formik.errors.subjectId}</small>
               </div>
             )}
           </div>
@@ -232,30 +226,6 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               </div>
             </div>
           </div>
-          {/* <div class="col-md-6 col-12 mb-2">
-            <label className="form-label">Ethnic Group</label>
-            <span className="text-danger">*</span>
-            <select
-              className="form-select"
-              name="subject"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.subject}
-            >
-              <option selected></option>
-              {subjectData &&
-                subjectData.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
-                    {subject.subjects}
-                  </option>
-                ))}
-            </select>
-            {formik.touched.subject && formik.errors.subject && (
-              <div className="text-danger">
-                <small>{formik.errors.subject}</small>
-              </div>
-            )}
-          </div> */}
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <div>
@@ -263,76 +233,21 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                   Ethnic Group<span className="text-danger">*</span>
                 </label>
               </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="CHINESE"
-                  checked={formik.values.ethnicGroup === "CHINESE"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio1">
-                  Chinese
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="MALAY"
-                  checked={formik.values.ethnicGroup === "MALAY"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Malay
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="INDIA"
-                  checked={formik.values.ethnicGroup === "INDIA"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Indian
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="EURASIAN"
-                  checked={formik.values.ethnicGroup === "EURASIAN"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Eurasian
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="OTHERS"
-                  checked={formik.values.ethnicGroup === "OTHERS"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Others
-                </label>
-              </div>
+              <select
+                name="ethnicGroup"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.ethnicGroup}
+                className="form-select"
+              >
+                <option selected></option>
+                {raceData &&
+                  raceData.map((raceId) => (
+                    <option key={raceId.id} value={raceId.race}>
+                      {raceId.race}
+                    </option>
+                  ))}
+              </select>
               {formik.touched.ethnicGroup && formik.errors.ethnicGroup && (
                 <div className="error text-danger ">
                   <small>{formik.errors.ethnicGroup}</small>
@@ -340,33 +255,6 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               )}
             </div>
           </div>
-          {/* <div class="col-md-6 col-12 mb-4">
-            <label>
-              Status<span class="text-danger">*</span>
-            </label>
-            <select
-              className={`form-select  ${
-                formik.touched.leadStatus && formik.errors.leadStatus
-                  ? "is-invalid"
-                  : ""
-              }`}
-              name="leadStatus"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.leadStatus}
-            >
-              <option></option>
-              <option value="Pending">Pending</option>
-              <option value="Arranging assessment">Arranging assessment</option>
-              <option value="Assessment confirmed">Assessment confirmed</option>
-              <option value="Waiting for payment">Waiting for payment</option>
-              <option value="Rejected">Rejected</option>
-              <option value="KIV">KIV</option>
-            </select>
-            {formik.touched.leadStatus && formik.errors.leadStatus && (
-              <div className="invalid-feedback">{formik.errors.leadStatus}</div>
-            )}
-          </div> */}
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <div>
@@ -443,49 +331,6 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               )}
             </div>
           </div>
-          {/* <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Name Of Children In Total
-                <span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="nameOfChildrenInTotal"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.nameOfChildrenInTotal}
-              />
-              {formik.touched.nameOfChildrenInTotal &&
-                formik.errors.nameOfChildrenInTotal && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.nameOfChildrenInTotal}</small>
-                  </div>
-                )}
-            </div>
-          </div> */}
-          {/* <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <label for="exampleFormControlInput1" className="form-label">
-                Father's Full Name<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="fathersFullName"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.fathersFullName}
-              />
-              {formik.touched.fathersFullName &&
-                formik.errors.fathersFullName && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.fathersFullName}</small>
-                  </div>
-                )}
-            </div>
-          </div> */}
         </div>
       </div>
     </form>

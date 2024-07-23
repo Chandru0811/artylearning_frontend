@@ -495,3 +495,19 @@ cursor: pointer;
   cursor: pointer !important;
   font-weight: 700 !important;
 }
+
+.status-txt {
+  font-size: 12px !important;
+  cursor: pointer !important;
+  font-weight: 700 !important;
+}
+
+.status-txt:hover {
+  color: white !important;
+  background-color: #e60504 !important; /* Removed quotes */
+}
+
+.status-txt.active {
+  color: white !important;
+  background-color: #e60504 !important;
+}

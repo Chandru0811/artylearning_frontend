@@ -9,10 +9,11 @@ import * as Yup from "yup";
 import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../../../List/SubjectList";
+import fetchAllRaceWithIds from "../../../List/RaceList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
-  subject: Yup.string().required("*Subject is required"), // Adding validation for subject field
+  subjectId: Yup.string().required("*Subject is required"), // Adding validation for subject field
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("Date of Birth is required")
@@ -21,20 +22,16 @@ const validationSchema = Yup.object().shape({
   ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
   nameOfSchool: Yup.string().required("*School Name is required"),
-  // nameOfChildrenInTotal: Yup.number()
-  //   .typeError("*Enter a valid number")
-  //   .required("*Name of Children is required"),
-  // fathersFullName: Yup.string().required("*Father Name is required"),
-  // leadStatus: Yup.string().required("*Status is required"),
 });
 
 const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
+  const [raceData, setRaceData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
       studentName: "",
-      subject: "",
+      subjectId: "",
       gender: "",
       dateOfBirth: "",
       medicalCondition: "",
@@ -75,18 +72,19 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     }
   };
 
-  // const fetchEthnicGroupData = async () => {
-  //   try {
-  //     const subjectData = await fetchAllSubjectsWithIds();
-  //     setSubjectData(subjectData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
+  const fetchData = async () => {
+    try {
+      const subjectData = await fetchAllSubjectsWithIds();
+      const raceData = await fetchAllRaceWithIds();
+      setRaceData(raceData);
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
-    fetchSubjectData();
-    // fetchEthnicGroupData();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -137,22 +135,22 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <span className="text-danger">*</span>
             <select
               className="form-select"
-              name="subject"
+              name="subjectId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.subject}
+              value={formik.values.subjectId}
             >
               <option selected></option>
               {subjectData &&
                 subjectData.map((subject) => (
-                  <option key={subject.id} value={subject.subjects}>
+                  <option key={subject.id} value={subject.id}>
                     {subject.subjects}
                   </option>
                 ))}
             </select>
-            {formik.touched.subject && formik.errors.subject && (
+            {formik.touched.subjectId && formik.errors.subjectId && (
               <div className="text-danger">
-                <small>{formik.errors.subject}</small>
+                <small>{formik.errors.subjectId}</small>
               </div>
             )}
           </div>
@@ -244,8 +242,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               </div>
             </div>
           </div>
-        
-          <div className="col-md-6 col-12 ">
+          {/* <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <div>
                 <label for="exampleFormControlInpu  t1" className="form-label">
@@ -328,34 +325,36 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
                 </div>
               )}
             </div>
-          </div>
-          {/* <div class="col-md-6 col-12 mb-4">
-            <label>
-              Status<span class="text-danger">*</span>
-            </label>
-            <select
-              className={`form-select  ${
-                formik.touched.leadStatus && formik.errors.leadStatus
-                  ? "is-invalid"
-                  : ""
-              }`}
-              name="leadStatus"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.leadStatus}
-            >
-              <option></option>
-              <option value="Pending">Pending</option>
-              <option value="Arranging assessment">Arranging assessment</option>
-              <option value="Assessment confirmed">Assessment confirmed</option>
-              <option value="Waiting for payment">Waiting for payment</option>
-              <option value="Rejected">Rejected</option>
-              <option value="KIV">KIV</option>
-            </select>
-            {formik.touched.leadStatus && formik.errors.leadStatus && (
-              <div className="invalid-feedback">{formik.errors.leadStatus}</div>
-            )}
           </div> */}
+          <div className="col-md-6 col-12 ">
+            <div className="mb-3">
+              <div>
+                <label for="exampleFormControlInpu t1" className="form-label">
+                  Ethnic Group<span className="text-danger">*</span>
+                </label>
+              </div>
+              <select
+                name="ethnicGroup"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.ethnicGroup}
+                className="form-select"
+              >
+                <option selected></option>
+                {raceData &&
+                  raceData.map((raceId) => (
+                    <option key={raceId.id} value={raceId.race}>
+                      {raceId.race}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.ethnicGroup && formik.errors.ethnicGroup && (
+                <div className="error text-danger ">
+                  <small>{formik.errors.ethnicGroup}</small>
+                </div>
+              )}
+            </div>
+          </div>
           <div className="col-md-6 col-12">
             <div className="mb-3">
               <div>

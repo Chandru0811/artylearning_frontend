@@ -148,6 +148,18 @@ const AssessmentPursuers = forwardRef(
             if (response.status === 200) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...data, leadId }));
+              try{
+                const response = await api.put(`/updateLeadInfo/${leadId}`, {
+                  leadStatus: "ASSESSMENT_DONE",
+                });
+                if(response.leadStatus === 200){
+                  console.log("Lead Status ASSESSMENT DONE");
+                }else{
+                  console.log("Lead Status ASSESSMENT NOT DONE");
+                }
+              }catch{
+                console.log("Lead Status ASSESSMENT NOT DONE");
+              };
               navigate("/lead/lead");
               // handleNext();
             } else {
@@ -178,6 +190,18 @@ const AssessmentPursuers = forwardRef(
                 ...data,
                 assesmentId,
               }));
+              try{
+                const response = await api.put(`/updateLeadInfo/${leadId}`, {
+                  leadStatus: "ASSESSMENT_DONE",
+                });
+                if(response.leadStatus === 200){
+                  console.log("Lead Status ASSESSMENT DONE");
+                }else{
+                  console.log("Lead Status ASSESSMENT NOT DONE");
+                }
+              }catch{
+                console.log("Lead Status ASSESSMENT NOT DONE");
+              };
               navigate("/lead/lead");
               // handleNext();
             } else {
