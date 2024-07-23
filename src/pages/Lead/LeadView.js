@@ -9,6 +9,7 @@ import { TiTick } from "react-icons/ti";
 import Modal from "react-bootstrap/Modal";
 import { jsPDF } from "jspdf";
 import 'jspdf-autotable';
+import Logo from "../../assets/images/Logo.png";
 import html2canvas from "html2canvas";
 import "boxicons";
 
@@ -117,78 +118,209 @@ function Leadview() {
   }, [id]);
 
   
-  
+
   const generatePDF = () => {
     const doc = new jsPDF();
-  
-    // Add title
-    doc.text('Part 1: ABC', 10, 10);
-  
-    // Define the columns
-    const columns = [
-      { header: 'empty', dataKey: 'empty' },
-      { header: 'Upper', dataKey: 'upper' },
-      { header: 'Lower', dataKey: 'lower' },
-      { header: 'Sound', dataKey: 'sound' },
-      { header: 'Recog', dataKey: 'recog' },
-      { header: 'Associate', dataKey: 'associate' },
-      { header: '', dataKey: '' },
-      { header: 'Upper', dataKey: 'upper2' },
-      { header: 'Lower', dataKey: 'lower2' },
-      { header: 'Sound', dataKey: 'sound2' },
-      { header: 'Recog', dataKey: 'recog2' },
-      { header: 'Associate', dataKey: 'associate2' }
-    ];
-  
-    // Define the rows
-    const rows = [
-      { empty: '',upper: 'Aa', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Nn', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Bb', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Oo', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Cc', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Pp', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Dd', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Qq', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Ee', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Rr', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Ff', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Ss', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Gg', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Tt', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Hh', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Uu', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Ii', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Vv', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Jj', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Ww', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Kk', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Xx', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Ll', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Yy', lower2: '', sound2: '', recog2: '', associate2: '' },
-      { empty: '',upper: 'Mm', lower: '', sound: '', recog: '', associate: '', empty:'', upper2: 'Zz', lower2: '', sound2: '', recog2: '', associate2: '' }
-    ];
-  
-    // Add the table to the document
+    doc.addImage(Logo, "PNG", 75, 5, 40, 25);
+    // Add text details
+    doc.setFontSize(10);
+doc.text(`Student Name : ${data.studentName}`, 10, 40); // 10 + 30 = 40
+doc.text(`Date of Birth : ${data.dateOfBirth ? data.dateOfBirth.substring(0, 10) : "--"}`, 10, 50); // 20 + 30 = 50
+doc.text(`Date of Assessment : ${doassesmentData.leadDoAssessmentModel[0].assessmentDate.substring(0, 10)}`, 10, 60); // 30 + 30 = 60
+doc.text(`Gender : ${data.gender}`, 10, 70); // 40 + 30 = 70
+doc.text(`Referred By : ${doassesmentData.leadDoAssessmentModel[0].referredBy}`, 120, 70); // 40 + 30 = 70
+doc.text(`Timeslot : ${doassesmentData.leadDoAssessmentModel[0].timeSlotOffered}`, 120, 50); // 20 + 30 = 50
+doc.text('Pace : Fast(F) / Normal(N) / Slow(S)', 120, 40); // 10 + 30 = 40
+doc.text('Confirmed Timeslot :', 120, 60); // 30 + 30 = 60
+// doc.text('Recommended Course :', 10, 90); // Adjust this if needed
 
-    doc.autoTable({
-      columns: columns,
-      body: rows,
-      startY: 20,
-      theme: 'grid',
-      didDrawCell: (data) => {
-        // Check conditions to avoid drawing checkbox in certain columns and the first row
-        if (
-          data.column.dataKey !== 'upper' &&
-          data.column.dataKey !== 'upper2' &&
-          data.column.index !== 0 && // Not the first column
-          data.row.index !== 0 && // Not the first row
-          data.column.index !== 6 // Not the seventh column
-        ) {
-          const checkboxX = data.cell.x + data.cell.width / 2 - 2;
-          const checkboxY = data.cell.y + data.cell.height / 2 - 2;
-    
-          // Draw the checkbox
-          doc.rect(checkboxX, checkboxY, 4, 4);
-        }
-      }
-    });
-    
-    
+
+
+    doc.text('Part 1: ABC', 10, 95); 
+    // Define columns and rows for Part 1
+    const columnsPart1 = [
+      { header: '', dataKey: 'empty' },
+      { header1: '', dataKey: 'upper' },
+      { header2: '', dataKey: 'lower' },
+      { header3: '', dataKey: 'sound' },
+      { header4: '', dataKey: 'recog' },
+      { header5: '', dataKey: 'associate' },
+      { header6: '', dataKey: 'empty2' },
+      { header7: '', dataKey: 'upper2' },
+      { header8: '', dataKey: 'lower2' },
+      { header9: '', dataKey: 'sound2' },
+      { header10: '', dataKey: 'recog2' },
+      { header11: '', dataKey: 'associate2' }
+  ];
   
+  const rowsPart1 = [
+      { empty: '', upper: 'Upper', lower: 'Lower', sound: 'Sound', recog: 'Recog', associate: 'Associate', empty2: '', upper2: 'Upper', lower2: 'Lower', sound2: 'Sound', recog2: 'Recog', associate2: 'Associate' },
+      { empty: 'Aa', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Nn', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Bb', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Oo', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Cc', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Pp', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Dd', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Qq', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Ee', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Rr', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Ff', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Ss', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Gg', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Tt', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Hh', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Uu', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Ii', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Vv', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Jj', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Ww', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Kk', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Xx', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Ll', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Yy', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' },
+      { empty: 'Mm', upper: '', lower: '', sound: '', recog: '', associate: '', empty2: 'Zz', upper2: '', lower2: '', sound2: '', recog2: '', associate2: '' }
+  ];
+  
+
+    // Add the first table to the document
+    doc.autoTable({
+        columns: columnsPart1,
+        body: rowsPart1,
+        startY: 100, // Adjust as needed
+        theme: 'grid',
+        styles: {
+            cellPadding: 2,
+            fontSize: 8,
+            // lineColor: [44, 62, 80], // Border color
+            // lineWidth: 0.75, // Border width
+        },
+        headStyles: {
+            fillColor: [255, 255, 255], // Header background color (white)
+            textColor: [0, 0, 0], // Header text color (black)
+        },
+        // didDrawCell: (data) => {
+        //     if (
+        //         data.column.dataKey !== 'empty' &&
+        //         data.column.dataKey !== 'empty2' &&
+        //         data.column.index !== 0 && // Not the first column
+        //         data.row.index !== 0 && // Not the first row
+        //         data.column.index !== 6 // Not the seventh column
+        //     ) {
+        //         const checkboxX = data.cell.x + data.cell.width / 2 - 2;
+        //         const checkboxY = data.cell.y + data.cell.height / 2 - 2;
+
+        //         // Draw the checkbox
+        //         doc.rect(checkboxX, checkboxY, 4, 4);
+        //     }
+        // }
+    });
+
+// Add title for Part 2
+doc.text('Part 2: CVC', 10, doc.lastAutoTable.finalY + 6);
+
+// Define columns and rows for Part 2
+const columnsPart2 = [
+    { header: '', dataKey: 'empty' },
+    { header: '', dataKey: 'spell' },
+    { header: '', dataKey: 'read' }
+];
+
+const rowsPart2 = [
+    { empty: '', spell: 'spell', read: 'read' },
+    { empty: 'a', spell: '', read: '' },
+    { empty: 'e', spell: '', read: '' },
+    { empty: 'i', spell: '', read: '' },
+    { empty: 'o', spell: '', read: '' },
+    { empty: 'u', spell: '', read: '' }
+];
+
+// Add the second table to the document
+doc.autoTable({
+    columns: columnsPart2,
+    body: rowsPart2,
+    startY: doc.lastAutoTable.finalY + 10, // Adjust spacing if needed
+    theme: 'grid',
+    styles: {
+        cellPadding: 2,
+        fontSize: 8,
+        // lineColor: [44, 62, 80], // Border color
+        // lineWidth: 0.75, // Border width
+    },
+    headStyles: {
+        fillColor: [255, 255, 255], // Header background color (white)
+        textColor: [0, 0, 0], // Header text color (black)
+    },
+    // didDrawCell: (data) => {
+    //     if (data.row.index !== 0 && (data.column.dataKey === 'spell' || data.column.dataKey === 'read')) {
+    //         const checkboxX = data.cell.x + data.cell.width / 2 - 2;
+    //         const checkboxY = data.cell.y + data.cell.height / 2 - 2;
+
+    //         // Draw the checkbox
+    //         doc.rect(checkboxX, checkboxY, 5, 5);
+    //     }
+    // }
+});
+
+
+    // Add title for Part 3
+    doc.text('Part 3: Blends & Concepts', 10, doc.lastAutoTable.finalY + 6);
+
+    // Define columns and rows for Part 3
+    const columnsPart3 = [
+        { header: '', dataKey: 'concept' },
+        { header: '', dataKey: 'blend' },
+        { header: '', dataKey: 'spell' },
+        { header: '', dataKey: 'remark' }
+    ];
+
+    const rowsPart3 = [
+        { concept: '', blend: 'Blend', spell: 'Spell', remark: 'Remark' },
+        { concept: 'ck', blend: '', spell: '', remark: '' },
+        { concept: 'll, ss, zz, ff', blend: '', spell: '', remark: '' },
+        { concept: 'L blend', blend: '', spell: '', remark: '' },
+        { concept: 'R blend', blend: '', spell: '', remark: '' },
+        { concept: 'S blend', blend: '', spell: '', remark: '' },
+        { concept: '-ng', blend: '', spell: '', remark: '' },
+        { concept: 'H bro', blend: '', spell: '', remark: '' },
+        { concept: 'oo', blend: '', spell: '', remark: '' },
+        { concept: 'Trigraph', blend: '', spell: '', remark: '' },
+        { concept: 'Magic e', blend: '', spell: '', remark: '' },
+        { concept: 'Hard & Soft c', blend: '', spell: '', remark: '' },
+        { concept: 'Hard & Soft g', blend: '', spell: '', remark: '' },
+        { concept: 'Ow, Ou', blend: '', spell: '', remark: '' },
+        { concept: 'OW /o/', blend: '', spell: '', remark: '' },
+        { concept: '2 Vowels', blend: '', spell: '', remark: '' },
+        { concept: 'Oi, Oy', blend: '', spell: '', remark: '' },
+        { concept: 'Ghost', blend: '', spell: '', remark: '' },
+        { concept: 'Aw, Au', blend: '', spell: '', remark: '' },
+        { concept: 'Bossy R', blend: '', spell: '', remark: '' }
+    ];
+
+    // Add the third table to the document
+    doc.autoTable({
+        columns: columnsPart3,
+        body: rowsPart3,
+        startY: doc.lastAutoTable.finalY + 10, // Adjust spacing if needed
+        theme: 'grid',
+        styles: {
+            cellPadding: 2,
+            fontSize: 8,
+            // lineColor: [44, 62, 80], // Border color
+            // lineWidth: 0.75, // Border width
+            
+        },
+        headStyles: {
+            fillColor: [255, 255, 255], // Header background color (white)
+            textColor: [0, 0, 0], // Header text color (black)
+        },
+        // didDrawCell: (data) => {
+        //   // Skip drawing checkboxes for the first row
+        //   if (data.row.index === 0) return;
+  
+        //   if (data.column.dataKey === 'blend' || data.column.dataKey === 'spell') {
+        //       const checkboxX = data.cell.x + data.cell.width / 2 - 2;
+        //       const checkboxY = data.cell.y + data.cell.height / 2 - 2;
+  
+        //       // Draw the checkbox
+        //       doc.rect(checkboxX, checkboxY, 4, 4);
+        //   }
+        // }
+    });
+
     // Save the PDF
     doc.save('table.pdf');
-  };
-  
-  
+};
+
+
   
   return (
     <>
