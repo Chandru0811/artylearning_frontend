@@ -8,8 +8,7 @@ import fetchAllCentreManager from "../List/CentreMangerList";
 
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
-  code: Yup.string()
-    .required("*Code is required"),
+  code: Yup.string().required("*Code is required"),
   centerManager: Yup.string().required("*Select the Centre Manager"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
@@ -44,6 +43,7 @@ const validationSchema = Yup.object().shape({
     .positive("*Please enter a valid number")
     .integer("*Bank Account Number is must be number"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
+  file: Yup.mixed().required("*File is required"),
 });
 
 function CenterAdd() {
