@@ -188,6 +188,7 @@ import SalaryTypeAdd from "../pages/Settings/Salary/SalaryTypeAdd";
 import IDType from "../pages/Settings/IdType/IDType";
 import IDTypeAdd from "../pages/Settings/IdType/IDTypeAdd";
 import IDTypeEdit from "../pages/Settings/IdType/IDTypeEdit";
+import SendNotificationView from "../pages/SendNotification/SendNotificationView";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -416,6 +417,10 @@ function Admin({ handleLogout }) {
               <Route
                 path="/sendNotification/edit"
                 element={<SendNotificationEdit />}
+              />
+              <Route
+                path="/sendNotification/view/:id"
+                element={<SendNotificationView />}
               />
 
               {/* Re-Schedule */}

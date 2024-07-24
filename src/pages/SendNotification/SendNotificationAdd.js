@@ -18,7 +18,7 @@ function SendNotificationAdd({ onSuccess }) {
     setShow(false);
     formik.resetForm();
   };
-
+  const MAX_FILE_SIZE = 20 * 1024 * 1024;
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({
@@ -26,17 +26,30 @@ function SendNotificationAdd({ onSuccess }) {
     messageDescription: Yup.string().required(
       "*Message Description is required"
     ),
-    files: Yup.mixed().test("fileSize", "*File size too large", (value) => {
-      if (value && value.length > 0) {
-        for (let file of value) {
-          if (file.size > 5242880) {
-            return false;
+    files: Yup.mixed()
+      .test("fileSize", "*File size too large", (value) => {
+        if (value && value.length > 0) {
+          for (let file of value) {
+            if (file.size > MAX_FILE_SIZE) {
+              return false;
+            }
           }
         }
-      }
-      return true;
-    }),
+        return true;
+      })
+      .test("fileType", "*Unsupported file type", (value) => {
+        if (value && value.length > 0) {
+          for (let file of value) {
+            const allowedTypes = ["image/jpeg", "image/png", "application/pdf", "video/mp4", "video/quicktime"];
+            if (!allowedTypes.includes(file.type)) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }),
   });
+
 
   const formik = useFormik({
     initialValues: {
@@ -100,11 +113,10 @@ function SendNotificationAdd({ onSuccess }) {
                   <input
                     type="text"
                     name="title"
-                    className={`form-control  ${
-                      formik.touched.messageTitle && formik.errors.messageTitle
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control  ${formik.touched.messageTitle && formik.errors.messageTitle
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("messageTitle")}
                   />
                   {formik.touched.messageTitle &&
@@ -122,12 +134,11 @@ function SendNotificationAdd({ onSuccess }) {
                     type="text"
                     name="message"
                     rows={5}
-                    className={`form-control  ${
-                      formik.touched.messageDescription &&
+                    className={`form-control  ${formik.touched.messageDescription &&
                       formik.errors.messageDescription
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("messageDescription")}
                   />
                   {formik.touched.messageDescription &&
@@ -142,11 +153,11 @@ function SendNotificationAdd({ onSuccess }) {
                   <input
                     type="file"
                     multiple
-                    className={`form-control ${
-                      formik.touched.files && formik.errors.files
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    accept=".jpg,.jpeg,.png,.pdf,.mp4,.mov"
+                    className={`form-control ${formik.touched.files && formik.errors.files
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     onChange={(event) => {
                       formik.setFieldValue("files", event.target.files);
                     }}
