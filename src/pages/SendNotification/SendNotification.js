@@ -7,6 +7,8 @@ import SendNotificationEdit from "./SendNotificationEdit";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
 import SendNotificationView from "./SendNotificationView";
+import { Link } from "react-router-dom";
+import { FaEye } from "react-icons/fa";
 
 const SendNotification = () => {
   const tableRef = useRef(null);
@@ -102,7 +104,13 @@ const SendNotification = () => {
                 <td>{data.datePosted}</td>
                 <td>
                   <div style={{ width: "100px" }}>
-                    <SendNotificationView id={data.id} />
+                  {storedScreens?.courseRead && (
+                    <Link to={`/sendnotification/view/${data.id}`}>
+                      <button className="btn btn-sm">
+                        <FaEye />
+                      </button>
+                    </Link>
+                  )}
                     {storedScreens?.sendNotificationUpdate && (
                       <SendNotificationEdit
                         id={data.id}
