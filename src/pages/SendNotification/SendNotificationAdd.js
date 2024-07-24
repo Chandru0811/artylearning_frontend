@@ -51,7 +51,7 @@ function SendNotificationAdd({ onSuccess }) {
       formData.append("messageTitle", values.messageTitle);
       formData.append("messageDescription", values.messageDescription);
       for (let file of values.files) {
-        formData.append("files", file);
+        formData.append("attachments", file);
       }
       try {
         const response = await api.post(

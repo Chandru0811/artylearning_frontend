@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import QR from "../../assets/images/view.png";
 import Logo from "../../assets/images/Logo.png";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllStudentsWithIds from "../List/StudentList";
@@ -15,6 +15,7 @@ function InvoiceView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const navigate = useNavigate()
   const [invoiceItem, setInvoiceItem] = useState([]);
   console.log("data", data);
   const [courseData, setCourseData] = useState(null);
@@ -193,6 +194,7 @@ function InvoiceView() {
       // toast.success(response.data.message);
       if (response.status === 200) {
         toast.success(response.data.message);
+        navigate('/invoice')
       } else {
         toast.error(response.data.message);
       }
