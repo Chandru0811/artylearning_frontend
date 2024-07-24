@@ -563,14 +563,14 @@ const Lead = () => {
                                     </button>
                                   </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                   <ArrangeAssesmentEdit
                                     leadId={data.id}
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                     studentNames={data.studentName}
                                   />
-                                </li>
+                                </li> */}
                                 <li>
                                   <button
                                     className="dropdown-item"

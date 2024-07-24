@@ -112,7 +112,7 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
     <>
       <li>
         <button className="dropdown-item" onClick={handleShow}>
-        Arranging Assesment
+        Edit Arranging Assesment
         </button>
       </li>
 
