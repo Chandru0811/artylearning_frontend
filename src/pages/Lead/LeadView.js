@@ -1287,13 +1287,13 @@ doc.autoTable({
                     <div className="row  m-3">
                       <div className="d-flex justify-content-between">
                         <h5 className="headColor mt-2 mb-4">Child Particulars</h5>
-                        <button
+                        {/* <button
                           onClick={generatePDF}
                           className="btn btn-border btn-sm mx-3"
                           style={{ padding: "2px 8px", fontSize: "0.8rem" }}
                         >
                           Generate PDF
-                        </button>
+                        </button> */}
                       </div>
 
                       <div className="col-md-6 col-12">
