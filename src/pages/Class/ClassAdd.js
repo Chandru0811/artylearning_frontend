@@ -73,7 +73,12 @@ function ClassAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        console.log("Duplicate Error:",error);
+        if (error.response.status === 409) {
+          toast.warning("Already Create Class Name!");
+        } else {
+          toast.error(error);
+        }
       }finally {
         setLoadIndicator(false);
       }

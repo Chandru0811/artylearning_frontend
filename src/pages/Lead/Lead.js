@@ -18,6 +18,7 @@ const Lead = () => {
   const tableRef = useRef(null);
 
   const [datas, setDatas] = useState([]);
+  console.log("Lead All Datas",datas);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newStatus, setNewStatus] = useState("");
@@ -543,16 +544,16 @@ const Lead = () => {
                                 </span>
                               </button>
                               <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                {/* <li>
+                                <li>
                                   <button
                                     className="dropdown-item"
                                     onClick={(e) =>
-                                      handleStatusChange(data.id, "ENROLLED")
+                                      handleStatusChange(data.id, "NEW_WAITLIST")
                                     }
                                   >
-                                    Enrolled
+                                    New / WaitList
                                   </button>
-                                </li> */}
+                                </li>
                                 <li>
                                   <Link
                                     to={`/lead/lead/assessment/${data.id}`}
@@ -563,14 +564,14 @@ const Lead = () => {
                                     </button>
                                   </Link>
                                 </li>
-                                {/* <li>
+                                <li>
                                   <ArrangeAssesmentEdit
                                     leadId={data.id}
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                     studentNames={data.studentName}
                                   />
-                                </li> */}
+                                </li>
                                 <li>
                                   <button
                                     className="dropdown-item"
