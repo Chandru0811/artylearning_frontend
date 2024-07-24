@@ -722,7 +722,7 @@ const Lead = () => {
                                       handleStatusChange(data.id, "DROP")
                                     }
                                   >
-                                    DROP
+                                    Drop
                                   </button>
                                 </li>
                               </ul>
