@@ -40,7 +40,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
     initialValues: {
       centerId: centerId || "",
       studentName: studentNames || "",
-      studentId:0,
+      studentId: 0,
       assessmentDate: new Date().toISOString().split("T")[0] || "",
       assessment: "ENGLISH_ASSESSMENT",
       time: "09:00",
@@ -52,17 +52,12 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
       const payload = {
         centerId: centerId,
         studentName: studentNames,
-        studentId:0,
-        leadId:leadId,
+        studentId: 0,
+        leadId: leadId,
         assessment: values.assessment,
         assessmentDate: `${values.assessmentDate}T15:55:13.386Z`,
         time: values.time,
         remarks: values.remarks,
-
-        createdAt:"2024-07-23T15:55:13.386Z",
-        createdBy:"",
-        updatedAt:"2024-07-23T15:55:13.386Z",
-        updatedBy:"",
       };
       console.log("Payload:", payload);
       setLoadIndicator(true);
@@ -112,7 +107,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
     <>
       <li>
         <button className="dropdown-item" onClick={handleShow}>
-          Arrange Assesment
+          Arranging Assesment
         </button>
       </li>
 
@@ -166,7 +161,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label htmlFor="assessment" className="form-label">
-                  Assessments
+                  Assessment
                 </label>
                 <select
                   className="form-select"
@@ -176,7 +171,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
                   <option selected value="ENGLISH_ASSESSMENT">
                     English Assemsment
                   </option>
-                  <option value="CHINESE_ASSESSMENT">Chinesh Assemsment</option>
+                  <option value="CHINESE_ASSESSMENT">Chinese Assemsment</option>
                 </select>
               </div>
               <div className="col-md-6 col-12 mb-2">
@@ -225,8 +220,12 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
               >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-button" disabled={loadIndicator}>
-              {loadIndicator && (
+              <button
+                type="submit"
+                className="btn btn-button"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
                   <span
                     className="spinner-border spinner-border-sm me-2"
                     aria-hidden="true"

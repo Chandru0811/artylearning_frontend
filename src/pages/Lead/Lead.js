@@ -9,7 +9,7 @@ import Delete from "../../components/common/Delete";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import ArrangeAssesmentAdd from "./ArrangeAssesmentAdd";
 import ArrangeAssesmentEdit from "./ArrangeAssesmentEdit";
 import { useFormik } from "formik";
@@ -28,6 +28,7 @@ const Lead = () => {
 
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -85,23 +86,23 @@ const Lead = () => {
     setSelectedId(id);
   };
 
-  const handleEnrolledChange = async (id, enrolled) => {
-    try {
-      const response = await api.put(`/updateLeadInfo/${id}`, {
-        leadStatus: enrolled,
-      });
+  // const handleEnrolledChange = async (id, enrolled) => {
+  //   try {
+  //     const response = await api.put(`/updateLeadInfo/${id}`, {
+  //       leadStatus: enrolled,
+  //     });
 
-      if (response.status === 200) {
-        toast.success("Lead Status Updated");
-        setShowModal(false);
-        refreshData();
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error(error.message || "An error occurred");
-    }
-  };
+  //     if (response.status === 200) {
+  //       toast.success("Lead Status Updated");
+  //       setShowModal(false);
+  //       refreshData();
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message || "An error occurred");
+  //   }
+  // };
 
   const handleFormSubmit = async () => {
     try {
@@ -112,6 +113,7 @@ const Lead = () => {
       if (response.status === 200) {
         toast.success("Lead Status Updated");
         setShowModal(false);
+        formik.resetForm();
         refreshData();
       } else {
         toast.error(response.data.message);
@@ -202,11 +204,30 @@ const Lead = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     formik.values.centerId,
     formik.values.subjectId,
     formik.values.leadStatus,
   ]);
+
+  useEffect(() => {
+    // Function to check screen size
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth <= 736);
+    };
+
+    // Initial check
+    checkScreenSize();
+
+    // Add event listener
+    window.addEventListener("resize", checkScreenSize);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
 
   return (
     <div>
@@ -226,7 +247,9 @@ const Lead = () => {
             <div className="row my-3 mb-5">
               <div className="col-12 d-flex flex-wrap justify-content-center">
                 <div
-                  className="btn-group bg-light"
+                  className={`btn-group bg-light ${
+                    isSmallScreen ? "btn-group-vertical" : ""
+                  }`}
                   role="group"
                   aria-label="Status buttons"
                 >
@@ -408,7 +431,7 @@ const Lead = () => {
                                 </li>
                                 <li>
                                   <Link
-                                    to={`/student/add?LeadId=${data.id}`}
+                                    to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
                                     style={{ textDecoration: "none" }}
                                   >
                                     <button className="dropdown-item">
@@ -490,7 +513,7 @@ const Lead = () => {
                                 </li>
                                 <li>
                                   <Link
-                                    to={`/student/add?LeadId=${data.id}`}
+                                    to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
                                     style={{ textDecoration: "none" }}
                                   >
                                     <button className="dropdown-item">
@@ -516,7 +539,7 @@ const Lead = () => {
                                 </span>
                               </button>
                               <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                <li>
+                                {/* <li>
                                   <button
                                     className="dropdown-item"
                                     onClick={(e) =>
@@ -525,7 +548,7 @@ const Lead = () => {
                                   >
                                     Enrolled
                                   </button>
-                                </li>
+                                </li> */}
                                 <li>
                                   <Link
                                     to={`/lead/lead/assessment/${data.id}`}
@@ -608,7 +631,7 @@ const Lead = () => {
                                 </li>
                                 <li>
                                   <Link
-                                    to={`/student/add?LeadId=${data.id}`}
+                                    to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
                                     style={{ textDecoration: "none" }}
                                   >
                                     <button className="dropdown-item">
@@ -680,18 +703,10 @@ const Lead = () => {
 
                                 <li>
                                   <Link
-                                    to={`/student/add?LeadId=${data.id}`}
+                                    to={`/student/add?LeadId=${data.id}&LeadStatus=ENROLLED`}
                                     style={{ textDecoration: "none" }}
                                   >
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={() =>
-                                        handleEnrolledChange(
-                                          data.id,
-                                          "ENROLLED"
-                                        )
-                                      }
-                                    >
+                                    <button className="dropdown-item">
                                       Enrolled
                                     </button>
                                   </Link>

@@ -6,13 +6,13 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import { files } from "jszip";
 // import { useNavigate } from "react-router-dom";
 
 function SendNotificationAdd({ onSuccess }) {
   // const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-
 
   const handleClose = () => {
     setShow(false);
@@ -23,38 +23,52 @@ function SendNotificationAdd({ onSuccess }) {
 
   const validationSchema = Yup.object({
     messageTitle: Yup.string().required("*Message Title is required"),
-    messageDescription: Yup.string().required("*Message Description is required"),
+    messageDescription: Yup.string().required(
+      "*Message Description is required"
+    ),
+    files: Yup.mixed().test("fileSize", "*File size too large", (value) => {
+      if (value && value.length > 0) {
+        for (let file of value) {
+          if (file.size > 5242880) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }),
   });
 
   const formik = useFormik({
     initialValues: {
       messageTitle: "",
-      messageDescription: ""
-    
+      messageDescription: "",
+      files: [],
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      console.log("pushNotification:", values);
+      const formData = new FormData();
+      formData.append("messageTitle", values.messageTitle);
+      formData.append("messageDescription", values.messageDescription);
+      for (let file of values.files) {
+        formData.append("files", file);
+      }
       try {
-        const response = await api.post(`/sendSmsPushNotifications`, values, {
-          headers: {
-            "Content-Type": "application/json",
-            //Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.post(
+          `/sendSmsPushNotifications`,
+          formData,
+          {}
+        );
         if (response.status === 201) {
-      
           onSuccess();
           handleClose();
           toast.success(response.data.message);
-        
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
         toast.error("Failed: " + error.message);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -73,7 +87,7 @@ function SendNotificationAdd({ onSuccess }) {
       </div>
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add Notification</Modal.Title>
+          <Modal.Title className="headColor">Add Announcement</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
@@ -93,11 +107,12 @@ function SendNotificationAdd({ onSuccess }) {
                     }`}
                     {...formik.getFieldProps("messageTitle")}
                   />
-                  {formik.touched.messageTitle && formik.errors.messageTitle && (
-                    <div className="invalid-feedback">
-                      {formik.errors.messageTitle}
-                    </div>
-                  )}
+                  {formik.touched.messageTitle &&
+                    formik.errors.messageTitle && (
+                      <div className="invalid-feedback">
+                        {formik.errors.messageTitle}
+                      </div>
+                    )}
                 </div>
                 <div className="col-md-12 col-12 mb-2">
                   <label className="form-label">
@@ -108,15 +123,37 @@ function SendNotificationAdd({ onSuccess }) {
                     name="message"
                     rows={5}
                     className={`form-control  ${
-                      formik.touched.messageDescription && formik.errors.messageDescription
+                      formik.touched.messageDescription &&
+                      formik.errors.messageDescription
                         ? "is-invalid"
                         : ""
                     }`}
                     {...formik.getFieldProps("messageDescription")}
                   />
-                  {formik.touched.messageDescription && formik.errors.messageDescription && (
+                  {formik.touched.messageDescription &&
+                    formik.errors.messageDescription && (
+                      <div className="invalid-feedback">
+                        {formik.errors.messageDescription}
+                      </div>
+                    )}
+                </div>
+                <div className="col-md-12 col-12 mb-2">
+                  <label className="form-label">Attachments</label>
+                  <input
+                    type="file"
+                    multiple
+                    className={`form-control ${
+                      formik.touched.files && formik.errors.files
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(event) => {
+                      formik.setFieldValue("files", event.target.files);
+                    }}
+                  />
+                  {formik.touched.files && formik.errors.files && (
                     <div className="invalid-feedback">
-                      {formik.errors.messageDescription}
+                      {formik.errors.files}
                     </div>
                   )}
                 </div>

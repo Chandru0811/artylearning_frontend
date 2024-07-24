@@ -6,6 +6,7 @@ import SendNotificationAdd from "./SendNotificationAdd";
 import SendNotificationEdit from "./SendNotificationEdit";
 import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
+import SendNotificationView from "./SendNotificationView";
 
 const SendNotification = () => {
   const tableRef = useRef(null);
@@ -100,22 +101,25 @@ const SendNotification = () => {
                 <td>{data.messageDescription}</td>
                 <td>{data.datePosted}</td>
                 <td>
-                  {storedScreens?.sendNotificationUpdate && (
-                    <SendNotificationEdit
-                      id={data.id}
-                      onSuccess={refreshData}
-                    />
-                  )}
-                  {/* {storedScreens?.subjectDelete && (
+                  <div style={{ width: "100px" }}>
+                    <SendNotificationView id={data.id} />
+                    {storedScreens?.sendNotificationUpdate && (
+                      <SendNotificationEdit
+                        id={data.id}
+                        onSuccess={refreshData}
+                      />
+                    )}
+                    {/* {storedScreens?.subjectDelete && (
                       <Delete
                         onSuccess={refreshData}
                         path={`/deleteCourseSubject/${data.id}`}
                       />
                     )} */}
-                  <Delete
-                    onSuccess={refreshData}
-                    path={`/deleteSmsPushNotifications/${data.id}`}
-                  />
+                    <Delete
+                      onSuccess={refreshData}
+                      path={`/deleteSmsPushNotifications/${data.id}`}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}
