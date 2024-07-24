@@ -5,24 +5,21 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 
+const validationSchema = Yup.object().shape({
+  agreeConditionOne: Yup.boolean().oneOf([true], "*Declare is required").required(),
+  agreeConditionTwo: Yup.boolean().oneOf([true], "*Declare is required").required(),
+  agreeConditionThree: Yup.boolean().oneOf([true], "*Declare is required").required(),
+});
+
 const EditForm6 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
 
-    const validationSchema = Yup.object().shape({
-      // addressOfAuthorisedPerson: Yup.string().required("*Address is required"),
-      // consentPhotos:Yup.string().required("*ConsentPhotos is required"),
-      // consentScrapbook:Yup.string().required("*ConsentScrapbook is required"),
-      agreeConditionOne: Yup.string().required("*Declare is required"),
-      agreeConditionTwo: Yup.string().required("*Declare is required"),
-      agreeConditionThree: Yup.string().required("*Declare is required"),
-    });
     const formik = useFormik({
       initialValues: {
-        // addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
-        agreeConditionOne: false,
-        agreeConditionTwo: false,
-        agreeConditionThree: false,
+        agreeConditionOne: formData.agreeConditionOne ?? false,
+        agreeConditionTwo: formData.agreeConditionTwo ?? false,
+        agreeConditionThree: formData.agreeConditionThree ?? false,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -57,7 +54,12 @@ const EditForm6 = forwardRef(
       const getData = async () => {
         const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
         console.log("api", response.data);
-        formik.setValues(response.data);
+        formik.setValues((prevValues) => ({
+          ...prevValues,
+          agreeConditionOne: response.data.agreeConditionOne ?? false,
+          agreeConditionTwo: response.data.agreeConditionTwo ?? false,
+          agreeConditionThree: response.data.agreeConditionThree ?? false,
+        }));
       };
       getData();
       // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -28,14 +28,14 @@ const EditForm5 = forwardRef(
     const formik = useFormik({
       initialValues: {
         centerId: formData.centerId,
-        preferredDay: formData.preferredDay || "",
+        preferredDay: formData.preferredDay || [],
         enquiryDate: formData.enquiryDate || "",
         marketingSource: formData.marketingSource || "",
         referBy: formData.referBy || "",
         nameOfReferral: formData.nameOfReferral || "",
         referedStudentCenterNameId: formData.referedStudentCenterNameId || "",
         remark: formData.remark || "",
-        preferredTimeSlot: formData.preferredTimeSlot || "",
+        preferredTimeSlot: formData.preferredTimeSlot || [],
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -82,6 +82,8 @@ const EditForm5 = forwardRef(
       formik.setValues({
         ...response.data,
         enquiryDate: enquiryDate,
+        preferredDay: response.data.preferredDay || [],
+        preferredTimeSlot: response.data.preferredTimeSlot || [],
       });
     };
 
