@@ -477,7 +477,7 @@ function Sidebar() {
               onClick={() => handleMenuClick(null)}
             >
               <i class="bx bx-send"></i>
-              <span className="links_name">Send Notification</span>
+              <span className="links_name">Announcement</span>
             </NavLink>
           </li>
         )}

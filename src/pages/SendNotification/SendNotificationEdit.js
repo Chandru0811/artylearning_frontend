@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
@@ -18,24 +17,45 @@ function SendNotificationEdit({ id, onSuccess }) {
 
   const validationSchema = Yup.object({
     messageTitle: Yup.string().required("*Message Title is required"),
-    messageDescription: Yup.string().required("*Message Description is required"),
+    messageDescription: Yup.string().required(
+      "*Message Description is required"
+    ),
+    files: Yup.mixed().test("fileSize", "*File size too large", (value) => {
+      if (value && value.length > 0) {
+        for (let file of value) {
+          if (file.size > 5242880) {
+            // 5MB
+            return false;
+          }
+        }
+      }
+      return true;
+    }),
   });
 
   const formik = useFormik({
     initialValues: {
       messageTitle: "",
       messageDescription: "",
+      files: [],
     },
-    validationSchema: validationSchema, // Assign the validation schema
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      const formData = new FormData();
+      formData.append("messageTitle", values.messageTitle);
+      formData.append("messageDescription", values.messageDescription);
+      for (let file of values.files) {
+        formData.append("files", file);
+      }
+
       try {
         const response = await api.put(
           `/updateSmsPushNotifications/${id}`,
-          values,
+          formData,
           {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
             },
           }
         );
@@ -47,12 +67,13 @@ function SendNotificationEdit({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
-      }finally {
+        toast.error(error.message);
+      } finally {
         setLoadIndicator(false);
       }
     },
   });
+
   const getData = async () => {
     try {
       const response = await api.get(`/getAllSmsPushNotificationsById/${id}`);
@@ -61,10 +82,10 @@ function SendNotificationEdit({ id, onSuccess }) {
       console.error("Error fetching data ", error);
     }
   };
+
   useEffect(() => {
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -73,7 +94,7 @@ function SendNotificationEdit({ id, onSuccess }) {
       </button>
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Notification</Modal.Title>
+          <Modal.Title className="headColor">Edit Announcement</Modal.Title>
         </Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
@@ -85,7 +106,7 @@ function SendNotificationEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.messageTitle && formik.errors.messageTitle
                         ? "is-invalid"
                         : ""
@@ -106,7 +127,7 @@ function SendNotificationEdit({ id, onSuccess }) {
                   <textarea
                     type="text"
                     rows={5}
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.messageDescription &&
                       formik.errors.messageDescription
                         ? "is-invalid"
@@ -121,13 +142,33 @@ function SendNotificationEdit({ id, onSuccess }) {
                       </div>
                     )}
                 </div>
+                <div className="col-md-12 col-12 mb-2">
+                  <label className="form-label">Attachments</label>
+                  <input
+                    type="file"
+                    multiple
+                    className={`form-control ${
+                      formik.touched.files && formik.errors.files
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(event) => {
+                      formik.setFieldValue("files", event.target.files);
+                    }}
+                  />
+                  {formik.touched.files && formik.errors.files && (
+                    <div className="invalid-feedback">
+                      {formik.errors.files}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <Modal.Footer>
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-               <Button
+              <Button
                 type="submit"
                 className="btn btn-button btn-sm"
                 disabled={loadIndicator}

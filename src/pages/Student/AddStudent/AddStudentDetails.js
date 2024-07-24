@@ -46,7 +46,7 @@ const AddStudentDetails = forwardRef(
     const [centerData, setCenterData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-
+console.log("FormData is ", formData)
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();

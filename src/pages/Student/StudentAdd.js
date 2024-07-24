@@ -25,8 +25,8 @@ export default function StudentAdd() {
   const [activeStep, setActiveStep] = useState(0);
   const [searchParams] = useSearchParams();
   const LeadId = searchParams.get("LeadId");
-  console.log("LeadId is ", LeadId);
-  const [formData, setFormData] = useState({ LeadId });
+  const LeadStatus = searchParams.get("LeadStatus");
+  const [formData, setFormData] = useState({ LeadId, LeadStatus });
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
