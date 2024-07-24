@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -51,7 +56,7 @@ export default function InvoiceAdd() {
   const searchParams = new URLSearchParams(location.search);
   const studentID = searchParams.get("studentID");
 
-  console.log("Stdent ID:",studentID);
+  console.log("Stdent ID:", studentID);
 
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
@@ -298,10 +303,12 @@ export default function InvoiceAdd() {
             receiptAmount: "",
             creditAdviceOffset: "",
             gst: "",
-            totalAmount:"",
+            totalAmount: "",
           });
-
-          formik.setFieldValue('center',studentData.centerId);
+          fetchCourses(studentData.centerId); // Fetch courses for the selected studentData.centerId
+          fetchPackage(studentData.centerId); // Fetch courses for the selected center
+          fetchStudent(studentData.centerId);
+          formik.setFieldValue("center", studentData.centerId);
           formik.setFieldValue("invoiceItems", [
             {
               item: "",

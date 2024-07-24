@@ -40,73 +40,67 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
     initialValues: {
       centerId: centerId || "",
       studentName: studentNames || "",
-      assessmentDate: "",
-      assessment: "",
-      startTime: "",
+      studentId:0,
+      assessmentDate: new Date().toISOString().split("T")[0] || "",
+      assessment: "ENGLISH_ASSESSMENT",
+      time: "09:00",
       remarks: "",
     },
     // validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
-      console.log("Arrangeing Assement:", values);
       setLoadIndicator(true);
       const payload = {
         centerId: centerId,
         studentName: studentNames,
+        studentId:0,
+        leadId:leadId,
         assessment: values.assessment,
-        assessmentDate: values.assessmentDate,
-        startTime: values.startTime,
+        assessmentDate: `${values.assessmentDate}T15:55:13.386Z`,
+        time: values.time,
         remarks: values.remarks,
+
+        createdAt:"2024-07-23T15:55:13.386Z",
+        createdBy:"",
+        updatedAt:"2024-07-23T15:55:13.386Z",
+        updatedBy:"",
       };
       console.log("Payload:", payload);
-      // try {
-      //   const response = await api.put(`/updateLeadInfo/${leadId}`, {
-      //     leadStatus: "ARRANGING_ASSESSMENT",
-      //   });
-      //   if (response.status === 200) {
-      //     console.log("Lead Status ARRANGING ASSESSMENT");
-      //     onSuccess();
-      //     handleClose();
-      //   } else {
-      //     console.log("Lead Status Not ARRANGING ASSESSMENT");
-      //   }
-      // } catch {
-      //   console.log("Lead Status Not ARRANGING ASSESSMENT");
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
-
-      // setLoadIndicator(true);
-      // try {
-      //   const response = await api.post("/createCourseLevels", values, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
-      //   if (response.status === 201) {
-      //     onSuccess();
-      //     handleClose();
-      //     toast.success(response.data.message);
-      // try{
-      //   const response = await api.put(`/updateLeadInfo/${leadId}`, {
-      //     leadStatus: "ARRANGING_ASSESSMENT",
-      //   });
-      //   if(response.status === 200){
-      //     console.log("Lead Status ARRANGING ASSESSMENT");
-      //     onSuccess();
-      //   }else{
-      //     console.log("Lead Status Not ARRANGING ASSESSMENT");
-      //   }
-      // }catch{
-      //   console.log("Lead Status Not ARRANGING ASSESSMENT");
-      // };
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
+      setLoadIndicator(true);
+      try {
+        const response = await api.put(
+          `/createAssessment/${leadId}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response.status === 201) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+          try {
+            const response = await api.put(`/updateLeadInfo/${leadId}`, {
+              leadStatus: "ARRANGING_ASSESSMENT",
+            });
+            if (response.status === 200) {
+              console.log("Lead Status ARRANGING ASSESSMENT");
+              onSuccess();
+            } else {
+              console.log("Lead Status Not ARRANGING ASSESSMENT");
+            }
+          } catch {
+            console.log("Lead Status Not ARRANGING ASSESSMENT");
+          }
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
@@ -118,14 +112,14 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
     <>
       <li>
         <button className="dropdown-item" onClick={handleShow}>
-          Arrange Assesment
+        Arranging Assesment
         </button>
       </li>
 
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title className="headColor">
-            Booking Edit Assessment  
+            Leads Assessment Booking
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -144,7 +138,7 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
                 <select
                   className="form-control"
                   value={formik.values.centerId}
-                   name="centerId"
+                  name="centerId"
                   {...formik.getFieldProps("centerId")}
                   disabled
                 >
@@ -172,7 +166,7 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label htmlFor="assessment" className="form-label">
-                  Assessments
+                  Assessment
                 </label>
                 <select
                   className="form-select"
@@ -182,7 +176,7 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
                   <option selected value="ENGLISH_ASSESSMENT">
                     English Assemsment
                   </option>
-                  <option value="CHINESE_ASSESSMENT">Chinesh Assemsment</option>
+                  <option value="CHINESE_ASSESSMENT">Chinese Assemsment</option>
                 </select>
               </div>
               <div className="col-md-6 col-12 mb-2">
@@ -198,15 +192,15 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
                 />
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <label htmlFor="startTime" className="form-label">
+                <label htmlFor="time" className="form-label">
                   Start Time
                 </label>
                 <input
                   type="time"
                   className="form-control"
-                  id="startTime"
-                  name="startTime"
-                  {...formik.getFieldProps("startTime")}
+                  id="time"
+                  name="time"
+                  {...formik.getFieldProps("time")}
                 />
               </div>
               <div className="col-md-12 col-12 mb-2">
@@ -231,8 +225,14 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
               >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-button">
-                Update
+              <button type="submit" className="btn btn-button" disabled={loadIndicator}>
+              {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Submit
               </button>
             </div>
           </form>
