@@ -326,9 +326,13 @@ const Lead = () => {
                         </option>
                       ))}
                   </select>
-                  {/* <button type="button" className="btn btn-sm border-secondary ms-3">
+                  <button
+                    type="button"
+                    className="btn btn-sm border-secondary ms-3"
+                    onClick={() => formik.resetForm()}
+                  >
                     Clear
-                  </button> */}
+                  </button>
                 </div>
               </div>
 
