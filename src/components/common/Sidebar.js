@@ -368,6 +368,29 @@ function Sidebar() {
           },
         ],
       },
+      {
+        title: "Messaging",
+        icon: "bx bx-send",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "My Messages",
+            path: "/messaging",
+            access: storedScreens.documentListingIndex,
+          },
+          {
+            title: "Other Messages",
+            path: "/othermessages",
+            access: storedScreens.documentFileIndex,
+          },
+          {
+            title: "School Announcement",
+            path: "/sendNotification",
+            access: storedScreens.documentFileIndex,
+          },
+          // Add more submenus as needed
+        ],
+      },
     ];
 
     setMenuItems(updatedMenuItems);
@@ -470,7 +493,7 @@ function Sidebar() {
               </li>
             )
         )}
-        {storedScreens?.sendNotificationIndex && (
+        {/* {storedScreens?.sendNotificationIndex && (
           <li>
             <NavLink
               to="/sendNotification"
@@ -480,7 +503,7 @@ function Sidebar() {
               <span className="links_name">Announcement</span>
             </NavLink>
           </li>
-        )}
+        )} */}
       </ul>
     </div>
   );

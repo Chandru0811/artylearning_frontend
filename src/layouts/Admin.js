@@ -189,6 +189,11 @@ import IDType from "../pages/Settings/IdType/IDType";
 import IDTypeAdd from "../pages/Settings/IdType/IDTypeAdd";
 import IDTypeEdit from "../pages/Settings/IdType/IDTypeEdit";
 import SendNotificationView from "../pages/SendNotification/SendNotificationView";
+import MyMessages from "../pages/Messaging/MyMessages/MyMessages";
+import MyMessagesAdd from "../pages/Messaging/MyMessages/MyMessagesAdd";
+import MyMessagesView from "../pages/Messaging/MyMessages/MyMessagesView";
+// import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
+// import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -542,7 +547,7 @@ function Admin({ handleLogout }) {
               <Route path="/idType" element={<IDType />} />
               <Route path="/idType/add" element={<IDTypeAdd />} />
               <Route path="/idType/edit/:id" element={<IDTypeEdit />} />
-             
+
               {/* Race */}
               <Route path="/race" element={<Race />} />
               <Route path="/race/add" element={<RaceAdd />} />
@@ -560,6 +565,11 @@ function Admin({ handleLogout }) {
               <Route path="/salarytype/add" element={<SalaryTypeAdd />} />
               <Route path="/salarytype/edit/:id" element={<SalaryTypeEdit />} />
               <Route path="/salarytype/view/:id" element={<SalaryTypeView />} />
+
+              {/* Messaging */}
+              <Route path="/messaging" element={<MyMessages />} />
+              <Route path="/messaging/add" element={<MyMessagesAdd />} />
+              <Route path="/messaging/view" element={<MyMessagesView />} />
             </Routes>
           </div>
           <Footer />
