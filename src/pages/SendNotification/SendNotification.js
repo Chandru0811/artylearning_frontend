@@ -8,7 +8,7 @@ import api from "../../config/URL";
 import Delete from "../../components/common/Delete";
 import SendNotificationView from "./SendNotificationView";
 import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import { FaEye,FaEdit} from "react-icons/fa";
 
 const SendNotification = () => {
   const tableRef = useRef(null);
@@ -71,9 +71,15 @@ const SendNotification = () => {
 
   return (
     <div className="container my-4">
-      {storedScreens?.sendNotificationCreate && (
-        <SendNotificationAdd onSuccess={refreshData} />
-      )}
+      <div className="my-3 d-flex justify-content-end mb-5">
+        {storedScreens?.sendNotificationCreate && (
+          <Link to="/sendNotification/add">
+            <button type="button" className="btn btn-button btn-sm">
+              Add <i class="bx bx-plus"></i>
+            </button>
+          </Link>
+        )}
+      </div>
       {loading ? (
         <div className="loader-container">
           <div className="loading">
@@ -104,18 +110,19 @@ const SendNotification = () => {
                 <td>{data.datePosted}</td>
                 <td>
                   <div style={{ width: "100px" }}>
-                  {storedScreens?.courseRead && (
-                    <Link to={`/sendnotification/view/${data.id}`}>
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                  )}
+                    {storedScreens?.courseRead && (
+                      <Link to={`/sendnotification/view/${data.id}`}>
+                        <button className="btn btn-sm">
+                          <FaEye />
+                        </button>
+                      </Link>
+                    )}
                     {storedScreens?.sendNotificationUpdate && (
-                      <SendNotificationEdit
-                        id={data.id}
-                        onSuccess={refreshData}
-                      />
+                      <Link to={`/sendNotification/edit/${data.id}`}>
+                        <button className="btn btn-sm">
+                          <FaEdit />
+                        </button>
+                      </Link>
                     )}
                     {/* {storedScreens?.subjectDelete && (
                       <Delete

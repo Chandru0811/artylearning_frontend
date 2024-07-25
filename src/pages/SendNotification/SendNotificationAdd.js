@@ -1,68 +1,83 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { files } from "jszip";
-// import { useNavigate } from "react-router-dom";
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
+import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 
-function SendNotificationAdd({ onSuccess }) {
-  // const navigate = useNavigate();
-  const [show, setShow] = useState(false);
+function SendNotificationAdd() {
+  const navigate = useNavigate();
+  const [centerData, setCenterData] = useState(null);
+  const [courseData, setCourseData] = useState(null);
+  const [classData, setClassData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
+  const fetchData = async () => {
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
-  const MAX_FILE_SIZE = 20 * 1024 * 1024;
-  const handleShow = () => setShow(true);
+
+  const fetchCourses = async (centerId) => {
+    try {
+      const courses = await fetchAllCoursesWithIdsC(centerId);
+      setCourseData(courses);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const fetchClasses = async (courseId) => {
+    try {
+      const classes = await fetchAllClassesWithIdsC(courseId);
+      setClassData(classes);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const validationSchema = Yup.object({
-    messageTitle: Yup.string().required("*Message Title is required"),
-    messageDescription: Yup.string().required(
-      "*Message Description is required"
-    ),
-    files: Yup.mixed()
-      .test("fileSize", "*File size too large", (value) => {
-        if (value && value.length > 0) {
-          for (let file of value) {
-            if (file.size > MAX_FILE_SIZE) {
-              return false;
-            }
-          }
-        }
-        return true;
-      })
-      .test("fileType", "*Unsupported file type", (value) => {
-        if (value && value.length > 0) {
-          for (let file of value) {
-            const allowedTypes = ["image/jpeg", "image/png", "application/pdf", "video/mp4", "video/quicktime"];
-            if (!allowedTypes.includes(file.type)) {
-              return false;
-            }
-          }
-        }
-        return true;
-      }),
+    recipient: Yup.string().required("*Recipient Name is required"),
+    centerId: Yup.string().required("*Centre Name is required"),
+    messageTitle: Yup.string().required("*Title is required"),
+    courseId: Yup.string().required("*Course Name is required"),
+    classId: Yup.string().required("*Class Name is required"),
+    day: Yup.string().required("*Day is required"),
+    files: Yup.string().required("*File is required"),
   });
-
-
   const formik = useFormik({
     initialValues: {
+      recipient: "",
       messageTitle: "",
-      messageDescription: "",
-      files: [],
+      centerId: "",
+      courseId: "",
+      classId: "",
+      day: "",
+      remark: "",
+      files: "",
     },
-    validationSchema: validationSchema, // Assign the validation schema
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      console.log(values);
       const formData = new FormData();
+      formData.append("recipient", values.recipient);
       formData.append("messageTitle", values.messageTitle);
-      formData.append("messageDescription", values.messageDescription);
+      formData.append("centerId", values.centerId);
+      formData.append("courseId", values.courseId);
+      formData.append("classId", values.classId);
+      formData.append("day", values.day);
+      formData.append("remark", values.remark);
       for (let file of values.files) {
         formData.append("attachments", file);
       }
@@ -73,125 +88,263 @@ function SendNotificationAdd({ onSuccess }) {
           {}
         );
         if (response.status === 201) {
-          onSuccess();
-          handleClose();
           toast.success(response.data.message);
+          navigate("/sendNotification");
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Failed: " + error.message);
+        console.log("Duplicate Error:", error);
+        if (error.response.status === 409) {
+          toast.warning("Already Send!");
+        } else {
+          toast.error(error);
+        }
       } finally {
         setLoadIndicator(false);
       }
     },
   });
 
+  const handleCenterChange = (event) => {
+    setCourseData(null);
+    setClassData(null);
+    const centerId = event.target.value;
+    formik.setFieldValue("centerId", centerId);
+    fetchCourses(centerId);
+  };
+
+  const handleCourseChange = (event) => {
+    setClassData(null);
+    const courseId = event.target.value;
+    formik.setFieldValue("courseId", courseId);
+    fetchClasses(courseId); // Fetch class for the selected center
+  };
+
   return (
-    <>
-      <div className="mb-5 mt-3 d-flex justify-content-end">
-        <button
-          type="button"
-          className="btn btn-button btn-sm"
-          onClick={handleShow}
-        >
-          Add <i class="bx bx-plus"></i>
-        </button>
-      </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Add Announcement</Modal.Title>
-        </Modal.Header>
-        <form onSubmit={formik.handleSubmit}>
-          <Modal.Body>
-            <div className="container">
-              <div className="row py-4">
-                <div className="col-md-12 col-12 mb-2">
-                  <label className="form-label">
-                    Title<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    className={`form-control  ${formik.touched.messageTitle && formik.errors.messageTitle
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    {...formik.getFieldProps("messageTitle")}
-                  />
-                  {formik.touched.messageTitle &&
-                    formik.errors.messageTitle && (
-                      <div className="invalid-feedback">
-                        {formik.errors.messageTitle}
-                      </div>
-                    )}
-                </div>
-                <div className="col-md-12 col-12 mb-2">
-                  <label className="form-label">
-                    Message<span className="text-danger">*</span>
-                  </label>
-                  <textarea
-                    type="text"
-                    name="message"
-                    rows={5}
-                    className={`form-control  ${formik.touched.messageDescription &&
-                      formik.errors.messageDescription
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    {...formik.getFieldProps("messageDescription")}
-                  />
-                  {formik.touched.messageDescription &&
-                    formik.errors.messageDescription && (
-                      <div className="invalid-feedback">
-                        {formik.errors.messageDescription}
-                      </div>
-                    )}
-                </div>
-                <div className="col-md-12 col-12 mb-2">
-                  <label className="form-label">Attachments</label>
-                  <input
-                    type="file"
-                    multiple
-                    accept=".jpg,.jpeg,.png,.pdf,.mp4,.mov"
-                    className={`form-control ${formik.touched.files && formik.errors.files
-                      ? "is-invalid"
-                      : ""
-                      }`}
-                    onChange={(event) => {
-                      formik.setFieldValue("files", event.target.files);
-                    }}
-                  />
-                  {formik.touched.files && formik.errors.files && (
-                    <div className="invalid-feedback">
-                      {formik.errors.files}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
+    <div className="container">
+      <form onSubmit={formik.handleSubmit}>
+        <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
+          <Link to="/sendNotification">
+            <button type="button " className="btn btn-sm btn-border   ">
+              Back
+            </button>
+          </Link>
+          &nbsp;&nbsp;
+          <button type="submit" className="btn btn-button btn-sm" >
+            {/* {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )} */}
+            Save
+          </button>
+        </div>
+        <div className="container">
+          <div className="row ">
+            <div class="col-md-6 col-12 mb-4">
+              <label>
+                Recipient<span class="text-danger">*</span>
+              </label>
+              <select
+                {...formik.getFieldProps("recipient")}
+                className={`form-select  ${formik.touched.recipient && formik.errors.recipient
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                name="recipient"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.recipient}
               >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
-            </Modal.Footer>
-          </Modal.Body>
-        </form>
-      </Modal>
-    </>
+                <option ></option>
+                <option value="All">All</option>
+                <option value="Parents">Parents</option>
+                <option value="Teachers">Teachers</option>
+              </select>
+              {formik.touched.recipient && formik.errors.recipient && (
+                <div className="invalid-feedback">
+                  {formik.errors.recipient}
+                </div>
+              )}
+            </div>
+
+            <div class="col-md-6 col-12 mb-4">
+              <label>
+                Title<span class="text-danger">*</span>
+              </label>
+              <input
+                {...formik.getFieldProps("messageTitle")}
+                className={`form-control  ${formik.touched.messageTitle && formik.errors.messageTitle
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                name="messageTitle"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.messageTitle}
+              >
+              </input>
+              {formik.touched.messageTitle && formik.errors.messageTitle && (
+                <div className="invalid-feedback">
+                  {formik.errors.messageTitle}
+                </div>
+              )}
+            </div>
+
+            <div className="col-md-6 col-12 mb-4">
+              <label className="form-label">
+                Centre<span className="text-danger">*</span>
+              </label>
+              <select
+                {...formik.getFieldProps("centerId")}
+                className={`form-select ${formik.touched.centerId && formik.errors.centerId
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                aria-label="Default select example"
+                onChange={handleCenterChange}
+              >
+                <option></option>
+                {centerData &&
+                  centerData.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.centerNames}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.centerId && formik.errors.centerId && (
+                <div className="invalid-feedback">
+                  {formik.errors.centerId}
+                </div>
+              )}
+            </div>
+
+            <div className="col-md-6 col-12 mb-2">
+              <label className="form-label">
+                Course<span className="text-danger">*</span>
+              </label>
+              <select
+                {...formik.getFieldProps("courseId")}
+                class={`form-select  ${formik.touched.courseId && formik.errors.courseId
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                onChange={handleCourseChange}
+              >
+                <option></option>
+                {courseData &&
+                  courseData.map((course) => (
+                    <option key={course.id} value={course.id}>
+                      {course.courseNames}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.courseId && formik.errors.courseId && (
+                <div className="invalid-feedback">
+                  {formik.errors.courseId}
+                </div>
+              )}
+            </div>
+
+            <div className="col-md-6 col-12 mb-2 d-flex flex-column justify-content-end">
+              <label className="form-label">
+                Class<span className="text-danger">*</span>
+              </label>
+              <select
+                {...formik.getFieldProps("classId")}
+                class={`form-select  ${formik.touched.classId && formik.errors.classId
+                  ? "is-invalid"
+                  : ""
+                  }`}
+              // onChange={handleClassChange}
+              >
+                <option></option>
+                {classData &&
+                  classData.map((classes) => (
+                    <option key={classes.id} value={classes.id}>
+                      {classes.classNames}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.classId && formik.errors.classId && (
+                <div className="invalid-feedback">
+                  {formik.errors.classId}
+                </div>
+              )}
+            </div>
+
+            <div class="col-md-6 col-12 mb-4">
+              <label>
+                Day<span class="text-danger">*</span>
+              </label>
+              <select
+                {...formik.getFieldProps("day")}
+                name="day"
+                className={`form-select   ${formik.touched.day && formik.errors.day
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                aria-label="Default select example"
+                class="form-select "
+              >
+                <option selected></option>
+                <option value="SUNDAY">Sunday</option>
+                <option value="MONDAY">Monday</option>
+                <option value="TUESDAY">Tuesday</option>
+                <option value="WEDNESDAY">Wednesday</option>
+                <option value="THURSDAY">Thursday</option>
+                <option value="FRIDAY">Friday</option>
+                <option value="SATURDAY">Saturday</option>
+              </select>
+              {formik.touched.day && formik.errors.day && (
+                <div className="invalid-feedback">{formik.errors.day}</div>
+              )}
+            </div>
+
+            <div class="col-md-6 col-12 mb-4">
+              <label>Attachement</label>
+              <span className="text-danger">*</span>
+              <input
+                type="file"
+                name="files"
+                className="form-control"
+                onChange={(event) => {
+                  formik.setFieldValue("files", event.target.files[0]);
+                }}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.files && !formik.values.files && (
+                <div className="error text-danger">
+                  <small>Photo is required</small>
+                </div>
+              )}
+            </div>
+            <div class="col-md-6 col-12 mb-4">
+              <label>Description</label>
+              <textarea
+                name="remark"
+                class="form-control "
+                row="5"
+                type="text"
+                className={`form-control  ${formik.touched.remark && formik.errors.remark
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                style={{
+                  height: "7rem",
+                }}
+                {...formik.getFieldProps("remark")}
+              />
+              {formik.touched.remark && formik.errors.remark && (
+                <div className="invalid-feedback">{formik.errors.remark}</div>
+              )}
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 }
 
