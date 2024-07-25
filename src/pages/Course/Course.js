@@ -7,7 +7,7 @@ import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { FaFileInvoice } from "react-icons/fa";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Tooltip, Dropdown, DropdownButton } from "react-bootstrap";
 import { SCREENS } from "../../config/ScreenFilter";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
@@ -81,7 +81,7 @@ const Course = () => {
     }
     setLoading(false);
   };
-    useEffect(() => {
+  useEffect(() => {
     fetchSubData();
   }, [loading]);
 
@@ -138,7 +138,7 @@ const Course = () => {
                     <span className="badge badges-Red">Inactive</span>
                   )}
                 </td>
-                <td>
+                <td className="d-flex">
                   {storedScreens?.courseRead && (
                     <Link to={`/course/view/${data.id}`}>
                       <button className="btn btn-sm">
@@ -153,6 +153,31 @@ const Course = () => {
                       </button>
                     </Link>
                   )}
+
+                  {storedScreens?.curriculumIndex && (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="tooltip-top">Curriculum</Tooltip>}
+                    >
+                      <DropdownButton
+                        title={<FaFileInvoice />}
+                        variant="white"
+                        size="sm"
+                        id="dropdown-basic-button"
+                      >
+                        <Dropdown.Item as={Link} to={`/course/coursefees/${data.id}`}>
+                          Course Fees
+                        </Dropdown.Item>
+                        <Dropdown.Item as={Link} to={`/course/coursedeposit/${data.id}`}>
+                          Course Deposit Fees
+                        </Dropdown.Item>
+                        <Dropdown.Item as={Link} to={`/course/curriculumoutlet/${data.id}`}>
+                          Curriculum Outline
+                        </Dropdown.Item>
+                      </DropdownButton>
+                    </OverlayTrigger>
+                  )}
+
                   {storedScreens?.courseDelete && (
                     <Delete
                       onSuccess={refreshData}
@@ -160,18 +185,7 @@ const Course = () => {
                     />
                   )}
 
-                  {storedScreens?.curriculumIndex && (
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip id="tooltip-top">Curriculum</Tooltip>}
-                    >
-                      <Link to={`/course/curriculum/${data.id}`}>
-                        <button className="btn btn-sm">
-                          <FaFileInvoice />
-                        </button>
-                      </Link>
-                    </OverlayTrigger>
-                  )}
+
                 </td>
               </tr>
             ))}
