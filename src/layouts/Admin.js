@@ -189,6 +189,24 @@ import IDType from "../pages/Settings/IdType/IDType";
 import IDTypeAdd from "../pages/Settings/IdType/IDTypeAdd";
 import IDTypeEdit from "../pages/Settings/IdType/IDTypeEdit";
 import SendNotificationView from "../pages/SendNotification/SendNotificationView";
+import CourseFees from "../pages/Course/CourseFees/CourseFees";
+import CourseFeesAdd from "../pages/Course/CourseFees/CourseFeesAdd";
+import CourseFeesEdit from "../pages/Course/CourseFees/CourseFeesEdit";
+import CourseFeesView from "../pages/Course/CourseFees/CourseFeesView";
+import CourseDeposit from "../pages/Course/CourseDeposit/CourseDeposit";
+import CourseDepositAdd from "../pages/Course/CourseDeposit/CourseDepositAdd";
+import CourseDepositEdit from "../pages/Course/CourseDeposit/CourseDepositEdit";
+import CourseDepositView from "../pages/Course/CourseDeposit/CourseDepositView";
+import CurriculumOutlet from "../pages/Course/CurriculumOutlet/CurriculumOutlet";
+import CurriculumOutletAdd from "../pages/Course/CurriculumOutlet/CurriculumOutletAdd";
+import CurriculumOutletEdit from "../pages/Course/CurriculumOutlet/CurriculumOutletEdit";
+import CurriculumOutletView from "../pages/Course/CurriculumOutlet/CurriculumOutletView";
+
+import MyMessages from "../pages/Messaging/MyMessages/MyMessages";
+import MyMessagesAdd from "../pages/Messaging/MyMessages/MyMessagesAdd";
+import MyMessagesView from "../pages/Messaging/MyMessages/MyMessagesView";
+
+
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -359,6 +377,12 @@ function Admin({ handleLogout }) {
               <Route path="/staff/leave/view" element={<StaffLeaveView />} />
               <Route path="/staff/payslip" element={<StaffPayslip />} />
 
+
+              {/* {/ Messaging /} */}
+              <Route path="/messaging" element={<MyMessages />} />
+              <Route path="/messaging/add" element={<MyMessagesAdd />} />
+              <Route path="/messaging/view" element={<MyMessagesView />} />
+
               {/* Course  */}
               <Route path="/course" element={<Course />} />
               <Route path="/course/add" element={<CourseAdd />} />
@@ -366,6 +390,21 @@ function Admin({ handleLogout }) {
               <Route path="/course/view/:id" element={<CourseView />} />
               <Route path="/course/curriculum/:id" element={<Curriculum />} />
               <Route path="/curriculum" element={<Curriculum />} />
+
+              <Route path="/course/coursefees/:id" element={<CourseFees />} />
+              <Route path="/course/coursefees/add" element={<CourseFeesAdd />} />
+              <Route path="/course/coursefees/edit/:id" element={<CourseFeesEdit />} />
+              <Route path="/course/coursefees/view/:id" element={<CourseFeesView />} />
+
+              <Route path="/course/coursedeposit/:id" element={<CourseDeposit />} />
+              <Route path="/course/coursedeposit/add" element={<CourseDepositAdd />} />
+              <Route path="/course/coursedeposit/edit/:id" element={<CourseDepositEdit />} />
+              <Route path="/course/coursedeposit/view/:id" element={<CourseDepositView />} />
+
+              <Route path="/course/curriculumoutlet/:id" element={<CurriculumOutlet />} />
+              <Route path="/course/curriculumoutlet/add" element={<CurriculumOutletAdd />} />
+              <Route path="/course/curriculumoutlet/edit/:id" element={<CurriculumOutletEdit />} />
+              <Route path="/course/curriculumoutlet/view/:id" element={<CurriculumOutletView />} />
 
               {/* Payment  */}
               <Route path="/payment" element={<Payment />} />
@@ -415,7 +454,7 @@ function Admin({ handleLogout }) {
                 element={<SendNotificationAdd />}
               />
               <Route
-                path="/sendNotification/edit"
+                path="/sendNotification/edit/:id"
                 element={<SendNotificationEdit />}
               />
               <Route
@@ -542,7 +581,7 @@ function Admin({ handleLogout }) {
               <Route path="/idType" element={<IDType />} />
               <Route path="/idType/add" element={<IDTypeAdd />} />
               <Route path="/idType/edit/:id" element={<IDTypeEdit />} />
-             
+
               {/* Race */}
               <Route path="/race" element={<Race />} />
               <Route path="/race/add" element={<RaceAdd />} />
