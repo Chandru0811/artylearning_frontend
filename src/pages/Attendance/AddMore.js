@@ -11,18 +11,31 @@ function AddMore() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [rows, setRows] = useState([{}]);
-
-  const validationSchema = Yup.object({});
+  const validationSchema = Yup.object().shape({
+    items: Yup.array().of(
+        Yup.object().shape({
+          lessonNo: Yup.string().required("Lesson number is required"),
+          curriculumCode: Yup.string().required("Curriculum code is required"),
+          nextClassAdvice: Yup.string().required(
+            "Next class advice is required"
+          ),
+          pace: Yup.string().required("Pace is required"),
+        })
+      )
+  });
 
   const formik = useFormik({
     initialValues: {
-      lessonNo: "",
-      curriculumCode: "",
-      nextClassAdvice: "",
-      pace: "",
+      items: [
+        {
+          lessonNo: "",
+          curriculumCode: "",
+          nextClassAdvice: "",
+          pace: "",
+        },
+      ],
     },
-    validationSchema: validationSchema, // Assign the validation schema
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
     },
@@ -38,20 +51,24 @@ function AddMore() {
         Add More Info
       </button>
       <Modal show={show} size="xl" onHide={handleClose} centered>
-        <Modal.Header closeButton></Modal.Header>
+        <Modal.Header closeButton>Attenence</Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
             <div className="container">
-              {rows.map((row, index) => (
+              {formik.values?.items?.map((item, index) => (
                 <div key={index}>
                   <div className="row">
-                    <div className="col-1 text-end d-flex justify-content-center align-items-end ">
+                    <div className="col-1 text-end d-flex justify-content-center align-items-start ">
                       {index > 0 && (
                         <button
                           type="button"
                           className="btn mt-2"
                           style={{ marginBottom: "5.0rem" }}
-                          onClick={() => setRows((pr) => pr.slice(0, -1))}
+                          onClick={() => {
+                            const data = [...formik.values.items];
+                            data.splice(index, 1);
+                            formik.setFieldValue("items", data);
+                          }}
                         >
                           <IoIosCloseCircleOutline
                             style={{
@@ -66,11 +83,11 @@ function AddMore() {
                     <div className="col-md-3 col-6 mb-4">
                       <label className="form-label">Lesson No</label>
                       <select
-                        {...formik.getFieldProps("lessonNo")}
+                        {...formik.getFieldProps(`items[${index}].lessonNo`)}
                         className={`form-select`}
                         aria-label="Default select example"
                       >
-                        <option selected></option>
+                        <option value=""></option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -83,58 +100,94 @@ function AddMore() {
                       <input
                         type="text"
                         className="form-control"
-                        {...formik.getFieldProps("curriculumCode")}
+                        {...formik.getFieldProps(
+                          `items[${index}].curriculumCode`
+                        )}
                       />
                     </div>
                     <div className="col-md-3 col-6 mb-4">
-                      <label class="form-label">Next Class Advice</label>
+                      <label className="form-label">Next Class Advice</label>
                       <div>
                         <input
-                          class="form-check-inline"
-                          value="Competent"
-                          name="nextClassAdvice"
                           type="radio"
+                          className="form-check-input"
+                          value="Competent"
+                          {...formik.getFieldProps(
+                            `items[${index}].nextClassAdvice`
+                          )}
+                          id={`items[${index}].nextClassAdvice-competent`}
                         />
-                        <label className="form-label">Competent</label>
+                        <label
+                          className="form-check-label"
+                          htmlFor={`items[${index}].nextClassAdvice-competent`}
+                        >
+                          Competent
+                        </label>
                       </div>
                       <div>
                         <input
-                          class="form-check-inline"
-                          value="Require Revision"
-                          name="nextClassAdvice"
                           type="radio"
+                          className="form-check-input"
+                          value="Require Revision"
+                          {...formik.getFieldProps(
+                            `items[${index}].nextClassAdvice`
+                          )}
+                          id={`items[${index}].nextClassAdvice-revision`}
                         />
-                        <label className="form-label">Require Revision</label>
+                        <label
+                          className="form-check-label"
+                          htmlFor={`items[${index}].nextClassAdvice-revision`}
+                        >
+                          Require Revision
+                        </label>
                       </div>
                     </div>
                     <div className="col-md-2 col-6 mb-4">
-                      <label class="form-label">Pace</label>
+                      <label className="form-label">Pace</label>
                       <div>
                         <input
-                          class="form-check-inline"
+                          type="radio"
+                          className="form-check-input"
                           value="Fast (F)"
-                          name="nextClassAdvice"
-                          type="radio"
+                          {...formik.getFieldProps(`items[${index}].pace`)}
+                          id={`items[${index}].pace-fast`}
                         />
-                        <label className="form-label">Fast (F)</label>
+                        <label
+                          className="form-check-label"
+                          htmlFor={`items[${index}].pace-fast`}
+                        >
+                          Fast (F)
+                        </label>
                       </div>
                       <div>
                         <input
-                          class="form-check-inline"
+                          type="radio"
+                          className="form-check-input"
                           value="Normal (N)"
-                          name="nextClassAdvice"
-                          type="radio"
+                          {...formik.getFieldProps(`items[${index}].pace`)}
+                          id={`items[${index}].pace-normal`}
                         />
-                        <label className="form-label">Normal (N)</label>
+                        <label
+                          className="form-check-label"
+                          htmlFor={`items[${index}].pace-normal`}
+                        >
+                          Normal (N)
+                        </label>
                       </div>
                       <div>
                         <input
-                          class="form-check-inline"
-                          value="Slow (S)"
-                          name="nextClassAdvice"
                           type="radio"
+                          className="form-check-input"
+                          value="Slow (S)"
+                          {...formik.getFieldProps(`items[${index}].pace`)}
+                          id={`items[${index}].pace-slow`}
                         />
-                        <label className="form-label">Slow (S)</label>
+                        <label
+                          className="form-check-label"
+                          htmlFor={`items[${index}].pace-slow`}
+                        >
+                          Slow (S)
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -150,7 +203,17 @@ function AddMore() {
                       height: "40px",
                       width: "125px",
                     }}
-                    onClick={() => setRows((pr) => [...pr, {}])}
+                    onClick={() =>
+                      formik.setFieldValue("items", [
+                        ...formik.values.items,
+                        {
+                          lessonNo: "",
+                          curriculumCode: "",
+                          nextClassAdvice: "",
+                          pace: "",
+                        },
+                      ])
+                    }
                   >
                     Add More
                   </button>
