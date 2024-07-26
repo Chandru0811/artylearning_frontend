@@ -192,6 +192,8 @@ import SendNotificationView from "../pages/SendNotification/SendNotificationView
 import MyMessages from "../pages/Messaging/MyMessages/MyMessages";
 import MyMessagesAdd from "../pages/Messaging/MyMessages/MyMessagesAdd";
 import MyMessagesView from "../pages/Messaging/MyMessages/MyMessagesView";
+import OtherMessagesView from "../pages/Messaging/OtherMessages/OtherMessagesView";
+import OtherMessages from "../pages/Messaging/OtherMessages/OtherMessages";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
 
@@ -570,6 +572,10 @@ function Admin({ handleLogout }) {
               <Route path="/messaging" element={<MyMessages />} />
               <Route path="/messaging/add" element={<MyMessagesAdd />} />
               <Route path="/messaging/view" element={<MyMessagesView />} />
+
+              {/* Other Messaging */}
+              <Route path="/othermessaging" element={<OtherMessages />} />
+              <Route path="/othermessaging/view" element={<OtherMessagesView />} />
             </Routes>
           </div>
           <Footer />

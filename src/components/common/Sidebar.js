@@ -380,7 +380,7 @@ function Sidebar() {
           },
           {
             title: "Other Messages",
-            path: "/othermessages",
+            path: "/othermessaging",
             access: storedScreens.documentFileIndex,
           },
           {
