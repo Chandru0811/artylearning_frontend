@@ -14,27 +14,30 @@ import CurriculumOutletEdit from "./CurriculumOutletEdit";
 import CurriculumOutletView from "./CurriculumOutletView";
 import { OverlayTrigger } from "react-bootstrap";
 import { Tooltip } from "chart.js";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaFileInvoice } from "react-icons/fa";
 
 
 function CurriculumOutlet() {
     // console.log("Screens : ", SCREENS);
-    // const { id } = useParams();
+    const { id } = useParams();
     const tableRef = useRef(null);
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [subjectData, setSubjectData] = useState(null);
     const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get("/getAllCourses");
-                setDatas(response.data);
-                setLoading(false);
+                const response = await api.get(`/getCurriculumOutLetByCourseId/${id}`);
+                if (response.status === 200) {
+                    setDatas(response.data);
+
+                }
             } catch (error) {
                 console.error("Error fetching data ", error);
+            } finally {
+                setLoading(false);
             }
         };
         getData();
@@ -66,20 +69,12 @@ function CurriculumOutlet() {
         }
     };
 
-    const fetchSubData = async () => {
-        try {
-            const subjectData = await fetchAllSubjectsWithIds();
-            setSubjectData(subjectData);
-        } catch (error) {
-            toast.error(error);
-        }
-    };
 
     const refreshData = async () => {
         destroyDataTable();
         setLoading(true);
         try {
-            const response = await api.get("/getAllCourses");
+            const response = await api.get(`/getCurriculumOutLetByCourseId/${id}`);
             setDatas(response.data);
             initializeDataTable(); // Reinitialize DataTable after successful data update
         } catch (error) {
@@ -87,9 +82,7 @@ function CurriculumOutlet() {
         }
         setLoading(false);
     };
-    useEffect(() => {
-        fetchSubData();
-    }, [loading]);
+
 
 
     return (
@@ -133,12 +126,12 @@ function CurriculumOutlet() {
                         </tr>
                     </thead>
                     <tbody>
-                        {datas.map((data, index) => (
+                        {datas?.map((data, index) => (
                             <tr key={index}>
                                 <th scope="row">{index + 1}</th>
                                 {/* <td>{data.centerName}</td> */}
-                                <td>{data.courseName}</td>
-                                <td>{data.courseCode}</td>
+                                <td>{data.effectiveDate}</td>
+                                <td>{data.name}</td>
                                 {/* <td>{data.courseType}</td> */}
                                 {/* <td>{data.courseType}</td>
                                 <td>{data.courseType}</td> */}
@@ -166,7 +159,7 @@ function CurriculumOutlet() {
                                         </OverlayTrigger>
                                     )} */}
 
-                                    <Link to={`/course/curriculum/${data.id}`}>
+                                    <Link to={`/curriculumoutlet/curriculum/${data.id}`}>
                                         <button className="btn btn-sm">
                                             <FaFileInvoice />
                                         </button>

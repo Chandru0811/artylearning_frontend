@@ -7,8 +7,10 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../../List/SubjectList";
+import { useParams } from "react-router-dom";
 
 function CurriculumOutletAdd({ onSuccess }) {
+    const { id } = useParams();
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
     const [subjectData, setSubjectData] = useState(null);
@@ -39,18 +41,16 @@ function CurriculumOutletAdd({ onSuccess }) {
 
     const validationSchema = Yup.object({
         effectiveDate: Yup.string().required("*Effective Date is required"),
-        title: Yup.string().required("*Name Fees Code is required"),
-        // weekdayFee: Yup.string().required("*Weekday Fee is required"),
-        // weekendFee: Yup.string().required("*Weekend Fee is required"),
-        Status: Yup.string().required("*Status Fee is required"),
+        name: Yup.string().required("*Name Fees Code is required"),
+
+        // Status: Yup.string().required("*Status Fee is required"),
     });
 
     const formik = useFormik({
         initialValues: {
             effectiveDate: "",
-            title: "",
-            // weekdayFee: "",
-            // weekendFee: "",
+            name: "",
+
             Status: "",
         },
         validationSchema: validationSchema, // Assign the validation schema
@@ -58,7 +58,7 @@ function CurriculumOutletAdd({ onSuccess }) {
             setLoadIndicator(true);
 
             try {
-                const response = await api.post("/createCourseLevels", values, {
+                const response = await api.post(`/createCurriculumOutLet/${id}`, values, {
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -92,7 +92,7 @@ function CurriculumOutletAdd({ onSuccess }) {
             </div>
             <Modal show={show} size="lg" onHide={handleClose} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Add Course Fees</Modal.Title>
+                    <Modal.Title className="headColor">Add Curriculum Outlet</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>
@@ -104,15 +104,15 @@ function CurriculumOutletAdd({ onSuccess }) {
                                     </label>
                                     <input
                                         type="text"
-                                        className={`form-control  ${formik.touched.levelCode && formik.errors.levelCode
+                                        className={`form-control  ${formik.touched.name && formik.errors.name
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        {...formik.getFieldProps("levelCode")}
+                                        {...formik.getFieldProps("name")}
                                     />
-                                    {formik.touched.levelCode && formik.errors.levelCode && (
+                                    {formik.touched.name && formik.errors.name && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.levelCode}
+                                            {formik.errors.name}
                                         </div>
                                     )}
                                 </div>
@@ -122,15 +122,15 @@ function CurriculumOutletAdd({ onSuccess }) {
                                     </label>
                                     <input
                                         type="date"
-                                        className={`form-control  ${formik.touched.levelCode && formik.errors.levelCode
+                                        className={`form-control  ${formik.touched.effectiveDate && formik.errors.effectiveDate
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        {...formik.getFieldProps("levelCode")}
+                                        {...formik.getFieldProps("effectiveDate")}
                                     />
-                                    {formik.touched.levelCode && formik.errors.levelCode && (
+                                    {formik.touched.effectiveDate && formik.errors.effectiveDate && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.levelCode}
+                                            {formik.errors.effectiveDate}
                                         </div>
                                     )}
                                 </div>

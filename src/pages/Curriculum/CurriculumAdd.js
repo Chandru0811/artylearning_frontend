@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 
-function CurriculumAdd({ onSuccess, course_id }) {
+function CurriculumAdd({ onSuccess, curriculumOutletId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
@@ -29,14 +29,23 @@ function CurriculumAdd({ onSuccess, course_id }) {
       curriculumCode: "",
       lessonNo: "",
       status: "",
+      curriculumNo: "",
+      description: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       // console.log(values);
-      values.courseId = course_id;
+      const payload = {
+        courseId: curriculumOutletId,
+        curriculumCode: values.curriculumCode,
+        lessonNo: values.lessonNo,
+        status: values.status,
+        curriculumNo: values.curriculumNo,
+        description: values.description,
+      }
       try {
-        const response = await api.post("/createCourseCurriculumCode", values, {
+        const response = await api.post(`/createCourseCurriculumCode/${curriculumOutletId}`, payload, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -82,11 +91,10 @@ function CurriculumAdd({ onSuccess, course_id }) {
                   </label>
                   <select
                     {...formik.getFieldProps("lessonNo")}
-                    class={`form-select  ${
-                      formik.touched.lessonNo && formik.errors.lessonNo
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    class={`form-select  ${formik.touched.lessonNo && formik.errors.lessonNo
+                      ? "is-invalid"
+                      : ""
+                      }`}
                   >
                     <option value="" selected></option>
                     {Array.from({ length: 150 }, (_, index) => (
@@ -107,12 +115,11 @@ function CurriculumAdd({ onSuccess, course_id }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.curriculumCode &&
+                    className={`form-control  ${formik.touched.curriculumCode &&
                       formik.errors.curriculumCode
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("curriculumCode")}
                   />
                   {formik.touched.curriculumCode &&
@@ -124,15 +131,35 @@ function CurriculumAdd({ onSuccess, course_id }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
+                    Curriculum Number<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`form-control  ${formik.touched.curriculumNo &&
+                      formik.errors.curriculumNo
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("curriculumNo")}
+                  />
+                  {formik.touched.curriculumNo &&
+                    formik.errors.curriculumNo && (
+                      <div className="invalid-feedback">
+                        {formik.errors.curriculumNo}
+                      </div>
+                    )}
+                </div>
+
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
                     Status<span className="text-danger">*</span>
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${
-                      formik.touched.status && formik.errors.status
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    class={`form-select  ${formik.touched.status && formik.errors.status
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -145,20 +172,40 @@ function CurriculumAdd({ onSuccess, course_id }) {
                     </div>
                   )}
                 </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Description<span className="text-danger">*</span>
+                  </label>
+                  <textarea
+                    type="text"
+                    className={`form-control  ${formik.touched.description &&
+                      formik.errors.description
+                      ? "is-invalid"
+                      : ""
+                      }`}
+                    {...formik.getFieldProps("description")}
+                  />
+                  {formik.touched.description &&
+                    formik.errors.description && (
+                      <div className="invalid-feedback">
+                        {formik.errors.description}
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
             <Modal.Footer>
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit"disabled={loadIndicator}
+              <Button variant="danger" type="submit" disabled={loadIndicator}
               >
                 {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Submit
               </Button>
             </Modal.Footer>

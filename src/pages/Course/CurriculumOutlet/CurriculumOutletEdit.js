@@ -38,16 +38,16 @@ function CurriculumOutletEdit({ id, onSuccess }) {
 
     const validationSchema = Yup.object({
         effectiveDate: Yup.string().required("*Effective Date is required"),
-        title: Yup.string().required("*Name Code is required"),
+        name: Yup.string().required("*Name Code is required"),
         // weekdayFee: Yup.string().required("*WeekdayFee is required"),
         // weekendFee: Yup.string().required("*WeekendFee is required"),
-        Status: Yup.string().required("*Status is required"),
+        // Status: Yup.string().required("*Status is required"),
     });
 
     const formik = useFormik({
         initialValues: {
             effectiveDate: "",
-            title: "",
+            name: "",
             // weekdayFee: "",
             // weekendFee: "",
             Status: "",
@@ -58,7 +58,7 @@ function CurriculumOutletEdit({ id, onSuccess }) {
             setLoadIndicator(true);
 
             try {
-                const response = await api.put(`/updateCourseLevel/${id}`, values, {
+                const response = await api.put(`/updateCurriculumOutLet/${id}`, values, {
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -81,7 +81,7 @@ function CurriculumOutletEdit({ id, onSuccess }) {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get(`/getAllCourseLevels/${id}`);
+                const response = await api.get(`/getAllCurriculumOutLetById/${id}`);
                 formik.setValues(response.data);
             } catch (error) {
                 console.error("Error fetching data ", error);
@@ -105,7 +105,7 @@ function CurriculumOutletEdit({ id, onSuccess }) {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Edit Course Fees</Modal.Title>
+                    <Modal.Title className="headColor">Edit Curriculum Outlet</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>
@@ -117,15 +117,15 @@ function CurriculumOutletEdit({ id, onSuccess }) {
                                     </label>
                                     <input
                                         type="text"
-                                        className={`form-control  ${formik.touched.levelCode && formik.errors.levelCode
+                                        className={`form-control  ${formik.touched.name && formik.errors.name
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        {...formik.getFieldProps("levelCode")}
+                                        {...formik.getFieldProps("name")}
                                     />
-                                    {formik.touched.levelCode && formik.errors.levelCode && (
+                                    {formik.touched.name && formik.errors.name && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.levelCode}
+                                            {formik.errors.name}
                                         </div>
                                     )}
                                 </div>
@@ -135,15 +135,15 @@ function CurriculumOutletEdit({ id, onSuccess }) {
                                     </label>
                                     <input
                                         type="date"
-                                        className={`form-control  ${formik.touched.levelCode && formik.errors.levelCode
+                                        className={`form-control  ${formik.touched.effectiveDate && formik.errors.effectiveDate
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        {...formik.getFieldProps("levelCode")}
+                                        {...formik.getFieldProps("effectiveDate")}
                                     />
-                                    {formik.touched.levelCode && formik.errors.levelCode && (
+                                    {formik.touched.effectiveDate && formik.errors.effectiveDate && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.levelCode}
+                                            {formik.errors.effectiveDate}
                                         </div>
                                     )}
                                 </div>

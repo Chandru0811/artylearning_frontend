@@ -7,34 +7,24 @@ import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllSubjectsWithIds from "../../List/SubjectList";
+
 
 function CourseFeesEdit({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
-    const [subjectData, setSubjectData] = useState(null);
+
 
     const handleClose = () => {
         setShow(false);
-        setSubjectData(null);
+
     };
     const handleShow = () => {
-        fetchData();
+
         setShow(true);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
 
-    const fetchData = async () => {
-        try {
-            const subject = await fetchAllSubjectsWithIds();
-            setSubjectData(subject);
-        } catch (error) {
-            toast.error(error);
-        }
-    };
+
 
     const validationSchema = Yup.object({
         effectiveDate: Yup.string().required("*Effective Date is required"),
@@ -58,7 +48,7 @@ function CourseFeesEdit({ id, onSuccess }) {
             setLoadIndicator(true);
 
             try {
-                const response = await api.put(`/updateCourseLevel/${id}`, values, {
+                const response = await api.put(`/updateCourseDepositFees/${id}`, values, {
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -81,7 +71,7 @@ function CourseFeesEdit({ id, onSuccess }) {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get(`/getAllCourseLevels/${id}`);
+                const response = await api.get(`/getAllCourseDepositFeesById/${id}`);
                 formik.setValues(response.data);
             } catch (error) {
                 console.error("Error fetching data ", error);
@@ -105,7 +95,7 @@ function CourseFeesEdit({ id, onSuccess }) {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Edit Course Fees</Modal.Title>
+                    <Modal.Title className="headColor">Edit Course Deposit</Modal.Title>
                 </Modal.Header>
                 <form onSubmit={formik.handleSubmit}>
                     <Modal.Body>
@@ -117,15 +107,15 @@ function CourseFeesEdit({ id, onSuccess }) {
                                     </label>
                                     <input
                                         type="date"
-                                        className={`form-control  ${formik.touched.levelCode && formik.errors.levelCode
+                                        className={`form-control  ${formik.touched.effectiveDate && formik.errors.effectiveDate
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        {...formik.getFieldProps("levelCode")}
+                                        {...formik.getFieldProps("effectiveDate")}
                                     />
-                                    {formik.touched.levelCode && formik.errors.levelCode && (
+                                    {formik.touched.effectiveDate && formik.errors.effectiveDate && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.levelCode}
+                                            {formik.errors.effectiveDate}
                                         </div>
                                     )}
                                 </div>
@@ -133,86 +123,42 @@ function CourseFeesEdit({ id, onSuccess }) {
                                     <label className="form-label">
                                         Deposit Fees<span className="text-danger">*</span>
                                     </label>
-                                    <select
-                                        {...formik.getFieldProps("subjectId")}
-                                        class={`form-select  ${formik.touched.subjectId && formik.errors.subjectId
+                                    <input
+                                        type="text"
+                                        className={`form-control  ${formik.touched.depositFees && formik.errors.depositFees
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                    >
-                                        <option></option>
-                                        {subjectData &&
-                                            subjectData.map((subject) => (
-                                                <option key={subject.id} value={subject.id}>
-                                                    {subject.subjects}
-                                                </option>
-                                            ))}
-                                    </select>
-                                    {formik.touched.subjectId && formik.errors.subjectId && (
+                                        {...formik.getFieldProps("depositFees")}
+                                    />
+                                    {formik.touched.depositFees && formik.errors.depositFees && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.subjectId}
+                                            {formik.errors.depositFees}
                                         </div>
                                     )}
                                 </div>
-
-                                {/* <div className="col-md-6 col-12 mb-2">
-                                    <label className="form-label">
-                                        Weekday Fee<span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control  ${formik.touched.level && formik.errors.level
-                                            ? "is-invalid"
-                                            : ""
-                                            }`}
-                                        {...formik.getFieldProps("level")}
-                                    />
-                                    {formik.touched.level && formik.errors.level && (
-                                        <div className="invalid-feedback">
-                                            {formik.errors.level}
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="col-md-6 col-12 mb-2">
-                                    <label className="form-label">
-                                        WeekEnd Fee<span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control  ${formik.touched.levelCode && formik.errors.levelCode
-                                            ? "is-invalid"
-                                            : ""
-                                            }`}
-                                        {...formik.getFieldProps("levelCode")}
-                                    />
-                                    {formik.touched.levelCode && formik.errors.levelCode && (
-                                        <div className="invalid-feedback">
-                                            {formik.errors.levelCode}
-                                        </div>
-                                    )}
-                                </div> */}
                                 <div className="col-md-6 col-12 mb-2">
                                     <label className="form-label">
                                         Tax Type<span className="text-danger">*</span>
                                     </label>
                                     <select
-                                        {...formik.getFieldProps("status")}
-                                        class={`form-select  ${formik.touched.status && formik.errors.status
+                                        {...formik.getFieldProps("taxType")}
+                                        class={`form-select  ${formik.touched.taxType && formik.errors.taxType
                                             ? "is-invalid"
                                             : ""
                                             }`}
-                                        aria-label="Default select example"
                                     >
-                                        <option selected></option>
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
+                                        <option></option>
+                                        <option>Taxable</option>
+                                        <option>Non-Taxable</option>
                                     </select>
-                                    {formik.touched.status && formik.errors.status && (
+                                    {formik.touched.taxType && formik.errors.taxType && (
                                         <div className="invalid-feedback">
-                                            {formik.errors.status}
+                                            {formik.errors.taxType}
                                         </div>
                                     )}
                                 </div>
+
                             </div>
                         </div>
                         <Modal.Footer>

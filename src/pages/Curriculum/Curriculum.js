@@ -30,10 +30,19 @@ const Curriculum = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await api.get(`/getAllCurriculumCodesByCourseId/${id}`);
-      setDatas(response.data);
-      setLoading(false);
-      console.log("Api Data:", response.data);
+      try {
+        const response = await api.get(`/getCourseCurriculumCodeCurriculumOutLetId/${id}`);
+        if (response.status === 200) {
+          setDatas(response.data);
+
+        }
+      } catch (error) {
+        console.error("Error fetching data ", error);
+      } finally {
+        setLoading(false);
+      }
+
+
     };
     getData();
     fetchData();
@@ -84,7 +93,7 @@ const Curriculum = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get(`/getAllCurriculumCodesByCourseId/${id}`);
+      const response = await api.get(`/getCourseCurriculumCodeCurriculumOutLetId/${id}`);
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -108,7 +117,7 @@ const Curriculum = () => {
       ) : (
         <>
           {storedScreens?.curriculumCreate && (
-            <CurriculumAdd onSuccess={refreshData} course_id={id} />
+            <CurriculumAdd onSuccess={refreshData} curriculumOutletId={id} />
           )}
           <table ref={tableRef} className="display">
             <thead>
@@ -116,9 +125,11 @@ const Curriculum = () => {
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
                   S No
                 </th>
-                <th scope="col">Course</th>
+                {/* <th scope="col">Course</th> */}
                 <th scope="col">Lesson No.</th>
                 <th scope="col">Curriculum Code</th>
+                <th scope="col">Curriculum Number</th>
+                <th scope="col">Description</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
               </tr>
@@ -127,16 +138,18 @@ const Curriculum = () => {
               {datas.map((data, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
-                  <td>
+                  {/* <td>
                     {courseData &&
                       courseData.map((course) =>
                         parseInt(data.courseId) === course.id
                           ? course.courseNames || "--"
                           : ""
                       )}
-                  </td>
+                  </td> */}
                   <td>{data.lessonNo}</td>
                   <td>{data.curriculumCode}</td>
+                  <td>{data.curriculumNo}</td>
+                  <td>{data.description}</td>
                   <td>
                     <td>
                       {data.status === "Active" ? (
