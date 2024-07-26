@@ -420,7 +420,7 @@ function Admin({ handleLogout }) {
                 element={<SendNotificationAdd />}
               />
               <Route
-                path="/sendNotification/edit"
+                path="/sendNotification/edit/:id"
                 element={<SendNotificationEdit />}
               />
               <Route

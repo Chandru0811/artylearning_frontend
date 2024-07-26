@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -9,6 +9,7 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 
 function SendNotificationEdit() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -42,10 +43,6 @@ function SendNotificationEdit() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const validationSchema = Yup.object({
     recipient: Yup.string().required("*Recipient Name is required"),
     centerId: Yup.string().required("*Centre Name is required"),
@@ -63,7 +60,7 @@ function SendNotificationEdit() {
       courseId: "",
       classId: "",
       day: "",
-      remark: "",
+      messageDescription: "",
       files: "",
     },
     // validationSchema: validationSchema,
@@ -77,34 +74,51 @@ function SendNotificationEdit() {
       formData.append("courseId", values.courseId);
       formData.append("classId", values.classId);
       formData.append("day", values.day);
-      formData.append("remark", values.remark);
+      formData.append("messageDescription", values.messageDescription);
       for (let file of values.files) {
         formData.append("attachments", file);
       }
       try {
-        const response = await api.post(
-          `/sendSmsPushNotifications`,
+        const response = await api.put(
+          `/updateSmsPushNotifications/${id}`,
           formData,
-          {}
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/sendNotification");
+          toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        console.log("Duplicate Error:", error);
-        if (error.response.status === 409) {
-          toast.warning("Already Send!");
-        } else {
-          toast.error(error);
-        }
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
     },
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllSmsPushNotificationsById/${id}`);
+        formik.setValues(response.data);
+      } catch (error) {
+        toast.error("Error fetching data:", error);
+      }
+    };
+
+    getData();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
 
   const handleCenterChange = (event) => {
     setCourseData(null);
@@ -138,7 +152,7 @@ function SendNotificationEdit() {
                 aria-hidden="true"
               ></span>
             )} */}
-            Save
+            Update
           </button>
         </div>
         <div className="container">
@@ -324,21 +338,21 @@ function SendNotificationEdit() {
             <div class="col-md-6 col-12 mb-4">
               <label>Description</label>
               <textarea
-                name="remark"
+                name="messageDescription"
                 class="form-control "
                 row="5"
                 type="text"
-                className={`form-control  ${formik.touched.remark && formik.errors.remark
+                className={`form-control  ${formik.touched.messageDescription && formik.errors.messageDescription
                   ? "is-invalid"
                   : ""
                   }`}
                 style={{
                   height: "7rem",
                 }}
-                {...formik.getFieldProps("remark")}
+                {...formik.getFieldProps("messageDescription")}
               />
-              {formik.touched.remark && formik.errors.remark && (
-                <div className="invalid-feedback">{formik.errors.remark}</div>
+              {formik.touched.messageDescription && formik.errors.messageDescription && (
+                <div className="invalid-feedback">{formik.errors.messageDescription}</div>
               )}
             </div>
           </div>
