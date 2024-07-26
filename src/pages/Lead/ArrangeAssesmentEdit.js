@@ -9,12 +9,12 @@ import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({});
 
-function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
+function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setCenterData] = useState(null);
 
-  // console.log("Lead Id:", leadId);
+  console.log("Arrange Assesment Id:", arrangeAssesmentId);
   // console.log("Centre ID :", centerId);
   // console.log("Student Name :", studentNames);
 
@@ -39,9 +39,9 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
   const formik = useFormik({
     initialValues: {
       centerId: centerId || "",
-      studentName: studentNames || "",
-      studentId:0,
-      assessmentDate: new Date().toISOString().split("T")[0] || "",
+      studentName:"",
+      studentId: 0,
+      assessmentDate: "",
       assessment: "ENGLISH_ASSESSMENT",
       time: "09:00",
       remarks: "",
@@ -51,24 +51,18 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
       setLoadIndicator(true);
       const payload = {
         centerId: centerId,
-        studentName: studentNames,
-        studentId:0,
-        leadId:leadId,
+        studentName: values.studentName,
         assessment: values.assessment,
-        assessmentDate: `${values.assessmentDate}T15:55:13.386Z`,
+        assessmentDate: values.assessmentDate,
         time: values.time,
         remarks: values.remarks,
-
-        createdAt:"2024-07-23T15:55:13.386Z",
-        createdBy:"",
-        updatedAt:"2024-07-23T15:55:13.386Z",
-        updatedBy:"",
+        leadId: leadId
       };
       console.log("Payload:", payload);
       setLoadIndicator(true);
       try {
         const response = await api.put(
-          `/createAssessment/${leadId}`,
+          `/updateAssessment/${arrangeAssesmentId}`,
           payload,
           {
             headers: {
@@ -76,7 +70,7 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
             },
           }
         );
-        if (response.status === 201) {
+        if (response.status === 200) {
           onSuccess();
           handleClose();
           toast.success(response.data.message);
@@ -87,6 +81,7 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
             if (response.status === 200) {
               console.log("Lead Status ARRANGING ASSESSMENT");
               onSuccess();
+              handleClose();
             } else {
               console.log("Lead Status Not ARRANGING ASSESSMENT");
             }
@@ -105,14 +100,24 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
   });
 
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAssessmentById/${arrangeAssesmentId}`);
+        formik.setValues(response.data);
+        console.log("getAssessmentById",response.data);
+      } catch (error) {
+        toast.error("Error Fetching Data");
+      }
+    };
     fetchCenterData();
+    getData();
   }, []);
 
   return (
     <>
       <li>
         <button className="dropdown-item" onClick={handleShow}>
-        Edit Arranging Assesment
+          Edit Arranging Assesment
         </button>
       </li>
 
@@ -160,7 +165,6 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
                   id="studentName"
                   name="studentName"
                   {...formik.getFieldProps("studentName")}
-                  value={studentNames}
                   readOnly
                 />
               </div>
@@ -226,7 +230,7 @@ function ArrangeAssesmentEdit({ leadId, onSuccess, centerId, studentNames }) {
                 Cancel
               </button>
               <button type="submit" className="btn btn-button" disabled={loadIndicator}>
-              {loadIndicator && (
+                {loadIndicator && (
                   <span
                     className="spinner-border spinner-border-sm me-2"
                     aria-hidden="true"

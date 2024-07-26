@@ -12,15 +12,28 @@ import { MultiSelect } from 'react-multi-select-component';
 function SendNotificationAdd() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState([]);
-  const [courseData, setCourseData] = useState(null);
-  const [classData, setClassData] = useState(null);
+  const [courseData, setCourseData] = useState([]);
+  const [classData, setClassData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedCenters, setSelectedCenters] = useState([]);
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [selectedClasses, setSelectedClasses] = useState([]);
 
   const centerOptions = centerData.map(center => ({
     label: center.centerNames,
     value: center.id
   }));
+
+  const courseOptions = courseData.map(course => ({
+    label: course.courseNames,
+    value: course.id
+  }));
+
+  const classOptions = classData.map(classes => ({
+    label: classes.classNames,
+    value: classes.id
+  }));
+
   const fetchData = async () => {
     try {
       const centers = await fetchAllCentersWithIds();
@@ -51,6 +64,22 @@ function SendNotificationAdd() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (selectedCenters.length > 0) {
+      fetchCourses(selectedCenters.map(option => option.value));
+    } else {
+      setCourseData([]);
+    }
+  }, [selectedCenters]);
+
+  useEffect(() => {
+    if (selectedCourses.length > 0) {
+      fetchClasses(selectedCourses.map(option => option.value));
+    } else {
+      setClassData([]);
+    }
+  }, [selectedCourses]);
 
   const validationSchema = Yup.object({
     recipient: Yup.string().required("*Recipient Name is required"),
@@ -138,12 +167,12 @@ function SendNotificationAdd() {
           </Link>
           &nbsp;&nbsp;
           <button type="submit" className="btn btn-button btn-sm" >
-            {/* {loadIndicator && (
+            {loadIndicator && (
               <span
                 className="spinner-border spinner-border-sm me-2"
                 aria-hidden="true"
               ></span>
-            )} */}
+            )}
             Save
           </button>
         </div>
@@ -203,34 +232,6 @@ function SendNotificationAdd() {
               <label className="form-label">
                 Centre<span className="text-danger">*</span>
               </label>
-              <select
-                {...formik.getFieldProps("centerId")}
-                className={`form-select ${formik.touched.centerId && formik.errors.centerId
-                  ? "is-invalid"
-                  : ""
-                  }`}
-                aria-label="Default select example"
-                onChange={handleCenterChange}
-              >
-                <option></option>
-                {centerData &&
-                  centerData.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
-                    </option>
-                  ))}
-              </select>
-              {formik.touched.centerId && formik.errors.centerId && (
-                <div className="invalid-feedback">
-                  {formik.errors.centerId}
-                </div>
-              )}
-            </div> */}
-
-            {/* <div className="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Centre<span className="text-danger">*</span>
-              </label>
               <MultiSelect
                 options={centerOptions}
                 value={selectedCenters}
@@ -273,22 +274,16 @@ function SendNotificationAdd() {
               <label className="form-label">
                 Course<span className="text-danger">*</span>
               </label>
-              <select
-                {...formik.getFieldProps("courseId")}
-                class={`form-select  ${formik.touched.courseId && formik.errors.courseId
-                  ? "is-invalid"
-                  : ""
-                  }`}
-                onChange={handleCourseChange}
-              >
-                <option></option>
-                {courseData &&
-                  courseData.map((course) => (
-                    <option key={course.id} value={course.id}>
-                      {course.courseNames}
-                    </option>
-                  ))}
-              </select>
+              <MultiSelect
+                options={courseOptions}
+                value={selectedCourses}
+                onChange={(selected) => {
+                  setSelectedCourses(selected);
+                  formik.setFieldValue('courseId', selected.map(option => option.value));
+                }}
+                labelledBy="Select Courses"
+                className={`form-multi-select ${formik.touched.courseId && formik.errors.courseId ? 'is-invalid' : ''}`}
+              />
               {formik.touched.courseId && formik.errors.courseId && (
                 <div className="invalid-feedback">
                   {formik.errors.courseId}
@@ -300,28 +295,23 @@ function SendNotificationAdd() {
               <label className="form-label">
                 Class<span className="text-danger">*</span>
               </label>
-              <select
-                {...formik.getFieldProps("classId")}
-                class={`form-select  ${formik.touched.classId && formik.errors.classId
-                  ? "is-invalid"
-                  : ""
-                  }`}
-              // onChange={handleClassChange}
-              >
-                <option></option>
-                {classData &&
-                  classData.map((classes) => (
-                    <option key={classes.id} value={classes.id}>
-                      {classes.classNames}
-                    </option>
-                  ))}
-              </select>
+              <MultiSelect
+                options={classOptions}
+                value={selectedClasses}
+                onChange={(selected) => {
+                  setSelectedClasses(selected);
+                  formik.setFieldValue('classId', selected.map(option => option.value));
+                }}
+                labelledBy="Select Classes"
+                className={`form-multi-select ${formik.touched.classId && formik.errors.classId ? 'is-invalid' : ''}`}
+              />
               {formik.touched.classId && formik.errors.classId && (
                 <div className="invalid-feedback">
                   {formik.errors.classId}
                 </div>
               )}
             </div>
+
 
             <div class="col-md-6 col-12 mb-4">
               <label>

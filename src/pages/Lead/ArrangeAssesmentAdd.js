@@ -41,7 +41,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
       centerId: centerId || "",
       studentName: studentNames || "",
       studentId: 0,
-      assessmentDate: new Date().toISOString().split("T")[0] || "",
+      assessmentDate: "",
       assessment: "ENGLISH_ASSESSMENT",
       time: "09:00",
       remarks: "",
@@ -55,8 +55,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
         studentId: 0,
         leadId: leadId,
         assessment: values.assessment,
-        assessmentDate: `${values.assessmentDate}T15:55:13.386Z`,
-        time: values.time,
+        assessmentDate: values.assessmentDate,
         remarks: values.remarks,
       };
       console.log("Payload:", payload);

@@ -567,9 +567,9 @@ const Lead = () => {
                                 <li>
                                   <ArrangeAssesmentEdit
                                     leadId={data.id}
+                                    arrangeAssesmentId={data.assessmentArrange[0].id}
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
-                                    studentNames={data.studentName}
                                   />
                                 </li>
                                 <li>
