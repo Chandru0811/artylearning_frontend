@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../../components/common/Delete";
 import api from "../../../config/URL";
 import { SCREENS } from "../../../config/ScreenFilter";
-import fetchAllSubjectsWithIds from "../../List/SubjectList";
 import { toast } from "react-toastify";
 import CourseDepositAdd from "./CourseDepositAdd";
 import CourseDepositEdit from "./CourseDepositEdit";
@@ -16,21 +15,23 @@ import CourseDepositView from "./CourseDepositView";
 
 const CourseDeposit = () => {
     console.log("Screens : ", SCREENS);
-    // const { id } = useParams();
+    const { id } = useParams();
     const tableRef = useRef(null);
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [subjectData, setSubjectData] = useState(null);
     const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
 
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get("/getAllCourses");
-                setDatas(response.data);
-                setLoading(false);
+                const response = await api.get(`/getCourseDepositByCourseId/${id}`);
+                if (response.status === 200) {
+                    setDatas(response.data);
+                }
             } catch (error) {
                 console.error("Error fetching data ", error);
+            } finally {
+                setLoading(false);
             }
         };
         getData();
@@ -62,47 +63,26 @@ const CourseDeposit = () => {
         }
     };
 
-    const fetchSubData = async () => {
-        try {
-            const subjectData = await fetchAllSubjectsWithIds();
-            setSubjectData(subjectData);
-        } catch (error) {
-            toast.error(error);
-        }
-    };
+
 
     const refreshData = async () => {
         destroyDataTable();
         setLoading(true);
         try {
-            const response = await api.get("/getAllCourses");
+            const response = await api.get(`/getCourseDepositByCourseId/${id}`);
             setDatas(response.data);
-            initializeDataTable(); // Reinitialize DataTable after successful data update
+            initializeDataTable();
         } catch (error) {
             console.error("Error refreshing data:", error);
         }
         setLoading(false);
     };
-    useEffect(() => {
-        fetchSubData();
-    }, [loading]);
+
 
 
     return (
         <div className="container my-4">
             {storedScreens?.levelCreate && <CourseDepositAdd onSuccess={refreshData} />}
-            {/* <div className="my-3 d-flex justify-content-end mb-5">
-                {storedScreens?.courseCreate && (
-                    <Link to={{
-                        pathname: "/course/coursefees/add",
-                        state: { subjectData }
-                    }}>
-                        <button type="button" className="btn btn-button btn-sm">
-                            Add <i class="bx bx-plus"></i>
-                        </button>
-                    </Link>
-                )}
-            </div> */}
             {loading ? (
                 <div className="loader-container">
                     <div class="loading">
@@ -129,13 +109,13 @@ const CourseDeposit = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {datas.map((data, index) => (
+                        {datas?.map((data, index) => (
                             <tr key={index}>
                                 <th scope="row">{index + 1}</th>
                                 {/* <td>{data.centerName}</td> */}
-                                <td>{data.courseName}</td>
-                                <td>{data.courseCode}</td>
-                                <td>{data.courseType}</td>
+                                <td>{data.effectiveDate}</td>
+                                <td>{data.taxType}</td>
+                                <td>{data.depositFees}</td>
                                 {/* <td>{data.courseType}</td>
                                 <td>{data.courseType}</td> */}
                                 <td>

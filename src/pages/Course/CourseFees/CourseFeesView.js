@@ -1,28 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../../config/URL";
-import fetchAllSubjectsWithIds from "../../List/SubjectList";
-import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
 import { Modal, Button } from 'react-bootstrap';
 
-export default function CourseFeesView() {
-    const { id } = useParams();
+export default function CourseFeesView({ id }) {
+
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
-    const [subjectData, setSubjectData] = useState(null);
 
-    const fetchData = async () => {
-        try {
-            const subjectData = await fetchAllSubjectsWithIds();
-            setSubjectData(subjectData);
-        } catch (error) {
-            toast.error(error);
-        }
-    };
+
+
 
     const handleShow = () => {
-        fetchData();
+
         setShow(true);
     };
 
@@ -31,14 +22,18 @@ export default function CourseFeesView() {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get(`/getAllCourseLevels/${id}`);
-                setData(response.data);
+
+                const response = await api.get(`/getAllCourseFeesById/${id}`);
+
+                if (response.status === 200) {
+                    setData(response.data);
+                }
             } catch (error) {
                 console.error("Error fetching data ", error);
             }
         };
         getData();
-        fetchData();
+
     }, [id]);
 
     return (
@@ -65,13 +60,8 @@ export default function CourseFeesView() {
                                     </div>
                                     <div className="col-6">
                                         <p className="text-muted text-sm">
-                                            :{" "}
-                                            {subjectData &&
-                                                subjectData.map((subjectId) =>
-                                                    parseInt(data.subjectId) === subjectId.id
-                                                        ? subjectId.subjects || "--"
-                                                        : ""
-                                                )}
+                                            :{data.effectiveDate}
+
                                         </p>
                                     </div>
                                 </div>
@@ -82,7 +72,7 @@ export default function CourseFeesView() {
                                         <p className="fw-medium">Package</p>
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-muted text-sm">: {data.level}</p>
+                                        <p className="text-muted text-sm">: {data.package}</p>
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +82,7 @@ export default function CourseFeesView() {
                                         <p className="fw-medium">WeekdayFee</p>
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-muted text-sm">: {data.levelCode}</p>
+                                        <p className="text-muted text-sm">: {data.weekdayFee}</p>
                                     </div>
                                 </div>
                             </div>
@@ -102,7 +92,7 @@ export default function CourseFeesView() {
                                         <p className="fw-medium">WeekendFee</p>
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-muted text-sm">: {data.status}</p>
+                                        <p className="text-muted text-sm">: {data.weekendFee}</p>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +102,7 @@ export default function CourseFeesView() {
                                         <p className="fw-medium">TaxType</p>
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-muted text-sm">: {data.status}</p>
+                                        <p className="text-muted text-sm">: {data.taxType}</p>
                                     </div>
                                 </div>
                             </div>

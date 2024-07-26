@@ -194,6 +194,18 @@ import MyMessagesAdd from "../pages/Messaging/MyMessages/MyMessagesAdd";
 import MyMessagesView from "../pages/Messaging/MyMessages/MyMessagesView";
 import OtherMessagesView from "../pages/Messaging/OtherMessages/OtherMessagesView";
 import OtherMessages from "../pages/Messaging/OtherMessages/OtherMessages";
+import CourseFees from "../pages/Course/CourseFees/CourseFees";
+import CourseFeesAdd from "../pages/Course/CourseFees/CourseFeesAdd";
+import CourseFeesEdit from "../pages/Course/CourseFees/CourseFeesEdit";
+import CourseFeesView from "../pages/Course/CourseFees/CourseFeesView";
+import CourseDeposit from "../pages/Course/CourseDeposit/CourseDeposit";
+import CourseDepositAdd from "../pages/Course/CourseDeposit/CourseDepositAdd";
+import CourseDepositEdit from "../pages/Course/CourseDeposit/CourseDepositEdit";
+import CourseDepositView from "../pages/Course/CourseDeposit/CourseDepositView";
+import CurriculumOutlet from "../pages/Course/CurriculumOutlet/CurriculumOutlet";
+import CurriculumOutletAdd from "../pages/Course/CurriculumOutlet/CurriculumOutletAdd";
+import CurriculumOutletEdit from "../pages/Course/CurriculumOutlet/CurriculumOutletEdit";
+import CurriculumOutletView from "../pages/Course/CurriculumOutlet/CurriculumOutletView";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
 
@@ -371,8 +383,26 @@ function Admin({ handleLogout }) {
               <Route path="/course/add" element={<CourseAdd />} />
               <Route path="/course/edit/:id" element={<CourseEdit />} />
               <Route path="/course/view/:id" element={<CourseView />} />
-              <Route path="/course/curriculum/:id" element={<Curriculum />} />
+              <Route path="/curriculumoutlet/curriculum/:id" element={<Curriculum />} />
               <Route path="/curriculum" element={<Curriculum />} />
+              <Route path="/curriculum" element={<Curriculum />} />
+              <Route path="/course/coursefees/:id" element={<CourseFees />} />
+              <Route path="/course/coursefees/add" element={<CourseFeesAdd />} />
+              <Route path="/course/coursefees/edit/:id" element={<CourseFeesEdit />} />
+              <Route path="/course/coursefees/view/:id" element={<CourseFeesView />} />
+              <Route path="/course/coursefees/:id" element={<CourseFees />} />
+              <Route path="/course/coursefees/add" element={<CourseFeesAdd />} />
+              <Route path="/course/coursefees/edit/:id" element={<CourseFeesEdit />} />
+              <Route path="/course/coursefees/view/:id" element={<CourseFeesView />} />
+              <Route path="/course/coursedeposit/:id" element={<CourseDeposit />} />
+              <Route path="/course/coursedeposit/add" element={<CourseDepositAdd />} />
+              <Route path="/course/coursedeposit/edit/:id" element={<CourseDepositAdd />} />
+              <Route path="/course/coursedeposit/view/:id" element={<CourseDepositAdd />} />
+              <Route path="/course/curriculumoutlet/:id" element={<CurriculumOutlet />} />
+              <Route path="/course/curriculumoutlet/add" element={<CurriculumOutletAdd />} />
+              <Route path="/course/curriculumoutlet/edit/:id" element={<CurriculumOutletEdit />} />
+              <Route path="/course/curriculumoutlet/view/:id" element={<CurriculumOutletView />} />
+
 
               {/* Payment  */}
               <Route path="/payment" element={<Payment />} />

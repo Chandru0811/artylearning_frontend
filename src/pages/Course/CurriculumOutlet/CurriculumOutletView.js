@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
 import { Modal, Button } from 'react-bootstrap';
 
-export default function CurriculumOutletView() {
-    const { id } = useParams();
+export default function CurriculumOutletView({ id }) {
+
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
     const [subjectData, setSubjectData] = useState(null);
@@ -31,8 +31,10 @@ export default function CurriculumOutletView() {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get(`/getAllCourseLevels/${id}`);
-                setData(response.data);
+                const response = await api.get(`/getAllCurriculumOutLetById/${id}`);
+                if (response.status) {
+                    setData(response.data);
+                }
             } catch (error) {
                 console.error("Error fetching data ", error);
             }
@@ -53,7 +55,7 @@ export default function CurriculumOutletView() {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <Modal.Header closeButton>
-                    <Modal.Title className="headColor">Course Fees View</Modal.Title>
+                    <Modal.Title className="headColor">Curriculum Outlet View</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="container">
@@ -65,13 +67,8 @@ export default function CurriculumOutletView() {
                                     </div>
                                     <div className="col-6">
                                         <p className="text-muted text-sm">
-                                            :{" "}
-                                            {subjectData &&
-                                                subjectData.map((subjectId) =>
-                                                    parseInt(data.subjectId) === subjectId.id
-                                                        ? subjectId.subjects || "--"
-                                                        : ""
-                                                )}
+                                            :{data.effectiveDate}
+
                                         </p>
                                     </div>
                                 </div>
@@ -82,7 +79,7 @@ export default function CurriculumOutletView() {
                                         <p className="fw-medium">Title</p>
                                     </div>
                                     <div className="col-6">
-                                        <p className="text-muted text-sm">: {data.level}</p>
+                                        <p className="text-muted text-sm">: {data.name}</p>
                                     </div>
                                 </div>
                             </div>
