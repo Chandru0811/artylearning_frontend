@@ -3,7 +3,7 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import Modal from "react-bootstrap/Modal";
-import { FaTrash } from "react-icons/fa";
+import { FaEdit, FaFileInvoice, FaTrash } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import ScheduleTeacherAdd from "../ScheduleTeacher/ScheduleTeacherAdd";
@@ -11,7 +11,8 @@ import ScheduleTeacherAdd from "../ScheduleTeacher/ScheduleTeacherAdd";
 import ScheduleTeacherView from "../ScheduleTeacher/ScheduleTeacherView";
 import { Link } from "react-router-dom";
 import { BsTable } from "react-icons/bs";
-import { Button } from "react-bootstrap";
+import { Button, DropdownButton, Dropdown } from "react-bootstrap";
+import TeacherReplacement from "./TeacherReplacement";
 
 const ScheduleTeacher = () => {
   const tableRef = useRef(null);
@@ -20,7 +21,7 @@ const ScheduleTeacher = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log("courseId pass ScheduleTeacher:",datas.courseId);
+  console.log("courseId pass ScheduleTeacher:", datas.courseId);
 
   const [show, setShow] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
@@ -164,6 +165,22 @@ const ScheduleTeacher = () => {
                           onSuccess={refreshData}
                         />
                       )} */}
+                        <DropdownButton
+                          title={<FaEdit />}
+                          variant="white"
+                          size="sm"
+                          id="dropdown-basic-button"
+                        >
+                          <Dropdown.Item >
+                            <TeacherReplacement id={data.id} onSuccess={refreshData} />
+                          </Dropdown.Item>
+                          {/* <Dropdown.Item as={Link} to={`/course/coursedeposit/${data.id}`}>
+                            Course Deposit Fees
+                          </Dropdown.Item>
+                          <Dropdown.Item as={Link} to={`/course/curriculumoutlet/${data.id}`}>
+                            Curriculum Outline
+                          </Dropdown.Item> */}
+                        </DropdownButton>
                         {storedScreens?.scheduleTeacherDelete && (
                           <button
                             className="btn btn-sm"
