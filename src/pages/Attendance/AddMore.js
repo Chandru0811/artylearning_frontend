@@ -13,15 +13,13 @@ function AddMore() {
 
   const validationSchema = Yup.object().shape({
     items: Yup.array().of(
-        Yup.object().shape({
-          lessonNo: Yup.string().required("Lesson number is required"),
-          curriculumCode: Yup.string().required("Curriculum code is required"),
-          nextClassAdvice: Yup.string().required(
-            "Next class advice is required"
-          ),
-          pace: Yup.string().required("Pace is required"),
-        })
-      )
+      Yup.object().shape({
+        lessonNo: Yup.string().required("Lesson number is required"),
+        curriculumCode: Yup.string().required("Curriculum code is required"),
+        nextClassAdvice: Yup.string().required("Next class advice is required"),
+        // pace: Yup.string().required("Pace is required"),````````````````````````````````````
+      })
+    ),
   });
 
   const formik = useFormik({
@@ -35,7 +33,7 @@ function AddMore() {
         },
       ],
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
     },
@@ -44,21 +42,21 @@ function AddMore() {
   return (
     <>
       <button
-        className="btn btn-button2 "
+        className="btn btn-button2"
         onClick={handleShow}
         style={{ backgroundColor: "#fa994af5" }}
       >
         Add More Info
       </button>
       <Modal show={show} size="xl" onHide={handleClose} centered>
-        <Modal.Header closeButton>Attenence</Modal.Header>
+        <Modal.Header closeButton>Attendance</Modal.Header>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
             <div className="container">
-              {formik.values?.items?.map((item, index) => (
+              {formik.values.items.map((item, index) => (
                 <div key={index}>
                   <div className="row">
-                    <div className="col-1 text-end d-flex justify-content-center align-items-start ">
+                    <div className="col-1 text-end d-flex justify-content-center align-items-start">
                       {index > 0 && (
                         <button
                           type="button"
@@ -84,7 +82,11 @@ function AddMore() {
                       <label className="form-label">Lesson No</label>
                       <select
                         {...formik.getFieldProps(`items[${index}].lessonNo`)}
-                        className={`form-select`}
+                        className={`form-select ${formik.touched.items?.[index]?.lessonNo &&
+                          formik.errors.items?.[index]?.lessonNo
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         aria-label="Default select example"
                       >
                         <option value=""></option>
@@ -94,28 +96,50 @@ function AddMore() {
                         <option value="4">4</option>
                         <option value="5">5</option>
                       </select>
+                      {formik.touched.items?.[index]?.lessonNo &&
+                        formik.errors.items?.[index]?.lessonNo ? (
+                        <div className="invalid-feedback">
+                          {formik.errors.items[index].lessonNo}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="col-md-3 col-6 mb-4">
                       <label className="form-label">Curriculum Code</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${formik.touched.items?.[index]?.curriculumCode &&
+                          formik.errors.items?.[index]?.curriculumCode
+                          ? "is-invalid"
+                          : ""
+                          }`}
                         {...formik.getFieldProps(
                           `items[${index}].curriculumCode`
                         )}
                       />
+                      {formik.touched.items?.[index]?.curriculumCode &&
+                        formik.errors.items?.[index]?.curriculumCode ? (
+                        <div className="invalid-feedback">
+                          {formik.errors.items[index].curriculumCode}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="col-md-3 col-6 mb-4">
-                      <label className="form-label">Next Class Advice</label>
+                      <label className="form-label">
+                        Next Class Advice<span className="text-danger">*</span>
+                      </label>
                       <div>
                         <input
                           type="radio"
-                          className="form-check-input"
-                          value="Competent"
-                          {...formik.getFieldProps(
-                            `items[${index}].nextClassAdvice`
-                          )}
                           id={`items[${index}].nextClassAdvice-competent`}
+                          name={`items[${index}].nextClassAdvice`}
+                          value="Competent"
+                          checked={formik.values.items[index].nextClassAdvice === "Competent"}
+                          onChange={formik.handleChange}
+                          className={`form-check-input ${formik.touched.items?.[index]?.nextClassAdvice &&
+                            formik.errors.items?.[index]?.nextClassAdvice
+                            ? "is-invalid"
+                            : ""
+                            }`}
                         />
                         <label
                           className="form-check-label"
@@ -127,12 +151,16 @@ function AddMore() {
                       <div>
                         <input
                           type="radio"
-                          className="form-check-input"
-                          value="Require Revision"
-                          {...formik.getFieldProps(
-                            `items[${index}].nextClassAdvice`
-                          )}
                           id={`items[${index}].nextClassAdvice-revision`}
+                          name={`items[${index}].nextClassAdvice`}
+                          value="Require Revision"
+                          checked={formik.values.items[index].nextClassAdvice === "Require Revision"}
+                          onChange={formik.handleChange}
+                          className={`form-check-input ${formik.touched.items?.[index]?.nextClassAdvice &&
+                            formik.errors.items?.[index]?.nextClassAdvice
+                            ? "is-invalid"
+                            : ""
+                            }`}
                         />
                         <label
                           className="form-check-label"
@@ -141,16 +169,28 @@ function AddMore() {
                           Require Revision
                         </label>
                       </div>
+                      {formik.touched.items?.[index]?.nextClassAdvice &&
+                        formik.errors.items?.[index]?.nextClassAdvice ? (
+                        <div className="invalid-feedback">
+                          {formik.errors.items[index].nextClassAdvice}
+                        </div>
+                      ) : null}
                     </div>
                     <div className="col-md-2 col-6 mb-4">
                       <label className="form-label">Pace</label>
                       <div>
                         <input
                           type="radio"
-                          className="form-check-input"
-                          value="Fast (F)"
-                          {...formik.getFieldProps(`items[${index}].pace`)}
                           id={`items[${index}].pace-fast`}
+                          name={`items[${index}].pace`}
+                          value="Fast (F)"
+                          checked={formik.values.items[index].pace === "Fast (F)"}
+                          onChange={formik.handleChange}
+                          className={`form-check-input ${formik.touched.items?.[index]?.pace &&
+                            formik.errors.items?.[index]?.pace
+                            ? "is-invalid"
+                            : ""
+                            }`}
                         />
                         <label
                           className="form-check-label"
@@ -162,10 +202,16 @@ function AddMore() {
                       <div>
                         <input
                           type="radio"
-                          className="form-check-input"
-                          value="Normal (N)"
-                          {...formik.getFieldProps(`items[${index}].pace`)}
                           id={`items[${index}].pace-normal`}
+                          name={`items[${index}].pace`}
+                          value="Normal (N)"
+                          checked={formik.values.items[index].pace === "Normal (N)"}
+                          onChange={formik.handleChange}
+                          className={`form-check-input ${formik.touched.items?.[index]?.pace &&
+                            formik.errors.items?.[index]?.pace
+                            ? "is-invalid"
+                            : ""
+                            }`}
                         />
                         <label
                           className="form-check-label"
@@ -177,10 +223,16 @@ function AddMore() {
                       <div>
                         <input
                           type="radio"
-                          className="form-check-input"
-                          value="Slow (S)"
-                          {...formik.getFieldProps(`items[${index}].pace`)}
                           id={`items[${index}].pace-slow`}
+                          name={`items[${index}].pace`}
+                          value="Slow (S)"
+                          checked={formik.values.items[index].pace === "Slow (S)"}
+                          onChange={formik.handleChange}
+                          className={`form-check-input ${formik.touched.items?.[index]?.pace &&
+                            formik.errors.items?.[index]?.pace
+                            ? "is-invalid"
+                            : ""
+                            }`}
                         />
                         <label
                           className="form-check-label"
@@ -189,6 +241,12 @@ function AddMore() {
                           Slow (S)
                         </label>
                       </div>
+                      {formik.touched.items?.[index]?.pace &&
+                        formik.errors.items?.[index]?.pace ? (
+                        <div className="invalid-feedback">
+                          {formik.errors.items[index].pace}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </div>

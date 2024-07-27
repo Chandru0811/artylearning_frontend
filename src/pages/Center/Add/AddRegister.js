@@ -24,7 +24,7 @@ function AddRegister({ id, onSuccess }) {
   };
 
   const validationSchema = yup.object().shape({
-    registrationDate: yup.string().required("*Registeration Date is required"),
+    // registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
     amount: yup
       .string()
@@ -34,7 +34,7 @@ function AddRegister({ id, onSuccess }) {
   });
   const formik = useFormik({
     initialValues: {
-      registrationDate: "",
+      // registrationDate: "",
       effectiveDate: "",
       amount: "",
       taxType: "",
@@ -125,11 +125,10 @@ function AddRegister({ id, onSuccess }) {
                 </lable>
                 <input
                   type="date"
-                  className={`form-control    ${
-                    formik.touched.effectiveDate && formik.errors.effectiveDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-control    ${formik.touched.effectiveDate && formik.errors.effectiveDate
+                    ? "is-invalid"
+                    : ""
+                    }`}
                   {...formik.getFieldProps("effectiveDate")}
                 />
                 {formik.touched.effectiveDate &&
@@ -146,11 +145,10 @@ function AddRegister({ id, onSuccess }) {
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control    ${
-                      formik.touched.amount && formik.errors.amount
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control    ${formik.touched.amount && formik.errors.amount
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     {...formik.getFieldProps("amount")}
                   />
                   {formik.touched.amount && formik.errors.amount && (
