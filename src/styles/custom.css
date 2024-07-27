@@ -523,29 +523,36 @@
   display: flex;
   flex-direction: column;
 }
+
 .chat-section .message-list {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
   background-color: #f0f0f0;
 }
+
 .chat-section .messages {
   display: flex;
   flex-direction: column;
 }
+
 .chat-section .message {
   margin-bottom: 10px;
 }
+
 .chat-section .message-bubble {
-  max-width: 70%;
+  /* max-width: 70%; */
+  max-width: 35%;
   padding: 10px;
   border-radius: 10px;
-  background-color: #e0e0e0;
+  background-color: #fff;
 }
+
 .chat-section .message.right .message-bubble {
   margin-left: auto;
-  background-color: #d1e7dd;
+  background-color: #f7e8db;
 }
+
 .chat-section .send-icon {
   background-color: #007bff;
   color: white;
@@ -591,21 +598,21 @@
 }
 
 .chat-section .input-group {
-  border-radius: 20px;
-  overflow: hidden; /* Ensure the border radius applies to all child elements */
+  border-radius: 5px;
+  overflow: hidden;
   background-color: transparent;
 }
 
 .chat-section .input-group .form-control {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  border-right: none; /* Remove right border to connect with the span */
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-right: none; 
   background-color: transparent;
 }
 
 .chat-section .input-group .input-group-text {
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  border-left: none; /* Remove left border to connect with the input */
+  border-left: none; 
   background-color: transparent;
 }

@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { IoMdSend } from "react-icons/io";
 import Student from "../../../assets/images/Documentimg_6.png";
 import Pdf from "../../../assets/images/Pdf_Image.png";
-import { CgAttachment } from "react-icons/cg"; // Adjust the import path as needed
-// import "./custom.css";  // Import the custom CSS file
+import { CgAttachment } from "react-icons/cg";
 
 function MyMessagesView() {
+  const fileInputRef = useRef(null);
+  const [fileCount, setFileCount] = useState(0);
+
+  const handleAttachmentClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    setFileCount(files.length);
+    console.log(files);
+    // Handle the selected files here
+  };
+
   return (
     <section className="chat-section">
       <div className="container-fluid">
@@ -38,7 +51,7 @@ function MyMessagesView() {
             </div>
           </div>
         </div>
-        <div className="row mt-3">
+        <div className="row" style={{ backgroundColor: "#fff" }}>
           <div className="col-md-11 col-11 px-2">
             <div className="mb-3" style={{ marginTop: "20px" }}>
               <div className="input-group mb-3">
@@ -49,17 +62,26 @@ function MyMessagesView() {
                   aria-label="Recipient's username"
                   aria-describedby="basic-addon2"
                 />
-                <span className="input-group-text" id="basic-addon2">
-                <CgAttachment />
+                <span
+                  className="input-group-text"
+                  id="basic-addon2"
+                  onClick={handleAttachmentClick}
+                >
+                  <CgAttachment style={{ cursor: "pointer" }} />
                 </span>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                  multiple
+                />
+                {fileCount > 0 && (
+                  <div className="file-count">
+                    <p>{fileCount} file(s) selected</p>
+                  </div>
+                )}
               </div>
-              {/* <input
-                type="text"
-                className="form-control"
-                id="exampleFormControlInput1"
-                placeholder="Type a message"
-                style={{ borderRadius: "20px" }}
-              /> */}
             </div>
           </div>
           <div
@@ -69,7 +91,6 @@ function MyMessagesView() {
             <IoMdSend className="send-icon" />
           </div>
         </div>
-        {/* <Footer /> */}
       </div>
     </section>
   );
