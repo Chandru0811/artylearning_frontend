@@ -19,55 +19,18 @@ function SendNotificationAdd() {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
 
-  const centerOptions = centerData.map(center => ({
-    label: center.centerNames,
-    value: center.id
-  }));
-
-  const courseOptions = courseData.map(course => ({
-    label: course.courseNames,
-    value: course.id
-  }));
-
-  const classOptions = classData.map(classes => ({
-    label: classes.classNames,
-    value: classes.id
-  }));
-
-  const fetchData = async () => {
-    try {
-      const centers = await fetchAllCentersWithIds();
-      setCenterData(centers);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const fetchCourses = async (centerId) => {
-    try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courses);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const fetchClasses = async (courseId) => {
-    try {
-      const classes = await fetchAllClassesWithIdsC(courseId);
-      setClassData(classes);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
+  const courseOptions = courseData.map(course => ({ label: course.courseNames, value: course.id }));
+  const classOptions = classData.map(classes => ({ label: classes.classNames, value: classes.id }));
 
   useEffect(() => {
-    fetchData();
+    fetchAllCentersWithIds().then(setCenterData).catch(error => toast.error(error.message));
   }, []);
 
   useEffect(() => {
     if (selectedCenters.length > 0) {
-      fetchCourses(selectedCenters.map(option => option.value));
+      const centerIds = selectedCenters.map(option => option.value);
+      fetchAllCoursesWithIdsC(centerIds).then(setCourseData).catch(error => toast.error(error.message));
     } else {
       setCourseData([]);
     }
@@ -75,7 +38,8 @@ function SendNotificationAdd() {
 
   useEffect(() => {
     if (selectedCourses.length > 0) {
-      fetchClasses(selectedCourses.map(option => option.value));
+      const courseIds = selectedCourses.map(option => option.value);
+      fetchAllClassesWithIdsC(courseIds).then(setClassData).catch(error => toast.error(error.message));
     } else {
       setClassData([]);
     }
@@ -88,7 +52,7 @@ function SendNotificationAdd() {
     courseId: Yup.array().min(1, "At least one course must be selected"),
     classId: Yup.array().min(1, "At least one class must be selected"),
     day: Yup.string().required("*Day is required"),
-    files: Yup.string().required("*File is required"),
+    attachments: Yup.string().required("*Photo is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -99,9 +63,9 @@ function SendNotificationAdd() {
       classId: [],
       day: "",
       messageDescription: "",
-      files: "",
+      attachments: "",
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log(values);
@@ -113,8 +77,8 @@ function SendNotificationAdd() {
       formData.append("classId", values.classId);
       formData.append("day", values.day);
       formData.append("messageDescription", values.messageDescription);
-      for (let file of values.files) {
-        formData.append("attachments", file);
+      for (let attachments of values.attachments) {
+        formData.append("attachments", attachments);
       }
       try {
         const response = await api.post(
@@ -141,20 +105,6 @@ function SendNotificationAdd() {
     },
   });
 
-  const handleCenterChange = (event) => {
-    setCourseData([]);
-    setClassData([]);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    fetchCourses(centerId);
-  };
-
-  const handleCourseChange = (event) => {
-    setClassData([]);
-    const courseId = event.target.value;
-    formik.setFieldValue("courseId", courseId);
-    fetchClasses(courseId); // Fetch class for the selected center
-  };
 
   return (
     <div className="container">
@@ -167,19 +117,19 @@ function SendNotificationAdd() {
           </Link>
           &nbsp;&nbsp;
           <button type="submit" className="btn btn-button btn-sm" >
-            {loadIndicator && (
+            {/* {loadIndicator && (
               <span
                 className="spinner-border spinner-border-sm me-2"
                 aria-hidden="true"
               ></span>
-            )}
+            )} */}
             Save
           </button>
         </div>
         <div className="container">
           <div className="row ">
             <div class="col-md-6 col-12 mb-4">
-              <label>
+              <label className="form-label">
                 Recipient<span class="text-danger">*</span>
               </label>
               <select
@@ -206,7 +156,7 @@ function SendNotificationAdd() {
             </div>
 
             <div class="col-md-6 col-12 mb-4">
-              <label>
+              <label className="form-label">
                 Title<span class="text-danger">*</span>
               </label>
               <input
@@ -228,32 +178,11 @@ function SendNotificationAdd() {
               )}
             </div>
 
-            {/* <div className="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Centre<span className="text-danger">*</span>
-              </label>
-              <MultiSelect
-                options={centerOptions}
-                value={selectedCenters}
-                onChange={(selected) => {
-                  setSelectedCenters(selected);
-                  formik.setFieldValue('centerIds', selected.map(option => option.value));
-                }}
-                labelledBy="Select Centers"
-                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds ? 'is-invalid' : ''}`}
-              />
-              {formik.touched.centerIds && formik.errors.centerIds && (
-                <div className="invalid-feedback">
-                  {formik.errors.centerIds}
-                </div>
-              )}
-            </div> */}
-
             <div className="col-md-6 col-12 mb-4">
               <label className="form-label">
                 Centre<span className="text-danger">*</span>
               </label>
-              <MultiSelect
+              <MultiSelect 
                 options={centerOptions}
                 value={selectedCenters}
                 onChange={(selected) => {
@@ -274,7 +203,7 @@ function SendNotificationAdd() {
               <label className="form-label">
                 Course<span className="text-danger">*</span>
               </label>
-              <MultiSelect
+              <MultiSelect 
                 options={courseOptions}
                 value={selectedCourses}
                 onChange={(selected) => {
@@ -291,11 +220,11 @@ function SendNotificationAdd() {
               )}
             </div>
 
-            <div className="col-md-6 col-12 mb-2 d-flex flex-column justify-content-end">
+            <div className="col-md-6 col-12 mb-2">
               <label className="form-label">
                 Class<span className="text-danger">*</span>
               </label>
-              <MultiSelect
+              <MultiSelect 
                 options={classOptions}
                 value={selectedClasses}
                 onChange={(selected) => {
@@ -312,9 +241,8 @@ function SendNotificationAdd() {
               )}
             </div>
 
-
             <div class="col-md-6 col-12 mb-4">
-              <label>
+              <label className="form-label">
                 Day<span class="text-danger">*</span>
               </label>
               <select
@@ -342,25 +270,26 @@ function SendNotificationAdd() {
             </div>
 
             <div class="col-md-6 col-12 mb-4">
-              <label>Attachement</label>
+              <label className="form-label">Attachement</label>
               <span className="text-danger">*</span>
               <input
                 type="file"
-                name="files"
-                className="form-control"
+                name="attachments"
+                className={`form-control  ${formik.touched.attachments && formik.errors.attachments
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 onChange={(event) => {
-                  formik.setFieldValue("files", event.target.files[0]);
+                  formik.setFieldValue("attachments", event.target.files[0]);
                 }}
                 onBlur={formik.handleBlur}
               />
-              {formik.touched.files && !formik.values.files && (
-                <div className="error text-danger">
-                  <small>Photo is required</small>
-                </div>
+              {formik.touched.attachments && formik.errors.attachments && (
+                <div className="invalid-feedback">{formik.errors.attachments}</div>
               )}
             </div>
             <div class="col-md-6 col-12 mb-4">
-              <label>Description</label>
+              <label className="form-label">Description</label>
               <textarea
                 name="messageDescription"
                 class="form-control "

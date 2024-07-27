@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { data } from "jquery";
+import { MultiSelect } from 'react-multi-select-component';
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
@@ -27,18 +28,20 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-  centerId: Yup.string().required("*Centres is required"),
+  centerId: Yup.array().min(1, "At least one center must be selected"),
 });
 
 const StaffAccountAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const [centerData, setCenterData] = useState(null);
+    const [centerData, setCenterData] = useState([]);
     const [shgData, setShgData] = useState([]);
+    const [selectedCenters, setSelectedCenters] = useState([]);
+    const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
 
     const fetchData = async () => {
       try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
+        const centers = await fetchAllCentersWithIds();
+        setCenterData(centers);
       } catch (error) {
         toast.error(error);
       }
@@ -74,7 +77,7 @@ const StaffAccountAdd = forwardRef(
         endDate: formData.endDate,
         approvelContentRequired: formData.approvelContentRequired,
         workingDays: formData.workingDays || [],
-        centerId: formData.centerId,
+        centerId: formData.centerId || [],
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -315,7 +318,7 @@ const StaffAccountAdd = forwardRef(
                 </div>
               </div>
               {formik.touched.approvelContentRequired &&
-              formik.errors.approvelContentRequired ? (
+                formik.errors.approvelContentRequired ? (
                 <div className="error text-danger ">
                   <small>{formik.errors.approvelContentRequired}</small>
                 </div>
@@ -480,6 +483,7 @@ const StaffAccountAdd = forwardRef(
                 </div>
               )}
             </div>
+
             <div className="col-md-6 col-12 mb-2 mt-3">
               <lable className="form-lable">
                 Centre Name<span className="text-danger">*</span>
@@ -509,6 +513,28 @@ const StaffAccountAdd = forwardRef(
                 )}
               </div>
             </div>
+
+            <div className="col-md-6 col-12 mb-4">
+              <label className="form-label">
+                Centre<span className="text-danger">*</span>
+              </label>
+              <MultiSelect
+                options={centerOptions}
+                value={selectedCenters}
+                onChange={(selected) => {
+                  setSelectedCenters(selected);
+                  formik.setFieldValue('centerId', selected.map(option => option.value));
+                }}
+                labelledBy="Select Centers"
+                className={`form-multi-select ${formik.touched.centerId && formik.errors.centerId ? 'is-invalid' : ''}`}
+              />
+              {formik.touched.centerId && formik.errors.centerId && (
+                <div className="invalid-feedback">
+                  {formik.errors.centerId}
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
       </form>

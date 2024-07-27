@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
+import { MultiSelect } from 'react-multi-select-component';
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
@@ -18,18 +19,20 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-  centerId: Yup.string().required("*Centres is required"),
+  centerId: Yup.array().min(1, "At least one center must be selected"),
 });
 
-const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
 
-  const [centerData, setCenterData] = useState(null);
+  const [centerData, setCenterData] = useState([]);
   const [shgData, setShgData] = useState([]);
+  const [selectedCenters, setSelectedCenters] = useState([]);
+  const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
     } catch (error) {
       toast.error(error);
     }
@@ -47,7 +50,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
       endDate: "",
       approvelContentRequired: "",
       workingDays: [],
-      centerId: "",
+      centerId: [],
     },
     validationSchema: validationSchema,
 
@@ -129,7 +132,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicators(false);
       }
     },
@@ -163,7 +166,7 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
           response.data.userAccountInfo.length > 0
         ) {
           const data = response.data.userAccountInfo[0];
-          console.log("data",data)
+          console.log("data", data)
           formik.setValues({
             ...response.data.userAccountInfo[0],
             accountId: response.data.userAccountInfo[0].id,
@@ -290,38 +293,38 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
             )}
           </div>
           <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>SHG(s) Type</label>
-              <select
-                type="text"
-                className="form-select"
-                name="shgType"
-                {...formik.getFieldProps("shgType")}
-                onChange={handleSubjectChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.shgType}
-              >
-                {" "}
-                <option selected></option>
-                {shgData &&
-                  shgData.map((shg) => (
-                    <option key={shg.id} value={shg.id}>
-                      {shg.shgType}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>SHG Amount</label>
-              <input
-                type="readOnly"
-                className="form-control"
-                name="shgAmount"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.shgAmount}
-                readOnly
-              />
-            </div>
+            <label>SHG(s) Type</label>
+            <select
+              type="text"
+              className="form-select"
+              name="shgType"
+              {...formik.getFieldProps("shgType")}
+              onChange={handleSubjectChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.shgType}
+            >
+              {" "}
+              <option selected></option>
+              {shgData &&
+                shgData.map((shg) => (
+                  <option key={shg.id} value={shg.id}>
+                    {shg.shgType}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div class="col-md-6 col-12 mb-2 mt-3">
+            <label>SHG Amount</label>
+            <input
+              type="readOnly"
+              className="form-control"
+              name="shgAmount"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.shgAmount}
+              readOnly
+            />
+          </div>
 
           {/* <div class="col-md-6 col-12 mb-2 mt-3">
             <lable class="">
@@ -566,11 +569,10 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
             <div className="input-group mb-3">
               <select
                 {...formik.getFieldProps("centerId")}
-                className={`form-select  ${
-                  formik.touched.centerId && formik.errors.centerId
+                className={`form-select  ${formik.touched.centerId && formik.errors.centerId
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
                 aria-label="Default select example"
               >
                 <option selected></option>
@@ -586,6 +588,28 @@ const AccountEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handl
               )}
             </div>
           </div>
+
+          {/* <div className="col-md-6 col-12 mb-4">
+            <label className="form-label">
+              Centre<span className="text-danger">*</span>
+            </label>
+            <MultiSelect
+              options={centerOptions}
+              value={selectedCenters}
+              onChange={(selected) => {
+                setSelectedCenters(selected);
+                formik.setFieldValue('centerId', selected.map(option => option.value));
+              }}
+              labelledBy="Select Centers"
+              className={`form-multi-select ${formik.touched.centerId && formik.errors.centerId ? 'is-invalid' : ''}`}
+            />
+            {formik.touched.centerId && formik.errors.centerId && (
+              <div className="invalid-feedback">
+                {formik.errors.centerId}
+              </div>
+            )}
+          </div> */}
+
         </div>
       </div>
     </form>
