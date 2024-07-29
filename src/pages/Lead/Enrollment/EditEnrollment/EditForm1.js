@@ -13,7 +13,7 @@ import fetchAllRaceWithIds from "../../../List/RaceList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
-  subjectId: Yup.string().required("*Subject is required"), // Adding validation for subject field
+  subject: Yup.string().required("*Subject is required"), // Adding validation for subject field
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("Date of Birth is required")
@@ -31,7 +31,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       studentName: "",
-      subjectId: "",
+      subject: "",
       gender: "",
       dateOfBirth: "",
       medicalCondition: "",
@@ -135,22 +135,18 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <span className="text-danger">*</span>
             <select
               className="form-select"
-              name="subjectId"
+              name="subject"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.subjectId}
+              value={formik.values.subject}
             >
               <option selected></option>
-              {subjectData &&
-                subjectData.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
-                    {subject.subjects}
-                  </option>
-                ))}
+              <option value="1">English / 英文</option>
+              <option value="2">Chinese / 中文</option>
             </select>
-            {formik.touched.subjectId && formik.errors.subjectId && (
+            {formik.touched.subject && formik.errors.subject && (
               <div className="text-danger">
-                <small>{formik.errors.subjectId}</small>
+                <small>{formik.errors.subject}</small>
               </div>
             )}
           </div>

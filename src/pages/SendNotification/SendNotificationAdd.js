@@ -7,7 +7,19 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
-import { MultiSelect } from 'react-multi-select-component';
+import { MultiSelect } from "react-multi-select-component";
+import fetchAllCoursesWithCenterIds from "../List/CourseListByCenterIdS";
+import fetchAllClassByCourseIds from "../List/ClassListByCourseIdS";
+
+const validationSchema = Yup.object({
+  recipient: Yup.string().required("*Recipient Name is required"),
+  messageTitle: Yup.string().required("*Title is required"),
+  centerIds: Yup.array().min(1, "At least one center must be selected"),
+  courseIds: Yup.array().min(1, "At least one course must be selected"),
+  classIds: Yup.array().min(1, "At least one class must be selected"),
+  days: Yup.string().required("*Day is required"),
+  attachments: Yup.array().min(1, "At least one attachment must be selected"),
+});
 
 function SendNotificationAdd() {
   const navigate = useNavigate();
@@ -19,18 +31,31 @@ function SendNotificationAdd() {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
 
-  const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
-  const courseOptions = courseData.map(course => ({ label: course.courseNames, value: course.id }));
-  const classOptions = classData.map(classes => ({ label: classes.classNames, value: classes.id }));
+  const centerOptions = centerData.map((center) => ({
+    label: center.centerNames,
+    value: center.id,
+  }));
+  const courseOptions = courseData.map((course) => ({
+    label: course.courseName,
+    value: course.courseId,
+  }));
+  const classOptions = classData.map((classes) => ({
+    label: classes.className,
+    value: classes.classId,
+  }));
 
   useEffect(() => {
-    fetchAllCentersWithIds().then(setCenterData).catch(error => toast.error(error.message));
+    fetchAllCentersWithIds()
+      .then(setCenterData)
+      .catch((error) => toast.error(error.message));
   }, []);
 
   useEffect(() => {
     if (selectedCenters.length > 0) {
-      const centerIds = selectedCenters.map(option => option.value);
-      fetchAllCoursesWithIdsC(centerIds).then(setCourseData).catch(error => toast.error(error.message));
+      const centerIds = selectedCenters.map((option) => option.value);
+      fetchAllCoursesWithCenterIds(centerIds)
+        .then(setCourseData)
+        .catch((error) => toast.error(error.message));
     } else {
       setCourseData([]);
     }
@@ -38,54 +63,44 @@ function SendNotificationAdd() {
 
   useEffect(() => {
     if (selectedCourses.length > 0) {
-      const courseIds = selectedCourses.map(option => option.value);
-      fetchAllClassesWithIdsC(courseIds).then(setClassData).catch(error => toast.error(error.message));
+      const courseIds = selectedCourses.map((option) => option.value);
+      fetchAllClassByCourseIds(courseIds)
+        .then(setClassData)
+        .catch((error) => toast.error(error.message));
     } else {
       setClassData([]);
     }
   }, [selectedCourses]);
 
-  const validationSchema = Yup.object({
-    recipient: Yup.string().required("*Recipient Name is required"),
-    messageTitle: Yup.string().required("*Title is required"),
-    centerId: Yup.array().min(1, "At least one center must be selected"),
-    courseId: Yup.array().min(1, "At least one course must be selected"),
-    classId: Yup.array().min(1, "At least one class must be selected"),
-    day: Yup.string().required("*Day is required"),
-    attachments: Yup.string().required("*Photo is required"),
-  });
   const formik = useFormik({
     initialValues: {
       recipient: "",
       messageTitle: "",
-      centerId: [],
-      courseId: [],
-      classId: [],
-      day: "",
+      centerIds: [],
+      courseIds: [],
+      classIds: [],
+      days: "",
       messageDescription: "",
       attachments: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log("Send Norification Data:", values);
       setLoadIndicator(true);
-      console.log(values);
       const formData = new FormData();
       formData.append("recipient", values.recipient);
       formData.append("messageTitle", values.messageTitle);
-      formData.append("centerId", values.centerId);
-      formData.append("courseId", values.courseId);
-      formData.append("classId", values.classId);
-      formData.append("day", values.day);
+      formData.append("centerIds", values.centerIds);
+      formData.append("courseIds", values.courseIds);
+      formData.append("classIds", values.classIds);
+      formData.append("days", values.days);
       formData.append("messageDescription", values.messageDescription);
-      for (let attachments of values.attachments) {
-        formData.append("attachments", attachments);
-      }
+      // Append each file to the formData object
+      values.attachments.forEach((file) => {
+        formData.append(`attachments`, file);
+      });
       try {
-        const response = await api.post(
-          `/sendSmsPushNotifications`,
-          formData,
-          {}
-        );
+        const response = await api.post(`/sendSmsPushNotifications`, formData);
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/sendNotification");
@@ -105,7 +120,6 @@ function SendNotificationAdd() {
     },
   });
 
-
   return (
     <div className="container">
       <form onSubmit={formik.handleSubmit}>
@@ -116,13 +130,17 @@ function SendNotificationAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm" >
-            {/* {loadIndicator && (
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
               <span
                 className="spinner-border spinner-border-sm me-2"
                 aria-hidden="true"
               ></span>
-            )} */}
+            )}
             Save
           </button>
         </div>
@@ -134,19 +152,21 @@ function SendNotificationAdd() {
               </label>
               <select
                 {...formik.getFieldProps("recipient")}
-                className={`form-select  ${formik.touched.recipient && formik.errors.recipient
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select  ${
+                  formik.touched.recipient && formik.errors.recipient
+                    ? "is-invalid"
+                    : ""
+                }`}
                 name="recipient"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.recipient}
               >
-                <option ></option>
-                <option value="All">All</option>
-                <option value="Parents">Parents</option>
-                <option value="Teachers">Teachers</option>
+                <option selected value="ALL">
+                  All
+                </option>
+                <option value="PARENTS">Parents</option>
+                <option value="TEACHERS">Teachers</option>
               </select>
               {formik.touched.recipient && formik.errors.recipient && (
                 <div className="invalid-feedback">
@@ -157,20 +177,20 @@ function SendNotificationAdd() {
 
             <div class="col-md-6 col-12 mb-4">
               <label className="form-label">
-                Title<span class="text-danger">*</span>
+                Title <span class="text-danger">*</span>
               </label>
               <input
                 {...formik.getFieldProps("messageTitle")}
-                className={`form-control  ${formik.touched.messageTitle && formik.errors.messageTitle
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control  ${
+                  formik.touched.messageTitle && formik.errors.messageTitle
+                    ? "is-invalid"
+                    : ""
+                }`}
                 name="messageTitle"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.messageTitle}
-              >
-              </input>
+              ></input>
               {formik.touched.messageTitle && formik.errors.messageTitle && (
                 <div className="invalid-feedback">
                   {formik.errors.messageTitle}
@@ -182,19 +202,26 @@ function SendNotificationAdd() {
               <label className="form-label">
                 Centre<span className="text-danger">*</span>
               </label>
-              <MultiSelect 
+              <MultiSelect
                 options={centerOptions}
                 value={selectedCenters}
                 onChange={(selected) => {
                   setSelectedCenters(selected);
-                  formik.setFieldValue('centerId', selected.map(option => option.value));
+                  formik.setFieldValue(
+                    "centerIds",
+                    selected.map((option) => option.value)
+                  );
                 }}
                 labelledBy="Select Centers"
-                className={`form-multi-select ${formik.touched.centerId && formik.errors.centerId ? 'is-invalid' : ''}`}
+                className={`form-multi-select ${
+                  formik.touched.centerIds && formik.errors.centerIds
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
-              {formik.touched.centerId && formik.errors.centerId && (
+              {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
-                  {formik.errors.centerId}
+                  {formik.errors.centerIds}
                 </div>
               )}
             </div>
@@ -203,19 +230,26 @@ function SendNotificationAdd() {
               <label className="form-label">
                 Course<span className="text-danger">*</span>
               </label>
-              <MultiSelect 
+              <MultiSelect
                 options={courseOptions}
                 value={selectedCourses}
                 onChange={(selected) => {
                   setSelectedCourses(selected);
-                  formik.setFieldValue('courseId', selected.map(option => option.value));
+                  formik.setFieldValue(
+                    "courseIds",
+                    selected.map((option) => option.value)
+                  );
                 }}
                 labelledBy="Select Courses"
-                className={`form-multi-select ${formik.touched.courseId && formik.errors.courseId ? 'is-invalid' : ''}`}
+                className={`form-multi-select ${
+                  formik.touched.courseIds && formik.errors.courseIds
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
-              {formik.touched.courseId && formik.errors.courseId && (
+              {formik.touched.courseIds && formik.errors.courseIds && (
                 <div className="invalid-feedback">
-                  {formik.errors.courseId}
+                  {formik.errors.courseIds}
                 </div>
               )}
             </div>
@@ -224,20 +258,25 @@ function SendNotificationAdd() {
               <label className="form-label">
                 Class<span className="text-danger">*</span>
               </label>
-              <MultiSelect 
+              <MultiSelect
                 options={classOptions}
                 value={selectedClasses}
                 onChange={(selected) => {
                   setSelectedClasses(selected);
-                  formik.setFieldValue('classId', selected.map(option => option.value));
+                  formik.setFieldValue(
+                    "classIds",
+                    selected.map((option) => option.value)
+                  );
                 }}
                 labelledBy="Select Classes"
-                className={`form-multi-select ${formik.touched.classId && formik.errors.classId ? 'is-invalid' : ''}`}
+                className={`form-multi-select ${
+                  formik.touched.classIds && formik.errors.classIds
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
-              {formik.touched.classId && formik.errors.classId && (
-                <div className="invalid-feedback">
-                  {formik.errors.classId}
-                </div>
+              {formik.touched.classIds && formik.errors.classIds && (
+                <div className="invalid-feedback">{formik.errors.classIds}</div>
               )}
             </div>
 
@@ -246,12 +285,11 @@ function SendNotificationAdd() {
                 Day<span class="text-danger">*</span>
               </label>
               <select
-                {...formik.getFieldProps("day")}
-                name="day"
-                className={`form-select   ${formik.touched.day && formik.errors.day
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                {...formik.getFieldProps("days")}
+                name="days"
+                className={`form-select   ${
+                  formik.touched.days && formik.errors.days ? "is-invalid" : ""
+                }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -264,16 +302,17 @@ function SendNotificationAdd() {
                 <option value="FRIDAY">Friday</option>
                 <option value="SATURDAY">Saturday</option>
               </select>
-              {formik.touched.day && formik.errors.day && (
-                <div className="invalid-feedback">{formik.errors.day}</div>
+              {formik.touched.days && formik.errors.days && (
+                <div className="invalid-feedback">{formik.errors.days}</div>
               )}
             </div>
 
-            <div class="col-md-6 col-12 mb-4">
+            {/* <div class="col-md-6 col-12 mb-4">
               <label className="form-label">Attachement</label>
               <span className="text-danger">*</span>
               <input
                 type="file"
+                multiple
                 name="attachments"
                 className={`form-control  ${formik.touched.attachments && formik.errors.attachments
                   ? "is-invalid"
@@ -287,7 +326,31 @@ function SendNotificationAdd() {
               {formik.touched.attachments && formik.errors.attachments && (
                 <div className="invalid-feedback">{formik.errors.attachments}</div>
               )}
+            </div> */}
+
+            <div className="col-md-6 col-12 mb-4">
+              <label className="form-label">Attachments</label>
+              <input
+                type="file"
+                className={`form-control ${
+                  formik.touched.attachments && formik.errors.attachments
+                    ? "is-invalid"
+                    : ""
+                }`}
+                multiple
+                onChange={(event) => {
+                  const files = Array.from(event.currentTarget.files);
+                  formik.setFieldValue("attachments", files);
+                }}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.attachments && formik.errors.attachments && (
+                <div className="invalid-feedback">
+                  {formik.errors.attachments}
+                </div>
+              )}
             </div>
+
             <div class="col-md-6 col-12 mb-4">
               <label className="form-label">Description</label>
               <textarea
@@ -295,18 +358,23 @@ function SendNotificationAdd() {
                 class="form-control "
                 row="5"
                 type="text"
-                className={`form-control  ${formik.touched.messageDescription && formik.errors.messageDescription
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control  ${
+                  formik.touched.messageDescription &&
+                  formik.errors.messageDescription
+                    ? "is-invalid"
+                    : ""
+                }`}
                 style={{
                   height: "7rem",
                 }}
                 {...formik.getFieldProps("messageDescription")}
               />
-              {formik.touched.messageDescription && formik.errors.messageDescription && (
-                <div className="invalid-feedback">{formik.errors.messageDescription}</div>
-              )}
+              {formik.touched.messageDescription &&
+                formik.errors.messageDescription && (
+                  <div className="invalid-feedback">
+                    {formik.errors.messageDescription}
+                  </div>
+                )}
             </div>
           </div>
         </div>
