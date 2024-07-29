@@ -27,8 +27,8 @@ function MyMessagesView() {
             {/* Message List */}
             <div className="messages">
               <div className="message">
-                <div className="message-bubble">
-                  Hello! <br />
+                <div className="message-bubble w-75">
+                  Hello!<br />
                   <img
                     className="img-fluid mt-4"
                     src={Student}
@@ -37,7 +37,7 @@ function MyMessagesView() {
                 </div>
               </div>
               <div className="message right">
-                <div className="message-bubble">
+                <div className="message-bubble  w-75">
                   Hi there! <br />
                   <img
                     className="img-fluid mt-4"
@@ -51,7 +51,7 @@ function MyMessagesView() {
             </div>
           </div>
         </div>
-        <div className="row pt-3" style={{ backgroundColor: "#fff" }}>
+        <div className="row p-1 w-100 ms-1" style={{ backgroundColor: "#fff" }}>
           <div className="col-md-9 col-12"></div>
           <div className="col-md-3 col-12">
             {fileCount > 0 && (
@@ -61,7 +61,7 @@ function MyMessagesView() {
             )}
           </div>
         </div>
-        <div className="row" style={{ backgroundColor: "#fff" }}>
+        <div className="row w-100 ms-1" style={{ backgroundColor: "#fff" }}>
           <div className="col-md-11 col-11 px-2">
             <div className="mb-3">
               <div className="input-group mb-3">
@@ -92,7 +92,7 @@ function MyMessagesView() {
           <div
             className="col-md-1 col-1 d-flex align-items-start justify-content-start"
           >
-            <IoMdSend className="send-icon" />
+            <IoMdSend className="send-icon" size={20}/>
           </div>
         </div>
       </div>
