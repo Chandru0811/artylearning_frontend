@@ -1,33 +1,70 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import MyMessagesAdd from "./MyMessagesAdd";
+import api from "../../../config/URL";
 
 const MyMessages = () => {
   const tableRef = useRef(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-
-  const datas = [
-    {
-      id: 1,
-      name: "Suriya",
-      message: "Hello",
-      createdDate: "2024-2-11",
-    },
-  ];
+  const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const table = $(tableRef.current).DataTable({
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllMessages");
+        setDatas(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
+
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
+      return;
+    }
+    $(tableRef.current).DataTable({
       responsive: true,
     });
+  };
 
-    return () => {
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
       table.destroy();
-    };
-  }, []);
+    }
+  };
+
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await api.get("/getAllMessages");
+      setDatas(response.data);
+      initializeDataTable(); // Reinitialize DataTable after successful data update
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+    setLoading(false);
+  };
 
   return (
     <div>
@@ -51,18 +88,27 @@ const MyMessages = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td>{data.name}</td>
+                <td>{data.senderName}</td>
                 <td>{data.message}</td>
-                <td>{data.createdDate}</td>
+                <td>{data.createdAt.substring(0, 10)}</td>
                 <td>
                   <div className="d-flex">
-                    {storedScreens?.staffRead && (
-                      <Link to={`/messaging/view`}>
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
+                    {/* {storedScreens?.messagingRead && ( */}
+                    <Link to={`/messaging/view/${data.id}`}>
+                      <button className="btn btn-sm">
+                        <FaEye />
+                      </button>
+                    </Link>
+                  {/* )} */}
+                    {/* {storedScreens?.levelUpdate && (
+                      <LevelEdit id={data.id} onSuccess={refreshData} />
                     )}
+                    {storedScreens?.levelDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteMessage/${data.id}`}
+                      />
+                    )} */}
                   </div>
                 </td>
               </tr>

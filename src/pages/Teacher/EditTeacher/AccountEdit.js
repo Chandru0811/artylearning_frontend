@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-  centerId: Yup.array().min(1, "At least one center must be selected"),
+  centerIds: Yup.array().min(1, "At least one center must be selected"),
 });
 
 const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -50,7 +50,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
       endDate: "",
       approvelContentRequired: "",
       workingDays: [],
-      centerId: [],
+      centerIds: [],
     },
     validationSchema: validationSchema,
 
@@ -90,7 +90,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
       try {
         if (values.accountId !== null) {
           const response = await api.put(
-            `/updateUserAccountInfo/${values.accountId}`,
+            `/updateUserAccountInfos/${values.accountId}`,
             updatedData,
             {
               headers: {
@@ -114,7 +114,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
           };
           values.userId = formData.staff_id;
           const response = await api.post(
-            `/createUserAccountInfo`,
+            `/createUserAccountInfos`,
             updatedData,
             {
               headers: {
@@ -172,6 +172,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
             accountId: response.data.userAccountInfo[0].id,
             startDate: data.startDate.substring(0, 10),
             approvelContentRequired: data.approvelContentRequired === true ? "Yes" : "No",
+            centerIds: response.data.centers
           });
         } else {
           formik.setValues({
@@ -186,7 +187,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
             endDate: "",
             approvelContentRequired: "",
             workingDays: [],
-            centerId: "",
+            centerIds: "",
           });
           // console.log("Account ID:", formik.values.accountId);
         }
@@ -562,14 +563,14 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
               </div>
             )}
           </div>
-          <div className="col-md-6 col-12 mb-2 mt-3">
+          {/* <div className="col-md-6 col-12 mb-2 mt-3">
             <lable className="form-lable">
               Centre Name<span className="text-danger">*</span>
             </lable>
             <div className="input-group mb-3">
               <select
-                {...formik.getFieldProps("centerId")}
-                className={`form-select  ${formik.touched.centerId && formik.errors.centerId
+                {...formik.getFieldProps("centerIds")}
+                className={`form-select  ${formik.touched.centerIds && formik.errors.centerIds
                     ? "is-invalid"
                     : ""
                   }`}
@@ -577,19 +578,19 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
               >
                 <option selected></option>
                 {centerData &&
-                  centerData.map((centerId) => (
-                    <option key={centerId.id} value={centerId.id}>
-                      {centerId.centerNames}
+                  centerData.map((centerIds) => (
+                    <option key={centerIds.id} value={centerIds.id}>
+                      {centerIds.centerNames}
                     </option>
                   ))}
               </select>
-              {formik.touched.centerId && formik.errors.centerId && (
-                <div className="invalid-feedback">{formik.errors.centerId}</div>
+              {formik.touched.centerIds && formik.errors.centerIds && (
+                <div className="invalid-feedback">{formik.errors.centerIds}</div>
               )}
             </div>
-          </div>
+          </div> */}
 
-          {/* <div className="col-md-6 col-12 mb-4">
+          <div className="col-md-6 col-12 mb-4">
             <label className="form-label">
               Centre<span className="text-danger">*</span>
             </label>
@@ -598,17 +599,17 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
               value={selectedCenters}
               onChange={(selected) => {
                 setSelectedCenters(selected);
-                formik.setFieldValue('centerId', selected.map(option => option.value));
+                formik.setFieldValue('centerIds', selected.map(option => option.value));
               }}
               labelledBy="Select Centers"
-              className={`form-multi-select ${formik.touched.centerId && formik.errors.centerId ? 'is-invalid' : ''}`}
+              className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds ? 'is-invalid' : ''}`}
             />
-            {formik.touched.centerId && formik.errors.centerId && (
+            {formik.touched.centerIds && formik.errors.centerIds && (
               <div className="invalid-feedback">
-                {formik.errors.centerId}
+                {formik.errors.centerIds}
               </div>
             )}
-          </div> */}
+          </div>
 
         </div>
       </div>

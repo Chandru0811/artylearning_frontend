@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-  centerId: Yup.array().min(1, "At least one center must be selected"),
+    centerIds: Yup.array().min(1, "At least one center must be selected"),
 });
 
 const AccountAdd = forwardRef(
@@ -69,7 +69,7 @@ const AccountAdd = forwardRef(
         status: formData.status || "",
         approvelContentRequired: formData.approvelContentRequired || "",
         workingDays: formData.workingDays || [],
-        centerId: formData.centerId || [],
+        centerIds: formData.centerIds || [],
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -84,7 +84,7 @@ const AccountAdd = forwardRef(
         values.signature = null;
         try {
           const response = await api.post(
-            `/createUserAccountInfo`,
+            `/createUserAccountInfos`,
             updatedData,
             {
               headers: {
@@ -92,7 +92,7 @@ const AccountAdd = forwardRef(
               },
             }
           );
-          if (response.status === 201) {
+          if (response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...values }));
             handleNext();
@@ -468,7 +468,7 @@ const AccountAdd = forwardRef(
                 </div>
               )}
             </div>
-            <div className="col-md-6 col-12 mb-2 mt-3">
+            {/* <div className="col-md-6 col-12 mb-2 mt-3">
               <lable className="form-lable">
                 Centre Name<span className="text-danger">*</span>
               </lable>
@@ -496,9 +496,9 @@ const AccountAdd = forwardRef(
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
 
-            {/* <div className="col-md-6 col-12 mb-4">
+            <div className="col-md-6 col-12 mb-4">
               <label className="form-label">
                 Centre<span className="text-danger">*</span>
               </label>
@@ -507,17 +507,17 @@ const AccountAdd = forwardRef(
                 value={selectedCenters}
                 onChange={(selected) => {
                   setSelectedCenters(selected);
-                  formik.setFieldValue('centerId', selected.map(option => option.value));
+                  formik.setFieldValue('centerIds', selected.map(option => option.value));
                 }}
                 labelledBy="Select Centers"
-                className={`form-multi-select ${formik.touched.centerId && formik.errors.centerId ? 'is-invalid' : ''}`}
+                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds ? 'is-invalid' : ''}`}
               />
-              {formik.touched.centerId && formik.errors.centerId && (
+              {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
-                  {formik.errors.centerId}
+                  {formik.errors.centerIds}
                 </div>
               )}
-            </div> */}
+            </div>
 
           </div>
         </div>

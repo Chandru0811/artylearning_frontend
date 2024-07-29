@@ -110,7 +110,7 @@ const Holiday = () => {
               </th>
               <th scope="col">Centre Name</th>
               <th scope="col">Holiday Name</th>
-              <th scope="col">Start Data</th>
+              <th scope="col">Start Date</th>
               <th className="text-center">Action</th>
             </tr>
           </thead>
