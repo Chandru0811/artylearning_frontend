@@ -102,7 +102,7 @@ const SendNotification = () => {
             </tr>
           </thead>
           <tbody>
-            {datas.map((data, index) => (
+            {Array.isArray(datas) && datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{data.messageTitle}</td>
