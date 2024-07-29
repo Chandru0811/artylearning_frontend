@@ -245,7 +245,7 @@ function CenterView() {
                     : {data.qrCode ? (
                       <img
                         src={data.qrCode}
-                        
+
                         className="img-fluid ms-2 w-100 rounded"
                         alt="Profile Image"
                       />
@@ -285,9 +285,9 @@ function CenterView() {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>
-                          {registration.registrationDate.substring(0, 10)}
+                          {registration.registrationDate?.substring(0, 10)}
                         </td>
-                        <td>{registration.effectiveDate.substring(0, 10)}</td>
+                        <td>{registration.effectiveDate?.substring(0, 10)}</td>
                         <td>{registration.amount}</td>
                         <td>{registration.taxType}</td>
                       </tr>

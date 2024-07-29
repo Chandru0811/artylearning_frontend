@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../../../pages/List/CenterList";
+
 
 const validationSchema = Yup.object().shape({
-  center: Yup.string().required("*Center name is required"),
+  centerId: Yup.string().required("*Center name is required"),
   studentName: Yup.string().required("*Child name is required"),
   gender: Yup.string().required("*Select a gender"),
   dateOfBirth: Yup.date()
@@ -36,9 +38,10 @@ const validationSchema = Yup.object().shape({
 });
 
 function LeadForm() {
+  const [centerData, setCenterData] = useState(null);
   const formik = useFormik({
     initialValues: {
-      center: "",
+      centerId: "",
       studentName: "",
       gender: "",
       dateOfBirth: "",
@@ -69,6 +72,7 @@ function LeadForm() {
       const lowercase = data.writeLowerAToZ === "Yes" ? true : false;
       const sound = data.soundOfAToZ === "Yes" ? true : false;
       const readSentence = data.canReadSimpleSentence === "Yes" ? true : false;
+
       const createData = {
         ...data,
         writeUpperAToZ: uppercase,
@@ -94,6 +98,19 @@ function LeadForm() {
     },
   });
 
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
+
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="container">
       <form onSubmit={formik.handleSubmit}>
@@ -104,21 +121,23 @@ function LeadForm() {
               Center / 中心 <span className="text-danger">*</span>
             </label>
             <select
-              {...formik.getFieldProps("center")}
-              className={`form-select    ${
-                formik.touched.center && formik.errors.center
-                  ? "is-invalid"
-                  : ""
-              }`}
+              {...formik.getFieldProps("centerId")}
+              className={`form-select    ${formik.touched.centerId && formik.errors.centerId
+                ? "is-invalid"
+                : ""
+                }`}
               aria-label="Default select example"
             >
               <option selected>--Select--</option>
-              <option value="1">Arty Learning @ Hougang</option>
-              <option value="2">Arty Learning @ Ang Mo Kio</option>
-              <option value="3">Arty Learning @ Bukit Batok</option>
+              {centerData &&
+                centerData.map((centerId) => (
+                  <option key={centerId.id} value={centerId.id}>
+                    {centerId.centerNames}
+                  </option>
+                ))}
             </select>
-            {formik.touched.center && formik.errors.center && (
-              <div className="invalid-feedback">{formik.errors.center}</div>
+            {formik.touched.centerId && formik.errors.centerId && (
+              <div className="invalid-feedback">{formik.errors.centerId}</div>
             )}
           </div>
           <div className="col-md-6 col-12 mb-3">
@@ -127,11 +146,10 @@ function LeadForm() {
                 Child's Name / 孩子名字 <span className="text-danger">*</span>
               </label>
               <input
-                className={`form-control  ${
-                  formik.touched.studentName && formik.errors.studentName
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.studentName && formik.errors.studentName
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Username"
                 aria-describedby="basic-addon1"
                 {...formik.getFieldProps("studentName")}
@@ -189,11 +207,10 @@ function LeadForm() {
                 {...formik.getFieldProps("dateOfBirth")}
                 name="dateOfBirth"
                 type="date"
-                className={`form-control   ${
-                  formik.touched.dateOfBirth && formik.errors.dateOfBirth
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control   ${formik.touched.dateOfBirth && formik.errors.dateOfBirth
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Username"
                 aria-describedby="basic-addon1"
               />
@@ -211,11 +228,10 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("pencilGrip")}
-                className={`form-select    ${
-                  formik.touched.pencilGrip && formik.errors.pencilGrip
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-select    ${formik.touched.pencilGrip && formik.errors.pencilGrip
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
@@ -237,11 +253,10 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("subject")}
-                className={`form-select    ${
-                  formik.touched.subject && formik.errors.subject
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-select    ${formik.touched.subject && formik.errors.subject
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
@@ -261,12 +276,11 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("marketingSource")}
-                className={`form-select    ${
-                  formik.touched.marketingSource &&
+                className={`form-select    ${formik.touched.marketingSource &&
                   formik.errors.marketingSource
-                    ? "is-invalid"
-                    : ""
-                }`}
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
@@ -291,11 +305,10 @@ function LeadForm() {
                 Referred by / 介绍人 <span className="text-danger">*</span>
               </label>
               <input
-                className={`form-control  ${
-                  formik.touched.referBy && formik.errors.referBy
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.referBy && formik.errors.referBy
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Username"
                 aria-describedby="basic-addon1"
                 {...formik.getFieldProps("referBy")}
@@ -457,11 +470,10 @@ function LeadForm() {
               Parent Name / 父母姓名 <span className="text-danger">*</span>
             </label>
             <input
-              className={`form-control  ${
-                formik.touched.fathersFullName && formik.errors.fathersFullName
-                  ? "is-invalid"
-                  : ""
-              }`}
+              className={`form-control  ${formik.touched.fathersFullName && formik.errors.fathersFullName
+                ? "is-invalid"
+                : ""
+                }`}
               name="fathersFullName"
               aria-label="Username"
               aria-describedby="basic-addon1"
@@ -482,12 +494,11 @@ function LeadForm() {
             <input
               {...formik.getFieldProps("fathersEmailAddress")}
               type="email"
-              className={`form-control   ${
-                formik.touched.fathersEmailAddress &&
+              className={`form-control   ${formik.touched.fathersEmailAddress &&
                 formik.errors.fathersEmailAddress
-                  ? "is-invalid"
-                  : ""
-              }`}
+                ? "is-invalid"
+                : ""
+                }`}
               name="fathersEmailAddress"
               aria-label="Username"
               aria-describedby="basic-addon1"
@@ -524,12 +535,11 @@ function LeadForm() {
               <input
                 type="text"
                 name="fathersMobileNumber"
-                className={`form-control ${
-                  formik.touched.fathersMobileNumber &&
+                className={`form-control ${formik.touched.fathersMobileNumber &&
                   formik.errors.fathersMobileNumber
-                    ? "is-invalid"
-                    : ""
-                }`}
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 aria-label="Text input with checkbox"
                 {...formik.getFieldProps("fathersMobileNumber")}
               />
@@ -546,11 +556,10 @@ function LeadForm() {
               Relation / 关系 <span className="text-danger">*</span>
             </label>
             <input
-              className={`form-control  ${
-                formik.touched.relation && formik.errors.relation
-                  ? "is-invalid"
-                  : ""
-              }`}
+              className={`form-control  ${formik.touched.relation && formik.errors.relation
+                ? "is-invalid"
+                : ""
+                }`}
               name="relation"
               aria-label="Username"
               aria-describedby="basic-addon1"
@@ -568,11 +577,10 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("writing")}
-                className={`form-select    ${
-                  formik.touched.writing && formik.errors.writing
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-select    ${formik.touched.writing && formik.errors.writing
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 name="writing"
                 aria-label="Default select example"
               >
@@ -597,11 +605,10 @@ function LeadForm() {
               </label>
               <select
                 {...formik.getFieldProps("recognizeAToZ")}
-                className={`form-select    ${
-                  formik.touched.recognizeAToZ && formik.errors.recognizeAToZ
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-select    ${formik.touched.recognizeAToZ && formik.errors.recognizeAToZ
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 name="recognizeAToZ"
                 aria-label="Default select example"
               >

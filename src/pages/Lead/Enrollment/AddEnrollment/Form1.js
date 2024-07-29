@@ -125,12 +125,8 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               value={formik.values.subjectId}
             >
               <option selected></option>
-              {subjectData &&
-                subjectData.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
-                    {subject.subjects}
-                  </option>
-                ))}
+              <option>English Assessesment</option>
+              <option >Chinese Assessesment</option>
             </select>
             {formik.touched.subjectId && formik.errors.subjectId && (
               <div className="text-danger">
