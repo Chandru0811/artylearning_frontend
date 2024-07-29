@@ -51,9 +51,19 @@ function MyMessagesView() {
             </div>
           </div>
         </div>
+        <div className="row pt-3" style={{ backgroundColor: "#fff" }}>
+          <div className="col-md-9 col-12"></div>
+          <div className="col-md-3 col-12">
+            {fileCount > 0 && (
+              <div className="file-count">
+                <p style={{marginBottom: "0px"}}>{fileCount} file(s) selected</p>
+              </div>
+            )}
+          </div>
+        </div>
         <div className="row" style={{ backgroundColor: "#fff" }}>
           <div className="col-md-11 col-11 px-2">
-            <div className="mb-3" style={{ marginTop: "20px" }}>
+            <div className="mb-3">
               <div className="input-group mb-3">
                 <input
                   type="text"
@@ -76,17 +86,11 @@ function MyMessagesView() {
                   onChange={handleFileChange}
                   multiple
                 />
-                {fileCount > 0 && (
-                  <div className="file-count">
-                    <p>{fileCount} file(s) selected</p>
-                  </div>
-                )}
               </div>
             </div>
           </div>
           <div
             className="col-md-1 col-1 d-flex align-items-start justify-content-start"
-            style={{ marginTop: "18px" }}
           >
             <IoMdSend className="send-icon" />
           </div>
