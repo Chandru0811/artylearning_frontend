@@ -540,20 +540,63 @@
   margin-bottom: 10px;
 }
 
-.chat-section .message-bubble {
-  max-width: fit-content;
-  /* max-width: 35%; */
-  padding: 10px;
+/* .chat-section .message-bubble {
+   max-width: fit-content !important;
+  padding: 5px;
   border-radius: 10px;
   background-color: #fff;
 }
 
 .chat-section .message.right .message-bubble {
+  max-width: fit-content !important;
+  padding: 5px;
+  border-radius: 10px;
+  margin-left:auto;
+  background-color: #f7e8db;
+}
+
+.chat-section .message-bubble img {
+  max-width: 75px;
+  height: auto;
+  display: block;
+  margin: 5px 0; 
+} */
+.chat-section .message-bubble {
+  max-width: fit-content !important;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px; /* Optional: Adjust spacing between images */
+}
+
+.chat-section .message.right .message-bubble {
+  max-width: fit-content !important;
+  padding: 5px;
+  border-radius: 10px;
   margin-left: auto;
   background-color: #f7e8db;
 }
 
-.chat-section .send-icon {
+.chat-section .message-bubble img {
+  max-width: 75px; /* Adjust the max-width as needed */
+  height: auto;
+  display: block;
+  margin: 5px 0; /* Optional: adjust the margin for better spacing */
+}
+
+.sticky-input-container {
+  min-width: 78%;
+  top: auto;
+  position: fixed !important;
+  bottom: 0 !important;
+  background-color: #fff;
+  padding: 10px 0;
+  z-index: 1000; /* Ensure it stays above other content */
+}
+
+/* .chat-section .send-icon {
   background-color: #e60504;
   color: white;
   border-radius: 50%;
@@ -565,9 +608,9 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-}
+} */
 
-@media (max-width: 780px) {
+/* @media (max-width: 780px) {
   .chat-section .send-icon {
     background-color: #e60504;
     color: white;
@@ -595,7 +638,7 @@
     width: 50px;
     height: 40px;
   }
-}
+} */
 
 .chat-section .input-group {
   border-radius: 5px;
