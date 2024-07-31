@@ -112,17 +112,17 @@ const Teacher = () => {
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   <td>
-                    {data.userAccountInfo.length > 0 &&
+                    {data.userAccountInfo?.length > 0 &&
                       data.userAccountInfo[0].teacherId}
                   </td>
                   {/* <td>{data.teacherId}</td> */}
                   <td>{data.teacherName}</td>
                   <td>
-                    {data.userAccountInfo.length > 0 &&
+                    {data.userAccountInfo?.length > 0 &&
                       data.userAccountInfo[0].teacherType}
                   </td>
                   <td>
-                    {data.userContactInfo.length > 0 &&
+                    {data.userContactInfo?.length > 0 &&
                       data.userContactInfo[0].contactNumber}
                   </td>
                   {/* <td>

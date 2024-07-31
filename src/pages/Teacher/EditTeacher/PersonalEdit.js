@@ -77,7 +77,7 @@ const PersonalEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUsersById/${formData.staff_id}`
+            `/getAllUserById/${formData.staff_id}`
           );
           const dateOfBirth = response.data.dateOfBirth.substring(0, 10);
           // console.log(response)

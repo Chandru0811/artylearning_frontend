@@ -580,9 +580,6 @@ function CenterEdit() {
                     S.No
                   </th>
                   <th scope="col" className="fw-medium">
-                    Registration Date
-                  </th>
-                  <th scope="col" className="fw-medium">
                     Effective Date
                   </th>
                   <th scope="col" className="fw-medium">
@@ -600,8 +597,7 @@ function CenterEdit() {
                   data.centerRegistrations.map((registration, index) => (
                     <tr key={index}>
                       <td>{registration.id}</td>
-                      <td>{registration.registrationDate.substring(0, 10)}</td>
-                      <td>{registration.effectiveDate.substring(0, 10)}</td>
+                      <td>{registration.effectiveDate?.substring(0, 10)}</td>
                       <td>{registration.amount}</td>
                       <td>{registration.taxType}</td>
                       <td>

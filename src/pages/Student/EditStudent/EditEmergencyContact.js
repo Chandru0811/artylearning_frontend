@@ -158,7 +158,7 @@ const EditEmergencyContact = forwardRef(
 
     const fetchData = async () => {
       try {
-        const response = await api.get(`/getAllStudentDetails/${formData.id}`);
+        const response = await api.get(`/getAllStudentById/${formData.id}`);
         if (
           response.data.studentEmergencyContacts &&
           response.data.studentEmergencyContacts.length > 0

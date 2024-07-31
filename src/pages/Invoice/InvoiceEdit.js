@@ -486,6 +486,8 @@ export default function InvoiceEdit() {
                   <option value="3:30 pm">3:30 pm</option>
                   <option value="5:00 pm">5:00 pm</option>
                   <option value="7:00 pm">7:00 pm</option>
+                  <option value="12:00 pm">12:00 pm</option>
+                  <option value="1:00 pm">1:00 pm</option>
                 </select>
                 {formik.touched.schedule && formik.errors.schedule && (
                   <div className="invalid-feedback">

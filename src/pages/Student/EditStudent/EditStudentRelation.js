@@ -111,7 +111,7 @@ const EditStudentRelation = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllStudentDetails/${formData.id}`
+            `/getAllStudentById/${formData.id}`
           );
           // console.log(response.data.studentRelationModels)
           if (

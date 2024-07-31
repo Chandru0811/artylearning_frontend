@@ -104,7 +104,7 @@ const LeaveEdit = forwardRef(
     useEffect(() => {
       const getData = async () => {
         try{
-          const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
+          const response = await api.get(`/getAllUserById/${formData.staff_id}`);
           if (
             response.data.userLeaveCreationModels &&
             response.data.userLeaveCreationModels.length > 0

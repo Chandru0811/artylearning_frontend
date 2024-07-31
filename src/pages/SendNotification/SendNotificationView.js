@@ -11,14 +11,10 @@ import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
 import { IoMdDownload } from "react-icons/io";
 import Delete from "../../components/common/Delete";
 
-
-
 function SendNotificationView() {
   const { id } = useParams();
   const [data, setData] = useState({});
   console.log("Data", data);
-
-
 
   const renderAttachment = (attachment) => {
     if (!attachment || !attachment.attachment) {
@@ -37,6 +33,8 @@ function SendNotificationView() {
       a.click();
       document.body.removeChild(a);
     };
+
+    // const deletedId = data.smsPushNotificationAttachments[0]?.id;
 
     const renderCard = (src, label, attachmentId, isVideo = false) => (
       <div className="position-relative d-flex align-items-center mb-3">
@@ -75,7 +73,11 @@ function SendNotificationView() {
             </div>
           </div>
         </div>
-        <div className="delete-icon-container" style={{ marginLeft: "10px", marginBottom: "8rem" }}>
+        <div
+          className="delete-icon-container"
+          style={{ marginLeft: "10px", marginBottom: "8rem" }}
+        >
+          {/* <Delete path={`/deleteSmsPushNotifications/${deletedId}`} id={attachmentId} onSuccess={getData} /> */}
           <Delete id={attachmentId} onSuccess={getData} />
         </div>
       </div>
@@ -107,13 +109,10 @@ function SendNotificationView() {
     }
   };
 
-
-
   const getData = async () => {
     try {
       const response = await api.get(`/getAllSmsPushNotificationsById/${id}`);
-      console.log("first", response.data
-      );
+      console.log("first", response.data);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data ", error);
@@ -141,17 +140,107 @@ function SendNotificationView() {
             <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6">
-                  <p className="fw-medium">Event Name</p>
+                  <p className="fw-medium">Recipient </p>
                 </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">: {data.messageTitle}</p>
+                <div className="col-6 text-start">
+                  <p className="text-muted text-sm">
+                    {" "}
+                    &nbsp; : &nbsp;{data.recipient}
+                  </p>
                 </div>
               </div>
             </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p className="fw-medium">Title </p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    {" "}
+                    &nbsp; : &nbsp;{data.messageTitle}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p className="fw-medium">Centre</p>
+                </div>
+                <div className="col-6">
+                  <span>&nbsp; : &nbsp;</span>
+                  <div className="col-6 text-start">
+                  <p className="text-muted text-sm">
+                      {data?.centers?.map(
+                          (center) =>
+                            `${center.centerName} ,`
+                        )
+                        .join(" ")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p className="fw-medium">Course</p>
+                </div>
+                <div className="col-6">
+                  <span>&nbsp; : &nbsp;</span>
+                  <div className="col-6 text-start">
+                  <p className="text-muted text-sm">
+                      {data?.courses?.map(
+                          (course) =>
+                            `${course.courseName} ,`
+                        )
+                        .join(" ")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p className="fw-medium">Class</p>
+                </div>
+                <div className="col-6">
+                  <span>&nbsp; : &nbsp;</span>
+                  <div className="col-6 text-start">
+                  <p className="text-muted text-sm">
+                      {data?.classes?.map(
+                          (cls) =>
+                            `${cls.className} ,`
+                        )
+                        .join(" ")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 col-12">
+              <div className="row mb-2">
+                <div className="col-6">
+                  <p className="fw-medium">Day </p>
+                </div>
+                <div className="col-6 text-start">
+                  <p className="text-muted text-sm">
+                    &nbsp; : &nbsp;{data.day}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="col-12">
               <div className="row mb-2">
                 <div className="col-12">
-                  <p className="fw-medium">Message</p>
+                  <p className="fw-medium">Message &nbsp; : &nbsp;</p>
                 </div>
                 <div className="col-12">
                   <p className="text-muted text-sm">
@@ -163,7 +252,7 @@ function SendNotificationView() {
             <div className="col-12">
               <div className="row mb-2">
                 <div className="col-12">
-                  <p className="fw-medium">Attachments</p>
+                  <p className="fw-medium">Attachments &nbsp; : &nbsp;</p>
                 </div>
                 {/* {data.smsPushNotificationAttachments && data.smsPushNotificationAttachments.length > 0 ? (
                     <img
@@ -177,7 +266,6 @@ function SendNotificationView() {
                         </div>
                   )} */}
                 <span className="text-dark">
-                  &nbsp; : &nbsp;
                   <div className="row">
                     {data.smsPushNotificationAttachments?.map(
                       (attachment, index) => (

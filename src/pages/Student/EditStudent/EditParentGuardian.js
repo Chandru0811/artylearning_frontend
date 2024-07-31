@@ -19,7 +19,7 @@ const EditParentGuardian = forwardRef(
     const getData = async () => {
       setLoadIndicators(true);
       try {
-        const response = await api.get(`/getAllStudentDetails/${formData.id}`);
+        const response = await api.get(`/getAllStudentById/${formData.id}`);
         setData(response.data);
         // console.log("Response data", response.data.studentParentsDetails.length)
         if (response.data.studentParentsDetails.length === 0) {

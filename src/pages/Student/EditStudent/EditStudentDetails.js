@@ -152,7 +152,7 @@ const EditStudentDetails = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllStudentDetails/${formData.id}`
+            `/getAllStudentById/${formData.id}`
           );
           const { allowMagazine, allowSocialMedia, ...otherData } =
             response.data;

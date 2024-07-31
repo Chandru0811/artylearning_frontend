@@ -106,7 +106,7 @@ const LoginEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleN
   useEffect(() => {
     const getData = async () => {
       try{
-        const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
+        const response = await api.get(`/getAllUserById/${formData.staff_id}`);
         if (
           response.data.userLoginInfoModels &&
           response.data.userLoginInfoModels.length > 0

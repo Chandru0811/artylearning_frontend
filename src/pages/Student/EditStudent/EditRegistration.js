@@ -162,7 +162,7 @@ const AddEmergencyContact = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllStudentDetails/${formData.id}`
+            `/getAllStudentById/${formData.id}`
           );
           if (
             response.data.studentEmergencyContacts &&

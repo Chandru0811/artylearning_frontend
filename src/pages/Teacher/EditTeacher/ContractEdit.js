@@ -8,7 +8,7 @@ import * as Yup from "yup";
 const validationSchema = Yup.object().shape({
   employer:Yup.string().required("*Employer is required"),
   employee: Yup.string().required("*Employee is required"),
-  uen: Yup.number().typeError("*UEN Must be numbers").required("*UEN is required"),
+  uen: Yup.string().required("*UEN is required"),
   addressOfEmployment:Yup.string().required("*Address is required"),  
   nric: Yup.string().required("*NRIC is required"),
   userContractAddress:Yup.string().required("*Address is required"),
@@ -149,7 +149,7 @@ const ContractEdit = forwardRef(({ formData,setLoadIndicators, setFormData }, re
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
+        const response = await api.get(`/getAllUserById/${formData.staff_id}`);
         if (
           response.data.userContractCreationModels &&
           response.data.userContractCreationModels.length > 0
