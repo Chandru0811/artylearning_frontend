@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import {
   Link,
+  useAsyncError,
   useLocation,
   useNavigate,
-  useSearchParams,
 } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -64,6 +64,7 @@ export default function InvoiceAdd() {
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
+  console.log("Tax Data", taxData);
 
   const fetchTaxData = async () => {
     try {
@@ -193,28 +194,6 @@ export default function InvoiceAdd() {
       toast.error(error);
     }
   };
-  const getcenterRigesterIdData = async (center) => {
-    if (center) {
-      try {
-        const response = await api.get(`/getLatestCenterRegistration/${center}`);
-        console.log("getLatestCenterRegistration:",response.data);
-        formik.setFieldValue("invoiceItems", [
-          {
-            item: "",
-            itemAmount: response.data.amount,
-            taxType: response.data.taxType,
-            gstAmount: "",
-            totalAmount: "",
-          },
-        ]);
-      } catch (error) {
-        console.error("Error fetching Student Data:", error);
-        toast.error("Error fetching Student Data");
-      }
-    }
-  };
-
-
 
   const handleCenterChange = (event) => {
     setCourseData(null);
@@ -225,80 +204,157 @@ export default function InvoiceAdd() {
     fetchCourses(center); // Fetch courses for the selected center
     fetchPackage(center); // Fetch courses for the selected center
     fetchStudent(center);
-    getcenterRigesterIdData(center);
   };
 
-  // const handleSelectChange = (index, value) => {
-  //   // const selectedTax = taxData.find((tax) => tax.id === value);
-  //   const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
-  //   const gstRate = selectedTax ? selectedTax.rate : 0;
-  //   const itemAmount = formik.values.invoiceItems[index]?.itemAmount || 0;
+  const handleStudentChange = async (event) => {
+    const studentID = event.target.value;
+    formik.setFieldValue("student", studentID);
 
-  //   // Calculate GST amount
-  //   const gstAmount = (parseFloat(itemAmount) * parseFloat(gstRate)) / 100;
-  //   const validGstAmount = isNaN(gstAmount) ? 0 : gstAmount;
+    try {
+      const response = await api.get(`/getAllStudentById/${studentID}`);
+      console.log("StudentDetails", response.data);
+      console.log(
+        "Student Centre Id:",
+        response.data.studentCourseDetailModels[0]?.centerId
+      );
+      console.log(
+        "Student Course Id:",
+        response.data.studentCourseDetailModels[0]?.courseId
+      );
+      console.log(
+        "Student Package Id:",
+        response.data.studentCourseDetailModels[0]?.packageName
+      );
 
-  //   // Calculate total amount
-  //   const totalAmount = parseFloat(itemAmount) + validGstAmount;
-  //   const validTotalAmount = isNaN(totalAmount) ? 0 : totalAmount;
+      const centerId = response.data.studentCourseDetailModels[0]?.centerId;
+      const courseId = response.data.studentCourseDetailModels[0]?.courseId;
+      const packageId = response.data.studentCourseDetailModels[0]?.packageName;
 
-  //   // Update rows state
-  //   const updatedRows = [...rows];
-  //   updatedRows[index] = {
-  //     ...updatedRows[index],
-  //     taxType: value,
-  //     gstAmount: gstRate,
-  //     totalAmount: validTotalAmount,
-  //   };
-  //   setRows(updatedRows);
+      if (centerId && courseId && packageId) {
+        try {
+          const response1 = await api.get(
+            `/getLatestCenterRegistrationByCenterId/${centerId}`
+          );
+          const response2 = await api.get(
+            `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
+          );
+          const response3 = await api.get(
+            `/getLatestCourseDepositFeesByCourseId/${courseId}`
+          );
 
-  //   // Update formik values
-  //   formik.setFieldValue(`invoiceItems[${index}].taxType`, value);
-  //   formik.setFieldValue(
-  //     `invoiceItems[${index}].gstAmount`,
-  //     validGstAmount.toFixed(2)
-  //   );
-  //   formik.setFieldValue(
-  //     `invoiceItems[${index}].totalAmount`,
-  //     validTotalAmount.toFixed(2)
-  //   );
-  // };
+          console.log("Response 1:",response1.data);
+          console.log("Response 2:",response2.data);
+          console.log("Response 3:",response3.data);
 
-  // const handleItemAmountChange = (index, value) => {
-  //   const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
-  //   const selectedTax = taxData.find((tax) => tax.taxType === selectedTaxType);
-  //   const gstRate = selectedTax ? selectedTax.rate : 0;
-  //   const itemAmount = parseFloat(value);
+          const selectedTax = taxData.find(
+            (tax) => parseInt(response1.data.taxType) === tax.id
+          );
+          const gstRate = selectedTax ? selectedTax.rate : 0;
 
-  //   // Calculate GST amount
-  //   const gstAmount = (itemAmount * parseFloat(gstRate)) / 100;
-  //   const validGstAmount = isNaN(gstAmount) ? 0 : gstAmount;
+          const amount = response1.data.amount;
+          const gstAmount = (amount * gstRate) / 100;
+          const amountBeforeGST = amount - gstAmount;
 
-  //   // Calculate total amount
-  //   const totalAmount = itemAmount + validGstAmount;
-  //   const validTotalAmount = isNaN(totalAmount) ? 0 : totalAmount;
+          // Response 2
+          const depositAmount = response3.data.depositFees;
+          const gstDepositeAmount = (depositAmount * gstRate) / 100;
+          const depositAmountBeforeGST = depositAmount - gstDepositeAmount;
 
-  //   // Update rows state
-  //   const updatedRows = [...rows];
-  //   updatedRows[index] = {
-  //     ...updatedRows[index],
-  //     itemAmount: itemAmount,
-  //     gstAmount: gstRate,
-  //     totalAmount: validTotalAmount,
-  //   };
-  //   setRows(updatedRows);
 
-  //   // Update formik values
-  //   formik.setFieldValue(`invoiceItems[${index}].itemAmount`, itemAmount);
-  //   formik.setFieldValue(
-  //     `invoiceItems[${index}].gstAmount`,
-  //     validGstAmount.toFixed(2)
-  //   );
-  //   formik.setFieldValue(
-  //     `invoiceItems[${index}].totalAmount`,
-  //     validTotalAmount.toFixed(2)
-  //   );
-  // };
+          formik.setFieldValue("invoiceItems", [
+            {
+              item: "Registration Fee",
+              itemAmount: amountBeforeGST,
+              taxType: response1.data.taxType,
+              gstAmount: gstAmount,
+              totalAmount: amount,
+            },
+            {
+              item: "Course Fee",
+              itemAmount: amountBeforeGST,
+              taxType: response1.data.taxType,
+              gstAmount: gstAmount,
+              totalAmount: amount,
+            },
+            {
+              item: "Course Deposite Fee",
+              itemAmount: amountBeforeGST,
+              taxType: response3.data.taxType,
+              gstAmount: depositAmountBeforeGST,
+              totalAmount: depositAmount,
+            },
+          ]);
+          
+        } catch (error) {
+          console.error("Error fetching 3 APIs:", error);
+        }
+      } else {
+        console.error("Ids not found");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  
+  const handleSelectChange = (index, value) => {
+    const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
+    const gstRate = selectedTax ? selectedTax.rate : 0;
+    const itemAmount =
+      parseFloat(formik.values.invoiceItems[index]?.itemAmount) || 0;
+
+    const gstAmount = (itemAmount * gstRate) / 100;
+    const totalAmount = itemAmount + gstAmount;
+
+    const updatedRows = [...rows];
+    updatedRows[index] = {
+      ...updatedRows[index],
+      taxType: value,
+      gstAmount: gstAmount.toFixed(2),
+      totalAmount: totalAmount.toFixed(2),
+    };
+    setRows(updatedRows);
+
+    formik.setFieldValue(`invoiceItems[${index}].taxType`, value);
+    formik.setFieldValue(
+      `invoiceItems[${index}].gstAmount`,
+      gstAmount.toFixed(2)
+    );
+    formik.setFieldValue(
+      `invoiceItems[${index}].totalAmount`,
+      totalAmount.toFixed(2)
+    );
+  };
+
+  const handleItemAmountChange = (index, value) => {
+    const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
+    const selectedTax = taxData.find(
+      (tax) => tax.id === parseInt(selectedTaxType)
+    );
+    const gstRate = selectedTax ? selectedTax.rate : 0;
+    const itemAmount = parseFloat(value) || 0;
+
+    const gstAmount = (itemAmount * gstRate) / 100;
+    const totalAmount = itemAmount + gstAmount;
+
+    const updatedRows = [...rows];
+    updatedRows[index] = {
+      ...updatedRows[index],
+      itemAmount: value,
+      gstAmount: gstAmount.toFixed(2),
+      totalAmount: totalAmount.toFixed(2),
+    };
+    setRows(updatedRows);
+
+    formik.setFieldValue(`invoiceItems[${index}].itemAmount`, value);
+    formik.setFieldValue(
+      `invoiceItems[${index}].gstAmount`,
+      gstAmount.toFixed(2)
+    );
+    formik.setFieldValue(
+      `invoiceItems[${index}].totalAmount`,
+      totalAmount.toFixed(2)
+    );
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -332,6 +388,20 @@ export default function InvoiceAdd() {
           fetchStudent(studentData.centerId);
           formik.setFieldValue("center", studentData.centerId);
           formik.setFieldValue("invoiceItems", [
+            {
+              item: "",
+              itemAmount: "",
+              taxType: "",
+              gstAmount: "",
+              totalAmount: "",
+            },
+            {
+              item: "",
+              itemAmount: "",
+              taxType: "",
+              gstAmount: "",
+              totalAmount: "",
+            },
             {
               item: "",
               itemAmount: "",
@@ -474,6 +544,7 @@ export default function InvoiceAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
+                  onChange={handleStudentChange}
                 >
                   <option selected></option>
                   {studentData &&
@@ -776,9 +847,9 @@ export default function InvoiceAdd() {
                             type="number"
                             min={0}
                             style={{ width: "80%" }}
-                            // onChange={(e) =>
-                            //   handleItemAmountChange(index, e.target.value)
-                            // }
+                            onChange={(e) =>
+                              handleItemAmountChange(index, e.target.value)
+                            }
                           />
                           {formik.touched.invoiceItems?.[index]?.itemAmount &&
                             formik.errors.invoiceItems?.[index]?.itemAmount && (
@@ -799,9 +870,9 @@ export default function InvoiceAdd() {
                               `invoiceItems[${index}].taxType`
                             )}
                             style={{ width: "100%" }}
-                            // onChange={(e) =>
-                            //   handleSelectChange(index, e.target.value)
-                            // }
+                            onChange={(e) =>
+                              handleSelectChange(index, e.target.value)
+                            }
                           >
                             <option value=""></option>
                             {taxData &&
@@ -827,6 +898,7 @@ export default function InvoiceAdd() {
                             type="text"
                             style={{ width: "80%" }}
                             readOnly
+                            onChange={formik.handleChange}
                           />
                         </td>
                         <td>
@@ -837,6 +909,7 @@ export default function InvoiceAdd() {
                             className="form-control"
                             type="text"
                             style={{ width: "80%" }}
+                            onChange={formik.handleChange}
                             readOnly
                           />
                         </td>
