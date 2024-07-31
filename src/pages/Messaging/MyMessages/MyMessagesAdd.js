@@ -33,8 +33,8 @@ function MyMessagesAdd({ onSuccess }) {
       console.log("object", values);
 
       const formData = new FormData();
-      formData.append("senderName", 'Fom');
-      formData.append("senderId", '4');
+      formData.append("senderName", data.userNames);
+      formData.append("senderId", userId);
       formData.append("senderRole", userName);
       formData.append("messageTo", "PARENT");
       formData.append("recipientId", values.student);
@@ -56,6 +56,7 @@ function MyMessagesAdd({ onSuccess }) {
         if (response.status === 201) {
           toast.success(response.data.message);
           setShow(false)
+          onSuccess();
           formik.resetForm();
         } else {
           toast.error(response.data.message);
