@@ -343,7 +343,12 @@ function Attendances() {
                     >
                       <div className="accordion-body">
                         <div className="d-flex justify-content-end mb-3">
-                          <AddMore />
+                          <AddMore
+                            courseId={attendanceItem.courseId}
+                            userId={attendanceItem.userId}
+                            attendanceDate={selectedDate}
+                            batchId={selectedBatch}
+                          />
                         </div>
                         <div className="table-responsive">
                           <table className="table table-striped ">
@@ -445,7 +450,10 @@ function Attendances() {
                               onClick={() =>
                                 handleSubmit(attendanceIndex, attendanceItem)
                               }
-                              disabled={attendanceData[attendanceIndex].students.length ===0}
+                              disabled={
+                                attendanceData[attendanceIndex].students
+                                  .length === 0
+                              }
                             >
                               Submit
                             </button>

@@ -152,7 +152,7 @@ const Curriculum = () => {
                   <td>{data.description}</td>
                   <td>
                     <td>
-                      {data.status === "Active" ? (
+                      {data.status === "ACTIVE" ? (
                         <span className="badge badges-Green">Active</span>
                       ) : (
                         <span className="badge badges-Red">Inactive</span>
@@ -161,7 +161,11 @@ const Curriculum = () => {
                   </td>
                   <td>
                     {storedScreens?.curriculumUpdate && (
-                      <CurriculumEdit id={data.id} onSuccess={refreshData} />
+                      <CurriculumEdit
+                        id={data.id}
+                        curriculumOutletId={id}
+                        onSuccess={refreshData}
+                      />
                     )}
                     {storedScreens?.curriculumDelete && (
                       <Delete

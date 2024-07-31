@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 
-function CurriculumEdit({ id, onSuccess }) {
+function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
@@ -35,6 +35,7 @@ function CurriculumEdit({ id, onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       // console.log(values);
+      values.curriculumOutletId = curriculumOutletId;
       try {
         const response = await api.put(
           `/updateCourseCurriculumCode/${id}`,
@@ -54,8 +55,7 @@ function CurriculumEdit({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }
-      finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -96,10 +96,11 @@ function CurriculumEdit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("lessonNo")}
-                    class={`form-select  ${formik.touched.lessonNo && formik.errors.lessonNo
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    class={`form-select  ${
+                      formik.touched.lessonNo && formik.errors.lessonNo
+                        ? "is-invalid"
+                        : ""
+                    }`}
                   >
                     <option value="" selected></option>
                     {Array.from({ length: 150 }, (_, index) => (
@@ -121,11 +122,12 @@ function CurriculumEdit({ id, onSuccess }) {
                   <input
                     type="text"
                     {...formik.getFieldProps("curriculumCode")}
-                    className={`form-control  ${formik.touched.curriculumCode &&
+                    className={`form-control  ${
+                      formik.touched.curriculumCode &&
                       formik.errors.curriculumCode
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                   />
                   {formik.touched.curriculumCode &&
                     formik.errors.curriculumCode && (
@@ -141,11 +143,11 @@ function CurriculumEdit({ id, onSuccess }) {
                   <input
                     type="text"
                     {...formik.getFieldProps("curriculumNo")}
-                    className={`form-control  ${formik.touched.curriculumNo &&
-                      formik.errors.curriculumNo
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.curriculumNo && formik.errors.curriculumNo
+                        ? "is-invalid"
+                        : ""
+                    }`}
                   />
                   {formik.touched.curriculumNo &&
                     formik.errors.curriculumNo && (
@@ -155,22 +157,22 @@ function CurriculumEdit({ id, onSuccess }) {
                     )}
                 </div>
 
-
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Status<span className="text-danger">*</span>
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${formik.touched.status && formik.errors.status
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    class={`form-select  ${
+                      formik.touched.status && formik.errors.status
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-label="Default select example"
                   >
                     <option value=""></option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
@@ -185,18 +187,17 @@ function CurriculumEdit({ id, onSuccess }) {
                   <textarea
                     type="text"
                     {...formik.getFieldProps("description")}
-                    className={`form-control  ${formik.touched.description &&
-                      formik.errors.description
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.description && formik.errors.description
+                        ? "is-invalid"
+                        : ""
+                    }`}
                   />
-                  {formik.touched.description &&
-                    formik.errors.description && (
-                      <div className="invalid-feedback">
-                        {formik.errors.description}
-                      </div>
-                    )}
+                  {formik.touched.description && formik.errors.description && (
+                    <div className="invalid-feedback">
+                      {formik.errors.description}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -204,8 +205,7 @@ function CurriculumEdit({ id, onSuccess }) {
               <Button variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit" disabled={loadIndicator}
-              >
+              <Button variant="danger" type="submit" disabled={loadIndicator}>
                 {loadIndicator && (
                   <span
                     className="spinner-border spinner-border-sm me-2"

@@ -37,13 +37,13 @@ function CurriculumAdd({ onSuccess, curriculumOutletId }) {
       setLoadIndicator(true);
       // console.log(values);
       const payload = {
-        courseId: curriculumOutletId,
+        curriculumOutletId: curriculumOutletId,
         curriculumCode: values.curriculumCode,
         lessonNo: values.lessonNo,
         status: values.status,
         curriculumNo: values.curriculumNo,
         description: values.description,
-      }
+      };
       try {
         const response = await api.post(`/createCourseCurriculumCode/${curriculumOutletId}`, payload, {
           headers: {
@@ -163,8 +163,8 @@ function CurriculumAdd({ onSuccess, curriculumOutletId }) {
                     aria-label="Default select example"
                   >
                     <option selected></option>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
