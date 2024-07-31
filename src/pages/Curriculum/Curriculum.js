@@ -6,13 +6,15 @@ import CurriculumAdd from "./CurriculumAdd";
 import CurriculumEdit from "./CurriculumEdit";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import { toast } from "react-toastify";
 
 const Curriculum = () => {
   const { id } = useParams();
-  // console.log("ID:", id);
+  const [searchParams] = useSearchParams();
+  const courseId = searchParams.get("courseId");
+  // console.log("ID:", courseId);
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,18 +33,17 @@ const Curriculum = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getCourseCurriculumCodeCurriculumOutLetId/${id}`);
+        const response = await api.get(
+          `/getCourseCurriculumCodeCurriculumOutLetId/${id}`
+        );
         if (response.status === 200) {
           setDatas(response.data);
-
         }
       } catch (error) {
         console.error("Error fetching data ", error);
       } finally {
         setLoading(false);
       }
-
-
     };
     getData();
     fetchData();
@@ -93,7 +94,9 @@ const Curriculum = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get(`/getCourseCurriculumCodeCurriculumOutLetId/${id}`);
+      const response = await api.get(
+        `/getCourseCurriculumCodeCurriculumOutLetId/${id}`
+      );
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -117,7 +120,11 @@ const Curriculum = () => {
       ) : (
         <>
           {storedScreens?.curriculumCreate && (
-            <CurriculumAdd onSuccess={refreshData} curriculumOutletId={id} />
+            <CurriculumAdd
+              onSuccess={refreshData}
+              curriculumOutletId={id}
+              courseId={courseId}
+            />
           )}
           <table ref={tableRef} className="display">
             <thead>
