@@ -91,7 +91,7 @@ const StaffAccountAdd = forwardRef(
         };
         try {
           const response = await api.post(
-            `/createUserContactInfo/${formData.user_id}`,
+            `/createUserAccountInfos`,
             updatedData,
             {
               headers: {
@@ -99,7 +99,7 @@ const StaffAccountAdd = forwardRef(
               },
             }
           );
-          if (response.status === 201) {
+          if (response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...values }));
             handleNext();

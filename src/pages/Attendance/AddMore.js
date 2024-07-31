@@ -8,9 +8,17 @@ import { MdAdd } from "react-icons/md";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 
-function AddMore({ courseId, attendanceDate, batchId, userId }) {
+function AddMore({
+  courseId,
+  attendanceDate,
+  batchId,
+  userId,
+  feedbackData,
+  onSuccess,
+}) {
   const [show, setShow] = useState(false);
-  console.log("Selected CourseId", courseId);
+  const [lessonData, setLessonData] = useState([]);
+  // console.log("Selected CourseId", courseId);
 
   const validationSchema = Yup.object().shape({
     items: Yup.array().of(
@@ -30,6 +38,7 @@ function AddMore({ courseId, attendanceDate, batchId, userId }) {
           lessonNo: "",
           curriculumCode: "",
           nextClassAdvice: "",
+          curriculumId: "",
           pace: "",
         },
       ],
@@ -38,9 +47,7 @@ function AddMore({ courseId, attendanceDate, batchId, userId }) {
     onSubmit: async (values) => {
       try {
         const additionalValues = {
-          remark: "Test",
           attendanceDate: attendanceDate,
-          curriculumId: 1,
           batchId: batchId,
           userId: userId,
         };
@@ -50,8 +57,10 @@ function AddMore({ courseId, attendanceDate, batchId, userId }) {
           ...additionalValues,
         }));
         const response = await api.post(`createFeedbackAttendances`, payload);
-        if (response.status === 200) {
+        if (response.status === 201) {
+          onSuccess();
           toast.success(response.data.message);
+          
           handleClose();
         } else {
           toast.error(response.data.message);
@@ -63,9 +72,36 @@ function AddMore({ courseId, attendanceDate, batchId, userId }) {
   });
 
   const getLessonData = async () => {
-    const response = await api.get(`active/${courseId}`);
-    console.log("Lesson Response Data", response.data);
+    try {
+      const response = await api.get(`active/${courseId}`);
+      setLessonData(response.data);
+    } catch (error) {
+      toast.error("Error Fetching Data ", error?.response?.data?.message);
+    }
   };
+
+  useEffect(() => {
+    const fetchCurriculumCodes = async () => {
+      const promises = formik.values.items.map(async (item, index) => {
+        if (item.lessonNo !== "") {
+          try {
+            const response = await api.get(`curriculumCode/${item.lessonNo}`);
+            console.log("Lesson Response is ", response.data);
+            formik.setFieldValue(
+              `items[${index}].curriculumCode`,
+              response.data.curriculumCode
+            );
+            formik.setFieldValue(`items[${index}].curriculumId`, item.lessonNo);
+          } catch (error) {
+            console.log("Error Fetching Data ", error?.response?.data?.message);
+          }
+        }
+      });
+      await Promise.all(promises);
+    };
+    fetchCurriculumCodes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.items]);
 
   const handleClose = () => {
     formik.resetForm();
@@ -73,9 +109,13 @@ function AddMore({ courseId, attendanceDate, batchId, userId }) {
   };
   const handleShow = () => {
     getLessonData();
+    if (feedbackData) {
+      formik.setFieldValue("items", feedbackData);
+    }
     setShow(true);
   };
 
+  console.log("Formik Values is ", formik.values);
   return (
     <>
       <button
@@ -127,12 +167,13 @@ function AddMore({ courseId, attendanceDate, batchId, userId }) {
                         }`}
                         aria-label="Default select example"
                       >
-                        <option value=""></option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                        <option></option>
+                        {lessonData &&
+                          lessonData.map((lesson) => (
+                            <option key={lesson.id} value={lesson.id}>
+                              {lesson.lessonNo}
+                            </option>
+                          ))}
                       </select>
                       {formik.touched.items?.[index]?.lessonNo &&
                       formik.errors.items?.[index]?.lessonNo ? (

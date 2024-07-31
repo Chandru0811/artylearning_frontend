@@ -1109,8 +1109,8 @@ function StudentView() {
                                   {/* {std.packageName || "--"} */}
                                   {packageData &&
                                     packageData.map((packages) =>
-                                      parseInt(data.packageId) === packages.id
-                                        ? packages.packageName || "--"
+                                      parseInt(std.packageName) === packages.id
+                                        ? packages.packageNames || "--"
                                         : ""
                                     )}
                                 </p>
@@ -1693,8 +1693,8 @@ function StudentView() {
                               {/* {std.packageName || "--"} */}
                               {packageData &&
                                 packageData.map((packages) =>
-                                  parseInt(data.packageId) === packages.id
-                                    ? packages.packageName || "--"
+                                  parseInt(std.packageName) === packages.id
+                                    ? packages.packageNames || "--"
                                     : ""
                                 )}
                             </p>

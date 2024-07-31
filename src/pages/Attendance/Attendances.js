@@ -344,10 +344,12 @@ function Attendances() {
                       <div className="accordion-body">
                         <div className="d-flex justify-content-end mb-3">
                           <AddMore
+                            onSuccess={fetchData}
                             courseId={attendanceItem.courseId}
                             userId={attendanceItem.userId}
                             attendanceDate={selectedDate}
                             batchId={selectedBatch}
+                            feedbackData={attendanceItem.feedbacks}
                           />
                         </div>
                         <div className="table-responsive">

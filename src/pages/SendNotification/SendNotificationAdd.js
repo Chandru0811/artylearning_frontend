@@ -18,7 +18,7 @@ const validationSchema = Yup.object({
   courseIds: Yup.array().min(1, "At least one course must be selected"),
   classIds: Yup.array().min(1, "At least one class must be selected"),
   days: Yup.string().required("*Day is required"),
-  attachments: Yup.array().min(1, "At least one attachment must be selected"),
+  // attachments: Yup.array().min(1, "At least one attachment must be selected"),
 });
 
 function SendNotificationAdd() {

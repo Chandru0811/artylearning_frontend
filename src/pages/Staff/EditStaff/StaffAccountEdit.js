@@ -93,7 +93,7 @@ const StaffAccountEdit = forwardRef(
         try {
           if (values.accountId !== null) {
             const response = await api.put(
-              `/updateUserAccountInfo/${values.accountId}`,
+              `/updateUserAccountInfos/${values.accountId}`,
               updatedData,
               {
                 headers: {
@@ -117,7 +117,7 @@ const StaffAccountEdit = forwardRef(
             };
             values.userId = formData.staff_id;
             const response = await api.post(
-              `/createUserAccountInfo`,
+              `/createUserAccountInfos`,
               updatedData,
               {
                 headers: {

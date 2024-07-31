@@ -25,6 +25,7 @@ const validationSchema = Yup.object().shape({
 const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
 
   const [centerData, setCenterData] = useState([]);
+  console.log("data",centerData)
   const [shgData, setShgData] = useState([]);
   const [selectedCenters, setSelectedCenters] = useState([]);
   const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
@@ -172,7 +173,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
             accountId: response.data.userAccountInfo[0].id,
             startDate: data.startDate.substring(0, 10),
             approvelContentRequired: data.approvelContentRequired === true ? "Yes" : "No",
-            centerIds: response.data.centers
+            centerIds: response.data.centers[0]?.id
           });
         } else {
           formik.setValues({
@@ -187,7 +188,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
             endDate: "",
             approvelContentRequired: "",
             workingDays: [],
-            centerIds: "",
+            centerIds: [],
           });
           // console.log("Account ID:", formik.values.accountId);
         }
@@ -590,20 +591,22 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
             </div>
           </div> */}
 
-          <div className="col-md-6 col-12 mb-4">
+          <div className="col-md-6 col-12  mb-2 mt-3">
             <label className="form-label">
               Centre<span className="text-danger">*</span>
             </label>
-            <MultiSelect
-              options={centerOptions}
-              value={selectedCenters}
-              onChange={(selected) => {
-                setSelectedCenters(selected);
-                formik.setFieldValue('centerIds', selected.map(option => option.value));
-              }}
-              labelledBy="Select Centers"
-              className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds ? 'is-invalid' : ''}`}
-            />
+            {centerOptions.length > 0 && (
+              <MultiSelect
+                options={centerOptions}
+                value={selectedCenters}
+                onChange={(selected) => {
+                  setSelectedCenters(selected);
+                  formik.setFieldValue('centerIds', selected.map(option => option.value));
+                }}
+                labelledBy="Select Centers"
+                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds ? 'is-invalid' : ''}`}
+              />
+            )}
             {formik.touched.centerIds && formik.errors.centerIds && (
               <div className="invalid-feedback">
                 {formik.errors.centerIds}
