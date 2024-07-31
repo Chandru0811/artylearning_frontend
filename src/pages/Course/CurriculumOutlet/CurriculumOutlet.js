@@ -149,7 +149,7 @@ function CurriculumOutlet() {
                                         </OverlayTrigger>
                                     )} */}
 
-                  <Link to={`/curriculumoutlet/curriculum/${data.id}`}>
+                  <Link to={`/curriculumoutlet/curriculum/${data.id}?courseId=${id}`}>
                     <button className="btn btn-sm">
                       <FaFileInvoice />
                     </button>

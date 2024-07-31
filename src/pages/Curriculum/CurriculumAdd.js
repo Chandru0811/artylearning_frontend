@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 
-function CurriculumAdd({ onSuccess, curriculumOutletId }) {
+function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
@@ -43,6 +43,7 @@ function CurriculumAdd({ onSuccess, curriculumOutletId }) {
         status: values.status,
         curriculumNo: values.curriculumNo,
         description: values.description,
+        courseId: courseId,
       };
       try {
         const response = await api.post(`/createCourseCurriculumCode/${curriculumOutletId}`, payload, {
