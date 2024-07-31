@@ -199,7 +199,7 @@ function MyMessagesAdd({ onSuccess }) {
                     <input
                       className="form-control"
                       type="file"
-                      accept="image/*, video/*"
+                      accept="*"
                       onChange={(event) => {
                         formik.setFieldValue(
                           "files",

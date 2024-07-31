@@ -540,50 +540,27 @@
   margin-bottom: 10px;
 }
 
-/* .chat-section .message-bubble {
-   max-width: fit-content !important;
-  padding: 5px;
-  border-radius: 10px;
-  background-color: #fff;
+.chat-section .message {
+  width: 75%;
 }
-
-.chat-section .message.right .message-bubble {
-  max-width: fit-content !important;
-  padding: 5px;
-  border-radius: 10px;
-  margin-left:auto;
-  background-color: #f7e8db;
-}
-
-.chat-section .message-bubble img {
-  max-width: 75px;
-  height: auto;
-  display: block;
-  margin: 5px 0; 
-} */
 .chat-section .message-bubble {
-  max-width: fit-content !important;
+  width: fit-content !important;
   padding: 5px;
   border-radius: 10px;
   background-color: #fff;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px; /* Optional: Adjust spacing between images */
+}
+
+.chat-section .message.right {
+  width: 75%;
+  margin-left: auto;
 }
 
 .chat-section .message.right .message-bubble {
-  max-width: fit-content !important;
+  width: fit-content !important;
   padding: 5px;
   border-radius: 10px;
   margin-left: auto;
   background-color: #f7e8db;
-}
-
-.chat-section .message-bubble img {
-  max-width: 75px; /* Adjust the max-width as needed */
-  height: auto;
-  display: block;
-  margin: 5px 0; /* Optional: adjust the margin for better spacing */
 }
 
 .sticky-input-container {
@@ -595,6 +572,7 @@
   padding: 10px 0;
   z-index: 1000; /* Ensure it stays above other content */
 }
+
 
 /* .chat-section .send-icon {
   background-color: #e60504;
@@ -623,22 +601,20 @@
     width: 40px;
     height: 40px;
   }
+}*/
+
+@media (min-width: 200px) and (max-width: 1200px) {
+  .sticky-input-container {
+    min-width: 93%;
+    top: auto;
+    position: fixed !important;
+    bottom: 0 !important;
+    background-color: #fff;
+    padding: 10px 0;
+    z-index: 1000; /* Ensure it stays above other content */
+  }
 }
 
-@media (max-width: 626px) {
-  .chat-section .send-icon {
-    background-color: #e60504;
-    color: white;
-    border-radius: 50%;
-    font-size: 64px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 40px;
-  }
-} */
 
 .chat-section .input-group {
   border-radius: 5px;

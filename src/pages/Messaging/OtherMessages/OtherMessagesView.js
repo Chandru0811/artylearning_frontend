@@ -1,78 +1,161 @@
-import React from "react";
-import { IoMdSend } from "react-icons/io";
-import Student from "../../../assets/images/Documentimg_6.png";
-import Pdf from "../../../assets/images/Pdf_Image.png";
-import { CgAttachment } from "react-icons/cg"; // Adjust the import path as needed
-// import "./custom.css";  // Import the custom CSS file
+import React, { useEffect, useRef, useState } from "react";
+import api from "../../../config/URL";
+import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
+import { LuDownload } from "react-icons/lu";
+import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
-function MyMessagesView() {
+function OtherMessagesView() {
+  const messagesContainerRef = useRef(null);
+  const [messages, setMessages] = useState([]);
+  const [data, setData] = useState(null);
+  const userId = sessionStorage.getItem("userId");
+  const { id } = useParams();
+  console.log("data", data);
+
+  useEffect(() => {
+    getData();
+  }, [userId, id]);
+
+  const getData = async () => {
+    try {
+      const response = await api.get(
+        `getSingleChatConversation?transcriptOne=${userId}&transcriptTwo=${id}`
+      );
+      setData(response.data);
+      const messages = response.data;
+      console.log("messages", messages);
+      const combinedMessages = messages.map((msg) => ({
+        content: msg.message,
+        isSender: msg.senderRole == "SMS_TEACHER",
+        attachments: msg.attachments,
+      }));
+
+      setMessages(combinedMessages);
+      console.log("Messages:", combinedMessages);
+    } catch (error) {
+      toast.error(`Error Fetching Data: ${error.message}`);
+    }
+  };
+  const renderAttachment = (attachment, index) => {
+    if (!attachment) {
+      return <span>No attachment available</span>;
+    }
+
+    const fileUrl = attachment.attachment;
+    const extension = fileUrl.split(".").pop().toLowerCase();
+
+    if (["jpg", "jpeg", "png", "gif", "bmp"].includes(extension)) {
+      return (
+        <div key={index} className="message-bubble w-75">
+          <div style={{ textAlign: "end" }}>
+            <a href={fileUrl} download>
+              <img
+                src={fileUrl}
+                alt=""
+                style={{ width: "100%", maxHeight: "170px", cursor: "pointer" }}
+                className="img-fluid"
+              />
+            </a>
+            <a href={fileUrl} download>
+              <button className="btn ">
+                <LuDownload size={24} color="#e60504" />
+              </button>
+            </a>
+          </div>
+        </div>
+      );
+    } else if (extension === "pdf") {
+      return (
+        <div key={index} className="message-bubble w-75">
+          <div style={{ textAlign: "end" }}>
+            <a href={fileUrl} download>
+              <img
+                src={document}
+                alt=""
+                style={{ width: "100%", maxHeight: "170px", cursor: "pointer" }}
+                className="img-fluid"
+              />
+            </a>
+            <a href={fileUrl} download style={{ textAlign: "end" }}>
+              <button className="btn ">
+                <LuDownload size={24} color="#e60504" />
+              </button>
+            </a>
+          </div>
+        </div>
+      );
+    } else if (["mp4", "mov", "avi", "mkv"].includes(extension)) {
+      return (
+        <div key={index} className="message-bubble w-75">
+          <div style={{ textAlign: "end" }}>
+            <video width="100%" height="auto" controls>
+              <source src={fileUrl} type={`video/${extension}`} />
+              Your browser does not support the video tag.
+            </video>
+            <div>
+              <a href={fileUrl} download>
+                <button className="btn">
+                  <LuDownload size={24} color="#e60504" />
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return <></>;
+    }
+  };
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <section className="chat-section">
       <div className="container-fluid">
         <div className="row message-list">
           <div className="col-12">
             {/* Message List */}
-            <div className="messages">
-              <div className="message">
-                <div className="message-bubble">
-                  Hello! <br />
-                  <img
-                    className="img-fluid mt-4"
-                    src={Student}
-                    alt="file"
-                  ></img>
+            <div
+              className="messages mb-5"
+              ref={messagesContainerRef}
+              style={{
+                maxHeight: "450px",
+                overflowY: "auto",
+                overflowX: "hidden",
+              }}
+            >
+              {messages.map((msg, index) => (
+                <div key={index}>
+                  <div className={`message ${msg.isSender ? "right" : ""}`}>
+                    <div className="message-bubble my-2 w-75">
+                      {msg.content}
+                    </div>
+                    {msg.attachments.length > 0 ? (
+                      msg.attachments.map((attachment, attIndex) => (
+                        <div
+                          key={attIndex}
+                          className="message-bubble w-75 mt-2"
+                        >
+                          {renderAttachment(attachment, attIndex)}
+                        </div>
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className="message right">
-                <div className="message-bubble">
-                  Hi there! <br />
-                  <img
-                    className="img-fluid mt-4"
-                    style={{ width: "200px", height: "200px" }}
-                    src={Pdf}
-                    alt="file"
-                  ></img>
-                </div>
-              </div>
-              {/* Add more messages here */}
+              ))}
             </div>
           </div>
         </div>
-        <div className="row mt-3">
-          <div className="col-md-11 col-11 px-2">
-            <div className="mb-3" style={{ marginTop: "20px" }}>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Type a message"
-                  aria-label="Recipient's username"
-                  aria-describedby="basic-addon2"
-                />
-                <span className="input-group-text" id="basic-addon2">
-                <CgAttachment />
-                </span>
-              </div>
-              {/* <input
-                type="text"
-                className="form-control"
-                id="exampleFormControlInput1"
-                placeholder="Type a message"
-                style={{ borderRadius: "20px" }}
-              /> */}
-            </div>
-          </div>
-          <div
-            className="col-md-1 col-1 d-flex align-items-start justify-content-start"
-            style={{ marginTop: "18px" }}
-          >
-            <IoMdSend className="send-icon" />
-          </div>
-        </div>
-        {/* <Footer /> */}
       </div>
     </section>
   );
 }
 
-export default MyMessagesView;
+export default OtherMessagesView;

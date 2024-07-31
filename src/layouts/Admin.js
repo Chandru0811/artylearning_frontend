@@ -605,7 +605,7 @@ function Admin({ handleLogout }) {
 
               {/* Other Messaging */}
               <Route path="/othermessaging" element={<OtherMessages />} />
-              <Route path="/othermessaging/view" element={<OtherMessagesView />} />
+              <Route path="/othermessaging/view/:id" element={<OtherMessagesView />} />
             </Routes>
           </div>
           <Footer />

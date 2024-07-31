@@ -5,9 +5,12 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
+import { LuDownload } from "react-icons/lu";
+import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
 function MyMessagesView() {
   const fileInputRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -23,7 +26,7 @@ function MyMessagesView() {
       files: [],
     },
     onSubmit: async (values) => {
-      if (values.message || values.files.length > 1) {
+      if (values.message || values.files.length > 0) {
         setLoadIndicator(true);
         const formData = new FormData();
 
@@ -49,7 +52,7 @@ function MyMessagesView() {
             },
           });
           if (response.status === 201) {
-            fileCount("");
+            setFileCount("");
             formik.resetForm();
             getData();
           } else {
@@ -88,7 +91,7 @@ function MyMessagesView() {
       console.log("messages", messages);
       const combinedMessages = messages.map((msg) => ({
         content: msg.message,
-        isSender: msg.senderId === 211,
+        isSender: msg.senderId == userId,
         attachments: msg.attachments,
       }));
 
@@ -98,6 +101,82 @@ function MyMessagesView() {
       toast.error(`Error Fetching Data: ${error.message}`);
     }
   };
+  const renderAttachment = (attachment, index) => {
+    if (!attachment) {
+      return <span>No attachment available</span>;
+    }
+
+    const fileUrl = attachment.attachment;
+    const extension = fileUrl.split(".").pop().toLowerCase();
+
+    if (["jpg", "jpeg", "png", "gif", "bmp"].includes(extension)) {
+      return (
+        <div key={index} className="message-bubble w-75">
+          <div style={{ textAlign: "end" }}>
+            <a href={fileUrl} download>
+              <img
+                src={fileUrl}
+                alt=""
+                style={{ width: "100%", maxHeight: "170px", cursor: "pointer" }}
+                className="img-fluid"
+              />
+            </a>
+            <a href={fileUrl} download>
+              <button className="btn ">
+                <LuDownload color="#e60504" />
+              </button>
+            </a>
+          </div>
+        </div>
+      );
+    } else if (extension === "pdf") {
+      return (
+        <div key={index} className="message-bubble w-75">
+          <div style={{ textAlign: "end" }}>
+            <a href={fileUrl} download>
+              <img
+                src={document}
+                alt=""
+                style={{ width: "100%", maxHeight: "170px", cursor: "pointer" }}
+                className="img-fluid "
+              />
+            </a>
+            <a href={fileUrl} download>
+              <button className="btn ">
+                <LuDownload size={18} color="#e60504" />
+              </button>
+            </a>
+          </div>
+        </div>
+      );
+    } else if (["mp4", "mov", "avi", "mkv"].includes(extension)) {
+      return (
+        <div key={index} className="message-bubble w-75">
+          <div style={{ textAlign: "end" }}>
+            <video width="100%" height="170px" controls>
+              <source src={fileUrl} type={`video/${extension}`} />
+              Your browser does not support the video tag.
+            </video>
+            <div>
+              <a href={fileUrl} download>
+                <button className="btn">
+                  <LuDownload size={18} color="#e60504" />
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return <></>;
+    }
+  };
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
     <section className="chat-section">
@@ -105,7 +184,15 @@ function MyMessagesView() {
         <div className="row message-list">
           <div className="col-12">
             {/* Message List */}
-            <div className="messages mb-5">
+            <div
+              className="messages mb-5"
+              ref={messagesContainerRef}
+              style={{
+                maxHeight: "450px",
+                overflowY: "auto",
+                overflowX: "hidden",
+              }}
+            >
               {messages.map((msg, index) => (
                 <div key={index}>
                   <div className={`message ${msg.isSender ? "right" : ""}`}>
@@ -113,17 +200,14 @@ function MyMessagesView() {
                       {msg.content}
                     </div>
                     {msg.attachments.length > 0 ? (
-                      <div className="message-bubble w-75">
-                        {msg.attachments.map((attachment, attIndex) => (
-                          <>
-                            <img
-                              key={attIndex}
-                              src={attachment.attachment}
-                              alt=""
-                            />
-                          </>
-                        ))}
-                      </div>
+                      msg.attachments.map((attachment, attIndex) => (
+                        <div
+                          key={attIndex}
+                          className="message-bubble w-75 mt-2"
+                        >
+                          {renderAttachment(attachment, attIndex)}
+                        </div>
+                      ))
                     ) : (
                       <></>
                     )}
@@ -178,7 +262,7 @@ function MyMessagesView() {
                     ref={fileInputRef}
                     style={{ display: "none" }}
                     onChange={handleFileChange}
-                    accept="image/*, video/*"
+                    accept="*"
                     multiple
                   />
                 </div>
