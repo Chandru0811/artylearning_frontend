@@ -41,7 +41,7 @@ function StudentView() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllStudentDetails/${id}`);
+        const response = await api.get(`/getAllStudentById/${id}`);
         // console.log("Api data:", response.data);
         setData(response.data);
         console.log("StudentDetails", response.data);

@@ -13,7 +13,7 @@ function TeacherView() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllUsersById/${id}`);
+        const response = await api.get(`/getAllUserById/${id}`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

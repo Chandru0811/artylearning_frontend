@@ -231,7 +231,7 @@ function CenterView() {
                   <p className="fw-medium">Invoice Notes</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.invoiceNotes}</p>
+                  <p className="text-muted text-sm">: {data.invoiceNotes || " "}</p>
                 </div>
               </div>
             </div>
@@ -266,9 +266,6 @@ function CenterView() {
                       S.No
                     </th>
                     <th scope="col" className="fw-medium">
-                      Registration Date
-                    </th>
-                    <th scope="col" className="fw-medium">
                       Effective Date
                     </th>
                     <th scope="col" className="fw-medium">
@@ -284,9 +281,6 @@ function CenterView() {
                     data.centerRegistrations.map((registration, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>
-                          {registration.registrationDate?.substring(0, 10)}
-                        </td>
                         <td>{registration.effectiveDate?.substring(0, 10)}</td>
                         <td>{registration.amount}</td>
                         <td>{registration.taxType}</td>

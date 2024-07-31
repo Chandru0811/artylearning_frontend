@@ -138,7 +138,7 @@ const EditTermsAndCondition = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllStudentDetails/${formData.id}`
+            `/getAllStudentById/${formData.id}`
           );
           console.log("Response is ", response.data);
           if (

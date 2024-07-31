@@ -127,7 +127,7 @@ const SalaryEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handle
   useEffect(() => {
     const getData = async () => {
       try{
-        const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
+        const response = await api.get(`/getAllUserById/${formData.staff_id}`);
         if (
           response.data.userSalaryCreationModels &&
           response.data.userSalaryCreationModels.length > 0

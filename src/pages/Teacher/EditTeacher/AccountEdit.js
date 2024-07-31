@@ -160,7 +160,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllUsersById/${formData.staff_id}`);
+        const response = await api.get(`/getAllUserById/${formData.staff_id}`);
         if (
           response.data.userAccountInfo &&
           response.data.userAccountInfo.length > 0

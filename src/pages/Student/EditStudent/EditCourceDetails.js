@@ -84,7 +84,7 @@ const EditCourseDetail = forwardRef(
 
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllStudentDetails/${formData.id}`);
+        const response = await api.get(`/getAllStudentById/${formData.id}`);
         console.log(response.data)
         if (
           response.data.studentCourseDetailModels &&

@@ -81,7 +81,7 @@ function SendNotificationEdit() {
       formData.append("attachments", values.attachments);
       try {
         const response = await api.put(
-          `/updateSmsPushNotifications`,
+          `/updateSmsPushNotifications/${id}`,
           formData,
         );
         if (response.status === 200) {
@@ -103,24 +103,7 @@ function SendNotificationEdit() {
     },
   });
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllSmsPushNotificationsById/${id}`);
-  //       formik.setValues({
-  //         ...response.data,
-  //         days:response.data.day,
-  //         centerIds:response.data.centers,
-  //         courseIds:response.data.courses,
-  //         classIds:response.data.classes
-  //       });
-  //     } catch (error) {
-  //       toast.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
-
+  
   useEffect(() => {
     const getData = async () => {
       try {
@@ -128,26 +111,7 @@ function SendNotificationEdit() {
         const announcementData = response.data;
 
         console.log('announcement Data is ', announcementData)
-
-        // // Prepopulate the MultiSelect fields
-        // const selectedCenters = centers.map(center => ({ label: center.centerName, value: center.id }));
-        // const selectedCourses = courses.map(course => ({ label: course.courseName, value: course.id }));
-        // const selectedClasses = classes.map(classId => {
-        //   const classObj = classData.find(cls => cls.classId === classId);
-        //   return classObj ? { label: classObj.className, value: classObj.classId } : null;
-        // }).filter(item => item !== null);
-
-        // setSelectedCenters(selectedCenters);
-        // setSelectedCourses(selectedCourses);
-        // setSelectedClasses(selectedClasses);
-
-        // formik.setValues({
-        //   ...rest,
-        //   days: rest.day,
-        //   centerIds: selectedCenters.map(option => option.value),
-        //   courseIds: selectedCourses.map(option => option.value),
-        //   classIds: selectedClasses.map(option => option.value),
-        // });
+        formik.setValues(announcementData);
       } catch (error) {
         toast.error("Error fetching data:", error);
       }
@@ -155,6 +119,39 @@ function SendNotificationEdit() {
     getData();
   }, []); // Ensure that classData is available before mapping classes
 
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await api.get(`/getAllSmsPushNotificationsById/${id}`);
+  //       const announcementData = response.data;
+
+  //       // Transform the data for MultiSelect components
+  //       const transformedCenterIds = announcementData.centers.map(center => ({ label: center.centerName, value: center.id }));
+  //       const transformedCourseIds = announcementData.courses.map(course => ({ label: course.courseName, value: course.id }));
+  //       const transformedClassIds = announcementData.classes.map(classes => ({ label: classes.className, value: classes.id }));
+
+  //       // Set the form values
+  //       formik.setValues({
+  //         recipient: announcementData.recipient,
+  //         messageTitle: announcementData.messageTitle,
+  //         centerIds: transformedCenterIds.map(option => option.value),
+  //         courseIds: transformedCourseIds.map(option => option.value),
+  //         classIds: transformedClassIds.map(option => option.value),
+  //         days: announcementData.days,
+  //         messageDescription: announcementData.messageDescription,
+  //         attachments: announcementData.smsPushNotificationAttachments[0]?.attachment || "",
+  //       });
+
+  //       // Set the selected options for MultiSelect components
+  //       setSelectedCenters(transformedCenterIds);
+  //       setSelectedCourses(transformedCourseIds);
+  //       setSelectedClasses(transformedClassIds);
+  //     } catch (error) {
+  //       toast.error("Error fetching data:", error.message);
+  //     }
+  //   };
+  //   getData();
+  // }, []); 
   
   return (
     <div className="container">

@@ -11,12 +11,13 @@ const MyMessages = () => {
   const tableRef = useRef(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
+  const id = sessionStorage.getItem("userId");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllMessages");
+        const response = await api.get(`/getAllMessagesByTeacherId/${id}`);
         setDatas(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -57,7 +58,7 @@ const MyMessages = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllMessages");
+      const response = await api.get(`/getAllMessagesByTeacherId/${id}`);
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -70,7 +71,7 @@ const MyMessages = () => {
     <div>
       <div className="container my-3">
         <div className="my-3 d-flex justify-content-end">
-          {storedScreens?.staffCreate && <MyMessagesAdd />}
+          {storedScreens?.staffCreate && <MyMessagesAdd onSuccess={refreshData}/>}
         </div>
         <table ref={tableRef} className="display">
           <thead>
@@ -94,7 +95,7 @@ const MyMessages = () => {
                 <td>
                   <div className="d-flex">
                     {/* {storedScreens?.messagingRead && ( */}
-                    <Link to={`/messaging/view/${data.id}`}>
+                    <Link to={`/messaging/view/${data.receiverId}`}>
                       <button className="btn btn-sm">
                         <FaEye />
                       </button>

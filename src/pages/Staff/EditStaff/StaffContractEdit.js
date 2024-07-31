@@ -134,7 +134,7 @@ const StaffContractEdit = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(
-            `/getAllUsersById/${formData.staff_id}`
+            `/getAllUserById/${formData.staff_id}`
           );
           if (
             response.data.userContractCreationModels &&
