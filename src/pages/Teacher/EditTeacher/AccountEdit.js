@@ -55,31 +55,6 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
     },
     validationSchema: validationSchema,
 
-    // onSubmit: async (values) => {
-    //   values.approvelContentRequired = values.approvelContentRequired === "Yes";
-
-    //   try {
-    //     const response = await api.put(
-    //       `/updateUserAccountInfo/${values.accountId}`,
-    //       values,
-    //       {
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     );
-    //     if (response.status === 200) {
-    //       toast.success(response.data.message);
-    //       setFormData((prv) => ({ ...prv, ...values }));
-    //       handleNext();
-    //     } else {
-    //       toast.error(response.data.message);
-    //     }
-    //   } catch (error) {
-    //     toast.error(error);
-    //   }
-    // },
-
     onSubmit: async (values) => {
       setLoadIndicators(true);
       // console.log("Api Data:", values);
@@ -173,8 +148,11 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
             accountId: response.data.userAccountInfo[0].id,
             startDate: data.startDate.substring(0, 10),
             approvelContentRequired: data.approvelContentRequired === true ? "Yes" : "No",
-            centerIds: response.data.centers[0]?.id
           });
+          const centers = response.data.userAccountInfo[0].centers
+          const selectedCenterIds = centers.map(center => center.id);
+          formik.setFieldValue("centerIds", selectedCenterIds);
+          setSelectedCenters(centers.map(center => ({ label: center.centerName, value: center.id })));
         } else {
           formik.setValues({
             accountId: null,
