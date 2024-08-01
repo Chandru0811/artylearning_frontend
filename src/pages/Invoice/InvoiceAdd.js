@@ -55,7 +55,7 @@ export default function InvoiceAdd() {
   const searchParams = new URLSearchParams(location.search);
   const studentID = searchParams.get("studentID");
 
-  console.log("Stdent ID:", studentID);
+  // console.log("Stdent ID:", studentID);
 
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
@@ -207,25 +207,10 @@ export default function InvoiceAdd() {
   };
 
   const handleStudentChange = async (event) => {
-    const studentID = event.target.value;
-    formik.setFieldValue("student", studentID);
+    formik.setFieldValue("student", event);
 
     try {
       const response = await api.get(`/getAllStudentById/${studentID}`);
-      console.log("StudentDetails", response.data);
-      console.log(
-        "Student Centre Id:",
-        response.data.studentCourseDetailModels[0]?.centerId
-      );
-      console.log(
-        "Student Course Id:",
-        response.data.studentCourseDetailModels[0]?.courseId
-      );
-      console.log(
-        "Student Package Id:",
-        response.data.studentCourseDetailModels[0]?.packageName
-      );
-
       const centerId = response.data.studentCourseDetailModels[0]?.centerId;
       const courseId = response.data.studentCourseDetailModels[0]?.courseId;
       const packageId = response.data.studentCourseDetailModels[0]?.packageName;
@@ -241,10 +226,6 @@ export default function InvoiceAdd() {
           const response3 = await api.get(
             `/getLatestCourseDepositFeesByCourseId/${courseId}`
           );
-
-          console.log("Response 1:", response1.data);
-          console.log("Response 2:", response2.data);
-          console.log("Response 3:", response3.data);
 
           const selectedTax = taxData.find(
             (tax) => parseInt(response1.data.taxType) === tax.id
@@ -295,11 +276,11 @@ export default function InvoiceAdd() {
     }
   };
 
-  // useEffect(() => {
-  //   if (studentID) {
-  //     handleStudentChange();
-  //   }
-  // }, [formik.values.studentId]);
+  useEffect(() => {
+    if (studentID) {
+      handleStudentChange(studentID);
+    }
+  }, [studentID]);
 
   const handleSelectChange = (index, value) => {
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
@@ -415,6 +396,7 @@ export default function InvoiceAdd() {
               totalAmount: "",
             },
           ]);
+          setRows(formik.values.invoiceItems);
         } catch (error) {
           console.error("Error fetching Student Data:", error);
           toast.error("Error fetching Student Data");
@@ -549,7 +531,7 @@ export default function InvoiceAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onChange={handleStudentChange}
+                  onChange={(event) => handleStudentChange(event.target.value)}
                 >
                   <option selected></option>
                   {studentData &&
