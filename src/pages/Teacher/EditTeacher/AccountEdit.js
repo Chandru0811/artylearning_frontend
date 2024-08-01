@@ -25,7 +25,6 @@ const validationSchema = Yup.object().shape({
 const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
 
   const [centerData, setCenterData] = useState([]);
-  console.log("data",centerData)
   const [shgData, setShgData] = useState([]);
   const [selectedCenters, setSelectedCenters] = useState([]);
   const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
@@ -98,7 +97,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
               },
             }
           );
-          if (response.status === 201) {
+          if (response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...values }));
             handleNext();
@@ -542,32 +541,6 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
               </div>
             )}
           </div>
-          {/* <div className="col-md-6 col-12 mb-2 mt-3">
-            <lable className="form-lable">
-              Centre Name<span className="text-danger">*</span>
-            </lable>
-            <div className="input-group mb-3">
-              <select
-                {...formik.getFieldProps("centerIds")}
-                className={`form-select  ${formik.touched.centerIds && formik.errors.centerIds
-                    ? "is-invalid"
-                    : ""
-                  }`}
-                aria-label="Default select example"
-              >
-                <option selected></option>
-                {centerData &&
-                  centerData.map((centerIds) => (
-                    <option key={centerIds.id} value={centerIds.id}>
-                      {centerIds.centerNames}
-                    </option>
-                  ))}
-              </select>
-              {formik.touched.centerIds && formik.errors.centerIds && (
-                <div className="invalid-feedback">{formik.errors.centerIds}</div>
-              )}
-            </div>
-          </div> */}
 
           <div className="col-md-6 col-12  mb-2 mt-3">
             <label className="form-label">
