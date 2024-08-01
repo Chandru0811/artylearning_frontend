@@ -5,7 +5,7 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { useFormik } from "formik";
-import { LuDownload } from "react-icons/lu";
+// import { LuDownload } from "react-icons/lu";
 import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
 function MyMessagesView() {
@@ -18,7 +18,7 @@ function MyMessagesView() {
   const userId = sessionStorage.getItem("userId");
   const userName = sessionStorage.getItem("userName");
   const { id } = useParams();
-  console.log("data", data);
+  console.log("Data From My Message:", data);
 
   const formik = useFormik({
     initialValues: {
@@ -93,6 +93,8 @@ function MyMessagesView() {
         content: msg.message,
         isSender: msg.senderId == userId,
         attachments: msg.attachments,
+        time: new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        // time: msg.createdAt
       }));
 
       setMessages(combinedMessages);
@@ -121,11 +123,11 @@ function MyMessagesView() {
                 className="img-fluid"
               />
             </a>
-            <a href={fileUrl} download>
+            {/* <a href={fileUrl} download>
               <button className="btn ">
                 <LuDownload color="#e60504" />
               </button>
-            </a>
+            </a> */}
           </div>
         </div>
       );
@@ -141,11 +143,11 @@ function MyMessagesView() {
                 className="img-fluid "
               />
             </a>
-            <a href={fileUrl} download>
+            {/* <a href={fileUrl} download>
               <button className="btn ">
                 <LuDownload size={18} color="#e60504" />
               </button>
-            </a>
+            </a> */}
           </div>
         </div>
       );
@@ -158,11 +160,11 @@ function MyMessagesView() {
               Your browser does not support the video tag.
             </video>
             <div>
-              <a href={fileUrl} download>
+              {/* <a href={fileUrl} download>
                 <button className="btn">
                   <LuDownload size={18} color="#e60504" />
                 </button>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>
@@ -208,9 +210,13 @@ function MyMessagesView() {
                           {renderAttachment(attachment, attIndex)}
                         </div>
                       ))
+                      
                     ) : (
                       <></>
                     )}
+                     <div className="message-bubble my-2 w-75" style={{fontSize:"11px",background:"transparent"}}>
+                      {msg.time}
+                    </div>
                   </div>
                 </div>
               ))}
