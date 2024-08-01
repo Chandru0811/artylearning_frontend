@@ -242,9 +242,9 @@ export default function InvoiceAdd() {
             `/getLatestCourseDepositFeesByCourseId/${courseId}`
           );
 
-          console.log("Response 1:",response1.data);
-          console.log("Response 2:",response2.data);
-          console.log("Response 3:",response3.data);
+          console.log("Response 1:", response1.data);
+          console.log("Response 2:", response2.data);
+          console.log("Response 3:", response3.data);
 
           const selectedTax = taxData.find(
             (tax) => parseInt(response1.data.taxType) === tax.id
@@ -259,7 +259,6 @@ export default function InvoiceAdd() {
           const depositAmount = response3.data.depositFees;
           const gstDepositeAmount = (depositAmount * gstRate) / 100;
           const depositAmountBeforeGST = depositAmount - gstDepositeAmount;
-
 
           formik.setFieldValue("invoiceItems", [
             {
@@ -284,7 +283,7 @@ export default function InvoiceAdd() {
               totalAmount: depositAmount,
             },
           ]);
-          
+          setRows(formik.values.invoiceItems);
         } catch (error) {
           console.error("Error fetching 3 APIs:", error);
         }
@@ -295,7 +294,13 @@ export default function InvoiceAdd() {
       console.error("Error fetching data:", error);
     }
   };
-  
+
+  // useEffect(() => {
+  //   if (studentID) {
+  //     handleStudentChange();
+  //   }
+  // }, [formik.values.studentId]);
+
   const handleSelectChange = (index, value) => {
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
     const gstRate = selectedTax ? selectedTax.rate : 0;
