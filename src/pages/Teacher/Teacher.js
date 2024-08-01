@@ -20,7 +20,7 @@ const Teacher = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllUsersByRole/teacher");
+        const response = await api.get("/getAllUsers");
         setDatas(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -61,7 +61,7 @@ const Teacher = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllUsersByRole/teacher");
+      const response = await api.get("/getAllUsers");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -112,18 +112,15 @@ const Teacher = () => {
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   <td>
-                    {data.userAccountInfo?.length > 0 &&
-                      data.userAccountInfo[0].teacherId}
+                    {data.teacherId}
                   </td>
                   {/* <td>{data.teacherId}</td> */}
                   <td>{data.teacherName}</td>
                   <td>
-                    {data.userAccountInfo?.length > 0 &&
-                      data.userAccountInfo[0].teacherType}
+                    {data.teacherType}
                   </td>
                   <td>
-                    {data.userContactInfo?.length > 0 &&
-                      data.userContactInfo[0].contactNumber}
+                    {data.contactNumber}
                   </td>
                   {/* <td>
                     {data.userAccountInfo.length > 0 &&

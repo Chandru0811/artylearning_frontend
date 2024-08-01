@@ -21,7 +21,7 @@ const Staff = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllUserListExceptTeacher");
+        const response = await api.get("/getAllUsers");
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
@@ -61,7 +61,7 @@ const Staff = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllUserListExceptTeacher");
+      const response = await api.get("/getAllUsers");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -113,14 +113,12 @@ const Staff = () => {
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   <td>
-                    {data.userAccountInfo?.length > 0 &&
-                      data.userAccountInfo[0].teacherId}
+                    {data.teacherId}
                   </td>
                   {/* <td>{data.teacherId}</td> */}
                   <td>{data.teacherName}</td>
                   <td>
-                    {data.userAccountInfo?.length > 0 &&
-                      data.userAccountInfo[0].teacherType}
+                    {data.teacherType }
                   </td>
                   <td>
                     {data.role === "branch_admin" ? (
@@ -135,8 +133,7 @@ const Staff = () => {
                   </td>
 
                   <td>
-                    {data.userContactInfo?.length > 0 &&
-                      data.userContactInfo[0].contactNumber}
+                    {data.contactNumber}
                   </td>
                   {/* <td>
                     {data.userAccountInfo.length > 0 &&
