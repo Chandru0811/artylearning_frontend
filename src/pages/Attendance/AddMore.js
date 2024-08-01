@@ -60,7 +60,7 @@ function AddMore({
         if (response.status === 201) {
           onSuccess();
           toast.success(response.data.message);
-          
+
           handleClose();
         } else {
           toast.error(response.data.message);
@@ -109,8 +109,18 @@ function AddMore({
   };
   const handleShow = () => {
     getLessonData();
-    if (feedbackData) {
+    if (feedbackData && feedbackData.length !== 0) {
       formik.setFieldValue("items", feedbackData);
+    } else {
+      formik.setFieldValue("items", [
+        {
+          lessonNo: "",
+          curriculumCode: "",
+          nextClassAdvice: "",
+          curriculumId: "",
+          pace: "",
+        },
+      ]);
     }
     setShow(true);
   };
