@@ -153,7 +153,7 @@ const AccountEdit = forwardRef(({ formData, setLoadIndicators, setFormData, hand
           const selectedCenterIds = centers.map(center => center.id);
           formik.setFieldValue("centerIds", selectedCenterIds);
           setSelectedCenters(centers.map(center => ({ label: center.centerName, value: center.id })));
-        } else {
+        } else {  
           formik.setValues({
             accountId: null,
             startDate: "",
