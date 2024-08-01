@@ -596,7 +596,7 @@ function CenterEdit() {
                 {data.centerRegistrations &&
                   data.centerRegistrations.map((registration, index) => (
                     <tr key={index}>
-                      <td>{registration.id}</td>
+                      <td>{index + 1}</td>
                       <td>{registration.effectiveDate?.substring(0, 10)}</td>
                       <td>{registration.amount}</td>
                       <td>{registration.taxType}</td>
