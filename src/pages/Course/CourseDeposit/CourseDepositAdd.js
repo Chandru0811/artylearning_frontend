@@ -12,6 +12,7 @@ const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),
   depositFees: Yup.string().required("*Deposit Fees Code is required"),
   taxType: Yup.string().required("*TaxType is required"),
+  status: Yup.string().required("*Status is required"),
 });
 
 function CourseFeesAdd({ onSuccess }) {
@@ -43,6 +44,7 @@ function CourseFeesAdd({ onSuccess }) {
       effectiveDate: "",
       depositFees: "",
       taxType: "",
+      status:"ACTIVE"
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -160,6 +162,30 @@ function CourseFeesAdd({ onSuccess }) {
                   {formik.touched.taxType && formik.errors.taxType && (
                     <div className="invalid-feedback">
                       {formik.errors.taxType}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Status<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    className={`form-select  ${
+                      formik.touched.status && formik.errors.status
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("status")}
+                    style={{ width: "100%" }}
+                  >
+                    <option value=""></option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+
+                  </select>
+                  {formik.touched.status && formik.errors.status && (
+                    <div className="invalid-feedback">
+                      {formik.errors.status}
                     </div>
                   )}
                 </div>

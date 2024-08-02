@@ -8,6 +8,7 @@ function CenterView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [centerManagerData, setCenterManagerData] = useState(null);
+  const [taxTypeData, setTaxTypeData] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -15,6 +16,15 @@ function CenterView() {
       setCenterManagerData(centerManagerData);
     } catch (error) {
       toast.error(error);
+    }
+  };
+
+  const fetchTaxData = async () => {
+    try {
+      const response = await api.get("getAllTaxSetting");
+      setTaxTypeData(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
     }
   };
 
@@ -29,6 +39,7 @@ function CenterView() {
     };
     getData();
     fetchData();
+    fetchTaxData();
   }, [id]);
   return (
     <div className="container ">
@@ -231,7 +242,9 @@ function CenterView() {
                   <p className="fw-medium">Invoice Notes</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.invoiceNotes || " "}</p>
+                  <p className="text-muted text-sm">
+                    : {data.invoiceNotes || " "}
+                  </p>
                 </div>
               </div>
             </div>
@@ -242,10 +255,10 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="my-2 d-flex">
-                    : {data.qrCode ? (
+                    :{" "}
+                    {data.qrCode ? (
                       <img
                         src={data.qrCode}
-
                         className="img-fluid ms-2 w-100 rounded"
                         alt="Profile Image"
                       />
@@ -283,7 +296,15 @@ function CenterView() {
                         <td>{index + 1}</td>
                         <td>{registration.effectiveDate?.substring(0, 10)}</td>
                         <td>{registration.amount}</td>
-                        <td>{registration.taxType}</td>
+                        {/* <td>{registration.taxType}</td> */}
+                        <td>
+                          {taxTypeData &&
+                            taxTypeData.map((tax) =>
+                              parseInt(registration.taxType) === tax.id
+                                ? tax.taxType || "--"
+                                : ""
+                            )}
+                        </td>
                       </tr>
                     ))}
                 </tbody>

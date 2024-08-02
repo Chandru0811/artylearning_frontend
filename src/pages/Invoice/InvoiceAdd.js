@@ -64,7 +64,7 @@ export default function InvoiceAdd() {
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
-  console.log("Tax Data", taxData);
+  // console.log("Tax Data", taxData);
 
   const fetchTaxData = async () => {
     try {
@@ -103,7 +103,7 @@ export default function InvoiceAdd() {
         },
       ],
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
@@ -211,66 +211,107 @@ export default function InvoiceAdd() {
 
     try {
       const response = await api.get(`/getAllStudentById/${studentID}`);
-      const centerId = response.data.studentCourseDetailModels[0]?.centerId;
-      const courseId = response.data.studentCourseDetailModels[0]?.courseId;
-      const packageId = response.data.studentCourseDetailModels[0]?.packageName;
+      const studentCourseDetails = response.data.studentCourseDetailModels[0];
+      const centerId = studentCourseDetails?.centerId;
+      const courseId = studentCourseDetails?.courseId;
+      const packageId = studentCourseDetails?.packageName;
 
-      if (centerId && courseId && packageId) {
+      let invoiceItems = [];
+
+      if (centerId) {
         try {
           const response1 = await api.get(
             `/getLatestCenterRegistrationByCenterId/${centerId}`
           );
-          const response2 = await api.get(
-            `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
-          );
-          const response3 = await api.get(
-            `/getLatestCourseDepositFeesByCourseId/${courseId}`
-          );
+          console.log("Response 1:", response1.data);
 
           const selectedTax = taxData.find(
             (tax) => parseInt(response1.data.taxType) === tax.id
           );
           const gstRate = selectedTax ? selectedTax.rate : 0;
+          const amount = response1.data.amount || 0;
+          const gstAmount = (amount * gstRate) / 100 || 0;
+          const amountBeforeGST = amount - gstAmount || 0;
 
-          const amount = response1.data.amount;
-          const gstAmount = (amount * gstRate) / 100;
-          const amountBeforeGST = amount - gstAmount;
-
-          // Response 2
-          const depositAmount = response3.data.depositFees;
-          const gstDepositeAmount = (depositAmount * gstRate) / 100;
-          const depositAmountBeforeGST = depositAmount - gstDepositeAmount;
-
-          formik.setFieldValue("invoiceItems", [
-            {
-              item: "Registration Fee",
-              itemAmount: amountBeforeGST,
-              taxType: response1.data.taxType,
-              gstAmount: gstAmount,
-              totalAmount: amount,
-            },
-            {
-              item: "Course Fee",
-              itemAmount: amountBeforeGST,
-              taxType: response1.data.taxType,
-              gstAmount: gstAmount,
-              totalAmount: amount,
-            },
-            {
-              item: "Course Deposite Fee",
-              itemAmount: amountBeforeGST,
-              taxType: response3.data.taxType,
-              gstAmount: depositAmountBeforeGST,
-              totalAmount: depositAmount,
-            },
-          ]);
-          setRows(formik.values.invoiceItems);
+          invoiceItems.push({
+            item: "Registration Fee",
+            itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+            taxType: response1.data.taxType || "",
+            gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+            totalAmount: isNaN(amount) ? 0 : amount,
+          });
         } catch (error) {
-          console.error("Error fetching 3 APIs:", error);
+          console.error("Error fetching center registration:", error);
         }
       } else {
-        console.error("Ids not found");
+        console.error("Center ID not found");
       }
+
+      if (courseId && packageId) {
+        try {
+          const response2 = await api.get(
+            `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
+          );
+          console.log("Response 2:", response2.data);
+
+          const selectedTax = taxData.find(
+            (tax) => parseInt(response2.data.taxType) === tax.id
+          );
+          const selectedCourse = courseData.find(
+            (course) => parseInt(response2.data.courseId) === course.id
+          );
+          const itemsName = selectedCourse ? selectedCourse.courseNames : "";
+          const gstRate = selectedTax ? selectedTax.rate : 0;
+          const amount = response2.data.weekdayFee || 0;
+          const gstAmount = (amount * gstRate) / 100 || 0;
+          const amountBeforeGST = amount - gstAmount || 0;
+
+          invoiceItems.push({
+            item: itemsName,
+            itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+            taxType: response2.data.taxType,
+            gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+            totalAmount: isNaN(amount) ? 0 : amount,
+          });
+        } catch (error) {
+          console.error("Error fetching course fees:", error);
+        }
+      } else {
+        console.error("Course ID and Package Id not found");
+      }
+
+      if (courseId) {
+        try {
+          const response3 = await api.get(
+            `/getLatestCourseDepositFeesByCourseId/${courseId}`
+          );
+          console.log("Response 3:", response3.data);
+
+          const selectedTax = taxData.find(
+            (tax) => parseInt(response3.data.taxType) === tax.id
+          );
+          const itemsName = "Deposit Fee";
+          const gstRate = selectedTax ? selectedTax.rate : 0;
+          const amount = response3.data.depositFees || 0;
+          const gstAmount = (amount * gstRate) / 100 || 0;
+          const amountBeforeGST = amount - gstAmount || 0;
+
+          invoiceItems.push({
+            item: itemsName,
+            itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+            taxType: response3.data.taxType,
+            gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+            totalAmount: isNaN(amount) ? 0 : amount,
+          });
+        } catch (error) {
+          console.error("Error fetching course deposit fees:", error);
+        }
+      } else {
+        console.error("Course ID not found");
+      }
+
+      formik.setFieldValue("invoiceItems", invoiceItems);
+      setRows(invoiceItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -289,7 +330,7 @@ export default function InvoiceAdd() {
       parseFloat(formik.values.invoiceItems[index]?.itemAmount) || 0;
 
     const gstAmount = (itemAmount * gstRate) / 100;
-    const totalAmount = itemAmount + gstAmount;
+    const totalAmount = itemAmount - gstAmount;
 
     const updatedRows = [...rows];
     updatedRows[index] = {
@@ -311,35 +352,33 @@ export default function InvoiceAdd() {
     );
   };
 
-  const handleItemAmountChange = (index, value) => {
+  const handelTotalAmountChange = (index, value) => {
+
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
     const selectedTax = taxData.find(
       (tax) => tax.id === parseInt(selectedTaxType)
     );
     const gstRate = selectedTax ? selectedTax.rate : 0;
-    const itemAmount = parseFloat(value) || 0;
-
-    const gstAmount = (itemAmount * gstRate) / 100;
-    const totalAmount = itemAmount + gstAmount;
+    const gstAmount = (parseInt(value) * gstRate) / 100;
+    const itemAmount = parseInt(value) - gstAmount;
 
     const updatedRows = [...rows];
     updatedRows[index] = {
       ...updatedRows[index],
-      itemAmount: value,
+      itemAmount: itemAmount.toFixed(2),
       gstAmount: gstAmount.toFixed(2),
-      totalAmount: totalAmount.toFixed(2),
+      totalAmount: value,
     };
     setRows(updatedRows);
-
-    formik.setFieldValue(`invoiceItems[${index}].itemAmount`, value);
+    formik.setFieldValue(
+      `invoiceItems[${index}].itemAmount`,
+      itemAmount.toFixed(2)
+    );
     formik.setFieldValue(
       `invoiceItems[${index}].gstAmount`,
       gstAmount.toFixed(2)
     );
-    formik.setFieldValue(
-      `invoiceItems[${index}].totalAmount`,
-      totalAmount.toFixed(2)
-    );
+    formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
 
   useEffect(() => {
@@ -374,20 +413,6 @@ export default function InvoiceAdd() {
           fetchStudent(studentData.centerId);
           formik.setFieldValue("center", studentData.centerId);
           formik.setFieldValue("invoiceItems", [
-            {
-              item: "",
-              itemAmount: "",
-              taxType: "",
-              gstAmount: "",
-              totalAmount: "",
-            },
-            {
-              item: "",
-              itemAmount: "",
-              taxType: "",
-              gstAmount: "",
-              totalAmount: "",
-            },
             {
               item: "",
               itemAmount: "",
@@ -834,9 +859,8 @@ export default function InvoiceAdd() {
                             type="number"
                             min={0}
                             style={{ width: "80%" }}
-                            onChange={(e) =>
-                              handleItemAmountChange(index, e.target.value)
-                            }
+                            onChange={formik.handleChange}
+                            readOnly
                           />
                           {formik.touched.invoiceItems?.[index]?.itemAmount &&
                             formik.errors.invoiceItems?.[index]?.itemAmount && (
@@ -896,8 +920,9 @@ export default function InvoiceAdd() {
                             className="form-control"
                             type="text"
                             style={{ width: "80%" }}
-                            onChange={formik.handleChange}
-                            readOnly
+                            onChange={(e) =>
+                              handelTotalAmountChange(index, e.target.value)
+                            }
                           />
                         </td>
                       </tr>

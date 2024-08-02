@@ -133,10 +133,8 @@ const CourseDeposit = () => {
                     )}
                 </td>
                 <td>{data.depositFees}</td>
-                {/* <td>{data.courseType}</td>
-                                <td>{data.courseType}</td> */}
                 <td>
-                  {data.status === "Active" ? (
+                  {data.status === "ACTIVE" ? (
                     <span className="badge badges-Green">Active</span>
                   ) : (
                     <span className="badge badges-Red">Inactive</span>

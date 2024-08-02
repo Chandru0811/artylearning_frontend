@@ -157,16 +157,13 @@ const CourseFees = () => {
                     )}</td>
                 <td>{data.effectiveDate}</td>
                 <td>
-                  {data.status === "Active" ? (
+                  {data.status === "ACTIVE" ? (
                     <span className="badge badges-Green">Active</span>
                   ) : (
                     <span className="badge badges-Red">Inactive</span>
                   )}
                 </td>
                 <td className="d-flex">
-                  {/* {storedScreens?.courseRead && (
-                    <CourseFeesView id={data.id} onSuccess={refreshData} />
-                  )} */}
                   {storedScreens?.courseUpdate && (
                     <CourseFeesEdit id={data.id} onSuccess={refreshData} />
                   )}
