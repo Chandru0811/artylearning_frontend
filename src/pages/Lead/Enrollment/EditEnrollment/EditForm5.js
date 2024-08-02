@@ -11,7 +11,7 @@ import fetchAllCentersWithIds from "../../../List/CenterList";
 import api from "../../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Center is required!"),
+  // centerId: Yup.string().required("*Centre is required!"),
   preferredDay: Yup.array()
     .min(1, "*Select at least one preferred day")
     .required("Select Preferred day"),
@@ -27,7 +27,7 @@ const EditForm5 = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        centerId: formData.centerId,
+        // centerId: formData.centerId,
         preferredDay: formData.preferredDay || [],
         enquiryDate: formData.enquiryDate || "",
         marketingSource: formData.marketingSource || "",
@@ -106,9 +106,9 @@ const EditForm5 = forwardRef(
                 <p className="headColor">Account Information</p>
               </div>
 
-              <div className="col-md-6 col-12 ">
+              {/* <div className="col-md-6 col-12 ">
                 <lable className="">
-                  Center<span className="text-danger">*</span>
+                  Centre<span className="text-danger">*</span>
                 </lable>
                 <select
                   className="form-select"
@@ -130,7 +130,7 @@ const EditForm5 = forwardRef(
                     <small>{formik.errors.centerId}</small>
                   </div>
                 )}
-              </div>
+              </div> */}
 
               <div className="col-md-6 col-12 mb-3">
                 <label>Referred By</label>

@@ -121,7 +121,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <label htmlFor="centerId" className="form-label">
-                  Center Name
+                  Centre Name
                 </label>
                 <input
                   type="hidden"

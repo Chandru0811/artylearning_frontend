@@ -10,6 +10,7 @@ import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../../../List/SubjectList";
 import fetchAllRaceWithIds from "../../../List/RaceList";
+import fetchAllCentersWithIds from "../../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
@@ -22,6 +23,7 @@ const validationSchema = Yup.object().shape({
   ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
   nameOfSchool: Yup.string().required("*School Name is required"),
+  centerId: Yup.string().required("*Centre is required"),
   // nameOfChildrenInTotal: Yup.number()
   //   .typeError("*Enter a valid number")
   //   .required("*Name of Children is required"),
@@ -32,6 +34,7 @@ const validationSchema = Yup.object().shape({
 const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
   const [raceData, setRaceData] = useState(null);
+  const [centerData, setCenterData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -43,6 +46,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
       ethnicGroup: formData.ethnicGroup || "",
       schoolType: formData.schoolType || "",
       nameOfSchool: formData.nameOfSchool || "",
+      centerId: formData.centerId || "",
       // nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
       fathersFullName: formData.fathersFullName || "",
       leadStatus: "NEW_WAITLIST" || "",
@@ -74,8 +78,10 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     try {
       const subjectData = await fetchAllSubjectsWithIds();
       const raceData = await fetchAllRaceWithIds();
+      const centerData = await fetchAllCentersWithIds();
       setRaceData(raceData);
       setSubjectData(subjectData);
+      setCenterData(centerData);
     } catch (error) {
       toast.error(error);
     }
@@ -125,8 +131,12 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               value={formik.values.subjectId}
             >
               <option selected></option>
-              <option>English Assessesment</option>
-              <option >Chinese Assessesment</option>
+              {subjectData &&
+                subjectData.map((subject) => (
+                  <option key={subject.subjectId} value={subject.id}>
+                    {subject.subjects}
+                  </option>
+                ))}
             </select>
             {formik.touched.subjectId && formik.errors.subjectId && (
               <div className="text-danger">
@@ -307,6 +317,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               )}
             </div>
           </div>
+
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
@@ -323,6 +334,33 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               {formik.touched.nameOfSchool && formik.errors.nameOfSchool && (
                 <div className="error text-danger ">
                   <small>{formik.errors.nameOfSchool}</small>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="col-md-6 col-12 ">
+            <div className="mb-3">
+              <label for="exampleFormControlInput1" className="form-label">
+                Centre<span className="text-danger">*</span>
+              </label>
+              <select
+                className="form-select"
+                name="centerId"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.centerId}
+              >
+                <option selected></option>
+                {centerData &&
+                  centerData.map((centerId) => (
+                    <option key={centerId.id} value={centerId.id}>
+                      {centerId.centerNames}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.centerId && formik.errors.centerId && (
+                <div className="error text-danger">
+                  <small>{formik.errors.centerId}</small>
                 </div>
               )}
             </div>

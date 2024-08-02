@@ -170,7 +170,7 @@ function AddRegister({ id, onSuccess }) {
                   <option value=""></option>
                   {taxData &&
                     taxData.map((tax) => (
-                      <option key={tax.id} value={tax.id}>
+                      <option key={tax.id} value={tax.taxType}>
                         {tax.taxType}
                       </option>
                     ))}

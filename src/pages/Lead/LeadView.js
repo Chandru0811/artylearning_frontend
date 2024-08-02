@@ -41,7 +41,7 @@ function Leadview() {
 
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
-
+  console.log("subject", subjectData)
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -406,7 +406,7 @@ function Leadview() {
                               :{" "}
                               {subjectData &&
                                 subjectData.map((subject) =>
-                                  parseInt(data.subject) === subject.id
+                                  parseInt(data.subjectId) === subject.id
                                     ? subject.subjects || "--"
                                     : ""
                                 )}
@@ -476,6 +476,24 @@ function Leadview() {
                           </div>
                         </div>
                       </div>
+                      <div className="col-md-6 col-12">
+                        <div className="row mb-2">
+                          <div className="col-6 d-flex  align-items-center">
+                            <p className="text-sm fw-medium ">Centre</p>
+                          </div>
+                          <div className="col-6">
+                            <p className="text-muted text-sm">
+                              :{" "}
+                              {centerData &&
+                                centerData.map((center) =>
+                                  parseInt(data.centerId) === center.id
+                                    ? center.centerNames || "--"
+                                    : ""
+                                )}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                       {/* <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
@@ -490,7 +508,7 @@ function Leadview() {
                           </div>
                         </div>
                       </div> */}
-                      <div className="col-md-6 col-12">
+                      {/* <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">
@@ -503,7 +521,7 @@ function Leadview() {
                             </p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="container-fluid">
@@ -952,24 +970,6 @@ function Leadview() {
                         Account Information
                       </h5>
 
-                      <div className="col-md-6 col-12">
-                        <div className="row mb-2">
-                          <div className="col-6 d-flex  align-items-center">
-                            <p className="text-sm fw-medium ">Centre</p>
-                          </div>
-                          <div className="col-6">
-                            <p className="text-muted text-sm">
-                              :{" "}
-                              {centerData &&
-                                centerData.map((center) =>
-                                  parseInt(data.centerId) === center.id
-                                    ? center.centerNames || "--"
-                                    : ""
-                                )}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
                       <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex">

@@ -164,7 +164,7 @@ function CourseEdit() {
                   aria-hidden="true"
                 ></span>
               )}
-              Save
+              Update
             </button>
           </div>
           <div className="container">

@@ -25,7 +25,7 @@ function EditRegisteration({ id, onSuccess }) {
   };
 
   const validationSchema = yup.object().shape({
-    registrationDate: yup.string().required("*Registeration Date is required"),
+    // registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
     amount: yup.string().required("*Amount is required"),
     taxType: yup.string().required("*Tax Type is required"),

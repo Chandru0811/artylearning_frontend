@@ -11,8 +11,11 @@ const validationSchema = Yup.object().shape({
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
   fathersMobileNumber: Yup.string()
-    .matches(/^(?:\+?65)?\s?\d{8,15}$/, "Invalid Phone Number")
-    .required("*Mobile Number is required"),
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
+    )
+    .required("*Emergency Person Contact Number is required"),
   // fathersEmailAddress: Yup.string()
   //   .email("*Invalid Email")
   //   .required("*Email is required"),
@@ -25,13 +28,16 @@ const validationSchema = Yup.object().shape({
   mothersDateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
-  mothersMobileNumber: Yup.string()
-    .matches(/^(?:\+?65)?\s?\d{8,15}$/, "Invalid Phone Number")
-    .required("*Mobile Number is required"),
+  fathersMobileNumber: Yup.string()
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
+    )
+    .required("*Emergency Person Contact Number is required"),
   // mothersEmailAddress: Yup.string()
   //   .email("*Invalid Email")
   //   .required("*Email is required"),
-    mothersEmailAddress: Yup.string()
+  mothersEmailAddress: Yup.string()
     .email("*Invalid Email").required("*Email is required"),
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
   primaryContact: Yup.string()
