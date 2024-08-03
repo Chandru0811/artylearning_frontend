@@ -34,7 +34,7 @@ function StudentRegisterCourse() {
   const formik = useFormik({
     initialValues: {
       lessonName: "",
-      packageName:""
+      packageName: ""
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -236,7 +236,7 @@ function StudentRegisterCourse() {
                   <p className="headColor">Course Detail</p>
                 </div>
                 <div className="col-md-6 d-flex justify-content-end align-items-center">
-                  <Link to={"/student"}>
+                  <Link to={`/student/view/${id}`}>
                     <button
                       className="btn btn-border btn-sm mx-3"
                       style={{ padding: "7px" }}
@@ -302,11 +302,10 @@ function StudentRegisterCourse() {
                 <div className="col-md-4">
                   <select
                     {...formik.getFieldProps("courseId")}
-                    class={`form-select  ${
-                      formik.touched.courseId && formik.errors.courseId
+                    class={`form-select  ${formik.touched.courseId && formik.errors.courseId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     id="courseId"
                     name="courseId"
                   >
@@ -324,11 +323,10 @@ function StudentRegisterCourse() {
                 <div className="col-md-4">
                   <select
                     {...formik.getFieldProps("days")}
-                    class={`form-select  ${
-                      formik.touched.days && formik.errors.days
+                    class={`form-select  ${formik.touched.days && formik.errors.days
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     id="days"
                     name="days"
                   >
@@ -428,11 +426,10 @@ function StudentRegisterCourse() {
                 <div className="col-md-4">
                   <select
                     {...formik.getFieldProps("packageName")}
-                    class={`form-select  ${
-                      formik.touched.packageName && formik.errors.packageName
+                    class={`form-select  ${formik.touched.packageName && formik.errors.packageName
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     id="packageName"
                     name="packageName"
                   >

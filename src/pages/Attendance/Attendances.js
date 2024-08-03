@@ -159,6 +159,7 @@ function Attendances() {
               aria-label="Default select example"
               onChange={(e) => setSelectedCenter(e.target.value)}
             >
+              <option selected></option>
               {centerData &&
                 centerData.map((center) => (
                   <option key={center.id} value={center.id}>

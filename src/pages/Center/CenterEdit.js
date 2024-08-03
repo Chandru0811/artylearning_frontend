@@ -533,6 +533,7 @@ function CenterEdit() {
               <div className="text-start mt-2">
                 <label htmlFor="" className="mb-1 fw-medium">
                   <small>QR Code</small>
+                  <span className="text-danger">*</span>
                 </label>
                 <br />
                 <input
