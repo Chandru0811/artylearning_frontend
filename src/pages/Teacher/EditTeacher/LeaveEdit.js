@@ -149,7 +149,7 @@ const LeaveEdit = forwardRef(
                   Year<span class="text-danger">*</span>
                 </label>
                 <input
-                  type="date"
+                  type="month"
                   class="form-control    mt-3 "
                   name="year"
                   onChange={formik.handleChange}

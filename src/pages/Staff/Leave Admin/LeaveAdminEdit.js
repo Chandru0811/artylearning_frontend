@@ -134,7 +134,7 @@ function LeaveAdminEdit() {
       leaveReason: "",
       file: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
 
     onSubmit: async (data) => {
       setLoadIndicator(true);

@@ -167,7 +167,7 @@ function DocumentAdd() {
           requestBody
         );
 
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/document");
         } else {

@@ -20,7 +20,7 @@ const Teacher = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllUsers");
+        const response = await api.get("/getAllUsersByRole/teacher");
         setDatas(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -61,7 +61,7 @@ const Teacher = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllUsers");
+      const response = await api.get("/getAllUsersByRole/teacher");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
