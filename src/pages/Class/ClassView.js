@@ -115,7 +115,7 @@ function ClassView() {
                   <p className="fw-medium">Remarks</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">
+                  <p className="text-muted text-sm d-flex text-break">
                     : {data.remark || ""}
                   </p>
                 </div>

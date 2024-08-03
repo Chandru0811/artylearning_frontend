@@ -12,7 +12,6 @@ function AddRegister({ id, onSuccess }) {
   const [taxData, setTaxData] = useState([]);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const fetchTaxData = async () => {
     try {
@@ -23,6 +22,11 @@ function AddRegister({ id, onSuccess }) {
     }
   };
 
+  const handleShow = () => {
+    fetchTaxData();
+    setShow(true);
+  };
+
   const validationSchema = yup.object().shape({
     // registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
@@ -31,6 +35,7 @@ function AddRegister({ id, onSuccess }) {
       .typeError("Amount must be a number")
       .required("*Amount is required"),
     taxType: yup.string().required("*Tax Type is required"),
+    status: yup.string().required("*Status is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -38,6 +43,7 @@ function AddRegister({ id, onSuccess }) {
       effectiveDate: "",
       amount: "",
       taxType: "",
+      status: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -68,9 +74,7 @@ function AddRegister({ id, onSuccess }) {
       }
     },
   });
-  useEffect(() => {
-    fetchTaxData();
-  }, []);
+
   return (
     <>
       <button
@@ -125,10 +129,11 @@ function AddRegister({ id, onSuccess }) {
                 </lable>
                 <input
                   type="date"
-                  className={`form-control    ${formik.touched.effectiveDate && formik.errors.effectiveDate
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control    ${
+                    formik.touched.effectiveDate && formik.errors.effectiveDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("effectiveDate")}
                 />
                 {formik.touched.effectiveDate &&
@@ -145,10 +150,11 @@ function AddRegister({ id, onSuccess }) {
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control    ${formik.touched.amount && formik.errors.amount
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control    ${
+                      formik.touched.amount && formik.errors.amount
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("amount")}
                   />
                   {formik.touched.amount && formik.errors.amount && (
@@ -163,14 +169,18 @@ function AddRegister({ id, onSuccess }) {
                   Tax Type<span class="text-danger">*</span>
                 </lable>
                 <select
-                  className="form-select"
+                  className={`form-select ${
+                    formik.touched.taxType && formik.errors.taxType
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("taxType")}
                   style={{ width: "100%" }}
                 >
                   <option value=""></option>
                   {taxData &&
                     taxData.map((tax) => (
-                      <option key={tax.id} value={tax.taxType}>
+                      <option key={tax.id} value={tax.id}>
                         {tax.taxType}
                       </option>
                     ))}
@@ -179,6 +189,27 @@ function AddRegister({ id, onSuccess }) {
                   <div className="invalid-feedback">
                     {formik.errors.taxType}
                   </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Status<span class="text-danger">*</span>
+                </lable>
+                <select
+                  className={`form-select ${
+                    formik.touched.status && formik.errors.status
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("status")}
+                  style={{ width: "100%" }}
+                >
+                  <option value=""></option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+                {formik.touched.status && formik.errors.status && (
+                  <div className="invalid-feedback">{formik.errors.status}</div>
                 )}
               </div>
             </div>

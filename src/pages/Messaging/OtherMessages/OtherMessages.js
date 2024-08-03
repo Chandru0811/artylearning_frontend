@@ -11,7 +11,8 @@ const OtherMessages = () => {
   // const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  
   useEffect(() => {
     const getData = async () => {
       try {
@@ -69,45 +70,45 @@ const OtherMessages = () => {
     <div>
       <div className="container my-3">
         {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+          <div className="loader-container">
+            <div class="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-        </div>
-      ) : (
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col">Name</th>
-              <th scope="col">Message</th>
-              <th scope="col">Created Date</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.senderName}</td>
-                <td>{data.message}</td>
-                <td>{data.createdAt.substring(0, 10)}</td>
-                <td>
-                  <div className="d-flex">
-                    {/* {storedScreens?.messagingRead && ( */}
-                    <Link to={`/othermessaging/view/${data.receiverId}`}>
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                  {/* )} */}
-                    {/* {storedScreens?.levelUpdate && (
+        ) : (
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                  S No
+                </th>
+                <th scope="col">Name</th>
+                <th scope="col">Message</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{data.senderName}</td>
+                  <td>{data.message}</td>
+                  <td>{data.createdAt.substring(0, 10)}</td>
+                  <td>
+                    <div className="d-flex">
+                      {storedScreens?.messagingRead && (
+                        <Link to={`/othermessaging/view/${data.receiverId}`}>
+                          <button className="btn btn-sm">
+                            <FaEye />
+                          </button>
+                        </Link>
+                      )}
+                      {/* {storedScreens?.levelUpdate && (
                       <LevelEdit id={data.id} onSuccess={refreshData} />
                     )}
                     {storedScreens?.levelDelete && (
@@ -116,13 +117,13 @@ const OtherMessages = () => {
                         path={`/deleteMessage/${data.id}`}
                       />
                     )} */}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

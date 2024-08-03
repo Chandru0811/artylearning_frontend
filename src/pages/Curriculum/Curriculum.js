@@ -50,9 +50,7 @@ const Curriculum = () => {
   }, [id]);
 
   useEffect(() => {
-    const table = $(tableRef.current).DataTable({
-      responsive: true,
-    });
+    const table = $(tableRef.current).DataTable();
 
     return () => {
       table.destroy();
@@ -78,9 +76,7 @@ const Curriculum = () => {
       // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
+    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
@@ -126,26 +122,27 @@ const Curriculum = () => {
               courseId={courseId}
             />
           )}
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
-                {/* <th scope="col">Course</th> */}
-                <th scope="col">Lesson No.</th>
-                <th scope="col">Curriculum Code</th>
-                <th scope="col">Curriculum Number</th>
-                <th scope="col">Description</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas.map((data, index) => (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
-                  {/* <td>
+          <div className="table-responsive">
+            <table ref={tableRef} className="display">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                    S No
+                  </th>
+                  {/* <th scope="col">Course</th> */}
+                  <th scope="col">Lesson No.</th>
+                  <th scope="col">Curriculum Code</th>
+                  <th scope="col">Curriculum Number</th>
+                  {/* <th scope="col">Description</th> */}
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {datas.map((data, index) => (
+                  <tr key={index}>
+                    <th scope="row">{index + 1}</th>
+                    {/* <td>
                     {courseData &&
                       courseData.map((course) =>
                         parseInt(data.courseId) === course.id
@@ -153,38 +150,39 @@ const Curriculum = () => {
                           : ""
                       )}
                   </td> */}
-                  <td>{data.lessonNo}</td>
-                  <td>{data.curriculumCode}</td>
-                  <td>{data.curriculumNo}</td>
-                  <td>{data.description}</td>
-                  <td>
+                    <td>{data.lessonNo}</td>
+                    <td>{data.curriculumCode}</td>
+                    <td>{data.curriculumNo}</td>
+                    {/* <td>{data.description}</td> */}
                     <td>
-                      {data.status === "ACTIVE" ? (
-                        <span className="badge badges-Green">Active</span>
-                      ) : (
-                        <span className="badge badges-Red">Inactive</span>
+                      <td>
+                        {data.status === "ACTIVE" ? (
+                          <span className="badge badges-Green">Active</span>
+                        ) : (
+                          <span className="badge badges-Red">Inactive</span>
+                        )}
+                      </td>
+                    </td>
+                    <td>
+                      {storedScreens?.curriculumUpdate && (
+                        <CurriculumEdit
+                          id={data.id}
+                          curriculumOutletId={id}
+                          onSuccess={refreshData}
+                        />
+                      )}
+                      {storedScreens?.curriculumDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCourseCurriculumCode/${data.id}`}
+                        />
                       )}
                     </td>
-                  </td>
-                  <td>
-                    {storedScreens?.curriculumUpdate && (
-                      <CurriculumEdit
-                        id={data.id}
-                        curriculumOutletId={id}
-                        onSuccess={refreshData}
-                      />
-                    )}
-                    {storedScreens?.curriculumDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteCourseCurriculumCode/${data.id}`}
-                      />
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
     </div>

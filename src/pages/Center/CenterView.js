@@ -241,8 +241,8 @@ function CenterView() {
                 <div className="col-6  ">
                   <p className="fw-medium">Invoice Notes</p>
                 </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
+                <div className="col-6  ">
+                  <p className="text-muted text-sm d-flex text-truncate">
                     : {data.invoiceNotes || " "}
                   </p>
                 </div>
@@ -398,7 +398,7 @@ function CenterView() {
                         <td>{centerClassRoom.classRoomCode}</td>
                         <td>{centerClassRoom.classRoomType}</td>
                         <td>{centerClassRoom.capacity}</td>
-                        <td>{centerClassRoom.description}</td>
+                        <td className="text-break">{centerClassRoom.description}</td>
                       </tr>
                     ))}
                 </tbody>

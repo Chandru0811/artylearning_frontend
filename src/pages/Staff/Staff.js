@@ -21,7 +21,7 @@ const Staff = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllUsers");
+        const response = await api.get("/getAllUsersByRole/staff");
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
@@ -61,7 +61,7 @@ const Staff = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllUsers");
+      const response = await api.get("/getAllUsersByRole/staff");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {

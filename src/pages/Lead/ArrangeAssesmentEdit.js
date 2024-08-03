@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 
-const validationSchema = Yup.object({});
+// const validationSchema = Yup.object({});
 
 function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId }) {
   const [show, setShow] = useState(false);
@@ -23,10 +23,6 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
     formik.resetForm();
   };
 
-  const handleShow = () => {
-    setShow(true);
-  };
-
   const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -35,7 +31,10 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
       toast.error(error);
     }
   };
-
+  const handleShow = () => {
+    fetchCenterData();
+    setShow(true);
+  };
   const formik = useFormik({
     initialValues: {
       centerId: centerId || "",
@@ -109,7 +108,6 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
         toast.error("Error Fetching Data");
       }
     };
-    fetchCenterData();
     getData();
   }, []);
 

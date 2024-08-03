@@ -19,7 +19,7 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
     curriculumCode: Yup.string().required("*Curriculum Code is required"),
     lessonNo: Yup.string().required("*Lesson No is required"),
     curriculumNo: Yup.string().required("*Curriculum Code is required"),
-    description: Yup.string().required("*Description is required"),
+    // description: Yup.string().required("*Description is required"),
     status: Yup.string().required("*Status is required"),
   });
 
@@ -181,9 +181,7 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Description<span className="text-danger">*</span>
-                  </label>
+                  <label className="form-label">Description</label>
                   <textarea
                     type="text"
                     {...formik.getFieldProps("description")}

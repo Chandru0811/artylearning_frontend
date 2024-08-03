@@ -29,6 +29,7 @@ function EditRegisteration({ id, onSuccess }) {
     effectiveDate: yup.string().required("*Effective Date is required"),
     amount: yup.string().required("*Amount is required"),
     taxType: yup.string().required("*Tax Type is required"),
+    status: yup.string().required("*Status is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -36,6 +37,7 @@ function EditRegisteration({ id, onSuccess }) {
       effectiveDate: "",
       amount: "",
       taxType: "",
+      status: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -185,7 +187,7 @@ function EditRegisteration({ id, onSuccess }) {
                   <option value=""></option>
                   {taxData &&
                     taxData.map((tax) => (
-                      <option key={tax.id} value={tax.taxType}>
+                      <option key={tax.id} value={tax.id}>
                         {tax.taxType}
                       </option>
                     ))}
@@ -193,6 +195,31 @@ function EditRegisteration({ id, onSuccess }) {
                 {formik.touched.taxType && formik.errors.taxType && (
                   <div className="invalid-feedback">
                     {formik.errors.taxType}
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="">
+                  Status<span class="text-danger">*</span>
+                </lable>
+                <select
+                   className={`form-select ${
+                    formik.touched.status &&
+                    formik.errors.status
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("status")}
+                  style={{ width: "100%" }}
+                >
+                  <option value=""></option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  
+                </select>
+                {formik.touched.status && formik.errors.status && (
+                  <div className="invalid-feedback">
+                    {formik.errors.status}
                   </div>
                 )}
               </div>

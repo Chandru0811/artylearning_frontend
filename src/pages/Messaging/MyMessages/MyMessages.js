@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import MyMessagesAdd from "./MyMessagesAdd";
 import api from "../../../config/URL";
+import Delete from "../../../components/common/Delete";
 
 const MyMessages = () => {
   const tableRef = useRef(null);
@@ -71,7 +72,7 @@ const MyMessages = () => {
     <div>
       <div className="container my-3">
         <div className="my-3 d-flex justify-content-end">
-          {storedScreens?.staffCreate && (
+          {storedScreens?.messagingCreate && (
             <MyMessagesAdd onSuccess={refreshData} />
           )}
         </div>
@@ -108,22 +109,22 @@ const MyMessages = () => {
                     <td>{data.createdAt.substring(0, 10)}</td>
                     <td>
                       <div className="d-flex">
-                        {/* {storedScreens?.messagingRead && ( */}
+                        {/* {storedScreens?.messagingRead && (
                         <Link to={`/messaging/view/${data.receiverId}`}>
                           <button className="btn btn-sm">
                             <FaEye />
                           </button>
                         </Link>
-                        {/* )} */}
+                        )}  */}
                         {/* {storedScreens?.levelUpdate && (
-                      <LevelEdit id={data.id} onSuccess={refreshData} />
-                    )}
-                    {storedScreens?.levelDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteMessage/${data.id}`}
-                      />
-                    )} */}
+                          <LevelEdit id={data.id} onSuccess={refreshData} />
+                        )} */}
+                        {storedScreens?.levelDelete && (
+                          <Delete
+                            onSuccess={refreshData}
+                            path={`/deleteMessage/${data.id}`}
+                          />
+                        )}
                       </div>
                     </td>
                   </tr>

@@ -22,6 +22,7 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
     curriculumCode: Yup.string().required("*Curriculum Code is required"),
     lessonNo: Yup.string().required("*Lesson No is required"),
     status: Yup.string().required("*Status is required"),
+    curriculumNo: Yup.string().required("*Curriculum No is required"),
   });
 
   const formik = useFormik({
@@ -46,11 +47,15 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
         courseId: courseId,
       };
       try {
-        const response = await api.post(`/createCourseCurriculumCode/${curriculumOutletId}`, payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await api.post(
+          `/createCourseCurriculumCode/${curriculumOutletId}`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 201) {
           toast.success(response.data.message);
           // navigate("/curriculum");
@@ -92,10 +97,11 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
                   </label>
                   <select
                     {...formik.getFieldProps("lessonNo")}
-                    class={`form-select  ${formik.touched.lessonNo && formik.errors.lessonNo
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    class={`form-select  ${
+                      formik.touched.lessonNo && formik.errors.lessonNo
+                        ? "is-invalid"
+                        : ""
+                    }`}
                   >
                     <option value="" selected></option>
                     {Array.from({ length: 150 }, (_, index) => (
@@ -116,11 +122,12 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.curriculumCode &&
+                    className={`form-control  ${
+                      formik.touched.curriculumCode &&
                       formik.errors.curriculumCode
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("curriculumCode")}
                   />
                   {formik.touched.curriculumCode &&
@@ -136,11 +143,11 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${formik.touched.curriculumNo &&
-                      formik.errors.curriculumNo
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.curriculumNo && formik.errors.curriculumNo
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("curriculumNo")}
                   />
                   {formik.touched.curriculumNo &&
@@ -157,10 +164,11 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${formik.touched.status && formik.errors.status
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    class={`form-select  ${
+                      formik.touched.status && formik.errors.status
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -174,24 +182,21 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Description<span className="text-danger">*</span>
-                  </label>
+                  <label className="form-label">Description</label>
                   <textarea
                     type="text"
-                    className={`form-control  ${formik.touched.description &&
-                      formik.errors.description
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control  ${
+                      formik.touched.description && formik.errors.description
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("description")}
                   />
-                  {formik.touched.description &&
-                    formik.errors.description && (
-                      <div className="invalid-feedback">
-                        {formik.errors.description}
-                      </div>
-                    )}
+                  {formik.touched.description && formik.errors.description && (
+                    <div className="invalid-feedback">
+                      {formik.errors.description}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -199,8 +204,7 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
               <Button type="button" variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" type="submit" disabled={loadIndicator}
-              >
+              <Button variant="danger" type="submit" disabled={loadIndicator}>
                 {loadIndicator && (
                   <span
                     className="spinner-border spinner-border-sm me-2"
