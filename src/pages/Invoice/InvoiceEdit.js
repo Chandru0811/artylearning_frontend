@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { IoIosCloseCircleOutline } from "react-icons/io";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
@@ -29,29 +28,23 @@ const validationSchema = Yup.object({
 });
 
 export default function InvoiceEdit() {
-  //  const Rows=[];
+  const [rows, setRows] = useState([{}]);
   const { id } = useParams();
-
   const navigate = useNavigate();
-
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
   const [packageData, setPackageData] = useState(null);
-  const [loadIndicator, setLoadIndicator] = useState(false);
-
-  const [rows, setRows] = useState([{}]);
-
   const [taxData, setTaxData] = useState([]);
-
-  const fetchTaxData = async () => {
-    try {
-      const response = await api.get("getAllTaxSetting");
-      setTaxData(response.data);
-    } catch (error) {
-      toast.error("Error fetching tax data:", error);
-    }
-  };
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const lessonOptions = [];
+  for (let i = 1; i <= 50; i++) {
+    lessonOptions.push(
+      <option key={i} value={i}>
+        {i}
+      </option>
+    );
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -162,6 +155,15 @@ export default function InvoiceEdit() {
     }
   };
 
+  const fetchTaxData = async () => {
+    try {
+      const response = await api.get("getAllTaxSetting");
+      setTaxData(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
+    }
+  };
+
   const fetchCourses = async (centerId) => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
@@ -200,76 +202,110 @@ export default function InvoiceEdit() {
     fetchStudent(centerId);
   };
 
+  // OLD Code
+  // const handleSelectChange = (index, value) => {
+  //   // const selectedTax = taxData.find((tax) => tax.taxType === value);
+  //   const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
+  //   const gstRate = selectedTax ? selectedTax.rate : 0;
+  //   const itemAmount = formik.values.invoiceItems[index]?.itemAmount || 0;
+
+  //   // Calculate GST amount
+  //   const gstAmount = (parseFloat(itemAmount) * parseFloat(gstRate)) / 100;
+  //   const validGstAmount = isNaN(gstAmount) ? 0 : gstAmount;
+
+  //   // Calculate total amount
+  //   const totalAmount = parseFloat(itemAmount) + validGstAmount;
+  //   const validTotalAmount = isNaN(totalAmount) ? 0 : totalAmount;
+
+  //   // Update rows state
+  //   const updatedRows = [...rows];
+  //   updatedRows[index] = {
+  //     ...updatedRows[index],
+  //     taxType: value,
+  //     gstAmount: gstRate,
+  //     totalAmount: validTotalAmount,
+  //   };
+  //   setRows(updatedRows);
+
+  //   // Update formik values
+  //   formik.setFieldValue(`invoiceItems[${index}].taxType`, value);
+  //   formik.setFieldValue(
+  //     `invoiceItems[${index}].gstAmount`,
+  //     validGstAmount.toFixed(2)
+  //   );
+  //   formik.setFieldValue(
+  //     `invoiceItems[${index}].totalAmount`,
+  //     validTotalAmount.toFixed(2)
+  //   );
+  // };
+
+  // NEW Code
   const handleSelectChange = (index, value) => {
-    // const selectedTax = taxData.find((tax) => tax.taxType === value);
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
     const gstRate = selectedTax ? selectedTax.rate : 0;
-    const itemAmount = formik.values.invoiceItems[index]?.itemAmount || 0;
+    const totalAmount =
+      parseFloat(formik.values.invoiceItems[index]?.totalAmount) || 0;
 
-    // Calculate GST amount
-    const gstAmount = (parseFloat(itemAmount) * parseFloat(gstRate)) / 100;
-    const validGstAmount = isNaN(gstAmount) ? 0 : gstAmount;
+    // Recalculate itemAmount based on totalAmount and gstRate
+    const gstAmount = (totalAmount * gstRate) / (100 + gstRate);
+    const itemAmount = totalAmount - gstAmount;
 
-    // Calculate total amount
-    const totalAmount = parseFloat(itemAmount) + validGstAmount;
-    const validTotalAmount = isNaN(totalAmount) ? 0 : totalAmount;
-
-    // Update rows state
     const updatedRows = [...rows];
     updatedRows[index] = {
       ...updatedRows[index],
       taxType: value,
-      gstAmount: gstRate,
-      totalAmount: validTotalAmount,
+      itemAmount: itemAmount.toFixed(2),
+      gstAmount: gstAmount.toFixed(2),
+      totalAmount: totalAmount.toFixed(2), // Keep totalAmount unchanged
     };
     setRows(updatedRows);
 
-    // Update formik values
     formik.setFieldValue(`invoiceItems[${index}].taxType`, value);
     formik.setFieldValue(
+      `invoiceItems[${index}].itemAmount`,
+      itemAmount.toFixed(2)
+    );
+    formik.setFieldValue(
       `invoiceItems[${index}].gstAmount`,
-      validGstAmount.toFixed(2)
+      gstAmount.toFixed(2)
     );
     formik.setFieldValue(
       `invoiceItems[${index}].totalAmount`,
-      validTotalAmount.toFixed(2)
+      totalAmount.toFixed(2)
     );
   };
 
-  const handleItemAmountChange = (index, value) => {
+  const handelTotalAmountChange = (index, value) => {
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
-    const selectedTax = taxData.find((tax) => tax.taxType === selectedTaxType);
+    const selectedTax = taxData.find(
+      (tax) => tax.id === parseInt(selectedTaxType)
+    );
+
     const gstRate = selectedTax ? selectedTax.rate : 0;
-    const itemAmount = parseFloat(value);
+    const gstAmount = isNaN((parseInt(value) * gstRate) / 100)
+      ? 0
+      : (parseInt(value) * gstRate) / 100;
+    const itemAmount = isNaN(parseInt(value) - gstAmount)
+      ? 0
+      : parseInt(value) - gstAmount;
 
-    // Calculate GST amount
-    const gstAmount = (itemAmount * parseFloat(gstRate)) / 100;
-    const validGstAmount = isNaN(gstAmount) ? 0 : gstAmount;
-
-    // Calculate total amount
-    const totalAmount = itemAmount + validGstAmount;
-    const validTotalAmount = isNaN(totalAmount) ? 0 : totalAmount;
-
-    // Update rows state
     const updatedRows = [...rows];
     updatedRows[index] = {
       ...updatedRows[index],
-      itemAmount: itemAmount,
-      gstAmount: gstRate,
-      totalAmount: validTotalAmount,
+      itemAmount: itemAmount.toFixed(2),
+      gstAmount: gstAmount.toFixed(2),
+      totalAmount: value,
     };
     setRows(updatedRows);
-
-    // Update formik values
-    formik.setFieldValue(`invoiceItems[${index}].itemAmount`, itemAmount);
+    formik.setFieldValue(
+      `invoiceItems[${index}].itemAmount`,
+      itemAmount.toFixed(2)
+    );
     formik.setFieldValue(
       `invoiceItems[${index}].gstAmount`,
-      validGstAmount.toFixed(2)
+      gstAmount.toFixed(2)
     );
-    formik.setFieldValue(
-      `invoiceItems[${index}].totalAmount`,
-      validTotalAmount.toFixed(2)
-    );
+    formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
 
   useEffect(() => {
@@ -300,40 +336,6 @@ export default function InvoiceEdit() {
     fetchTaxData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const calculateTotalAmount = (itemAmount, gstRate) => {
-    const itemAmountValue = parseFloat(itemAmount) || 0;
-    if (!itemAmountValue) {
-      return {
-        gstAmount: "0.00",
-        totalAmount: "0.00",
-      };
-    }
-
-    const gstAmount = itemAmountValue * (parseFloat(gstRate) / 100);
-    const totalAmount = itemAmountValue + gstAmount;
-    return {
-      gstAmount: gstAmount.toFixed(2),
-      totalAmount: totalAmount.toFixed(2),
-    };
-  };
-
-  useEffect(() => {
-    rows.forEach((_, index) => {
-      const itemAmount =
-        parseFloat(formik.values.invoiceItems[index]?.itemAmount) || 0;
-
-      if (formik.values.invoiceItems[index]?.taxType === "Standard") {
-        const { gstAmount, totalAmount } = calculateTotalAmount(itemAmount, 9);
-        formik.setFieldValue(`invoiceItems[${index}].gstAmount`, gstAmount);
-        formik.setFieldValue(`invoiceItems[${index}].totalAmount`, totalAmount);
-      } else if (formik.values.invoiceItems[index]?.taxType === "Non-Taxable") {
-        formik.setFieldValue(`invoiceItems[${index}].gstAmount`, "0.00");
-        const totalAmount = calculateTotalAmount(itemAmount, 0).totalAmount;
-        formik.setFieldValue(`invoiceItems[${index}].totalAmount`, totalAmount);
-      }
-    });
-  }, [formik.values.invoiceItems]);
 
   useEffect(() => {
     // Calculate total Item Amounts
@@ -506,9 +508,8 @@ export default function InvoiceEdit() {
                   class="form-select "
                   aria-label="Default select example"
                 >
-                  <option selected></option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
+                  <option value="" selected></option>
+                  {lessonOptions}
                 </select>
               </div>
               <div className="text-start mt-3">
@@ -704,28 +705,55 @@ export default function InvoiceEdit() {
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].item`
                             )}
-                            className="form-control"
+                            className={`form-control ${
+                              formik.touched.invoiceItems?.[index]?.item &&
+                              formik.errors.invoiceItems?.[index]?.item
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             type="text"
                             style={{ width: "80%" }}
                           />
+                          {formik.touched.invoiceItems?.[index]?.item &&
+                            formik.errors.invoiceItems?.[index]?.item && (
+                              <div className="invalid-feedback">
+                                {formik.errors.invoiceItems[index].item}
+                              </div>
+                            )}
                         </td>
                         <td>
                           <input
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].itemAmount`
                             )}
-                            className="form-control"
+                            className={`form-control ${
+                              formik.touched.invoiceItems?.[index]
+                                ?.itemAmount &&
+                              formik.errors.invoiceItems?.[index]?.itemAmount
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             type="number"
                             min={0}
                             style={{ width: "80%" }}
-                            onChange={(e) =>
-                              handleItemAmountChange(index, e.target.value)
-                            }
+                            onChange={formik.handleChange}
+                            readOnly
                           />
+                          {formik.touched.invoiceItems?.[index]?.itemAmount &&
+                            formik.errors.invoiceItems?.[index]?.itemAmount && (
+                              <div className="invalid-feedback">
+                                {formik.errors.invoiceItems[index].itemAmount}
+                              </div>
+                            )}
                         </td>
                         <td>
                           <select
-                            className="form-select"
+                            className={`form-select ${
+                              formik.touched.invoiceItems?.[index]?.taxType &&
+                              formik.errors.invoiceItems?.[index]?.taxType
+                                ? "is-invalid"
+                                : ""
+                            }`}
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].taxType`
                             )}
@@ -742,6 +770,12 @@ export default function InvoiceEdit() {
                                 </option>
                               ))}
                           </select>
+                          {formik.touched.invoiceItems?.[index]?.taxType &&
+                            formik.errors.invoiceItems?.[index]?.taxType && (
+                              <div className="invalid-feedback">
+                                {formik.errors.invoiceItems[index].taxType}
+                              </div>
+                            )}
                         </td>
                         <td>
                           <input
@@ -752,6 +786,7 @@ export default function InvoiceEdit() {
                             type="text"
                             style={{ width: "80%" }}
                             readOnly
+                            onChange={formik.handleChange}
                           />
                         </td>
                         <td>
@@ -762,7 +797,9 @@ export default function InvoiceEdit() {
                             className="form-control"
                             type="text"
                             style={{ width: "80%" }}
-                            readOnly
+                            onChange={(e) =>
+                              handelTotalAmountChange(index, e.target.value)
+                            }
                           />
                         </td>
                       </tr>
