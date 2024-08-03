@@ -99,7 +99,7 @@ const StudentEndClass = () => {
           console.log("Value not present in the table");
         }
       } catch (error) {
-        toast.error("Error Fetching Form Data");
+        console.log("Error Fetching Form Data");
       }
     };
 

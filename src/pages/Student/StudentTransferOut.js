@@ -79,7 +79,8 @@ function StudentTransferOut() {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllStudentDetails/${id}`);
-        if (response.data.studentCourseDetailModels.length > 0) {
+        console.log("Response is ", response.data)
+        if (response.data.centerId && response.data.centerId) {
           // setData(response.data);
           const formattedResponseData = {
             courseId: response.data.studentCourseDetailModels[0].courseId,
@@ -88,7 +89,7 @@ function StudentTransferOut() {
           formik.setValues(formattedResponseData);
         }
       } catch (error) {
-        toast.error("Error Fetching Form Data");
+        console.log("Error Fetching Form Data");
       } finally {
         setLoadIndicator(false);
       }
