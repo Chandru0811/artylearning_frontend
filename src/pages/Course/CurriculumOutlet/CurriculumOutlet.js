@@ -11,6 +11,7 @@ import CurriculumOutletAdd from "./CurriculumOutletAdd";
 import CurriculumOutletEdit from "./CurriculumOutletEdit";
 import { Link, useParams } from "react-router-dom";
 import { FaFileInvoice } from "react-icons/fa";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 function CurriculumOutlet() {
   // console.log("Screens : ", SCREENS);
@@ -148,12 +149,21 @@ function CurriculumOutlet() {
                                             
                                         </OverlayTrigger>
                                     )} */}
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip id="tooltip-top">Course Curriculum</Tooltip>
+                    }
+                  >
+                    <Link
+                      to={`/curriculumoutlet/curriculum/${data.id}?courseId=${id}`}
+                    >
+                      <button className="btn btn-sm">
+                        <FaFileInvoice />
+                      </button>
+                    </Link>
+                  </OverlayTrigger>
 
-                  <Link to={`/curriculumoutlet/curriculum/${data.id}?courseId=${id}`}>
-                    <button className="btn btn-sm">
-                      <FaFileInvoice />
-                    </button>
-                  </Link>
                   {storedScreens?.courseDelete && (
                     <Delete
                       onSuccess={refreshData}

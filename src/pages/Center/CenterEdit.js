@@ -532,7 +532,7 @@ function CenterEdit() {
             <div className="col-md-6 col-12">
               <div className="text-start mt-2">
                 <label htmlFor="" className="mb-1 fw-medium">
-                  <small>QR Code</small>
+                  <small>QR Code<span className="text-danger">*</span></small>
                 </label>
                 <br />
                 <input
@@ -671,6 +671,7 @@ function CenterEdit() {
           {/* class Room  */}
           <div className="col-md-12 col-12 mt-4">
             <h5 className="headColor mb-3">Centre Classroom</h5>
+            <div className="table-responsive">
             <table class="table table-border-solid">
               <thead>
                 <tr>
@@ -729,7 +730,7 @@ function CenterEdit() {
                       <td>{centerClassRoom.classRoomCode}</td>
                       <td>{centerClassRoom.classRoomType}</td>
                       <td>{centerClassRoom.capacity}</td>
-                      <td>{centerClassRoom.description}</td>
+                      <td className="text-break">{centerClassRoom.description}</td>
                       <td>
                         <EditClass
                           id={centerClassRoom.id}
@@ -746,6 +747,7 @@ function CenterEdit() {
                   ))}
               </tbody>
             </table>
+            </div>
           </div>
           .{/* Package  */}
           <div className="col-md-12 col-12 mt-4">

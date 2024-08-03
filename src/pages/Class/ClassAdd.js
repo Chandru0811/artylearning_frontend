@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
 function ClassAdd() {
   const navigate = useNavigate();
@@ -16,12 +16,24 @@ function ClassAdd() {
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      const courseData = await fetchAllCoursesWithIds();
       setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  const fetchCourses = async (centerId) => {
+    try {
+      const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
     } catch (error) {
       toast.error(error);
     }
+  };
+  const handleCenterChange = (event) => {
+    setCourseData(null);
+    const center = event.target.value;
+    formik.setFieldValue("centerId", center);
+    fetchCourses(center);
   };
 
   useEffect(() => {
@@ -73,13 +85,13 @@ function ClassAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        console.log("Duplicate Error:",error);
+        console.log("Duplicate Error:", error);
         if (error.response.status === 409) {
           toast.warning("Already Create Class Name!");
         } else {
           toast.error(error);
         }
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -95,15 +107,19 @@ function ClassAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                Save
-              </button>
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Save
+          </button>
         </div>
         <div className="container">
           <div className="row py-4">
@@ -114,12 +130,14 @@ function ClassAdd() {
               <select
                 {...formik.getFieldProps("centerId")}
                 name="centerId"
-                className={`form-select   ${formik.touched.centerId && formik.errors.centerId
+                className={`form-select   ${
+                  formik.touched.centerId && formik.errors.centerId
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 aria-label="Default select example"
                 class="form-select "
+                onChange={handleCenterChange}
               >
                 <option selected></option>
                 {centerData &&
@@ -140,10 +158,11 @@ function ClassAdd() {
               <select
                 {...formik.getFieldProps("courseId")}
                 name="courseId"
-                className={`form-select   ${formik.touched.courseId && formik.errors.courseId
+                className={`form-select   ${
+                  formik.touched.courseId && formik.errors.courseId
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -167,10 +186,11 @@ function ClassAdd() {
                 name="className"
                 class="form-control "
                 type="text"
-                className={`form-control  ${formik.touched.className && formik.errors.className
+                className={`form-control  ${
+                  formik.touched.className && formik.errors.className
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 {...formik.getFieldProps("className")}
               />
               {formik.touched.className && formik.errors.className && (
@@ -223,17 +243,18 @@ function ClassAdd() {
                 Duration(Hrs)<span class="text-danger">*</span>
               </label>
               <select
-               {...formik.getFieldProps("durationInHrs")}
-                className={`form-select  ${formik.touched.durationInHrs && formik.errors.durationInHrs
+                {...formik.getFieldProps("durationInHrs")}
+                className={`form-select  ${
+                  formik.touched.durationInHrs && formik.errors.durationInHrs
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 name="durationInHrs"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.durationInHrs}
               >
-                <option ></option>
+                <option></option>
                 <option value="1.00">1.00 hr</option>
                 <option value="1.30">1.30 hr</option>
               </select>
@@ -249,10 +270,11 @@ function ClassAdd() {
                 name="remark"
                 class="form-control "
                 type="text"
-                className={`form-control  ${formik.touched.remark && formik.errors.remark
+                className={`form-control  ${
+                  formik.touched.remark && formik.errors.remark
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 {...formik.getFieldProps("remark")}
               />
               {formik.touched.remark && formik.errors.remark && (

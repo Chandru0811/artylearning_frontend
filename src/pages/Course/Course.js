@@ -172,7 +172,7 @@ const Course = () => {
                           Course Deposit Fees
                         </Dropdown.Item>
                         <Dropdown.Item as={Link} to={`/course/curriculumoutlet/${data.id}`}>
-                          Curriculum Outline
+                          Curriculum Outlet
                         </Dropdown.Item>
                       </DropdownButton>
                     </OverlayTrigger>

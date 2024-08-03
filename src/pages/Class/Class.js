@@ -44,9 +44,7 @@ const Class = () => {
       // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
+    $(tableRef.current).DataTable();
   };
 
   const destroyDataTable = () => {
@@ -97,7 +95,7 @@ const Class = () => {
               <th scope="col">S No</th>
               <th scope="col">Class Name</th>
               <th scope="col">Class Type </th>
-              <th scope="col">Remark </th>
+              {/* <th scope="col">Remark </th> */}
 
               <th scope="col">Action</th>
             </tr>
@@ -108,7 +106,7 @@ const Class = () => {
                 <th scope="row">{index + 1}</th>
                 <td>{data.className}</td>
                 <td>{data.classType}</td>
-                <td>{data.remark}</td>
+                {/* <td>{data.remark}</td> */}
                 <td>
                   {storedScreens?.classRead && (
                     <Link to={`/class/view/${data.id}`}>

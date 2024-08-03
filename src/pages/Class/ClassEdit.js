@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
 function ClassEdit() {
   const { id } = useParams();
@@ -17,12 +17,24 @@ const [loadIndicator, setLoadIndicator] = useState(false);
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      const courseData = await fetchAllCoursesWithIds();
       setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  const fetchCourses = async (centerId) => {
+    try {
+      const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
     } catch (error) {
       toast.error(error);
     }
+  };
+  const handleCenterChange = (event) => {
+    setCourseData(null);
+    const center = event.target.value;
+    formik.setFieldValue("centerId", center);
+    fetchCourses(center);
   };
 
   const validationSchema = Yup.object({
@@ -75,6 +87,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
       try {
         const response = await api.get(`/getAllCourseClassListingsById/${id}`);
         formik.setValues(response.data);
+        fetchCourses(response.data.centerId);
       } catch (error) {
         toast.error("Error Fetch Data ", error);
       }
@@ -82,6 +95,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
 
     getData();
     fetchData();
+   
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -120,6 +134,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
                   }`}
                 aria-label="Default select example"
                 class="form-select "
+                onChange={handleCenterChange}
               >
                 <option selected></option>
                 {centerData &&
@@ -140,10 +155,11 @@ const [loadIndicator, setLoadIndicator] = useState(false);
               <select
                 {...formik.getFieldProps("courseId")}
                 name="courseId"
-                className={`form-select   ${formik.touched.courseId && formik.errors.courseId
+                className={`form-select   ${
+                  formik.touched.courseId && formik.errors.courseId
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 aria-label="Default select example"
                 class="form-select "
               >
