@@ -376,17 +376,20 @@ function Sidebar() {
           {
             title: "My Messages",
             path: "/messaging",
-            access: storedScreens.documentListingIndex,
+            access: storedScreens.smsMessageIndex,
+            // access:true
           },
           {
             title: "Other Messages",
             path: "/othermessaging",
-            access: storedScreens.documentFileIndex,
+            access: storedScreens.smsMessageIndex,
+            // access:true
           },
           {
             title: "School Announcement",
             path: "/sendNotification",
-            access: storedScreens.documentFileIndex,
+            access: storedScreens.sendNotificationIndex,
+            // access:true
           },
           // Add more submenus as needed
         ],

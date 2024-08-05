@@ -100,7 +100,7 @@ function HolidayView() {
                   <p className="fw-medium">Description</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.holidayDescription || "--"}</p>
+                  <p className="text-muted text-sm text-break">: {data.holidayDescription || "--"}</p>
                 </div>
               </div>
             </div>

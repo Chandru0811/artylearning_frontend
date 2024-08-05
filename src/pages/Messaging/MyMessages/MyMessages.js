@@ -119,12 +119,12 @@ const MyMessages = () => {
                         {/* {storedScreens?.levelUpdate && (
                           <LevelEdit id={data.id} onSuccess={refreshData} />
                         )} */}
-                        {storedScreens?.levelDelete && (
+                        {/* {storedScreens?.levelDelete && ( */}
                           <Delete
                             onSuccess={refreshData}
                             path={`/deleteMessage/${data.id}`}
                           />
-                        )}
+                        {/* )} */}
                       </div>
                     </td>
                   </tr>

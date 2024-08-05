@@ -226,12 +226,12 @@ function RolesAdd() {
       timeScheduleUnBlock: true,
       timeScheduleAdd: true,
       timeScheduleApproved: true,
-      schoolAnnouncementIndex: true,
-      schoolAnnouncementCreate: true,
-      schoolAnnouncementUpdate: true,
-      messagingIndex: true,
-      messagingRead: true,
-      messagingCreate: true,
+      sendNotificationIndex: true,
+      sendNotificationCreate: true,
+      sendNotificationUpdate: true,
+      smsMessageIndex: true,
+      smsMessageRead: true,
+      smsMessageCreate: true,
       account_read: true,
       headerIndex: true,
       headerRead: true,
@@ -2785,10 +2785,10 @@ function RolesAdd() {
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="schoolAnnouncementIndex"
-                          checked={formik.values.schoolAnnouncementIndex}
+                          name="sendNotificationIndex"
+                          checked={formik.values.sendNotificationIndex}
                           onChange={handleCheckboxChange(
-                            `schoolAnnouncementIndex`
+                            `sendNotificationIndex`
                           )}
                         />
                       </td>
@@ -2796,19 +2796,19 @@ function RolesAdd() {
                         {/* <input
                           class="form-check-input"
                           type="checkbox"
-                          name="notificationRead"
-                          checked={formik.values.notificationRead}
-                          onChange={handleCheckboxChange(`notificationRead`)}
+                          name="sendNotificationRead"
+                          checked={formik.values.sendNotificationRead}
+                          onChange={handleCheckboxChange(`sendNotificationRead`)}
                         /> */}
                       </td>
                       <td>
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="schoolAnnouncementCreate"
-                          checked={formik.values.schoolAnnouncementCreate}
+                          name="sendNotificationCreate"
+                          checked={formik.values.sendNotificationCreate}
                           onChange={handleCheckboxChange(
-                            `schoolAnnouncementCreate`
+                            `sendNotificationCreate`
                           )}
                         />
                       </td>
@@ -2816,10 +2816,10 @@ function RolesAdd() {
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="schoolAnnouncementUpdate"
-                          checked={formik.values.schoolAnnouncementUpdate}
+                          name="sendNotificationUpdate"
+                          checked={formik.values.sendNotificationUpdate}
                           onChange={handleCheckboxChange(
-                            `schoolAnnouncementUpdate`
+                            `sendNotificationUpdate`
                           )}
                         />
                       </td>
@@ -2827,14 +2827,15 @@ function RolesAdd() {
                         {/* <input
                           class="form-check-input"
                           type="checkbox"
-                          name="notificationDelete"
-                          checked={formik.values.notificationDelete}
+                          name="sendNotificationDelete"
+                          checked={formik.values.sendNotificationDelete}
                           onChange={handleCheckboxChange(
-                            `notificationDelete`
+                            `sendNotificationDelete`
                           )}
                         /> */}
                       </td>
                     </tr>
+                    
                     <tr>
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
@@ -2845,10 +2846,10 @@ function RolesAdd() {
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="messagingIndex"
-                          checked={formik.values.messagingIndex}
+                          name="smsMessageIndex"
+                          checked={formik.values.smsMessageIndex}
                           onChange={handleCheckboxChange(
-                            `messagingIndex`
+                            `smsMessageIndex`
                           )}
                         />
                       </td>
@@ -2856,19 +2857,19 @@ function RolesAdd() {
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="messagingRead"
-                          checked={formik.values.messagingRead}
-                          onChange={handleCheckboxChange(`messagingRead`)}
+                          name="smsMessageRead"
+                          checked={formik.values.smsMessageRead}
+                          onChange={handleCheckboxChange(`smsMessageRead`)}
                         />
                       </td>
                       <td>
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          name="messagingCreate"
-                          checked={formik.values.messagingCreate}
+                          name="smsMessageCreate"
+                          checked={formik.values.smsMessageCreate}
                           onChange={handleCheckboxChange(
-                            `messagingCreate`
+                            `smsMessageCreate`
                           )}
                         />
                       </td>
@@ -2877,10 +2878,83 @@ function RolesAdd() {
                         {/* <input
                           class="form-check-input"
                           type="checkbox"
-                          name="notificationDelete"
-                          checked={formik.values.notificationDelete}
+                          name="smsMessageUpdate"
+                          checked={formik.values.smsMessageUpdate}
                           onChange={handleCheckboxChange(
-                            `notificationDelete`
+                            `smsMessageUpdate`
+                          )}
+                        /> */}
+                      </td>
+                      <td>
+                        {/* <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="smsMessageDelete"
+                          checked={formik.values.smsMessageDelete}
+                          onChange={handleCheckboxChange(
+                            `smsMessageDelete`
+                          )}
+                        /> */}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Other Messages
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="smsMessageIndex"
+                          checked={formik.values.smsMessageIndex}
+                          onChange={handleCheckboxChange(
+                            `smsMessageIndex`
+                          )}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="smsMessageRead"
+                          checked={formik.values.smsMessageRead}
+                          onChange={handleCheckboxChange(`smsMessageRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="smsMessageCreate"
+                          checked={formik.values.smsMessageCreate}
+                          onChange={handleCheckboxChange(
+                            `smsMessageCreate`
+                          )}
+                        />
+                      </td>
+
+                      <td>
+                        {/* <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="smsMessageUpdate"
+                          checked={formik.values.smsMessageUpdate}
+                          onChange={handleCheckboxChange(
+                            `smsMessageUpdate`
+                          )}
+                        /> */}
+                      </td>
+                      <td>
+                        {/* <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="smsMessageDelete"
+                          checked={formik.values.smsMessageDelete}
+                          onChange={handleCheckboxChange(
+                            `smsMessageDelete`
                           )}
                         /> */}
                       </td>

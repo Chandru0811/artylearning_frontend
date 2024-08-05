@@ -70,7 +70,7 @@ const StaffRequiredAdd = forwardRef(
               <input
                 type="file"
                 class="form-control mt-3"
-                // accept=".pdf"
+                accept=".pdf"
                 name="resume"
                 onChange={(event) => {
                   formik.setFieldValue("resume", event.currentTarget.files[0]);
@@ -84,7 +84,7 @@ const StaffRequiredAdd = forwardRef(
               <input
                 type="file"
                 class="form-control mt-3"
-                // accept=".pdf"
+                accept=".pdf"
                 name="educationCertificate"
                 onChange={(event) => {
                   formik.setFieldValue(
