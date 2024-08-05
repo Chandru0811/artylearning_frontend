@@ -13,7 +13,7 @@ import CourseDepositEdit from "./CourseDepositEdit";
 import CourseDepositView from "./CourseDepositView";
 
 const CourseDeposit = () => {
-  console.log("Screens : ", SCREENS);
+  const uniqueKey = "CourseDepositPageNumber";
   const { id } = useParams();
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
@@ -58,11 +58,20 @@ const CourseDeposit = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
+
     $(tableRef.current).DataTable({
       responsive: true,
+      pageLength: 10, // default page length
+      displayStart: localStorage.getItem(uniqueKey)
+        ? parseInt(localStorage.getItem(uniqueKey)) * 10
+        : 0,
+      drawCallback: function () {
+        var table = $(tableRef.current).DataTable();
+        var pageInfo = table.page.info();
+        localStorage.setItem(uniqueKey, pageInfo.page);
+      },
     });
   };
 
@@ -86,7 +95,11 @@ const CourseDeposit = () => {
     setLoading(false);
   };
 
-
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
+    };
+  }, []);
 
   return (
     <div className="container my-4">

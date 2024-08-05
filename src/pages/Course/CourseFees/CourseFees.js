@@ -2,20 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link, useParams } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 import Delete from "../../../components/common/Delete";
 import api from "../../../config/URL";
-import { SCREENS } from "../../../config/ScreenFilter";
-import fetchAllSubjectsWithIds from "../../List/SubjectList";
+
 import { toast } from "react-toastify";
 import CourseFeesAdd from "./CourseFeesAdd";
 import CourseFeesEdit from "./CourseFeesEdit";
-import CourseFeesView from "./CourseFeesView";
 import fetchAllPackageList from "../../List/PackageList";
 
 const CourseFees = () => {
-  console.log("Screens : ", SCREENS);
+  const uniqueKey = "CourseFeeNumber";
   const { id } = useParams();
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
@@ -70,11 +67,20 @@ const CourseFees = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
+
     $(tableRef.current).DataTable({
       responsive: true,
+      pageLength: 10, // default page length
+      displayStart: localStorage.getItem(uniqueKey)
+        ? parseInt(localStorage.getItem(uniqueKey)) * 10
+        : 0,
+      drawCallback: function () {
+        var table = $(tableRef.current).DataTable();
+        var pageInfo = table.page.info();
+        localStorage.setItem(uniqueKey, pageInfo.page);
+      },
     });
   };
 
@@ -102,6 +108,12 @@ const CourseFees = () => {
   useEffect(() => {
     fetchTaxData();
     fetchPackageData();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
+    };
   }, []);
 
   return (

@@ -15,7 +15,7 @@ const Class = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-  // console.log("Screens : ", SCREENS);
+  const uniqueKey = "ClassPageNumber";
 
   useEffect(() => {
     const getCenterData = async () => {
@@ -41,10 +41,21 @@ const Class = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable();
+
+    $(tableRef.current).DataTable({
+      responsive: true,
+      pageLength: 10, // default page length
+      displayStart: localStorage.getItem(uniqueKey)
+        ? parseInt(localStorage.getItem(uniqueKey)) * 10
+        : 0,
+      drawCallback: function () {
+        var table = $(tableRef.current).DataTable();
+        var pageInfo = table.page.info();
+        localStorage.setItem(uniqueKey, pageInfo.page);
+      },
+    });
   };
 
   const destroyDataTable = () => {
@@ -66,6 +77,12 @@ const Class = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
+    };
+  }, []);
 
   return (
     <div className="container my-4">

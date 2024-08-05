@@ -22,7 +22,7 @@ const Invoice = () => {
   const [packageData, setPackageData] = useState(null);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-  // console.log("Screens : ", SCREENS);
+  const uniqueKey = "InvoicetPageNumber";
 
   const fetchData = async () => {
     try {
@@ -65,14 +65,23 @@ const Invoice = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
+
     $(tableRef.current).DataTable({
       responsive: true,
+      pageLength: 10, // default page length
+      displayStart: localStorage.getItem(uniqueKey)
+        ? parseInt(localStorage.getItem(uniqueKey)) * 10
+        : 0,
+      drawCallback: function () {
+        var table = $(tableRef.current).DataTable();
+        var pageInfo = table.page.info();
+        localStorage.setItem(uniqueKey, pageInfo.page);
+      },
     });
   };
-
+  
   const destroyDataTable = () => {
     const table = $(tableRef.current).DataTable();
     if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
@@ -92,6 +101,12 @@ const Invoice = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
+    };
+  }, []);
 
   return (
     <div className="container my-4">

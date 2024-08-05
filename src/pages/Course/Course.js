@@ -13,7 +13,7 @@ import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
 
 const Course = () => {
-  console.log("Screens : ", SCREENS);
+  const uniqueKey = "CoursePageNumber";
   // const { id } = useParams();
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
@@ -45,11 +45,20 @@ const Course = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
+
     $(tableRef.current).DataTable({
       responsive: true,
+      pageLength: 10, // default page length
+      displayStart: localStorage.getItem(uniqueKey)
+        ? parseInt(localStorage.getItem(uniqueKey)) * 10
+        : 0,
+      drawCallback: function () {
+        var table = $(tableRef.current).DataTable();
+        var pageInfo = table.page.info();
+        localStorage.setItem(uniqueKey, pageInfo.page);
+      },
     });
   };
 
@@ -85,6 +94,11 @@ const Course = () => {
     fetchSubData();
   }, [loading]);
 
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
+    };
+  }, []);
 
   return (
     <div className="container my-4">

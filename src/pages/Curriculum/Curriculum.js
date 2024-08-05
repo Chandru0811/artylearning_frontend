@@ -14,7 +14,7 @@ const Curriculum = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const courseId = searchParams.get("courseId");
-  // console.log("ID:", courseId);
+  const uniqueKey = "CoursePageNumber";
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,11 +57,7 @@ const Curriculum = () => {
     };
   }, [loading]);
 
-  // const refreshData = async () => {
-  //   const response = await api.get(`/getAllCurriculumCodesByCourseId/${id}`);
-  //   setDatas(response.data);
-  // };
-
+ 
   useEffect(() => {
     if (!loading) {
       initializeDataTable();
@@ -73,10 +69,21 @@ const Curriculum = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable();
+
+    $(tableRef.current).DataTable({
+      responsive: true,
+      pageLength: 10, // default page length
+      displayStart: localStorage.getItem(uniqueKey)
+        ? parseInt(localStorage.getItem(uniqueKey)) * 10
+        : 0,
+      drawCallback: function () {
+        var table = $(tableRef.current).DataTable();
+        var pageInfo = table.page.info();
+        localStorage.setItem(uniqueKey, pageInfo.page);
+      },
+    });
   };
 
   const destroyDataTable = () => {
@@ -100,6 +107,12 @@ const Curriculum = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
+    };
+  }, []);
 
   return (
     <div className="container my-4">

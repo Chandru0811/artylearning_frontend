@@ -14,7 +14,7 @@ import { FaFileInvoice } from "react-icons/fa";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 function CurriculumOutlet() {
-  // console.log("Screens : ", SCREENS);
+  const uniqueKey = "CurriculumOutletPageNumber";
   const { id } = useParams();
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
@@ -48,11 +48,20 @@ function CurriculumOutlet() {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
+
     $(tableRef.current).DataTable({
       responsive: true,
+      pageLength: 10, // default page length
+      displayStart: localStorage.getItem(uniqueKey)
+        ? parseInt(localStorage.getItem(uniqueKey)) * 10
+        : 0,
+      drawCallback: function () {
+        var table = $(tableRef.current).DataTable();
+        var pageInfo = table.page.info();
+        localStorage.setItem(uniqueKey, pageInfo.page);
+      },
     });
   };
 
@@ -75,6 +84,12 @@ function CurriculumOutlet() {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
+    };
+  }, []);
 
   return (
     <div className="container my-4">
