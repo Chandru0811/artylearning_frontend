@@ -22,8 +22,9 @@ const invoiceItemSchema = Yup.object().shape({
     .positive("Item amount must be a positive number"),
   taxType: Yup.string().required("Tax type is required"),
   gstAmount: Yup.number()
-    .required("GST amount is required")
-    .positive("GST amount must be a positive number"),
+  .required("GST amount is required")
+  .min(0, "GST amount must be a positive number or zero"),
+
   totalAmount: Yup.number()
     .required("Total amount is required")
     .positive("Total amount must be a positive number"),
@@ -62,7 +63,7 @@ export default function InvoiceAdd() {
       </option>
     );
   }
- 
+
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -552,24 +553,6 @@ export default function InvoiceAdd() {
               </div>
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
-                  Parent<span class="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  {...formik.getFieldProps("parent")}
-                  className={`form-control  ${
-                    formik.touched.parent && formik.errors.parent
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  type="text"
-                />
-                {formik.touched.parent && formik.errors.parent && (
-                  <div className="invalid-feedback">{formik.errors.parent}</div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
                   Student<span class="text-danger">*</span>
                 </label>
                 <br />
@@ -596,6 +579,25 @@ export default function InvoiceAdd() {
                   </div>
                 )}
               </div>
+              <div className="text-start mt-3">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  Parent<span class="text-danger">*</span>
+                </label>
+                <br />
+                <input
+                  {...formik.getFieldProps("parent")}
+                  className={`form-control  ${
+                    formik.touched.parent && formik.errors.parent
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  type="text"
+                />
+                {formik.touched.parent && formik.errors.parent && (
+                  <div className="invalid-feedback">{formik.errors.parent}</div>
+                )}
+              </div>
+
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
                   Course<span class="text-danger">*</span>
@@ -650,18 +652,30 @@ export default function InvoiceAdd() {
               </div>
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
-                  Number of Lesson
+                  Package<span class="text-danger">*</span>
                 </label>
                 <br />
                 <select
-                  name="noOfLessons"
-                  {...formik.getFieldProps("noOfLessons")}
-                  class="form-select "
-                  aria-label="Default select example"
+                  {...formik.getFieldProps("packageId")}
+                  className={`form-select ${
+                    formik.touched.packageId && formik.errors.packageId
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 >
-                  <option value="" selected></option>
-                  {lessonOptions}
+                  <option selected></option>
+                  {packageData &&
+                    packageData.map((packages) => (
+                      <option key={packages.id} value={packages.id}>
+                        {packages.packageNames}
+                      </option>
+                    ))}
                 </select>
+                {formik.touched.packageId && formik.errors.packageId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.packageId}
+                  </div>
+                )}
               </div>
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
@@ -720,33 +734,7 @@ export default function InvoiceAdd() {
                   </div>
                 )}
               </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Package<span class="text-danger">*</span>
-                </label>
-                <br />
-                <select
-                  {...formik.getFieldProps("packageId")}
-                  className={`form-select ${
-                    formik.touched.packageId && formik.errors.packageId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected></option>
-                  {packageData &&
-                    packageData.map((packages) => (
-                      <option key={packages.id} value={packages.id}>
-                        {packages.packageNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.packageId && formik.errors.packageId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.packageId}
-                  </div>
-                )}
-              </div>
+
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
                   Invoice Period From<span class="text-danger">*</span>
@@ -814,6 +802,21 @@ export default function InvoiceAdd() {
                       {formik.errors.receiptAmount}
                     </div>
                   )}
+              </div>
+              <div className="text-start mt-3">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  Number of Lesson
+                </label>
+                <br />
+                <select
+                  name="noOfLessons"
+                  {...formik.getFieldProps("noOfLessons")}
+                  class="form-select "
+                  aria-label="Default select example"
+                >
+                  <option value="" selected></option>
+                  {lessonOptions}
+                </select>
               </div>
             </div>
           </div>
