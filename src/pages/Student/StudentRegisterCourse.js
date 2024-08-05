@@ -31,6 +31,80 @@ function StudentRegisterCourse() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
 
+  // const formik = useFormik({
+  //   initialValues: {
+  //     lessonName: "",
+  //     packageName: ""
+  //   },
+  //   validationSchema: validationSchema,
+  //   onSubmit: async (data) => {
+  //     if (!selectedRow) {
+  //       toast.warning("Please select a course");
+  //       return;
+  //     }
+  //     setLoadIndicator(true);
+  //     const payload = {
+  //       ...data,
+  //       studentId: id,
+  //       centerId: selectedRowData.centerId,
+  //       centerName: selectedRowData.centerName,
+  //       classId: selectedRowData.classId,
+  //       className: selectedRowData.className,
+  //       course: selectedRowData.course,
+  //       courseId: selectedRowData.courseId,
+  //       batchId: selectedRowData.batchId,
+  //       batch: selectedRowData.batch,
+  //       days: selectedRowData.days,
+  //       classRoom: selectedRowData.classRoom,
+  //       startDate: selectedRowData.startDate,
+  //       endDate: selectedRowData.endDate,
+  //       studentCount: selectedRowData.studentCount,
+  //       teacher: selectedRowData.teacher,
+  //       userId: selectedRowData.userId,
+  //     };
+  //     console.log("Payload Data:", payload);
+  //     try {
+  //       if (data.studentCourseDetailsId !== null) {
+  //         const response = await api.put(
+  //           `/updateStudentCourseDetails/${studentCourseDetailsId}`,
+  //           data,
+  //           {
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //           }
+  //         );
+  //         if (response.status === 200) {
+  //           toast.success(response.data.message);
+  //           navigate("/student");
+  //         } else {
+  //           toast.error(response.data.message);
+  //         }
+  //       } else {
+  //         const response = await api.post(
+  //           `/createStudentCourseDetails`,
+  //           data,
+  //           {
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //           }
+  //         );
+  //         if (response.status === 201) {
+  //           toast.success(response.data.message);
+  //           navigate("/student");
+  //         } else {
+  //           toast.error(response.data.message);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       toast.error(error);
+  //     } finally {
+  //       setLoadIndicator(false);
+  //     }
+  //   },
+  // });
+
   const formik = useFormik({
     initialValues: {
       lessonName: "",
@@ -64,24 +138,42 @@ function StudentRegisterCourse() {
       };
       console.log("Payload Data:", payload);
       try {
-        const response = await api.put(
-          `/updateStudentCourseDetails/${studentCourseDetailsId}`,
-          payload
-        );
-
-        if (response.status === 200) {
+        let response;
+        if (data.studentCourseDetailsId) {
+          response = await api.put(
+            `/updateStudentCourseDetails/${data.studentCourseDetailsId}`,
+            payload,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        } else {
+          response = await api.post(
+            `/createStudentCourseDetails`,
+            payload,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        }
+        if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
           navigate("/student");
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "An error occurred");
       } finally {
         setLoadIndicator(false);
       }
     },
   });
+
 
   const fetchCourseData = async () => {
     try {
@@ -303,8 +395,8 @@ function StudentRegisterCourse() {
                   <select
                     {...formik.getFieldProps("courseId")}
                     class={`form-select  ${formik.touched.courseId && formik.errors.courseId
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     id="courseId"
                     name="courseId"
@@ -324,8 +416,8 @@ function StudentRegisterCourse() {
                   <select
                     {...formik.getFieldProps("days")}
                     class={`form-select  ${formik.touched.days && formik.errors.days
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     id="days"
                     name="days"
@@ -427,8 +519,8 @@ function StudentRegisterCourse() {
                   <select
                     {...formik.getFieldProps("packageName")}
                     class={`form-select  ${formik.touched.packageName && formik.errors.packageName
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     id="packageName"
                     name="packageName"

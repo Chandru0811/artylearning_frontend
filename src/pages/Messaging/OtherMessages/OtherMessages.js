@@ -5,6 +5,7 @@ import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import api from "../../../config/URL";
+import Delete from "../../../components/common/Delete";
 
 const OtherMessages = () => {
   const tableRef = useRef(null);
@@ -12,7 +13,7 @@ const OtherMessages = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-  
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -53,18 +54,18 @@ const OtherMessages = () => {
     }
   };
 
-  // const refreshData = async () => {
-  //   destroyDataTable();
-  //   setLoading(true);
-  //   try {
-  //     const response = await api.get("/getAllMessagesOnlyTeachers");
-  //     setDatas(response.data);
-  //     initializeDataTable(); // Reinitialize DataTable after successful data update
-  //   } catch (error) {
-  //     console.error("Error refreshing data:", error);
-  //   }
-  //   setLoading(false);
-  // };
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await api.get("/getAllMessagesOnlyTeachers");
+      setDatas(response.data);
+      initializeDataTable(); // Reinitialize DataTable after successful data update
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+    setLoading(false);
+  };
 
   return (
     <div>
@@ -101,22 +102,22 @@ const OtherMessages = () => {
                   <td>{data.createdAt.substring(0, 10)}</td>
                   <td>
                     <div className="d-flex">
-                      {storedScreens?.messagingRead && (
+                      {/* {storedScreens?.messagingRead && ( */}
                         <Link to={`/othermessaging/view/${data.receiverId}`}>
                           <button className="btn btn-sm">
                             <FaEye />
                           </button>
                         </Link>
-                      )}
-                      {/* {storedScreens?.levelUpdate && (
-                      <LevelEdit id={data.id} onSuccess={refreshData} />
-                    )}
-                    {storedScreens?.levelDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteMessage/${data.id}`}
-                      />
-                    )} */}
+                      {/* )} */}
+                      {/* {storedScreens?.messagingUpdate && (
+                        <LevelEdit id={data.id} onSuccess={refreshData} />
+                      )} */}
+                      {/* {storedScreens?.messagingDelete && ( */}
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteMessage/${data.id}`}
+                        />
+                      {/* )} */}
                     </div>
                   </td>
                 </tr>
