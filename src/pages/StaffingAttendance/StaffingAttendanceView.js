@@ -177,7 +177,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Attendance Remark</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.attendanceRemark || "--"}</p>
+                  <p className="text-muted text-sm text-break">: {data.attendanceRemark || "--"}</p>
                 </div>
               </div>
             </div>

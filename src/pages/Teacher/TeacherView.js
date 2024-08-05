@@ -159,11 +159,11 @@ function TeacherView() {
         </div>
         <div className="col-md-6 col-12">
           <div className="row mb-3">
-            <div className="col-6 d-flex">
+            <div className="col-6 ">
               <p className="text-sm fw-medium">Short Introduction</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">
+              <p className="text-muted text-sm text-break">
                 :{" "}
                 {data.shortIntroduction === "undefined"
                   ? "--"
@@ -463,7 +463,7 @@ function TeacherView() {
                 <p className="text-sm text-muted">Resume/Cv</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">{resumeFileName || "--"}</p>
+                <p className="text-sm text-muted text-break">{resumeFileName || "--"}</p>
               </div>
               <div className="col-4 ">
                 {userRequireInfo && (
@@ -486,7 +486,7 @@ function TeacherView() {
                 <p className="text-sm text-muted">Educational Certificates</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted">
+                <p className="text-sm text-muted text-break">
                   {educationalCertificates || "--"}
                 </p>
               </div>
