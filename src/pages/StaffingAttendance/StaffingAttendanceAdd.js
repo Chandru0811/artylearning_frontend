@@ -316,6 +316,29 @@ function StaffingAttendanceAdd() {
                       </div>
                     )}
                   </div>
+
+                  <div className="col-md-6 col-12 mb-3 ">
+                    <lable className="">Mode Of Working</lable>
+                    <span className="text-danger">*</span>
+                    <select
+                      className={`form-select ${formik.touched.modeOfWorking && formik.errors.modeOfWorking
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      {...formik.getFieldProps("modeOfWorking")}
+                      aria-label="Default select example"
+                    >
+                      <option selected></option>
+                      <option value="WORK_FROM_HOME">Work From Home</option>
+                      <option value="WORK_FROM_OFFICE">Work From Office</option>
+                    </select>
+                    {formik.touched.modeOfWorking &&
+                      formik.errors.modeOfWorking && (
+                        <div className="invalid-feedback">
+                          {formik.errors.modeOfWorking}
+                        </div>
+                      )}
+                  </div>
                 </>
               )}
 
@@ -364,29 +387,6 @@ function StaffingAttendanceAdd() {
                 )}
               </div> */}
 
-
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Mode Of Working</lable>
-                <span className="text-danger">*</span>
-                <select
-                  className={`form-select ${formik.touched.modeOfWorking && formik.errors.modeOfWorking
-                    ? "is-invalid"
-                    : ""
-                    }`}
-                  {...formik.getFieldProps("modeOfWorking")}
-                  aria-label="Default select example"
-                >
-                  <option selected></option>
-                  <option value="WORK_FROM_HOME">Work From Home</option>
-                  <option value="WORK_FROM_OFFICE">Work From Office</option>
-                </select>
-                {formik.touched.modeOfWorking &&
-                  formik.errors.modeOfWorking && (
-                    <div className="invalid-feedback">
-                      {formik.errors.modeOfWorking}
-                    </div>
-                  )}
-              </div>
               <div className="col-md-6 col-12">
                 <div className="text-start mt-2">
                   <lable className="form-lable">Attendance Remark</lable>

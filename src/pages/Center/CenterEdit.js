@@ -56,6 +56,7 @@ function CenterEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [teacherData, setTeacherData] = useState(null);
   const navigate = useNavigate();
+  const [taxTypeData, setTaxTypeData] = useState(null);
 
   useEffect(() => {
     fetchTeacher();
@@ -143,10 +144,20 @@ function CenterEdit() {
       }
     },
   });
+
+  const fetchTaxData = async () => {
+    try {
+      const response = await api.get("getAllTaxSetting");
+      setTaxTypeData(response.data);
+    } catch (error) {
+      toast.error("Error fetching tax data:", error);
+    }
+  };
+
   useEffect(() => {
     const getData = async () => {
       const response = await api.get(`/getAllCenterById/${id}`);
-      console.log("response",response.data)
+      console.log("response", response.data)
       const formattedData = {
         ...response.data,
         openingDate: response.data.openingDate
@@ -159,7 +170,7 @@ function CenterEdit() {
 
     getData();
     fetchTeacher();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchTaxData();
   }, [id]);
 
   const refreshData = async () => {
@@ -538,6 +549,7 @@ function CenterEdit() {
                 <br />
                 <input
                   type="file"
+                  accept=".png"
                   name="file"
                   className="form-control"
                   onChange={(event) => {
@@ -551,6 +563,11 @@ function CenterEdit() {
                   </div>
                 )}
               </div>
+              <img
+                src={data.qrCode}
+                className="img-fluid ms-2 w-50 rounded mt-2"
+                alt="Profile Image"
+              />
             </div>
             <div className="col-12">
               <label for="exampleFormControlInput1" className="form-label">
@@ -600,7 +617,15 @@ function CenterEdit() {
                       <td>{index + 1}</td>
                       <td>{registration.effectiveDate?.substring(0, 10)}</td>
                       <td>{registration.amount}</td>
-                      <td>{registration.taxType}</td>
+                      {/* <td>{registration.taxType}</td> */}
+                      <td>
+                        {taxTypeData &&
+                          taxTypeData.map((tax) =>
+                            parseInt(registration.taxType) === tax.id
+                              ? tax.taxType || "--"
+                              : ""
+                          )}
+                      </td>
                       <td>
                         <EditRegisteration
                           id={registration.id}
@@ -673,81 +698,81 @@ function CenterEdit() {
           <div className="col-md-12 col-12 mt-4">
             <h5 className="headColor mb-3">Centre Classroom</h5>
             <div className="table-responsive">
-            <table class="table table-border-solid">
-              <thead>
-                <tr>
-                  <th scope="col" className="fw-medium">
-                    S.No
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Classroom Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Classroom Code
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Classroom Type
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Capacity
-                  </th>
-                  <th
-                    scope="col"
-                    className="fw-medium"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Description
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Edit
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Delete
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.centerClassRooms &&
-                  data.centerClassRooms.map((centerClassRoom, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{centerClassRoom.classRoomName}</td>
-                      <td>{centerClassRoom.classRoomCode}</td>
-                      <td>{centerClassRoom.classRoomType}</td>
-                      <td>{centerClassRoom.capacity}</td>
-                      <td className="text-break">{centerClassRoom.description}</td>
-                      <td>
-                        <EditClass
-                          id={centerClassRoom.id}
-                          onSuccess={refreshData}
-                        />
-                      </td>
-                      <td>
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteCenterClassRooms/${centerClassRoom.id}`}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+              <table class="table table-border-solid">
+                <thead>
+                  <tr>
+                    <th scope="col" className="fw-medium">
+                      S.No
+                    </th>
+                    <th
+                      scope="col"
+                      className="fw-medium"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Classroom Name
+                    </th>
+                    <th
+                      scope="col"
+                      className="fw-medium"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Classroom Code
+                    </th>
+                    <th
+                      scope="col"
+                      className="fw-medium"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Classroom Type
+                    </th>
+                    <th
+                      scope="col"
+                      className="fw-medium"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Capacity
+                    </th>
+                    <th
+                      scope="col"
+                      className="fw-medium"
+                      style={{ whiteSpace: "nowrap" }}
+                    >
+                      Description
+                    </th>
+                    <th scope="col" className="fw-medium">
+                      Edit
+                    </th>
+                    <th scope="col" className="fw-medium">
+                      Delete
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.centerClassRooms &&
+                    data.centerClassRooms.map((centerClassRoom, index) => (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{centerClassRoom.classRoomName}</td>
+                        <td>{centerClassRoom.classRoomCode}</td>
+                        <td>{centerClassRoom.classRoomType}</td>
+                        <td>{centerClassRoom.capacity}</td>
+                        <td className="text-break">{centerClassRoom.description}</td>
+                        <td>
+                          <EditClass
+                            id={centerClassRoom.id}
+                            onSuccess={refreshData}
+                          />
+                        </td>
+                        <td>
+                          <Delete
+                            onSuccess={refreshData}
+                            path={`/deleteCenterClassRooms/${centerClassRoom.id}`}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
             </div>
           </div>
           .{/* Package  */}
