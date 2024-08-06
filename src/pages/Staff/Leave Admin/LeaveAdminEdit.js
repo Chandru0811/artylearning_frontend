@@ -232,7 +232,7 @@ function LeaveAdminEdit() {
         <form onSubmit={formik.handleSubmit}>
           <div className="row my-3 mb-5">
             <div className="col-12 text-end">
-              <Link to="/leave">
+              <Link to="/leaveadmin">
                 <button type="button" className="btn btn-sm btn-border">
                   Back
                 </button>
