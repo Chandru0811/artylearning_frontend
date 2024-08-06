@@ -14,25 +14,21 @@ function Edit({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
 
-  const handleClose = () => {
-    setShow(false);
-    setSubjectData(null);
-  };
-  const handleShow = () => {
-    fetchData();
-    setShow(true);
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const subject = await fetchAllSubjectsWithIds();
       setSubjectData(subject);
     } catch (error) {
       toast.error(error);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllCourseLevels/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
     }
   };
 
@@ -75,19 +71,16 @@ function Edit({ id, onSuccess }) {
     },
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllCourseLevels/${id}`);
-        formik.setValues(response.data);
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      }
-    };
+  const handleClose = () => {
+    formik.resetForm();    setShow(false);
+    setSubjectData(null);
+  };
 
+  const handleShow = () => {
+    fetchData();
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setShow(true);
+  };
 
   return (
     <>
