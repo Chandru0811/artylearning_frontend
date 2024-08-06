@@ -1106,13 +1106,13 @@ function StudentView() {
                               <div className="col-6">
                                 <p className="text-muted text-sm">
                                   <b className="mx-2">:</b>
-                                  {std.packageName || "--"}
-                                  {/* {packageData &&
+                                  {/* {std.packageName || "--"} */}
+                                  {packageData &&
                                     packageData.map((packages) =>
                                       parseInt(std.packageName) === packages.id
                                         ? packages.packageNames || "--"
                                         : ""
-                                    )} */}
+                                    )}
                                 </p>
                               </div>
                             </div>
