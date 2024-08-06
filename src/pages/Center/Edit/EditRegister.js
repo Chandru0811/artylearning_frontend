@@ -13,9 +13,7 @@ function EditRegisteration({ id, onSuccess }) {
   const [taxData, setTaxData] = useState([]);
   
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const fetchTaxData = async () => {
+  const handleShow = async() => {setShow(true)
     try {
       const response = await api.get("getAllTaxSetting");
       setTaxData(response.data);
@@ -23,6 +21,8 @@ function EditRegisteration({ id, onSuccess }) {
       toast.error("Error fetching tax data:", error);
     }
   };
+
+
 
   const validationSchema = yup.object().shape({
     // registrationDate: yup.string().required("*Registeration Date is required"),
@@ -86,8 +86,7 @@ function EditRegisteration({ id, onSuccess }) {
     };
 
     getData();
-    fetchTaxData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

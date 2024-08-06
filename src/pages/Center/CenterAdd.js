@@ -512,6 +512,7 @@ function CenterAdd() {
                 <input
                   type="file"
                   name="file"
+                  accept=".png"
                   className="form-control"
                   onChange={(event) => {
                     formik.setFieldValue("file", event.target.files[0]);

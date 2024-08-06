@@ -11,13 +11,28 @@ function EditBreak({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    formik.resetForm();
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   const validationSchema = yup.object().shape({
     breakName: yup.string().required("*Break Name is required"),
     fromDate: yup.string().required("*From Date is required"),
-    toDate: yup.string().required("*To Date is required"),
+    toDate: yup
+      .string()
+      .required("*To Date is required")
+      .test(
+        "is-greater",
+        "*To Date must be greater than From Date",
+        function (value) {
+          const { fromDate } = this.parent;
+          return fromDate && value
+            ? new Date(value) >= new Date(fromDate)
+            : true;
+        }
+      ),
   });
   const formik = useFormik({
     initialValues: {
@@ -43,7 +58,7 @@ function EditBreak({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -160,19 +175,19 @@ function EditBreak({ id, onSuccess }) {
               Cancel
             </Button>
             <Button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
+              type="submit"
+              onSubmit={formik.handleSubmit}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </Button>
           </Modal.Footer>
         </form>
       </Modal>
