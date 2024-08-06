@@ -21,7 +21,7 @@ const Staff = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllUsersByRole/staff");
+        const response = await api.get("/getAllUserListExceptTeacher");
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
@@ -64,7 +64,7 @@ const Staff = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllUsersByRole/staff");
+      const response = await api.get("/getAllUserListExceptTeacher");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -102,11 +102,11 @@ const Staff = () => {
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
                   S No
                 </th>
-                <th scope="col">Staff Id</th>
+                <th scope="col">Citizenship</th>
                 <th scope="col">Staff Name</th>
-                <th scope="col">Staff Type</th>
+                {/* <th scope="col">Staff Type</th> */}
                 <th scope="col">Role</th>
-                <th scope="col">Mobile</th>
+                {/* <th scope="col">Mobile</th> */}
                 {/* <th scope="col">Status</th> */}
                 <th scope="col" className="text-center">Action</th>
               </tr>
@@ -116,13 +116,13 @@ const Staff = () => {
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   <td>
-                    {data.teacherId}
+                    {data.citizenship}
                   </td>
                   {/* <td>{data.teacherId}</td> */}
                   <td>{data.teacherName}</td>
-                  <td>
+                  {/* <td>
                     {data.teacherType }
-                  </td>
+                  </td> */}
                   <td>
                     {data.role === "branch_admin" ? (
                       <span className="badge badges-Red">Branch Admin</span>
@@ -135,9 +135,9 @@ const Staff = () => {
                     )}
                   </td>
 
-                  <td>
+                  {/* <td>
                     {data.contactNumber}
-                  </td>
+                  </td> */}
                   {/* <td>
                     {data.userAccountInfo.length > 0 &&
                     data.userAccountInfo[0]?.status === "Active" ? (
