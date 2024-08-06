@@ -45,6 +45,9 @@ const Leave = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 

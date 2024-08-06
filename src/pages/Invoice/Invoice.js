@@ -22,7 +22,6 @@ const Invoice = () => {
   const [packageData, setPackageData] = useState(null);
 
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-  const uniqueKey = "InvoicetPageNumber";
 
   const fetchData = async () => {
     try {
@@ -65,20 +64,14 @@ const Invoice = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
-
     $(tableRef.current).DataTable({
       responsive: true,
-      pageLength: 10, // default page length
-      displayStart: localStorage.getItem(uniqueKey)
-        ? parseInt(localStorage.getItem(uniqueKey)) * 10
-        : 0,
-      drawCallback: function () {
-        var table = $(tableRef.current).DataTable();
-        var pageInfo = table.page.info();
-        localStorage.setItem(uniqueKey, pageInfo.page);
-      },
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
   
@@ -102,11 +95,7 @@ const Invoice = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
-    };
-  }, []);
+
 
   return (
     <div className="container my-4">
@@ -141,7 +130,7 @@ const Invoice = () => {
               <th scope="col">Student</th>
               <th scope="col">Package</th>
               <th scope="col">Status</th>
-              <th scope="col">Action</th>
+              <th scope="col" className="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -189,8 +178,8 @@ const Invoice = () => {
                       <span className="badge badges-Yellow">Pending</span>
                     )}
                 </td>
-                <td>
-                  <div className="d-flex">
+                <td className="text-center">
+                  <div>
                     {storedScreens?.invoiceRead && (
                       <Link to={`/invoice/view/${data.id}`}>
                         <button className="btn btn-sm">

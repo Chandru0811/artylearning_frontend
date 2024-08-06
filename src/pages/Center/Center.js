@@ -17,7 +17,6 @@ import fetchAllCentreManager from "../List/CentreMangerList";
 const Center = () => {
   const tableRef = useRef(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-  const uniqueKey = "CenterPageNumber";
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,26 +42,18 @@ const Center = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
-
     $(tableRef.current).DataTable({
       responsive: true,
-      pageLength: 10, // default page length
       columnDefs: [
         { orderable: false, targets: -1 }
       ],
-      displayStart: localStorage.getItem(uniqueKey)
-        ? parseInt(localStorage.getItem(uniqueKey)) * 10
-        : 0,
-      drawCallback: function () {
-        var table = $(tableRef.current).DataTable();
-        var pageInfo = table.page.info();
-        localStorage.setItem(uniqueKey, pageInfo.page);
-      },
     });
   };
 
+ 
   const destroyDataTable = () => {
     const table = $(tableRef.current).DataTable();
     if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
@@ -95,12 +86,6 @@ const Center = () => {
     };
     getCenterData();
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
-    };
   }, []);
 
   return (

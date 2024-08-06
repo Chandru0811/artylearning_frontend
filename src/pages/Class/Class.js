@@ -15,7 +15,6 @@ const Class = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-  const uniqueKey = "ClassPageNumber";
 
   useEffect(() => {
     const getCenterData = async () => {
@@ -41,20 +40,14 @@ const Class = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
-
     $(tableRef.current).DataTable({
       responsive: true,
-      pageLength: 10, // default page length
-      displayStart: localStorage.getItem(uniqueKey)
-        ? parseInt(localStorage.getItem(uniqueKey)) * 10
-        : 0,
-      drawCallback: function () {
-        var table = $(tableRef.current).DataTable();
-        var pageInfo = table.page.info();
-        localStorage.setItem(uniqueKey, pageInfo.page);
-      },
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 
@@ -77,12 +70,6 @@ const Class = () => {
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
-    };
-  }, []);
 
   return (
     <div className="container my-4">
@@ -114,7 +101,7 @@ const Class = () => {
               <th scope="col">Class Type </th>
               {/* <th scope="col">Remark </th> */}
 
-              <th scope="col">Action</th>
+              <th scope="col" className="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -124,7 +111,7 @@ const Class = () => {
                 <td>{data.className}</td>
                 <td>{data.classType}</td>
                 {/* <td>{data.remark}</td> */}
-                <td>
+                <td className="text-center">
                   {storedScreens?.classRead && (
                     <Link to={`/class/view/${data.id}`}>
                       <button className="btn btn-sm">

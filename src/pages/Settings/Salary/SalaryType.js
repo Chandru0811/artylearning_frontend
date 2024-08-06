@@ -48,6 +48,9 @@ const Salary = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 

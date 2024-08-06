@@ -90,9 +90,15 @@ const ScheduleTeacher = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
-    $(tableRef.current).DataTable();
+    $(tableRef.current).DataTable({
+      responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
+    });
   };
 
   const destroyDataTable = () => {
@@ -141,7 +147,7 @@ const ScheduleTeacher = () => {
                   <th scope="col">Course</th>
                   <th scope="col">Class</th>
                   <th scope="col">Day</th>
-                  <th scope="col">Action</th>
+                  <th scope="col" className="text-center">Action</th>
                 </tr>
               </thead>
               {/* Table Body */}

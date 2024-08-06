@@ -56,9 +56,11 @@ const StaffingAttendance = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
-
   const destroyDataTable = () => {
     const table = $(tableRef.current).DataTable();
     if (table && $.fn.DataTable.isDataTable(tableRef.current)) {

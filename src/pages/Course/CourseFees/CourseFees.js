@@ -12,7 +12,6 @@ import CourseFeesEdit from "./CourseFeesEdit";
 import fetchAllPackageList from "../../List/PackageList";
 
 const CourseFees = () => {
-  const uniqueKey = "CourseFeeNumber";
   const { id } = useParams();
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
@@ -67,20 +66,14 @@ const CourseFees = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
-
     $(tableRef.current).DataTable({
       responsive: true,
-      pageLength: 10, // default page length
-      displayStart: localStorage.getItem(uniqueKey)
-        ? parseInt(localStorage.getItem(uniqueKey)) * 10
-        : 0,
-      drawCallback: function () {
-        var table = $(tableRef.current).DataTable();
-        var pageInfo = table.page.info();
-        localStorage.setItem(uniqueKey, pageInfo.page);
-      },
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 
@@ -110,11 +103,6 @@ const CourseFees = () => {
     fetchPackageData();
   }, []);
 
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
-    };
-  }, []);
 
   return (
     <div className="container my-4">

@@ -47,6 +47,9 @@ const Teacher = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 
@@ -104,7 +107,7 @@ const Teacher = () => {
                 <th scope="col">Teacher Type</th>
                 <th scope="col">Mobile</th>
                 {/* <th scope="col">Status</th> */}
-                <th scope="col">Action</th>
+                <th scope="col" className="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -132,8 +135,8 @@ const Teacher = () => {
                       <span className="badge badges-Red ">In Active</span>
                     )}
                   </td> */}
-                  <td>
-                    <div className="d-flex">
+                  <td className="text-center">
+                    <div>
                       {storedScreens?.teacherRead && (
                         <Link to={`/teacher/view/${data.id}`}>
                           <button className="btn btn-sm">

@@ -48,6 +48,9 @@ const Student = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 
@@ -107,7 +110,7 @@ const Student = () => {
                 <th scope="col">Nationality</th>
                 {/* <th scope="col">Join Class Date</th>
                 <th scope="col">Status</th> */}
-                <th scope="col">Action</th>
+                <th scope="col" className="text-center">Action</th>
               </tr>
             </thead>
             <tbody>

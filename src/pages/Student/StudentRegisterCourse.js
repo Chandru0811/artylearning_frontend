@@ -19,7 +19,12 @@ const validationSchema = Yup.object().shape({
 function StudentRegisterCourse() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [studentCourseDetailsId, setStudentCourseDetailsId] = useState(null);
+  console.log("Data ....:",data);
+  
+  const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
+
+  console.log("studentCourseDetailsId",studentCourseDetailsId);
+  
   const tableRef = useRef(null);
   const [datas, setDatas] = useState({});
   const [loading, setLoading] = useState(true);
@@ -136,12 +141,13 @@ function StudentRegisterCourse() {
         teacher: selectedRowData.teacher,
         userId: selectedRowData.userId,
       };
-      console.log("Payload Data:", payload);
+      console.log("Payload Data:", payload);      
       try {
         let response;
-        if (data.studentCourseDetailsId) {
+
+        if (studentCourseDetailsId !== null) {
           response = await api.put(
-            `/updateStudentCourseDetails/${data.studentCourseDetailsId}`,
+            `/updateStudentCourseDetails/${studentCourseDetailsId}`,
             payload,
             {
               headers: {
@@ -256,11 +262,11 @@ function StudentRegisterCourse() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllStudentDetails/${id}`);
+        const response = await api.get(`/getAllStudentById/${id}`);
         setData(response.data);
         const studentCourseDetail = response.data.studentCourseDetailModels[0];
         setStudentCourseDetailsId(studentCourseDetail.id);
-        formik.setFieldValue({
+        formik.setValues({
           // ...studentCourseDetail,
           studentCourseDetailsId: studentCourseDetail.id,
         });

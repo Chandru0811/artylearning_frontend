@@ -13,7 +13,6 @@ import DocumentEdit from "./DocumentEdit";
 const Document = () => {
   const tableRef = useRef(null);
   const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
-  const uniqueKey = "DocumentPageNumber";
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [studentData, setStudentData] = useState(null);
@@ -48,20 +47,14 @@ const Document = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
-
     $(tableRef.current).DataTable({
       responsive: true,
-      pageLength: 10, // default page length
-      displayStart: localStorage.getItem(uniqueKey)
-        ? parseInt(localStorage.getItem(uniqueKey)) * 10
-        : 0,
-      drawCallback: function () {
-        var table = $(tableRef.current).DataTable();
-        var pageInfo = table.page.info();
-        localStorage.setItem(uniqueKey, pageInfo.page);
-      },
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 
@@ -84,12 +77,6 @@ const Document = () => {
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem(uniqueKey); // Clear the storage when component unmounts
-    };
-  }, []);
 
   return (
     <div className="container my-4">

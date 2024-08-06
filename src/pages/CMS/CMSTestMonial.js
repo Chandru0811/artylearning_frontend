@@ -41,7 +41,6 @@ const CMSTestMonail = () => {
       destroyDataTable();
     };
   }, [loading]);
-
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       // DataTable already initialized, no need to initialize again
@@ -49,6 +48,9 @@ const CMSTestMonail = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 

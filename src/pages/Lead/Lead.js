@@ -67,10 +67,14 @@ const Lead = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 
@@ -359,7 +363,7 @@ const Lead = () => {
                     <th scope="col">Subject</th>
                     <th scope="col">Father Name</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" className="text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>

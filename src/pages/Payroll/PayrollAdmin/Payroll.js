@@ -55,6 +55,9 @@ const Payroll = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [
+        { orderable: false, targets: -1 }
+      ],
     });
   };
 
@@ -111,7 +114,7 @@ const Payroll = () => {
               {/* <th scope="col">Deduction</th> */}
               <th scope="col">Net Pay</th>
               <th scope="col">Status</th>
-              <th scope="col">Action</th>
+              <th scope="col" className="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -140,7 +143,7 @@ const Payroll = () => {
                     <span className="badge badges-Red">Rejected</span>
                   )}
                 </td>
-                <td>
+                <td className="text-center">
                   {storedScreens?.payrollRead && (
                     <Link to={`/payrolladmin/view/${data.id}`}>
                       <button className="btn btn-sm">

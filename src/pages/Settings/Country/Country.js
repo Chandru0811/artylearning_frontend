@@ -40,12 +40,16 @@ const Country = () => {
 
     const initializeDataTable = () => {
         if ($.fn.DataTable.isDataTable(tableRef.current)) {
-            return;
+          // DataTable already initialized, no need to initialize again
+          return;
         }
         $(tableRef.current).DataTable({
-            responsive: true,
+          responsive: true,
+          columnDefs: [
+            { orderable: false, targets: -1 }
+          ],
         });
-    };
+      };
 
     const destroyDataTable = () => {
         const table = $(tableRef.current).DataTable();

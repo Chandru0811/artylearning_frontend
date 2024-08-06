@@ -38,10 +38,12 @@ const Deduction = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -95,7 +97,7 @@ const Deduction = () => {
               <th scope="col">Employee Name</th>
               <th scope="col">Deduction Name</th>
               <th scope="col">Deduction Amount</th>
-              <th scope="col">Action</th>
+              <th scope="col" className="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -106,28 +108,29 @@ const Deduction = () => {
                 <td>{data.employeeName}</td>
                 <td>{data.deductionName}</td>
                 <td>{data.deductionAmount}</td>
-                <td>
-                  {storedScreens?.deductionRead && (
-                    <Link to={`/deduction/list/${data.id}`}>
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                  )}
-                  {storedScreens?.deductionUpdate && (
-                    <Link to={`/deduction/edit/${data.id}`}>
-                      <button className="btn btn-sm">
-                        <FaEdit />
-                      </button>
-                    </Link>
-                  )}
-
-                  {storedScreens?.deductionDelete && (
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteUserDeduction/${data.id}`}
-                    />
-                  )}
+                <td className="text-center">
+                  <div className="d-flex">
+                    {storedScreens?.deductionRead && (
+                      <Link to={`/deduction/list/${data.id}`}>
+                        <button className="btn btn-sm">
+                          <FaEye />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.deductionUpdate && (
+                      <Link to={`/deduction/edit/${data.id}`}>
+                        <button className="btn btn-sm">
+                          <FaEdit />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.deductionDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteUserDeduction/${data.id}`}
+                      />
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}
