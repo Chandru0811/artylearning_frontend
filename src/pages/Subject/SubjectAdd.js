@@ -24,18 +24,18 @@ function SubjectAdd({ onSuccess }) {
   
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = async (levelId) => {
-    try {
-      const level = await fetchAllLevelsWithIds(levelId);
-      setLevelData(level);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  // const fetchData = async (levelId) => {
+  //   try {
+  //     const level = await fetchAllLevelsWithIds(levelId);
+  //     setLevelData(level);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
   const validationSchema = yup.object().shape({
     subject: yup.string().required("*Subject is required"),
@@ -49,19 +49,19 @@ function SubjectAdd({ onSuccess }) {
       subject: "",
       code: "",
       status: "",
-      levelId: "",
+      // levelId: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      let selectedLevelName = "";
+      // let selectedLevelName = "";
       // console.log(values);
 
-      levelData.forEach((level) => {
-        if (parseInt(values.levelId) === level.id) {
-          selectedLevelName = level.levels || "--";
-        }
-      });
+      // levelData.forEach((level) => {
+      //   if (parseInt(values.levelId) === level.id) {
+      //     selectedLevelName = level.levels || "--";
+      //   }
+      // });
       try {
         const response = await api.post("/createCourseSubject", values, {
           headers: {
@@ -84,12 +84,12 @@ function SubjectAdd({ onSuccess }) {
     },
   });
 
-  const handleLevelChange = (event) => {
-    setLevelData(null);
-    const levelId = event.target.value;
-    formik.setFieldValue("levelId", levelId);
-    fetchData(levelId); // Fetch class for the selected center
-  };
+  // const handleLevelChange = (event) => {
+  //   setLevelData(null);
+  //   const levelId = event.target.value;
+  //   formik.setFieldValue("levelId", levelId);
+  //   fetchData(levelId); // Fetch class for the selected center
+  // };
 
 
   return (

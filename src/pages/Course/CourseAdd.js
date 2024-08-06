@@ -8,7 +8,6 @@ import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
-import fetchAllLevelsWithIds from "../List/LevelList";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Select the Centre Name"),
@@ -35,8 +34,6 @@ function CourseAdd({ onSuccess }) {
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const location = useLocation();
-  // const subjectData = location.state?.subjectData;
 
   const formik = useFormik({
     initialValues: {
@@ -161,7 +158,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("centerId")}
-                    className={`form-select  ${
+                    className={`form-select custom-select-height ${
                       formik.touched.centerId && formik.errors.centerId
                         ? "is-invalid"
                         : ""
@@ -207,7 +204,7 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">
                   Subject<span className="text-danger">*</span>
                 </lable>
-                <select
+                <select 
                   className={`form-select  ${
                     formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"

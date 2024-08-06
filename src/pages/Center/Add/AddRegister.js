@@ -11,7 +11,10 @@ function AddRegister({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    formik.resetForm();
+    setShow(false);
+  };
 
   const fetchTaxData = async () => {
     try {
