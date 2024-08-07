@@ -206,6 +206,7 @@ import CurriculumOutlet from "../pages/Course/CurriculumOutlet/CurriculumOutlet"
 import CurriculumOutletAdd from "../pages/Course/CurriculumOutlet/CurriculumOutletAdd";
 import CurriculumOutletEdit from "../pages/Course/CurriculumOutlet/CurriculumOutletEdit";
 import CurriculumOutletView from "../pages/Course/CurriculumOutlet/CurriculumOutletView";
+import ScrollToTop from "../pages/ScrollToTop";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
 
@@ -228,6 +229,7 @@ function Admin({ handleLogout }) {
         <Sidebar />
         <section className="home-section">
           <Header onLogout={handleLogout} />
+          <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <Routes>
               <Route path="/" element={<Dashboard />} />
