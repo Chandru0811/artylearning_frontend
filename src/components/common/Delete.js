@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaTrash } from "react-icons/fa";
@@ -10,6 +10,7 @@ function Delete({ onSuccess, path }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const deleteButtonRef = useRef(null);
 
   const handelDelete = async () => {
     try {
@@ -29,6 +30,26 @@ function Delete({ onSuccess, path }) {
       toast.error("Error deleting data:", error);
     }
   };
+  useEffect(() => {
+    if (show && deleteButtonRef.current) {
+      deleteButtonRef.current.focus();
+    }
+  }, [show]);
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        if (show) {
+          handelDelete();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [show]);
 
   return (
     <>
@@ -45,7 +66,7 @@ function Delete({ onSuccess, path }) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="danger" onClick={handelDelete}>
+          <Button variant="danger" onClick={handelDelete}  className={show ? 'focused-button' : ''}>
             Delete
           </Button>
         </Modal.Footer>
