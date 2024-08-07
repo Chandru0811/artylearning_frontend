@@ -635,3 +635,13 @@
   border-left: none; 
   background-color: transparent;
 }
+
+.css-4ff9q7.Mui-active {
+  color: #ff7903 !important;
+}
+
+.focused-button {
+  border: 4px solid red; 
+  outline: none;
+}
+
