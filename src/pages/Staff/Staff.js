@@ -102,12 +102,11 @@ const Staff = () => {
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
                   S No
                 </th>
-                <th scope="col">Citizenship</th>
-                <th scope="col">Staff Name</th>
-                {/* <th scope="col">Staff Type</th> */}
+                <th scope="col">Staff ID</th>
+                <th scope="col">Staff Type</th>
+                <th scope="col">Staff Name</th>               
                 <th scope="col">Role</th>
-                {/* <th scope="col">Mobile</th> */}
-                {/* <th scope="col">Status</th> */}
+                <th scope="col">Mobile</th>
                 <th scope="col" className="text-center">Action</th>
               </tr>
             </thead>
@@ -115,14 +114,11 @@ const Staff = () => {
               {datas.map((data, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
+                  <td>{data.teacherId}</td>
                   <td>
-                    {data.citizenship}
-                  </td>
-                  {/* <td>{data.teacherId}</td> */}
-                  <td>{data.teacherName}</td>
-                  {/* <td>
                     {data.teacherType }
-                  </td> */}
+                  </td>
+                  <td>{data.teacherName}</td>
                   <td>
                     {data.role === "branch_admin" ? (
                       <span className="badge badges-Red">Branch Admin</span>
@@ -134,20 +130,9 @@ const Staff = () => {
                       <span className="badge badges-Green">Staff</span>
                     )}
                   </td>
-
-                  {/* <td>
+                  <td>
                     {data.contactNumber}
-                  </td> */}
-                  {/* <td>
-                    {data.userAccountInfo.length > 0 &&
-                    data.userAccountInfo[0]?.status === "Active" ? (
-                      <span className="badge badges-Green">Active</span>
-                    ) : data.userAccountInfo[0]?.status === "Pending" ? (
-                      <span className="badge badges-Yellow ">Pending</span>
-                    ) : (
-                      <span className="badge badges-Red ">In Active</span>
-                    )}
-                  </td> */}
+                  </td>
                   <td className="text-center">
                     <div>
                       {storedScreens?.staffRead && (
