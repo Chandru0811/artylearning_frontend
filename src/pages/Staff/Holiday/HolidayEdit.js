@@ -10,8 +10,17 @@ function HolidayEdit() {
   const validationSchema = Yup.object({
     centerId: Yup.string().required("*Centre Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
-    startDate: Yup.string().required("*Select the start date"),
-    endDate: Yup.string().required("*Select the end date"),
+    startDate: Yup.string().required("*Start Date is required"),
+    endDate: Yup.string()
+      .required("*End Date is required")
+      .test(
+        "is-greater",
+        "*To Date should be later than From Date",
+        function (value) {
+          const { startDate } = this.parent;
+          return !startDate || !value || new Date(value) >= new Date(startDate);
+        }
+      ),
     holidayDescription: Yup.string().required(
       "*Holiday Description is required"
     ),
@@ -35,11 +44,11 @@ function HolidayEdit() {
       try {
         const payload = {
           centerId: values.centerId,
-          holidayName:values.holidayName,
-          startDate:values.startDate,
-          endDate:values.endDate,
-          holidayDescription:values.holidayDescription
-        }
+          holidayName: values.holidayName,
+          startDate: values.startDate,
+          endDate: values.endDate,
+          holidayDescription: values.holidayDescription,
+        };
         const response = await api.put(`/updateUserHoliday/${id}`, payload, {
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +65,7 @@ function HolidayEdit() {
         toast.error(
           error.message || "An error occurred while submitting the form"
         );
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -103,15 +112,19 @@ function HolidayEdit() {
                   </button>
                 </Link>
                 &nbsp;&nbsp;
-                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
                       aria-hidden="true"
                     ></span>
                   )}
-                Update
-              </button>
+                  Update
+                </button>
               </div>
             </div>
             <div className="row mt-3">

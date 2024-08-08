@@ -10,7 +10,16 @@ import api from "../../../config/URL";
 const validationSchema = Yup.object({
   leaveType: Yup.string().required("*Select a Leave Type"),
   fromDate: Yup.string().required("*From Date is required"),
-  toDate: Yup.string().required("*To Date is required"),
+  toDate: Yup.string()
+    .required("*To Date is required")
+    .test(
+      "is-greater",
+      "*To Date should be later than From Date",
+      function (value) {
+        const { fromDate } = this.parent;
+        return !fromDate || !value || new Date(value) >= new Date(fromDate);
+      }
+    ),
   dayType: Yup.string().required("*Day Type is required"),
   leaveReason: Yup.string().required("*Leave Reason is required"),
 });
@@ -114,7 +123,7 @@ function LeaveAdd() {
       toast.error(error);
     }
   };
-  
+
   const fetchLeaveType = async () => {
     try {
       const response = await api.get(`getAllLeaveSetting`);
@@ -123,7 +132,7 @@ function LeaveAdd() {
       toast.error(error.message);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
     fetchLeaveType();

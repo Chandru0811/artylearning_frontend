@@ -6,14 +6,24 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-
 function HolidayAdd() {
   const validationSchema = Yup.object({
     centerId: Yup.string().required("*Centre Name is required"),
     holidayName: Yup.string().required("*Holiday Name is required"),
-    startDate: Yup.string().required("*Select the start date"),
-    endDate: Yup.string().required("*Select the end date"),
-    holidayDescription : Yup.string().required("*Holiday Description is required"),
+    startDate: Yup.string().required("*Start Date is required"),
+    endDate: Yup.string()
+      .required("*End Date is required")
+      .test(
+        "is-greater",
+        "*To Date should be later than From Date",
+        function (value) {
+          const { startDate } = this.parent;
+          return !startDate || !value || new Date(value) >= new Date(startDate);
+        }
+      ),
+    holidayDescription: Yup.string().required(
+      "*Holiday Description is required"
+    ),
   });
   const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -24,7 +34,7 @@ function HolidayAdd() {
       holidayName: "",
       startDate: "",
       endDate: "",
-      holidayDescription:""
+      holidayDescription: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -33,11 +43,11 @@ function HolidayAdd() {
       try {
         const payload = {
           centerId: values.centerId,
-          holidayName:values.holidayName,
-          startDate:values.startDate,
-          endDate:values.endDate,
-          holidayDescription:values.holidayDescription
-        }
+          holidayName: values.holidayName,
+          startDate: values.startDate,
+          endDate: values.endDate,
+          holidayDescription: values.holidayDescription,
+        };
         const response = await api.post("/createUserHoliday", payload, {
           headers: {
             "Content-Type": "application/json",
@@ -54,7 +64,7 @@ function HolidayAdd() {
         toast.error(
           error.message || "An error occurred while submitting the form"
         );
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -86,15 +96,19 @@ function HolidayAdd() {
                   </button>
                 </Link>
                 &nbsp;&nbsp;
-                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
                       aria-hidden="true"
                     ></span>
                   )}
-                Save
-              </button>
+                  Save
+                </button>
               </div>
             </div>
             <div className="row mt-3">
@@ -104,25 +118,27 @@ function HolidayAdd() {
                     Centre Name<span className="text-danger">*</span>
                   </label>
                   <select
-                  {...formik.getFieldProps("centerId")}
-                  name="centerId"
-                  className={`form-select ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected disabled></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">{formik.errors.centerId}</div>
-                )}
+                    {...formik.getFieldProps("centerId")}
+                    name="centerId"
+                    className={`form-select ${
+                      formik.touched.centerId && formik.errors.centerId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected disabled></option>
+                    {centerData &&
+                      centerData.map((center) => (
+                        <option key={center.id} value={center.id}>
+                          {center.centerNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.centerId && formik.errors.centerId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.centerId}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-12">
@@ -197,17 +213,19 @@ function HolidayAdd() {
                     type="text"
                     rows={5}
                     className={`form-control  ${
-                      formik.touched.holidayDescription && formik.errors.holidayDescription
+                      formik.touched.holidayDescription &&
+                      formik.errors.holidayDescription
                         ? "is-invalid"
                         : ""
                     }`}
                     {...formik.getFieldProps("holidayDescription")}
                   />
-                  {formik.touched.holidayDescription && formik.errors.holidayDescription && (
-                    <div className="invalid-feedback">
-                      {formik.errors.holidayDescription}
-                    </div>
-                  )}
+                  {formik.touched.holidayDescription &&
+                    formik.errors.holidayDescription && (
+                      <div className="invalid-feedback">
+                        {formik.errors.holidayDescription}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

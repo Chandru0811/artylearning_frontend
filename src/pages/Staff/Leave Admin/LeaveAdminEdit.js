@@ -292,6 +292,7 @@ function LeaveAdminEdit() {
                     ? "is-invalid"
                     : ""
                 }`}
+                readOnly
                 {...formik.getFieldProps("fromDate")}
                 onChange={(e) => {
                   formik.handleChange(e);
@@ -313,6 +314,7 @@ function LeaveAdminEdit() {
               </label>
               <input
                 type="date"
+                readOnly
                 className={`form-control  ${
                   formik.touched.toDate && formik.errors.toDate
                     ? "is-invalid"
