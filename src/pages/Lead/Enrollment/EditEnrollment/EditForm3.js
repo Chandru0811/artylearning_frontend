@@ -26,7 +26,8 @@ const validationSchema = Yup.object().shape({
   //   .email("*Invalid Email")
   //   .required("*Email is required!"),
   fathersEmailAddress: Yup.string()
-    .email("*Invalid Email").required("*Email is required"),
+    .email("*Invalid Email")
+    .required("*Email is required"),
   monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
 
   mothersFullName: Yup.string().required("*Mother Name is required"),
@@ -45,7 +46,8 @@ const validationSchema = Yup.object().shape({
   //   .email("*Invalid Email")
   //   .required("*Email is required!"),
   mothersEmailAddress: Yup.string()
-    .email("*Invalid Email").required("*Email is required"),
+    .email("*Invalid Email")
+    .required("*Email is required"),
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
 });
 
@@ -139,7 +141,12 @@ const EditForm3 = forwardRef(
                   <h6>Mother's Info</h6>
                 </div>
                 <div className="col-6 text-end">
-                  <label className="form-label">Primary Contact</label>
+                  <label className="form-label">
+                    Primary Contact{" "}
+                    {formik.values.primaryContactMother && (
+                      <span className="text-danger">*</span>
+                    )}
+                  </label>
                   <input
                     type="radio"
                     name="primaryContact"
@@ -207,6 +214,7 @@ const EditForm3 = forwardRef(
                 </label>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="mothersDateOfBirth"
                   onChange={formik.handleChange}
@@ -303,7 +311,12 @@ const EditForm3 = forwardRef(
                   <h6>Father's Info</h6>
                 </div>
                 <div className="col-6 text-end">
-                  <label className="form-label">Primary Contact</label>
+                  <label className="form-label">
+                    Primary Contact{" "}
+                    {formik.values.primaryContactFather && (
+                      <span className="text-danger">*</span>
+                    )}
+                  </label>
                   <input
                     type="radio"
                     name="primaryContact"
@@ -371,6 +384,7 @@ const EditForm3 = forwardRef(
                 </label>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="fathersDateOfBirth"
                   onChange={formik.handleChange}

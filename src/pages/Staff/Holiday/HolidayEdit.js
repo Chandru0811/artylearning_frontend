@@ -185,6 +185,7 @@ function HolidayEdit() {
                   </lable>
                   <input
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
                         ? "is-invalid"
@@ -206,6 +207,7 @@ function HolidayEdit() {
                   </lable>
                   <input
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate
                         ? "is-invalid"

@@ -233,6 +233,7 @@ const StaffContractAdd = forwardRef(
                 <label>Start Date of Employment</label><span className="text-danger">*</span>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="startDateOfEmployment"
                   onChange={formik.handleChange}
@@ -281,6 +282,7 @@ const StaffContractAdd = forwardRef(
                 <label>Contract Start Date</label><span className="text-danger">*</span>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractStartDate"
                   onChange={formik.handleChange}
@@ -502,6 +504,7 @@ const StaffContractAdd = forwardRef(
                 <label>Salary Start Date</label><span className="text-danger">*</span>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="salaryStartDate"
                   onChange={formik.handleChange}
@@ -519,6 +522,7 @@ const StaffContractAdd = forwardRef(
                 <label>Contract End Date</label><span className="text-danger">*</span>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractEndDate"
                   onChange={formik.handleChange}
@@ -560,6 +564,7 @@ const StaffContractAdd = forwardRef(
                   <label>Contract Date</label><span className="text-danger">*</span>
                   <input
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     className="form-control"
                     name="contractDate"
                     onChange={formik.handleChange}

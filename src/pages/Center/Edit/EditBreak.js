@@ -139,6 +139,7 @@ function EditBreak({ id, onSuccess }) {
                       ? "is-invalid"
                       : ""
                   }`}
+                  onFocus={(e) => e.target.showPicker()}
                   {...formik.getFieldProps("fromDate")}
                 />
                 {formik.touched.fromDate && formik.errors.fromDate && (
@@ -159,6 +160,7 @@ function EditBreak({ id, onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
+                    onFocus={(e) => e.target.showPicker()}
                     {...formik.getFieldProps("toDate")}
                   />
                   {formik.touched.toDate && formik.errors.toDate && (

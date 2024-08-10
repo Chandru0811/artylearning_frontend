@@ -151,9 +151,7 @@ const EditStudentDetails = forwardRef(
     useEffect(() => {
       const getData = async () => {
         try {
-          const response = await api.get(
-            `/getAllStudentById/${formData.id}`
-          );
+          const response = await api.get(`/getAllStudentById/${formData.id}`);
           const { allowMagazine, allowSocialMedia, ...otherData } =
             response.data;
           const updatedValues = {
@@ -251,6 +249,7 @@ const EditStudentDetails = forwardRef(
                         className="form-control  form-contorl-sm"
                         name="dateOfBirth"
                         type="date"
+                        onFocus={(e) => e.target.showPicker()}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}

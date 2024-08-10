@@ -19,7 +19,7 @@ const CourseFees = () => {
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
 
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const fetchPackageData = async () => {
     try {

@@ -107,7 +107,7 @@ const AddEmergencyContact = forwardRef(
             const leadData = response.data;
             console.log("Lead Data ", leadData)
             formik.setValues({
-              emergencyContactName: "",
+              emergencyContactName: leadData.emergencyNric || "",
               emergencyContactNo: leadData.emergencyContact || "",
               authorizedRelation :""
             });

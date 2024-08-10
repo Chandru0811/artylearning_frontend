@@ -9,7 +9,7 @@ function OtherMessagesView() {
   const messagesContainerRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [data, setData] = useState(null);
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   const { id } = useParams();
   console.log("data", data);
 

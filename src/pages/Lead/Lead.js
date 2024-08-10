@@ -25,7 +25,7 @@ const Lead = () => {
   const [selectedId, setSelectedId] = useState("");
   const [activeButton, setActiveButton] = useState("All");
 
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);

@@ -488,6 +488,7 @@ function DocumentAdd() {
                 <input
                   name="date"
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className={`form-control  ${
                     formik.touched.date && formik.errors.date
                       ? "is-invalid"

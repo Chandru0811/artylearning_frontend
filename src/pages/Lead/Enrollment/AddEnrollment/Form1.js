@@ -193,6 +193,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 name="dateOfBirth"
                 className="form-control"
                 onChange={formik.handleChange}

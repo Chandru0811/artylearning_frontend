@@ -11,10 +11,32 @@ import { format } from "date-fns";
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
-  date: Yup.string().required("*Date is required"),
+  date: Yup.date()
+    .transform((value, originalValue) =>
+      originalValue ? new Date(originalValue) : value
+    )
+    .required("*Date is required")
+    .min(
+      new Date().setHours(0, 0, 0, 0),
+      "*Date must be today or in the future"
+    ),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
-  modeOfWorking: Yup.string().required("*Mode of working is required"),
-  // checkIn: Yup.string().required("*Check-in is required"),
+  modeOfWorking: Yup.string().test(
+    "check-mode-of-working",
+    "*Mode of working is required",
+    function (value) {
+      const { attendanceStatus } = this.parent;
+      return attendanceStatus === "Present" ? !!value : true;
+    }
+  ),
+  checkIn: Yup.string().test(
+    "check-check-in",
+    "*Check-in is required",
+    function (value) {
+      const { attendanceStatus } = this.parent;
+      return attendanceStatus === "Present" ? !!value : true;
+    }
+  ),
   // checkOut: Yup.string().required("*Check-out is required"),
   // otStartTime: Yup.string().required("*OT start time is required"),
   // otEndTime: Yup.string().required("*OT end time is required"),
@@ -27,6 +49,8 @@ function StaffingAttendanceAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
+  // const timestamp = 1723141800000;
+  // const date = new Date(timestamp).toISOString().substring(0, 10);
 
   const formik = useFormik({
     initialValues: {
@@ -144,7 +168,11 @@ function StaffingAttendanceAdd() {
                   <button className="btn btn-sm btn-border">Back</button>
                 </Link>
                 &nbsp;&nbsp;
-                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm"
+                  disabled={loadIndicator}
+                >
                   {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
@@ -152,7 +180,8 @@ function StaffingAttendanceAdd() {
                     ></span>
                   )}
                   Save
-                </button>              </div>
+                </button>{" "}
+              </div>
             </div>
             <div className="row mt-3">
               <div className="col-md-6 col-12 mb-3 ">
@@ -160,10 +189,11 @@ function StaffingAttendanceAdd() {
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("centerId")}
-                  className={`form-select ${formik.touched.centerId && formik.errors.centerId
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-select ${
+                    formik.touched.centerId && formik.errors.centerId
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
@@ -186,10 +216,11 @@ function StaffingAttendanceAdd() {
                 <lable className="">Employee Name</lable>
                 <select
                   {...formik.getFieldProps("userId")}
-                  class={`form-select  ${formik.touched.userId && formik.errors.userId
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  class={`form-select  ${
+                    formik.touched.userId && formik.errors.userId
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 >
                   <option selected disabled></option>
                   {userNamesData &&
@@ -204,36 +235,39 @@ function StaffingAttendanceAdd() {
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Date</lable>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="">Date</label>
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  className={`form-control ${formik.touched.date && formik.errors.date
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control ${
+                    formik.touched.date && formik.errors.date
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("date")}
+                  onFocus={(e) => e.target.showPicker()}
                 />
                 {formik.touched.date && formik.errors.date && (
                   <div className="invalid-feedback">{formik.errors.date}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Attendance Status</lable>
+
+              <div className="col-md-6 col-12 mb-3">
+                <label>Attendance Status</label>
                 <span className="text-danger">*</span>
                 <select
-                  className={`form-select ${formik.touched.attendanceStatus &&
+                  className={`form-select ${
+                    formik.touched.attendanceStatus &&
                     formik.errors.attendanceStatus
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("attendanceStatus")}
-                  aria-label="Default select example"
                 >
-                  <option selected></option>
-                  <option value="Present">Present</option>
-                  <option value="Absent">Absent</option>
+                  <option value="" />
+                  <option value="Present" label="Present" />
+                  <option value="Absent" label="Absent" />
                 </select>
                 {formik.touched.attendanceStatus &&
                   formik.errors.attendanceStatus && (
@@ -245,15 +279,17 @@ function StaffingAttendanceAdd() {
 
               {formik.values.attendanceStatus === "Present" && (
                 <>
-                  <div className="col-md-6 col-12 mb-3 ">
-                    <label className="">Check In</label>
+                  <div className="col-md-6 col-12 mb-3">
+                    <label>Check In</label>
                     <span className="text-danger">*</span>
                     <input
                       type="time"
-                      className={`form-control ${formik.touched.checkIn && formik.errors.checkIn
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      onFocus={(e) => e.target.showPicker()}
+                      className={`form-control ${
+                        formik.touched.checkIn && formik.errors.checkIn
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       {...formik.getFieldProps("checkIn")}
                     />
                     {formik.touched.checkIn && formik.errors.checkIn && (
@@ -268,10 +304,12 @@ function StaffingAttendanceAdd() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      className={`form-control ${formik.touched.checkOut && formik.errors.checkOut
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      onFocus={(e) => e.target.showPicker()}
+                      className={`form-control ${
+                        formik.touched.checkOut && formik.errors.checkOut
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       {...formik.getFieldProps("checkOut")}
                     />
                     {formik.touched.checkOut && formik.errors.checkOut && (
@@ -286,17 +324,20 @@ function StaffingAttendanceAdd() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      className={`form-control ${formik.touched.otStartTime && formik.errors.otStartTime
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      onFocus={(e) => e.target.showPicker()}
+                      className={`form-control ${
+                        formik.touched.otStartTime && formik.errors.otStartTime
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       {...formik.getFieldProps("otStartTime")}
                     />
-                    {formik.touched.otStartTime && formik.errors.otStartTime && (
-                      <div className="invalid-feedback">
-                        {formik.errors.otStartTime}
-                      </div>
-                    )}
+                    {formik.touched.otStartTime &&
+                      formik.errors.otStartTime && (
+                        <div className="invalid-feedback">
+                          {formik.errors.otStartTime}
+                        </div>
+                      )}
                   </div>
 
                   <div className="col-md-6 col-12 mb-3 ">
@@ -304,10 +345,12 @@ function StaffingAttendanceAdd() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      className={`form-control  ${formik.touched.otEndTime && formik.errors.otEndTime
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      onFocus={(e) => e.target.showPicker()}
+                      className={`form-control  ${
+                        formik.touched.otEndTime && formik.errors.otEndTime
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       {...formik.getFieldProps("otEndTime")}
                     />
                     {formik.touched.otEndTime && formik.errors.otEndTime && (
@@ -317,20 +360,24 @@ function StaffingAttendanceAdd() {
                     )}
                   </div>
 
-                  <div className="col-md-6 col-12 mb-3 ">
-                    <lable className="">Mode Of Working</lable>
+                  <div className="col-md-6 col-12 mb-3">
+                    <label>Mode Of Working</label>
                     <span className="text-danger">*</span>
                     <select
-                      className={`form-select ${formik.touched.modeOfWorking && formik.errors.modeOfWorking
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-select ${
+                        formik.touched.modeOfWorking &&
+                        formik.errors.modeOfWorking
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       {...formik.getFieldProps("modeOfWorking")}
-                      aria-label="Default select example"
                     >
-                      <option selected></option>
-                      <option value="WORK_FROM_HOME">Work From Home</option>
-                      <option value="WORK_FROM_OFFICE">Work From Office</option>
+                      <option value="" label="Select mode" />
+                      <option value="WORK_FROM_HOME" label="Work From Home" />
+                      <option
+                        value="WORK_FROM_OFFICE"
+                        label="Work From Office"
+                      />
                     </select>
                     {formik.touched.modeOfWorking &&
                       formik.errors.modeOfWorking && (
@@ -395,11 +442,12 @@ function StaffingAttendanceAdd() {
                   <textarea
                     id="floatingTextarea2"
                     style={{ height: "100px" }}
-                    className={`form-control  ${formik.touched.attendanceRemark &&
+                    className={`form-control  ${
+                      formik.touched.attendanceRemark &&
                       formik.errors.attendanceRemark
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("attendanceRemark")}
                   />
                   {formik.touched.attendanceRemark &&

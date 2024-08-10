@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
@@ -30,6 +30,7 @@ const validationSchema = Yup.object({
 function CourseAdd({ onSuccess }) {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
+  const colorInputRef = useRef(null);
   console.log("Center Data", centerData);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
@@ -123,7 +124,11 @@ function CourseAdd({ onSuccess }) {
     fetchData();
     fetchSubject();
   }, []);
-
+  const handleColorPickerClick = () => {
+    if (colorInputRef.current) {
+      colorInputRef.current.click();
+    }
+  };
   return (
     <section className="courseAdd">
       <div className="container">
@@ -188,12 +193,17 @@ function CourseAdd({ onSuccess }) {
                       type="color"
                       {...formik.getFieldProps("colorCode")}
                       className="form-control-color circle"
+                      ref={colorInputRef}
                     />
                   </div>
                   <input
                     type="text"
-                    className={`form-control iconInput `}
+                    className={`form-control iconInput`}
                     value={formik.values.colorCode}
+                    onClick={handleColorPickerClick}
+                    onChange={(e) =>
+                      formik.setFieldValue("colorCode", e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -204,7 +214,7 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">
                   Subject<span className="text-danger">*</span>
                 </lable>
-                <select 
+                <select
                   className={`form-select  ${
                     formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"

@@ -21,7 +21,7 @@ const Invoice = () => {
   const [studentData, setStudentData] = useState(null);
   const [packageData, setPackageData] = useState(null);
 
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
     try {

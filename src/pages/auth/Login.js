@@ -12,7 +12,7 @@ function Login({ onLogin }) {
 
   // useEffect(() => {
   //   // Check if already logged in, redirect to dashboard
-  //   const isAuthenticated = sessionStorage.getItem("isAuthenticated");
+  //   const isAuthenticated = localStorage.getItem("isAuthenticated");
   //   if (isAuthenticated) {
   //     navigate("/dashboard");
   //   }
@@ -49,12 +49,12 @@ function Login({ onLogin }) {
           } else {
             // Proceed with login for other roles
             toast.success(response.data.message);
-            sessionStorage.setItem("roleId", response.data.roleId);
-            sessionStorage.setItem("token", response.data.accessToken);
-            sessionStorage.setItem("userId", response.data.userId);
-            sessionStorage.setItem("userName", response.data.role);
-            sessionStorage.setItem("loginUserId", response.data.loginUserId);
-            sessionStorage.setItem("centerId", response.data.centerId);
+            localStorage.setItem("roleId", response.data.roleId);
+            localStorage.setItem("token", response.data.accessToken);
+            localStorage.setItem("userId", response.data.userId);
+            localStorage.setItem("userName", response.data.role);
+            localStorage.setItem("loginUserId", response.data.loginUserId);
+            localStorage.setItem("centerId", response.data.centerId);
             onLogin(response.data.roleId);
             navigate("/dashboard");
           }
@@ -62,7 +62,7 @@ function Login({ onLogin }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Failed: " + error.message);
+        toast.error("Failed: " + error.data.message);
       }
 
       resetForm();

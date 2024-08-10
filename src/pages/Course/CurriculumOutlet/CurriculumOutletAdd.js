@@ -122,6 +122,7 @@ function CurriculumOutletAdd({ onSuccess }) {
                   </label>
                   <input
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate

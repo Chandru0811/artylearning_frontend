@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import { MultiSelect } from 'react-multi-select-component';
+import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-    centerIds: Yup.array().min(1, "At least one center must be selected"),
+  centerIds: Yup.array().min(1, "At least one center must be selected"),
 });
 
 const AccountAdd = forwardRef(
@@ -32,7 +32,10 @@ const AccountAdd = forwardRef(
     const [centerData, setCenterData] = useState([]);
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
-    const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
+    const centerOptions = centerData.map((center) => ({
+      label: center.centerNames,
+      value: center.id,
+    }));
 
     const fetchData = async () => {
       try {
@@ -131,6 +134,7 @@ const AccountAdd = forwardRef(
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="startDate"
                 onChange={formik.handleChange}
@@ -261,7 +265,8 @@ const AccountAdd = forwardRef(
               End Date
             </label>
             <input
-              type="date"
+               type="date"
+    onFocus={(e) => e.target.showPicker()}
               className="form-control"
               name="endDate"
               onChange={formik.handleChange}
@@ -302,7 +307,7 @@ const AccountAdd = forwardRef(
                 </div>
               </div>
               {formik.touched.approvelContentRequired &&
-                formik.errors.approvelContentRequired ? (
+              formik.errors.approvelContentRequired ? (
                 <div className="error text-danger ">
                   <small>{formik.errors.approvelContentRequired}</small>
                 </div>
@@ -507,10 +512,17 @@ const AccountAdd = forwardRef(
                 value={selectedCenters}
                 onChange={(selected) => {
                   setSelectedCenters(selected);
-                  formik.setFieldValue('centerIds', selected.map(option => option.value));
+                  formik.setFieldValue(
+                    "centerIds",
+                    selected.map((option) => option.value)
+                  );
                 }}
                 labelledBy="Select Centers"
-                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds ? 'is-invalid' : ''}`}
+                className={`form-multi-select ${
+                  formik.touched.centerIds && formik.errors.centerIds
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
               {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
@@ -518,7 +530,6 @@ const AccountAdd = forwardRef(
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </form>

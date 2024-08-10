@@ -15,7 +15,7 @@ function HolidayAdd() {
       .required("*End Date is required")
       .test(
         "is-greater",
-        "*To Date should be later than From Date",
+        "*To Date should be later than Start Date",
         function (value) {
           const { startDate } = this.parent;
           return !startDate || !value || new Date(value) >= new Date(startDate);
@@ -169,6 +169,7 @@ function HolidayAdd() {
                   </lable>
                   <input
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
                         ? "is-invalid"
@@ -190,6 +191,7 @@ function HolidayAdd() {
                   </lable>
                   <input
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate
                         ? "is-invalid"

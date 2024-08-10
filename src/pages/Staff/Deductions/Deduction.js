@@ -12,7 +12,7 @@ const Deduction = () => {
   const [datas, setDatas] = useState([]);
   console.log(datas);
   const [loading, setLoading] = useState(true);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
     const getData = async () => {

@@ -28,7 +28,7 @@ export const CmsTeacher = () => {
   const [headingMess, setHeadingMess] =
     useState(`Meet the people who make it all possible, learn about their skills
                   and experience, and see why they're passionate about what they do.`);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const handleChangeHeadgang = (e) => {
     setHeading(e.target.value);
   };

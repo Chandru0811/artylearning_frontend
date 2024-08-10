@@ -56,17 +56,17 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
       setLoadIndicator(true);
       try {
         const formDatas = new FormData();
-        formDatas.append('parentName', data.parentName);
-        formDatas.append('parentDateOfBirth', data.parentDateOfBirth);
-        formDatas.append('email', data.email);
-        formDatas.append('relation', data.relation);
-        formDatas.append('occupation', data.occupation);
-        formDatas.append('file', data.file);
-        formDatas.append('mobileNumber', data.mobileNumber);
-        formDatas.append('postalCode', data.postalCode);
-        formDatas.append('address', data.address);
+        formDatas.append("parentName", data.parentName);
+        formDatas.append("parentDateOfBirth", data.parentDateOfBirth);
+        formDatas.append("email", data.email);
+        formDatas.append("relation", data.relation);
+        formDatas.append("occupation", data.occupation);
+        formDatas.append("file", data.file);
+        formDatas.append("mobileNumber", data.mobileNumber);
+        formDatas.append("postalCode", data.postalCode);
+        formDatas.append("address", data.address);
         // formDatas.append('parentId', id);
-        formDatas.append('password', "12345678");
+        formDatas.append("password", "12345678");
 
         const response = await api.put(
           `/updateStudentParentsDetailsWithProfileImages/${id}`,
@@ -87,7 +87,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -95,9 +95,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
 
   const fetchParentData = async () => {
     try {
-      const response = await api.get(
-        `/getAllStudentParentsDetailsById/${id}`
-      );
+      const response = await api.get(`/getAllStudentParentsDetailsById/${id}`);
       const getFormData = {
         ...response.data,
         parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10),
@@ -182,6 +180,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   </lable>
                   <input
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     name="parentDateOfBirth"
                     className={`form-control ${
                       formik.touched.parentDateOfBirth &&
@@ -332,19 +331,19 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
               </Button>
 
               <button
-              type="submit"
-              onSubmit={formik.handleSubmit}
-              className="btn btn-button btn-sm"
-              disabled={loadIndicator}
-            >
-              {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
-              Update
-            </button>
+                type="submit"
+                onSubmit={formik.handleSubmit}
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Update
+              </button>
               {/* <Button
                 type="submit"
                 variant="danger"

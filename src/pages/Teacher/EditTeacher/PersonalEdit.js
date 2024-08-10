@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -16,8 +21,7 @@ const validationSchema = Yup.object().shape({
   citizenship: Yup.string().required("*CitizenShip is required"),
 });
 const PersonalEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
     const [citizenShipData, setCitizenShipData] = useState(null);
 
@@ -34,7 +38,7 @@ const PersonalEdit = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        setLoadIndicators(true)
+        setLoadIndicators(true);
         setFormData((prv) => ({ ...prv, ...data }));
         // console.log("Api Data:", data);
         data.photo = null;
@@ -67,8 +71,8 @@ const PersonalEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally{
-          setLoadIndicators(false)
+        } finally {
+          setLoadIndicators(false);
         }
       },
     });
@@ -147,6 +151,7 @@ const PersonalEdit = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 class="form-control "
                 name="dateOfBirth"
                 onChange={formik.handleChange}
@@ -162,7 +167,7 @@ const PersonalEdit = forwardRef(
           </div>
 
           <div class="container row d-flex my-4 justify-align-content-around">
-          <div class="form-group col-sm">
+            <div class="form-group col-sm">
               <label>ID Type</label>
               <span className="text-danger">*</span>
               <select
@@ -206,7 +211,7 @@ const PersonalEdit = forwardRef(
             </div>
           </div>
           <div class="container row d-flex my-4 justify-align-content-around">
-          <div class="form-group col-sm">
+            <div class="form-group col-sm">
               <label>Citizenship</label>
               <span className="text-danger">*</span>
               <select

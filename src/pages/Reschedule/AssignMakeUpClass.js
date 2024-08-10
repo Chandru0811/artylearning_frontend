@@ -202,6 +202,7 @@ function AssignMakeUpClass() {
                       <div class="input-group mb-3">
                         <input
                           type="time"
+                      onFocus={(e) => e.target.showPicker()}
                           className={`form-control  ${
                             formik.touched.batchFrom && formik.errors.batchFrom
                               ? "is-invalid"
@@ -224,6 +225,7 @@ function AssignMakeUpClass() {
                       <div class="input-group mb-3">
                         <input
                           type="time"
+                      onFocus={(e) => e.target.showPicker()}
                           className={`form-control  ${
                             formik.touched.batchFrom && formik.errors.batchTo
                               ? "is-invalid"

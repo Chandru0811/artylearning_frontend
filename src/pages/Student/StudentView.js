@@ -18,7 +18,7 @@ function StudentView() {
   const { id } = useParams();
   const [data, setData] = useState({});
   console.log("Student Datas:", data);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const [centerData, setCenterData] = useState(null);
   const [packageData, setPackageData] = useState(null);

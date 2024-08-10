@@ -8,7 +8,7 @@ function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
   const [data, setData] = useState({});
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
     const getData = async () => {
@@ -23,7 +23,7 @@ function Sidebar() {
   }, []);
 
   useEffect(() => {
-    const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+    const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
     // Define your menu items based on screen access values
     const updatedMenuItems = [

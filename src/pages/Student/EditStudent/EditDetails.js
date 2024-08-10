@@ -45,8 +45,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddStudentDetails = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
@@ -114,7 +115,7 @@ const AddStudentDetails = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -123,9 +124,7 @@ const AddStudentDetails = forwardRef(
     useEffect(() => {
       const getData = async () => {
         try {
-          const response = await api.get(
-            `/getAllStudentById/${formData.id}`
-          );
+          const response = await api.get(`/getAllStudentById/${formData.id}`);
           const { allowMagazine, allowSocialMedia, ...otherData } =
             response.data;
           const updatedValues = {
@@ -217,6 +216,7 @@ const AddStudentDetails = forwardRef(
                         className="form-control  form-contorl-sm"
                         name="dateOfBirth"
                         type="date"
+                        onFocus={(e) => e.target.showPicker()}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}
@@ -401,29 +401,42 @@ const AddStudentDetails = forwardRef(
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
+                      <label htmlFor="file" className="fw-medium">
                         <small>Profile Image</small>
                         <span className="text-danger">*</span>
                       </label>
                       <br />
                       <input
                         type="file"
-                        name="profileImage"
+                        name="file"
                         className="form-control"
                         onChange={(event) => {
-                          formik.setFieldValue(
-                            "profileImage",
-                            event.target.files[0]
-                          );
+                          const file = event.target.files[0];
+                          formik.setFieldValue("file", file);
+                          if (file) {
+                            const previewUrl = URL.createObjectURL(file);
+                            setImagePreviewUrl(previewUrl);
+                          } else {
+                            setImagePreviewUrl(null);
+                          }
                         }}
                         onBlur={formik.handleBlur}
+                        accept=".jpg, .jpeg, .png"
                       />
-                      {/* {formik.touched.profileImage &&
-                        formik.errors.profileImage && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.profileImage}</small>
-                          </div>
-                        )} */}
+                      {formik.touched.file && formik.errors.file && (
+                        <div className="error text-danger">
+                          <small>{formik.errors.file}</small>
+                        </div>
+                      )}
+                      {imagePreviewUrl && (
+                        <div className="mt-3">
+                          <img
+                            src={imagePreviewUrl}
+                            alt="Profile Preview"
+                            className="w-25"
+                          />
+                        </div>
+                      )}
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">

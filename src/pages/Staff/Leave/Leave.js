@@ -11,12 +11,12 @@ import api from "../../../config/URL";
 const Leave = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const userId = sessionStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   // console.log("Data:", datas.employeeData);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
   // console.log("centerData", centerData);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
     try {

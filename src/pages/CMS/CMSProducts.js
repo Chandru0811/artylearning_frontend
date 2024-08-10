@@ -19,7 +19,7 @@ function CMSProducts() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(true);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const handleClose = () => {
     setShow(false);
   };

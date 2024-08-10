@@ -13,7 +13,10 @@ const validationSchema = Yup.object({
   userId: Yup.number().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),
-  deductionAmount: Yup.string().required("*Deduction Amount is required"),
+  deductionAmount: Yup.number()
+    .typeError("*Deduction Amount must be a number")
+    .required("*Deduction Amount is required")
+    .positive("*Deduction Amount must be a positive value"),
 });
 
 function DeductionAdd() {
@@ -29,9 +32,8 @@ function DeductionAdd() {
       deductionName: "",
       deductionMonth: "",
       deductionAmount: "",
-     
     },
-     validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log("Attendance Emp:", values);
@@ -74,10 +76,9 @@ function DeductionAdd() {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
-
     },
   });
 
@@ -132,15 +133,19 @@ function DeductionAdd() {
                   </button>
                 </Link>
                 &nbsp;&nbsp;
-                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
                       aria-hidden="true"
                     ></span>
                   )}
-                Save
-              </button>
+                  Save
+                </button>
               </div>
             </div>
             <div className="row mt-3">
@@ -172,7 +177,8 @@ function DeductionAdd() {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Employee Name</label> <span className="text-danger">*</span>
+                <label className="form-label">Employee Name</label>{" "}
+                <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
                   class={`form-select  ${
@@ -204,61 +210,60 @@ function DeductionAdd() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                 
                 >
                   <option></option>
                   <option>CPF</option>
                   <option>LOP</option>
                   <option>LOAN INTEREST</option>
-                 
                 </select>
-                {formik.touched.deductionName && formik.errors.deductionName && (
-                  <div className="invalid-feedback">
-                    {formik.errors.deductionName}
-                  </div>
-                )}
+                {formik.touched.deductionName &&
+                  formik.errors.deductionName && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionName}
+                    </div>
+                  )}
               </div>
               <div className="col-md-6 col-12 mb-3">
-                  <label className="form-label">
-                    Deduction Month<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="month"
-                    className={`form-control ${
-                      formik.touched.deductionMonth &&
-                      formik.errors.deductionMonth
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("deductionMonth")}
-                  />
-                  {formik.touched.deductionMonth &&
-                    formik.errors.deductionMonth && (
-                      <div className="invalid-feedback">
-                        {formik.errors.deductionMonth}
-                      </div>
-                    )}
+                <label className="form-label">
+                  Deduction Month<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="month"
+                  className={`form-control ${
+                    formik.touched.deductionMonth &&
+                    formik.errors.deductionMonth
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("deductionMonth")}
+                />
+                {formik.touched.deductionMonth &&
+                  formik.errors.deductionMonth && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionMonth}
+                    </div>
+                  )}
               </div>
               <div className="col-md-6 col-12 mb-3">
-                  <label className="form-label">
-                    Deduction Amount<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      formik.touched.deductionAmount &&
-                      formik.errors.deductionAmount
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("deductionAmount")}
-                  />
-                  {formik.touched.deductionAmount &&
-                    formik.errors.deductionAmount && (
-                      <div className="invalid-feedback">
-                        {formik.errors.deductionAmount}
-                      </div>
-                    )}
+                <label className="form-label">
+                  Deduction Amount<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.deductionAmount &&
+                    formik.errors.deductionAmount
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("deductionAmount")}
+                />
+                {formik.touched.deductionAmount &&
+                  formik.errors.deductionAmount && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionAmount}
+                    </div>
+                  )}
               </div>
               {/* <div className="col-md-6 col-12">
                 <div className="text-start mb-3">

@@ -19,7 +19,7 @@ function CmsHome() {
     childVideo: "",
   });
   const [editingField, setEditingField] = useState(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
 
   const toggleEdit = (field) => {

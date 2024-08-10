@@ -12,8 +12,10 @@ const validationSchema = Yup.object({
   userId: Yup.string().required("*Employee Name is required"),
   deductionName: Yup.string().required("*Select the Deduction Name"),
   deductionMonth: Yup.string().required("*Select the Deduction Month"),
-  deductionAmount: Yup.string().required("*Deduction Amount is required"),
-  
+  deductionAmount: Yup.number()
+    .typeError("*Deduction Amount must be a number")
+    .required("*Deduction Amount is required")
+    .positive("*Deduction Amount must be a positive value"),
 });
 
 function DeductionEdit() {
@@ -48,7 +50,7 @@ function DeductionEdit() {
         }
       } catch (error) {
         toast.error(error.message);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -110,15 +112,19 @@ function DeductionEdit() {
                   </button>
                 </Link>
                 &nbsp;&nbsp;
-                <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
                     <span
                       className="spinner-border spinner-border-sm me-2"
                       aria-hidden="true"
                     ></span>
                   )}
-                Update
-              </button>
+                  Update
+                </button>
               </div>
             </div>
             <div className="row mt-3">
@@ -150,7 +156,8 @@ function DeductionEdit() {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Employee Name</lable> <span className="text-danger">*</span>
+                <lable className="">Employee Name</lable>{" "}
+                <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
                   class={`form-select  ${
@@ -182,19 +189,17 @@ function DeductionEdit() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                 
                 >
-                 
                   <option value="CPF">CPF</option>
                   <option value="LOP">LOP</option>
                   <option value="LOAN INTEREST">LOAN INTEREST</option>
-                 
                 </select>
-                {formik.touched.deductionName && formik.errors.deductionName && (
-                  <div className="invalid-feedback">
-                    {formik.errors.deductionName}
-                  </div>
-                )}
+                {formik.touched.deductionName &&
+                  formik.errors.deductionName && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionName}
+                    </div>
+                  )}
               </div>
 
               <div className="col-lg-6 col-md-6 col-12">

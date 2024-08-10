@@ -11,7 +11,7 @@ import { FaTrash } from "react-icons/fa6";
 function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const handleShow = () => setShow(true);

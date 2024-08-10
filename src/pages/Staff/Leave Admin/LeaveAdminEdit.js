@@ -20,8 +20,8 @@ function LeaveAdminEdit() {
   const [datas, setDatas] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
-  const userId = sessionStorage.getItem("userId");
-  const centerId = sessionStorage.getItem("centerId");
+  const userId = localStorage.getItem("userId");
+  const centerId = localStorage.getItem("centerId");
   const navigate = useNavigate();
 
   const [selectedDate, setSelectedDate] = useState(

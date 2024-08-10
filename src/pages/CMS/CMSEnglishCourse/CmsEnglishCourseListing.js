@@ -26,7 +26,7 @@ function CmsEnglishCourseListing({
   const [paragraph1, setParagraph1] = useState("");
   const [paragraph2, setParagraph2] = useState("");
   const [editingSection, setEditingSection] = useState(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [sections, setSections] = useState([
     {
       id: "Believer",

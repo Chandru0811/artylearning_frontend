@@ -227,7 +227,7 @@ function CourseView() {
                   <p className="fw-medium">Description</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.description}</p>
+                  <p className="text-muted text-sm text-break">: {data.description}</p>
                 </div>
               </div>
             </div>

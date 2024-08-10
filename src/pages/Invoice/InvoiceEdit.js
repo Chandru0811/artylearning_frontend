@@ -543,6 +543,7 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
+                  onFocus={(e) => e.target.showPicker()}
                   type="date"
                 />
                 {formik.touched.invoiceDate && formik.errors.invoiceDate && (
@@ -564,6 +565,7 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
+                  onFocus={(e) => e.target.showPicker()}
                   type="date"
                 />
                 {formik.touched.dueDate && formik.errors.dueDate && (
@@ -613,6 +615,7 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
+                  onFocus={(e) => e.target.showPicker()}
                   type="date"
                 />
                 {formik.touched.invoicePeriodFrom &&
@@ -636,6 +639,7 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
+                  onFocus={(e) => e.target.showPicker()}
                   type="date"
                 />
                 {formik.touched.invoicePeriodTo &&

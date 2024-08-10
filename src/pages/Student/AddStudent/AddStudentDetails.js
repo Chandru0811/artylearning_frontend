@@ -44,6 +44,7 @@ const validationSchema = Yup.object().shape({
 const AddStudentDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
 console.log("FormData is ", formData)
@@ -300,6 +301,7 @@ console.log("FormData is ", formData)
                         className="form-control  form-contorl-sm"
                         name="dateOfBirth"
                         type="date"
+                        onFocus={(e) => e.target.showPicker()}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}
@@ -489,27 +491,43 @@ console.log("FormData is ", formData)
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className=" fw-medium">
-                        <small>Profile Image</small>
-                        <span className="text-danger">*</span>
-                      </label>
-                      <br />
-                      <input
-                        type="file"
-                        name="file"
-                        className="form-control"
-                        onChange={(event) => {
-                          formik.setFieldValue("file", event.target.files[0]);
-                        }}
-                        onBlur={formik.handleBlur}
-                        accept=".jpg, .jpeg, .png"
-                      />
-                      {formik.touched.file && formik.errors.file && (
-                        <div className="error text-danger ">
-                          <small>{formik.errors.file}</small>
-                        </div>
-                      )}
-                    </div>
+        <label htmlFor="file" className="fw-medium">
+          <small>Profile Image</small>
+          <span className="text-danger">*</span>
+        </label>
+        <br />
+        <input
+          type="file"
+          name="file"
+          className="form-control"
+          onChange={(event) => {
+            const file = event.target.files[0];
+            formik.setFieldValue("file", file);
+            if (file) {
+              const previewUrl = URL.createObjectURL(file);
+              setImagePreviewUrl(previewUrl);
+            } else {
+              setImagePreviewUrl(null);
+            }
+          }}
+          onBlur={formik.handleBlur}
+          accept=".jpg, .jpeg, .png"
+        />
+        {formik.touched.file && formik.errors.file && (
+          <div className="error text-danger">
+            <small>{formik.errors.file}</small>
+          </div>
+        )}
+        {imagePreviewUrl && (
+          <div className="mt-3">
+            <img
+              src={imagePreviewUrl}
+              alt="Profile Preview"
+               className="w-25"
+            />
+          </div>
+        )}
+      </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Age</small>

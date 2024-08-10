@@ -20,7 +20,7 @@ export default function ScheduleTime() {
   console.log("courseId pass ScheduleTime:",courseId);
   // const [selectedDay, setSelectedDay] = useState(null);
   // const [selectedClass, setSelectedClass] = useState(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   // console.log(teacherSchedules);
 
   useEffect(() => {

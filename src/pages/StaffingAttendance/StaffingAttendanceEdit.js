@@ -8,11 +8,12 @@ import { toast } from "react-toastify";
 import fetchAllEmployeeListByCenter from "../List/EmployeeList";
 import api from "../../config/URL";
 
-
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
-  date: Yup.string().required("*Date is required"),
+  date: Yup.date()
+    .required("*Date is required")
+    .min(new Date(), "*Date must be in the future"),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   modeOfWorking: Yup.string().required("*Mode of working is required"),
   // checkIn: Yup.string().required("*Check-in is required"),
@@ -178,10 +179,11 @@ function StaffingAttendanceEdit() {
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("centerId")}
-                  className={`form-select ${formik.touched.centerId && formik.errors.centerId
+                  className={`form-select ${
+                    formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
@@ -204,10 +206,11 @@ function StaffingAttendanceEdit() {
                 <label className="">Employee Name</label>
                 <select
                   {...formik.getFieldProps("userId")}
-                  className={`form-select  ${formik.touched.userId && formik.errors.userId
+                  className={`form-select  ${
+                    formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                 >
                   <option selected disabled></option>
                   {userNamesData &&
@@ -227,10 +230,12 @@ function StaffingAttendanceEdit() {
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  className={`form-control ${formik.touched.date && formik.errors.date
+                  onFocus={(e) => e.target.showPicker()}
+                  className={`form-control ${
+                    formik.touched.date && formik.errors.date
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("date")}
                 />
                 {formik.touched.date && formik.errors.date && (
@@ -241,11 +246,12 @@ function StaffingAttendanceEdit() {
                 <label className="">Attendance Status</label>
                 <span className="text-danger">*</span>
                 <select
-                  className={`form-select ${formik.touched.attendanceStatus &&
-                      formik.errors.attendanceStatus
+                  className={`form-select ${
+                    formik.touched.attendanceStatus &&
+                    formik.errors.attendanceStatus
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("attendanceStatus")}
                   aria-label="Default select example"
                 >
@@ -268,10 +274,12 @@ function StaffingAttendanceEdit() {
                     <span className="text-danger">*</span>
                     <input
                       type="time"
-                      className={`form-control ${formik.touched.checkIn && formik.errors.checkIn
+                      onFocus={(e) => e.target.showPicker()}
+                      className={`form-control ${
+                        formik.touched.checkIn && formik.errors.checkIn
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       {...formik.getFieldProps("checkIn")}
                     />
                     {formik.touched.checkIn && formik.errors.checkIn && (
@@ -286,10 +294,12 @@ function StaffingAttendanceEdit() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      className={`form-control ${formik.touched.checkOut && formik.errors.checkOut
+                      onFocus={(e) => e.target.showPicker()}
+                      className={`form-control ${
+                        formik.touched.checkOut && formik.errors.checkOut
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       {...formik.getFieldProps("checkOut")}
                     />
                     {formik.touched.checkOut && formik.errors.checkOut && (
@@ -304,17 +314,20 @@ function StaffingAttendanceEdit() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      className={`form-control ${formik.touched.otStartTime && formik.errors.otStartTime
+                      onFocus={(e) => e.target.showPicker()}
+                      className={`form-control ${
+                        formik.touched.otStartTime && formik.errors.otStartTime
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       {...formik.getFieldProps("otStartTime")}
                     />
-                    {formik.touched.otStartTime && formik.errors.otStartTime && (
-                      <div className="invalid-feedback">
-                        {formik.errors.otStartTime}
-                      </div>
-                    )}
+                    {formik.touched.otStartTime &&
+                      formik.errors.otStartTime && (
+                        <div className="invalid-feedback">
+                          {formik.errors.otStartTime}
+                        </div>
+                      )}
                   </div>
 
                   <div className="col-md-6 col-12 mb-3 ">
@@ -322,10 +335,12 @@ function StaffingAttendanceEdit() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      className={`form-control  ${formik.touched.otEndTime && formik.errors.otEndTime
+                      onFocus={(e) => e.target.showPicker()}
+                      className={`form-control  ${
+                        formik.touched.otEndTime && formik.errors.otEndTime
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       {...formik.getFieldProps("otEndTime")}
                     />
                     {formik.touched.otEndTime && formik.errors.otEndTime && (
@@ -386,10 +401,11 @@ function StaffingAttendanceEdit() {
                 <label className="">Mode Of Working</label>
                 <span className="text-danger">*</span>
                 <select
-                  className={`form-select ${formik.touched.modeOfWorking && formik.errors.modeOfWorking
+                  className={`form-select ${
+                    formik.touched.modeOfWorking && formik.errors.modeOfWorking
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("modeOfWorking")}
                   aria-label="Default select example"
                 >
@@ -412,11 +428,12 @@ function StaffingAttendanceEdit() {
                   <textarea
                     id="floatingTextarea2"
                     style={{ height: "100px" }}
-                    className={`form-control  ${formik.touched.attendanceRemark &&
-                        formik.errors.attendanceRemark
+                    className={`form-control  ${
+                      formik.touched.attendanceRemark &&
+                      formik.errors.attendanceRemark
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     {...formik.getFieldProps("attendanceRemark")}
                   />
                   {formik.touched.attendanceRemark &&

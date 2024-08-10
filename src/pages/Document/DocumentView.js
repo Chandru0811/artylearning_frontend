@@ -21,7 +21,7 @@ function DocumentView() {
   const [images] = useState([AddContact]);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
     const fetchData = async () => {

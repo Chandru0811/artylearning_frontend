@@ -15,7 +15,7 @@ function Attendances() {
   const [selectedCenter, setSelectedCenter] = useState("1");
   // const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedBatch, setSelectedBatch] = useState("1");
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [count, setCount] = useState(0);
   // console.log("count", count);
   const getCurrentDate = () => {
@@ -205,6 +205,7 @@ function Attendances() {
               type="date"
               className="form-control"
               onChange={(e) => setSelectedDate(e.target.value)}
+              onFocus={(e) => e.target.showPicker()}
               value={selectedDate}
             />
           </div>

@@ -12,7 +12,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const isAdminFromStorage = sessionStorage.getItem("isAuthenticated");
+    const isAdminFromStorage = localStorage.getItem("isAuthenticated");
     const isAdminBoolean = isAdminFromStorage === "true";
     if (isAuthenticated !== isAdminBoolean) {
       setIsAuthenticated(isAdminBoolean);
@@ -46,8 +46,8 @@ function App() {
         const rolePermissions = response.data;
         updateScreens(rolePermissions);
         setIsAuthenticated(true);
-        sessionStorage.setItem("isAuthenticated", true);
-        // sessionStorage.setItem("userName", userName);
+        localStorage.setItem("isAuthenticated", true);
+        // localStorage.setItem("userName", userName);
       } else {
         setIsLoading(false);
         toast.error("Invalid email or password");
@@ -61,14 +61,14 @@ function App() {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    sessionStorage.removeItem("isAuthenticated");
-    sessionStorage.removeItem("screens");
-    sessionStorage.removeItem("roleId");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("userName");
-    sessionStorage.removeItem("loginUserId");
-    sessionStorage.removeItem("centerId");
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("screens");
+    localStorage.removeItem("roleId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("loginUserId");
+    localStorage.removeItem("centerId");
   };
 
   return (

@@ -130,9 +130,11 @@ function StudentChangeClass() {
             </div>
             <div class="col-md-6 col-12 mb-2">
               <lable class="">Prefer Days</lable>
-              <input type="text"
-              {...formik.getFieldProps("preferDays")}
-              className="form-control" />
+              <input
+                type="text"
+                {...formik.getFieldProps("preferDays")}
+                className="form-control"
+              />
             </div>
             <div class="col-md-6 col-12 mb-2 ">
               <label>Prefer Timing</label>
@@ -148,6 +150,7 @@ function StudentChangeClass() {
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 class={`form-control  ${
                   formik.touched.preferStartDate &&
                   formik.errors.preferStartDate
@@ -196,7 +199,7 @@ function StudentChangeClass() {
 
             <div class="col-12 mb-2 ">
               <label>
-              Centre Remark<span class="text-danger">*</span>
+                Centre Remark<span class="text-danger">*</span>
               </label>
               <textarea
                 class={`form-control  ${

@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -157,6 +162,7 @@ const PersonalAdd = forwardRef(
                 </label>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="dateOfBirth"
                   className="form-control"
                   onChange={formik.handleChange}

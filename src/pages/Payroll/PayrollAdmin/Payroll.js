@@ -11,7 +11,7 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 
 const Payroll = () => {
   const tableRef = useRef(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);

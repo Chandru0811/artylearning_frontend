@@ -177,6 +177,7 @@ const Attendance = () => {
             <input
               {...formik.getFieldProps("attendanceDate")}
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               className={`form-control ${formik.touched.attendanceDate && formik.errors.attendanceDate
                   ? "is-invalid"
                   : ""

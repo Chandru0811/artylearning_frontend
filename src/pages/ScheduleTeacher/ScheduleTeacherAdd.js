@@ -348,6 +348,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <input
                     type="time"
+                      onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.batch && formik.errors.batch
                         ? "is-invalid"
@@ -445,6 +446,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                     {...formik.getFieldProps("startDate")}
                     class={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
@@ -464,6 +466,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                     {...formik.getFieldProps("endDate")}
                     class={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate

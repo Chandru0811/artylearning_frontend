@@ -134,6 +134,7 @@ const StudentWithdraw = forwardRef(
               </label>
               <input
                 type="time"
+                      onFocus={(e) => e.target.showPicker()}
                 name="dayTime"
                 className="form-control"
                 onChange={formik.handleChange}
@@ -153,6 +154,7 @@ const StudentWithdraw = forwardRef(
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 name="classStartDate"
                 className="form-control"
                 onChange={formik.handleChange}
@@ -173,6 +175,7 @@ const StudentWithdraw = forwardRef(
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 name="classEndDate"
                 className="form-control"
                 onChange={formik.handleChange}
@@ -192,6 +195,7 @@ const StudentWithdraw = forwardRef(
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 name="requestDate"
                 className="form-control"
                 onChange={formik.handleChange}
@@ -286,6 +290,7 @@ const StudentWithdraw = forwardRef(
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 name="lastLessonDate"
                 className="form-control"
                 onChange={formik.handleChange}
@@ -305,6 +310,7 @@ const StudentWithdraw = forwardRef(
               </label>
               <input
                type="date"
+               onFocus={(e) => e.target.showPicker()}
                name="lastPaidLessonDate"
                className="form-control"
                onChange={formik.handleChange}
@@ -345,6 +351,7 @@ const StudentWithdraw = forwardRef(
               <input
                 
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 name="expectedRefundDate"
                 className="form-control"
                 onChange={formik.handleChange}

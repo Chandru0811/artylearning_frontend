@@ -4,7 +4,7 @@ import TeacherView from "../../pages/Teacher/TeacherView";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
-  const userName = sessionStorage.getItem("userName");
+  const userName = localStorage.getItem("userName");
   const handelLogOutClick = () => {
     onLogout();
     navigate("/login");

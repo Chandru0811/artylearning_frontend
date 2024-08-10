@@ -17,7 +17,7 @@ const CourseDeposit = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [taxData, setTaxData] = useState([]);
 
   const fetchTaxData = async () => {

@@ -79,7 +79,7 @@ function StudentTransferOut() {
     const getData = async () => {
       try {
         const response = await api.get(`/getAllStudentDetails/${id}`);
-        console.log("Response is ", response.data)
+        console.log("Response is ", response.data);
         if (response.data.centerId && response.data.centerId) {
           // setData(response.data);
           const formattedResponseData = {
@@ -131,10 +131,11 @@ function StudentTransferOut() {
               <select
                 {...formik.getFieldProps("courseId")}
                 name="courseId"
-                className={`form-control   ${formik.touched.courseId && formik.errors.courseId
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control   ${
+                  formik.touched.courseId && formik.errors.courseId
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -182,12 +183,14 @@ function StudentTransferOut() {
               </lable>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 {...formik.getFieldProps("lastLessonDate")}
                 name="lastLessonDate"
-                className={`form-control   ${formik.touched.lastLessonDate && formik.errors.lastLessonDate
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control   ${
+                  formik.touched.lastLessonDate && formik.errors.lastLessonDate
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
               {formik.touched.lastLessonDate &&
                 formik.errors.lastLessonDate && (
@@ -203,10 +206,11 @@ function StudentTransferOut() {
               <select
                 {...formik.getFieldProps("centerId")}
                 name="centerId"
-                className={`form-control   ${formik.touched.centerId && formik.errors.centerId
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control   ${
+                  formik.touched.centerId && formik.errors.centerId
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -229,6 +233,7 @@ function StudentTransferOut() {
                 name="preferTiming"
                 {...formik.getFieldProps("preferTiming")}
                 type="time"
+                      onFocus={(e) => e.target.showPicker()}
               />
             </div>
             {/* <div class="col-md-6 col-12 mb-2 ">
@@ -241,16 +246,15 @@ function StudentTransferOut() {
               />
             </div> */}
             <div class="col-md-6 col-12 mb-2">
-              <lable class="">
-                Prefer Days
-              </lable>
+              <lable class="">Prefer Days</lable>
               <select
                 {...formik.getFieldProps("preferDays")}
                 name="preferDays"
-                className={`form-select ${formik.touched.preferDays && formik.errors.preferDays
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select ${
+                  formik.touched.preferDays && formik.errors.preferDays
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -274,6 +278,7 @@ function StudentTransferOut() {
               <label>Prefer Start date</label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 name="preferStartDate"
                 class="form-control "
                 {...formik.getFieldProps("preferStartDate")}
@@ -286,10 +291,11 @@ function StudentTransferOut() {
               <select
                 {...formik.getFieldProps("reason")}
                 name="reason"
-                className={`form-select   ${formik.touched.reason && formik.errors.reason
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select   ${
+                  formik.touched.reason && formik.errors.reason
+                    ? "is-invalid"
+                    : ""
+                }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -325,10 +331,11 @@ function StudentTransferOut() {
                 type="text"
                 rows="4"
                 name="centerRemark"
-                className={`form-control  ${formik.touched.centerRemark && formik.errors.centerRemark
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control  ${
+                  formik.touched.centerRemark && formik.errors.centerRemark
+                    ? "is-invalid"
+                    : ""
+                }`}
                 {...formik.getFieldProps("centerRemark")}
               />
               {formik.touched.centerRemark && formik.errors.centerRemark && (

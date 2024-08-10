@@ -28,8 +28,8 @@ function LeaveAdd() {
   const [centerData, setCenterData] = useState(null);
   const [datas, setDatas] = useState([]);
   console.log("Datas:", datas);
-  const userId = sessionStorage.getItem("userId");
-  const centerId = sessionStorage.getItem("centerId");
+  const userId = localStorage.getItem("userId");
+  const centerId = localStorage.getItem("centerId");
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
@@ -233,6 +233,7 @@ function LeaveAdd() {
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className={`form-control  ${
                   formik.touched.fromDate && formik.errors.fromDate
                     ? "is-invalid"
@@ -259,6 +260,7 @@ function LeaveAdd() {
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className={`form-control  ${
                   formik.touched.toDate && formik.errors.toDate
                     ? "is-invalid"

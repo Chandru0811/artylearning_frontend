@@ -221,6 +221,7 @@ const StaffAccountEdit = forwardRef(
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="startDate"
                 onChange={formik.handleChange}
@@ -337,6 +338,7 @@ const StaffAccountEdit = forwardRef(
               <label>End Date</label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="endDate"
                 onChange={formik.handleChange}

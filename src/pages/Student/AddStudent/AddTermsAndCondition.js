@@ -189,6 +189,7 @@ const AddTermsAndCondition = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="termsAndConditionSignatureDate"
                           type="date"
+                          onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.termsAndConditionSignatureDate}

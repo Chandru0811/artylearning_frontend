@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 export default function CmsEnglish() {
   const [data, setData] = useState([]);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const getData = async () => {
     try {
       const response = await api.get(`/getEnglishCourse`);

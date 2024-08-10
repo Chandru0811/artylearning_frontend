@@ -190,6 +190,7 @@ const AssessmentChild = forwardRef(
                 <div className="col-12 d-flex ">
                   <input
                     type="time"
+                      onFocus={(e) => e.target.showPicker()}
                     name="timeSlotOffered"
                     className="form-control"
                     onChange={formik.handleChange}

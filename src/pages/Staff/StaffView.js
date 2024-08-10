@@ -12,7 +12,7 @@ function StaffView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   console.log("Api Staff data:", data);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
     const getData = async () => {
@@ -146,7 +146,7 @@ function StaffView() {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save("generated.pdf");
+      pdf.save(data.teacherName);
 
       document.body.removeChild(tempElem);
     } catch (error) {
@@ -154,6 +154,14 @@ function StaffView() {
       toast.error("Error generating PDF");
     }
   };
+  const shouldShowDownloadButton =
+    data.userContractCreationModels?.length > 0 &&
+    data.userAccountInfo?.length > 0 &&
+    data.userContactInfo?.length > 0 &&
+    data.userLoginInfoModels?.length > 0 &&
+    data.userSalaryCreationModels?.length > 0 &&
+    data.userLeaveCreationModels?.length > 0 &&
+    data.userRequireInformationModels?.length > 0;
 
   const getFileNameFromUrl = (url) => {
     if (url) {
@@ -187,12 +195,14 @@ function StaffView() {
           </div>
           <div class="col-auto">
             <div class="hstack gap-2 justify-content-end">
-              <button
-                className="btn btn-button btn-sm ms-1"
-                onClick={generatePDF}
-              >
-                Download Contract
-              </button>
+              {shouldShowDownloadButton && (
+                <button
+                  className="btn btn-button btn-sm ms-1"
+                  onClick={generatePDF}
+                >
+                  Download Contract
+                </button>
+              )}
               <Link to="/staff">
                 <button type="button" class="btn btn-border">
                   <span>Back</span>

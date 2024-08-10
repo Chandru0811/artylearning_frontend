@@ -18,7 +18,7 @@
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [subjectData, setSubjectData] = useState(null);
-    const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+    const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
     useEffect(() => {
       const getData = async () => {

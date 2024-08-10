@@ -34,6 +34,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
     setCourseData(null);
     const center = event.target.value;
     formik.setFieldValue("centerId", center);
+    formik.setFieldValue("courseId", "");
     fetchCourses(center);
   };
 

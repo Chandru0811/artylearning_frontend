@@ -21,7 +21,7 @@ const StudentDeposit = () => {
         <div className="row py-4">
           <div class="col-md-6 col-12 mb-4">
             <lable className="form-lable">
-            Centre Name<span class="text-danger"></span>
+              Centre Name<span class="text-danger"></span>
             </lable>
             <select
               class="form-select form select-sm"
@@ -62,6 +62,7 @@ const StudentDeposit = () => {
             <div class="input-group mb-3">
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className={`form-control iconInput `}
                 value={"2024-01-06"}
               />

@@ -219,6 +219,7 @@ const AddParentDetailModel = forwardRef(
                               <input
                                 className="form-control  form-contorl-sm"
                                 type="date"
+                                onFocus={(e) => e.target.showPicker()}
                                 name={`parentInformation[${index}].parentDateOfBirths`}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}

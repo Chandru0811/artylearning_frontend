@@ -14,7 +14,7 @@ const LeaveAdmin = () => {
   console.log("Leave Data:", datas);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
     try {

@@ -11,9 +11,10 @@ function EditRegisteration({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
-  
+
   const handleClose = () => setShow(false);
-  const handleShow = async() => {setShow(true)
+  const handleShow = async () => {
+    setShow(true);
     try {
       const response = await api.get("getAllTaxSetting");
       setTaxData(response.data);
@@ -21,8 +22,6 @@ function EditRegisteration({ id, onSuccess }) {
       toast.error("Error fetching tax data:", error);
     }
   };
-
-
 
   const validationSchema = yup.object().shape({
     // registrationDate: yup.string().required("*Registeration Date is required"),
@@ -61,7 +60,7 @@ function EditRegisteration({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -86,8 +85,24 @@ function EditRegisteration({ id, onSuccess }) {
     };
 
     getData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handleSubmit = () => {
+    const selectedTaxType = formik.values.taxType;
+
+    const activeTaxTypes = taxData.filter((tax) => tax.status === "ACTIVE");
+
+    const isValidTaxType = activeTaxTypes.some(
+      (tax) => tax.id === parseInt(selectedTaxType)
+    );
+
+    if (!isValidTaxType) {
+      formik.setFieldValue("taxType", "");
+      formik.handleSubmit();
+    } else {
+      formik.handleSubmit();
+    }
+  };
 
   return (
     <>
@@ -144,6 +159,7 @@ function EditRegisteration({ id, onSuccess }) {
                       ? "is-invalid"
                       : ""
                   }`}
+                  onFocus={(e) => e.target.showPicker()}
                   {...formik.getFieldProps("effectiveDate")}
                 />
                 {formik.touched.effectiveDate &&
@@ -176,10 +192,14 @@ function EditRegisteration({ id, onSuccess }) {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">
-                  Tax Type<span class="text-danger">*</span>
+                  Tax Type<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className="form-select"
+                  className={`form-select ${
+                    formik.touched.taxType && formik.errors.taxType
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("taxType")}
                   style={{ width: "100%" }}
                 >
@@ -202,9 +222,8 @@ function EditRegisteration({ id, onSuccess }) {
                   Status<span class="text-danger">*</span>
                 </lable>
                 <select
-                   className={`form-select ${
-                    formik.touched.status &&
-                    formik.errors.status
+                  className={`form-select ${
+                    formik.touched.status && formik.errors.status
                       ? "is-invalid"
                       : ""
                   }`}
@@ -214,12 +233,9 @@ function EditRegisteration({ id, onSuccess }) {
                   <option value=""></option>
                   <option value="Active">Active</option>
                   <option value="Inactive">Inactive</option>
-                  
                 </select>
                 {formik.touched.status && formik.errors.status && (
-                  <div className="invalid-feedback">
-                    {formik.errors.status}
-                  </div>
+                  <div className="invalid-feedback">{formik.errors.status}</div>
                 )}
               </div>
             </div>
@@ -229,19 +245,19 @@ function EditRegisteration({ id, onSuccess }) {
               Cancel
             </Button>
             <Button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
+              type="button"
+              onClick={handleSubmit}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </Button>
           </Modal.Footer>
         </form>
       </Modal>

@@ -20,7 +20,8 @@ const validationSchema = Yup.object().shape({
   //   .email("*Invalid Email")
   //   .required("*Email is required"),
   fathersEmailAddress: Yup.string()
-    .email("*Invalid Email").required("*Email is required"),
+    .email("*Invalid Email")
+    .required("*Email is required"),
   monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
 
   mothersFullName: Yup.string().required("*Mother Name is required"),
@@ -28,7 +29,7 @@ const validationSchema = Yup.object().shape({
   mothersDateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
-  fathersMobileNumber: Yup.string()
+  mothersMobileNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "*Invalid Phone Number"
@@ -38,11 +39,15 @@ const validationSchema = Yup.object().shape({
   //   .email("*Invalid Email")
   //   .required("*Email is required"),
   mothersEmailAddress: Yup.string()
-    .email("*Invalid Email").required("*Email is required"),
+    .email("*Invalid Email")
+    .required("*Email is required"),
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
   primaryContact: Yup.string()
-    .oneOf(["father", "mother"], "*Primary Contact must be either 'father' or 'mother'")
-    .required("*Primary Contact is required")
+    .oneOf(
+      ["father", "mother"],
+      "*Primary Contact must be either 'father' or 'mother'"
+    )
+    .required("*Primary Contact is required"),
 });
 
 const Form3 = forwardRef(
@@ -112,7 +117,12 @@ const Form3 = forwardRef(
                   <h6>Mother's Info</h6>
                 </div>
                 <div className="col-6 text-end">
-                  <label className="form-label">Primary Contact</label>
+                  <label className="form-label">
+                    Primary Contact{" "}
+                    {formik.values.primaryContact === "mother" && (
+                      <span className="text-danger">*</span>
+                    )}
+                  </label>
                   <input
                     type="radio"
                     name="primaryContact"
@@ -180,6 +190,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="mothersDateOfBirth"
                   onChange={formik.handleChange}
@@ -276,7 +287,12 @@ const Form3 = forwardRef(
                   <h6>Father's Info</h6>
                 </div>
                 <div className="col-6 text-end">
-                  <label className="form-label">Primary Contact</label>
+                  <label className="form-label">
+                    Primary Contact
+                    {formik.values.primaryContact === "father" && (
+                      <span className="text-danger">*</span>
+                    )}
+                  </label>
                   <input
                     type="radio"
                     name="primaryContact"
@@ -344,6 +360,7 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="fathersDateOfBirth"
                   onChange={formik.handleChange}

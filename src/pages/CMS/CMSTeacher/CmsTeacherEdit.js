@@ -11,7 +11,7 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [selectedFile, setSelectedFile] = useState(null);
 
   const formik = useFormik({

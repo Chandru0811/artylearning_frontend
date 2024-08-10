@@ -131,6 +131,7 @@ const StaffPersonalAdd = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 class="form-control"
                 name="dateOfBirth"
                 onChange={formik.handleChange}

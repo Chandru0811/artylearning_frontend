@@ -10,7 +10,7 @@
     const [editingField, setEditingField] = useState(null);
     const [michelleimg, setMischelleimg] = useState(null);
     const [ammandaimg, setAmandaimg] = useState(null);
-    const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+    const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
     // const [content, setContent] = useState({
     //   name1: "Michelle",
     //   name2: "Amanda",

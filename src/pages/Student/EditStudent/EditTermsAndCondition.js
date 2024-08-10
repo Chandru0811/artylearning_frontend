@@ -137,9 +137,7 @@ const EditTermsAndCondition = forwardRef(
     useEffect(() => {
       const getData = async () => {
         try {
-          const response = await api.get(
-            `/getAllStudentById/${formData.id}`
-          );
+          const response = await api.get(`/getAllStudentById/${formData.id}`);
           console.log("Response is ", response.data);
           if (
             response.data.studentTermsAndConditions &&
@@ -332,6 +330,7 @@ const EditTermsAndCondition = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="termsAndConditionSignatureDate"
                           type="date"
+                          onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.termsAndConditionSignatureDate}

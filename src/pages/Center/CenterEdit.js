@@ -358,6 +358,7 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("openingDate")}
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className={`form-control   ${formik.touched.openingDate && formik.errors.openingDate
                     ? "is-invalid"
                     : ""

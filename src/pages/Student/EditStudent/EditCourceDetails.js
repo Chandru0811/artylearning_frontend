@@ -29,7 +29,7 @@ const EditCourseDetail = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        console.log("Data is ", data)
+        console.log("Data is ", data);
         setLoadIndicators(true);
         try {
           if (data.courseDetailId !== null) {
@@ -85,7 +85,7 @@ const EditCourseDetail = forwardRef(
     const getData = async () => {
       try {
         const response = await api.get(`/getAllStudentById/${formData.id}`);
-        console.log(response.data)
+        console.log(response.data);
         if (
           response.data.studentCourseDetailModels &&
           response.data.studentCourseDetailModels.length > 0
@@ -179,6 +179,7 @@ const EditCourseDetail = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="startDate"
                           type="date"
+                          onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.startDate}
@@ -192,6 +193,7 @@ const EditCourseDetail = forwardRef(
                         <input
                           className="form-control"
                           type="time"
+                      onFocus={(e) => e.target.showPicker()}
                           name="startTime"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
@@ -232,6 +234,7 @@ const EditCourseDetail = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="endDate"
                           type="date"
+                          onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.endDate}
@@ -245,6 +248,7 @@ const EditCourseDetail = forwardRef(
                         <input
                           className="form-control "
                           type="time"
+                      onFocus={(e) => e.target.showPicker()}
                           name="endTime"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}

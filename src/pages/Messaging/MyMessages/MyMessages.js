@@ -10,9 +10,9 @@ import Delete from "../../../components/common/Delete";
 
 const MyMessages = () => {
   const tableRef = useRef(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
-  const id = sessionStorage.getItem("userId");
+  const id = localStorage.getItem("userId");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

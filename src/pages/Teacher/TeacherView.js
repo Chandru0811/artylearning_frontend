@@ -8,7 +8,7 @@ function TeacherView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   console.log("Api data:", data);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
     const getData = async () => {

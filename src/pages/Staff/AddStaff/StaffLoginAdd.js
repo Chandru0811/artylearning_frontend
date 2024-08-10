@@ -66,7 +66,7 @@ const StaffLoginAdd = forwardRef(
 
     return (
       <form onSubmit={formik.handleSubmit}>
-        <div className="container" style={{ minHeight: "60vh" }}>
+        <div className="container" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Login Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2">

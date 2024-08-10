@@ -12,7 +12,7 @@ import DocumentEdit from "./DocumentEdit";
 
 const Document = () => {
   const tableRef = useRef(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [studentData, setStudentData] = useState(null);

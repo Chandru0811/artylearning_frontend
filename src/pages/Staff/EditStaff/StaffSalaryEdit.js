@@ -173,6 +173,7 @@ const StaffSalaryEdit = forwardRef(
                 <label>Effective Date</label>
                 <input
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="effectiveDate"
                   onChange={formik.handleChange}

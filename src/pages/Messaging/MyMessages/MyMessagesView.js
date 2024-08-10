@@ -15,8 +15,8 @@ function MyMessagesView() {
   const [data, setData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [fileCount, setFileCount] = useState(0);
-  const userId = sessionStorage.getItem("userId");
-  const userName = sessionStorage.getItem("userName");
+  const userId = localStorage.getItem("userId");
+  const userName = localStorage.getItem("userName");
   const { id } = useParams();
   console.log("Data From My Message:", data);
 

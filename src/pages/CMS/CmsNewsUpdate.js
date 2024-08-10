@@ -11,7 +11,7 @@ const CmsNewsUpdate = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const currentData = new Date().toISOString().split("T")[0];

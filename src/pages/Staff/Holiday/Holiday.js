@@ -10,13 +10,13 @@ import fetchAllCentersWithIds from "../../List/CenterList";
 
 const Holiday = () => {
   const tableRef = useRef(null);
-  // const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
-  const storedScreens = JSON.parse(sessionStorage.getItem("screens") || "{}");
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const fetchData = async () => {
     try {
