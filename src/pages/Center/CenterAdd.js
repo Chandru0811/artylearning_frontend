@@ -30,11 +30,7 @@ const validationSchema = Yup.object().shape({
   openingDate: Yup.date().required("*Date is required"),
   uenNumber: Yup.string().required("*UEN number is required"),
   gst: Yup.string().required("*Choose an option"),
-  taxRegistrationNumber: Yup.number()
-    .typeError("*Tax Number must be numeric")
-    .required("*Tax Number is required")
-    .positive("*Please enter a valid number")
-    .integer("*Must be numeric"),
+  taxRegistrationNumber: Yup.string().required("*Tax Registration Number is required"),
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
   bankAccountNumber: Yup.number()
