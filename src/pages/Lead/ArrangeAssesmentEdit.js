@@ -31,9 +31,16 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
       toast.error(error);
     }
   };
-  const handleShow = () => {
+  const handleShow = async() => {
     fetchCenterData();
     setShow(true);
+    try {
+      const response = await api.get(`/getAssessmentById/${arrangeAssesmentId}`);
+      formik.setValues(response.data);
+      console.log("getAssessmentById",response.data);
+    } catch (error) {
+      toast.error("Error Fetching Data");
+    }
   };
   const formik = useFormik({
     initialValues: {
@@ -98,18 +105,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
     },
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAssessmentById/${arrangeAssesmentId}`);
-        formik.setValues(response.data);
-        console.log("getAssessmentById",response.data);
-      } catch (error) {
-        toast.error("Error Fetching Data");
-      }
-    };
-    getData();
-  }, []);
+ 
 
   return (
     <>

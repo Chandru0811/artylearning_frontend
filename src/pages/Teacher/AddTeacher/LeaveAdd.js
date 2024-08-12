@@ -64,7 +64,7 @@ const LeaveAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNe
   return (
     <form onSubmit={formik.handleSubmit}>
       <section>
-        <div className="container" style={{ minHeight: "95vh" }}>
+        <div className="container" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Leave Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2">

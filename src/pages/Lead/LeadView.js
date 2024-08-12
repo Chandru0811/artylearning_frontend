@@ -16,6 +16,7 @@ import AssesmentPdf from "./AssesmentPdf";
 
 function Leadview() {
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   console.log("Lead Data:", data);
   const [doassesmentData, setDoassesmentData] = useState([]);

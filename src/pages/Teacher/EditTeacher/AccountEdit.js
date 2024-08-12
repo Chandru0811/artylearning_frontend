@@ -3,6 +3,7 @@ import React, {
   useImperativeHandle,
   useEffect,
   useState,
+  useRef,
 } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -27,6 +28,7 @@ const validationSchema = Yup.object().shape({
 const AccountEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState([]);
+    const colorInputRef = useRef(null);
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
     const centerOptions = centerData.map((center) => ({
@@ -195,6 +197,11 @@ const AccountEdit = forwardRef(
     useImperativeHandle(ref, () => ({
       accountEdit: formik.handleSubmit,
     }));
+    const handleColorPickerClick = () => {
+      if (colorInputRef.current) {
+        colorInputRef.current.click();
+      }
+    };
 
     return (
       <form onSubmit={formik.handleSubmit}>
@@ -220,30 +227,27 @@ const AccountEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Color Code<span class="text-danger">*</span>
-              </label>
-              <div class="input-group mb-3 courseAdd">
-                <div class="input-group-text inputGroup">
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="form-lable">Color Code</lable>
+              <div className="input-group mb-3">
+                <div className="input-group-text inputGroup">
                   <input
                     type="color"
                     {...formik.getFieldProps("colorCode")}
-                    className="form-control-color  circle"
+                    className="form-control-color circle"
+                    ref={colorInputRef}
                   />
                 </div>
                 <input
                   type="text"
-                  className={`form-control form-control-sm iconInput `}
+                  className={`form-control iconInput`}
                   value={formik.values.colorCode}
-                  placeholder=""
+                  onClick={handleColorPickerClick}
+                  onChange={(e) =>
+                    formik.setFieldValue("colorCode", e.target.value)
+                  }
                 />
               </div>
-              {formik.errors.colorCode ? (
-                <div className="error text-danger ">
-                  <small>{formik.errors.colorCode}</small>
-                </div>
-              ) : null}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>

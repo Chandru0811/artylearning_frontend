@@ -73,7 +73,7 @@ const StaffSalaryAdd = forwardRef(
     return (
       <form onSubmit={formik.handleSubmit}>
         <section>
-          <div className="container" style={{ minHeight: "70vh" }}>
+          <div className="container" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2 mt-3">
