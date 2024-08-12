@@ -7,10 +7,13 @@ import Logo from "../../assets/images/Logo.png";
 import html2canvas from "html2canvas";
 
 const AssesmentPdf = ({ doassesmentData }) => {
+  console.log("doassesmentData",doassesmentData)
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const table1Ref = useRef();
   const table2Ref = useRef();
 
   const handleGeneratePDF = async () => {
+    setLoadIndicator(true)
     const pdf = new jsPDF({
       orientation: "p", // 'p' for portrait, 'l' for landscape
       unit: "px",
@@ -51,7 +54,15 @@ const AssesmentPdf = ({ doassesmentData }) => {
     await addTableToPDF(table2Ref, 2); // Add second table
 
     // Save PDF
-    pdf.save("student-details.pdf");
+    const fileName = doassesmentData &&
+    doassesmentData.leadDoAssessmentModel &&
+    doassesmentData.leadDoAssessmentModel.length > 0 &&
+    doassesmentData.leadDoAssessmentModel[0]
+    ? doassesmentData.leadDoAssessmentModel[0].name
+    : "Assessment";
+
+  pdf.save(`${fileName}.pdf`);
+    setLoadIndicator(false)
   };
   return (
     <>
@@ -60,7 +71,15 @@ const AssesmentPdf = ({ doassesmentData }) => {
           type="button"
           class="btn btn-border btn-sm"
           onClick={handleGeneratePDF}
+          disabled={loadIndicator}
         >
+          {" "}
+          {loadIndicator && (
+            <span
+              className="spinner-border spinner-border-sm me-2"
+              aria-hidden="true"
+            ></span>
+          )}
           generatePDF
         </button>
       </div>
@@ -3079,29 +3098,63 @@ const AssesmentPdf = ({ doassesmentData }) => {
           </div>
         )}
       </div>
-        <div ref={table2Ref}
+      <div
+        ref={table2Ref}
         className="container p-3 rounded mb-5"
         style={{
-            visibility: "hidden",
-            position: "absolute",
-            left: "-9999px",
-            display: "none",
-          }}
-        >
-          {/* Arty Pursuers */}
-          {doassesmentData.leadDoAssessmentArtyPursuers &&
-          doassesmentData.leadDoAssessmentArtyPursuers.length > 0 ? (
-            <div className="container-fluid">
-              <div className="row m-3">
-                <h5 className="headColor mt-5  mb-4">Arty Pursuers</h5>
-                <div className="col-12">
-                  <div className="row mb-2">
-                    <div className="col-md-3 col-6 d-flex  align-items-center">
-                      <p className="text-sm fw-medium ">Sight Words</p>
-                    </div>
-                    <div className="col-md-9 col-6">
-                      <p className="text-muted text-sm">
-                        :{" "}
+          visibility: "hidden",
+          position: "absolute",
+          left: "-9999px",
+          display: "none",
+        }}
+      >
+        {/* Arty Pursuers */}
+        {doassesmentData.leadDoAssessmentArtyPursuers &&
+        doassesmentData.leadDoAssessmentArtyPursuers.length > 0 ? (
+          <div className="container-fluid">
+            <div className="row m-3">
+              <h5 className="headColor mt-5  mb-4">Arty Pursuers</h5>
+              <div className="col-12">
+                <div className="row mb-2">
+                  <div className="col-md-3 col-6 d-flex  align-items-center">
+                    <p className="text-sm fw-medium ">Sight Words</p>
+                  </div>
+                  <div className="col-md-9 col-6">
+                    <p className="text-muted text-sm">
+                      :{" "}
+                      {doassesmentData &&
+                      doassesmentData.leadDoAssessmentModel &&
+                      doassesmentData.leadDoAssessmentModel.length > 0 &&
+                      doassesmentData.leadDoAssessmentModel[0] &&
+                      doassesmentData.leadDoAssessmentAlphabet &&
+                      doassesmentData.leadDoAssessmentAlphabet[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0].sightWords
+                        ? doassesmentData.leadDoAssessmentArtyPursuers[0].sightWords.join(
+                            " , "
+                          )
+                        : "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div className="table-responsive">
+                <table class="table">
+                  <thead className="table-warning">
+                    <tr>
+                      <th scope="col">CVC</th>
+                      <th scope="col">A</th>
+                      <th scope="col">E</th>
+                      <th scope="col">I</th>
+                      <th scope="col">O</th>
+                      <th scope="col">U</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Real</th>
+                      <td>
+                        Hag{" "}
                         {doassesmentData &&
                         doassesmentData.leadDoAssessmentModel &&
                         doassesmentData.leadDoAssessmentModel.length > 0 &&
@@ -3109,381 +3162,19 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentArtyPursuers[0]
-                          .sightWords
-                          ? doassesmentData.leadDoAssessmentArtyPursuers[0].sightWords.join(
-                              " , "
-                            )
-                          : "--"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <div className="table-responsive">
-                  <table class="table">
-                    <thead className="table-warning">
-                      <tr>
-                        <th scope="col">CVC</th>
-                        <th scope="col">A</th>
-                        <th scope="col">E</th>
-                        <th scope="col">I</th>
-                        <th scope="col">O</th>
-                        <th scope="col">U</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">Real</th>
-                        <td>
-                          Hag{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realHag ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Keg{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realKeg ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Dip{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realDip ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Lot{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realLot ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Bud{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realBud ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Spelling</th>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realHagSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .realHagSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realKegSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .realKegSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realDipSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .realDipSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realLotSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .realLotSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .realBudSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .realBudSpelling
-                            : "--"}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Non sense</th>
-                        <td>
-                          Zam{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseZam ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Den{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseDen ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Wip{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseWip ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Sot{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseSot ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Yub{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseYub ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Spelling</th>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseZamSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .nonSenseZamSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseDenSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .nonSenseDenSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseWipSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .nonSenseWipSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseSotSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .nonSenseSotSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .nonSenseYubSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .nonSenseYubSpelling
-                            : "--"}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className="col-12">
-                  <div className="row mb-2">
-                    <div className="col-md-3 col-6 d-flex">
-                      <p className="text-sm fw-medium ">Remarks</p>
-                    </div>
-                    <div className="col-md-9 col-6">
-                      <p className="text-muted text-sm">
+                          .realHag ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Keg{" "}
                         {doassesmentData &&
                         doassesmentData.leadDoAssessmentModel &&
                         doassesmentData.leadDoAssessmentModel.length > 0 &&
@@ -3491,827 +3182,360 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentArtyPursuers[0]
-                          .realRemarks
-                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                              .realRemarks
-                          : "--"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <div className="table-responsive">
-                  <table class="table">
-                    <thead className="table-warning">
-                      <tr>
-                        <th scope="col">CVC</th>
-                        <th scope="col">A</th>
-                        <th scope="col">E</th>
-                        <th scope="col">I</th>
-                        <th scope="col">O</th>
-                        <th scope="col">U</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">L Blend</th>
-                        <td>
-                          Claf{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendClaf ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Fled{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendFled ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Silm{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendSilm ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Glob{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendGlob ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Blum{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendBlum ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Spelling</th>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendClafSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendClafSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendFledSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendFledSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendSilmSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendSilmSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendGlobSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendGlobSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendBlumSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendBlumSpelling
-                            : "--"}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">R Blend</th>
-                        <td>
-                          Drap{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendDrap ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Curd{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendCued ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Brim{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendBrim ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Trop{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendTrop ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Crum{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendCrum ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Spelling</th>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendDrapSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .rblendDrapSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendCuedSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .rblendCuedSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendBrimSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .rblendBrimSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendTropSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .rblendTropSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .rblendCrumSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .rblendCrumSpelling
-                            : "--"}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">S Blend</th>
-                        <td>
-                          Snap{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendSnap ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Smeg{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendSmeg ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Spit{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendSpit ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Stomp{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendStomp ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Swum{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendSwum ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Spelling</th>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendSnapSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .sblendSnapSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendSmegSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .sblendSmegSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendSpitSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .sblendSpitSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendStompSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .sblendStompSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .sblendSwumSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .sblendSwumSpelling
-                            : "--"}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className="col-12">
-                  <div className="row mb-2">
-                    <div className="col-md-3 col-6 d-flex">
-                      <p className="text-sm fw-medium ">Remarks</p>
-                    </div>
-                    <div className="col-md-9 col-6">
-                      <p className="text-muted text-sm">
+                          .realKeg ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Dip{" "}
                         {doassesmentData &&
-                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                        doassesmentData.leadDoAssessmentArtyPursuers.length >
-                          0 &&
-                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentArtyPursuers[0]
-                          .blendRemarks
-                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                              .blendRemarks
-                          : "--"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <div className="table-responsive">
-                  <table class="table">
-                    <thead className="table-warning">
-                      <tr>
-                        <th scope="col">H Brothers</th>
-                        <th scope="col">SH</th>
-                        <th scope="col">CH</th>
-                        <th scope="col">WH</th>
-                        <th scope="col">TH</th>
-                        <th scope="col">PH</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">L Blend</th>
-                        <td>
-                          Shamrock{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendShamrock ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Choose{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendChoose ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Whack{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendWhack ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Thrust{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendThrust ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                        <td>
-                          Phobics{" "}
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendPhobics ? (
-                            <TiTick
-                              style={{
-                                color: "green",
-                                fontSize: "25px",
-                              }}
-                            />
-                          ) : (
-                            <ImCross style={{ color: "red" }} />
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Spelling</th>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendShamrockSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendShamrockSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendChooseSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendChooseSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendWhackSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendWhackSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendThrustSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendThrustSpelling
-                            : "--"}
-                        </td>
-                        <td>
-                          {doassesmentData &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers.length >
-                            0 &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                          doassesmentData.leadDoAssessmentArtyPursuers[0]
-                            .lblendPhobicsSpelling
-                            ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                                .lblendPhobicsSpelling
-                            : "--"}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div className="col-12">
-                  <div className="row mb-2">
-                    <div className="col-md-3 col-6 d-flex">
-                      <p className="text-sm fw-medium ">Remarks</p>
-                    </div>
-                    <div className="col-md-9 col-6">
-                      <p className="text-muted text-sm">
+                          .realDip ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Lot{" "}
                         {doassesmentData &&
-                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                        doassesmentData.leadDoAssessmentArtyPursuers.length >
-                          0 &&
-                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentArtyPursuers[0]
-                          .hbrothersRemarks
-                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                              .hbrothersRemarks
-                          : "--"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <div className="col-12">
-                  <div className="row mb-2">
-                    <div className="col-md-3 col-6 d-flex">
-                      <p className="text-sm fw-medium ">Sight Words</p>
-                    </div>
-                    <div className="col-md-9 col-6">
-                      <p className="text-muted text-sm">
+                          .realLot ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Bud{" "}
                         {doassesmentData &&
-                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                        doassesmentData.leadDoAssessmentArtyPursuers.length >
-                          0 &&
-                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
-                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentArtyPursuers[0]
-                          .hbrothersSightWords
-                          ? doassesmentData.leadDoAssessmentArtyPursuers[0].hbrothersSightWords.join(
-                              ", "
-                            )
+                          .realBud ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Spelling</th>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .realHagSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .realHagSpelling
                           : "--"}
-                      </p>
-                    </div>
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .realKegSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .realKegSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .realDipSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .realDipSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .realLotSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .realLotSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .realBudSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .realBudSpelling
+                          : "--"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Non sense</th>
+                      <td>
+                        Zam{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseZam ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Den{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseDen ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Wip{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseWip ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Sot{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseSot ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Yub{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseYub ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Spelling</th>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseZamSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .nonSenseZamSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseDenSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .nonSenseDenSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseWipSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .nonSenseWipSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseSotSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .nonSenseSotSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .nonSenseYubSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .nonSenseYubSpelling
+                          : "--"}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="col-12">
+                <div className="row mb-2">
+                  <div className="col-md-3 col-6 d-flex">
+                    <p className="text-sm fw-medium ">Remarks</p>
+                  </div>
+                  <div className="col-md-9 col-6">
+                    <p className="text-muted text-sm">
+                      {doassesmentData &&
+                      doassesmentData.leadDoAssessmentModel &&
+                      doassesmentData.leadDoAssessmentModel.length > 0 &&
+                      doassesmentData.leadDoAssessmentModel[0] &&
+                      doassesmentData.leadDoAssessmentAlphabet &&
+                      doassesmentData.leadDoAssessmentAlphabet[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0]
+                        .realRemarks
+                        ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                            .realRemarks
+                        : "--"}
+                    </p>
                   </div>
                 </div>
-                <div className="col-12">
-                  <div className="row mb-2">
-                    <div className="col-md-3 col-6 d-flex">
-                      <p className="text-sm fw-medium ">Remarks</p>
-                    </div>
-                    <div className="col-md-9 col-6">
-                      <p className="text-muted text-sm">
+              </div>
+              <hr />
+              <div className="table-responsive">
+                <table class="table">
+                  <thead className="table-warning">
+                    <tr>
+                      <th scope="col">CVC</th>
+                      <th scope="col">A</th>
+                      <th scope="col">E</th>
+                      <th scope="col">I</th>
+                      <th scope="col">O</th>
+                      <th scope="col">U</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">L Blend</th>
+                      <td>
+                        Claf{" "}
                         {doassesmentData &&
                         doassesmentData.leadDoAssessmentModel &&
                         doassesmentData.leadDoAssessmentModel.length > 0 &&
@@ -4319,22 +3543,814 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentArtyPursuers &&
                         doassesmentData.leadDoAssessmentArtyPursuers[0] &&
                         doassesmentData.leadDoAssessmentArtyPursuers[0]
-                          .sightWordsRemarks
+                          .lblendClaf ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Fled{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendFled ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Silm{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendSilm ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Glob{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendGlob ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Blum{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendBlum ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Spelling</th>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendClafSpelling
                           ? doassesmentData.leadDoAssessmentArtyPursuers[0]
-                              .sightWordsRemarks
+                              .lblendClafSpelling
                           : "--"}
-                      </p>
-                    </div>
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendFledSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendFledSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendSilmSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendSilmSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendGlobSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendGlobSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendBlumSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendBlumSpelling
+                          : "--"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">R Blend</th>
+                      <td>
+                        Drap{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendDrap ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Curd{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendCued ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Brim{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendBrim ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Trop{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendTrop ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Crum{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendCrum ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Spelling</th>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendDrapSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .rblendDrapSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendCuedSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .rblendCuedSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendBrimSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .rblendBrimSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendTropSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .rblendTropSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .rblendCrumSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .rblendCrumSpelling
+                          : "--"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">S Blend</th>
+                      <td>
+                        Snap{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendSnap ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Smeg{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendSmeg ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Spit{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendSpit ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Stomp{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendStomp ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Swum{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendSwum ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Spelling</th>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendSnapSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .sblendSnapSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendSmegSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .sblendSmegSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendSpitSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .sblendSpitSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendStompSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .sblendStompSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .sblendSwumSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .sblendSwumSpelling
+                          : "--"}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="col-12">
+                <div className="row mb-2">
+                  <div className="col-md-3 col-6 d-flex">
+                    <p className="text-sm fw-medium ">Remarks</p>
+                  </div>
+                  <div className="col-md-9 col-6">
+                    <p className="text-muted text-sm">
+                      {doassesmentData &&
+                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                      doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0]
+                        .blendRemarks
+                        ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                            .blendRemarks
+                        : "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div className="table-responsive">
+                <table class="table">
+                  <thead className="table-warning">
+                    <tr>
+                      <th scope="col">H Brothers</th>
+                      <th scope="col">SH</th>
+                      <th scope="col">CH</th>
+                      <th scope="col">WH</th>
+                      <th scope="col">TH</th>
+                      <th scope="col">PH</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">L Blend</th>
+                      <td>
+                        Shamrock{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendShamrock ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Choose{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendChoose ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Whack{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendWhack ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Thrust{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendThrust ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        Phobics{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendPhobics ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Spelling</th>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendShamrockSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendShamrockSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendChooseSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendChooseSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendWhackSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendWhackSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendThrustSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendThrustSpelling
+                          : "--"}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                          0 &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                        doassesmentData.leadDoAssessmentArtyPursuers[0]
+                          .lblendPhobicsSpelling
+                          ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                              .lblendPhobicsSpelling
+                          : "--"}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="col-12">
+                <div className="row mb-2">
+                  <div className="col-md-3 col-6 d-flex">
+                    <p className="text-sm fw-medium ">Remarks</p>
+                  </div>
+                  <div className="col-md-9 col-6">
+                    <p className="text-muted text-sm">
+                      {doassesmentData &&
+                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                      doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0]
+                        .hbrothersRemarks
+                        ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                            .hbrothersRemarks
+                        : "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div className="col-12">
+                <div className="row mb-2">
+                  <div className="col-md-3 col-6 d-flex">
+                    <p className="text-sm fw-medium ">Sight Words</p>
+                  </div>
+                  <div className="col-md-9 col-6">
+                    <p className="text-muted text-sm">
+                      {doassesmentData &&
+                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                      doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0]
+                        .hbrothersSightWords
+                        ? doassesmentData.leadDoAssessmentArtyPursuers[0].hbrothersSightWords.join(
+                            ", "
+                          )
+                        : "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-12">
+                <div className="row mb-2">
+                  <div className="col-md-3 col-6 d-flex">
+                    <p className="text-sm fw-medium ">Remarks</p>
+                  </div>
+                  <div className="col-md-9 col-6">
+                    <p className="text-muted text-sm">
+                      {doassesmentData &&
+                      doassesmentData.leadDoAssessmentModel &&
+                      doassesmentData.leadDoAssessmentModel.length > 0 &&
+                      doassesmentData.leadDoAssessmentModel[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0] &&
+                      doassesmentData.leadDoAssessmentArtyPursuers[0]
+                        .sightWordsRemarks
+                        ? doassesmentData.leadDoAssessmentArtyPursuers[0]
+                            .sightWordsRemarks
+                        : "--"}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="text-center">
-              <p>Arty Pursuers Information not available </p>
-            </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="text-center">
+            <p>Arty Pursuers Information not available </p>
+          </div>
+        )}
+      </div>
     </>
   );
 };

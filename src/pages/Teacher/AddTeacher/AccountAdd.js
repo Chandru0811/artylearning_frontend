@@ -3,6 +3,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useEffect,
+  useRef,
 } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -30,6 +31,7 @@ const validationSchema = Yup.object().shape({
 const AccountAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState([]);
+    const colorInputRef = useRef(null);
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
     const centerOptions = centerData.map((center) => ({
@@ -122,6 +124,11 @@ const AccountAdd = forwardRef(
     useImperativeHandle(ref, () => ({
       accountAdd: formik.handleSubmit,
     }));
+    const handleColorPickerClick = () => {
+      if (colorInputRef.current) {
+        colorInputRef.current.click();
+      }
+    };
 
     return (
       <form onSubmit={formik.handleSubmit}>
@@ -147,21 +154,25 @@ const AccountAdd = forwardRef(
                 </div>
               )}
             </div>
-            <div className="col-md-6 col-12 mb-2 mt-3">
-              <label>Color Code</label>
-              <div class="input-group mb-3 courseAdd">
-                <div class="input-group-text inputGroup">
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="form-lable">Color Code</lable>
+              <div className="input-group mb-3">
+                <div className="input-group-text inputGroup">
                   <input
                     type="color"
-                    className="form-control-color circle"
                     {...formik.getFieldProps("colorCode")}
+                    className="form-control-color circle"
+                    ref={colorInputRef}
                   />
                 </div>
                 <input
                   type="text"
-                  className={`form-control iconInput `}
+                  className={`form-control iconInput`}
                   value={formik.values.colorCode}
-                  placeholder=""
+                  onClick={handleColorPickerClick}
+                  onChange={(e) =>
+                    formik.setFieldValue("colorCode", e.target.value)
+                  }
                 />
               </div>
             </div>

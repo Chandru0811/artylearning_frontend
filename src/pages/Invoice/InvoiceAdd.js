@@ -494,6 +494,13 @@ export default function InvoiceAdd() {
     };
     getData();
   }, [studentID]);
+  const handleRowDelete = (index) => {
+    const updatedInvoiceItems = formik.values.invoiceItems.filter((_, i) => i !== index);
+  
+    // Update the rows and formik values
+    setRows(updatedInvoiceItems);
+    formik.setFieldValue("invoiceItems", updatedInvoiceItems);
+  };
 
   useEffect(() => {
     // Calculate total Item Amounts
@@ -969,13 +976,14 @@ export default function InvoiceAdd() {
                 <button
                   type="button"
                   className="btn btn-sm mx-2 text-danger border-danger bg-white"
-                  onClick={() => {
-                    setRows((pr) => pr.slice(0, -1));
-                    formik.setFieldValue(
-                      "invoiceItems",
-                      formik.values.invoiceItems.slice(0, -1)
-                    );
-                  }}
+                  // onClick={() => {
+                  //   setRows((pr) => pr.slice(0, -1));
+                  //   formik.setFieldValue(
+                  //     "invoiceItems",
+                  //     formik.values.invoiceItems.slice(0, -1)
+                  //   );
+                  // }}
+                  onClick={() => handleRowDelete(rows.length - 1)}
                 >
                   Delete
                 </button>

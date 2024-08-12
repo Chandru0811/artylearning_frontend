@@ -255,8 +255,8 @@ const AssessmentChild = forwardRef(
                     No
                   </label>
                 </div>
-                {formik.touched.gst && formik.errors.gst ? (
-                  <div className="text-danger">{formik.errors.gst}</div>
+                {formik.touched.pictureToken && formik.errors.pictureToken ? (
+                  <div className="text-danger">{formik.errors.pictureToken}</div>
                 ) : null}
               </div>
               <div className="col-md-6 col-12 mb-4">
@@ -283,7 +283,7 @@ const AssessmentChild = forwardRef(
                 <div className="col-12 d-flex ">
                   <input
                     type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                    onFocus={(e) => e.target.showPicker()}
                     name="timeSlotOffered"
                     className="form-control"
                     onChange={formik.handleChange}
@@ -336,53 +336,62 @@ const AssessmentChild = forwardRef(
                   </label>
                 </div>
               </div>
-              <div className="col-md-6 col-12 mb-4">
-                <label className="form-label">
-                  Level Assessed
-                  <span className="text-danger">*</span>
-                </label>
-                <div className="mt-1">
-                  <input
-                    className="form-check-input mx-2"
-                    type="radio"
-                    name="levelAssessed"
-                    id="levelAssessed"
-                    value="ARTY_BELIVER"
-                    checked={formik.values.levelAssessed === "ARTY_BELIVER"}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label className="form-check-label">Arty Beliver</label>
-                  <input
-                    className="form-check-input mx-2"
-                    type="radio"
-                    name="levelAssessed"
-                    id="levelAssessed"
-                    value="ARTY_DREAMER"
-                    checked={formik.values.levelAssessed === "ARTY_DREAMER"}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label className="form-check-label">Arty Dreamer</label>
-                  <input
-                    className="form-check-input mx-2"
-                    type="radio"
-                    name="levelAssessed"
-                    id="levelAssessed"
-                    value="ARTY_PURSUER"
-                    checked={formik.values.levelAssessed === "ARTY_PURSUER"}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label className="form-check-label">Arty Pursuer</label>
+              <div className="col-md-6 col-12">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInput1" className="form-label">
+                  Level Assessed<span className="text-danger">*</span>
+                  </label>
                 </div>
-                {formik.touched.levelAssessed &&
-                  formik.errors.levelAssessed && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.levelAssessed}</small>
-                    </div>
-                  )}
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="levelAssessed"
+                    id="inlineRadio1"
+                    value="ARTY_BELIVER"
+                    onChange={formik.handleChange}
+                    checked={formik.values.levelAssessed === "ARTY_BELIVER"}
+                  />
+                  <label className="form-check-label" htmlFor="inlineRadio1">
+                  Arty Beliver
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="levelAssessed"
+                    id="inlineRadio2"
+                    value="ARTY_DREAMER"
+                    onChange={formik.handleChange}
+                    checked={formik.values.levelAssessed === "ARTY_DREAMER"}
+                  />
+                  <label className="form-check-label" htmlFor="inlineRadio2">
+                  Arty Dreamer
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="levelAssessed"
+                    id="inlineRadio3"
+                    value="ARTY_PURSUER"
+                    onChange={formik.handleChange}
+                    checked={formik.values.levelAssessed === "ARTY_PURSUER"}
+                  />
+                  <label className="form-check-label" htmlFor="inlineRadio3">
+                  Arty Pursuer
+                  </label>
+                </div>
+                {formik.errors.levelAssessed && formik.touched.levelAssessed && (
+                  <div className="text-danger  " style={{ fontSize: ".875em" }}>
+                    {formik.errors.levelAssessed}
+                  </div>
+                )}
               </div>
+            </div>
               <div className="col-md-6 col-12 mb-4">
                 <lable>Sibling(s)</lable>
                 <input

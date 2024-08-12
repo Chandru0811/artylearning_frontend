@@ -65,7 +65,7 @@ const StaffLeaveAdd = forwardRef(
     return (
       <form onSubmit={formik.handleSubmit}>
         <section>
-          <div className="container" style={{ minHeight: "95vh" }}>
+          <div className="container" style={{ minHeight: "60vh" }}>
             <p className="headColor my-4">Leave Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2">
@@ -74,6 +74,7 @@ const StaffLeaveAdd = forwardRef(
                 </label>
                 <input
                   type="month"
+                  onFocus={(e)=> e.target.showPicker()}
                   class="form-control mt-3"
                   name="year"
                   onChange={formik.handleChange}

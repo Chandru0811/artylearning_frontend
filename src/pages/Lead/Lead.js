@@ -544,7 +544,7 @@ const Lead = () => {
                                   className="text-white fw-bold"
                                   style={{ textWrap: "nowrap" }}
                                 >
-                                  Arranging Assesment
+                                Assesment Arranged
                                 </span>
                               </button>
                               <ul className="dropdown-menu text-capitalize leadStatuslist">
@@ -564,7 +564,7 @@ const Lead = () => {
                                     style={{ textDecoration: "none" }}
                                   >
                                     <button className="dropdown-item">
-                                      Do Assesment
+                                      Do Assessment
                                     </button>
                                   </Link>
                                 </li>
@@ -672,7 +672,7 @@ const Lead = () => {
                                   className="text-white fw-bold"
                                   style={{ textWrap: "nowrap" }}
                                 >
-                                  Assesment Done
+                                  Assessment Done
                                 </span>
                               </button>
                               <ul className="dropdown-menu text-capitalize leadStatuslist">
@@ -695,7 +695,7 @@ const Lead = () => {
                                     style={{ textDecoration: "none" }}
                                   >
                                     <button className="dropdown-item">
-                                      Edit Do Assesment
+                                      Edit Do Assessment
                                     </button>
                                   </Link>
                                 </li>

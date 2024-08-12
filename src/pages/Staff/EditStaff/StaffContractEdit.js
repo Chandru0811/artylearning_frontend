@@ -1,10 +1,11 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 import * as Yup from "yup";
+import fetchAllCentersWithIds from "../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   employer:Yup.string().required("*Employer is required"),
@@ -35,6 +36,7 @@ const validationSchema = Yup.object().shape({
 const StaffContractEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
     const navigate = useNavigate();
+    const [centerData, setCenterData] = useState(null);
     const formik = useFormik({
       initialValues: {
         employer: "",
@@ -129,6 +131,24 @@ const StaffContractEdit = forwardRef(
         }
       },
     });
+    const fetchData = async () => {
+      try {
+        const centerData = await fetchAllCentersWithIds();
+        setCenterData(centerData);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+    const getData1 = async (id) => {
+      try {
+        const response = await api.get(`/getAllCenterById/${id}`);
+        formik.setFieldValue("uen",response.data.uenNumber)
+        formik.setFieldValue("addressOfEmployment",response.data.address)
+       console.log("response",response.data)
+      } catch (error) {
+        toast.error("Error Fetching Data", error);
+      }
+    };
 
     useEffect(() => {
       const getData = async () => {
@@ -194,12 +214,16 @@ const StaffContractEdit = forwardRef(
       };
       console.log(formik.values);
       getData();
+      fetchData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useImperativeHandle(ref, () => ({
       staffContractEdit: formik.handleSubmit,
     }));
+    const filteredCenters = centerData?.filter((center) =>
+      formData.centerIds?.includes(center.id)
+    );
 
     return (
       <form onSubmit={formik.handleSubmit}>
@@ -208,16 +232,28 @@ const StaffContractEdit = forwardRef(
           <div className="container mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
-              <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Employer</label><span className="text-danger">*</span>
-                <input
+            <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>Employer</label>
+                <span className="text-danger">*</span>
+                <select
                   type="text"
-                  className="form-control"
+                  className="form-select"
                   name="employer"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    const selectedId = e.target.value;
+                    formik.setFieldValue('employer', selectedId);
+                    getData1(selectedId); 
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.employer}
-                />
+                >
+                  <option selected></option>
+                  {filteredCenters?.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.centerNames}
+                    </option>
+                  ))}
+                </select>
                 {formik.touched.employer && formik.errors.employer && (
                   <div className="error text-danger ">
                     <small>{formik.errors.employer}</small>
