@@ -80,7 +80,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
               aria-hidden="true"
             ></span>
           )}
-          generatePDF
+          Generate PDF
         </button>
       </div>
       <div
