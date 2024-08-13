@@ -16,9 +16,9 @@ import { useFormik } from "formik";
 
 const Lead = () => {
   const tableRef = useRef(null);
-
+  const [confirmationMessage, setConfirmationMessage] = useState("");
   const [datas, setDatas] = useState([]);
-  console.log("Lead All Datas",datas);
+  console.log("Lead All Datas", datas);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newStatus, setNewStatus] = useState("");
@@ -72,9 +72,7 @@ const Lead = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -85,9 +83,23 @@ const Lead = () => {
     }
   };
 
-  const handleStatusChange = async (id, data) => {
+  const handleStatusChange = async (id, status) => {
+    let message = "Are you sure want to change the lead status?";
+    if (status === "DROP") {
+      message = "Are you sure want to drop this lead?";
+    } else if (status === "KIV") {
+      message = "Are you sure want to KIV this lead?";
+    } else if (status === "NEW_WAITLIST") {
+      message = "Are you sure want to make this lead New/Waitlist?";
+    } else if (status === "WAITING_FOR_PAYMENT") {
+      message = "Are you sure want to mark this lead as Waiting For Payment?";
+    } else if (status === "CONFIRMED") {
+      message = "Are you sure want to confirm this lead?";
+    }
+
+    setConfirmationMessage(message);
     setShowModal(true);
-    setNewStatus(data);
+    setNewStatus(status);
     setSelectedId(id);
   };
 
@@ -363,7 +375,9 @@ const Lead = () => {
                     <th scope="col">Subject</th>
                     <th scope="col">Father Name</th>
                     <th scope="col">Status</th>
-                    <th scope="col" className="text-center">Action</th>
+                    <th scope="col" className="text-center">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -544,7 +558,7 @@ const Lead = () => {
                                   className="text-white fw-bold"
                                   style={{ textWrap: "nowrap" }}
                                 >
-                                Assesment Arranged
+                                  Assesment Arranged
                                 </span>
                               </button>
                               <ul className="dropdown-menu text-capitalize leadStatuslist">
@@ -552,26 +566,38 @@ const Lead = () => {
                                   <button
                                     className="dropdown-item"
                                     onClick={(e) =>
-                                      handleStatusChange(data.id, "NEW_WAITLIST")
+                                      handleStatusChange(
+                                        data.id,
+                                        "NEW_WAITLIST"
+                                      )
                                     }
                                   >
                                     New / WaitList
                                   </button>
                                 </li>
-                                <li>
-                                  <Link
-                                    to={`/lead/lead/assessment/${data.id}`}
-                                    style={{ textDecoration: "none" }}
-                                  >
-                                    <button className="dropdown-item">
-                                      Do Assessment
-                                    </button>
-                                  </Link>
-                                </li>
+                                {data.assessmentArrange &&
+                                data.assessmentArrange.length > 0 &&
+                                new Date(
+                                  data.assessmentArrange[0].assessmentDate
+                                ).toDateString() ===
+                                  new Date().toDateString() ? (
+                                  <li>
+                                    <Link
+                                      to={`/lead/lead/assessment/${data.id}`}
+                                      style={{ textDecoration: "none" }}
+                                    >
+                                      <button className="dropdown-item">
+                                        Do Assessment
+                                      </button>
+                                    </Link>
+                                  </li>
+                                ) : ""}
                                 <li>
                                   <ArrangeAssesmentEdit
                                     leadId={data.id}
-                                    arrangeAssesmentId={data.assessmentArrange[0].id}
+                                    arrangeAssesmentId={
+                                      data.assessmentArrange[0].id
+                                    }
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                   />
@@ -943,7 +969,7 @@ const Lead = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="text-start">
-            <p>Are You Sure Want To Change Leads Status?</p>
+            <p>{confirmationMessage}</p>
             <div className="d-flex justify-content-between align-items-center">
               <button
                 variant="secondary"

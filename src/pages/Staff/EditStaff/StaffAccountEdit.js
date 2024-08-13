@@ -236,7 +236,7 @@ const StaffAccountEdit = forwardRef(
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
-                Color Code<span class="text-danger">*</span>
+                Color Code
               </label>
               <div class="input-group mb-3 courseAdd">
                 <div class="input-group-text inputGroup">

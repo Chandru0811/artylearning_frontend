@@ -73,6 +73,7 @@ const LeaveAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNe
               </label>
               <input
                 type="month"
+                onFocus={(e)=> e.target.showPicker()}
                 class="form-control    mt-3 "
                 name="year"
                 onChange={formik.handleChange}

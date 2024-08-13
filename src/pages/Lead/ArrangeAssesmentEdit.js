@@ -159,7 +159,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
                   id="studentName"
                   name="studentName"
                   {...formik.getFieldProps("studentName")}
-                  readOnly
+                  disabled
                 />
               </div>
               <div className="col-md-6 col-12 mb-2">

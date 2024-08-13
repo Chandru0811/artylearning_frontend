@@ -39,6 +39,7 @@ const validationSchema = Yup.object().shape({
 
 const ContractAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
+    console.log("formDataContractAdd",formData)
     const [centerData, setCenterData] = useState(null);
     const navigate = useNavigate();
     const formik = useFormik({
