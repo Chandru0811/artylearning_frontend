@@ -21,14 +21,14 @@ const validationSchema = Yup.object({
       "*Date must be today or in the future"
     ),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
-  modeOfWorking: Yup.string().test(
-    "check-mode-of-working",
-    "*Mode of working is required",
-    function (value) {
-      const { attendanceStatus } = this.parent;
-      return attendanceStatus === "Present" ? !!value : true;
-    }
-  ),
+  // modeOfWorking: Yup.string().test(
+  //   "check-mode-of-working",
+  //   "*Mode of working is required",
+  //   function (value) {
+  //     const { attendanceStatus } = this.parent;
+  //     return attendanceStatus === "Present" ? !!value : true;
+  //   }
+  // ),
   checkIn: Yup.string().test(
     "check-check-in",
     "*Check-in is required",
@@ -93,7 +93,6 @@ function StaffingAttendanceAdd() {
         employeeName: selectedEmployeeName,
         date: values.date,
         attendanceStatus: values.attendanceStatus,
-        modeOfWorking: values.modeOfWorking,
         checkIn: values.checkIn,
         checkOut: values.checkOut,
         checkInmode: values.checkInmode,
@@ -102,6 +101,55 @@ function StaffingAttendanceAdd() {
         otEndTime: values.otEndTime,
         attendanceRemark: values.attendanceRemark,
       };
+
+      if (values.modeOfWorking !== "") {
+        payload = {
+          ...payload,
+          modeOfWorking: values.modeOfWorking,
+        };
+      }
+      
+      if (values.checkIn !== "") {
+        payload = {
+          ...payload,
+          checkIn: values.checkIn,
+        };
+      }
+      
+      if (values.checkOut !== "") {
+        payload = {
+          ...payload,
+          checkOut: values.checkOut,
+        };
+      }
+      
+      if (values.checkInmode !== "") {
+        payload = {
+          ...payload,
+          checkInmode: values.checkInmode,
+        };
+      }
+      
+      if (values.checkOutmode !== "") {
+        payload = {
+          ...payload,
+          checkOutmode: values.checkOutmode,
+        };
+      }
+      
+      if (values.otStartTime !== "") {
+        payload = {
+          ...payload,
+          otStartTime: values.otStartTime,
+        };
+      }
+      
+      if (values.otEndTime !== "") {
+        payload = {
+          ...payload,
+          otEndTime: values.otEndTime,
+        };
+      }
 
       try {
         const response = await api.post("/createUserAttendance", payload, {

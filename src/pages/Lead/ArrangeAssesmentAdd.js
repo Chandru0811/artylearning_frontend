@@ -104,14 +104,13 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
     <>
       <li>
         <button className="dropdown-item" onClick={handleShow}>
-          Arranging Assesment
-        </button>
+        Assesment Arranged        </button>
       </li>
 
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title className="headColor">
-            Leads Assessment Booking
+            Leads Assesment Booking
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -158,7 +157,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label htmlFor="assessment" className="form-label">
-                  Assessment
+                  Assesment
                 </label>
                 <select
                   className="form-select"
@@ -166,14 +165,14 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
                   {...formik.getFieldProps("assessment")}
                 >
                   <option selected value="ENGLISH_ASSESSMENT">
-                    English Assemsment
+                    English Assesment
                   </option>
                   <option value="CHINESE_ASSESSMENT">Chinese Assemsment</option>
                 </select>
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label htmlFor="assessmentDate" className="form-label">
-                  Assessment Date
+                  Assesment Date
                 </label>
                 <input
                   type="date"
