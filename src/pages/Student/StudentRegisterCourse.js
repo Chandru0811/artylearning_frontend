@@ -169,6 +169,8 @@ function StudentRegisterCourse() {
         if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
           navigate("/student");
+          formik.resetForm();
+
         } else {
           toast.error(response.data.message);
         }
@@ -458,6 +460,24 @@ function StudentRegisterCourse() {
                     <option value="6">1:00 pm</option>
                   </select>
                 </div>
+                <button
+  type="button"
+  className="btn btn-sm border-secondary ms-3 my-1"
+  style={{ width: '100px' }}
+  onClick={() => formik.resetForm({
+    values: {
+      lessonName: "",
+      packageName: "",
+      courseId: "",
+      days: "",
+      batchId: ""
+    }
+  })}
+>
+  Clear
+</button>
+
+
               </div>
               {/* ScheduleTeachers Table */}
               <div className="container my-4">

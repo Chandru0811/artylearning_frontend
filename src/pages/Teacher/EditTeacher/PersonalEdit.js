@@ -88,6 +88,8 @@ const PersonalEdit = forwardRef(
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
+            shortIntroduction: response.data.shortIntroduction || "", 
+
           });
         } catch (error) {
           console.error("Error fetching data:", error);

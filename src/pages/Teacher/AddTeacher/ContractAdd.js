@@ -39,7 +39,7 @@ const validationSchema = Yup.object().shape({
 
 const ContractAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
-    console.log("formDataContractAdd",formData)
+    console.log("formDataContractAdd", formData)
     const [centerData, setCenterData] = useState(null);
     const navigate = useNavigate();
     const formik = useFormik({
@@ -96,6 +96,7 @@ const ContractAdd = forwardRef(
         }
       },
     });
+
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
@@ -104,6 +105,22 @@ const ContractAdd = forwardRef(
         toast.error(error);
       }
     };
+
+    // const errors = {};
+    // const { userContractStartDate, userContractEndDate } = values;
+
+    // if (userContractStartDate && userContractEndDate) {
+    //   const startDate = new Date(userContractStartDate);
+    //   const endDate = new Date(userContractEndDate);
+
+    //   if (endDate < startDate) {
+    //     errors.userContractEndDate = 'Contract end date cannot be before start date';
+    //   } else {
+    //     const diffTime = Math.abs(endDate - startDate);
+    //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    //     formik.setFieldValue('contactPeriod', diffDays.toString());
+    //   }
+    // }
 
     const filteredCenters = centerData?.filter((center) =>
       formData.centerIds.includes(center.id)
@@ -126,6 +143,41 @@ const ContractAdd = forwardRef(
     useImperativeHandle(ref, () => ({
       contractAdd: formik.handleSubmit,
     }));
+
+    const calculateContractPeriod = (startDate, endDate) => {
+      if (startDate && endDate && endDate >= startDate) {
+        let start = new Date(startDate);
+        let end = new Date(endDate);
+
+        let years = end.getFullYear() - start.getFullYear();
+        let months = end.getMonth() - start.getMonth();
+        let days = end.getDate() - start.getDate();
+
+        // Adjust the days and months if necessary
+        if (days < 0) {
+          months -= 1;
+          days += new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate(); // days in the previous month
+        }
+
+        if (months < 0) {
+          years -= 1;
+          months += 12;
+        }
+
+        const contractPeriod = `${years} years, ${months} months, ${days} days`;
+        formik.setFieldValue('contactPeriod', contractPeriod);
+      } else {
+        // If the end date is before the start date or not provided, set the contract period to an empty string or handle it accordingly
+        formik.setFieldValue('contactPeriod', '');
+      }
+    };
+    useEffect(() => {
+      // Set the contractDate to match the userContractStartDate initially
+      if (formik.values.userContractStartDate) {
+        formik.setFieldValue('contractDate', formik.values.userContractStartDate);
+      }
+    }, [formik.values.userContractStartDate]);
+
 
     return (
       <form onSubmit={formik.handleSubmit}>
@@ -210,6 +262,7 @@ const ContractAdd = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.employee}
+                  readOnly
                 />
                 {formik.touched.employee && formik.errors.employee && (
                   <div className="error text-danger ">
@@ -244,6 +297,7 @@ const ContractAdd = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractAddress}
+                  readOnly
                 />
                 {formik.touched.userContractAddress &&
                   formik.errors.userContractAddress && (
@@ -286,7 +340,7 @@ const ContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Start Date of Employment</label>
                 <span className="text-danger">*</span>
                 <input
@@ -297,14 +351,17 @@ const ContractAdd = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.startDateOfEmployment}
+                  min={new Date().toISOString().split("T")[0]}
+                  readOnly
                 />
                 {formik.touched.startDateOfEmployment &&
                   formik.errors.startDateOfEmployment && (
-                    <div className="error text-danger ">
+                    <div className="error text-danger">
                       <small>{formik.errors.startDateOfEmployment}</small>
                     </div>
                   )}
               </div>
+
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Training</label>
                 <span className="text-danger">*</span>
@@ -338,7 +395,7 @@ const ContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Contract Start Date</label>
                 <span className="text-danger">*</span>
                 <input
@@ -346,18 +403,32 @@ const ContractAdd = forwardRef(
                   onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractStartDate"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+
+                    const startDate = e.target.value;
+                    formik.setFieldValue('contractDate', startDate); // Automatically set Contract Date
+
+                    // Recalculate contract period if end date is already selected
+                    if (formik.values.userContractEndDate) {
+                      const endDate = new Date(formik.values.userContractEndDate);
+                      calculateContractPeriod(new Date(startDate), endDate);
+                    }
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractStartDate}
+                  readOnly
                 />
-                {formik.touched.userContractStartDate &&
-                  formik.errors.userContractStartDate && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.userContractStartDate}</small>
-                    </div>
-                  )}
+                {formik.touched.userContractStartDate && formik.errors.userContractStartDate && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.userContractStartDate}</small>
+                  </div>
+                )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+
+
+
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Contract Period</label>
                 <span className="text-danger">*</span>
                 <input
@@ -367,13 +438,13 @@ const ContractAdd = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.contactPeriod}
+                  readOnly
                 />
-                {formik.touched.contactPeriod &&
-                  formik.errors.contactPeriod && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.contactPeriod}</small>
-                    </div>
-                  )}
+                {formik.touched.contactPeriod && formik.errors.contactPeriod && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.contactPeriod}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Porbation</label>
@@ -405,6 +476,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      readOnly
                     />
                     <label for="myCheckbox1" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -576,6 +648,8 @@ const ContractAdd = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.salaryStartDate}
+                  min={new Date().toISOString().split("T")[0]}
+
                 />
                 {formik.touched.salaryStartDate &&
                   formik.errors.salaryStartDate && (
@@ -584,7 +658,7 @@ const ContractAdd = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Contract End Date</label>
                 <span className="text-danger">*</span>
                 <input
@@ -592,16 +666,20 @@ const ContractAdd = forwardRef(
                   onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractEndDate"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    const startDate = new Date(formik.values.userContractStartDate);
+                    const endDate = new Date(e.target.value);
+                    calculateContractPeriod(startDate, endDate);
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractEndDate}
                 />
-                {formik.touched.userContractEndDate &&
-                  formik.errors.userContractEndDate && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.userContractEndDate}</small>
-                    </div>
-                  )}
+                {formik.touched.userContractEndDate && formik.errors.userContractEndDate && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.userContractEndDate}</small>
+                  </div>
+                )}
               </div>
               <div class="row mt-3">
                 <span className="mt-3 fw-bold">Bank Account Details</span>
@@ -627,7 +705,7 @@ const ContractAdd = forwardRef(
                     value={formik.values.internetBanking}
                   />
                 </div>
-                <div class="col-md-6 col-12 mb-2 mt-3">
+                <div className="col-md-6 col-12 mb-2 mt-3">
                   <label>Contract Date</label>
                   <span className="text-danger">*</span>
                   <input
@@ -639,12 +717,11 @@ const ContractAdd = forwardRef(
                     onBlur={formik.handleBlur}
                     value={formik.values.contractDate}
                   />
-                  {formik.touched.contractDate &&
-                    formik.errors.contractDate && (
-                      <div className="error text-danger ">
-                        <small>{formik.errors.contractDate}</small>
-                      </div>
-                    )}
+                  {formik.touched.contractDate && formik.errors.contractDate && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.contractDate}</small>
+                    </div>
+                  )}
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
                   <label>Termination Notice</label>

@@ -153,6 +153,9 @@ const StaffAccountAdd = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.startDate}
+                min={new Date().toISOString().split("T")[0]} 
+
+                
               />
               {formik.touched.startDate && formik.errors.startDate && (
                 <div className="error text-danger ">
