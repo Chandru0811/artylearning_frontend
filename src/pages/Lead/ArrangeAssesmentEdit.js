@@ -6,14 +6,15 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // const validationSchema = Yup.object({});
 
-function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId }) {
+function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId ,setAll}) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setCenterData] = useState(null);
-
+  const navigate = useNavigate();
   console.log("Arrange Assesment Id:", arrangeAssesmentId);
   // console.log("Centre ID :", centerId);
   // console.log("Student Name :", studentNames);
@@ -80,6 +81,8 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
           onSuccess();
           handleClose();
           toast.success(response.data.message);
+          navigate("/lead/lead");
+          setAll();
           try {
             const response = await api.put(`/updateLeadInfo/${leadId}`, {
               leadStatus: "ARRANGING_ASSESSMENT",
@@ -88,6 +91,8 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
               console.log("Lead Status ARRANGING ASSESSMENT");
               onSuccess();
               handleClose();
+              navigate("/lead/lead");
+              setAll();
             } else {
               console.log("Lead Status Not ARRANGING ASSESSMENT");
             }

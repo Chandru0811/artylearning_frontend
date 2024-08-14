@@ -128,8 +128,9 @@ const Leave = () => {
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
                   S No
                 </th>
-                <th scope="col">Centre Name</th>
-                <th scope="col">Employee Name</th>
+                {/* <th scope="col">Centre Name</th> */}
+                <th scope="col">From Date</th>
+                <th scope="col">To Date</th>
                 <th scope="col">Leave Type</th>
                 <th scope="col">Leave Status</th>
                 <th className="text-center">Action</th>
@@ -139,8 +140,9 @@ const Leave = () => {
               {datas.employeeData.map((data, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
-                  <td>{data.centerName} </td>
-                  <td>{data.employeeName}</td>
+                  {/* <td>{data.centerName} </td> */}
+                  <td>{data.fromDate}</td>
+                  <td>{data.toDate}</td>
                   <td>{data.leaveType}</td>
                   <td>
                     {data.leaveStatus === "APPROVED" ? (
