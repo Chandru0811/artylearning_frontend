@@ -167,7 +167,7 @@ function InvoiceView() {
       }
 
       // Save the PDF
-      doc.save("invoice.pdf");
+      doc.save(`${data.invoiceNumber}.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast.error("Error generating PDF");

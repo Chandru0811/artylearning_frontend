@@ -127,6 +127,9 @@ const AddEmergencyContactModel = forwardRef(
     useEffect(() => {
       fetchEmergencyData();
     }, []);
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+     }, []);
 
     return (
       <div className="container-fluid">

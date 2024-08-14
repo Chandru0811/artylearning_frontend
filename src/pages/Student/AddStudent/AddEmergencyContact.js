@@ -140,6 +140,9 @@ const AddEmergencyContact = forwardRef(
     useImperativeHandle(ref, () => ({
       EmergencyContact: formik.handleSubmit,
     }));
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+     }, []);
 
     return (
       <div className="container-fluid">

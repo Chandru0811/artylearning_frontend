@@ -52,12 +52,12 @@ function CourseView() {
       <div>
         <div className="container">
           <div className="row mt-5 pb-3">
-            <div className="col-md-6 col-12">
+            <div className="col-md-12 col-12">
               <div className="row mt-3  mb-2">
-                <div className="col-6 ">
+                <div className="col-3 ">
                   <p className="fw-medium">Centre Name</p>
                 </div>
-                <div className="col-6">
+                <div className="col-9">
                   <p className="text-muted text-sm">
                     :{" "}
                     {centerData &&

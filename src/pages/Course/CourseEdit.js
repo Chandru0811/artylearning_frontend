@@ -9,9 +9,10 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllLevelsWithIds from "../List/LevelList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
+import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object({
-  centerId: Yup.string().required("*Select the Centre Name"),
+  centerId: Yup.array().min(1, "At least one center must be selected"),
   courseName: Yup.string().required("*Course Name is required"),
   courseCode: Yup.string().required("*Course Code is required"),
   subjectId: Yup.string().required("*Select the Subject"),
@@ -32,10 +33,15 @@ function CourseEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [centerData, setCenterData] = useState(null);
+  const [centerData, setCenterData] = useState([]);
+  const [selectedCenters, setSelectedCenters] = useState([]);;
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const centerOptions = centerData?.map((center) => ({
+    label: center.centerNames,
+    value: center.id,
+  }));
 
   useEffect(() => {
     fetchData();
@@ -43,7 +49,7 @@ function CourseEdit() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: "",
+      centerId: [],
       courseName: "",
       courseCode: "",
       subjectId: "",
@@ -169,35 +175,33 @@ function CourseEdit() {
           </div>
           <div className="container">
             <div className="row">
-              <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
-                  Centre Name<span className="text-danger">*</span>
-                </lable>
-                <div className="input-group mb-3">
-                  <select
-                    {...formik.getFieldProps("centerId")}
-                    className={`form-select  ${
-                      formik.touched.centerId && formik.errors.centerId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="Default select example"
-                  >
-                    <option selected></option>
-                    {centerData &&
-                      centerData.map((centerId) => (
-                        <option key={centerId.id} value={centerId.id}>
-                          {centerId.centerNames}
-                        </option>
-                      ))}
-                  </select>
-                  {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerId}
-                    </div>
-                  )}
+            <div className="col-md-6 col-12 mb-4">
+              <label className="form-label">
+                Centre<span className="text-danger">*</span>
+              </label>
+              <MultiSelect
+                options={centerOptions}
+                value={selectedCenters}
+                onChange={(selected) => {
+                  setSelectedCenters(selected);
+                  formik.setFieldValue(
+                    "centerId",
+                    selected.map((option) => option.value)
+                  );
+                }}
+                labelledBy="Select Centers"
+                className={`form-multi-select ${
+                  formik.touched.centerId && formik.errors.centerId
+                    ? "is-invalid"
+                    : ""
+                }`}
+              />
+              {formik.touched.centerId && formik.errors.centerId && (
+                <div className="invalid-feedback">
+                  {formik.errors.centerId}
                 </div>
-              </div>
+              )}
+            </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">Color Code</lable>
                 <div className="input-group mb-3">

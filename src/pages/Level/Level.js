@@ -105,8 +105,8 @@ const Level = () => {
           <thead>
             <tr>
               <th scope="col">S No</th>
-              <th scope="col">Subject</th>
               <th scope="col">Level</th>
+              <th scope="col">Subject</th>
               <th scope="col">Code</th>
               <th scope="col">Status</th>
               <th scope="col">Action</th>
@@ -116,6 +116,7 @@ const Level = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
+                <td>{data.level}</td>
                 <td>
                   {subjectData &&
                     subjectData.map((subjectId) =>
@@ -124,7 +125,6 @@ const Level = () => {
                         : ""
                     )}
                 </td>
-                <td>{data.level}</td>
                 <td>{data.levelCode}</td>
                 <td>
                   {data.status === "Active" ? (

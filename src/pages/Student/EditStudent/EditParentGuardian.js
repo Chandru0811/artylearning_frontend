@@ -42,6 +42,10 @@ const EditParentGuardian = forwardRef(
       editParentGuardian: handleNext,
     }));
 
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+     }, []);
+
     return (
       <div className="container-fluid">
         <div className="container-fluid">
