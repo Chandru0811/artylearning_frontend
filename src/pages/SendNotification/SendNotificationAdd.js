@@ -83,7 +83,7 @@ function SendNotificationAdd() {
       messageDescription: "",
       attachments: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Send Norification Data:", values);
       setLoadIndicator(true);

@@ -6,14 +6,15 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // const validationSchema = Yup.object({});
 
-function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
+function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll}) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setCenterData] = useState(null);
-
+  const navigate = useNavigate();
   // console.log("Lead Id:", leadId);
   // console.log("Centre ID :", centerId);
   // console.log("Student Name :", studentNames);
@@ -22,8 +23,6 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
     setShow(false);
     formik.resetForm();
   };
-
-
 
   const fetchCenterData = async () => {
     try {
@@ -75,6 +74,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
         if (response.status === 201) {
           onSuccess();
           handleClose();
+          setAll();
           toast.success(response.data.message);
           try {
             const response = await api.put(`/updateLeadInfo/${leadId}`, {
@@ -83,6 +83,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
             if (response.status === 200) {
               console.log("Lead Status ARRANGING ASSESSMENT");
               onSuccess();
+              setAll();
             } else {
               console.log("Lead Status Not ARRANGING ASSESSMENT");
             }
@@ -104,7 +105,8 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
     <>
       <li>
         <button className="dropdown-item" onClick={handleShow}>
-        Assesment Arranged        </button>
+          Assesment Arranged
+        </button>
       </li>
 
       <Modal show={show} size="lg" onHide={handleClose} centered>
@@ -189,7 +191,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames }) {
                 </label>
                 <input
                   type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   id="time"
                   name="time"

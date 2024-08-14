@@ -103,24 +103,6 @@ const Lead = () => {
     setSelectedId(id);
   };
 
-  // const handleEnrolledChange = async (id, enrolled) => {
-  //   try {
-  //     const response = await api.put(`/updateLeadInfo/${id}`, {
-  //       leadStatus: enrolled,
-  //     });
-
-  //     if (response.status === 200) {
-  //       toast.success("Lead Status Updated");
-  //       setShowModal(false);
-  //       refreshData();
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error(error.message || "An error occurred");
-  //   }
-  // };
-
   const handleFormSubmit = async () => {
     try {
       const response = await api.put(`/updateLeadInfo/${selectedId}`, {
@@ -227,6 +209,10 @@ const Lead = () => {
     formik.values.subjectId,
     formik.values.leadStatus,
   ]);
+
+  const ResetFilter = () => {
+    formik.resetForm();
+  };
 
   useEffect(() => {
     // Function to check screen size
@@ -346,7 +332,7 @@ const Lead = () => {
                   <button
                     type="button"
                     className="btn btn-sm border-secondary ms-3"
-                    onClick={() => formik.resetForm()}
+                    onClick={ResetFilter}
                   >
                     Clear
                   </button>
@@ -427,6 +413,7 @@ const Lead = () => {
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                     studentNames={data.studentName}
+                                    setAll={ResetFilter}
                                   />
                                 </li>
                                 <li>
@@ -509,6 +496,7 @@ const Lead = () => {
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                     studentNames={data.studentName}
+                                    setAll={ResetFilter}
                                   />
                                 </li>
                                 <li>
@@ -591,7 +579,9 @@ const Lead = () => {
                                       </button>
                                     </Link>
                                   </li>
-                                ) : ""}
+                                ) : (
+                                  ""
+                                )}
                                 <li>
                                   <ArrangeAssesmentEdit
                                     leadId={data.id}
@@ -600,6 +590,7 @@ const Lead = () => {
                                     }
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
+                                    setAll={ResetFilter}
                                   />
                                 </li>
                                 <li>
@@ -649,6 +640,7 @@ const Lead = () => {
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                     studentNames={data.studentName}
+                                    setAll={ResetFilter}
                                   />
                                 </li>
                                 <li>
@@ -817,6 +809,7 @@ const Lead = () => {
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                     studentNames={data.studentName}
+                                    setAll={ResetFilter}
                                   />
                                 </li>
                                 <li>
@@ -873,6 +866,7 @@ const Lead = () => {
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                     studentNames={data.studentName}
+                                    setAll={ResetFilter}
                                   />
                                 </li>
                                 <li>
