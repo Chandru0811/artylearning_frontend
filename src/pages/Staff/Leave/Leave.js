@@ -3,7 +3,7 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import { FaEdit, FaEye } from "react-icons/fa";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
@@ -161,6 +161,14 @@ const Leave = () => {
                       >
                         <button className="btn btn-sm">
                           <FaEye />
+                        </button>
+                      </Link>
+                      <Link
+                        to={`/leave/edit/${data.id}`}
+                        style={{ display: "inline-block" }}
+                      >
+                        <button className="btn btn-sm">
+                          <FaEdit />
                         </button>
                       </Link>
                     </div>

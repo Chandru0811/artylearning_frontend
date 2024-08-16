@@ -2,28 +2,39 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+// import fetchAllTeacherListByCenter from "../../List/TeacherListByCenter";
+import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object({
-  centerName: Yup.string().required("*Select a Centre Name"),
-  userId: Yup.string().required("*Employee Name is required"),
   leaveType: Yup.string().required("*Select a Leave Type"),
   fromDate: Yup.string().required("*From Date is required"),
-  toDate: Yup.string().required("*To Date is required"),
-  dayType: Yup.string().required("*Leave Status is required"),
-  leaveStatus: Yup.string().required("*Day Type is required"),
+  toDate: Yup.string()
+    .required("*To Date is required")
+    .test(
+      "is-greater",
+      "*To Date should be later than From Date",
+      function (value) {
+        const { fromDate } = this.parent;
+        return !fromDate || !value || new Date(value) >= new Date(fromDate);
+      }
+    ),
+  dayType: Yup.string().required("*Day Type is required"),
   leaveReason: Yup.string().required("*Leave Reason is required"),
 });
 
-function LeaveAdminEdit() {
-  const [datas, setDatas] = useState([]);
+function LeaveEdit() {
   const { id } = useParams();
-  const [loadIndicator, setLoadIndicator] = useState(false);
-  const [daysDifference, setDaysDifference] = useState(0);
+  const [centerData, setCenterData] = useState(null);
+  const [datas, setDatas] = useState([]);
+  console.log("Datas:", datas);
   const userId = localStorage.getItem("userId");
   const centerId = localStorage.getItem("centerId");
   const navigate = useNavigate();
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [daysDifference, setDaysDifference] = useState(0);
+  const [leaveTypeData, setLeaveTypeData] = useState([]);
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -46,22 +57,31 @@ function LeaveAdminEdit() {
       leaveReason: "",
       file: "",
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
 
     onSubmit: async (data) => {
       setLoadIndicator(true);
+      let selectedCenterName = "";
+
+      if (centerData) {
+        centerData.forEach((center) => {
+          if (parseInt(centerId) === center.id) {
+            selectedCenterName = center.centerNames || "--";
+          }
+        });
+      }
       try {
         const formDatas = new FormData();
         formDatas.append("userId", userId);
-        formDatas.append("centerName", data.centerName);
-        formDatas.append("employeeName", data.employeeName);
+        formDatas.append("centerName", selectedCenterName);
+        formDatas.append("employeeName", datas && datas.employeeName);
         formDatas.append("leaveType", data.leaveType);
-        formDatas.append("noOfDays",daysDifference);
+        formDatas.append("noOfDays", data.noOfDays);
         formDatas.append("fromDate", data.fromDate);
         formDatas.append("toDate", data.toDate);
         formDatas.append("dayType", data.dayType);
         formDatas.append("leaveReason", data.leaveReason);
-        formDatas.append("leaveStatus", data.leaveStatus);
+        formDatas.append("leaveStatus", "PENDING");
         formDatas.append("file", data.file);
 
         const response = await api.put(
@@ -75,7 +95,7 @@ function LeaveAdminEdit() {
         );
         if (response.status === 201) {
           toast.success(response.data.message);
-          navigate("/leaveadmin");
+          navigate("/leave");
         } else {
           toast.error(response.data.message);
         }
@@ -96,6 +116,43 @@ function LeaveAdminEdit() {
     return daysDifference;
   };
 
+  const fetchData = async () => {
+    try {
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchLeaveType = async () => {
+    try {
+      const response = await api.get(`getAllLeaveSetting`);
+      setLeaveTypeData(response.data); // Assuming response.data is an array
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    fetchLeaveType();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(
+          `/getUserLeaveRequestByUserId/${userId}`
+        );
+        setDatas(response.data);
+      } catch (error) {
+        toast.error("Error Fetching Data : ", error);
+      }
+    };
+    getData();
+  }, []);
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -115,19 +172,40 @@ function LeaveAdminEdit() {
     getData();
   }, [id]);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(
-          `/getUserLeaveRequestByUserId/${userId}`
-        );
-        setDatas(response.data);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await api.get(`/getUserLeaveRequestById/${id}`);
+    
+  //       const fetchedData = response.data;
+
+  //       formik.setValues({
+  //         userId: fetchedData.userId || "",
+  //         centerId: fetchedData.centerId || "",
+  //         centerName: fetchedData.centerName || "",
+  //         employeeName: fetchedData.employeeName || "",
+  //         leaveType: fetchedData.leaveType || "",
+  //         noOfDays: fetchedData.noOfDays || "",
+  //         fromDate: fetchedData.fromDate || "",
+  //         toDate: fetchedData.toDate || "",
+  //         requestDate: fetchedData.requestDate || "",
+  //         approverName: fetchedData.approverName || "",
+  //         dayType: fetchedData.dayType || "",
+  //         leaveStatus: fetchedData.leaveStatus || "",
+  //         leaveReason: fetchedData.leaveReason || "",
+  //         file: fetchedData.attachment || "",
+  //       });
+  //     if (!fetchedData.noOfDays && fetchedData.fromDate && fetchedData.toDate) {
+  //       const daysDiff = calculateDays(fetchedData.fromDate, fetchedData.toDate);
+  //       setDaysDifference(daysDiff);
+  //     }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   getData();
+  //   fetchData();
+  // }, []);
 
   return (
     <section>
@@ -135,7 +213,7 @@ function LeaveAdminEdit() {
         <form onSubmit={formik.handleSubmit}>
           <div className="row my-3 mb-5">
             <div className="col-12 text-end">
-              <Link to="/leaveadmin">
+              <Link to="/leave">
                 <button type="button" className="btn btn-sm btn-border">
                   Back
                 </button>
@@ -160,28 +238,48 @@ function LeaveAdminEdit() {
           <div className="row">
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
-                Centre Name<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="centerName"
-                className="form-control"
-                {...formik.getFieldProps("centerName")}
-                readOnly
-              />
-            </div>
-
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
                 Employee Name<span className="text-danger">*</span>
               </label>
               <input
                 type="text"
                 name="employeeName"
                 className="form-control"
-                {...formik.getFieldProps("employeeName")}
+                value={datas && datas.employeeName}
                 readOnly
               />
+              <input
+                type="hidden"
+                name="userId"
+                value={datas && datas.userId}
+                {...formik.getFieldProps("userId")}
+              />
+            </div>
+
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">
+                Leave Type<span className="text-danger">*</span>
+              </label>
+              <select
+                className={`form-select  ${
+                  formik.touched.leaveType && formik.errors.leaveType
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("leaveType")}
+              >
+                <option selected></option>
+                {leaveTypeData &&
+                  leaveTypeData.map((leave) => (
+                    <option key={leave.id} value={leave.leaveType}>
+                      {leave.leaveType}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.leaveType && formik.errors.leaveType && (
+                <div className="invalid-feedback">
+                  {formik.errors.leaveType}
+                </div>
+              )}
             </div>
 
             <div className="col-md-6 col-12 mb-3">
@@ -190,12 +288,12 @@ function LeaveAdminEdit() {
               </label>
               <input
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 className={`form-control  ${
                   formik.touched.fromDate && formik.errors.fromDate
                     ? "is-invalid"
                     : ""
                 }`}
-                readOnly
                 {...formik.getFieldProps("fromDate")}
                 onChange={(e) => {
                   formik.handleChange(e);
@@ -217,7 +315,7 @@ function LeaveAdminEdit() {
               </label>
               <input
                 type="date"
-                readOnly
+                onFocus={(e) => e.target.showPicker()}
                 className={`form-control  ${
                   formik.touched.toDate && formik.errors.toDate
                     ? "is-invalid"
@@ -238,12 +336,13 @@ function LeaveAdminEdit() {
               )}
             </div>
 
-             <div className="col-md-6 col-12 mb-3">
+            <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 No.Of.Days<span className="text-danger">*</span>
               </label>
               <input
                 type="text"
+                name="noOfDays"
                 className={`form-control  ${
                   formik.touched.noOfDays && formik.errors.noOfDays
                     ? "is-invalid"
@@ -270,58 +369,24 @@ function LeaveAdminEdit() {
                     : ""
                 }`}
                 {...formik.getFieldProps("dayType")}
-                readOnly
               />
               {formik.touched.dayType && formik.errors.dayType && (
                 <div className="invalid-feedback">{formik.errors.dayType}</div>
               )}
             </div>
-
             <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Leave Type<span className="text-danger">*</span>
-              </label>
+              <label className="form-label">Attachment</label>
               <input
-                type="text"
-                className={`form-control  ${
-                  formik.touched.leaveType && formik.errors.leaveType
-                    ? "is-invalid"
-                    : ""
-                }`}
-                {...formik.getFieldProps("leaveType")}
-                readOnly
+                type="file"
+                className="form-control"
+                name="file"
+                // {...formik.getFieldProps("file")}
+                onChange={(event) => {
+                  formik.setFieldValue("file", event.currentTarget.files[0]);
+                }}
+                onBlur={formik.handleBlur}
               />
-              {formik.touched.leaveType && formik.errors.leaveType && (
-                <div className="invalid-feedback">
-                  {formik.errors.leaveType}
-                </div>
-              )}
             </div>
-
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Leave Status<span className="text-danger">*</span>
-              </label>
-              <select
-                name="leaveStatus"
-                className={`form-select ${
-                  formik.touched.leaveStatus && formik.errors.leaveStatus
-                    ? "is-invalid"
-                    : ""
-                }`}
-                {...formik.getFieldProps("leaveStatus")}
-              >
-                <option value="PENDING">Pending</option>
-                <option value="REJECTED">Rejected</option>
-                <option value="APPROVED">Approved</option>
-              </select>
-              {formik.touched.leaveStatus && formik.errors.leaveStatus && (
-                <div className="invalid-feedback">
-                  {formik.errors.leaveStatus}
-                </div>
-              )}
-            </div>
-
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 Leave Reason<span className="text-danger">*</span>
@@ -334,7 +399,6 @@ function LeaveAdminEdit() {
                     : ""
                 }`}
                 {...formik.getFieldProps("leaveReason")}
-                readOnly
               ></textarea>
               {formik.touched.leaveReason && formik.errors.leaveReason && (
                 <div className="invalid-feedback">
@@ -349,4 +413,4 @@ function LeaveAdminEdit() {
   );
 }
 
-export default LeaveAdminEdit;
+export default LeaveEdit;

@@ -207,6 +207,7 @@ import CurriculumOutletAdd from "../pages/Course/CurriculumOutlet/CurriculumOutl
 import CurriculumOutletEdit from "../pages/Course/CurriculumOutlet/CurriculumOutletEdit";
 import CurriculumOutletView from "../pages/Course/CurriculumOutlet/CurriculumOutletView";
 import ScrollToTop from "../pages/ScrollToTop";
+import LeaveEdit from "../pages/Staff/Leave/LeaveEdit";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
 
@@ -344,6 +345,7 @@ function Admin({ handleLogout }) {
               {/* {/ Leave /} */}
               <Route path="/leave" element={<Leave />} />
               <Route path="/leave/add" element={<LeaveAdd />} />
+              <Route path="/leave/edit/:id" element={<LeaveEdit />} />
               <Route path="/leave/view/:id" element={<LeaveView />} />
 
               {/* {/ Payroll /} */}
