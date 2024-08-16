@@ -54,7 +54,7 @@ function Login({ onLogin }) {
             localStorage.setItem("userId", response.data.userId);
             localStorage.setItem("userName", response.data.role);
             localStorage.setItem("loginUserId", response.data.loginUserId);
-            localStorage.setItem("centerId", response.data.centerId);
+            localStorage.setItem("centerId", response.data.centerIds[0]);
             onLogin(response.data.roleId);
             navigate("/dashboard");
           }
