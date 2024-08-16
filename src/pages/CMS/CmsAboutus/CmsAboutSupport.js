@@ -96,7 +96,11 @@ function CmsAboutSupport({ getData, datas }) {
       <section className="support">
         <div className="container-fluid backgound-imag-2 edit-container">
           <div className="container pt-4" style={{ minHeight: "80vh" }}>
-            <form onSubmit={formik.handleSubmit}>
+             <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
               <div className="row pt-5">
                 <div className="col-md-5 col-12 d-flex align-items-center justify-content-end paint">
                   <div className="position-relative">

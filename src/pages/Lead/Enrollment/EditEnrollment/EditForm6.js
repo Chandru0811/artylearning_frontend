@@ -74,7 +74,11 @@ const EditForm6 = forwardRef(
         <div className="py-3">
           <p className="headColor">Permission for Medias Posting</p>
         </div>
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <div className="row">
             {/* <div className="col-md-12 col-12 mb-3">
               <div className="mb-3">

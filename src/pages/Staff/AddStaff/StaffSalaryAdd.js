@@ -71,7 +71,11 @@ const StaffSalaryAdd = forwardRef(
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <section>
           <div className="container" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>

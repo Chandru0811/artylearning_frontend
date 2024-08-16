@@ -110,7 +110,11 @@ function CmsAboutPersonalized({ getData, datas }) {
       className="container-fluid edit-container"
       style={{ backgroundColor: "#f9fafb" }}
     >
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="container">
           <div className="row py-5">
             <div className="col-md-5 col-12 ">

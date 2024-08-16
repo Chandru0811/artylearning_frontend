@@ -199,7 +199,11 @@ function AddPayroll() {
 
   return (
     <div className="container-fluid">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="container py-3">
           <div className="row">
             <div className="col-12 text-end">

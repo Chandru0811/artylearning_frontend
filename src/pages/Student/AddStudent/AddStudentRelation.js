@@ -119,7 +119,11 @@ const Addrelation = forwardRef(
 
     return (
       <div className="container-fluid">
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <div className="border-0 mb-5">
             <div className="mb-5">
               <div className="border-0 my-2 px-2">

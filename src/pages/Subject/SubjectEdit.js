@@ -83,7 +83,11 @@ function SubjectEdit({ id, onSuccess }) {
         aria-labelledby="contained-model-title-vcenter"
         centered
       >
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <Modal.Header closeButton>
             <Modal.Title className="headColor">Edit Subject</Modal.Title>
           </Modal.Header>

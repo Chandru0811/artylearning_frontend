@@ -52,7 +52,11 @@ function AssignMakeUpClass() {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Assign MakeUp Class</Modal.Title>
         </Modal.Header>
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <Modal.Body>
             <div className="container">
               <div className="row ">

@@ -60,7 +60,11 @@ const LeadParentAdd = forwardRef(({ formData, setFormData, handleNext }, ref) =>
 
     return (
       <section>
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <div className="container-fluid">
             <div className="row  px-1">
               <div className="py-3">

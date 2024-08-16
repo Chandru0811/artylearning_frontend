@@ -365,7 +365,11 @@ export default function InvoiceEdit() {
 
   return (
     <div className="container-fluid">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="container py-3">
           <div className="row mt-3">
             <div className="col-lg-6 col-md-6 col-12 px-5">

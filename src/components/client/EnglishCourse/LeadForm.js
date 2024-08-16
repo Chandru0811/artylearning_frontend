@@ -113,7 +113,11 @@ function LeadForm() {
   }, []);
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="row headbody">
           <h1 className="form-font mb-3">Waitlist Request Form</h1>
           <div className="col-md-6 col-12 mb-3">

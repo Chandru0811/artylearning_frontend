@@ -84,7 +84,11 @@ function CenterManagerAdd() {
 
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/class">
             <button type="button " className="btn btn-sm btn-border   ">
