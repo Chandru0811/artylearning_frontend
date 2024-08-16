@@ -19,12 +19,12 @@ const validationSchema = Yup.object().shape({
 function StudentRegisterCourse() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  console.log("Data ....:",data);
-  
+  console.log("Data ....:", data);
+
   const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
 
-  console.log("studentCourseDetailsId",studentCourseDetailsId);
-  
+  console.log("studentCourseDetailsId", studentCourseDetailsId);
+
   const tableRef = useRef(null);
   const [datas, setDatas] = useState({});
   const [loading, setLoading] = useState(true);
@@ -113,7 +113,7 @@ function StudentRegisterCourse() {
   const formik = useFormik({
     initialValues: {
       lessonName: "",
-      packageName: ""
+      packageName: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -141,7 +141,7 @@ function StudentRegisterCourse() {
         teacher: selectedRowData.teacher,
         userId: selectedRowData.userId,
       };
-      console.log("Payload Data:", payload);      
+      console.log("Payload Data:", payload);
       try {
         let response;
 
@@ -156,21 +156,16 @@ function StudentRegisterCourse() {
             }
           );
         } else {
-          response = await api.post(
-            `/createStudentCourseDetails`,
-            payload,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          response = await api.post(`/createStudentCourseDetails`, payload, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
         }
         if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
           navigate("/student");
           formik.resetForm();
-
         } else {
           toast.error(response.data.message);
         }
@@ -181,7 +176,6 @@ function StudentRegisterCourse() {
       }
     },
   });
-
 
   const fetchCourseData = async () => {
     try {
@@ -406,10 +400,11 @@ function StudentRegisterCourse() {
                 <div className="col-md-4">
                   <select
                     {...formik.getFieldProps("courseId")}
-                    class={`form-select  ${formik.touched.courseId && formik.errors.courseId
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    class={`form-select  ${
+                      formik.touched.courseId && formik.errors.courseId
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     id="courseId"
                     name="courseId"
                   >
@@ -427,10 +422,11 @@ function StudentRegisterCourse() {
                 <div className="col-md-4">
                   <select
                     {...formik.getFieldProps("days")}
-                    class={`form-select  ${formik.touched.days && formik.errors.days
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    class={`form-select  ${
+                      formik.touched.days && formik.errors.days
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     id="days"
                     name="days"
                   >
@@ -446,7 +442,7 @@ function StudentRegisterCourse() {
                     <option value="SUNDAY">SUNDAY</option>
                   </select>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-4 d-flex">
                   <select
                     {...formik.getFieldProps("batchId")}
                     className="form-select"
@@ -463,25 +459,26 @@ function StudentRegisterCourse() {
                     <option value="5">12:00 pm</option>
                     <option value="6">1:00 pm</option>
                   </select>
+                  <button
+                  type="button"
+                  className="btn btn-sm border-secondary ms-3 my-1"
+                  style={{ width: "100px" }}
+                  onClick={() =>
+                    formik.resetForm({
+                      values: {
+                        lessonName: "",
+                        packageName: "",
+                        courseId: "",
+                        days: "",
+                        batchId: "",
+                      },
+                    })
+                  }
+                >
+                  Clear
+                </button>
                 </div>
-                <button
-  type="button"
-  className="btn btn-sm border-secondary ms-3 my-1"
-  style={{ width: '100px' }}
-  onClick={() => formik.resetForm({
-    values: {
-      lessonName: "",
-      packageName: "",
-      courseId: "",
-      days: "",
-      batchId: ""
-    }
-  })}
->
-  Clear
-</button>
-
-
+              
               </div>
               {/* ScheduleTeachers Table */}
               <div className="container my-4">
@@ -548,10 +545,11 @@ function StudentRegisterCourse() {
                 <div className="col-md-4">
                   <select
                     {...formik.getFieldProps("packageName")}
-                    class={`form-select  ${formik.touched.packageName && formik.errors.packageName
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    class={`form-select  ${
+                      formik.touched.packageName && formik.errors.packageName
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     id="packageName"
                     name="packageName"
                   >

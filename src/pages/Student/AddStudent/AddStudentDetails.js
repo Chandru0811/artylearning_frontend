@@ -17,7 +17,10 @@ const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Student Name is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
-    .max(new Date(), "*Date of Birth cannot be in the future"),
+    .max(
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      "*Date of Birth must be at least 1 year ago"
+    ),
   age: Yup.string().required("*Age is required"),
   gender: Yup.string().required("*Gender is required"),
   schoolType: Yup.string().required("*School Type is required"),
@@ -51,6 +54,10 @@ const AddStudentDetails = forwardRef(
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     console.log("FormData is ", formData);
+
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() - 1);
+
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
@@ -313,6 +320,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}
+                        // max={maxDate.toISOString().split("T")[0]}
                       />
                       {formik.touched.dateOfBirth &&
                         formik.errors.dateOfBirth && (
