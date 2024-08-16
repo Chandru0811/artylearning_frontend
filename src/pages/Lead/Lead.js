@@ -442,7 +442,7 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                    style={{ textDecoration: "none" }}
+                                    style={{ textDecoration: "none",cursor: "default" }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
@@ -525,7 +525,8 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                    style={{ textDecoration: "none" }}
+                                    style={{ textDecoration: "none",cursor: "default" }}
+                                  
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
@@ -659,7 +660,7 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                    style={{ textDecoration: "none" }}
+                                    style={{ textDecoration: "none",cursor: "default" }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
@@ -757,7 +758,7 @@ const Lead = () => {
                             >
                               <span
                                 className="text-white fw-bold"
-                                style={{ textWrap: "nowrap" }}
+                                style={{ textDecoration: "none",cursor: "default" }}
                               >
                                 Confirmed
                               </span>
@@ -766,6 +767,7 @@ const Lead = () => {
                             <button
                               className={`btn btn-sm leadStatus text-bg-success`}
                               type="button"
+                              style={{ cursor: "default" }}
                             >
                               <span
                                 className="text-white fw-bold"
@@ -825,7 +827,7 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}`}
-                                    style={{ textDecoration: "none" }}
+                                    style={{ textDecoration: "none",cursor: "default" }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
@@ -895,7 +897,7 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}`}
-                                    style={{ textDecoration: "none" }}
+                                    style={{ textDecoration: "none",cursor: "default" }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
