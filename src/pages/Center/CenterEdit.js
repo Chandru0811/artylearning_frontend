@@ -100,7 +100,7 @@ function CenterEdit() {
       // });
 
       // Convert gst value to boolean
-      // values.gst = values.gst === "true";
+      values.gst = values.gst === "true";
       const formData = new FormData();
       formData.append("centerName", values.centerName);
       formData.append("code", values.code);
