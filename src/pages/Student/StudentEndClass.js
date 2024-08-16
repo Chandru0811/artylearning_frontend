@@ -13,8 +13,12 @@ const validationSchema = Yup.object().shape({
   lastLessonDate: Yup.string().required("*Select a Last Lesson"),
   reason: Yup.string().required("*Select a Reason"),
   otherReason: Yup.string().required("*Other Reason is required"),
-  centerRemark: Yup.string().required("*Centre Remark is required"),
-  parentRemark: Yup.string().required("*Parent Remark is required"),
+  centerRemark: Yup.string()
+  .required("*Leave Reason is required")
+  .max(200, "*The maximum length is 200 characters"),
+  parentRemark: Yup.string()
+  .required("*Leave Reason is required")
+  .max(200, "*The maximum length is 200 characters"),
 });
 
 const StudentEndClass = () => {

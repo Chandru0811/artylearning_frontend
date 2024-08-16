@@ -16,6 +16,9 @@ const validationSchema = Yup.object({
     .min(new Date(), "*Date must be in the future"),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   modeOfWorking: Yup.string().required("*Mode of working is required"),
+  attendanceRemark: Yup.string()
+    .required("*Leave Reason is required")
+    .max(200, "*The maximum length is 200 characters"),
   // checkIn: Yup.string().required("*Check-in is required"),
   // checkOut: Yup.string().required("*Check-out is required"),
   // otStartTime: Yup.string().required("*OT start time is required"),

@@ -19,6 +19,9 @@ const validationSchema = Yup.object().shape({
     .min(1, "*Select at least one preferred time slot")
     .required("Select preferred time slot"),
   enquiryDate: Yup.string().required("*Enquiry Date is required"),
+  remark: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
 });
 
 const EditForm5 = forwardRef(

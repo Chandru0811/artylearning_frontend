@@ -20,6 +20,9 @@ const validationSchema = Yup.object().shape({
     .min(1, "*Select at least one preferred time slot")
     .required("*Select Preferred Time Slot"),
   enquiryDate: Yup.string().required("*Enquiry Date is required"),
+  remark: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
 });
 
 const Form5 = forwardRef(
@@ -138,7 +141,9 @@ const Form5 = forwardRef(
               </div>
 
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Preferred Day<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Preferred Day<span className="text-danger">*</span>
+                </label>
                 <div>
                   <div className="form-check form-check-inline">
                     <input
@@ -193,10 +198,11 @@ const Form5 = forwardRef(
                     <label className="form-check-label">Friday</label>
                   </div>
                 </div>
-                
               </div>
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Preferred Time Slot<span className="text-danger">*</span></label>
+                <label className="form-label">
+                  Preferred Time Slot<span className="text-danger">*</span>
+                </label>
                 <div>
                   <div className="form-check form-check-inline">
                     <input
@@ -261,10 +267,10 @@ const Form5 = forwardRef(
                   </div>
                 </div>
                 {formik.touched.preferredDay && formik.errors.preferredDay && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.preferredDay}</small>
-                </div>
-              )}
+                  <div className="error text-danger ">
+                    <small>{formik.errors.preferredDay}</small>
+                  </div>
+                )}
               </div>
               <div className="col-md-6 col-12 mb-3">
                 {/* <label className="form-label">Preferred Time Slot</label> */}
@@ -315,11 +321,12 @@ const Form5 = forwardRef(
                     <label className="form-check-label">3AM - 6AM</label>
                   </div>
                 </div>
-                {formik.touched.preferredTimeSlot && formik.errors.preferredTimeSlot && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.preferredTimeSlot}</small>
-                </div>
-              )}
+                {formik.touched.preferredTimeSlot &&
+                  formik.errors.preferredTimeSlot && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.preferredTimeSlot}</small>
+                    </div>
+                  )}
               </div>
 
               <div className="col-md-6 col-12 mb-3">

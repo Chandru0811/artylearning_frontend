@@ -21,7 +21,12 @@ function StudentTransferOut() {
     lastLessonDate: Yup.string().required("*Last Lesson Date  is required"),
     centerId: Yup.string().required("*Transfer To is required"),
     reason: Yup.string().required("*Reason is required"),
-    centerRemark: Yup.string().required("*Centre Remark is required"),
+    centerRemark: Yup.string()
+  .required("*Leave Reason is required")
+  .max(200, "*The maximum length is 200 characters"),
+  parentRemark: Yup.string()
+  .notRequired("*Leave Reason is required")
+  .max(200, "*The maximum length is 200 characters"),
   });
 
   const fetchData = async () => {

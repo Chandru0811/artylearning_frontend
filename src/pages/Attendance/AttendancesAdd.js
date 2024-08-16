@@ -12,6 +12,9 @@ const validationSchema = Yup.object().shape({
   pace: Yup.string().required("*Select the Type"),
   curriculamCode: Yup.string().required("*Curriculam Code is required"),
   bodyTemperature: Yup.string().required("*Body Temperature is required"),
+  remark: Yup.string()
+  .notRequired()
+  .max(200, "*The maximum length is 200 characters"),
 });
 
 function AttendancesAdd() {

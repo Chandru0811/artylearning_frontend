@@ -34,6 +34,9 @@ const validationSchema = Yup.object().shape({
   medicalCondition: Yup.string().required(
     "*Medical Condition Result is required"
   ),
+  remark: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
   // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguage: Yup.string().required("*Primary Language is required"),
   race: Yup.string().required("*Select a Race"),
@@ -47,7 +50,7 @@ const AddStudentDetails = forwardRef(
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-console.log("FormData is ", formData)
+    console.log("FormData is ", formData);
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
@@ -65,23 +68,22 @@ console.log("FormData is ", formData)
 
     const calculateAge = (dob) => {
       if (!dob) return "0 years, 0 months"; // Default value if dob is not provided
-    
+
       const birthDate = new Date(dob);
       const today = new Date();
-    
+
       if (isNaN(birthDate.getTime())) return "0 years, 0 months"; // Handle invalid date
-    
+
       let years = today.getFullYear() - birthDate.getFullYear();
       let months = today.getMonth() - birthDate.getMonth();
-    
+
       if (months < 0) {
         years--;
         months += 12;
       }
-    
+
       return `${years} years, ${months} months`;
     };
-    
 
     const formik = useFormik({
       initialValues: {
@@ -182,14 +184,16 @@ console.log("FormData is ", formData)
             const response = await api.get(
               `/getAllLeadInfoById/${formData.LeadId}`
             );
-           
+
             const leadData = response.data;
             formik.setValues({
               centerId: leadData.centerId || "",
               studentName: leadData.studentName || "",
               studentChineseName: leadData.studentChineseName || "",
               file: null || "",
-              age: leadData.dateOfBirth ? calculateAge(leadData.dateOfBirth) : "0 years, 0 months",
+              age: leadData.dateOfBirth
+                ? calculateAge(leadData.dateOfBirth)
+                : "0 years, 0 months",
               medicalCondition: leadData.medicalCondition || "",
               dateOfBirth: leadData.dateOfBirth.substring(0, 10) || "",
               gender: leadData.gender || "",
@@ -491,43 +495,43 @@ console.log("FormData is ", formData)
                         )}
                     </div>
                     <div className="text-start mt-4">
-        <label htmlFor="file" className="fw-medium">
-          <small>Profile Image</small>
-          <span className="text-danger">*</span>
-        </label>
-        <br />
-        <input
-          type="file"
-          name="file"
-          className="form-control"
-          onChange={(event) => {
-            const file = event.target.files[0];
-            formik.setFieldValue("file", file);
-            if (file) {
-              const previewUrl = URL.createObjectURL(file);
-              setImagePreviewUrl(previewUrl);
-            } else {
-              setImagePreviewUrl(null);
-            }
-          }}
-          onBlur={formik.handleBlur}
-          accept=".jpg, .jpeg, .png"
-        />
-        {formik.touched.file && formik.errors.file && (
-          <div className="error text-danger">
-            <small>{formik.errors.file}</small>
-          </div>
-        )}
-        {imagePreviewUrl && (
-          <div className="mt-3">
-            <img
-              src={imagePreviewUrl}
-              alt="Profile Preview"
-               className="w-25"
-            />
-          </div>
-        )}
-      </div>
+                      <label htmlFor="file" className="fw-medium">
+                        <small>Profile Image</small>
+                        <span className="text-danger">*</span>
+                      </label>
+                      <br />
+                      <input
+                        type="file"
+                        name="file"
+                        className="form-control"
+                        onChange={(event) => {
+                          const file = event.target.files[0];
+                          formik.setFieldValue("file", file);
+                          if (file) {
+                            const previewUrl = URL.createObjectURL(file);
+                            setImagePreviewUrl(previewUrl);
+                          } else {
+                            setImagePreviewUrl(null);
+                          }
+                        }}
+                        onBlur={formik.handleBlur}
+                        accept=".jpg, .jpeg, .png"
+                      />
+                      {formik.touched.file && formik.errors.file && (
+                        <div className="error text-danger">
+                          <small>{formik.errors.file}</small>
+                        </div>
+                      )}
+                      {imagePreviewUrl && (
+                        <div className="mt-3">
+                          <img
+                            src={imagePreviewUrl}
+                            alt="Profile Preview"
+                            className="w-25"
+                          />
+                        </div>
+                      )}
+                    </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Age</small>
@@ -681,6 +685,11 @@ console.log("FormData is ", formData)
                       height: "7rem",
                     }}
                   />
+                  {formik.touched.remark && formik.errors.remark && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.remark}</small>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-5">

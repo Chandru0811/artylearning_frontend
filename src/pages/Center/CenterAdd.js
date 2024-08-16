@@ -40,6 +40,9 @@ const validationSchema = Yup.object().shape({
     .integer("*Bank Account Number is must be number"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
   file: Yup.mixed().required("*File is required"),
+  invoiceNotes: Yup.string()
+  .notRequired()
+  .max(200, "*The maximum length is 200 characters"),
 });
 
 function CenterAdd() {

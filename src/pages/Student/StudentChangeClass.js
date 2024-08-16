@@ -10,7 +10,12 @@ function StudentChangeClass() {
     lastLessonDate: Yup.string().required("*Select a Last Lesson Date"),
     preferStartDate: Yup.date().required("*Prefer Start Date is required"),
     reason: Yup.string().required("*Select a Reason"),
-    centerRemark: Yup.string().required("*Centre Remark is required"),
+    centerRemark: Yup.string()
+      .required("*Leave Reason is required")
+      .max(200, "*The maximum length is 200 characters"),
+    parentRemark: Yup.string()
+      .notRequired("*Leave Reason is required")
+      .max(200, "*The maximum length is 200 characters"),
   });
 
   const formik = useFormik({

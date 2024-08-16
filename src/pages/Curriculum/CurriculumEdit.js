@@ -21,6 +21,9 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
     curriculumNo: Yup.string().required("*Curriculum Code is required"),
     // description: Yup.string().required("*Description is required"),
     status: Yup.string().required("*Status is required"),
+    description: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
   });
 
   const formik = useFormik({

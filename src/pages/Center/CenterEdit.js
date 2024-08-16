@@ -44,6 +44,9 @@ const validationSchema = Yup.object().shape({
     .positive("*Please enter a valid number")
     .integer("*Bank Account Number must be Numeric"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
+  invoiceNotes: Yup.string()
+  .notRequired()
+  .max(200, "*The maximum length is 200 characters"),
 });
 
 function CenterEdit() {
