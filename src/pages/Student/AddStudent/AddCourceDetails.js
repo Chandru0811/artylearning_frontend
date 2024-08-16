@@ -219,7 +219,14 @@ const AddcourseDetail = forwardRef(
 
     return (
       <div className="container-fluid">
-        <form onSubmit={formik.handleSubmit}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault();
+            }
+          }}
+        >
           <div className="border-0 mb-5">
             <div className="mb-5">
               <div className="border-0 my-2 px-2">
@@ -270,7 +277,7 @@ const AddcourseDetail = forwardRef(
                       <option value="SUNDAY">SUNDAY</option>
                     </select>
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-4 d-flex">
                     <select
                       {...formik.getFieldProps("batchId")}
                       className="form-select"
@@ -287,6 +294,24 @@ const AddcourseDetail = forwardRef(
                       <option value="5">12:00 pm</option>
                       <option value="6">1:00 pm</option>
                     </select>
+                    <button
+                      type="button"
+                      className="btn btn-sm border-secondary ms-3 my-1"
+                      style={{ width: "100px" }}
+                      onClick={() =>
+                        formik.resetForm({
+                          values: {
+                            lessonName: "",
+                            packageName: "",
+                            courseId: "",
+                            days: "",
+                            batchId: "",
+                          },
+                        })
+                      }
+                    >
+                      Clear
+                    </button>
                   </div>
                 </div>
                 <div className="container my-4">
@@ -370,10 +395,7 @@ const AddcourseDetail = forwardRef(
                       </option>
                       {packageData &&
                         packageData.map((packages) => (
-                          <option
-                            key={packages.id}
-                            value={packages.id}
-                          >
+                          <option key={packages.id} value={packages.id}>
                             {packages.packageNames}
                           </option>
                         ))}
