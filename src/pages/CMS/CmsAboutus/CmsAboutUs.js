@@ -122,7 +122,11 @@ function CmsAboutUs() {
               <div className="col-md-6 col-12 d-flex flex-column align-items-center justify-content-center">
                 {editingField === "AdminImg" ? (
                   <>
-                    <form onSubmit={formik.handleSubmit}>
+                     <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
                       {/* <input
                       type="file"
                       onChange={(e) => {

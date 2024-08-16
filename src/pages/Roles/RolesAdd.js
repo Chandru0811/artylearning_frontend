@@ -381,7 +381,11 @@ function RolesAdd() {
 
   return (
     <div className="container-fluid">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <button type="submit" className="btn btn-button btn-sm ">
             Save

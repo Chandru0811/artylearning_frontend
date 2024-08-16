@@ -175,7 +175,11 @@ function CmsHome() {
 
   return (
     <>
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="container card my-2 py-2">
           <div className="row p-1">
             <div className="col-md-6 col-12">

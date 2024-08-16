@@ -102,7 +102,11 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={formik.handleSubmit}>
+           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
             <div className="row">
               <div class=" col-12 mb-2">
                 <lable className="form-lable">Upload Image File</lable>

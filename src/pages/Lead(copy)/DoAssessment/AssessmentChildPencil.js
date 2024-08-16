@@ -37,7 +37,11 @@ const AssessmentChildPencil = forwardRef(
 
     return (
       <section>
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <div className="py-3">
             <h5 className="headColor">Child Pencil Grip </h5>
             <div class="container-fluid row d-flex my-4">

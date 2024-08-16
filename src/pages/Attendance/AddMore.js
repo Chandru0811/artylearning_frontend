@@ -137,7 +137,11 @@ function AddMore({
       </button>
       <Modal show={show} size="xl" onHide={handleClose} centered>
         <Modal.Header closeButton>Attendance</Modal.Header>
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <Modal.Body>
             <div className="container">
               {formik.values.items.map((item, index) => (

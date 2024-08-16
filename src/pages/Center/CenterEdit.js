@@ -79,7 +79,7 @@ function CenterEdit() {
       email: "",
       openingDate: "",
       uenNumber: "",
-      gst: data.gst || false,
+      gst: "",
       taxRegistrationNumber: "",
       bankName: "",
       bankBranch: "",
@@ -100,7 +100,7 @@ function CenterEdit() {
       // });
 
       // Convert gst value to boolean
-      values.gst = values.gst === "true";
+      // values.gst = values.gst === "true";
       const formData = new FormData();
       formData.append("centerName", values.centerName);
       formData.append("code", values.code);
@@ -183,7 +183,11 @@ function CenterEdit() {
 
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/center">
             <button type="button " className="btn btn-sm btn-border   ">

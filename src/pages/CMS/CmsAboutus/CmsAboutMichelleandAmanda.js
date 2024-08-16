@@ -111,7 +111,11 @@
     return (
       <div className="container-fluid bgimage_aboutus edit-container">
         <div className="container ">
-          <form onSubmit={formik.handleSubmit}>
+           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
             <div className="row py-5" style={{ marginTop: "100px" }}>
               <div className="col-md-6 col-12">
                 {editingField === "Michelle" ? (

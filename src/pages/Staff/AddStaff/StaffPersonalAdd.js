@@ -105,7 +105,11 @@ const StaffPersonalAdd = forwardRef(
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
           <div class="container row d-flex my-4">

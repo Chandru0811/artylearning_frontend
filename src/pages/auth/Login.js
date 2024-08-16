@@ -99,7 +99,11 @@ function Login({ onLogin }) {
               >
                 <div className="card-body">
                   <h3 className="card-title text-center mb-4">Login</h3>
-                  <form onSubmit={formik.handleSubmit}>
+                   <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
                     <div className="mb-3">
                       <label className="form-label fw-semibold">
                         Email address

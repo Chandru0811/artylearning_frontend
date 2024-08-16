@@ -53,7 +53,11 @@ const Form1 = forwardRef(
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="container py-4">
           <h5 className="headColor  mb-5">Enrollment Form</h5>
           <div className="row">

@@ -193,7 +193,11 @@ const AddParentGuardian = forwardRef(
           <div className="border-0 mb-5" key={index}>
             <div>
               <div className=" border-0 my-2">
-                <form onSubmit={formik.handleSubmit}>
+                 <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
                   <p className="headColor">Parents / Guardian</p>
                   <div className="container pt-3">
                     <div className="row mt-2">

@@ -81,7 +81,11 @@ function DocumentEdit({ id, onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Document</Modal.Title>
         </Modal.Header>
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -168,7 +172,7 @@ export default DocumentEdit;
 
 //   return (
 //     <div className="container">
-//       <form onSubmit={formik.handleSubmit}>
+//        <form onSubmit={formik.handleSubmit} >
 //         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
 //           <Link to="/document">
 //             <button type="button " className="btn btn-sm btn-border   ">

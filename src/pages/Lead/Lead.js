@@ -246,7 +246,11 @@ const Lead = () => {
         </div>
       ) : (
         <div className="container my-4">
-          <form onSubmit={formik.handleSubmit}>
+           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
             <div className="row my-3 mb-5">
               <div className="col-12 d-flex flex-wrap justify-content-center">
                 <div

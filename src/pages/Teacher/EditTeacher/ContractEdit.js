@@ -250,7 +250,11 @@ const ContractEdit = forwardRef(
     }, [formik.values.userContractStartDate]);
 
     return (
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="container">
           <p className="headColor my-4">Contract Information</p>
           <div className="container mt-5" style={{ minHeight: "95vh" }}>

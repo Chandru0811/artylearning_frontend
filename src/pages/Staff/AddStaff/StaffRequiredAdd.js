@@ -61,7 +61,11 @@ const StaffRequiredAdd = forwardRef(
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit}>
+       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
         <div className="container" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Required Information</p>
           <div class="row">

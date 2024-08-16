@@ -212,7 +212,11 @@ function StaffingAttendanceAdd() {
     <section className="AttendanceAdd p-3">
       <div className="container-fluid">
         <div className="container">
-          <form onSubmit={formik.handleSubmit}>
+           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
             <div className="row">
               <div className="col-12 text-end">
                 <Link to="/staffing/attendance">

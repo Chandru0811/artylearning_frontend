@@ -127,7 +127,11 @@ function Contact() {
           <div className="col-md-6 col-12 d-flex align-items-center justify-content-center">
             <div className="card p-3" style={{ width: "100%" }}>
               <div className="card-body">
-                <form onSubmit={formik.handleSubmit}>
+                 <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
                   <div className="mb-2 form-group">
                     <label className="form-label">
                       <b>

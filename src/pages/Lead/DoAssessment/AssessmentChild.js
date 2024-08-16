@@ -151,7 +151,11 @@ const AssessmentChild = forwardRef(
 
     return (
       <section>
-        <form onSubmit={formik.handleSubmit}>
+         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+          if (e.key === 'Enter' && !formik.isSubmitting) {
+            e.preventDefault();  // Prevent default form submission
+          }
+        }}>
           <div className="mt-3">
             <h5 className="headColor mb-4">Child Particulars</h5>
             <div className="container-fluid row">
