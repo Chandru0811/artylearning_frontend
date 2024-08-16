@@ -11,6 +11,9 @@ const validationSchema = Yup.object().shape({
   lesson: Yup.string().required("*Select the Lesson"),
   nextclass: Yup.string().required("*Select the Type"),
   pace: Yup.string().required("*Select the Type"),
+  remark: Yup.string()
+  .notRequired()
+  .max(200, "*The maximum length is 200 characters"),
 });
 
 

@@ -14,6 +14,9 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
   assessmentDate: Yup.date().required("*Assessment Date is required"),
   levelAssessed: Yup.string().required("*Level Assessed is required"),
+  remarks: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
 });
 
 const AssessmentChild = forwardRef(
@@ -256,7 +259,9 @@ const AssessmentChild = forwardRef(
                   </label>
                 </div>
                 {formik.touched.pictureToken && formik.errors.pictureToken ? (
-                  <div className="text-danger">{formik.errors.pictureToken}</div>
+                  <div className="text-danger">
+                    {formik.errors.pictureToken}
+                  </div>
                 ) : null}
               </div>
               <div className="col-md-6 col-12 mb-4">
@@ -337,61 +342,68 @@ const AssessmentChild = forwardRef(
                 </div>
               </div>
               <div className="col-md-6 col-12">
-              <div className="mb-3">
-                <div>
-                  <label for="exampleFormControlInput1" className="form-label">
-                  Level Assessed<span className="text-danger">*</span>
-                  </label>
-                </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="levelAssessed"
-                    id="inlineRadio1"
-                    value="ARTY_BELIVER"
-                    onChange={formik.handleChange}
-                    checked={formik.values.levelAssessed === "ARTY_BELIVER"}
-                  />
-                  <label className="form-check-label" htmlFor="inlineRadio1">
-                  Arty Beliver
-                  </label>
-                </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="levelAssessed"
-                    id="inlineRadio2"
-                    value="ARTY_DREAMER"
-                    onChange={formik.handleChange}
-                    checked={formik.values.levelAssessed === "ARTY_DREAMER"}
-                  />
-                  <label className="form-check-label" htmlFor="inlineRadio2">
-                  Arty Dreamer
-                  </label>
-                </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="levelAssessed"
-                    id="inlineRadio3"
-                    value="ARTY_PURSUER"
-                    onChange={formik.handleChange}
-                    checked={formik.values.levelAssessed === "ARTY_PURSUER"}
-                  />
-                  <label className="form-check-label" htmlFor="inlineRadio3">
-                  Arty Pursuer
-                  </label>
-                </div>
-                {formik.errors.levelAssessed && formik.touched.levelAssessed && (
-                  <div className="text-danger  " style={{ fontSize: ".875em" }}>
-                    {formik.errors.levelAssessed}
+                <div className="mb-3">
+                  <div>
+                    <label
+                      for="exampleFormControlInput1"
+                      className="form-label"
+                    >
+                      Level Assessed<span className="text-danger">*</span>
+                    </label>
                   </div>
-                )}
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="levelAssessed"
+                      id="inlineRadio1"
+                      value="ARTY_BELIVER"
+                      onChange={formik.handleChange}
+                      checked={formik.values.levelAssessed === "ARTY_BELIVER"}
+                    />
+                    <label className="form-check-label" htmlFor="inlineRadio1">
+                      Arty Beliver
+                    </label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="levelAssessed"
+                      id="inlineRadio2"
+                      value="ARTY_DREAMER"
+                      onChange={formik.handleChange}
+                      checked={formik.values.levelAssessed === "ARTY_DREAMER"}
+                    />
+                    <label className="form-check-label" htmlFor="inlineRadio2">
+                      Arty Dreamer
+                    </label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="levelAssessed"
+                      id="inlineRadio3"
+                      value="ARTY_PURSUER"
+                      onChange={formik.handleChange}
+                      checked={formik.values.levelAssessed === "ARTY_PURSUER"}
+                    />
+                    <label className="form-check-label" htmlFor="inlineRadio3">
+                      Arty Pursuer
+                    </label>
+                  </div>
+                  {formik.errors.levelAssessed &&
+                    formik.touched.levelAssessed && (
+                      <div
+                        className="text-danger  "
+                        style={{ fontSize: ".875em" }}
+                      >
+                        {formik.errors.levelAssessed}
+                      </div>
+                    )}
+                </div>
               </div>
-            </div>
               <div className="col-md-6 col-12 mb-4">
                 <lable>Sibling(s)</lable>
                 <input

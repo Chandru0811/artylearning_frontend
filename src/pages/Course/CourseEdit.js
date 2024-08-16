@@ -27,6 +27,9 @@ const validationSchema = Yup.object({
     "*Select the Class Replacement Allowed"
   ),
   replacementLessonStudentBuffer: Yup.number().notRequired(""),
+  description: Yup.string()
+  .notRequired()
+  .max(200, "*The maximum length is 200 characters"),
 });
 
 function CourseEdit() {

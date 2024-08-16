@@ -14,7 +14,9 @@ const validationSchema = Yup.object().shape({
   comprehendingOfInstruction: Yup.string().required("*Select a Instruction"),
   attentionMilestone: Yup.string().required("*Select Attention Milestone"),
   verbalLanguageDevelopment: Yup.string().required("*Select Verbal Language"),
-  artyRemarks: Yup.string().required("*Arty Remarks is Required"),
+  artyRemarks: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
 });
 
 const AssessmentBeliever = forwardRef(
@@ -81,7 +83,7 @@ const AssessmentBeliever = forwardRef(
             }
           } catch (error) {
             toast.error(error);
-          }finally {
+          } finally {
             setLoadIndicators(false);
           }
         }

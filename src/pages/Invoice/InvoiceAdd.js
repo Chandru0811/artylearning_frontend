@@ -22,8 +22,8 @@ const invoiceItemSchema = Yup.object().shape({
     .positive("Item amount must be a positive number"),
   taxType: Yup.string().required("Tax type is required"),
   gstAmount: Yup.number()
-  .required("GST amount is required")
-  .min(0, "GST amount must be a positive number or zero"),
+    .required("GST amount is required")
+    .min(0, "GST amount must be a positive number or zero"),
 
   totalAmount: Yup.number()
     .required("Total amount is required")
@@ -48,6 +48,9 @@ const validationSchema = Yup.object({
     .of(invoiceItemSchema)
     // .min(1, "At least one invoice item is required")
     .required("Invoice items are required"),
+  remark: Yup.string()
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
 });
 
 export default function InvoiceAdd() {
@@ -495,8 +498,10 @@ export default function InvoiceAdd() {
     getData();
   }, [studentID]);
   const handleRowDelete = (index) => {
-    const updatedInvoiceItems = formik.values.invoiceItems.filter((_, i) => i !== index);
-  
+    const updatedInvoiceItems = formik.values.invoiceItems.filter(
+      (_, i) => i !== index
+    );
+
     // Update the rows and formik values
     setRows(updatedInvoiceItems);
     formik.setFieldValue("invoiceItems", updatedInvoiceItems);

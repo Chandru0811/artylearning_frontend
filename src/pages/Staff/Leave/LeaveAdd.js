@@ -21,7 +21,9 @@ const validationSchema = Yup.object({
       }
     ),
   dayType: Yup.string().required("*Day Type is required"),
-  leaveReason: Yup.string().required("*Leave Reason is required"),
+  leaveReason: Yup.string()
+  .required("*Leave Reason is required")
+  .max(200, "*The maximum length is 200 characters"),
 });
 
 function LeaveAdd() {
