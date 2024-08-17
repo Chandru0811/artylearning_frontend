@@ -155,6 +155,7 @@ const Teacher = () => {
                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteUser/${data.id}`}
+                          teachermsg = "Teacher deleted successfully"
                         />
                       )}
                     </div>

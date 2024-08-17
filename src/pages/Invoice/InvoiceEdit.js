@@ -574,6 +574,8 @@ export default function InvoiceEdit() {
                   }`}
                   onFocus={(e) => e.target.showPicker()}
                   type="date"
+                  min={new Date().toISOString().split("T")[0]} 
+
                 />
                 {formik.touched.dueDate && formik.errors.dueDate && (
                   <div className="invalid-feedback">

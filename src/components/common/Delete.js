@@ -5,7 +5,7 @@ import { FaTrash } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 
-function Delete({ onSuccess, path }) {
+function Delete({ onSuccess, path ,staffmsg ,teachermsg}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -18,7 +18,16 @@ function Delete({ onSuccess, path }) {
       if (response.status === 201) {
         onSuccess();
         handleClose();
-        toast.success(response.data.message);
+        if (staffmsg){
+          toast.success(staffmsg);
+        }
+        else if(teachermsg){
+          toast.success(teachermsg);
+        }
+        else{
+          toast.success(response.data.message);
+         }
+       
       } else if (response.status === 200) {
         onSuccess();
         handleClose();
