@@ -146,20 +146,20 @@ const AssessmentPursuers = forwardRef(
               }
             );
             if (response.status === 200) {
-              toast.success(response.data.message);
+              toast.success("Lead do assessment updated successfully");
               setFormData((prv) => ({ ...prv, ...data, leadId }));
-              try{
+              try {
                 const response = await api.put(`/updateLeadInfo/${leadId}`, {
                   leadStatus: "ASSESSMENT_DONE",
                 });
-                if(response.leadStatus === 200){
+                if (response.leadStatus === 200) {
                   console.log("Lead Status ASSESSMENT DONE");
-                }else{
+                } else {
                   console.log("Lead Status ASSESSMENT NOT DONE");
                 }
-              }catch{
+              } catch {
                 console.log("Lead Status ASSESSMENT NOT DONE");
-              };
+              }
               navigate("/lead/lead");
               // handleNext();
             } else {
@@ -190,18 +190,18 @@ const AssessmentPursuers = forwardRef(
                 ...data,
                 assesmentId,
               }));
-              try{
+              try {
                 const response = await api.put(`/updateLeadInfo/${leadId}`, {
                   leadStatus: "ASSESSMENT_DONE",
                 });
-                if(response.leadStatus === 200){
+                if (response.leadStatus === 200) {
                   console.log("Lead Status ASSESSMENT DONE");
-                }else{
+                } else {
                   console.log("Lead Status ASSESSMENT NOT DONE");
                 }
-              }catch{
+              } catch {
                 console.log("Lead Status ASSESSMENT NOT DONE");
-              };
+              }
               navigate("/lead/lead");
               // handleNext();
             } else {
@@ -245,8 +245,8 @@ const AssessmentPursuers = forwardRef(
       AssessmentPursuers: formik.handleSubmit,
     }));
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-     }, []);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
 
     return (
       <section>

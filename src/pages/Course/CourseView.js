@@ -26,6 +26,13 @@ function CourseView() {
       toast.error(error);
     }
   };
+  const getCenterNames = (centerIds) =>
+    centerIds
+      ?.map(
+        (centerId) =>
+          centerData?.find((c) => c.id === centerId)?.centerNames || ""
+      )
+      .join(", ");
 
   useEffect(() => {
     const getData = async () => {
@@ -59,13 +66,7 @@ function CourseView() {
                 </div>
                 <div className="col-9">
                   <p className="text-muted text-sm">
-                    :{" "}
-                    {centerData &&
-                      centerData.map((centerId) =>
-                        parseInt(data.centerId) === centerId.id
-                          ? centerId.centerNames || "--"
-                          : ""
-                      )}
+                    :{getCenterNames(data.centers)}
                   </p>
                 </div>
               </div>
@@ -217,7 +218,9 @@ function CourseView() {
                   {/* <p className="text-muted text-sm">
                     : {data.classReplacementAllowed}
                   </p> */}
-                  <p className="text-muted text-sm">: {data.classReplacementAllowed ? "Yes" : "No"}</p>
+                  <p className="text-muted text-sm">
+                    : {data.classReplacementAllowed ? "Yes" : "No"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -227,7 +230,9 @@ function CourseView() {
                   <p className="fw-medium">Description</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm text-break">: {data.description}</p>
+                  <p className="text-muted text-sm text-break">
+                    : {data.description}
+                  </p>
                 </div>
               </div>
             </div>

@@ -22,8 +22,8 @@ const validationSchema = Yup.object({
     ),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   attendanceRemark: Yup.string()
-  .required("*Leave Reason is required")
-  .max(200, "*The maximum length is 200 characters"),
+    .required("*Leave Reason is required")
+    .max(200, "*The maximum length is 200 characters"),
   // modeOfWorking: Yup.string().test(
   //   "check-mode-of-working",
   //   "*Mode of working is required",
@@ -111,42 +111,42 @@ function StaffingAttendanceAdd() {
           modeOfWorking: values.modeOfWorking,
         };
       }
-      
+
       if (values.checkIn !== "") {
         payload = {
           ...payload,
           checkIn: values.checkIn,
         };
       }
-      
+
       if (values.checkOut !== "") {
         payload = {
           ...payload,
           checkOut: values.checkOut,
         };
       }
-      
+
       if (values.checkInmode !== "") {
         payload = {
           ...payload,
           checkInmode: values.checkInmode,
         };
       }
-      
+
       if (values.checkOutmode !== "") {
         payload = {
           ...payload,
           checkOutmode: values.checkOutmode,
         };
       }
-      
+
       if (values.otStartTime !== "") {
         payload = {
           ...payload,
           otStartTime: values.otStartTime,
         };
       }
-      
+
       if (values.otEndTime !== "") {
         payload = {
           ...payload,
@@ -212,11 +212,14 @@ function StaffingAttendanceAdd() {
     <section className="AttendanceAdd p-3">
       <div className="container-fluid">
         <div className="container">
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
             <div className="row">
               <div className="col-12 text-end">
                 <Link to="/staffing/attendance">
@@ -492,7 +495,7 @@ function StaffingAttendanceAdd() {
               <div className="col-md-6 col-12">
                 <div className="text-start mt-2">
                   <lable className="form-lable">Attendance Remark</lable>
-                  {/* <span className="text-danger">*</span> */}
+                  <span className="text-danger">*</span>
                   <br />
                   <textarea
                     id="floatingTextarea2"

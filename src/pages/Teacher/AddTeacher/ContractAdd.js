@@ -228,6 +228,7 @@ const ContractAdd = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.uen}
+                  readOnly
                 />
                 {formik.touched.uen && formik.errors.uen && (
                   <div className="error text-danger ">
@@ -246,6 +247,7 @@ const ContractAdd = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.addressOfEmployment}
+                readOnly
               />
               {formik.touched.addressOfEmployment &&
                 formik.errors.addressOfEmployment && (
@@ -349,7 +351,7 @@ const ContractAdd = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="startDateOfEmployment"
                   onChange={formik.handleChange}
@@ -404,7 +406,7 @@ const ContractAdd = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractStartDate"
                   onChange={(e) => {
@@ -502,6 +504,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      
                     />
                     <label for="myCheckbox2" class="custom-checkbox">
                       <div class="inner-square"></div>
