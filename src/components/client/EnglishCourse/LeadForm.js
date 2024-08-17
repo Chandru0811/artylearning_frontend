@@ -64,6 +64,7 @@ function LeadForm() {
       preferredTime: [],
       preferredTimeSlot: [],
       remark: "",
+      leadStatus: "NEW_WAITLIST" || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
