@@ -25,7 +25,7 @@ const validationSchema = Yup.object({
   receiptAmount: Yup.number()
     .required("*Receipt Amount is required")
     .typeError("*Must be a Number"),
-    remark: Yup.string()
+  remark: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
 });
@@ -365,11 +365,14 @@ export default function InvoiceEdit() {
 
   return (
     <div className="container-fluid">
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="container py-3">
           <div className="row mt-3">
             <div className="col-lg-6 col-md-6 col-12 px-5">
@@ -506,19 +509,32 @@ export default function InvoiceEdit() {
               </div>
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
-                  Number of Lesson
+                  Package<span class="text-danger">*</span>
                 </label>
                 <br />
                 <select
-                  name="noOfLessons"
-                  {...formik.getFieldProps("noOfLessons")}
-                  class="form-select "
-                  aria-label="Default select example"
+                  {...formik.getFieldProps("packageId")}
+                  className={`form-select ${
+                    formik.touched.packageId && formik.errors.packageId
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 >
-                  <option value="" selected></option>
-                  {lessonOptions}
+                  <option selected></option>
+                  {packageData &&
+                    packageData.map((packages) => (
+                      <option key={packages.id} value={packages.id}>
+                        {packages.packageNames}
+                      </option>
+                    ))}
                 </select>
+                {formik.touched.packageId && formik.errors.packageId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.packageId}
+                  </div>
+                )}
               </div>
+
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
                   Remarks
@@ -574,8 +590,7 @@ export default function InvoiceEdit() {
                   }`}
                   onFocus={(e) => e.target.showPicker()}
                   type="date"
-                  min={new Date().toISOString().split("T")[0]} 
-
+                  min={new Date().toISOString().split("T")[0]}
                 />
                 {formik.touched.dueDate && formik.errors.dueDate && (
                   <div className="invalid-feedback">
@@ -583,33 +598,7 @@ export default function InvoiceEdit() {
                   </div>
                 )}
               </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Package<span class="text-danger">*</span>
-                </label>
-                <br />
-                <select
-                  {...formik.getFieldProps("packageId")}
-                  className={`form-select ${
-                    formik.touched.packageId && formik.errors.packageId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected></option>
-                  {packageData &&
-                    packageData.map((packages) => (
-                      <option key={packages.id} value={packages.id}>
-                        {packages.packageNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.packageId && formik.errors.packageId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.packageId}
-                  </div>
-                )}
-              </div>
+
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
                   Invoice Period From<span class="text-danger">*</span>
@@ -681,6 +670,21 @@ export default function InvoiceEdit() {
                       {formik.errors.receiptAmount}
                     </div>
                   )}
+              </div>
+              <div className="text-start mt-3">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  Number of Lesson
+                </label>
+                <br />
+                <select
+                  name="noOfLessons"
+                  {...formik.getFieldProps("noOfLessons")}
+                  class="form-select "
+                  aria-label="Default select example"
+                >
+                  <option value="" selected></option>
+                  {lessonOptions}
+                </select>
               </div>
             </div>
           </div>

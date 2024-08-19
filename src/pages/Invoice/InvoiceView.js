@@ -131,11 +131,18 @@ function InvoiceView() {
 
       // Add Credit Advice Offset, GST, Total Amount
       doc.setFontSize(11);
-      doc.text(
+      // doc.text(
+      //   `Remark: ${data.remark || "--"}`,
+      //   14,
+      //   doc.autoTable.previous.finalY + 10
+      // );
+      const remarkText = doc.splitTextToSize(
         `Remark: ${data.remark || "--"}`,
-        14,
-        doc.autoTable.previous.finalY + 10
+        180 // Width of the text area where you want to wrap the text
       );
+      
+      doc.text(remarkText, 14, doc.autoTable.previous.finalY + 10);
+      
 
       // Load QR code image
       const qrCodeImage = await loadImage(qrCodeUrl);

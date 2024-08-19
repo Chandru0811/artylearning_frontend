@@ -26,7 +26,7 @@ function AddMore({
         lessonNo: Yup.string().required("Lesson number is required"),
         curriculumCode: Yup.string().required("Curriculum code is required"),
         nextClassAdvice: Yup.string().required("Next class advice is required"),
-        pace: Yup.string().required("Pace is required"),
+        // pace: Yup.string().required("Pace is required"),
       })
     ),
   });
@@ -137,11 +137,7 @@ function AddMore({
       </button>
       <Modal show={show} size="xl" onHide={handleClose} centered>
         <Modal.Header closeButton>Attendance</Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+         <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
             <div className="container">
               {formik.values.items.map((item, index) => (
