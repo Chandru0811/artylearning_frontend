@@ -482,7 +482,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      readOnly
+                      disabled
                     />
                     <label for="myCheckbox1" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -504,6 +504,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                       
                     />
                     <label for="myCheckbox2" class="custom-checkbox">
@@ -526,6 +527,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox3" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -547,6 +549,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox4" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -568,6 +571,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox5" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -589,6 +593,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox6" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -610,6 +615,7 @@ const ContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox7" class="custom-checkbox">
                       <div class="inner-square"></div>

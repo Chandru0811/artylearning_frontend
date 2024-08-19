@@ -330,23 +330,23 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Start Date of Employment</label>
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="startDateOfEmployment"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.startDateOfEmployment}
                   min={new Date().toISOString().split("T")[0]}
-
+                  readOnly
                 />
                 {formik.touched.startDateOfEmployment &&
                   formik.errors.startDateOfEmployment && (
-                    <div className="error text-danger ">
+                    <div className="error text-danger">
                       <small>{formik.errors.startDateOfEmployment}</small>
                     </div>
                   )}
@@ -384,12 +384,12 @@ const StaffContractAdd = forwardRef(
                   </div>
                 )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Contract Start Date</label>
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractStartDate"
                   onChange={(e) => {
@@ -403,17 +403,18 @@ const StaffContractAdd = forwardRef(
                       const endDate = new Date(formik.values.userContractEndDate);
                       calculateContractPeriod(new Date(startDate), endDate);
                     }
-                  }}                  onBlur={formik.handleBlur}
+                  }}
+                  onBlur={formik.handleBlur}
                   value={formik.values.userContractStartDate}
+                  readOnly
                 />
-                {formik.touched.userContractStartDate &&
-                  formik.errors.userContractStartDate && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.userContractStartDate}</small>
-                    </div>
-                  )}
+                {formik.touched.userContractStartDate && formik.errors.userContractStartDate && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.userContractStartDate}</small>
+                  </div>
+                )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Contract Period</label>
                 <span className="text-danger">*</span>
                 <input
@@ -423,13 +424,13 @@ const StaffContractAdd = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.contactPeriod}
+                  readOnly
                 />
-                {formik.touched.contactPeriod &&
-                  formik.errors.contactPeriod && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.contactPeriod}</small>
-                    </div>
-                  )}
+                {formik.touched.contactPeriod && formik.errors.contactPeriod && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.contactPeriod}</small>
+                  </div>
+                )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Probation</label>
@@ -461,6 +462,7 @@ const StaffContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox1" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -482,6 +484,7 @@ const StaffContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox2" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -503,6 +506,7 @@ const StaffContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox3" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -524,6 +528,7 @@ const StaffContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox4" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -545,6 +550,7 @@ const StaffContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox5" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -566,6 +572,7 @@ const StaffContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox6" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -587,6 +594,7 @@ const StaffContractAdd = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      disabled
                     />
                     <label for="myCheckbox7" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -642,7 +650,7 @@ const StaffContractAdd = forwardRef(
                     </div>
                   )}
               </div>
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Contract End Date</label>
                 <span className="text-danger">*</span>
                 <input
@@ -655,15 +663,15 @@ const StaffContractAdd = forwardRef(
                     const startDate = new Date(formik.values.userContractStartDate);
                     const endDate = new Date(e.target.value);
                     calculateContractPeriod(startDate, endDate);
-                  }}                  onBlur={formik.handleBlur}
+                  }}
+                  onBlur={formik.handleBlur}
                   value={formik.values.userContractEndDate}
                 />
-                {formik.touched.userContractEndDate &&
-                  formik.errors.userContractEndDate && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.userContractEndDate}</small>
-                    </div>
-                  )}
+                {formik.touched.userContractEndDate && formik.errors.userContractEndDate && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.userContractEndDate}</small>
+                  </div>
+                )}
               </div>
               <div class="row mt-3">
                 <span className="mt-3 fw-bold">Bank Account Details</span>

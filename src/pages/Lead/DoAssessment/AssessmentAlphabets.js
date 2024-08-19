@@ -307,7 +307,7 @@ const AssessmentAlphabets = forwardRef(
                 </thead>
                 <tbody>
                   <tr>
-                    <th className="text-end fw-medium">Uppercase:</th>
+                    <th className="text-end fw-medium">Recognition of sounds:</th>
                     {firstHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
@@ -325,8 +325,8 @@ const AssessmentAlphabets = forwardRef(
                         </div>
                       </td>
                     ))}
-                  </tr>
-                  <tr>
+                 </tr>
+                  {/* <tr>
                     <th className="text-end fw-medium">Written Strokes:</th>
                     {firstHalfArray.map((char) => (
                       <td key={char}>
@@ -349,9 +349,9 @@ const AssessmentAlphabets = forwardRef(
                         </div>
                       </td>
                     ))}
-                  </tr>
+                  </tr> */}
                   <tr>
-                    <th className="text-end fw-medium">Lower Case:</th>
+                    <th className="text-end fw-medium">Recognition of letters:</th>
                     {firstHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
@@ -371,7 +371,7 @@ const AssessmentAlphabets = forwardRef(
                     ))}
                   </tr>
                   <tr>
-                    <th className="text-end fw-medium">Written Strokes:</th>
+                    <th className="text-end fw-medium">Writing:</th>
                     {firstHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
@@ -444,7 +444,7 @@ const AssessmentAlphabets = forwardRef(
                 </thead>
                 <tbody>
                   <tr>
-                    <th className="text-end fw-medium">Uppercase:</th>
+                    <th className="text-end fw-medium">Recognition of sounds:</th>
                     {secondHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
@@ -463,7 +463,7 @@ const AssessmentAlphabets = forwardRef(
                       </td>
                     ))}
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <th className="text-end fw-medium">Written Strokes:</th>
                     {secondHalfArray.map((char) => (
                       <td key={char}>
@@ -486,9 +486,9 @@ const AssessmentAlphabets = forwardRef(
                         </div>
                       </td>
                     ))}
-                  </tr>
+                  </tr> */}
                   <tr>
-                    <th className="text-end fw-medium">Lower Case:</th>
+                    <th className="text-end fw-medium">Recognition of letters:</th>
                     {secondHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
@@ -508,7 +508,7 @@ const AssessmentAlphabets = forwardRef(
                     ))}
                   </tr>
                   <tr>
-                    <th className="text-end fw-medium">Written Strokes:</th>
+                    <th className="text-end fw-medium">Writing:</th>
                     {secondHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
