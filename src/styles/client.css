@@ -9,6 +9,16 @@
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
+@media screen and (max-width: 320px) {
+  .hero_heading{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    font-size: clamp(21px, 4vw, 46px);
+  }
+  }
+
 /* Top Bar  */
 .social-icons {
   background-color: red;

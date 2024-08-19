@@ -32,7 +32,7 @@ function Hero() {
             }}
           />
           <h1
-            className="text-center d-flex flex-column justify-content-center align-items-center position-absolute fw-bold"
+            className="text-center d-flex flex-column justify-content-center align-items-center position-absolute fw-bold hero_heading"
             style={{
               top: "60%",
               left: "50%",
@@ -46,7 +46,7 @@ function Hero() {
                 <span>
                   We Help Children Build a <br /> Strong Language Foundation
                 </span>
-                <span className="mt-lg-3">
+                <span className="mt-lg-4">
                   <span>With </span>
                   <span style={{ backgroundColor: "#eb0505", color: "#fff" }}>
                     Our Creative Touch.

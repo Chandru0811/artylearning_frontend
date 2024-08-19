@@ -57,7 +57,7 @@ console.log("object",datas)
           className="mb-3 tab fw-medium mt-2"
           style={{ fontSize: "20px" }}
         >
-          <Tab eventKey="home" title="English Phonics Teachers">
+          <Tab eventKey="home" title="English Teachers">
             <div className="row mt-5">
               {engTeacherData && engTeacherData.map((data,i)=>(
                 <div className="col-md-6 col-12 mb-3">
