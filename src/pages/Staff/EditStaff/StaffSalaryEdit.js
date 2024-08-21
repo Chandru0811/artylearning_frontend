@@ -17,6 +17,8 @@ const validationSchema = Yup.object().shape({
 const StaffSalaryEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
     const fetchData = async () => {
       try {
         const salarytype = await fetchAllSalaryTypeWithIds();
@@ -35,6 +37,8 @@ const StaffSalaryEdit = forwardRef(
         salary: "",
         effectiveDate: "",
         salaryType: "",
+        updatedBy:userName,
+
       },
 
       // onSubmit: async (data) => {
@@ -177,7 +181,6 @@ const StaffSalaryEdit = forwardRef(
                 <label>Effective Date</label>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="effectiveDate"
                   onChange={formik.handleChange}

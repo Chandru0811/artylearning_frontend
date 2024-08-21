@@ -14,7 +14,7 @@ import fetchAllCentersWithIds from "../../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
-  subjectId: Yup.string().required("*Subject is required"), // Adding validation for subject field
+  subject: Yup.string().required("*Subject is required"), // Adding validation for subject field
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
@@ -39,7 +39,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       studentName: formData.studentName || "",
-      subjectId: formData.subjectId,
+      subject: "",
       gender: formData.gender || "",
       dateOfBirth: formData.dateOfBirth || "",
       medicalCondition: formData.medicalCondition || "",
@@ -125,25 +125,24 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <span className="text-danger">*</span>
             <select
               className="form-select"
-              name="subjectId"
+              name="subject"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.subjectId}
+              value={formik.values.subject}
             >
               <option selected></option>
-              {subjectData &&
-                subjectData.map((subject) => (
-                  <option key={subject.subjectId} value={subject.id}>
-                    {subject.subjects}
-                  </option>
-                ))}
+              <option value="English Assessment">English Assessment</option>
+              <option value="Chinese Assessment">Chinese Assessment</option>
             </select>
-            {formik.touched.subjectId && formik.errors.subjectId && (
+            {formik.touched.subject && formik.errors.subject && (
               <div className="text-danger">
-                <small>{formik.errors.subjectId}</small>
+                <small>{formik.errors.subject}</small>
               </div>
             )}
           </div>
+
+
+
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <div>
@@ -193,7 +192,6 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               </label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
                 name="dateOfBirth"
                 className="form-control"
                 onChange={formik.handleChange}

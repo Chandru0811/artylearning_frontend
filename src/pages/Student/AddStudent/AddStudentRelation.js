@@ -17,6 +17,8 @@ const Addrelation = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
 
     const fetchData = async () => {
       try {
@@ -46,6 +48,8 @@ const Addrelation = forwardRef(
         studentRelationCenter: formData.studentRelationCenter || "",
         studentRelation: formData.studentRelation || "",
         studentRelationStudentName: formData.studentRelationStudentName || "",
+        createdBy: userName,
+
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {

@@ -12,6 +12,8 @@ function ClassAdd() {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
 
   const fetchData = async () => {
     try {
@@ -58,6 +60,8 @@ function ClassAdd() {
       classType: "",
       durationInHrs: "",
       remark: "",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

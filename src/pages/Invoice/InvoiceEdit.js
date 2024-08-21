@@ -40,6 +40,8 @@ export default function InvoiceEdit() {
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {
     lessonOptions.push(
@@ -110,6 +112,8 @@ export default function InvoiceEdit() {
           taxType: item.taxType,
           gstAmount: parseFloat(item.gstAmount), // Ensure numerical values are parsed correctly
           totalAmount: parseFloat(item.totalAmount), // Ensure numerical values are parsed correctly
+          updatedBy:userName,
+
         })),
       };
       try {
@@ -566,7 +570,7 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   type="date"
                 />
                 {formik.touched.invoiceDate && formik.errors.invoiceDate && (
@@ -588,7 +592,7 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   type="date"
                   min={new Date().toISOString().split("T")[0]}
                 />
@@ -613,7 +617,7 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   type="date"
                 />
                 {formik.touched.invoicePeriodFrom &&
@@ -637,7 +641,7 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   type="date"
                 />
                 {formik.touched.invoicePeriodTo &&

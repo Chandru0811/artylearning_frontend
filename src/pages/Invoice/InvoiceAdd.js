@@ -74,6 +74,8 @@ export default function InvoiceAdd() {
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
+  const userName  = localStorage.getItem('userName');
+
   // const [isLoading, setIsLoading] = useState(true);
 
   const formik = useFormik({
@@ -134,6 +136,8 @@ export default function InvoiceAdd() {
             taxType: item.taxType,
             gstAmount: parseFloat(item.gstAmount), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(item.totalAmount), // Ensure numerical values are parsed correctly
+            createdBy: userName,
+
           })),
         };
 
@@ -722,7 +726,7 @@ export default function InvoiceAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   type="date"
                 />
                 {formik.touched.invoiceDate && formik.errors.invoiceDate && (
@@ -743,7 +747,7 @@ export default function InvoiceAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   type="date"
                   min={new Date().toISOString().split("T")[0]} 
 
@@ -769,7 +773,7 @@ export default function InvoiceAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   type="date"
                 />
                 {formik.touched.invoicePeriodFrom &&
@@ -792,7 +796,7 @@ export default function InvoiceAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   type="date"
                 />
                 {formik.touched.invoicePeriodTo &&

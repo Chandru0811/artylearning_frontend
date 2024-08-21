@@ -20,6 +20,8 @@ const validationSchema = Yup.object().shape({
 function AttendancesAdd() {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
   const formik = useFormik({
     initialValues: {
       studentid: "",
@@ -31,6 +33,8 @@ function AttendancesAdd() {
       remark: "",
       curriculamCode: "",
       bodyTemperature: "",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {

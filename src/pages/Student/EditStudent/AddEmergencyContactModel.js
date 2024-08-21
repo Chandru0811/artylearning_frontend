@@ -20,6 +20,8 @@ const AddEmergencyContactModel = forwardRef(
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
     const [loadIndicator, setLoadIndicator] = useState(false);
+    const userName  = localStorage.getItem('userName');
+
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
@@ -63,6 +65,7 @@ const AddEmergencyContactModel = forwardRef(
             );
             formDatas.append("files", data.files);
             formDatas.append("deleteEmergencyAuthorizedContactIds ", 1);
+            formDatas.append("createdBy ", userName);
           });
           const response = await api.put(
             `/updateEmergencyContactWithEmergencyAuthorizedContact/${emergencyId}`,

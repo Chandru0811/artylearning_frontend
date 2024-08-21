@@ -12,6 +12,8 @@ function CMSTestMonialAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const userName  = localStorage.getItem('userName');
+
 
   const handleClose = () => {
     setShow(false);
@@ -52,6 +54,8 @@ function CMSTestMonialAdd({ onSuccess }) {
       formData.append("parentDescription", values.parentDescription)
       formData.append("parentName ", values.parentName)
       formData.append("file", values.parentImage)
+      formData.append("createdBy ", userName);
+
       try {
         const response = await api.post("/createTestimonialSaveWithProfileImages", formData, {
           // headers: {

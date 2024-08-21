@@ -25,6 +25,8 @@ function CourseFeesAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
+  const userName  = localStorage.getItem('userName');
+
 
   const fetchPackageData = async () => {
     try {
@@ -64,7 +66,9 @@ function CourseFeesAdd({ onSuccess }) {
       weekendFee: "",
       taxType: "",
       courseId: id,
-      status: "ACTIVE"
+      status: "ACTIVE",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -125,7 +129,7 @@ function CourseFeesAdd({ onSuccess }) {
                   </label>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
+   
                     className={`form-control  ${
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate

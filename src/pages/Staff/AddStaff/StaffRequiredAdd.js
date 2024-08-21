@@ -5,6 +5,8 @@ import api from "../../../config/URL";
 
 const StaffRequiredAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName  = localStorage.getItem('userName');
+
     const formik = useFormik({
       initialValues: {
         resume: null || "",
@@ -20,6 +22,8 @@ const StaffRequiredAdd = forwardRef(
           formDatas.append("userId", userId);
           formDatas.append("resume", values.resume);
           formDatas.append("educationCertificate", values.educationCertificate);
+          formDatas.append("educationCertificate", values.educationCertificate);
+          formDatas.append("createdBy", userName);
           
           const response = await api.post(
             `/createUserRequireInformation`,

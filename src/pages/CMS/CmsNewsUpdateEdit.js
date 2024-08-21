@@ -16,6 +16,8 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const handleShow = () => setShow(true);
   const currentData = new Date().toISOString().split("T")[0];
+  const userName  = localStorage.getItem('userName');
+
 
  
 
@@ -38,6 +40,8 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
       formData.append("date ", currentData);
       formData.append("comment ", data.comment);
       formData.append("para ", data.para);
+      formData.append("updatedBy ", userName);
+
       setLoadIndicator(true);
       try {
         const response = await api.put(

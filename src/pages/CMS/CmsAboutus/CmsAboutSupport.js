@@ -9,6 +9,8 @@ function CmsAboutSupport({ getData, datas }) {
   const [editingField, setEditingField] = useState(null);
   const [glassImgUrl, setGlassImgUrl] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const userName  = localStorage.getItem('userName');
+
 
   console.log("object", datas);
   // const [content, setContent] = useState({
@@ -66,6 +68,8 @@ function CmsAboutSupport({ getData, datas }) {
         formData.append("imageTwo", values.files);
       }
       formData.append("contentOne", values.paragraphs);
+      formData.append("updatedBy ", userName);
+
 
       try {
         const response = await api.put(`/updateAboutUsSaveImage`, formData);

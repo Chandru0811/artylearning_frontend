@@ -141,7 +141,7 @@ function AddRegister({ id, onSuccess }) {
                       ? "is-invalid"
                       : ""
                   }`}
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   {...formik.getFieldProps("effectiveDate")}
                 />
                 {formik.touched.effectiveDate &&

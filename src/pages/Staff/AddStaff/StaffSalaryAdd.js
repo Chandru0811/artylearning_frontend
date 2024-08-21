@@ -19,6 +19,8 @@ const StaffSalaryAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     
     const [salaryTypeData, setSalaryTypeData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
     const fetchData = async () => {
       try {
         const salarytype = await fetchAllSalaryTypeWithIds();
@@ -37,6 +39,7 @@ const StaffSalaryAdd = forwardRef(
         salary: formData.salary || "",
         effectiveDate: formData.effectiveDate || "",
         salaryType: formData.salaryType || "",
+        createdBy: formData.userName || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -100,7 +103,6 @@ const StaffSalaryAdd = forwardRef(
                 <label>Effective Date</label>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="effectiveDate"
                   onChange={formik.handleChange}

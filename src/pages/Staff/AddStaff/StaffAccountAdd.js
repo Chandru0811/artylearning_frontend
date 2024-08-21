@@ -42,6 +42,7 @@ const StaffAccountAdd = forwardRef(
       label: center.centerNames,
       value: center.id,
     }));
+    const userName  = localStorage.getItem('userName');
 
     const fetchData = async () => {
       try {
@@ -83,6 +84,7 @@ const StaffAccountAdd = forwardRef(
         approvelContentRequired: formData.approvelContentRequired,
         workingDays: formData.workingDays || [],
         centerIds: formData.centerIds || [],
+
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -93,6 +95,8 @@ const StaffAccountAdd = forwardRef(
         const updatedData = {
           ...values,
           approvelContentRequired: Approval,
+                  createdBy: userName,
+
         };
         try {
           const response = await api.post(
@@ -151,7 +155,6 @@ const StaffAccountAdd = forwardRef(
               </label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="startDate"
                 onChange={formik.handleChange}

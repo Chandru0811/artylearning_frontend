@@ -33,6 +33,8 @@ const validationSchema = Yup.object().shape({
 
 const ContractEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
+    const userName  = localStorage.getItem('userName');
+
     const navigate = useNavigate();
     const formik = useFormik({
       initialValues: {
@@ -58,6 +60,8 @@ const ContractEdit = forwardRef(
         internetBanking: "",
         contractDate: "",
         terminationNotice: "",
+        updatedBy:userName,
+
       },
       // onSubmit: async (data) => {
       //   try {
@@ -270,6 +274,7 @@ const ContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.employer}
+                  readOnly
                 />
                 {formik.touched.employer && formik.errors.employer && (
                   <div className="error text-danger ">
@@ -406,7 +411,7 @@ const ContractEdit = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="startDateOfEmployment"
                   onChange={formik.handleChange}
@@ -460,7 +465,7 @@ const ContractEdit = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractStartDate"
                   onChange={(e) => {
@@ -506,7 +511,7 @@ const ContractEdit = forwardRef(
                   )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Porbation</label>
+                <label>Probation</label>
                 <input
                   type="text"
                   className="form-control"
@@ -707,7 +712,7 @@ const ContractEdit = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="salaryStartDate"
                   onChange={formik.handleChange}
@@ -726,7 +731,7 @@ const ContractEdit = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractEndDate"
                   onChange={(e) => {
@@ -773,7 +778,7 @@ const ContractEdit = forwardRef(
                   <span className="text-danger">*</span>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
+                    // onFocus={(e) => e.target.showPicker()}
                     className="form-control"
                     name="contractDate"
                     onChange={formik.handleChange}

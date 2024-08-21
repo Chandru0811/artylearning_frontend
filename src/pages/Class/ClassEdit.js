@@ -13,6 +13,8 @@ function ClassEdit() {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
 const [loadIndicator, setLoadIndicator] = useState(false);
+const userName  = localStorage.getItem('userName');
+
 
   const fetchData = async () => {
     try {
@@ -57,6 +59,7 @@ const [loadIndicator, setLoadIndicator] = useState(false);
       classType: "",
       durationInHrs: "",
       remark: "",
+      updatedBy:userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

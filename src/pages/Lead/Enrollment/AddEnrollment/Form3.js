@@ -194,7 +194,6 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="mothersDateOfBirth"
                   onChange={formik.handleChange}
@@ -364,7 +363,6 @@ const Form3 = forwardRef(
                 </label>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="fathersDateOfBirth"
                   onChange={formik.handleChange}

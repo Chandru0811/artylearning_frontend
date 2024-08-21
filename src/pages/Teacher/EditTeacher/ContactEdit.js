@@ -19,12 +19,16 @@ const validationSchema = Yup.object().shape({
 });
 const ContactEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName  = localStorage.getItem('userName');
+
     const formik = useFormik({
       initialValues: {
         email: "",
         contactNumber: "",
         address: "",
         postalCode: "",
+        updatedBy:userName,
+
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {

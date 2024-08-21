@@ -41,6 +41,8 @@ const ContractAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
     console.log("formDataContractAdd", formData)
     const [centerData, setCenterData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
     const navigate = useNavigate();
     const formik = useFormik({
       initialValues: {
@@ -67,6 +69,8 @@ const ContractAdd = forwardRef(
         internetBanking: formData.internetBanking || "",
         contractDate: formData.contractDate || "",
         terminationNotice: formData.terminationNotice || "",
+        createdBy: userName,
+
       },
       validationSchema: validationSchema,
 
@@ -453,7 +457,7 @@ const ContractAdd = forwardRef(
                 )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Porbation</label>
+                <label>Probation</label>
                 <input
                   type="text"
                   className="form-control"
@@ -655,7 +659,7 @@ const ContractAdd = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="salaryStartDate"
                   onChange={formik.handleChange}
@@ -676,7 +680,7 @@ const ContractAdd = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractEndDate"
                   onChange={(e) => {
@@ -723,7 +727,7 @@ const ContractAdd = forwardRef(
                   <span className="text-danger">*</span>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
+                    // onFocus={(e) => e.target.showPicker()}
                     className="form-control"
                     name="contractDate"
                     onChange={formik.handleChange}

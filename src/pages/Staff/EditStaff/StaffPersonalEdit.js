@@ -19,6 +19,8 @@ const validationSchema = Yup.object().shape({
 const StaffPersonalEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
 
+  const userName  = localStorage.getItem('userName');
+
     const [idTypeData, setIdTypeData] = useState(null);
     const [citizenShipData, setCitizenShipData] = useState(null);
 
@@ -52,6 +54,7 @@ const StaffPersonalEdit = forwardRef(
           formDatas.append("shortIntroduction", data.shortIntroduction);
           formDatas.append("gender", data.gender);
           formDatas.append("role", data.role);
+          formDatas.append("updatedBy", userName);
           const response = await api.put(
             `/updateUser/${formData.staff_id}`,
             formDatas,
@@ -155,7 +158,6 @@ const StaffPersonalEdit = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
                 class="form-control "
                 name="dateOfBirth"
                 onChange={formik.handleChange}

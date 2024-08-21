@@ -10,6 +10,8 @@ import api from "../../config/URL";
 function SubjectEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
 
   const navigate = useState();
 
@@ -33,6 +35,8 @@ function SubjectEdit({ id, onSuccess }) {
       subject: "",
       code: "",
       status: "",
+      updatedBy:userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

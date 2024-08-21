@@ -30,6 +30,7 @@ function SendNotificationAdd() {
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
+  const userName  = localStorage.getItem('userName');
 
   const centerOptions = centerData.map((center) => ({
     label: center.centerNames,
@@ -98,6 +99,8 @@ function SendNotificationAdd() {
       // Append each file to the formData object
       values.attachments.forEach((file) => {
         formData.append(`attachments`, file);
+        formData.append("createdBy", userName);
+
       });
       try {
         const response = await api.post(`/sendSmsPushNotifications`, formData);

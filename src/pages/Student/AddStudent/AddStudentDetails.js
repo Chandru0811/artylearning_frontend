@@ -53,6 +53,8 @@ const AddStudentDetails = forwardRef(
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
     console.log("FormData is ", formData);
 
     const maxDate = new Date();
@@ -152,6 +154,7 @@ const AddStudentDetails = forwardRef(
           formData.append("primaryLanguage", values.primaryLanguage);
           formData.append("groupName", values.groupName);
           formData.append("file", values.file);
+          formData.append("createdBy", userName);
 
           for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
@@ -316,7 +319,7 @@ const AddStudentDetails = forwardRef(
                         className="form-control  form-contorl-sm"
                         name="dateOfBirth"
                         type="date"
-                        onFocus={(e) => e.target.showPicker()}
+                        // onFocus={(e) => e.target.showPicker()}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}

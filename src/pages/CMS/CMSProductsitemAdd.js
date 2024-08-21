@@ -11,6 +11,8 @@ function CMSProductsItemAdd({ onSuccess }) {
   const handleCloseModal = () => setShowModal(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const userName  = localStorage.getItem('userName');
+
 
   const handleSaveChanges = () => {
     setShowModal(false);
@@ -37,6 +39,8 @@ function CMSProductsItemAdd({ onSuccess }) {
       const formData = new FormData();
       formData.append("file", data.files);
       formData.append("imageDetails ", data.imageDetails);
+      formData.append("createdBy ", userName);
+
 
       try {
         const response = await api.post("/createProductImageSave", formData, {

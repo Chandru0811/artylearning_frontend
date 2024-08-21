@@ -110,7 +110,7 @@ const LeadStudentAdd = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+
                   name="dateOfBirth"
                   className="form-control"
                   onChange={formik.handleChange}

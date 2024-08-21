@@ -27,6 +27,8 @@ const validationSchema = Yup.object().shape({
 const EditEmergencyContact = forwardRef(
   ({ formData,setLoadIndicators, handleNext }, ref) => {
     const [rows, setRows] = useState([{}]);
+    const userName  = localStorage.getItem('userName');
+
     const handleDelete = () => {
       formik.setFieldValue(
         "emergencyAuthorizedContactModels",
@@ -96,6 +98,7 @@ const EditEmergencyContact = forwardRef(
               formDatas.append("files", contact.files);
             });
             formDatas.append("deleteEmergencyAuthorizedContactIds", 1);
+            formDatas.append("updatedBy", userName);
             const response = await api.put(
               `/updateEmergencyContactWithEmergencyAuthorizedContact/${data.emergencyContactId}`,
               formDatas,

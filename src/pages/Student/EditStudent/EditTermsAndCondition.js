@@ -24,6 +24,8 @@ const EditTermsAndCondition = forwardRef(
   ({ formData, setFormData, setLoadIndicators }, ref) => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
+    const userName  = localStorage.getItem('userName');
+
 
     const [sign, setSign] = useState();
     const [url, setUrl] = useState();
@@ -46,6 +48,8 @@ const EditTermsAndCondition = forwardRef(
           formData.termsAndConditionSignatureDate || "",
         agree: formData.agree || "",
         studentDetailId: formData.id || "",
+        updatedBy:userName,
+
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -334,7 +338,7 @@ const EditTermsAndCondition = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="termsAndConditionSignatureDate"
                           type="date"
-                          onFocus={(e) => e.target.showPicker()}
+                          // onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.termsAndConditionSignatureDate}

@@ -22,6 +22,8 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   const [teacherData, setTeacherData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
   // const navigate = useNavigate();
 
   const handleClose = () => {
@@ -180,6 +182,8 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
         startDate: values.startDate,
         endDate: values.endDate,
         classRoom: selectedClassRoomName,
+        updatedBy:userName,
+
       };
 
       // console.log(requestBody);
@@ -348,7 +352,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="time"
-                      onFocus={(e) => e.target.showPicker()}
+     
                     className={`form-control ${
                       formik.touched.batch && formik.errors.batch
                         ? "is-invalid"
@@ -447,7 +451,6 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                     {...formik.getFieldProps("startDate")}
                     class={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
@@ -467,7 +470,6 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                   </label>
                   <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                     {...formik.getFieldProps("endDate")}
                     class={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate

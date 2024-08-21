@@ -182,7 +182,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
                 </label>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+
                   className="form-control"
                   id="assessmentDate"
                   name="assessmentDate"
@@ -195,7 +195,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
                 </label>
                 <input
                   type="time"
-                  onFocus={(e) => e.target.showPicker()}
+ 
                   className="form-control"
                   id="time"
                   name="time"

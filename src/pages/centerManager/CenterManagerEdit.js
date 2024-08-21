@@ -13,6 +13,8 @@ function CenterManagerEdit() {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
 
   const fetchData = async () => {
     try {
@@ -44,6 +46,7 @@ function CenterManagerEdit() {
         email: "",
         phone: "",
         desgination: "",
+        updatedBy:userName,
       
     },
     validationSchema: validationSchema,

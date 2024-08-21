@@ -21,6 +21,8 @@ const StaffPersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
     const [citizenShipData, setCitizenShipData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
 
     const formik = useFormik({
       initialValues: {
@@ -50,6 +52,8 @@ const StaffPersonalAdd = forwardRef(
           formData.append("shortIntroduction", values.shortIntroduction);
           formData.append("gender", values.gender);
           formData.append("file", values.file);
+          formData.append("createdBy", userName);
+          
 
           const response = await api.post(
             "/createUserWithProfileImage",
@@ -135,7 +139,6 @@ const StaffPersonalAdd = forwardRef(
               <span className="text-danger">*</span>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
                 class="form-control"
                 name="dateOfBirth"
                 onChange={formik.handleChange}

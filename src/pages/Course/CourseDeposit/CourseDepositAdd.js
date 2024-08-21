@@ -20,6 +20,8 @@ function CourseFeesAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
+  const userName  = localStorage.getItem('userName');
+
 
   const handleClose = () => {
     setShow(false);
@@ -44,7 +46,9 @@ function CourseFeesAdd({ onSuccess }) {
       effectiveDate: "",
       depositFees: "",
       taxType: "",
-      status:"ACTIVE"
+      status:"ACTIVE",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -114,7 +118,7 @@ function CourseFeesAdd({ onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onFocus={(e) => e.target.showPicker()}
+   
                     {...formik.getFieldProps("effectiveDate")}
                   />
                   {formik.touched.effectiveDate &&

@@ -46,6 +46,8 @@ const EditStudentDetails = forwardRef(
     const [centerData, setCenterData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
 
     const fetchData = async () => {
       try {
@@ -98,6 +100,8 @@ const EditStudentDetails = forwardRef(
         remark: formData.remark || "",
         allowMagazine: false || "",
         allowSocialMedia: false || "",
+        updatedBy:userName,
+
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -253,7 +257,7 @@ const EditStudentDetails = forwardRef(
                         className="form-control  form-contorl-sm"
                         name="dateOfBirth"
                         type="date"
-                        onFocus={(e) => e.target.showPicker()}
+                        // onFocus={(e) => e.target.showPicker()}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}

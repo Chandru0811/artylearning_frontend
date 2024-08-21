@@ -219,7 +219,7 @@ const StudentEndClass = () => {
               <div className="input-group mb-3">
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+
                   className={`form-control  ${
                     formik.touched.lastLessonDate &&
                     formik.errors.lastLessonDate

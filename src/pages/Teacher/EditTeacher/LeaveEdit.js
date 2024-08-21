@@ -22,6 +22,8 @@ const validationSchema = Yup.object().shape({
 });
 const LeaveEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName  = localStorage.getItem('userName');
+
     const formik = useFormik({
       initialValues: {
         year: "",
@@ -29,6 +31,8 @@ const LeaveEdit = forwardRef(
         medicalLeave: "",
         otherLeave: "",
         carryForwardLeave: "",
+        updatedBy:userName,
+
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {

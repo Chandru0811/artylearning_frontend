@@ -242,7 +242,7 @@ function StudentTransferOut() {
                 name="preferTiming"
                 {...formik.getFieldProps("preferTiming")}
                 type="time"
-                      onFocus={(e) => e.target.showPicker()}
+     
               />
             </div>
             {/* <div class="col-md-6 col-12 mb-2 ">

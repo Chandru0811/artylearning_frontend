@@ -37,6 +37,8 @@ const AddParentDetailModel = forwardRef(
     const [loadIndicator, setLoadIndicator] = useState(false);
     const [show, setShow] = useState(false);
     const [data, setData] = useState({});
+    const userName  = localStorage.getItem('userName');
+
 
     const handleClose = () => {
       setShow(false);
@@ -91,6 +93,7 @@ const AddParentDetailModel = forwardRef(
             formDatas.append(`addresses`, parent.addresses);
             // formDatas.append(`primaryContacts`,true);
             formDatas.append(`primaryContacts`, primaryContact);
+            formDatas.append(`createdBy,`, userName);
           });
 
           const response = await api.post(
@@ -223,7 +226,7 @@ const AddParentDetailModel = forwardRef(
                               <input
                                 className="form-control  form-contorl-sm"
                                 type="date"
-                                onFocus={(e) => e.target.showPicker()}
+                                // onFocus={(e) => e.target.showPicker()}
                                 name={`parentInformation[${index}].parentDateOfBirths`}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}

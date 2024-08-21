@@ -139,7 +139,6 @@ function TaxEdit({ id, onSuccess }) {
                                     </label>
                                     <input
                                         type="date"
-                                        onFocus={(e) => e.target.showPicker()}
                                         placeholder=""
                                         className={`form-control  ${formik.touched.effectiveDate && formik.errors.effectiveDate
                                             ? "is-invalid"

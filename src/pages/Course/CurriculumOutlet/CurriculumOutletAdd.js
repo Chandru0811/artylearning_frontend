@@ -14,6 +14,7 @@ function CurriculumOutletAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
+  const userName  = localStorage.getItem('userName');
 
   const handleClose = () => {
     setShow(false);
@@ -43,6 +44,8 @@ function CurriculumOutletAdd({ onSuccess }) {
     effectiveDate: Yup.string().required("*Effective Date is required"),
     name: Yup.string().required("*Name Fees Code is required"),
     status: Yup.string().required("*Status Fee is required"),
+    createdBy: userName,
+
   });
 
   const formik = useFormik({
@@ -126,7 +129,7 @@ function CurriculumOutletAdd({ onSuccess }) {
                   </label>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
+   
                     className={`form-control  ${
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate

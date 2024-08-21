@@ -141,7 +141,7 @@ function InvoicePayment() {
                 <input
                   name="paymentdate"
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+
                   className={`form-select  ${
                     formik.touched.paymentdate && formik.errors.paymentdate
                       ? "is-invalid"

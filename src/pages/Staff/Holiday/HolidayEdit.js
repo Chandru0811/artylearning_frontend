@@ -27,6 +27,8 @@ function HolidayEdit() {
   });
   const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
   const navigate = useNavigate();
   const { id } = useParams();
   const formik = useFormik({
@@ -48,6 +50,8 @@ function HolidayEdit() {
           startDate: values.startDate,
           endDate: values.endDate,
           holidayDescription: values.holidayDescription,
+          updatedBy:userName,
+
         };
         const response = await api.put(`/updateUserHoliday/${id}`, payload, {
           headers: {
@@ -189,7 +193,6 @@ function HolidayEdit() {
                   </lable>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
                         ? "is-invalid"
@@ -211,7 +214,6 @@ function HolidayEdit() {
                   </lable>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate
                         ? "is-invalid"

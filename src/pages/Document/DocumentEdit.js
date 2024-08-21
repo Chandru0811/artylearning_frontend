@@ -14,6 +14,8 @@ function DocumentEdit({ id, onSuccess }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const userName  = localStorage.getItem('userName');
+
 
   const validationSchema = Yup.object({
     folderName: Yup.string().required("*Folder Name is required"),
@@ -22,6 +24,8 @@ function DocumentEdit({ id, onSuccess }) {
   const formik = useFormik({
     initialValues: {
       folderName: "",
+      updatedBy:userName,
+
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {

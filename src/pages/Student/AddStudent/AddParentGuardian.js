@@ -36,6 +36,8 @@ const validationSchema = Yup.object().shape({
 
 const AddParentGuardian = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName  = localStorage.getItem('userName');
+
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
@@ -78,6 +80,8 @@ const AddParentGuardian = forwardRef(
             formDatas.append(`mobileNumbers`, parent.mobileNumbers);
             formDatas.append(`postalCodes`, parent.postalCodes);
             formDatas.append(`addresses`, parent.addresses);
+            formDatas.append("createdBy", userName);
+
             // formDatas.append(`primaryContact`, parent.primaryContact);
             formDatas.append(
               `primaryContacts`,
@@ -245,7 +249,7 @@ const AddParentGuardian = forwardRef(
                           <input
                             className="form-control  form-contorl-sm"
                             type="date"
-                            onFocus={(e) => e.target.showPicker()}
+                            // onFocus={(e) => e.target.showPicker()}
                             name={`parentInformation[${index}].parentDateOfBirths`}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}

@@ -27,6 +27,8 @@ function HolidayAdd() {
   });
   const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -47,6 +49,8 @@ function HolidayAdd() {
           startDate: values.startDate,
           endDate: values.endDate,
           holidayDescription: values.holidayDescription,
+          createdBy: userName,
+
         };
         const response = await api.post("/createUserHoliday", payload, {
           headers: {
@@ -173,7 +177,6 @@ function HolidayAdd() {
                   </lable>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
                         ? "is-invalid"
@@ -195,7 +198,6 @@ function HolidayAdd() {
                   </lable>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
                     className={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate
                         ? "is-invalid"

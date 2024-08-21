@@ -33,6 +33,8 @@ const AddcourseDetail = forwardRef(
 
     const [selectedRow, setSelectedRow] = useState(null); // Add state for selected row
     const [selectedRowData, setSelectedRowData] = useState({}); // State for selected row data
+    const userName  = localStorage.getItem('userName');
+
 
     const formik = useFormik({
       initialValues: {
@@ -64,6 +66,8 @@ const AddcourseDetail = forwardRef(
           studentCount: selectedRowData.studentCount,
           teacher: selectedRowData.teacher,
           userId: selectedRowData.userId,
+          createdBy: userName,
+
         };
         console.log("Payload Data:", payload);
         try {

@@ -4,11 +4,15 @@ import api from '../../../config/URL';
 import { toast } from 'react-toastify';
 
 const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref)=>{
+  const userName  = localStorage.getItem('userName');
+
   console.log("required",formData)
   const formik = useFormik({
     initialValues: {
       resume: null || "",
       educationCertificate: null || "",
+      updatedBy:userName,
+
     },
     onSubmit: async (values) => {
       setLoadIndicators(true);

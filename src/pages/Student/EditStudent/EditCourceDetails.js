@@ -16,6 +16,8 @@ const EditCourseDetail = forwardRef(
   ({ formData, setLoadIndicators, handleNext }, ref) => {
     // console.log("FormData is ", formData.student_id)
     const [courseData, setCourseData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
 
     const formik = useFormik({
       initialValues: {
@@ -26,6 +28,8 @@ const EditCourseDetail = forwardRef(
         endDate: formData.endDate || "",
         endTime: formData.endTime || "",
         studentId: formData.id || "",
+        updatedBy:userName,
+
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -183,7 +187,7 @@ const EditCourseDetail = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="startDate"
                           type="date"
-                          onFocus={(e) => e.target.showPicker()}
+                          // onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.startDate}
@@ -197,7 +201,7 @@ const EditCourseDetail = forwardRef(
                         <input
                           className="form-control"
                           type="time"
-                      onFocus={(e) => e.target.showPicker()}
+     
                           name="startTime"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
@@ -238,7 +242,7 @@ const EditCourseDetail = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="endDate"
                           type="date"
-                          onFocus={(e) => e.target.showPicker()}
+                          // onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.endDate}
@@ -252,7 +256,7 @@ const EditCourseDetail = forwardRef(
                         <input
                           className="form-control "
                           type="time"
-                      onFocus={(e) => e.target.showPicker()}
+     
                           name="endTime"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}

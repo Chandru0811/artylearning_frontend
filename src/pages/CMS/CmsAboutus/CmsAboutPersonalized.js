@@ -15,6 +15,8 @@ function CmsAboutPersonalized({ getData, datas }) {
   const [animation3, setAnimation3] = useState(null);
   const [animation4, setAnimation4] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const userName  = localStorage.getItem('userName');
+
 
   // const [paragraph, setParagraph] =
   //   useState(`We take a personalized approach to education, placing children in
@@ -69,6 +71,8 @@ function CmsAboutPersonalized({ getData, datas }) {
         formData.append("imageFive ", values.animation1);
       }
       formData.append("contentFive ", values.paragraph);
+      formData.append("updatedBy ", userName);
+
       // formData.append("contentFour ", values.amanda);
       // formData.append("imageEight ", values.name1);
 

@@ -34,6 +34,8 @@ const AccountAdd = forwardRef(
     const colorInputRef = useRef(null);
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
+    const userName  = localStorage.getItem('userName');
+
     const centerOptions = centerData.map((center) => ({
       label: center.centerNames,
       value: center.id,
@@ -85,6 +87,9 @@ const AccountAdd = forwardRef(
         const updatedData = {
           ...values,
           approvelContentRequired: Approval,
+          createdBy: userName,
+
+
         };
         values.signature = null;
         try {
@@ -145,7 +150,7 @@ const AccountAdd = forwardRef(
               </label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
+                // onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="startDate"
                 onChange={formik.handleChange}

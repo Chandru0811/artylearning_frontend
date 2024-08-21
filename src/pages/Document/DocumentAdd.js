@@ -19,6 +19,7 @@ function DocumentAdd() {
   const [studentData, setStudentData] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
 
   const fetchData = async () => {
     try {
@@ -95,6 +96,8 @@ function DocumentAdd() {
       batchId: "",
       groupSelect: "",
       studentSelect: "",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -492,7 +495,7 @@ function DocumentAdd() {
                 <input
                   name="date"
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+
                   className={`form-control  ${
                     formik.touched.date && formik.errors.date
                       ? "is-invalid"

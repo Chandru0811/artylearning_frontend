@@ -80,7 +80,7 @@ function ParentGuardian() {
                     <input
                       className="form-control  "
                       type="date"
-                      onFocus={(e) => e.target.showPicker()}
+     
                     />
                   </div>
                   <div className="text-start mt-5">

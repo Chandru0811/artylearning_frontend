@@ -19,7 +19,8 @@ const StaffRequiredEdit = forwardRef(
     //     setLoadIndicators(false);
     //   },
     // });
-    
+    const userName  = localStorage.getItem('userName');
+
     console.log("object",formData)
     const formik = useFormik({
       initialValues: {
@@ -34,6 +35,7 @@ const StaffRequiredEdit = forwardRef(
           // Add each data field manually to the FormData object
           formDatas.append("resume", values.resume);
           formDatas.append("educationCertificate", values.educationCertificate);
+          formDatas.append("updatedBy", userName);
 
           const response = await api.put(
             `/updateUserRequireInformation/${values.userEnquireId}`,

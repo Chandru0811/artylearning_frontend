@@ -39,6 +39,7 @@ const StaffAccountEdit = forwardRef(
         toast.error(error);
       }
     };
+    const userName  = localStorage.getItem('userName');
 
     const formik = useFormik({
       initialValues: {
@@ -114,6 +115,8 @@ const StaffAccountEdit = forwardRef(
             const updatedData = {
               ...values,
               approvelContentRequired: Approval,
+              updatedBy: userName,
+
             };
             values.userId = formData.staff_id;
             const response = await api.post(
@@ -225,7 +228,6 @@ const StaffAccountEdit = forwardRef(
               </label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="startDate"
                 onChange={formik.handleChange}
@@ -342,7 +344,6 @@ const StaffAccountEdit = forwardRef(
               <label>End Date</label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="endDate"
                 onChange={formik.handleChange}

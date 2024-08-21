@@ -47,6 +47,8 @@ const StaffContractAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     console.log("ContractformData", formData);
     const [centerData, setCenterData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
     const navigate = useNavigate();
     const formik = useFormik({
       initialValues: {
@@ -73,6 +75,8 @@ const StaffContractAdd = forwardRef(
         internetBanking: formData.internetBanking || "",
         contractDate: formData.contractDate || "",
         terminationNotice: formData.terminationNotice || "",
+        createdBy: userName,
+
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -335,7 +339,6 @@ const StaffContractAdd = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="startDateOfEmployment"
                   onChange={formik.handleChange}
@@ -634,7 +637,6 @@ const StaffContractAdd = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="salaryStartDate"
                   onChange={formik.handleChange}
@@ -655,7 +657,6 @@ const StaffContractAdd = forwardRef(
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractEndDate"
                   onChange={(e) => {
@@ -702,7 +703,6 @@ const StaffContractAdd = forwardRef(
                   <span className="text-danger">*</span>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
                     className="form-control"
                     name="contractDate"
                     onChange={formik.handleChange}

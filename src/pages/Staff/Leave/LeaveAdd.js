@@ -36,6 +36,8 @@ function LeaveAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
   const [leaveTypeData, setLeaveTypeData] = useState([]);
+  const userName  = localStorage.getItem('userName');
+
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -84,6 +86,7 @@ function LeaveAdd() {
         formDatas.append("leaveReason", data.leaveReason);
         formDatas.append("leaveStatus", "PENDING");
         formDatas.append("file", data.file);
+        formDatas.append("createdBy", userName);
 
         const response = await api.post(
           `/createUserLeaveRequestWithAttachment`,
@@ -239,7 +242,6 @@ function LeaveAdd() {
               </label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
                 className={`form-control  ${
                   formik.touched.fromDate && formik.errors.fromDate
                     ? "is-invalid"
@@ -266,7 +268,6 @@ function LeaveAdd() {
               </label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
                 className={`form-control  ${
                   formik.touched.toDate && formik.errors.toDate
                     ? "is-invalid"

@@ -13,6 +13,8 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
   const handleCloseModal = () => setShowModal(false);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [selectedFile, setSelectedFile] = useState(null);
+  const userName  = localStorage.getItem('userName');
+
 
   const formik = useFormik({
     initialValues: {
@@ -38,6 +40,8 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
       formData.append("teacherRoleName", data.teacherRoleName);
       formData.append("experience", data.experience);
       formData.append("role", data.role);
+      formData.append("updatedBy ", userName);
+
       try {
         const response = await api.put(`/updateTeacherSave/${id}`, formData);
         if (response.status === 200) {

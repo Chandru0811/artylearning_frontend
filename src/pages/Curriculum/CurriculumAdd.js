@@ -10,6 +10,8 @@ import api from "../../config/URL";
 function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
 
   const handleClose = () => {
     setShow(false);
@@ -26,6 +28,8 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
     description: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
+    createdBy: userName,
+
   });
 
   const formik = useFormik({

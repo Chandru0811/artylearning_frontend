@@ -12,6 +12,8 @@ import api from "../../../config/URL";
 function CMSContactEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
   
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -41,6 +43,8 @@ function CMSContactEdit({ id, onSuccess }) {
       address: "",
       map: "",
       mobileNo: "",
+      updatedBy:userName,
+
     },
     // validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {

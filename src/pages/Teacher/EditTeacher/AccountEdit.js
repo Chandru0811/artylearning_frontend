@@ -35,6 +35,8 @@ const AccountEdit = forwardRef(
       label: center.centerNames,
       value: center.id,
     }));
+    const userName  = localStorage.getItem('userName');
+
 
     const fetchData = async () => {
       try {
@@ -94,6 +96,8 @@ const AccountEdit = forwardRef(
             const updatedData = {
               ...values,
               approvelContentRequired: Approval,
+              updatedBy:userName,
+
             };
             values.userId = formData.staff_id;
             const response = await api.post(
@@ -218,7 +222,7 @@ const AccountEdit = forwardRef(
               </label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
+                // onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="startDate"
                 onChange={formik.handleChange}
@@ -355,7 +359,7 @@ const AccountEdit = forwardRef(
               <label>End Date</label>
               <input
                 type="date"
-                onFocus={(e) => e.target.showPicker()}
+                // onFocus={(e) => e.target.showPicker()}
                 className="form-control"
                 name="endDate"
                 onChange={formik.handleChange}

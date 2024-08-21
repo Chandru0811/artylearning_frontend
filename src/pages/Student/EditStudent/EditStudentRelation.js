@@ -17,6 +17,8 @@ const EditStudentRelation = forwardRef(
   ({ formData, setFormData, setLoadIndicators, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
 
     console.log("Formdata ID:", formData.id);
     const fetchData = async () => {
@@ -50,6 +52,8 @@ const EditStudentRelation = forwardRef(
         studentRelation: formData.studentRelation || "",
         studentRelationStudentName: formData.studentRelationStudentName || "",
         studentId: formData.id || "",
+        updatedBy:userName,
+
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {

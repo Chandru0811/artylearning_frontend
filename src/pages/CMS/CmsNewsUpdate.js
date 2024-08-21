@@ -16,6 +16,10 @@ const CmsNewsUpdate = () => {
   const [loading, setLoading] = useState(true);
   const currentData = new Date().toISOString().split("T")[0];
   const [selectedFile, setSelectedFile] = useState(null);
+  const role = localStorage.getItem('userName')?.replace(/_/g, ' ');;
+  
+
+    console.log("role",role);
 
 
   const handleCloseAddModal = () => {
@@ -38,7 +42,7 @@ const CmsNewsUpdate = () => {
     initialValues: {
       file: "",
       heading: "",
-      role: "",
+      role: role || "",
       date: "",
       comment: "",
       para: "",
@@ -49,7 +53,9 @@ const CmsNewsUpdate = () => {
       const formData = new FormData()
       formData.append("file", data.file)
       formData.append("heading ", data.heading)
-      formData.append("role ", "Admin")
+      if (role) {
+        formData.append("role", role);
+      }    
       formData.append("date ", currentData)
       formData.append("comment ", data.comment)
       formData.append("para ", data.para)
@@ -156,6 +162,7 @@ const CmsNewsUpdate = () => {
                     </h6>
                     <p>
                       {item.role}/{item.date}/{item.comment}
+
                     </p>
                   </div>
                   <div className="mt-auto">

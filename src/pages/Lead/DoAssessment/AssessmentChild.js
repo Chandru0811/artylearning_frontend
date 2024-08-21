@@ -183,7 +183,7 @@ const AssessmentChild = forwardRef(
                 </label>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+
                   name="assessmentDate"
                   className="form-control"
                   onChange={formik.handleChange}
@@ -218,7 +218,7 @@ const AssessmentChild = forwardRef(
                   className="form-control  "
                   aria-label="Default form-control example"
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+
                   name="year"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -292,7 +292,7 @@ const AssessmentChild = forwardRef(
                 <div className="col-12 d-flex ">
                   <input
                     type="time"
-                    onFocus={(e) => e.target.showPicker()}
+   
                     name="timeSlotOffered"
                     className="form-control"
                     onChange={formik.handleChange}

@@ -14,10 +14,14 @@ const validationSchema = Yup.object().shape({
     .required("*Confirm Password is required"),
 });
 const LoginAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  const userName  = localStorage.getItem('userName');
+
   const formik = useFormik({
     initialValues: {
       password: formData.password,
       confirmPassword: formData.confirmPassword,
+      createdBy: userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

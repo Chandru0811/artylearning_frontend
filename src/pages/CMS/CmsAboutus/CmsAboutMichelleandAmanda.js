@@ -11,6 +11,8 @@
     const [michelleimg, setMischelleimg] = useState(null);
     const [ammandaimg, setAmandaimg] = useState(null);
     const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+    const userName  = localStorage.getItem('userName');
+
     // const [content, setContent] = useState({
     //   name1: "Michelle",
     //   name2: "Amanda",
@@ -82,6 +84,7 @@
         formData.append("contentFour ", values.amanda);
         formData.append("michelleName ", values.name1);
         formData.append("amandaName ", values.name2);
+        formData.append("updatedBy ", userName);
 
         try {
           const response = await api.put(`/updateAboutUsSaveImage`, formData);

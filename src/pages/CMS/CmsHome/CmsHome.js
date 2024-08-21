@@ -20,6 +20,8 @@ function CmsHome() {
   });
   const [editingField, setEditingField] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const userName  = localStorage.getItem('userName');
+
 
 
   const toggleEdit = (field) => {
@@ -66,6 +68,8 @@ function CmsHome() {
       formData.append("childImageFile", values.childImageFile);
 
       formData.append("childVideo", values.childVideo);
+      formData.append("updatedBy ", userName);
+
 
       for (let pair of formData.entries()) {
         if (pair[1] instanceof File) {

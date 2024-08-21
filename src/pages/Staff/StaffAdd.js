@@ -21,6 +21,7 @@ function StaffAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const childRef = React.useRef();
   const [formData, setFormData] = useState({});
+
   console.log("perant", formData);
 
   const isStepSkipped = (step) => {

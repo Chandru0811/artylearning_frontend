@@ -23,6 +23,7 @@ const validationSchema = Yup.object().shape({
 const AddEmergencyContact = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const [rows, setRows] = useState([{}]);
+    const userName  = localStorage.getItem('userName');
 
     const formik = useFormik({
       initialValues: {
@@ -59,6 +60,7 @@ const AddEmergencyContact = forwardRef(
           formDatas.append("postalCode",contact.postalCode);
           formDatas.append("emergencyContactAddress",contact.emergencyContactAddress);
           formDatas.append("files", contact.files);
+          formDatas.append("createdBy", userName);
         });
         console.log(formDatas);
         try {

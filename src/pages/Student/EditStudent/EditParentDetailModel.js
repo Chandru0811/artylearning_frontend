@@ -31,6 +31,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -67,6 +68,8 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         formDatas.append("address", data.address);
         // formDatas.append('parentId', id);
         formDatas.append("password", "12345678");
+        formDatas.append("updatedBy", userName);
+
 
         const response = await api.put(
           `/updateStudentParentsDetailsWithProfileImages/${id}`,
@@ -184,7 +187,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                   </lable>
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
+                    // onFocus={(e) => e.target.showPicker()}
                     name="parentDateOfBirth"
                     className={`form-control ${
                       formik.touched.parentDateOfBirth &&

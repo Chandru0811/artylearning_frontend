@@ -14,6 +14,8 @@ function SubjectAdd({ onSuccess }) {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [levelData, setLevelData] = useState(null);
+  const userName  = localStorage.getItem('userName');
+
 
 
   const handleClose = () => {
@@ -49,6 +51,8 @@ function SubjectAdd({ onSuccess }) {
       subject: "",
       code: "",
       status: "",
+      createdBy: userName,
+
       // levelId: "",
     },
     validationSchema: validationSchema,

@@ -18,6 +18,8 @@ const validationSchema = Yup.object().shape({
 const AddTermsAndCondition = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
+    const userName  = localStorage.getItem('userName');
+
 
     const [sign, setSign] = useState();
     const [url, setUrl] = useState();
@@ -57,6 +59,7 @@ const AddTermsAndCondition = forwardRef(
         );
         formDatas.append("agree", data.agree);
         formDatas.append("studentDetailId", formData.student_id);
+        formDatas.append("createdBy", userName);
 
         try {
           const response = await api.post(
@@ -193,7 +196,7 @@ const AddTermsAndCondition = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="termsAndConditionSignatureDate"
                           type="date"
-                          onFocus={(e) => e.target.showPicker()}
+                          // onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.termsAndConditionSignatureDate}

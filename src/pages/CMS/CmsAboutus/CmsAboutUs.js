@@ -16,6 +16,8 @@ function CmsAboutUs() {
   const [datas, setDatas] = useState([]);
   const [adminImgUrl, setAdminImgUrl] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const userName  = localStorage.getItem('userName');
+
   const toggleEdit = (field) => {
     setEditingField(field);
   };
@@ -39,6 +41,8 @@ function CmsAboutUs() {
       console.log(data);
       const formData = new FormData();
       formData.append("imageOne", data.files);
+      formData.append("updatedBy ", userName);
+
 
       try {
         const response = await api.put(

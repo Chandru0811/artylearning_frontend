@@ -447,7 +447,7 @@ const LeadAccountAdd = forwardRef(
                 <div className="input-group">
                   <input
                     type="date"
-                    onFocus={(e) => e.target.showPicker()}
+   
                     name="enquiryDate"
                     className="form-control"
                     onChange={formik.handleChange}

@@ -21,6 +21,8 @@ const CmsTeacherAdd = ({ getData }) => {
   const handleShowModal = () => setShowModal(true);
   // const handleCloseModal = () => setShowModal(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const userName  = localStorage.getItem('userName');
+
 
   const handleSaveChanges = () => {
     setShowModal(false);
@@ -51,6 +53,8 @@ const CmsTeacherAdd = ({ getData }) => {
       formData.append("teacherRoleName ", data.teacherRoleName);
       formData.append("experience ", data.experience);
       formData.append("role ", data.role);
+      formData.append("createdBy ", userName);
+
 
       try {
         const response = await api.post(

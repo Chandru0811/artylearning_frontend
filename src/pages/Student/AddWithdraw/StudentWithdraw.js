@@ -134,7 +134,7 @@ const StudentWithdraw = forwardRef(
               </label>
               <input
                 type="time"
-                      onFocus={(e) => e.target.showPicker()}
+     
                 name="dayTime"
                 className="form-control"
                 onChange={formik.handleChange}

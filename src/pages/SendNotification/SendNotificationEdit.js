@@ -29,6 +29,8 @@ function SendNotificationEdit() {
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
+  const userName  = localStorage.getItem('userName');
+
 
   const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
   const courseOptions = courseData.map(course => ({ label: course.courseName, value: course.courseId }));
@@ -80,6 +82,8 @@ function SendNotificationEdit() {
       formData.append("days", values.days);
       formData.append("messageDescription", values.messageDescription);
       formData.append("attachments", values.attachments);
+      formData.append("updatedBy", userName);
+
       try {
         const response = await api.put(`/updateSmsPushNotifications/${id}`, formData);
         if (response.status === 200) {

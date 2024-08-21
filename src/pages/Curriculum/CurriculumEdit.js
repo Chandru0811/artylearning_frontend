@@ -14,6 +14,8 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
+  const userName  = localStorage.getItem('userName');
+
 
   const validationSchema = Yup.object({
     curriculumCode: Yup.string().required("*Curriculum Code is required"),
@@ -33,6 +35,8 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
       curriculumNo: "",
       description: "",
       status: "",
+      updatedBy:userName,
+
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {

@@ -44,6 +44,7 @@ function CourseAdd({ onSuccess }) {
     label: center.centerNames,
     value: center.id,
   }));
+  const userName  = localStorage.getItem('userName');
 
   const formik = useFormik({
     initialValues: {
@@ -62,6 +63,8 @@ function CourseAdd({ onSuccess }) {
       status: "",
       classReplacementAllowed: "",
       description: "",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

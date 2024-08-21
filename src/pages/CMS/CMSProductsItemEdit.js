@@ -13,6 +13,8 @@ function CMSProductsItemEdit({ id, getData }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const userName  = localStorage.getItem('userName');
+
 
   const [data, setDatas] = useState();
 
@@ -39,6 +41,8 @@ function CMSProductsItemEdit({ id, getData }) {
       const formData = new FormData();
       formData.append("files", data.files);
       formData.append("imageDetails ", data.imageDetails);
+      formData.append("updatedBy ", userName);
+
 
       try {
         const response = await api.put(

@@ -15,10 +15,14 @@ const validationSchema = Yup.object().shape({
 });
 
 const LoginEdit = forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  const userName  = localStorage.getItem('userName');
+
   const formik = useFormik({
     initialValues: {
       password: "",
       confirmPassword: "",
+      updatedBy:userName,
+
     },
     validationSchema: validationSchema,
     // onSubmit: async (data) => {

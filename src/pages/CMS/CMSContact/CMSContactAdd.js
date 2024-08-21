@@ -11,6 +11,8 @@ import api from "../../../config/URL";
 function CMSContactAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
+
 
   const handleClose = () => {
     setShow(false);
@@ -18,6 +20,7 @@ function CMSContactAdd({ onSuccess }) {
   };
 
   const handleShow = () => setShow(true);
+
 
   const validationSchema = Yup.object({
     centerName: Yup.string().required("*Centre Name is required"),
@@ -44,6 +47,8 @@ function CMSContactAdd({ onSuccess }) {
       address: "",
       map: "",
       mobileNo: "",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {

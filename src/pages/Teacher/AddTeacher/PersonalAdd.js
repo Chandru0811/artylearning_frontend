@@ -28,6 +28,8 @@ const PersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
     const [citizenShipData, setCitizenShipData] = useState(null);
+    const userName  = localStorage.getItem('userName');
+
 
     const formik = useFormik({
       initialValues: {
@@ -40,6 +42,8 @@ const PersonalAdd = forwardRef(
         file: null || "",
         shortIntroduction: formData.shortIntroduction,
         gender: formData.gender,
+        createdBy: userName,
+
       },
       validationSchema: validationSchema,
       // onSubmit: async (values) => {
@@ -166,7 +170,7 @@ const PersonalAdd = forwardRef(
                 </label>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   name="dateOfBirth"
                   className="form-control"
                   onChange={formik.handleChange}

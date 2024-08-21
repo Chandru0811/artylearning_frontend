@@ -11,6 +11,8 @@ function CMSTestMonialEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const userName  = localStorage.getItem('userName');
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -36,6 +38,8 @@ function CMSTestMonialEdit({ id, onSuccess }) {
       formData.append("file", values.parentImage);
       formData.append("parentDescription", values.parentDescription);
       formData.append("parentName", values.parentName);
+      formData.append("updatedBy ", userName);
+
       try {
         const response = await api.put(
           `/updateTestimonialSaveWithProfileImages/${id}`,
