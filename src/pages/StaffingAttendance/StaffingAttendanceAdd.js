@@ -52,6 +52,7 @@ function StaffingAttendanceAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const navigate = useNavigate();
+  const userName = localStorage.getItem("userName");
   // const timestamp = 1723141800000;
   // const date = new Date(timestamp).toISOString().substring(0, 10);
 
@@ -91,6 +92,7 @@ function StaffingAttendanceAdd() {
 
       let payload = {
         centerId: values.centerId,
+        createdBy: userName,
         centerName: selectedCenterName,
         userId: values.userId,
         employeeName: selectedEmployeeName,
@@ -304,7 +306,8 @@ function StaffingAttendanceAdd() {
                       : ""
                   }`}
                   {...formik.getFieldProps("date")}
-                  onFocus={(e) => e.target.showPicker()}
+                  value={formik.values.date}
+                  readOnly
                 />
                 {formik.touched.date && formik.errors.date && (
                   <div className="invalid-feedback">{formik.errors.date}</div>
@@ -342,7 +345,7 @@ function StaffingAttendanceAdd() {
                     <span className="text-danger">*</span>
                     <input
                       type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                      // onFocus={(e) => e.target.showPicker()}
                       className={`form-control ${
                         formik.touched.checkIn && formik.errors.checkIn
                           ? "is-invalid"
@@ -362,7 +365,7 @@ function StaffingAttendanceAdd() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                      // onFocus={(e) => e.target.showPicker()}
                       className={`form-control ${
                         formik.touched.checkOut && formik.errors.checkOut
                           ? "is-invalid"
@@ -382,7 +385,7 @@ function StaffingAttendanceAdd() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                      // onFocus={(e) => e.target.showPicker()}
                       className={`form-control ${
                         formik.touched.otStartTime && formik.errors.otStartTime
                           ? "is-invalid"
@@ -403,7 +406,7 @@ function StaffingAttendanceAdd() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                      // onFocus={(e) => e.target.showPicker()}
                       className={`form-control  ${
                         formik.touched.otEndTime && formik.errors.otEndTime
                           ? "is-invalid"
