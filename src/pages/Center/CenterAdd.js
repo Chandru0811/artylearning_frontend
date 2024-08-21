@@ -49,6 +49,7 @@ function CenterAdd() {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [managerData, setmanagerData] = useState(null);
+  const userName = localStorage.getItem("userName");
 
   useEffect(() => {
     fetchTeacher();
@@ -92,7 +93,7 @@ function CenterAdd() {
       // });
 
       // Convert gst value to boolean
-      values.gst = values.gst === "true";
+      // values.gst = values.gst === "true";
       const formData = new FormData();
       formData.append("centerName", values.centerName);
       formData.append("code", values.code);
@@ -111,6 +112,7 @@ function CenterAdd() {
       formData.append("bankAccountName", values.bankAccountName);
       formData.append("invoiceNotes  ", values.invoiceNotes);
       formData.append("file", values.file);
+      formData.append("createdBy", userName);
 
       // for (let [key, value] of formData.entries()) {
       //   console.log(`${key}: ${value}`);
@@ -317,7 +319,7 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("openingDate")}
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className={`form-control   ${
                     formik.touched.openingDate && formik.errors.openingDate
                       ? "is-invalid"
@@ -347,8 +349,8 @@ function CenterAdd() {
                     name="gst"
                     id="inlineRadio1"
                     value="true"
-                    onChange={formik.handleChange}
-                    checked={formik.values.gst === "true"}
+                    onChange={() => formik.setFieldValue('gst', true)}
+                    checked={formik.values.gst === true}
                   />
                   <label className="form-check-label" htmlFor="inlineRadio1">
                     Yes
@@ -361,7 +363,7 @@ function CenterAdd() {
                     name="gst"
                     id="inlineRadio2"
                     value="false"
-                    onChange={formik.handleChange}
+                    onChange={() => formik.setFieldValue('gst', false)}
                     checked={formik.values.gst === "false"}
                   />
                   <label className="form-check-label" htmlFor="inlineRadio2">

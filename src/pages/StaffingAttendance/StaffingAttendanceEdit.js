@@ -11,15 +11,35 @@ import api from "../../config/URL";
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
-  date: Yup.date()
-    .required("*Date is required")
-    .min(new Date(), "*Date must be in the future"),
+  // date: Yup.date()
+  //   .transform((value, originalValue) =>
+  //     originalValue ? new Date(originalValue) : value
+  //   )
+  //   .required("*Date is required")
+  //   .min(
+  //     new Date().setHours(0, 0, 0, 0),
+  //     "*Date must be today or in the future"
+  //   ),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
-  modeOfWorking: Yup.string().required("*Mode of working is required"),
   attendanceRemark: Yup.string()
     .required("*Leave Reason is required")
     .max(200, "*The maximum length is 200 characters"),
-  // checkIn: Yup.string().required("*Check-in is required"),
+  // modeOfWorking: Yup.string().test(
+  //   "check-mode-of-working",
+  //   "*Mode of working is required",
+  //   function (value) {
+  //     const { attendanceStatus } = this.parent;
+  //     return attendanceStatus === "Present" ? !!value : true;
+  //   }
+  // ),
+  checkIn: Yup.string().test(
+    "check-check-in",
+    "*Check-in is required",
+    function (value) {
+      const { attendanceStatus } = this.parent;
+      return attendanceStatus === "Present" ? !!value : true;
+    }
+  ),
   // checkOut: Yup.string().required("*Check-out is required"),
   // otStartTime: Yup.string().required("*OT start time is required"),
   // otEndTime: Yup.string().required("*OT end time is required"),
@@ -31,13 +51,14 @@ function StaffingAttendanceEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
+  const userName = localStorage.getItem("userName")
   const { id } = useParams();
 
   const formik = useFormik({
     initialValues: {
       centerId: "",
       userId: "",
-      date: "",
+      date: new Date().toISOString().split("T")[0],
       attendanceStatus: "",
       modeOfWorking: "",
       checkIn: "",
@@ -68,6 +89,7 @@ function StaffingAttendanceEdit() {
 
       let payload = {
         centerId: values.centerId,
+        updatedBy: userName,
         centerName: selectedCenterName,
         userId: values.userId,
         employeeName: selectedEmployeeName,
@@ -82,6 +104,54 @@ function StaffingAttendanceEdit() {
         otEndTime: values.otEndTime,
         attendanceRemark: values.attendanceRemark,
       };
+      if (values.modeOfWorking !== "") {
+        payload = {
+          ...payload,
+          modeOfWorking: values.modeOfWorking,
+        };
+      }
+
+      if (values.checkIn !== "") {
+        payload = {
+          ...payload,
+          checkIn: values.checkIn,
+        };
+      }
+
+      if (values.checkOut !== "") {
+        payload = {
+          ...payload,
+          checkOut: values.checkOut,
+        };
+      }
+
+      if (values.checkInmode !== "") {
+        payload = {
+          ...payload,
+          checkInmode: values.checkInmode,
+        };
+      }
+
+      if (values.checkOutmode !== "") {
+        payload = {
+          ...payload,
+          checkOutmode: values.checkOutmode,
+        };
+      }
+
+      if (values.otStartTime !== "") {
+        payload = {
+          ...payload,
+          otStartTime: values.otStartTime,
+        };
+      }
+
+      if (values.otEndTime !== "") {
+        payload = {
+          ...payload,
+          otEndTime: values.otEndTime,
+        };
+      }
 
       try {
         const response = await api.put(`/updateUserAttendance/${id}`, payload, {
@@ -110,6 +180,20 @@ function StaffingAttendanceEdit() {
       await fetchUserName(centerId);
     } catch (error) {
       toast.error(error);
+    }
+  };
+  const handleAttendanceChange = async (event) => {
+    const attendance = event.target.value;
+    formik.setFieldValue("attendanceStatus", attendance);
+    if (attendance === "Absent") {
+      // Clear the fields if attendance is "Absent"
+      formik.setFieldValue("modeOfWorking",);
+      formik.setFieldValue("checkIn", "");
+      formik.setFieldValue("checkOut", "");
+      formik.setFieldValue("checkInmode", "");
+      formik.setFieldValue("checkOutmode", "");
+      formik.setFieldValue("otStartTime", "");
+      formik.setFieldValue("otEndTime", "");
     }
   };
 
@@ -154,11 +238,14 @@ function StaffingAttendanceEdit() {
     <section className="AttendanceAdd p-3">
       <div className="container-fluid">
         <div className="container">
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
             <div className="row">
               <div className="col-12 text-end">
                 <Link to="/staffing/attendance">
@@ -176,7 +263,7 @@ function StaffingAttendanceEdit() {
                       aria-hidden="true"
                     ></span>
                   )}
-                  Save
+                  Update
                 </button>{" "}
               </div>
             </div>
@@ -237,13 +324,14 @@ function StaffingAttendanceEdit() {
                 <span className="text-danger">*</span>
                 <input
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
                   className={`form-control ${
                     formik.touched.date && formik.errors.date
                       ? "is-invalid"
                       : ""
                   }`}
                   {...formik.getFieldProps("date")}
+                  value={formik.values.date}
+                  readOnly
                 />
                 {formik.touched.date && formik.errors.date && (
                   <div className="invalid-feedback">{formik.errors.date}</div>
@@ -261,6 +349,7 @@ function StaffingAttendanceEdit() {
                   }`}
                   {...formik.getFieldProps("attendanceStatus")}
                   aria-label="Default select example"
+                  onChange={handleAttendanceChange}
                 >
                   <option selected></option>
                   <option value="Present">Present</option>
@@ -281,7 +370,7 @@ function StaffingAttendanceEdit() {
                     <span className="text-danger">*</span>
                     <input
                       type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                      // onFocus={(e) => e.target.showPicker()}
                       className={`form-control ${
                         formik.touched.checkIn && formik.errors.checkIn
                           ? "is-invalid"
@@ -301,7 +390,7 @@ function StaffingAttendanceEdit() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                      // onFocus={(e) => e.target.showPicker()}
                       className={`form-control ${
                         formik.touched.checkOut && formik.errors.checkOut
                           ? "is-invalid"
@@ -321,7 +410,7 @@ function StaffingAttendanceEdit() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                      // onFocus={(e) => e.target.showPicker()}
                       className={`form-control ${
                         formik.touched.otStartTime && formik.errors.otStartTime
                           ? "is-invalid"
@@ -342,7 +431,7 @@ function StaffingAttendanceEdit() {
                     {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
-                      onFocus={(e) => e.target.showPicker()}
+                      // onFocus={(e) => e.target.showPicker()}
                       className={`form-control  ${
                         formik.touched.otEndTime && formik.errors.otEndTime
                           ? "is-invalid"
@@ -356,6 +445,29 @@ function StaffingAttendanceEdit() {
                       </div>
                     )}
                   </div>
+                  <div className="col-md-6 col-12 mb-3 ">
+                <label className="">Mode Of Working</label>
+                <span className="text-danger">*</span>
+                <select
+                  className={`form-select ${
+                    formik.touched.modeOfWorking && formik.errors.modeOfWorking
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("modeOfWorking")}
+                  aria-label="Default select example"
+                >
+                  <option selected></option>
+                  <option value="WORK_FROM_HOME">Work From Home</option>
+                  <option value="WORK_FROM_OFFICE">Work From Office</option>
+                </select>
+                {formik.touched.modeOfWorking &&
+                  formik.errors.modeOfWorking && (
+                    <div className="invalid-feedback">
+                      {formik.errors.modeOfWorking}
+                    </div>
+                  )}
+              </div>
                 </>
               )}
 
@@ -404,33 +516,11 @@ function StaffingAttendanceEdit() {
                 )}
               </div> */}
 
-              <div className="col-md-6 col-12 mb-3 ">
-                <label className="">Mode Of Working</label>
-                <span className="text-danger">*</span>
-                <select
-                  className={`form-select ${
-                    formik.touched.modeOfWorking && formik.errors.modeOfWorking
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("modeOfWorking")}
-                  aria-label="Default select example"
-                >
-                  <option selected></option>
-                  <option value="WORK_FROM_HOME">Work From Home</option>
-                  <option value="WORK_FROM_OFFICE">Work From Office</option>
-                </select>
-                {formik.touched.modeOfWorking &&
-                  formik.errors.modeOfWorking && (
-                    <div className="invalid-feedback">
-                      {formik.errors.modeOfWorking}
-                    </div>
-                  )}
-              </div>
+         
               <div className="col-md-6 col-12">
                 <div className="text-start mt-2">
                   <label className="form-lable">Attendance Remark</label>
-                  {/* <span className="text-danger">*</span> */}
+                  <span className="text-danger">*</span>
                   <br />
                   <textarea
                     id="floatingTextarea2"

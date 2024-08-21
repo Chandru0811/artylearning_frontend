@@ -28,8 +28,8 @@ const validationSchema = Yup.object({
   ),
   replacementLessonStudentBuffer: Yup.number().notRequired(""),
   description: Yup.string()
-  .notRequired()
-  .max(200, "*The maximum length is 200 characters"),
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
 });
 
 function CourseEdit() {
@@ -37,11 +37,13 @@ function CourseEdit() {
   const navigate = useNavigate();
 
   const [centerData, setCenterData] = useState([]);
-  const [selectedCenters, setSelectedCenters] = useState([]);;
+  const [selectedCenters, setSelectedCenters] = useState([]);
   const [levelData, setLevelData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const centerOptions = centerData?.map((center) => ({
+  
+ const userName = localStorage.getItem("userName"); 
+  const centerOptions = centerData.map((center) => ({
     label: center.centerNames,
     value: center.id,
   }));
@@ -67,12 +69,13 @@ function CourseEdit() {
       status: "",
       classReplacementAllowed: false,
       description: "",
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log(values);
-      values.classReplacementAllowed = values.classReplacementAllowed === true;
+      // values.classReplacementAllowed = values.classReplacementAllowed === true;
       try {
         const response = await api.put(`/updateCourses/${id}`, values, {
           headers: {
@@ -103,6 +106,9 @@ function CourseEdit() {
             response.data.classReplacementAllowed || false,
         });
         fetchLevels(response.data.subjectId);
+        setSelectedCenters(response.data.centers.map(center => ({ label: center.centerName, value: center.id })));
+        // setSelectedCenters(response.data.centers.map(center => (console.log("object",center.id))));
+        console.log("selectedCenters",selectedCenters)
       } catch (error) {
         toast.error("Error fetching data:", error);
       }
@@ -154,11 +160,14 @@ function CourseEdit() {
   return (
     <section className="courseAdd">
       <div className="container">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
             <Link to="/course">
               <button type="button " className="btn btn-sm btn-border   ">
@@ -182,33 +191,33 @@ function CourseEdit() {
           </div>
           <div className="container">
             <div className="row">
-            <div className="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Centre<span className="text-danger">*</span>
-              </label>
-              <MultiSelect
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Centre<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
                 options={centerOptions}
                 value={selectedCenters}
-                onChange={(selected) => {
-                  setSelectedCenters(selected);
-                  formik.setFieldValue(
-                    "centerId",
-                    selected.map((option) => option.value)
-                  );
-                }}
-                labelledBy="Select Centers"
-                className={`form-multi-select ${
-                  formik.touched.centerId && formik.errors.centerId
-                    ? "is-invalid"
-                    : ""
-                }`}
-              />
-              {formik.touched.centerId && formik.errors.centerId && (
-                <div className="invalid-feedback">
-                  {formik.errors.centerId}
-                </div>
-              )}
-            </div>
+                  onChange={(selected) => {
+                    setSelectedCenters(selected);
+                    formik.setFieldValue(
+                      "centerId",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Centers"
+                  className={`form-multi-select ${
+                    formik.touched.centerId && formik.errors.centerId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.centerId}
+                  </div>
+                )}
+              </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">Color Code</lable>
                 <div className="input-group mb-3">
@@ -509,8 +518,8 @@ function CourseEdit() {
                     value="Yes"
                     name="classReplacementAllowed"
                     type="radio"
-                    onChange={formik.handleChange}
-                    checked={formik.values.classReplacementAllowed === "Yes"}
+                    onChange={() => formik.setFieldValue('classReplacementAllowed', true)}
+                    checked={formik.values.classReplacementAllowed === true}
                   />
                   <p className="my-0 me-1">Yes</p>
                   <input
@@ -518,8 +527,8 @@ function CourseEdit() {
                     value="No"
                     name="classReplacementAllowed"
                     type="radio"
-                    onChange={formik.handleChange}
-                    checked={formik.values.classReplacementAllowed === "No"}
+                    onChange={() => formik.setFieldValue('classReplacementAllowed', false)}
+                    checked={formik.values.classReplacementAllowed === false}
                   />
                   <p className="my-0 me-1">No</p>
                 </div>

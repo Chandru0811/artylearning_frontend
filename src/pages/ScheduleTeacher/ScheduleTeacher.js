@@ -17,7 +17,7 @@ import TeacherReplacement from "./TeacherReplacement";
 const ScheduleTeacher = () => {
   const tableRef = useRef(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
+  const deleteButtonRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,8 +33,9 @@ const ScheduleTeacher = () => {
   };
 
   const handelDelete = async (rowData) => {
+    
     try {
-      const { centerId, userId, courseId, classId, days } = rowData;
+      const { centerId, userId, courseId, classId, days } = selectedRowData;
       const formData = new FormData();
       formData.append("centerId", centerId);
       formData.append("userId", userId);
@@ -95,9 +96,7 @@ const ScheduleTeacher = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -120,6 +119,11 @@ const ScheduleTeacher = () => {
     }
     setLoading(false);
   };
+  useEffect(() => {
+    if (show) {
+      deleteButtonRef.current?.focus(); // Focus on the Delete button when the modal is shown
+    }
+  }, [show]);
 
   return (
     <div className="container my-4">
@@ -147,7 +151,9 @@ const ScheduleTeacher = () => {
                   <th scope="col">Course</th>
                   <th scope="col">Class</th>
                   <th scope="col">Day</th>
-                  <th scope="col" className="text-center">Action</th>
+                  <th scope="col" className="text-center">
+                    Action
+                  </th>
                 </tr>
               </thead>
               {/* Table Body */}
@@ -177,8 +183,11 @@ const ScheduleTeacher = () => {
                           size="sm"
                           id="dropdown-basic-button"
                         >
-                          <Dropdown.Item >
-                            <TeacherReplacement id={data.id} onSuccess={refreshData} />
+                          <Dropdown.Item>
+                            <TeacherReplacement
+                              id={data.id}
+                              onSuccess={refreshData}
+                            />
                           </Dropdown.Item>
                           {/* <Dropdown.Item as={Link} to={`/course/coursedeposit/${data.id}`}>
                             Course Deposit Fees
@@ -222,8 +231,10 @@ const ScheduleTeacher = () => {
                 Close
               </Button>
               <Button
+                ref={deleteButtonRef}
                 variant="danger"
-                onClick={() => handelDelete(selectedRowData)}
+                onClick={handelDelete}
+                className={show ? "focused-button" : ""}
               >
                 Delete
               </Button>

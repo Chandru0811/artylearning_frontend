@@ -224,13 +224,13 @@ function CourseView() {
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-12">
+            <div className="col-md-12 col-12">
               <div className="row  mb-2">
-                <div className="col-6  ">
+                <div className="col-3  ">
                   <p className="fw-medium">Description</p>
                 </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm text-break">
+                <div className="col-9 ">
+                  <p className="text-muted text-sm text-break ">
                     : {data.description}
                   </p>
                 </div>

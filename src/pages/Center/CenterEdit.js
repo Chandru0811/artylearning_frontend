@@ -56,6 +56,7 @@ function CenterEdit() {
   const [teacherData, setTeacherData] = useState(null);
   const navigate = useNavigate();
   const [taxTypeData, setTaxTypeData] = useState(null);
+ const userName = localStorage.getItem("userName"); 
 
   useEffect(() => {
     fetchTeacher();
@@ -100,7 +101,7 @@ function CenterEdit() {
       // });
 
       // Convert gst value to boolean
-      values.gst = values.gst === "true";
+      // values.gst = values.gst === "true";
       const formData = new FormData();
       formData.append("centerName", values.centerName);
       formData.append("code", values.code);
@@ -119,6 +120,7 @@ function CenterEdit() {
       formData.append("bankAccountName", values.bankAccountName);
       formData.append("invoiceNotes", values.invoiceNotes);
       formData.append("file", values.file);
+      formData.append("updatedBy", userName);
 
       // for (let [key, value] of formData.entries()) {
       //   console.log(`${key}: ${value}`);
@@ -361,7 +363,7 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("openingDate")}
                   type="date"
-                  onFocus={(e) => e.target.showPicker()}
+                  // onFocus={(e) => e.target.showPicker()}
                   className={`form-control   ${formik.touched.openingDate && formik.errors.openingDate
                     ? "is-invalid"
                     : ""
