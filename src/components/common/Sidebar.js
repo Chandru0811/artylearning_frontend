@@ -270,7 +270,7 @@ function Sidebar() {
         isOpen: false,
         subMenus: [
           {
-            title: "Header",
+            title: "Header & Footer",
             path: "/cms/header",
             access: storedScreens.headerIndex,
           },

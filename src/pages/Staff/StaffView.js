@@ -204,7 +204,7 @@ function StaffView() {
                 </button>
               )}
               <Link to="/staff">
-                <button type="button" class="btn btn-border">
+                <button type="button" className="btn btn-border btn-sm">
                   <span>Back</span>
                 </button>
               </Link>
