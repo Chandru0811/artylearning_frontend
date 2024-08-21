@@ -20,6 +20,7 @@ const validationSchema = Yup.object({
 });
 
 function CourseFeesEdit({ id, onSuccess }) {
+  console.log("object",id)
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);

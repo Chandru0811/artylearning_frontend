@@ -14,7 +14,7 @@ function CurriculumOutletAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => {
     setShow(false);
@@ -44,8 +44,6 @@ function CurriculumOutletAdd({ onSuccess }) {
     effectiveDate: Yup.string().required("*Effective Date is required"),
     name: Yup.string().required("*Name Fees Code is required"),
     status: Yup.string().required("*Status Fee is required"),
-    createdBy: userName,
-
   });
 
   const formik = useFormik({
@@ -53,6 +51,7 @@ function CurriculumOutletAdd({ onSuccess }) {
       effectiveDate: "",
       name: "",
       status: "",
+      createdBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -98,11 +97,14 @@ function CurriculumOutletAdd({ onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Curriculum Outlet</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -129,7 +131,6 @@ function CurriculumOutletAdd({ onSuccess }) {
                   </label>
                   <input
                     type="date"
-   
                     className={`form-control  ${
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate

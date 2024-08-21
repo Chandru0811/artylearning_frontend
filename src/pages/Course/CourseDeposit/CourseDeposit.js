@@ -141,9 +141,9 @@ const CourseDeposit = () => {
                   )}
                 </td>
                 <td className="d-flex">
-                  {storedScreens?.courseRead && (
+                  {/* {storedScreens?.courseRead && (
                     <CourseDepositView id={data.id} onSuccess={refreshData} />
-                  )}
+                  )} */}
                   {storedScreens?.courseUpdate && (
                     <CourseDepositEdit id={data.id} onSuccess={refreshData} />
                   )}

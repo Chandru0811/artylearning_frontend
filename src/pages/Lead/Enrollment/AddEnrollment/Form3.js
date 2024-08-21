@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
@@ -104,6 +104,9 @@ const Form3 = forwardRef(
     useImperativeHandle(ref, () => ({
       form3: formik.handleSubmit,
     }));
+    useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+     }, []);
 
     return (
        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {

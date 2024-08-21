@@ -385,12 +385,7 @@ const Lead = () => {
                         </td>
                         <td>{data.studentName}</td>
                         <td>
-                          {subjectData &&
-                            subjectData.map((subject) =>
-                              parseInt(data.subjectId) === subject.id
-                                ? subject.subjects || "--"
-                                : ""
-                            )}
+                          {data.subject}
                         </td>
                         <td>{data.fathersFullName}</td>
 
