@@ -42,7 +42,7 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
     effectiveDate: Yup.string().required("*Effective Date is required"),
     name: Yup.string().required("*Name Code is required"),
     status: Yup.string().required("*Status is required"),
-    updatedBy: userName,
+    
 
   });
 
@@ -51,6 +51,7 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
       effectiveDate: "",
       name: "",
       status: "",
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

@@ -28,7 +28,7 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
     description: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
-    createdBy: userName,
+    
 
   });
 
@@ -39,6 +39,7 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
       status: "",
       curriculumNo: "",
       description: "",
+      createdBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
