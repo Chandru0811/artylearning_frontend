@@ -60,7 +60,9 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           },
         });
         if (response.status === 201) {
-          const lead_id = response.data.lead_id;
+          console.log("object",response.data.id)
+          const lead_id = response.data.id;
+          console.log(" lead_id ", lead_id )
           toast.success(response.data.message);
           setFormData((prv) => ({ ...prv, ...data, lead_id }));
           // console.log("Form data is ",formData)

@@ -12,7 +12,7 @@ import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
 import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object({
-  centerId: Yup.array().min(1, "At least one center must be selected"),
+  centers: Yup.array().min(1, "At least one center must be selected"),
   courseName: Yup.string().required("*Course Name is required"),
   courseCode: Yup.string().required("*Course Code is required"),
   subjectId: Yup.string().required("*Select the Subject"),
@@ -43,6 +43,7 @@ function CourseEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   
  const userName = localStorage.getItem("userName"); 
+ console.log("object",userName)
   const centerOptions = centerData.map((center) => ({
     label: center.centerNames,
     value: center.id,
@@ -54,7 +55,7 @@ function CourseEdit() {
 
   const formik = useFormik({
     initialValues: {
-      centerId: [],
+      centers: [],
       courseName: "",
       courseCode: "",
       subjectId: "",
@@ -75,6 +76,7 @@ function CourseEdit() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log(values);
+      // values.updatedBy = userName
       // values.classReplacementAllowed = values.classReplacementAllowed === true;
       try {
         const response = await api.put(`/updateCourses/${id}`, values, {
@@ -201,20 +203,20 @@ function CourseEdit() {
                   onChange={(selected) => {
                     setSelectedCenters(selected);
                     formik.setFieldValue(
-                      "centerId",
+                      "centers",
                       selected.map((option) => option.value)
                     );
                   }}
                   labelledBy="Select Centers"
                   className={`form-multi-select ${
-                    formik.touched.centerId && formik.errors.centerId
+                    formik.touched.centers && formik.errors.centers
                       ? "is-invalid"
                       : ""
                   }`}
                 />
-                {formik.touched.centerId && formik.errors.centerId && (
+                {formik.touched.centers && formik.errors.centers && (
                   <div className="invalid-feedback">
-                    {formik.errors.centerId}
+                    {formik.errors.centers}
                   </div>
                 )}
               </div>

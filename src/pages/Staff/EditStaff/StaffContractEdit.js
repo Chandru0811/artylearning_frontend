@@ -38,6 +38,7 @@ const StaffContractEdit = forwardRef(
     const navigate = useNavigate();
     const userName = localStorage.getItem("userName")
     const [centerData, setCenterData] = useState(null);
+    const [employerData, setEmployerData] = useState(null);
     const formik = useFormik({
       initialValues: {
         employer: "",
@@ -186,6 +187,9 @@ const StaffContractEdit = forwardRef(
           const response = await api.get(
             `/getAllUserById/${formData.staff_id}`
           );
+          const employerData = response.data.userAccountInfo[0].centers;
+           setEmployerData(employerData);
+           console.log("employerData",employerData)
           if (
             response.data.userContractCreationModels &&
             response.data.userContractCreationModels.length > 0
@@ -208,9 +212,6 @@ const StaffContractEdit = forwardRef(
                 : "",
               salaryStartDate: contractData.salaryStartDate
                 ? contractData.salaryStartDate.substring(0, 10)
-                : "",
-              employer: contractData.employer
-                ? contractData.employer
                 : "",
             });
           } else {
@@ -254,9 +255,6 @@ const StaffContractEdit = forwardRef(
     useImperativeHandle(ref, () => ({
       staffContractEdit: formik.handleSubmit,
     }));
-    // const filteredCenters = centerData?.filter((center) =>
-    //   formData.centerIds?.includes(center.id)
-    // );
 
     return (
        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
@@ -272,18 +270,25 @@ const StaffContractEdit = forwardRef(
             <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Employer</label>
                 <span className="text-danger">*</span>
-                <input
+                <select
                   type="text"
-                  className="form-control"
+                  className="form-select"
                   name="employer"
-                  // onChange={(e) => {
-                  //   const selectedId = e.target.value;
-                  //   formik.setFieldValue('employer', selectedId);
-                  //   getData1(selectedId); 
-                  // }}
+                  onChange={(e) => {
+                    const selectedId = e.target.value;
+                    formik.setFieldValue('employer', selectedId);
+                    getData1(selectedId); 
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.employer}
-                />
+                >
+                  <option selected></option>
+                  {employerData?.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.centerName}
+                    </option>
+                  ))}
+                </select>
                 {formik.touched.employer && formik.errors.employer && (
                   <div className="error text-danger ">
                     <small>{formik.errors.employer}</small>

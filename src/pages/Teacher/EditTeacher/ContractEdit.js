@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
@@ -34,6 +34,7 @@ const validationSchema = Yup.object().shape({
 const ContractEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
     const userName  = localStorage.getItem('userName');
+    const [employerData, setEmployerData] = useState(null)
 
     const navigate = useNavigate();
     const formik = useFormik({
@@ -157,6 +158,9 @@ const ContractEdit = forwardRef(
           const response = await api.get(
             `/getAllUserById/${formData.staff_id}`
           );
+          const employerData = response.data.userAccountInfo[0].centers;
+          setEmployerData(employerData);
+          console.log("employerData",employerData)
           if (
             response.data.userContractCreationModels &&
             response.data.userContractCreationModels.length > 0
@@ -214,6 +218,16 @@ const ContractEdit = forwardRef(
       getData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const getData1 = async (id) => {
+      try {
+        const response = await api.get(`/getAllCenterById/${id}`);
+        formik.setFieldValue("uen",response.data.uenNumber)
+        formik.setFieldValue("addressOfEmployment",response.data.address)
+       console.log("response",response.data)
+      } catch (error) {
+        toast.error("Error Fetching Data", error);
+      }
+    };
 
     useImperativeHandle(ref, () => ({
       contractEdit: formik.handleSubmit,
@@ -264,18 +278,28 @@ const ContractEdit = forwardRef(
           <div className="container mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
-              <div class="col-md-6 col-12 mb-2 mt-3">
+            <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Employer</label>
                 <span className="text-danger">*</span>
-                <input
+                <select
                   type="text"
-                  className="form-control"
+                  className="form-select"
                   name="employer"
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    const selectedId = e.target.value;
+                    formik.setFieldValue('employer', selectedId);
+                    getData1(selectedId); 
+                  }}
                   onBlur={formik.handleBlur}
                   value={formik.values.employer}
-                  readOnly
-                />
+                >
+                  <option selected></option>
+                  {employerData?.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.centerName}
+                    </option>
+                  ))}
+                </select>
                 {formik.touched.employer && formik.errors.employer && (
                   <div className="error text-danger ">
                     <small>{formik.errors.employer}</small>
@@ -292,6 +316,7 @@ const ContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.uen}
+                  readOnly
                 />
                 {formik.touched.uen && formik.errors.uen && (
                   <div className="error text-danger ">
@@ -310,6 +335,7 @@ const ContractEdit = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.addressOfEmployment}
+                readOnly
               />
               {formik.touched.addressOfEmployment &&
                 formik.errors.addressOfEmployment && (
