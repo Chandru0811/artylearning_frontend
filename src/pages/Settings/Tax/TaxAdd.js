@@ -17,6 +17,7 @@ function TaxAdd({ onSuccess }) {
   };
 
   const handleShow = () => setShow(true);
+  const userName  = localStorage.getItem('userName');
 
   const validationSchema = Yup.object({
     taxType: Yup.string().required("*Tax Type is required"),
@@ -34,6 +35,8 @@ function TaxAdd({ onSuccess }) {
       rate: "",
       effectiveDate: "",
       status: "",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {

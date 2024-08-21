@@ -17,6 +17,7 @@ const validationSchema = Yup.object({
 function CountryEdit({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
+    const userName = localStorage.getItem("userName"); 
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -25,7 +26,9 @@ function CountryEdit({ id, onSuccess }) {
         initialValues: {
             country: "",
             nationality: "",
-            citizenship:""
+            citizenship:"",
+            updatedBy: userName,
+
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {

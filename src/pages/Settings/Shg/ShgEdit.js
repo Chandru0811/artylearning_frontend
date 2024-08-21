@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 function ShgEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName  = localStorage.getItem('userName');
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -24,6 +25,8 @@ function ShgEdit({ id, onSuccess }) {
     initialValues: {
       shgType: "",
       shgAmount: "",
+      updatedBy: userName,
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

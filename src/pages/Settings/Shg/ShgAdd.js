@@ -15,6 +15,8 @@ function ShgAdd({ onSuccess }) {
         formik.resetForm();
     };
     const handleShow = () => setShow(true);
+    const userName  = localStorage.getItem('userName');
+
     const validationSchema = Yup.object({
         shgType: Yup.string().required("*Shg Type is required"),
         shgAmount: Yup.string().required("*Shg Amount is required"),
@@ -24,6 +26,8 @@ function ShgAdd({ onSuccess }) {
         initialValues: {
             shgType: "",
             shgAmount: "",
+            createdBy: userName,
+
         },
         validationSchema: validationSchema, 
         onSubmit: async (values) => {

@@ -15,6 +15,8 @@ function SalaryTypeAdd({ onSuccess }) {
     formik.resetForm();
   };
   const handleShow = () => setShow(true);
+  const userName = localStorage.getItem("userName"); 
+
   const validationSchema = Yup.object({
     salaryType: Yup.string().required("*Leave Type is required"),
   });
@@ -22,6 +24,8 @@ function SalaryTypeAdd({ onSuccess }) {
   const formik = useFormik({
     initialValues: {
       salaryType: "",
+      createdBy: userName,
+
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {

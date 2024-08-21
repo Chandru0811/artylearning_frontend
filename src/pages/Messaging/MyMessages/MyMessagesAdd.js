@@ -26,6 +26,7 @@ function MyMessagesAdd({ onSuccess }) {
       message: "",
       recipientName: "",
       files: null,
+      
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -36,6 +37,7 @@ function MyMessagesAdd({ onSuccess }) {
       formData.append("senderName", data.userNames);
       formData.append("senderId", userId);
       formData.append("senderRole", userName);
+      formData.append("createdBy", userName);
       formData.append("messageTo", "PARENT");
       formData.append("recipientId", values.student);
       formData.append("recipientName", values.recipientName);
