@@ -17,6 +17,8 @@ function CountryAdd({ onSuccess }) {
     };
 
     const handleShow = () => setShow(true);
+    const userName  = localStorage.getItem('userName');
+
 
     const validationSchema = Yup.object({
         country: Yup.string().required("*Country is required"),
@@ -28,7 +30,9 @@ function CountryAdd({ onSuccess }) {
         initialValues: {
             country: "",
             nationality: "",
-            citizenship:""
+            citizenship:"",
+            createdBy: userName,
+
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {

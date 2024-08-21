@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 function IDTypeAdd({ onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
+    const userName  = localStorage.getItem('userName');
+
     const handleClose = () => {
         setShow(false);
         formik.resetForm();
@@ -22,6 +24,8 @@ function IDTypeAdd({ onSuccess }) {
     const formik = useFormik({
         initialValues: {
             idType: "",
+            createdBy: userName,
+
         },
         validationSchema: validationSchema, // Assign the validation schema
         onSubmit: async (values) => {

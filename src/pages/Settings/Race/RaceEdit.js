@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 function RaceEdit({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
+    const userName = localStorage.getItem("userName"); 
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -22,6 +23,8 @@ function RaceEdit({ id, onSuccess }) {
     const formik = useFormik({
         initialValues: {
             race: "",
+            updatedBy: userName,
+
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {

@@ -14,6 +14,8 @@ function TaxEdit({ id, onSuccess }) {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const userName = localStorage.getItem("userName"); 
+
 
     const validationSchema = Yup.object({
         taxType: Yup.string().required("*Tax Type is required"),
@@ -31,6 +33,8 @@ function TaxEdit({ id, onSuccess }) {
             rate: "",
             effectiveDate: "",
             status: "",
+            updatedBy: userName,
+
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {

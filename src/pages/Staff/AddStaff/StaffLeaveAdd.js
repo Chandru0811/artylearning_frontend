@@ -83,7 +83,7 @@ const StaffLeaveAdd = forwardRef(
                 </label>
                 <input
                   type="month"
-                  onFocus={(e)=> e.target.showPicker()}
+                  // onFocus={(e)=> e.target.showPicker()}
                   class="form-control mt-3"
                   name="year"
                   onChange={formik.handleChange}
