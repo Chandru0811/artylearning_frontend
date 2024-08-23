@@ -225,7 +225,7 @@ export default function TeacherAdd() {
               )}
 
               <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-              {activeStep > 0 && (
+              {activeStep > 1 && (
                 <button
                   className="btn btn-sm btn-border mt-4"
                   style={{ padding: "7px" }}

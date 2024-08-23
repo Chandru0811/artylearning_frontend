@@ -7,10 +7,12 @@ import { toast } from "react-toastify";
 import TeacherSummary from "../Teacher/TeacherSummary";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import fetchAllCentersWithIds from "../List/CenterList";
 
 function StaffView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [centerData, setCenterData] = useState(null);
   console.log("Api Staff data:", data);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
@@ -24,7 +26,17 @@ function StaffView() {
       }
     };
     getData();
+    fetchData();
   }, [id]);
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   // const generatePDF = () => {
   //   const doc = new jsPDF();
@@ -510,6 +522,11 @@ function StaffView() {
               <p className="text-sm fw-medium">Centre Name</p>
             </div>
             <div className="col-9">
+              {/* <p className="text-muted text-sm">: {centerData && centerData.map((centerId) =>
+                      parseInt(data.centerId) === centerId.id
+                        ? centerId.centerNames || "--"
+                        : ""
+                    )}</p> */}
               <p className="text-muted text-sm">
                 :{" "}
                 {data.userAccountInfo &&
@@ -826,12 +843,22 @@ function StaffView() {
             <div className="col-6">
               <p className="text-muted text-sm">
                 :{" "}
+                {centerData &&
+                  centerData.map((centerId) =>
+                    parseInt(data.userContractCreationModels[0].employer) ===
+                    centerId.id
+                      ? centerId.centerNames || "--"
+                      : ""
+                  )}
+              </p>
+              {/* <p className="text-muted text-sm">
+                :{" "}
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].employer
                   ? data.userContractCreationModels[0].employer
                   : "--"}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -17,9 +22,8 @@ const validationSchema = Yup.object().shape({
   // file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-
-  const userName  = localStorage.getItem('userName');
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
 
     const [idTypeData, setIdTypeData] = useState(null);
     const [citizenShipData, setCitizenShipData] = useState(null);
@@ -73,12 +77,11 @@ const StaffPersonalEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally{
+        } finally {
           setLoadIndicators(false);
         }
       },
     });
-
 
     const fetchIDTypeData = async () => {
       try {
@@ -103,7 +106,6 @@ const StaffPersonalEdit = forwardRef(
       fetchCitizenShipData();
     }, []);
 
-
     useEffect(() => {
       const getData = async () => {
         try {
@@ -114,6 +116,10 @@ const StaffPersonalEdit = forwardRef(
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
+            shortIntroduction:
+              response.data.shortIntroduction === undefined
+                ? response.data.shortIntroduction
+                : " " || "",
           });
         } catch (error) {
           toast.error("Error Fetching Data");
@@ -128,11 +134,14 @@ const StaffPersonalEdit = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
           <div class="container-fluid row d-flex my-4">
@@ -172,7 +181,7 @@ const StaffPersonalEdit = forwardRef(
             </div>
           </div>
           <div class="container row d-flex my-4 justify-align-content-around">
-          <div class="form-group col-sm">
+            <div class="form-group col-sm">
               <label>ID Type</label>
               <span className="text-danger">*</span>
               <select
@@ -216,7 +225,7 @@ const StaffPersonalEdit = forwardRef(
             </div>
           </div>
           <div class="container row d-flex my-4 justify-align-content-around">
-          <div class="form-group col-sm">
+            <div class="form-group col-sm">
               <label>Citizenship</label>
               <span className="text-danger">*</span>
               <select
@@ -270,7 +279,7 @@ const StaffPersonalEdit = forwardRef(
                 onBlur={formik.handleBlur}
               />
             </div> */}
-             <div class="form-group  col-sm ">
+            <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
                 <div className="me-4">
@@ -302,10 +311,8 @@ const StaffPersonalEdit = forwardRef(
                 </label>
               </div>
             </div>
-           
           </div>
-          <div class="container row d-flex my-4 justify-align-content-around">
-            </div>
+          <div class="container row d-flex my-4 justify-align-content-around"></div>
           <div class="container row d-flex justify-content-start align-items-center">
             <div class="form-group  col-sm ">
               <label

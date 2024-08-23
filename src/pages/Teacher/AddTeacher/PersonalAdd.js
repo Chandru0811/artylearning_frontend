@@ -259,6 +259,7 @@ const PersonalAdd = forwardRef(
                 <input
                   type="file"
                   name="file"
+                  accept="image/*"
                   className="form-control"
                   onChange={(event) => {
                     formik.setFieldValue("file", event.target.files[0]);

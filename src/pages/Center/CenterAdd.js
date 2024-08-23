@@ -97,7 +97,7 @@ function CenterAdd() {
       const formData = new FormData();
       formData.append("centerName", values.centerName);
       formData.append("code", values.code);
-      formData.append("centerManager", values.centerManager);
+      formData.append("userId", values.centerManager);
       formData.append("address", values.address);
       formData.append("zipCode", values.zipCode);
       formData.append("mobile", values.mobile);

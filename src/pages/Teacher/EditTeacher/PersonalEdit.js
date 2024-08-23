@@ -24,8 +24,7 @@ const PersonalEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
     const [citizenShipData, setCitizenShipData] = useState(null);
-    const userName  = localStorage.getItem('userName');
-
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
@@ -91,8 +90,10 @@ const PersonalEdit = forwardRef(
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
-            shortIntroduction: response.data.shortIntroduction || "", 
-
+            shortIntroduction:
+              response.data.shortIntroduction === undefined
+                ? response.data.shortIntroduction
+                : " " || "",
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -130,11 +131,14 @@ const PersonalEdit = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
           <div class="container-fluid row d-flex my-4">

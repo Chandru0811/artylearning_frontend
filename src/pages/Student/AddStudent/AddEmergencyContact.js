@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -21,9 +26,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddEmergencyContact = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [rows, setRows] = useState([{}]);
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
@@ -35,8 +40,8 @@ const AddEmergencyContact = forwardRef(
             name: formData.name || "",
             emergencyRelation: formData.emergencyRelation || "",
             contactNo: formData.contactNo || "",
-            postalCode:formData.postalCode || "",
-            emergencyContactAddress:formData.emergencyContactAddress || "",
+            postalCode: formData.postalCode || "",
+            emergencyContactAddress: formData.emergencyContactAddress || "",
             files: null || "",
           },
         ],
@@ -57,8 +62,11 @@ const AddEmergencyContact = forwardRef(
           formDatas.append("name", contact.name);
           formDatas.append("contactNo", contact.contactNo);
           formDatas.append("authorizedRelation", contact.authorizedRelation);
-          formDatas.append("postalCode",contact.postalCode);
-          formDatas.append("emergencyContactAddress",contact.emergencyContactAddress);
+          formDatas.append("postalCode", contact.postalCode);
+          formDatas.append(
+            "emergencyContactAddress",
+            contact.emergencyContactAddress
+          );
           formDatas.append("files", contact.files);
           formDatas.append("createdBy", userName);
         });
@@ -82,7 +90,7 @@ const AddEmergencyContact = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -107,21 +115,21 @@ const AddEmergencyContact = forwardRef(
             );
 
             const leadData = response.data;
-            console.log("Lead Data ", leadData)
+            console.log("Lead Data ", leadData);
             formik.setValues({
               emergencyContactName: leadData.emergencyNric || "",
               emergencyContactNo: leadData.emergencyContact || "",
-              authorizedRelation :""
+              authorizedRelation: "",
             });
             if (!formData.emergencyContactInformation) {
-
               formik.setFieldValue("emergencyContactInformation", [
                 {
                   name: leadData.fathersFullName || "",
                   emergencyRelation: "Father",
                   contactNo: leadData.emergencyContact || "",
                   postalCode: leadData.postalCode || "",
-                  emergencyContactAddress: leadData.addressOfAuthorisedPerson || "",
+                  emergencyContactAddress:
+                    leadData.addressOfAuthorisedPerson || "",
                   files: null || "",
                 },
               ]);
@@ -137,25 +145,26 @@ const AddEmergencyContact = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
-
     useImperativeHandle(ref, () => ({
       EmergencyContact: formik.handleSubmit,
     }));
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-     }, []);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
 
     return (
       <div className="container-fluid">
         <div className="container-fluid">
           <div className="border-0 mb-5">
             <div className="border-0 my-2">
-               <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+              <form
+                onSubmit={formik.handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !formik.isSubmitting) {
+                    e.preventDefault(); // Prevent default form submission
+                  }
+                }}
+              >
                 <div className="border-0 mb-5">
                   <div className="mb-5">
                     <div className="border-0 my-2">
@@ -211,14 +220,17 @@ const AddEmergencyContact = forwardRef(
             </div>
           </div>
           <div className="border-0 mb-5">
-            {rows.map((row, index) => (
+            {rows?.map((row, index) => (
               <div className="border-0 mb-5" key={index}>
                 <div className="border-0 my-2">
-                   <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+                  <form
+                    onSubmit={formik.handleSubmit}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !formik.isSubmitting) {
+                        e.preventDefault(); // Prevent default form submission
+                      }
+                    }}
+                  >
                     <p className="headColor">
                       Authorized Person to Take Child from Class
                     </p>
@@ -237,8 +249,9 @@ const AddEmergencyContact = forwardRef(
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={
-                                formik.values.emergencyContactInformation[index]
-                                  ?.name || ""
+                                formik.values.emergencyContactInformation?.[
+                                  index
+                                ]?.name || ""
                               }
                             />
                           </div>
@@ -254,7 +267,7 @@ const AddEmergencyContact = forwardRef(
                               className="form-select "
                               aria-label=" example"
                               value={
-                                formik.values.emergencyContactInformation[index]
+                                formik.values.emergencyContactInformation?.[index]
                                   ?.authorizedRelation || ""
                               }
                             >
@@ -277,7 +290,7 @@ const AddEmergencyContact = forwardRef(
                               onBlur={formik.handleBlur}
                               name={`emergencyContactInformation[${index}].emergencyContactAddress`}
                               value={
-                                formik.values.emergencyContactInformation[index]
+                                formik.values.emergencyContactInformation?.[index]
                                   ?.emergencyContactAddress || ""
                               }
                             />
@@ -296,7 +309,7 @@ const AddEmergencyContact = forwardRef(
                               onBlur={formik.handleBlur}
                               name={`emergencyContactInformation[${index}].contactNo`}
                               value={
-                                formik.values.emergencyContactInformation[index]
+                                formik.values.emergencyContactInformation?.[index]
                                   ?.contactNo || ""
                               }
                             />
@@ -313,7 +326,7 @@ const AddEmergencyContact = forwardRef(
                               onBlur={formik.handleBlur}
                               name={`emergencyContactInformation[${index}].postalCode`}
                               value={
-                                formik.values.emergencyContactInformation[index]
+                                formik.values.emergencyContactInformation?.[index]
                                   ?.postalCode || ""
                               }
                             />
@@ -327,7 +340,7 @@ const AddEmergencyContact = forwardRef(
                               className="form-control"
                               type="file"
                               name="files"
-                               // name={`emergencyContactInformation[${index}].files`}
+                              // name={`emergencyContactInformation[${index}].files`}
                               // onChange={(event) => {
                               //   const fileName = event.target.files[0].name;
                               //   event.target.parentNode.querySelector(

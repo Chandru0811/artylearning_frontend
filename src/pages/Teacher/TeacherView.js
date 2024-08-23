@@ -3,11 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import api from "../../config/URL";
 import TeacherSummary from "./TeacherSummary";
+import fetchAllCentersWithIds from "../List/CenterList";
+import { toast } from "react-toastify";
 
 function TeacherView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   console.log("Api data:", data);
+  const [centerData, setCenterData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -20,7 +23,17 @@ function TeacherView() {
       }
     };
     getData();
+    fetchData()
   }, [id]);
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const getFileNameFromUrl = (url) => {
     if (url) {
@@ -664,14 +677,24 @@ function TeacherView() {
               <p className="text-sm fw-medium">Employer</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">
+            <p className="text-muted text-sm">
+                :{" "}
+                {centerData &&
+                  centerData.map((centerId) =>
+                    parseInt(data.userContractCreationModels[0].employer) ===
+                    centerId.id
+                      ? centerId.centerNames || "--"
+                      : ""
+                  )}
+              </p>
+              {/* <p className="text-muted text-sm">
                 :{" "}
                 {data.userContractCreationModels &&
                 data.userContractCreationModels.length > 0 &&
                 data.userContractCreationModels[0].employer
                   ? data.userContractCreationModels[0].employer
                   : "--"}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
