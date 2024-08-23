@@ -100,6 +100,7 @@ const PersonalEdit = forwardRef(
         }
       };
       getData();
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

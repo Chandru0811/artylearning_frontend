@@ -1,5 +1,5 @@
 import { Box, Step, StepLabel, Stepper, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tick from "../../assets/images/Tick.png";
 import StaffPersonalEdit from "./EditStaff/StaffPersonalEdit";
 import StaffAccountEdit from "./EditStaff/StaffAccountEdit";
@@ -91,6 +91,7 @@ function StaffEdit() {
         break;
     }
   };
+
   return (
     <div class="container-fluid minHeight my-5">
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>

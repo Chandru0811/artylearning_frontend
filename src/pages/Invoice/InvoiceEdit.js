@@ -284,18 +284,15 @@ export default function InvoiceEdit() {
 
   const handelTotalAmountChange = (index, value) => {
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
-    const selectedTax = taxData.find(
-      (tax) => tax.id === parseInt(selectedTaxType)
-    );
-
+    const selectedTax = taxData.find((tax) => tax.id === parseInt(selectedTaxType));
+  
     const gstRate = selectedTax ? selectedTax.rate : 0;
-    const gstAmount = isNaN((parseInt(value) * gstRate) / 100)
-      ? 0
-      : (parseInt(value) * gstRate) / 100;
-    const itemAmount = isNaN(parseInt(value) - gstAmount)
-      ? 0
-      : parseInt(value) - gstAmount;
-
+    const totalAmount = parseFloat(value) || 0;
+  
+    // Calculate the itemAmount based on the totalAmount inclusive of GST
+    const itemAmount = totalAmount / (1 + gstRate / 100);
+    const gstAmount = totalAmount - itemAmount;
+  
     const updatedRows = [...rows];
     updatedRows[index] = {
       ...updatedRows[index],
@@ -304,16 +301,12 @@ export default function InvoiceEdit() {
       totalAmount: value,
     };
     setRows(updatedRows);
-    formik.setFieldValue(
-      `invoiceItems[${index}].itemAmount`,
-      itemAmount.toFixed(2)
-    );
-    formik.setFieldValue(
-      `invoiceItems[${index}].gstAmount`,
-      gstAmount.toFixed(2)
-    );
+  
+    formik.setFieldValue(`invoiceItems[${index}].itemAmount`, itemAmount.toFixed(2));
+    formik.setFieldValue(`invoiceItems[${index}].gstAmount`, gstAmount.toFixed(2));
     formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
+  
 
   useEffect(() => {
     const getData = async () => {
@@ -366,6 +359,16 @@ export default function InvoiceEdit() {
     );
     formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
   }, [formik.values.invoiceItems]);
+
+  const handleRowDelete = (index) => {
+    const updatedInvoiceItems = formik.values.invoiceItems.filter(
+      (_, i) => i !== index
+    );
+
+    // Update the rows and formik values
+    setRows(updatedInvoiceItems);
+    formik.setFieldValue("invoiceItems", updatedInvoiceItems);
+  };
 
   return (
     <div className="container-fluid">
@@ -833,17 +836,18 @@ export default function InvoiceEdit() {
 
           <div className="row mt-3">
             <div className="col-12 text-end mt-3">
-              {rows.length > 1 && (
+            {rows.length > 1 && (
                 <button
                   type="button"
                   className="btn btn-sm mx-2 text-danger border-danger bg-white"
-                  onClick={() => {
-                    setRows((pr) => pr.slice(0, -1));
-                    formik.setFieldValue(
-                      "invoiceItems",
-                      formik.values.invoiceItems.slice(0, -1)
-                    );
-                  }}
+                  // onClick={() => {
+                  //   setRows((pr) => pr.slice(0, -1));
+                  //   formik.setFieldValue(
+                  //     "invoiceItems",
+                  //     formik.values.invoiceItems.slice(0, -1)
+                  //   );
+                  // }}
+                  onClick={() => handleRowDelete(rows.length - 1)}
                 >
                   Delete
                 </button>

@@ -1,5 +1,5 @@
 import { Step, StepLabel, Stepper } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import Tick from "../../assets/images/Tick.png";
 import StaffPersonalAdd from "./AddStaff/StaffPersonalAdd";
 import StaffAccountAdd from "./AddStaff/StaffAccountAdd";

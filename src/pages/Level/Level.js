@@ -48,7 +48,6 @@ const Level = () => {
       return;
     }
     $(tableRef.current).DataTable({
-      responsive: true,
       columnDefs: [
         { orderable: false, targets: -1 }
       ],
@@ -116,7 +115,7 @@ const Level = () => {
             {datas.map((data, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td>{data.level}</td>
+                <td className="text-break">{data.level}</td>
                 <td>
                   {subjectData &&
                     subjectData.map((subjectId) =>
@@ -125,7 +124,7 @@ const Level = () => {
                         : ""
                     )}
                 </td>
-                <td>{data.levelCode}</td>
+                <td className="text-break">{data.levelCode}</td>
                 <td>
                   {data.status === "Active" ? (
                     <span className="badge badges-Green">Active</span>
@@ -133,7 +132,7 @@ const Level = () => {
                     <span className="badge badges-Red">Inactive</span>
                   )}
                 </td>
-                <td>
+                <td className="d-flex">
                   {/* {storedScreens?.levelRead && (
                     <Link to={`/level/view/${data.id}`}>
                       <button className="btn btn-sm">

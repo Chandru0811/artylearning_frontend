@@ -36,8 +36,18 @@ const validationSchema = Yup.object().shape({
     .typeError("*Salary Must be numbers")
     .required("*Salary is required"),
   salaryStartDate: Yup.string().required("*Start Date Of Salary is required"),
-  userContractEndDate: Yup.string().required(
-    "*End Date Of Contract is required"
+  userContractEndDate: Yup.string()
+  .required("*End Date Of Contract is required")
+  .test(
+    "is-greater",
+    "*End Date should be later than the Start Date",
+    function (value) {
+      const { userContractStartDate } = this.parent;
+      return (
+        !userContractStartDate ||
+        new Date(value) >= new Date(userContractStartDate)
+      );
+    }
   ),
   contractDate: Yup.string().required("*Contract Date is required"),
   terminationNotice: Yup.string().required("*Termination Notice is required"),
@@ -264,6 +274,7 @@ const StaffContractEdit = forwardRef(
       console.log(formik.values);
       getData();
       fetchData();
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

@@ -17,7 +17,7 @@ function TaxAdd({ onSuccess }) {
   };
 
   const handleShow = () => setShow(true);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const validationSchema = Yup.object({
     taxType: Yup.string().required("*Tax Type is required"),
@@ -36,7 +36,6 @@ function TaxAdd({ onSuccess }) {
       effectiveDate: "",
       status: "",
       createdBy: userName,
-
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -78,11 +77,14 @@ function TaxAdd({ onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Tax</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -114,7 +116,7 @@ function TaxAdd({ onSuccess }) {
                     type="number"
                     min={0}
                     max={100}
-                    step="1.1"
+                    step="0.01"
                     className={`form-control  ${
                       formik.touched.rate && formik.errors.rate
                         ? "is-invalid"

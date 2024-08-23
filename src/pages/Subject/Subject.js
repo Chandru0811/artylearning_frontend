@@ -48,7 +48,6 @@ const Subject = () => {
       return;
     }
     $(tableRef.current).DataTable({
-      responsive: true,
       columnDefs: [
         { orderable: false, targets: -1 }
       ],
@@ -112,7 +111,7 @@ const Subject = () => {
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{data.subject}</td>
-                <td>{data.code}</td>
+                <td className="text-break">{data.code}</td>
                 <td>
                   {" "}
                   {data.status === "Active" ? (

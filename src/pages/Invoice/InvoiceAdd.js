@@ -421,18 +421,15 @@ export default function InvoiceAdd() {
 
   const handelTotalAmountChange = (index, value) => {
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
-    const selectedTax = taxData.find(
-      (tax) => tax.id === parseInt(selectedTaxType)
-    );
-
+    const selectedTax = taxData.find((tax) => tax.id === parseInt(selectedTaxType));
+  
     const gstRate = selectedTax ? selectedTax.rate : 0;
-    const gstAmount = isNaN((parseInt(value) * gstRate) / 100)
-      ? 0
-      : (parseInt(value) * gstRate) / 100;
-    const itemAmount = isNaN(parseInt(value) - gstAmount)
-      ? 0
-      : parseInt(value) - gstAmount;
-
+    const totalAmount = parseFloat(value) || 0;
+  
+    // Calculate the itemAmount based on the totalAmount inclusive of GST
+    const itemAmount = totalAmount / (1 + gstRate / 100);
+    const gstAmount = totalAmount - itemAmount;
+  
     const updatedRows = [...rows];
     updatedRows[index] = {
       ...updatedRows[index],
@@ -441,17 +438,13 @@ export default function InvoiceAdd() {
       totalAmount: value,
     };
     setRows(updatedRows);
-    formik.setFieldValue(
-      `invoiceItems[${index}].itemAmount`,
-      itemAmount.toFixed(2)
-    );
-    formik.setFieldValue(
-      `invoiceItems[${index}].gstAmount`,
-      gstAmount.toFixed(2)
-    );
+  
+    formik.setFieldValue(`invoiceItems[${index}].itemAmount`, itemAmount.toFixed(2));
+    formik.setFieldValue(`invoiceItems[${index}].gstAmount`, gstAmount.toFixed(2));
     formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
-
+  
+  
   useEffect(() => {
     const getData = async () => {
       if (studentID) {

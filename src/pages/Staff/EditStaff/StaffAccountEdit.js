@@ -198,6 +198,7 @@ const StaffAccountEdit = forwardRef(
       getData();
       fetchData();
       ShgType();
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }, []);
 
     useImperativeHandle(ref, () => ({

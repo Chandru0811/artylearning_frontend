@@ -27,6 +27,19 @@ const validationSchema = Yup.object().shape({
   userContractStartDate: Yup.string().required(
     "*Start Date Of Contract is required"
   ),
+  userContractEndDate: Yup.string()
+  .required("*End Date Of Contract is required")
+  .test(
+    "is-greater",
+    "*End Date should be later than the Start Date",
+    function (value) {
+      const { userContractStartDate } = this.parent;
+      return (
+        !userContractStartDate ||
+        new Date(value) >= new Date(userContractStartDate)
+      );
+    }
+  ),
   contactPeriod: Yup.string().required("*Contract Period is required"),
   workingDays: Yup.array()
     .min(1, "*Working days are required")
@@ -35,9 +48,6 @@ const validationSchema = Yup.object().shape({
     .typeError("*Salary Must be numbers")
     .required("*Salary is required"),
   salaryStartDate: Yup.string().required("*Start Date Of Salary is required"),
-  userContractEndDate: Yup.string().required(
-    "*End Date Of Contract is required"
-  ),
   contractDate: Yup.string().required("*Contract Date is required"),
   terminationNotice: Yup.string().required("*Termination Notice is required"),
   allowance: Yup.number().typeError("*Allowance Must be numbers").notRequired(),
@@ -131,6 +141,7 @@ const StaffContractAdd = forwardRef(
       }
     };
     useEffect(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       // getData();
       fetchData();
     }, []);
