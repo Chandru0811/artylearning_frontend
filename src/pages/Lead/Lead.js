@@ -588,6 +588,7 @@ const Lead = () => {
                                     arrangeAssesmentId={
                                       data.assessmentArrange[0].id
                                     }
+                                    studentNames={data.studentName}
                                     onSuccess={refreshData}
                                     centerId={data.centerId}
                                     setAll={ResetFilter}

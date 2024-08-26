@@ -60,12 +60,13 @@ function ClassAdd() {
       classType: "",
       durationInHrs: "",
       remark: "",
-      createdBy: userName,
+      // createdBy: userName,
 
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      values.createdBy = userName;
       const selectedValue = formik.values.centerId; // Assuming formik is in scope
       let selectedOptionName = "";
 
@@ -94,7 +95,7 @@ function ClassAdd() {
       } catch (error) {
         console.log("Duplicate Error:", error);
         if (error.response.status === 409) {
-          toast.warning("Already Create Class Name!");
+          toast.warning("Class Name Already Created!");
         } else {
           toast.error(error);
         }

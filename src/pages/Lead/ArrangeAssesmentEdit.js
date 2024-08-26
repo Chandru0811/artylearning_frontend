@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 // const validationSchema = Yup.object({});
 
-function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId ,setAll}) {
+function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId ,setAll,studentNames}) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setCenterData] = useState(null);
@@ -46,7 +46,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
   const formik = useFormik({
     initialValues: {
       centerId: centerId || "",
-      studentName:"",
+      studentName: studentNames ||"",
       studentId: 0,
       assessmentDate: "",
       assessment: "ENGLISH_ASSESSMENT",
@@ -58,7 +58,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
       setLoadIndicator(true);
       const payload = {
         centerId: centerId,
-        studentName: values.studentName,
+        studentName: studentNames,
         assessment: values.assessment,
         assessmentDate: values.assessmentDate,
         time: values.time,
@@ -168,6 +168,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
                   id="studentName"
                   name="studentName"
                   {...formik.getFieldProps("studentName")}
+                  value={studentNames}
                   disabled
                 />
               </div>

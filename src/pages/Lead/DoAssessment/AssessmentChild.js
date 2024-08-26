@@ -189,6 +189,7 @@ const AssessmentChild = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.assessmentDate} // Use formik.values.assessmentDate
+                  readOnly
                 />
                 {formik.touched.assessmentDate &&
                   formik.errors.assessmentDate && (

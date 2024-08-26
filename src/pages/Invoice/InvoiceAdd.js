@@ -391,7 +391,7 @@ export default function InvoiceAdd() {
       parseFloat(formik.values.invoiceItems[index]?.totalAmount) || 0;
 
     // Recalculate itemAmount based on totalAmount and gstRate
-    const gstAmount = (totalAmount * gstRate) / (100 + gstRate);
+    const gstAmount = (totalAmount * gstRate) / 100 ;
     const itemAmount = totalAmount - gstAmount;
 
     const updatedRows = [...rows];
@@ -425,10 +425,9 @@ export default function InvoiceAdd() {
   
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const totalAmount = parseFloat(value) || 0;
-  
-    // Calculate the itemAmount based on the totalAmount inclusive of GST
-    const itemAmount = totalAmount / (1 + gstRate / 100);
-    const gstAmount = totalAmount - itemAmount;
+    const itemAmount1 = (totalAmount) * (gstRate) / 100;
+    const gstAmount = itemAmount1
+    const itemAmount = totalAmount - gstAmount;
   
     const updatedRows = [...rows];
     updatedRows[index] = {

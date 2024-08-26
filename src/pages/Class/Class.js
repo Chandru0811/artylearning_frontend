@@ -7,13 +7,19 @@ import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-// import { SCREENS } from "../../config/ScreenFilter";
+import { FcAddColumn } from "react-icons/fc";
+import { FaEyeSlash } from "react-icons/fa";
 
 const Class = () => {
   const tableRef = useRef(null);
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showHideIcon, setShowHideIcon] = useState(false);
+  const [showColumns, setShowColumns] = useState({
+    createdBy: false,
+    updatedBy: false,
+  });
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -36,17 +42,16 @@ const Class = () => {
     return () => {
       destroyDataTable();
     };
-  }, [loading]);
+  }, [loading, showColumns]);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
     $(tableRef.current).DataTable({
       responsive: true,
       columnDefs: [
-        { orderable: false, targets: -1 }
+        { orderable: false, targets: -1 },
       ],
     });
   };
@@ -71,20 +76,30 @@ const Class = () => {
     setLoading(false);
   };
 
+  const handleToggleColumns = () => {
+    setShowColumns((prevColumns) => ({
+      createdBy: !prevColumns.createdBy,
+      updatedBy: !prevColumns.updatedBy,
+    }));
+    setShowHideIcon((prevState) => !prevState);
+
+    destroyDataTable();
+  };
+
   return (
     <div className="container my-4">
       <div className="my-3 d-flex justify-content-end mb-5">
         {storedScreens?.classCreate && (
           <Link to={`/class/add`}>
             <button type="button" className="btn btn-button btn-sm">
-              Add <i class="bx bx-plus"></i>
+              Add <i className="bx bx-plus"></i>
             </button>
           </Link>
         )}
       </div>
       {loading ? (
         <div className="loader-container">
-          <div class="loading">
+          <div className="loading">
             <span></span>
             <span></span>
             <span></span>
@@ -98,9 +113,9 @@ const Class = () => {
             <tr>
               <th scope="col">S No</th>
               <th scope="col">Class Name</th>
-              <th scope="col">Class Type </th>
-              {/* <th scope="col">Remark </th> */}
-
+              <th scope="col">Class Type</th>
+              {showColumns.createdBy && <th scope="col">Created By</th>}
+              {showColumns.updatedBy && <th scope="col">Updated By</th>}
               <th scope="col" className="text-center">Action</th>
             </tr>
           </thead>
@@ -110,7 +125,8 @@ const Class = () => {
                 <th scope="row">{index + 1}</th>
                 <td>{data.className}</td>
                 <td>{data.classType}</td>
-                {/* <td>{data.remark}</td> */}
+                {showColumns.createdBy && <td>{data.createdBy}</td>}
+                {showColumns.updatedBy && <td>{data.updatedBy}</td>}
                 <td className="text-center">
                   {storedScreens?.classRead && (
                     <Link to={`/class/view/${data.id}`}>
@@ -126,6 +142,12 @@ const Class = () => {
                       </button>
                     </Link>
                   )}
+                  <button
+                    className="btn btn-sm"
+                    onClick={handleToggleColumns}
+                  >
+                    {showHideIcon ? <FaEyeSlash /> : <FcAddColumn />} 
+                  </button>
                   {storedScreens?.classDelete && (
                     <Delete
                       onSuccess={refreshData}

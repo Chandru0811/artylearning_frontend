@@ -95,7 +95,7 @@ function CMSProductsItemEdit({ id, getData }) {
 
   return (
     <div className="container">
-      <button className="btn btn-sm text-end" onClick={handleShow}>
+      <button className="btn btn-sm " onClick={handleShow}>
         <FaEdit />
       </button>
       {/* <div className="my-3 d-flex justify-content-end align-items-end  mb-5">

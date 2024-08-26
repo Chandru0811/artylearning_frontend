@@ -14,7 +14,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
 const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Information" },{ tooltip: "Contact Information" },
-{ tooltip: "Required Information" },{ tooltip: "Login Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
+{ tooltip: "Required Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
 
 function StaffEdit() {
   const { staff_id } = useParams();
@@ -66,22 +66,22 @@ function StaffEdit() {
           childRef.current.staffRequireEdit();
         }
         break;
+      // case "4":
+      //   if (childRef.current) {
+      //     childRef.current.staffLoginEdit();
+      //   }
+      //   break;
       case "4":
-        if (childRef.current) {
-          childRef.current.staffLoginEdit();
-        }
-        break;
-      case "5":
         if (childRef.current) {
           childRef.current.staffSalaryEdit();
         }
         break;
-      case "6":
+      case "5":
         if (childRef.current) {
           childRef.current.staffLeaveEdit();
         }
         break;
-      case "7":
+      case "6":
         if (childRef.current) {
           childRef.current.staffContractEdit();
         }
@@ -178,7 +178,7 @@ function StaffEdit() {
               />
             )}
 
-            {activeStep === 4 && (
+            {/* {activeStep === 4 && (
               <StaffLoginEdit
                 formData={formData}
                 ref={childRef}
@@ -186,9 +186,9 @@ function StaffEdit() {
                 handleNext={handleNext}
                 setLoadIndicators={setLoadIndicator}
               />
-            )}
+            )} */}
 
-            {activeStep === 5 && (
+            {activeStep === 4 && (
               <StaffSalaryEdit
                 formData={formData}
                 ref={childRef}
@@ -197,7 +197,7 @@ function StaffEdit() {
                 setLoadIndicators={setLoadIndicator}
               />
             )}
-            {activeStep === 6 && (
+            {activeStep === 5 && (
               <StaffLeaveEdit
                 formData={formData}
                 ref={childRef}
@@ -207,7 +207,7 @@ function StaffEdit() {
               />
             )}
 
-            {activeStep === 7 && (
+            {activeStep === 6 && (
               <StaffContractEdit
                 formData={formData}
                 ref={childRef}

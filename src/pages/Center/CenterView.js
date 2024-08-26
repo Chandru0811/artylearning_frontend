@@ -83,13 +83,8 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    :{" "}
-                    {centerManagerData &&
-                      centerManagerData.map((Cmanager) =>
-                        parseInt(data.centerManager) === Cmanager.id
-                          ? Cmanager.userNames || "--"
-                          : ""
-                      )}
+                    :{data.centerManager}
+                     
                   </p>
                 </div>
               </div>

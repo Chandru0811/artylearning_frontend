@@ -64,6 +64,7 @@ const userName  = localStorage.getItem('userName');
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
+      values.updatedBy = userName;
       setLoadIndicator(true);
       try {
         const response = await api.put(

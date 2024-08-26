@@ -17,7 +17,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
 const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Information" },{ tooltip: "Contact Information" },
-{ tooltip: "Login Information" },{ tooltip: "Required Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
+{ tooltip: "Required Information" },{ tooltip: "Salary Information" },{ tooltip: "Leave Information" },{ tooltip: "Contract Informationn" } ];
 
 export default function TeacherEdit() {
   const { staff_id } = useParams();
@@ -70,27 +70,27 @@ export default function TeacherEdit() {
           childRef.current.contactEdit();
         }
         break;
+      // case "3":
+      //   if (childRef.current) {
+      //     childRef.current.loginEdit();
+      //   }
+      //   break;
       case "3":
-        if (childRef.current) {
-          childRef.current.loginEdit();
-        }
-        break;
-      case "4":
         if (childRef.current) {
           childRef.current.requireEdit();
         }
         break;
-      case "5":
+      case "4":
         if (childRef.current) {
           childRef.current.salaryEdit();
         }
         break;
-      case "6":
+      case "5":
         if (childRef.current) {
           childRef.current.leaveEdit();
         }
         break;
-      case "7":
+      case "6":
         if (childRef.current) {
           childRef.current.contractEdit();
         }
@@ -172,7 +172,7 @@ export default function TeacherEdit() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {activeStep === 3 && (
+              {/* {activeStep === 3 && (
                 <LoginEdit
                   formData={formData}
                   ref={childRef}
@@ -180,8 +180,8 @@ export default function TeacherEdit() {
                   handleNext={handleNext}
                   setLoadIndicators={setLoadIndicator}
                 />
-              )}
-              {activeStep === 4 && (
+              )} */}
+              {activeStep === 3 && (
                 <RequiredEdit
                   formData={formData}
                   ref={childRef}
@@ -190,7 +190,7 @@ export default function TeacherEdit() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {activeStep === 5 && (
+              {activeStep === 4 && (
                 <SalaryEdit
                   formData={formData}
                   ref={childRef}
@@ -199,7 +199,7 @@ export default function TeacherEdit() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {activeStep === 6 && (
+              {activeStep === 5 && (
                 <LeaveEdit
                   formData={formData}
                   ref={childRef}
@@ -208,7 +208,7 @@ export default function TeacherEdit() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {activeStep === 7 && (
+              {activeStep === 6 && (
                 <ContractEdit
                   formData={formData}
                   ref={childRef}
