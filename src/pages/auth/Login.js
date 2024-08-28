@@ -62,7 +62,11 @@ function Login({ onLogin }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error("Failed: " + error.data.message);
+        if(error?.response?.status === 409){
+          toast.warning("Wrong username or password!")
+        } else{
+          toast.error(error?.response?.data?.message);
+        }
       }
 
       resetForm();

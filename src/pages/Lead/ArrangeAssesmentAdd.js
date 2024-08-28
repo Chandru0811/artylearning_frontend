@@ -75,7 +75,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
           onSuccess();
           handleClose();
           setAll();
-          toast.success(response.data.message);
+          toast.success("Arrangeing Assessment Created Successfully");
           try {
             const response = await api.put(`/updateLeadInfo/${leadId}`, {
               leadStatus: "ARRANGING_ASSESSMENT",

@@ -5,7 +5,7 @@ import { FaTrash } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 
-function Delete({ onSuccess, path ,staffmsg ,teachermsg}) {
+function Delete({ onSuccess, path, staffmsg, teachermsg }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -18,16 +18,13 @@ function Delete({ onSuccess, path ,staffmsg ,teachermsg}) {
       if (response.status === 201) {
         onSuccess();
         handleClose();
-        if (staffmsg){
+        if (staffmsg) {
           toast.success(staffmsg);
-        }
-        else if(teachermsg){
+        } else if (teachermsg) {
           toast.success(teachermsg);
-        }
-        else{
+        } else {
           toast.success(response.data.message);
-         }
-       
+        }
       } else if (response.status === 200) {
         onSuccess();
         handleClose();
@@ -36,7 +33,12 @@ function Delete({ onSuccess, path ,staffmsg ,teachermsg}) {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Error deleting data:", error);
+      if (error?.response?.status === 409) {
+        toast.warning(error?.response?.data?.message);
+        handleClose();
+      } else {
+        toast.error("Error deleting data:", error);
+      }
     }
   };
   useEffect(() => {
@@ -47,16 +49,16 @@ function Delete({ onSuccess, path ,staffmsg ,teachermsg}) {
 
   useEffect(() => {
     const handleKeyPress = (event) => {
-      if (event.key === 'Enter') {
+      if (event.key === "Enter") {
         if (show) {
           handelDelete();
         }
       }
     };
 
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener("keydown", handleKeyPress);
     };
   }, [show]);
 
@@ -75,7 +77,11 @@ function Delete({ onSuccess, path ,staffmsg ,teachermsg}) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="danger" onClick={handelDelete}  className={show ? 'focused-button' : ''}>
+          <Button
+            variant="danger"
+            onClick={handelDelete}
+            className={show ? "focused-button" : ""}
+          >
             Delete
           </Button>
         </Modal.Footer>

@@ -14,6 +14,12 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
   assessmentDate: Yup.date().required("*Assessment Date is required"),
   levelAssessed: Yup.string().required("*Level Assessed is required"),
+  year: Yup.date()
+  .notRequired("*Date of Birth is required")
+  .max(
+    new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+    "*Date of Birth must be at least 1 year ago"
+  ),
   remarks: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
@@ -145,6 +151,32 @@ const AssessmentChild = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const calculateAge = (dob) => {
+      if (!dob) return "0 years, 0 months"; // Default value if dob is not provided
+
+      const birthDate = new Date(dob);
+      const today = new Date();
+
+      if (isNaN(birthDate.getTime())) return "0 years, 0 months"; // Handle invalid date
+
+      let years = today.getFullYear() - birthDate.getFullYear();
+      let months = today.getMonth() - birthDate.getMonth();
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      return `${years} years, ${months} months`;
+    };
+
+    useEffect(() => {
+      if (formik.values.year) {
+        formik.setFieldValue("age", calculateAge(formik.values.year));
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formik.values.year]);
+
     useImperativeHandle(ref, () => ({
       AssessmentChild: formik.handleSubmit,
     }));
@@ -210,21 +242,27 @@ const AssessmentChild = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.age}
+                  readOnly
                 />
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <label>Date Of Birth</label>
                 <br />
                 <input
-                  className="form-control  "
+                  className="form-control"
                   aria-label="Default form-control example"
                   type="date"
-
                   name="year"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.year}
                 />
+                {formik.touched.year &&
+                        formik.errors.year && (
+                          <div className="error text-danger ">
+                            <small>{formik.errors.year}</small>
+                          </div>
+                        )}
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <p>
