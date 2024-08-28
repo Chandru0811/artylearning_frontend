@@ -559,51 +559,50 @@ export default function InvoiceEdit() {
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 px-5">
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Invoice Date<span class="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  name="invoiceDate"
-                  {...formik.getFieldProps("invoiceDate")}
-                  className={`form-control  ${
-                    formik.touched.invoiceDate && formik.errors.invoiceDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
- 
-                  type="date"
-                />
-                {formik.touched.invoiceDate && formik.errors.invoiceDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.invoiceDate}
-                  </div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Due Date<span class="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  name="dueDate"
-                  {...formik.getFieldProps("dueDate")}
-                  className={`form-control  ${
-                    formik.touched.dueDate && formik.errors.dueDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
- 
-                  type="date"
-                  min={new Date().toISOString().split("T")[0]}
-                />
-                {formik.touched.dueDate && formik.errors.dueDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.dueDate}
-                  </div>
-                )}
-              </div>
+            <div className="text-start mt-3">
+  <label htmlFor="" className="mb-1 fw-medium">
+    Invoice Date<span className="text-danger">*</span>
+  </label>
+  <br />
+  <input
+    {...formik.getFieldProps("invoiceDate")}
+    className={`form-control ${
+      formik.touched.invoiceDate && formik.errors.invoiceDate
+        ? "is-invalid"
+        : ""
+    }`}
+    type="date"
+  />
+  {formik.touched.invoiceDate && formik.errors.invoiceDate && (
+    <div className="invalid-feedback">
+      {formik.errors.invoiceDate}
+    </div>
+  )}
+</div>
+
+<div className="text-start mt-3">
+  <label htmlFor="" className="mb-1 fw-medium">
+    Due Date<span className="text-danger">*</span>
+  </label>
+  <br />
+  <input
+    {...formik.getFieldProps("dueDate")}
+    className={`form-control ${
+      formik.touched.dueDate && formik.errors.dueDate
+        ? "is-invalid"
+        : ""
+    }`}
+    type="date"
+    // Set the minimum due date to the selected invoice date
+    min={formik.values.invoiceDate || new Date().toISOString().split("T")[0]} 
+  />
+  {formik.touched.dueDate && formik.errors.dueDate && (
+    <div className="invalid-feedback">
+      {formik.errors.dueDate}
+    </div>
+  )}
+</div>
+
 
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
