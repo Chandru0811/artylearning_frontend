@@ -73,7 +73,7 @@ function Viewpayroll() {
           <div className="col-md-6 col-12">
             <div className="row mb-2">
               <div className="col-6  ">
-                <p className="fw-medium">Gross Pay</p>
+                <p className="fw-medium">Basic Pay</p>
               </div>
               <div className="col-6">
                 <p className="text-muted text-sm">
