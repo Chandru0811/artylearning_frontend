@@ -48,9 +48,7 @@ const Student = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -110,7 +108,9 @@ const Student = () => {
                 <th scope="col">Nationality</th>
                 {/* <th scope="col">Join Class Date</th>
                 <th scope="col">Status</th> */}
-                <th scope="col" className="text-center">Action</th>
+                <th scope="col" className="text-center">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -146,6 +146,14 @@ const Student = () => {
                           path={`/deleteStudentDetail/${data.id}`}
                         />
                       )}
+                      {/* {data &&
+                      (data.studentParentsDetails?.length === 0 &&
+                        data.studentEmergencyContacts?.length === 0 &&
+                        data.studentCourseDetailModels?.length === 0 &&
+                        data.studentRelationModels?.length === 0 &&
+                        data.studentTermsAndConditions?.length === 0)
+                        ? <span className="fs-3 fw-bolder text-danger">.</span>
+                        : ' '} */}
                     </div>
                   </td>
                 </tr>

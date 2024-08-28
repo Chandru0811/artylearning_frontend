@@ -263,7 +263,7 @@ function CenterEdit() {
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
-                Centre Manager<span className="text-danger">*</span>
+                Centre Manager
               </label>
               <select
                 {...formik.getFieldProps("userId")}
@@ -596,8 +596,9 @@ function CenterEdit() {
               <div class="input-group mb-3">
                 <textarea
                   class="form-control"
-                  {...formik.getFieldProps("invoiceNotes")}
-                  id="exampleFormControlTextarea1"
+                  name="invoiceNotes"
+                  {...formik.getFieldProps("invoiceNotes") || " "}
+                  id="invoiceNotes"
                   rows="5"
                 ></textarea>
               </div>
@@ -645,7 +646,7 @@ function CenterEdit() {
                       <td>
                         {taxTypeData &&
                           taxTypeData.map((tax) =>
-                            parseInt(registration.taxType) === tax.id
+                            parseInt(registration.taxId) === tax.id
                               ? tax.taxType || "--"
                               : ""
                           )}

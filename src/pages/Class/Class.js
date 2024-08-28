@@ -142,12 +142,12 @@ const Class = () => {
                       </button>
                     </Link>
                   )}
-                  <button
+                  {/* <button
                     className="btn btn-sm"
                     onClick={handleToggleColumns}
                   >
                     {showHideIcon ? <FaEyeSlash /> : <FcAddColumn />} 
-                  </button>
+                  </button> */}
                   {storedScreens?.classDelete && (
                     <Delete
                       onSuccess={refreshData}

@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
   // colorCode: Yup.string().required("*Color Code is required"),
   teacherId: Yup.string().required("*Staff Id is required"),
   teacherType: Yup.string().required("*Staff Type is required"),
-  // shgType: Yup.string().required("*Shg Type is required"),
+  // shgTypeId: Yup.string().required("*Shg Type is required"),
   // shgAmount: Yup.string()
   //   .matches(/^[0-9]+$/, "*Amount Must be numbers")
   //   .required("*SHG amount is required"),
@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
   workingDays: Yup.array()
     .of(Yup.string().required("*Working Days is required"))
     .min(1, "*Working Days is required"),
-  centerIds: Yup.array().min(1, "At least one center must be selected"),
+  centerIds: Yup.array().min(1, "*At least one Centre must be selected"),
 });
 
 const StaffAccountAdd = forwardRef(
@@ -78,7 +78,7 @@ const StaffAccountAdd = forwardRef(
         teacherId: formData.teacherId,
         colorCode: formData.colorCode,
         teacherType: formData.teacherType,
-        shgType: formData.shgType,
+        shgTypeId: formData.shgTypeId,
         shgAmount: formData.shgAmount,
         status: formData.status,
         endDate: formData.endDate,
@@ -130,7 +130,7 @@ const StaffAccountAdd = forwardRef(
 
     const handleSubjectChange = (event) => {
       const shgTypeId = parseInt(event.target.value, 10);
-      formik.setFieldValue("shgType", shgTypeId);
+      formik.setFieldValue("shgTypeId", shgTypeId);
       const shg = shgData.find((shg) => shg.id === shgTypeId);
       if (shg) {
         formik.setFieldValue("shgAmount", shg.shgAmount);
@@ -150,7 +150,7 @@ const StaffAccountAdd = forwardRef(
         <div className="container courseAdd">
           <p className="headColor my-4">Account Information</p>
           <div class="row">
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div class="col-md-6 col-12 my-2">
               <label>
                 Start Date<span class="text-danger">*</span>
               </label>
@@ -171,27 +171,34 @@ const StaffAccountAdd = forwardRef(
                 </div>
               )}
             </div>
-            <div className="col-md-6 col-12 mb-2">
-              <lable className="form-lable">Color Code</lable>
-              <div className="input-group mb-3">
-                <div className="input-group-text inputGroup">
-                  <input
-                    type="color"
-                    {...formik.getFieldProps("colorCode")}
-                    className="form-control-color circle"
-                    ref={colorInputRef}
-                  />
+           
+            <div className="col-md-6 col-12 mb-4">
+              <label className="form-label">
+                Centre<span className="text-danger">*</span>
+              </label>
+              <MultiSelect
+                options={centerOptions}
+                value={selectedCenters}
+                onChange={(selected) => {
+                  setSelectedCenters(selected);
+                  formik.setFieldValue(
+                    "centerIds",
+                    selected.map((option) => option.value)
+                  );
+                }}
+                labelledBy="Select Centers"
+                menuPlacement="top"
+                className={`form-multi-select ${
+                  formik.touched.centerIds && formik.errors.centerIds
+                    ? "is-invalid"
+                    : ""
+                }`}
+              />
+              {formik.touched.centerIds && formik.errors.centerIds && (
+                <div className="invalid-feedback">
+                  {formik.errors.centerIds}
                 </div>
-                <input
-                  type="text"
-                  className={`form-control iconInput`}
-                  value={formik.values.colorCode}
-                  onClick={handleColorPickerClick}
-                  onChange={(e) =>
-                    formik.setFieldValue("colorCode", e.target.value)
-                  }
-                />
-              </div>
+              )}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
@@ -239,8 +246,8 @@ const StaffAccountAdd = forwardRef(
               <select
                 type="text"
                 className="form-select"
-                name="shgType"
-                {...formik.getFieldProps("shgType")}
+                name="shgTypeId"
+                {...formik.getFieldProps("shgTypeId")}
                 onChange={handleSubjectChange}
               >
                 {" "}
@@ -534,32 +541,28 @@ const StaffAccountAdd = forwardRef(
               </div>
             </div> */}
 
-            <div className="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Centre<span className="text-danger">*</span>
-              </label>
-              <MultiSelect
-                options={centerOptions}
-                value={selectedCenters}
-                onChange={(selected) => {
-                  setSelectedCenters(selected);
-                  formik.setFieldValue(
-                    "centerIds",
-                    selected.map((option) => option.value)
-                  );
-                }}
-                labelledBy="Select Centers"
-                className={`form-multi-select ${
-                  formik.touched.centerIds && formik.errors.centerIds
-                    ? "is-invalid"
-                    : ""
-                }`}
-              />
-              {formik.touched.centerIds && formik.errors.centerIds && (
-                <div className="invalid-feedback">
-                  {formik.errors.centerIds}
+
+            <div className="col-md-6 col-12 mb-2">
+              <lable className="form-lable">Color Code</lable>
+              <div className="input-group mb-3">
+                <div className="input-group-text inputGroup">
+                  <input
+                    type="color"
+                    {...formik.getFieldProps("colorCode")}
+                    className="form-control-color circle"
+                    ref={colorInputRef}
+                  />
                 </div>
-              )}
+                <input
+                  type="text"
+                  className={`form-control iconInput`}
+                  value={formik.values.colorCode}
+                  onClick={handleColorPickerClick}
+                  onChange={(e) =>
+                    formik.setFieldValue("colorCode", e.target.value)
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>

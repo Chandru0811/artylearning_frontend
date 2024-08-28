@@ -18,7 +18,10 @@ const validationSchema = Yup.object().shape({
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
-    .max(new Date(), "*Date of Birth cannot be in the future"),
+    .max(
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      "*Date of Birth must be at least 1 year ago"
+    ),
   medicalCondition: Yup.string().required("*Medical Condition is required"),
   ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
@@ -133,8 +136,8 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               value={formik.values.subject}
             >
               <option selected></option>
-              <option value="English Assessment">English Assessment</option>
-              <option value="Chinese Assessment">Chinese Assessment</option>
+              <option value="ENGLISH_ASSESSMENT">English Assessment</option>
+              <option value="CHINESE_ASSESSMENT" >Chinese Assessment</option>
             </select>
             {formik.touched.subject && formik.errors.subject && (
               <div className="text-danger">
@@ -142,8 +145,6 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               </div>
             )}
           </div>
-
-
 
           <div className="col-md-6 col-12 ">
             <div className="mb-3">

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -24,13 +25,34 @@ export default function LeadAssessment() {
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [loadIndicator, setLoadIndicator] = useState(false);
-
+  const [searchParams] = useSearchParams();  // Ensure this is correctly imported
+  const [skipped, setSkipped] = React.useState(new Set());
+  const editDo = searchParams.get('mode');
   const childRef = React.useRef();
   // console.log("Form Data:", formData);
+  const isStepSkipped = (step) => {
+    return skipped.has(step);
+  };
 
   const handleNext = () => {
-    setActiveStep((prevStep) => prevStep + 1);
+    let newSkipped = skipped;
+    if (editDo && isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
   };
+
+  const handleStepClick = (index) => {
+    if (editDo === 'edit') {
+      setActiveStep(index);
+    }
+  };
+
+  // const handleNext = () => {
+  //   setActiveStep((prevStep) => prevStep + 1);
+  // };
 
   const handleBack = () => {
     setActiveStep((prevStep) => prevStep - 1);
@@ -73,7 +95,7 @@ export default function LeadAssessment() {
     <div className="container-fluid minHeight">
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
-          <Step key={index}>
+          <Step key={index}  onClick={() => handleStepClick(index)}>
             <OverlayTrigger
               placement="top"
               overlay={

@@ -291,11 +291,11 @@ function CenterView() {
                         <td>{index + 1}</td>
                         <td>{registration.effectiveDate?.substring(0, 10)}</td>
                         <td>{registration.amount}</td>
-                        {/* <td>{registration.taxType}</td> */}
+                        {/* <td>{registration.taxId || "--"}</td> */}
                         <td>
                           {taxTypeData &&
                             taxTypeData.map((tax) =>
-                              parseInt(registration.taxType) === tax.id
+                              parseInt(registration.taxId) === tax.id
                                 ? tax.taxType || "--"
                                 : ""
                             )}

@@ -125,7 +125,7 @@ const Lead = () => {
   const formik = useFormik({
     initialValues: {
       centerId: "",
-      subjectId: "",
+      subject: "",
       leadStatus: "ALL",
     },
     onSubmit: async (data) => {
@@ -156,8 +156,8 @@ const Lead = () => {
       params.centerId = formik.values.centerId;
     }
 
-    if (formik.values.subjectId !== "") {
-      params.subjectId = formik.values.subjectId;
+    if (formik.values.subject !== "") {
+      params.subject = formik.values.subject;
     }
 
     if (formik.values.leadStatus !== "" && formik.values.leadStatus !== "ALL") {
@@ -206,7 +206,7 @@ const Lead = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     formik.values.centerId,
-    formik.values.subjectId,
+    formik.values.subject,
     formik.values.leadStatus,
   ]);
 
@@ -246,11 +246,14 @@ const Lead = () => {
         </div>
       ) : (
         <div className="container my-4">
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
             <div className="row my-3 mb-5">
               <div className="col-12 d-flex flex-wrap justify-content-center">
                 <div
@@ -320,18 +323,24 @@ const Lead = () => {
                   </select>
                   <select
                     className="form-select mb-2 mb-md-0"
-                    name="subjectId"
-                    {...formik.getFieldProps("subjectId")}
+                    name="subject"
+                    {...formik.getFieldProps("subject")}
                   >
                     <option value="" disabled selected>
                       Select Subject
                     </option>
-                    {subjectData &&
+                    {/* {subjectData &&
                       subjectData.map((subject) => (
                         <option key={subject.id} value={subject.id}>
                           {subject.subjects}
                         </option>
-                      ))}
+                      ))} */}
+                    <option value="ENGLISH_ASSESSMENT">
+                      English Assessment
+                    </option>
+                    <option value="CHINESE_ASSESSMENT">
+                      Chinese Assessment
+                    </option>
                   </select>
                   <button
                     type="button"
@@ -385,8 +394,13 @@ const Lead = () => {
                         </td>
                         <td>{data.studentName}</td>
                         <td>
-                          {data.subject}
+                          {data.subject === "ENGLISH_ASSESSMENT"
+                            ? "English Assessment"
+                            : data.subject === "CHINESE_ASSESSMENT"
+                            ? "Chinese Assessment"
+                            : ""}
                         </td>
+
                         <td>{data.fathersFullName}</td>
 
                         <td>
@@ -441,7 +455,10 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                    style={{ textDecoration: "none",cursor: "default" }}
+                                    style={{
+                                      textDecoration: "none",
+                                      cursor: "default",
+                                    }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
@@ -524,8 +541,10 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                    style={{ textDecoration: "none",cursor: "default" }}
-                                  
+                                    style={{
+                                      textDecoration: "none",
+                                      cursor: "default",
+                                    }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
@@ -660,7 +679,10 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                    style={{ textDecoration: "none",cursor: "default" }}
+                                    style={{
+                                      textDecoration: "none",
+                                      cursor: "default",
+                                    }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
@@ -709,8 +731,16 @@ const Lead = () => {
                                   </button>
                                 </li>
                                 <li>
+                                  {/* <Link
+                                    to={`/lead/lead/assessment?editDo="editDoAssessment"/${data.id}`}
+                                    style={{ textDecoration: "none" }}
+                                  >
+                                    <button className="dropdown-item">
+                                      Edit Do Assessment
+                                    </button>
+                                  </Link> */}
                                   <Link
-                                    to={`/lead/lead/assessment/${data.id}`}
+                                    to={`/lead/lead/assessment/${data.id}?mode=edit`}
                                     style={{ textDecoration: "none" }}
                                   >
                                     <button className="dropdown-item">
@@ -758,7 +788,10 @@ const Lead = () => {
                             >
                               <span
                                 className="text-white fw-bold"
-                                style={{ textDecoration: "none",cursor: "default" }}
+                                style={{
+                                  textDecoration: "none",
+                                  cursor: "default",
+                                }}
                               >
                                 Confirmed
                               </span>
@@ -827,7 +860,10 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}`}
-                                    style={{ textDecoration: "none",cursor: "default" }}
+                                    style={{
+                                      textDecoration: "none",
+                                      cursor: "default",
+                                    }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed
@@ -897,7 +933,10 @@ const Lead = () => {
                                 <li>
                                   <Link
                                     to={`/student/add?LeadId=${data.id}`}
-                                    style={{ textDecoration: "none",cursor: "default" }}
+                                    style={{
+                                      textDecoration: "none",
+                                      cursor: "default",
+                                    }}
                                   >
                                     <button className="dropdown-item">
                                       Confirmed

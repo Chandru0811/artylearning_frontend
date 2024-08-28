@@ -5,7 +5,10 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  year: Yup.string().required("*year is required"),
+  year: Yup.number()
+  .min(1990, "*Year is required")
+  .max(2050, "*Year is required")
+  .required("*Year is required"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Annual Leave Must be numbers")
@@ -157,13 +160,15 @@ const LeaveEdit = forwardRef(
                   Year<span class="text-danger">*</span>
                 </label>
                 <input
-                  type="month"
-                  // onFocus={(e)=> e.target.showPicker()}
-                  class="form-control    mt-3 "
+                  type="number"
+                  className="form-control mt-3"
                   name="year"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.year}
+                  // max={new Date().getFullYear()}
+                  step="1"
+                  placeholder="YYYY"
                 />
                 {formik.touched.year && formik.errors.year && (
                   <div className="error text-danger ">

@@ -16,7 +16,7 @@ const validationSchema = Yup.object().shape({
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
-  idType: Yup.string().required("*Id Type is required"),
+  idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
   citizenship: Yup.string().required("*CitizenShip is required"),
   // file: Yup.string().required("*Photo is required!"),
@@ -32,7 +32,7 @@ const StaffPersonalEdit = forwardRef(
       initialValues: {
         teacherName: formData.teacherName || "",
         dateOfBirth: formData.dateOfBirth || "",
-        idType: formData.idType || "",
+        idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
         citizenship: formData.citizenship || "",
         file: formData.file || "",
@@ -50,7 +50,7 @@ const StaffPersonalEdit = forwardRef(
           const formDatas = new FormData();
           formDatas.append("teacherName", data.teacherName);
           formDatas.append("dateOfBirth", data.dateOfBirth);
-          formDatas.append("idType", data.idType);
+          formDatas.append("idTypeId", data.idTypeId);
           formDatas.append("idNo", data.idNo);
           formDatas.append("citizenship", data.citizenship);
           formDatas.append("photo", data.photo);
@@ -76,7 +76,11 @@ const StaffPersonalEdit = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          if(error?.response?.status === 409){
+            toast.warning("ID Number already exists!")
+          } else{
+            toast.error(error?.response?.data?.message);
+          }
         } finally {
           setLoadIndicators(false);
         }
@@ -116,17 +120,14 @@ const StaffPersonalEdit = forwardRef(
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
-            shortIntroduction:
-              response.data.shortIntroduction === undefined
-                ? response.data.shortIntroduction
-                : " " || "",
+            shortIntroduction: response.data.shortIntroduction || " ",
           });
         } catch (error) {
           toast.error("Error Fetching Data");
         }
       };
       getData();
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -188,22 +189,22 @@ const StaffPersonalEdit = forwardRef(
               <select
                 type="text"
                 className="form-select"
-                name="idType"
+                name="idTypeId"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.idType}
+                value={formik.values.idTypeId}
               >
                 <option value=""></option>
                 {idTypeData &&
-                  idTypeData.map((idType) => (
-                    <option key={idType.id} value={idType.idType}>
-                      {idType.idType}
+                  idTypeData.map((idTypeId) => (
+                    <option key={idTypeId.id} value={idTypeId.id}>
+                      {idTypeId.idType}
                     </option>
                   ))}
               </select>
-              {formik.touched.idType && formik.errors.idType && (
+              {formik.touched.idTypeId && formik.errors.idTypeId && (
                 <div className="error text-danger ">
-                  <small>{formik.errors.idType}</small>
+                  <small>{formik.errors.idTypeId}</small>
                 </div>
               )}
             </div>
@@ -316,15 +317,12 @@ const StaffPersonalEdit = forwardRef(
           <div class="container row d-flex my-4 justify-align-content-around"></div>
           <div class="container row d-flex justify-content-start align-items-center">
             <div class="form-group  col-sm ">
-              <label
-                for="exampleFormControlTextarea1 "
-                class="form-label d-flex "
-              >
+              <label for="shortIntroduction " class="form-label d-flex ">
                 Short Introduction
               </label>
               <textarea
                 class="form-control "
-                id="exampleFormControlTextarea1"
+                id="shortIntroduction"
                 rows="4"
                 name="shortIntroduction"
                 onChange={formik.handleChange}

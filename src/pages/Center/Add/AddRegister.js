@@ -37,7 +37,7 @@ function AddRegister({ id, onSuccess }) {
       .string()
       .typeError("Amount must be a number")
       .required("*Amount is required"),
-    taxType: yup.string().required("*Tax Type is required"),
+    taxId: yup.string().required("*Tax Type is required"),
     status: yup.string().required("*Status is required"),
   });
   const formik = useFormik({
@@ -45,7 +45,7 @@ function AddRegister({ id, onSuccess }) {
       // registrationDate: "",
       effectiveDate: "",
       amount: "",
-      taxType: "",
+      taxId: "",
       status: "",
     },
     validationSchema: validationSchema,
@@ -178,11 +178,11 @@ function AddRegister({ id, onSuccess }) {
                 </lable>
                 <select
                   className={`form-select ${
-                    formik.touched.taxType && formik.errors.taxType
+                    formik.touched.taxId && formik.errors.taxId
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("taxType")}
+                  {...formik.getFieldProps("taxId")}
                   style={{ width: "100%" }}
                 >
                   <option value=""></option>
@@ -193,9 +193,9 @@ function AddRegister({ id, onSuccess }) {
                       </option>
                     ))}
                 </select>
-                {formik.touched.taxType && formik.errors.taxType && (
+                {formik.touched.taxId && formik.errors.taxId && (
                   <div className="invalid-feedback">
-                    {formik.errors.taxType}
+                    {formik.errors.taxId}
                   </div>
                 )}
               </div>

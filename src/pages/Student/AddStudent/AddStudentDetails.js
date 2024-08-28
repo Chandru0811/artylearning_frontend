@@ -377,8 +377,8 @@ const AddStudentDetails = forwardRef(
                           className="form-check-input mx-2"
                           type="radio"
                           name="schoolType"
-                          value="Childcare"
-                          checked={formik.values.schoolType === "Childcare"}
+                          value="CHILDCARE"
+                          checked={formik.values.schoolType === "CHILDCARE"}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
@@ -388,8 +388,8 @@ const AddStudentDetails = forwardRef(
                           className="form-check-input mx-2"
                           type="radio"
                           name="schoolType"
-                          value="Kindergarten"
-                          checked={formik.values.schoolType === "Kindergarten"}
+                          value="KINDERGARTEN"
+                          checked={formik.values.schoolType === "KINDERGARTEN"}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />

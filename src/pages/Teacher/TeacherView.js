@@ -23,7 +23,7 @@ function TeacherView() {
       }
     };
     getData();
-    fetchData()
+    fetchData();
   }, [id]);
 
   const fetchData = async () => {
@@ -68,7 +68,7 @@ function TeacherView() {
           <div class="col-auto">
             <div class="hstack gap-2 justify-content-end">
               <Link to="/teacher">
-                <button type="submit" class="btn btn-border">
+                <button type="submit" className="btn btn-border btn-sm">
                   <span>Back</span>
                 </button>
               </Link>
@@ -372,7 +372,9 @@ function TeacherView() {
                 {data.userAccountInfo &&
                 data.userAccountInfo.length > 0 &&
                 data.userAccountInfo[0].centers
-                  ? data.userAccountInfo[0].centers.map((item)=>item.centerName).join(", ")
+                  ? data.userAccountInfo[0].centers
+                      .map((item) => item.centerName)
+                      .join(", ")
                   : "--"}
               </p>
             </div>
@@ -476,7 +478,9 @@ function TeacherView() {
                 <p className="text-sm text-muted">Resume/Cv</p>
               </div>
               <div className="col-4">
-                <p className="text-sm text-muted text-break">{resumeFileName || "--"}</p>
+                <p className="text-sm text-muted text-break">
+                  {resumeFileName || "--"}
+                </p>
               </div>
               <div className="col-4 ">
                 {userRequireInfo && (
@@ -677,15 +681,28 @@ function TeacherView() {
               <p className="text-sm fw-medium">Employer</p>
             </div>
             <div className="col-6">
-            <p className="text-muted text-sm">
+              <p className="text-muted text-sm">
                 :{" "}
-                {centerData &&
+                {/* {centerData &&
                   centerData.map((centerId) =>
                     parseInt(data.userContractCreationModels[0].employer) ===
                     centerId.id
                       ? centerId.centerNames || "--"
                       : ""
-                  )}
+                  )} */}
+                {centerData &&
+                  centerData.map((centerId) => {
+                    if (
+                      data &&
+                      data.userContractCreationModels &&
+                      data.userContractCreationModels.length > 0 &&
+                      parseInt(data.userContractCreationModels[0].employer) ===
+                        centerId.id
+                    ) {
+                      return centerId.centerNames || "--";
+                    }
+                    return null;
+                  })}
               </p>
               {/* <p className="text-muted text-sm">
                 :{" "}

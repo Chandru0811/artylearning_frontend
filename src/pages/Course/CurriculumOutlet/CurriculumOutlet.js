@@ -169,7 +169,7 @@ function CurriculumOutlet() {
                   {storedScreens?.courseDelete && (
                     <Delete
                       onSuccess={refreshData}
-                      path={`/deleteCourse/${data.id}`}
+                      path={`/deleteCurriculumOutLet/${data.id}`}
                     />
                   )}
                 </td>

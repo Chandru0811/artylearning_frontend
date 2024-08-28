@@ -110,7 +110,7 @@ function CenterAdd() {
       formData.append("bankBranch", values.bankBranch);
       formData.append("bankAccountNumber", values.bankAccountNumber);
       formData.append("bankAccountName", values.bankAccountName);
-      formData.append("invoiceNotes  ", values.invoiceNotes);
+      formData.append("invoiceNotes  ", values.invoiceNotes || " ");
       formData.append("file", values.file);
       formData.append("createdBy", userName);
 
@@ -212,7 +212,7 @@ function CenterAdd() {
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
-                Centre Manager<span className="text-danger">*</span>
+                Centre Manager
               </label>
               <select
                 {...formik.getFieldProps("centerManager")}
@@ -349,7 +349,7 @@ function CenterAdd() {
                     name="gst"
                     id="inlineRadio1"
                     value="true"
-                    onChange={() => formik.setFieldValue('gst', true)}
+                    onChange={() => formik.setFieldValue("gst", true)}
                     checked={formik.values.gst === true}
                   />
                   <label className="form-check-label" htmlFor="inlineRadio1">
@@ -363,8 +363,8 @@ function CenterAdd() {
                     name="gst"
                     id="inlineRadio2"
                     value="false"
-                    onChange={() => formik.setFieldValue('gst', false)}
-                    checked={formik.values.gst === "false"}
+                    onChange={() => formik.setFieldValue("gst", false)}
+                    checked={formik.values.gst === false}
                   />
                   <label className="form-check-label" htmlFor="inlineRadio2">
                     No
@@ -538,9 +538,10 @@ function CenterAdd() {
               </label>
               <div class="input-group mb-3">
                 <textarea
+                  name="invoiceNotes"
                   class="form-control"
                   {...formik.getFieldProps("invoiceNotes")}
-                  id="exampleFormControlTextarea1"
+                  id="invoiceNotes"
                   rows="5"
                 ></textarea>
               </div>

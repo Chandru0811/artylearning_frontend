@@ -122,7 +122,7 @@ function HolidayAdd() {
             <div className="row mt-3">
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
-                  <label className="form-label">
+                  <label className="form-label m-0">
                     Centre Name<span className="text-danger">*</span>
                   </label>
                   <select

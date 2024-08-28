@@ -12,7 +12,7 @@ import fetchAllLevelBySubjectsWithIds from "../List/LevelListBySubject";
 import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object({
-  centers: Yup.array().min(1, "At least one center must be selected"),
+  centers: Yup.array().min(1, "*At least one Centre must be selected"),
   courseName: Yup.string().required("*Course Name is required"),
   courseCode: Yup.string().required("*Course Code is required"),
   subjectId: Yup.string().required("*Select the Subject"),
@@ -551,6 +551,12 @@ function CourseEdit() {
                   {...formik.getFieldProps("description")}
                   placeholder=""
                 ></textarea>
+                {formik.errors.description &&
+                  formik.touched.description && (
+                    <div className="text-danger" style={{ fontSize: ".875em" }}>
+                      {formik.errors.description}
+                    </div>
+                  )}
               </div>
             </div>
           </div>

@@ -846,6 +846,7 @@ const ContractEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.contractDate}
+                    readOnly
                   />
                   {formik.touched.contractDate &&
                     formik.errors.contractDate && (

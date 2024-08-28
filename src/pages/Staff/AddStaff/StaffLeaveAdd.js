@@ -5,7 +5,10 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  year: Yup.string().required("*Year is required"),
+  year: Yup.number()
+  .min(1990, "*Year is required")
+  .max(2050, "*Year is required")
+  .required("*Year is required"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Annual Leave Must be numbers")
@@ -21,11 +24,10 @@ const validationSchema = Yup.object().shape({
     .required("*Carry Forward Leave is required"),
 });
 const StaffLeaveAdd = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
-      
       initialValues: {
         year: formData.year,
         annualLeave: formData.annualLeave,
@@ -33,7 +35,6 @@ const StaffLeaveAdd = forwardRef(
         otherLeave: formData.otherLeave,
         carryForwardLeave: formData.carryForwardLeave,
         createdBy: userName,
-
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -57,7 +58,7 @@ const StaffLeaveAdd = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -68,16 +69,19 @@ const StaffLeaveAdd = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <section>
           <div className="container" style={{ minHeight: "60vh" }}>
             <p className="headColor my-4">Leave Information</p>
             <div class="row">
-              <div class="col-md-6 col-12 mb-2">
+              {/* <div class="col-md-6 col-12 mb-2">
                 <label>
                   Year<span class="text-danger">*</span>
                 </label>
@@ -95,7 +99,29 @@ const StaffLeaveAdd = forwardRef(
                     <small>{formik.errors.year}</small>
                   </div>
                 )}
+              </div> */}
+              <div className="col-md-6 col-12 mb-2">
+                <label>
+                  Year<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  className="form-control mt-3"
+                  name="year"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.year}
+                  // max={new Date().getFullYear()}
+                  step="1"
+                  placeholder="YYYY"
+                />
+                {formik.touched.year && formik.errors.year && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.year}</small>
+                  </div>
+                )}
               </div>
+
               <div class="col-md-6 col-12 mb-2">
                 <label>
                   Annual Leave<span class="text-danger">*</span>

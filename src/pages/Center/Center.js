@@ -134,12 +134,13 @@ const Center = () => {
                 <th scope="row">{index + 1}</th>
                 <td>{data.centerName}</td>
                 <td>
-                  {centerManagerData &&
+                  {/* {centerManagerData &&
                     centerManagerData.map((Cmanager) =>
                       parseInt(data.centerManager) === Cmanager.id
                         ? Cmanager.userNames || "--"
                         : ""
-                    )}
+                    )} */}
+                    {data.centerManager}
                 </td>
                 <td>{data.code}</td>
                 <td>{data.uenNumber}</td>

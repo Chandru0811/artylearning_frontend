@@ -844,6 +844,7 @@ function StaffView() {
               <p className="text-muted text-sm">
                 :{" "}
                 {centerData &&
+                  data?.userContractCreationModels?.length > 0 &&
                   centerData.map((centerId) =>
                     parseInt(data.userContractCreationModels[0].employer) ===
                     centerId.id

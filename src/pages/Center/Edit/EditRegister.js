@@ -27,7 +27,7 @@ function EditRegisteration({ id, onSuccess }) {
     // registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
     amount: yup.string().required("*Amount is required"),
-    taxType: yup.string().required("*Tax Type is required"),
+    taxId: yup.string().required("*Tax Type is required"),
     status: yup.string().required("*Status is required"),
   });
   const formik = useFormik({
@@ -35,7 +35,7 @@ function EditRegisteration({ id, onSuccess }) {
       registrationDate: "",
       effectiveDate: "",
       amount: "",
-      taxType: "",
+      taxId: "",
       status: "",
     },
     validationSchema: validationSchema,
@@ -88,7 +88,7 @@ function EditRegisteration({ id, onSuccess }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleSubmit = () => {
-    const selectedTaxType = formik.values.taxType;
+    const selectedTaxType = formik.values.taxId;
 
     const activeTaxTypes = taxData.filter((tax) => tax.status === "ACTIVE");
 
@@ -97,7 +97,7 @@ function EditRegisteration({ id, onSuccess }) {
     );
 
     if (!isValidTaxType) {
-      formik.setFieldValue("taxType", "");
+      formik.setFieldValue("taxId", "");
       formik.handleSubmit();
     } else {
       formik.handleSubmit();
@@ -200,11 +200,11 @@ function EditRegisteration({ id, onSuccess }) {
                 </lable>
                 <select
                   className={`form-select ${
-                    formik.touched.taxType && formik.errors.taxType
+                    formik.touched.taxId && formik.errors.taxId
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("taxType")}
+                  {...formik.getFieldProps("taxId")}
                   style={{ width: "100%" }}
                 >
                   <option value=""></option>
@@ -215,9 +215,9 @@ function EditRegisteration({ id, onSuccess }) {
                       </option>
                     ))}
                 </select>
-                {formik.touched.taxType && formik.errors.taxType && (
+                {formik.touched.taxId && formik.errors.taxId && (
                   <div className="invalid-feedback">
-                    {formik.errors.taxType}
+                    {formik.errors.taxId}
                   </div>
                 )}
               </div>

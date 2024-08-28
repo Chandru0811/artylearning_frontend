@@ -16,7 +16,7 @@ const validationSchema = Yup.object().shape({
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
-  idType: Yup.string().required("*Id Type is required"),
+  idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
   citizenship: Yup.string().required("*Citizenship is required"),
 
@@ -36,7 +36,7 @@ const PersonalAdd = forwardRef(
         role: "teacher",
         teacherName: formData.teacherName,
         dateOfBirth: formData.dateOfBirth,
-        idType: formData.idType,
+        idTypeId: formData.idTypeId,
         idNo: formData.idNo,
         citizenship: formData.citizenship,
         file: null || "",
@@ -76,7 +76,7 @@ const PersonalAdd = forwardRef(
           formData.append("role", "teacher");
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
-          formData.append("idType", values.idType);
+          formData.append("idTypeId", values.idTypeId);
           formData.append("idNo", values.idNo);
           formData.append("citizenship", values.citizenship);
           formData.append("shortIntroduction", values.shortIntroduction);
@@ -102,7 +102,11 @@ const PersonalAdd = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          if(error?.response?.status === 409){
+            toast.warning("ID Number already exists!")
+          } else{
+            toast.error(error?.response?.data?.message);
+          }
         } finally {
           setLoadIndicators(false);
         }
@@ -189,22 +193,22 @@ const PersonalAdd = forwardRef(
                 <select
                   type="text"
                   className="form-select"
-                  name="idType"
+                  name="idTypeId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.idType}
+                  value={formik.values.idTypeId}
                 >
                   <option value=""></option>
                   {idTypeData &&
-                    idTypeData.map((idType) => (
-                      <option key={idType.id} value={idType.idType}>
-                        {idType.idType}
+                    idTypeData.map((idTypeId) => (
+                      <option key={idTypeId.id} value={idTypeId.id}>
+                        {idTypeId.idType}
                       </option>
                     ))}
                 </select>
-                {formik.touched.idType && formik.errors.idType && (
+                {formik.touched.idTypeId && formik.errors.idTypeId && (
                   <div className="error text-danger ">
-                    <small>{formik.errors.idType}</small>
+                    <small>{formik.errors.idTypeId}</small>
                   </div>
                 )}
               </div>
