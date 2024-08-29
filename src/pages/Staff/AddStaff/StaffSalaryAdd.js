@@ -38,7 +38,7 @@ const StaffSalaryAdd = forwardRef(
       initialValues: {
         salary: formData.salary || "",
         effectiveDate: formData.effectiveDate || "",
-        salaryType: formData.salaryType || "",
+        salaryTypeId: formData.salaryTypeId || "",
         createdBy: formData.userName || "",
       },
       validationSchema: validationSchema,
@@ -115,15 +115,15 @@ const StaffSalaryAdd = forwardRef(
                 <select
                   type="text"
                   className="form-select"
-                  name="salaryType"
+                  name="salaryTypeId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.salaryType}
+                  value={formik.values.salaryTypeId}
                 >
                   <option value=""></option>
                   {salaryTypeData &&
                     salaryTypeData.map((salaryId) => (
-                      <option key={salaryId.id} value={salaryId.salaryType}>
+                      <option key={salaryId.id} value={salaryId.id}>
                         {salaryId.salaryType}
                       </option>
                     ))}

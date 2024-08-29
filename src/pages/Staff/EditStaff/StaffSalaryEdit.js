@@ -17,14 +17,14 @@ const validationSchema = Yup.object().shape({
 const StaffSalaryEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName');
 
     const fetchData = async () => {
       try {
         const salarytype = await fetchAllSalaryTypeWithIds();
-        setSalaryTypeData(salarytype);
+        setSalaryTypeData(salarytype); // Make sure to update state here
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "Error fetching salary types");
       }
     };
 
@@ -36,37 +36,12 @@ const StaffSalaryEdit = forwardRef(
       initialValues: {
         salary: "",
         effectiveDate: "",
-        salaryType: "",
-        updatedBy:userName,
-
+        salaryTypeId: "",
+        updatedBy: userName,
       },
-
-      // onSubmit: async (data) => {
-      //   try {
-      //     const response = await api.put(
-      //       `/updateUserSalaryCreation/${data.salaryId}`,
-      //       data,
-      //       {
-      //         headers: {
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     if (response.status === 200) {
-      //       toast.success(response.data.message);
-      //       setFormData((prv) => ({ ...prv, ...data }));
-      //       handleNext();
-      //     } else {
-      //       toast.error(response.data.message);
-      //     }
-      //   } catch (error) {
-      //     toast.error(error);
-      //   }
-      // },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-        console.log("Api Data:", values);
         try {
           if (values.salaryId !== null) {
             const response = await api.put(
@@ -80,7 +55,7 @@ const StaffSalaryEdit = forwardRef(
             );
             if (response.status === 200) {
               toast.success(response.data.message);
-              setFormData((prv) => ({ ...prv, ...values }));
+              setFormData((prev) => ({ ...prev, ...values }));
               handleNext();
             } else {
               toast.error(response.data.message);
@@ -97,14 +72,14 @@ const StaffSalaryEdit = forwardRef(
             );
             if (response.status === 201) {
               toast.success(response.data.message);
-              setFormData((prv) => ({ ...prv, ...values }));
+              setFormData((prev) => ({ ...prev, ...values }));
               handleNext();
             } else {
               toast.error(response.data.message);
             }
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message || "Error submitting data");
         } finally {
           setLoadIndicators(false);
         }
@@ -124,6 +99,8 @@ const StaffSalaryEdit = forwardRef(
             formik.setValues({
               ...response.data.userSalaryCreationModels[0],
               salaryId: response.data.userSalaryCreationModels[0].id,
+              salaryTypeId: response.data.userSalaryCreationModels[0].salaryTypeId || "", 
+
               effectiveDate:
                 response.data.userSalaryCreationModels[0].effectiveDate.substring(
                   0,
@@ -135,18 +112,16 @@ const StaffSalaryEdit = forwardRef(
               salaryId: null,
               salary: "",
               effectiveDate: "",
-              salaryType: "",
+              salaryTypeId: "",
             });
-            // console.log("Salary ID:", formik.values.salaryId);
           }
         } catch (error) {
-          toast.error("Error Fetching Data ", error);
+          toast.error("Error fetching data");
         }
       };
-      // console.log(formik.values);
+
       getData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [formData.staff_id]); // Added staff_id as a dependency to avoid unnecessary rerenders
 
     useImperativeHandle(ref, () => ({
       staffSalaryEdit: formik.handleSubmit,
@@ -193,15 +168,15 @@ const StaffSalaryEdit = forwardRef(
                 <select
                   type="text"
                   className="form-select"
-                  name="salaryType"
+                  name="salaryTypeId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.salaryType}
+                  value={formik.values.salaryTypeId}
                 >
                   <option value=""></option>
                   {salaryTypeData &&
                     salaryTypeData.map((salaryId) => (
-                      <option key={salaryId.id} value={salaryId.salaryType}>
+                      <option key={salaryId.id} value={salaryId.id}>
                         {salaryId.salaryType}
                       </option>
                     ))}

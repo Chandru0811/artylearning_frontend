@@ -11,15 +11,14 @@ import { toast } from "react-toastify";
 function DocumentView() {
   const { id } = useParams();
   const location = useLocation();
-  // Extract the query parameters
   const queryParams = new URLSearchParams(location.search);
-  const approveStatus = queryParams.get('approveStatus') === 'true';
-  console.log("Approval Status:", approveStatus);
+  const initialApproveStatus = queryParams.get('approveStatus') === 'true';
   
   const [data, setData] = useState([]);
   const [folderName, setFolderName] = useState("");
   const [images] = useState([AddContact]);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [approveStatus, setApproveStatus] = useState(initialApproveStatus);
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
@@ -57,7 +56,6 @@ function DocumentView() {
       console.error("Error refreshing data:", error);
     }
   };
-  console.log("data", data);
 
   const downloadFiles = async () => {
     setLoadIndicator(true);
@@ -70,22 +68,21 @@ function DocumentView() {
       zip.file(fileName, blob);
     }
 
-    // Generate ZIP file and trigger download
     const content = await zip.generateAsync({ type: "blob" });
     saveAs(content, folderName);
     setLoadIndicator(false);
   };
 
-  const ApproveStatus = async () => {
+  const approveUser = async () => {
     try {
       const response = await api.put(`/approveUser/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      // toast.success(response.data.message);
       if (response.status === 200) {
         toast.success(response.data.message);
+        setApproveStatus(false); // Hide the button after approval
       } else {
         toast.error(response.data.message);
       }
@@ -97,16 +94,14 @@ function DocumentView() {
   return (
     <div className="container">
       <div className="d-flex justify-content-end align-item-end mt-4">
-        {approveStatus === true ? (
+        {approveStatus && (
           <button
             type="button"
-            onClick={ApproveStatus}
+            onClick={approveUser}
             className="btn btn-sm btn-border mx-2"
           >
-            Approval User
+            Approve User
           </button>
-        ) : (
-          <></>
         )}
 
         <Link to="/document">
@@ -191,7 +186,7 @@ function DocumentView() {
               ) : (
                 <tr>
                   <td colSpan="4" className="text-center">
-                    No Record's Found
+                    No Records Found
                   </td>
                 </tr>
               )}
