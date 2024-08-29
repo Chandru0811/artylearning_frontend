@@ -141,6 +141,15 @@ const StaffAccountAdd = forwardRef(
         colorInputRef.current.click();
       }
     };
+    useEffect(() => {
+      if (formik.values.centerIds) {
+        const initializedCenters = centerOptions.filter(option =>
+          formik.values.centerIds.includes(option.value)
+        );
+        setSelectedCenters(initializedCenters);
+      }
+    }, [formik.values.centerIds, centerOptions]);
+    
     return (
        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
