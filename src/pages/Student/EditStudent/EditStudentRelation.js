@@ -17,8 +17,7 @@ const EditStudentRelation = forwardRef(
   ({ formData, setFormData, setLoadIndicators, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
-    const userName  = localStorage.getItem('userName');
-
+    const userName = localStorage.getItem("userName");
 
     console.log("Formdata ID:", formData.id);
     const fetchData = async () => {
@@ -52,8 +51,7 @@ const EditStudentRelation = forwardRef(
         studentRelation: formData.studentRelation || "",
         studentRelationStudentName: formData.studentRelationStudentName || "",
         studentId: formData.id || "",
-        updatedBy:userName,
-
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -114,9 +112,7 @@ const EditStudentRelation = forwardRef(
     useEffect(() => {
       const getData = async () => {
         try {
-          const response = await api.get(
-            `/getAllStudentById/${formData.id}`
-          );
+          const response = await api.get(`/getAllStudentById/${formData.id}`);
           // console.log(response.data.studentRelationModels)
           if (
             response.data.studentRelationModels &&
@@ -154,11 +150,14 @@ const EditStudentRelation = forwardRef(
 
     return (
       <div className="container-fluid">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="border-0 mb-5">
             <div className="mb-5">
               <div className="border-0 my-2 px-2">
@@ -234,7 +233,7 @@ const EditStudentRelation = forwardRef(
                           }`}
                         >
                           <option selected></option>
-                          {studentData &&
+                          {/* {studentData &&
                             studentData.map((student) => (
                               <option
                                 key={student.id}
@@ -242,7 +241,18 @@ const EditStudentRelation = forwardRef(
                               >
                                 {student.studentNames}
                               </option>
-                            ))}
+                            ))} */}
+                          {studentData &&
+                            studentData
+                              .filter(
+                                (student) => student.id !== formData.student_id
+                              ) // Filter students with matching id
+                              .map((student) => (
+                                <option key={student.id} value={student.id}>
+                                  {student.studentNames}{" "}
+                                  {/* Display the student name */}
+                                </option>
+                              ))}
                         </select>
                         {formik.touched.studentRelationStudentName &&
                           formik.errors.studentRelationStudentName && (

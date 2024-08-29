@@ -162,7 +162,7 @@ const AssessmentBeliever = forwardRef(
             </div>
             <div className="col-md-6 col-12 my-4">
               <label for="floatingTextarea2">
-                Remarks<span className="text-danger">*</span>
+                Remarks
               </label>
               <div className="">
                 <textarea

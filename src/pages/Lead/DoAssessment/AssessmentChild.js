@@ -30,6 +30,7 @@ const AssessmentChild = forwardRef(
     const { leadId } = useParams();
     const [assessmentAvailable, setAssessmentAvailable] = useState(false);
     const [assessmentId, setAssessmentId] = useState(false);
+    const [arrangeassesmentData, setArrangeassesmentData] = useState([]);
     console.log(assessmentId);
     const currentDate = new Date().toISOString().split("T")[0];
     const formik = useFormik({
@@ -114,6 +115,19 @@ const AssessmentChild = forwardRef(
       },
     });
 
+    const getArrangeAssesmentData = async () => {
+      try {
+        const response = await api.get(`/getAllLeadInfoWithReferrerById/${leadId}`);
+        setArrangeassesmentData(response.data);
+        // console.log("Lead Do Data:",response.data.assessmentArrange[0].time);
+        const timeSlotOffered = response?.data?.assessmentArrange[0]?.time;
+        formik.setFieldValue('timeSlotOffered',timeSlotOffered);
+      } catch (error) {
+        toast.error("Error Fetch Data ", error);
+      }
+    };
+
+
     useEffect(() => {
       const getData = async () => {
         const response = await api.get(
@@ -126,6 +140,11 @@ const AssessmentChild = forwardRef(
           const year =
             response.data.leadDoAssessmentModel[0].year &&
             response.data.leadDoAssessmentModel[0].year.substring(0, 10);
+          formik.setValues({
+            ...response.data.leadDoAssessmentModel[0],
+            year: year,
+            assessmentDate: currentDate,
+          });
           formik.setValues({
             ...response.data.leadDoAssessmentModel[0],
             year: year,
@@ -145,9 +164,18 @@ const AssessmentChild = forwardRef(
             remarks: leadResponse.data.remark,
             referredBy: leadResponse.data.referBy,
           });
+          // if (response?.data?.assessmentArrange?.length > 0) {
+          //   formik.setFieldValue('timeSlotOffered', response.data.assessmentArrange[0].time);
+          // } else {
+          //   // Handle the case when assessmentArrange is not available
+          //   formik.setFieldValue('timeSlotOffered', ''); // or set a default value
+          // }
         }
+        
+        
       };
       getData();
+      getArrangeAssesmentData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -331,7 +359,6 @@ const AssessmentChild = forwardRef(
                 <div className="col-12 d-flex ">
                   <input
                     type="time"
-   
                     name="timeSlotOffered"
                     className="form-control"
                     onChange={formik.handleChange}

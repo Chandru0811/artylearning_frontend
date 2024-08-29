@@ -17,8 +17,7 @@ const Addrelation = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
-    const userName  = localStorage.getItem('userName');
-
+    const userName = localStorage.getItem("userName");
 
     const fetchData = async () => {
       try {
@@ -49,7 +48,6 @@ const Addrelation = forwardRef(
         studentRelation: formData.studentRelation || "",
         studentRelationStudentName: formData.studentRelationStudentName || "",
         createdBy: userName,
-
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -89,7 +87,7 @@ const Addrelation = forwardRef(
             const response = await api.get(
               `/getAllLeadInfoById/${formData.LeadId}`
             );
-           
+
             const leadData = response.data;
             formik.setValues({
               studentRelationCenter: leadData.centerId || "",
@@ -123,11 +121,14 @@ const Addrelation = forwardRef(
 
     return (
       <div className="container-fluid">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="border-0 mb-5">
             <div className="mb-5">
               <div className="border-0 my-2 px-2">
@@ -135,7 +136,7 @@ const Addrelation = forwardRef(
                 <div className="container py-3">
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-12">
-                    <div className="text-start">
+                      <div className="text-start">
                         <label htmlFor="" className="mb-1 fw-medium">
                           <small>Centre</small>
                         </label>
@@ -203,12 +204,23 @@ const Addrelation = forwardRef(
                           }`}
                         >
                           <option selected></option>
-                          {studentData &&
+                          {/* {studentData &&
                             studentData.map((student) => (
-                              <option key={student.id} value={student.studentNames}>
-                                {student.studentNames}
+                              <option key={student.id} value={student.id === formData.student_id}>
+                                {student.studentNames ? "" : student.studentNames}
                               </option>
-                            ))}
+                            ))} */}
+                           {studentData &&
+                            studentData
+                              .filter(
+                                (student) => student.id !== formData.student_id
+                              ) // Filter students with matching id
+                              .map((student) => (
+                                <option key={student.id} value={student.id}>
+                                  {student.studentNames}{" "}
+                                  {/* Display the student name */}
+                                </option>
+                              ))}
                         </select>
                         {formik.touched.studentRelationStudentName &&
                           formik.errors.studentRelationStudentName && (

@@ -38,7 +38,7 @@ const validationSchema = Yup.object().shape({
     "*Medical Condition Result is required"
   ),
   remark: Yup.string()
-      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
+      .max(200, "*The maximum length is 200 characters").notRequired("*Only 200 Letters"),
   // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguage: Yup.string().required("*Primary Language is required"),
   race: Yup.string().required("*Select a Race"),
