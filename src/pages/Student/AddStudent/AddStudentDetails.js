@@ -38,8 +38,7 @@ const validationSchema = Yup.object().shape({
     "*Medical Condition Result is required"
   ),
   remark: Yup.string()
-    .notRequired()
-    .max(200, "*The maximum length is 200 characters"),
+      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
   // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguage: Yup.string().required("*Primary Language is required"),
   race: Yup.string().required("*Select a Race"),
@@ -699,6 +698,8 @@ const AddStudentDetails = forwardRef(
                     style={{
                       height: "7rem",
                     }}
+                    maxLength={200}
+
                   />
                   {formik.touched.remark && formik.errors.remark && (
                     <div className="error text-danger">

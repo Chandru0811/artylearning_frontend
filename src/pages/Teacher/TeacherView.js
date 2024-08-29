@@ -11,6 +11,8 @@ function TeacherView() {
   const [data, setData] = useState([]);
   console.log("Api data:", data);
   const [centerData, setCenterData] = useState(null);
+  const [shgData, setShgData] = useState([]);
+
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -34,7 +36,20 @@ function TeacherView() {
       toast.error(error);
     }
   };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllSHGSetting");
+        setShgData(response.data);
+        console.log("shgdata", shgData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    getData();
+   
+  }, []);
   const getFileNameFromUrl = (url) => {
     if (url) {
       const parts = url.split("/");
@@ -262,14 +277,18 @@ function TeacherView() {
               <p className="text-sm fw-medium">SHG(S) Type</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].shgType
-                  ? data.userAccountInfo[0].shgType
-                  : "--"}
-              </p>
+            <p className="text-muted text-sm">
+            :{" "}
+            {data.userAccountInfo &&
+            data.userAccountInfo.length > 0 &&
+            data.userAccountInfo[0].shgTypeId
+              ? (
+                  shgData.find(
+                    (item) => item.id == data.userAccountInfo[0].shgTypeId
+                  ) || {}
+                ).shgType || "--"
+              : "--"}
+          </p>
             </div>
           </div>
         </div>

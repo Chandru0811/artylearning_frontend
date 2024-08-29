@@ -20,8 +20,7 @@ const validationSchema = Yup.object().shape({
     .required("Select preferred time slot"),
   enquiryDate: Yup.string().required("*Enquiry Date is required"),
   remark: Yup.string()
-    .notRequired()
-    .max(200, "*The maximum length is 200 characters"),
+      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
 });
 
 const EditForm5 = forwardRef(
@@ -454,6 +453,8 @@ const EditForm5 = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.remark}
+                    maxLength={200}
+
                   ></textarea>
                 </div>
               </div>

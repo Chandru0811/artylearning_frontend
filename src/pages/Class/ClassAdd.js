@@ -49,8 +49,7 @@ function ClassAdd() {
     classType: Yup.string().required("*Class Type is required"),
     durationInHrs: Yup.number().required("*Duration is required"),
     remark: Yup.string()
-    .notRequired()
-    .max(200, "*The maximum length is 200 characters"),
+      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
   });
   const formik = useFormik({
     initialValues: {
@@ -276,18 +275,17 @@ function ClassAdd() {
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-4">
+            <div className="col-md-6 col-12 mb-4">
               <label>Remark</label>
               <textarea
                 name="remark"
-                class="form-control "
-                type="text"
-                className={`form-control  ${
+                className={`form-control ${
                   formik.touched.remark && formik.errors.remark
                     ? "is-invalid"
                     : ""
                 }`}
                 {...formik.getFieldProps("remark")}
+                maxLength={200}
               />
               {formik.touched.remark && formik.errors.remark && (
                 <div className="invalid-feedback">{formik.errors.remark}</div>

@@ -12,8 +12,7 @@ const validationSchema = Yup.object().shape({
   nextclass: Yup.string().required("*Select the Type"),
   pace: Yup.string().required("*Select the Type"),
   remark: Yup.string()
-  .notRequired()
-  .max(200, "*The maximum length is 200 characters"),
+      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
 });
 
 
@@ -339,6 +338,8 @@ function AttendancesEdit() {
                 class="form-control"
                 {...formik.getFieldProps("remark")}
                 rows="3"
+                maxLength={200}
+
               ></textarea>
             </div>
           </div>

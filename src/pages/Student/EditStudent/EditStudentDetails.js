@@ -31,6 +31,8 @@ const validationSchema = Yup.object().shape({
   // preAssessmentResult: Yup.string().required(
   //   "*Pre-Assessment Result is required!"
   // ),
+  remark: Yup.string()
+      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
   medicalCondition: Yup.string().required(
     "*Medical Condition Result is required"
   ),
@@ -616,6 +618,8 @@ const EditStudentDetails = forwardRef(
                     style={{
                       height: "7rem",
                     }}
+                    maxLength={200}
+
                   />
                 </div>
 

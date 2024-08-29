@@ -13,6 +13,8 @@ function StaffView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [centerData, setCenterData] = useState(null);
+  const [shgData, setShgData] = useState([]);
+
   console.log("Api Staff data:", data);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
@@ -50,7 +52,20 @@ function StaffView() {
   //   // Save the PDF
   //   doc.save('generated.pdf');
   // };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllSHGSetting");
+        setShgData(response.data);
+        console.log("shgdata", shgData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    getData();
+   
+  }, []);
   const generatePDF = async () => {
     const mailContent = `
  <!DOCTYPE html>
@@ -412,22 +427,26 @@ function StaffView() {
           </div>
         </div>
         <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">SHG(S) Type</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userAccountInfo &&
-                data.userAccountInfo.length > 0 &&
-                data.userAccountInfo[0].shgType
-                  ? data.userAccountInfo[0].shgType
-                  : "--"}
-              </p>
-            </div>
-          </div>
+      <div className="row mb-3">
+        <div className="col-6 d-flex">
+          <p className="text-sm fw-medium">SHG(S) Type</p>
         </div>
+        <div className="col-6">
+          <p className="text-muted text-sm">
+            :{" "}
+            {data.userAccountInfo &&
+            data.userAccountInfo.length > 0 &&
+            data.userAccountInfo[0].shgTypeId
+              ? (
+                  shgData.find(
+                    (item) => item.id == data.userAccountInfo[0].shgTypeId
+                  ) || {}
+                ).shgType || "--"
+              : "--"}
+          </p>
+        </div>
+      </div>
+    </div>
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">

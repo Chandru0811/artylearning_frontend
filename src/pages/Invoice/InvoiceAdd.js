@@ -48,9 +48,8 @@ const validationSchema = Yup.object({
     .of(invoiceItemSchema)
     // .min(1, "At least one invoice item is required")
     .required("Invoice items are required"),
-  remark: Yup.string()
-    .notRequired()
-    .max(200, "*The maximum length is 200 characters"),
+    remark: Yup.string()
+    .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
 });
 
 export default function InvoiceAdd() {
@@ -702,6 +701,8 @@ export default function InvoiceAdd() {
                   style={{
                     height: "7rem",
                   }}
+                  maxLength={200}
+
                 />
               </div>
             </div>

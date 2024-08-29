@@ -22,8 +22,7 @@ const validationSchema = Yup.object({
   //   ),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   attendanceRemark: Yup.string()
-    .required("*Leave Reason is required")
-    .max(200, "*The maximum length is 200 characters"),
+  .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
   // modeOfWorking: Yup.string().test(
   //   "check-mode-of-working",
   //   "*Mode of working is required",
@@ -532,6 +531,8 @@ function StaffingAttendanceEdit() {
                         : ""
                     }`}
                     {...formik.getFieldProps("attendanceRemark")}
+                    maxLength={200}
+
                   />
                   {formik.touched.attendanceRemark &&
                     formik.errors.attendanceRemark && (

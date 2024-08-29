@@ -47,8 +47,7 @@ const userName  = localStorage.getItem('userName');
     classType: Yup.string().required("*Class Type is required"),
     durationInHrs: Yup.number().required("*Duration is required"),
     remark: Yup.string()
-    .notRequired()
-    .max(200, "*The maximum length is 200 characters"),
+    .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
   });
 
   const formik = useFormik({
@@ -282,6 +281,8 @@ const userName  = localStorage.getItem('userName');
                     : ""
                   }`}
                 {...formik.getFieldProps("remark")}
+                maxLength={200}
+
               />
               {formik.touched.remark && formik.errors.remark && (
                 <div className="invalid-feedback">{formik.errors.remark}</div>
