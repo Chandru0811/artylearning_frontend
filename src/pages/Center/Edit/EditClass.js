@@ -18,8 +18,9 @@ function EditClass({ id, onSuccess }) {
     classRoomName: yup.string().required("*Classroom name is required"),
     classRoomType: yup.string().required("*Classroom type is required"),
     classRoomCode: yup.string().required("*Classroom Code is required"),
-    capacity: yup.string().required("*Capacity is required"),
-  });
+    capacity: yup.number().integer("Must be an integer")
+    .typeError("Must be a number")
+    .positive("Must be positive").required("*Capacity is required"),  });
   const formik = useFormik({
     initialValues: {
       classRoomName: "",
@@ -170,6 +171,7 @@ function EditClass({ id, onSuccess }) {
                 </lable>
                 <input
                   type="text"
+                  pattern="^\d+$"
                   className={`form-control   ${
                     formik.touched.capacity && formik.errors.capacity
                       ? "is-invalid"

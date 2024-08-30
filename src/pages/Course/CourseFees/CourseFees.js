@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Delete from "../../../components/common/Delete";
 import api from "../../../config/URL";
 
@@ -106,6 +106,9 @@ const CourseFees = () => {
 
   return (
     <div className="container my-4">
+              
+
+      
       {storedScreens?.levelCreate && <CourseFeesAdd onSuccess={refreshData} />}
 
       {loading ? (

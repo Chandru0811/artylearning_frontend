@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../../List/SubjectList";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function CurriculumOutletAdd({ onSuccess }) {
   const { id } = useParams();
@@ -85,6 +85,12 @@ function CurriculumOutletAdd({ onSuccess }) {
   return (
     <>
       <div className="mb-5 mt-3 d-flex justify-content-end">
+      <Link to="/course">
+            <button type="button " className="btn btn-sm btn-border   ">
+              Back
+            </button>
+          </Link>
+          &nbsp;&nbsp;
         <button
           type="button"
           className="btn btn-button btn-sm"

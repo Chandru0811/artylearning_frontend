@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
+import { Link } from "react-router-dom";
 
 function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
   const [show, setShow] = useState(false);
@@ -83,6 +84,12 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
   return (
     <>
       <div className="mb-5 mt-3 d-flex justify-content-end">
+      <Link to="/course/curriculumoutlet">
+            <button type="button " className="btn btn-sm btn-border   ">
+              Back
+            </button>
+          </Link>
+          &nbsp;&nbsp;
         <button
           type="button"
           className="btn btn-button btn-sm"

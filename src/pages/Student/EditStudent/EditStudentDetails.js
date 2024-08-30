@@ -32,7 +32,7 @@ const validationSchema = Yup.object().shape({
   //   "*Pre-Assessment Result is required!"
   // ),
   remark: Yup.string()
-      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
+      .max(200, "*The maximum length is 200 characters").notRequired(),
   medicalCondition: Yup.string().required(
     "*Medical Condition Result is required"
   ),

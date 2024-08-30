@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import fetchAllPackageList from "../../List/PackageList";
 
 const validationSchema = Yup.object({
@@ -103,6 +103,12 @@ function CourseFeesAdd({ onSuccess }) {
   return (
     <>
       <div className="mb-5 mt-3 d-flex justify-content-end">
+      <Link to="/course">
+            <button type="button " className="btn btn-sm btn-border   ">
+              Back
+            </button>
+          </Link>
+          &nbsp;&nbsp;
         <button
           type="button"
           className="btn btn-button btn-sm"

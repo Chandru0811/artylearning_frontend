@@ -133,7 +133,7 @@ const StaffAccountEdit = forwardRef(
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
             } else {
-              toast.error(response.data.message);
+              toast.error(response?.data?.message);
             }
           }
         } catch (error) {

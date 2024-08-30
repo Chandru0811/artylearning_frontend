@@ -49,7 +49,7 @@ function ClassAdd() {
     classType: Yup.string().required("*Class Type is required"),
     durationInHrs: Yup.number().required("*Duration is required"),
     remark: Yup.string()
-      .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
+      .max(200, "*The maximum length is 200 characters").notRequired(),
   });
   const formik = useFormik({
     initialValues: {
