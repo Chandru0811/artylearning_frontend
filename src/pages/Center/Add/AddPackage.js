@@ -15,7 +15,11 @@ function AddPackage({ id, onSuccess }) {
 
   const validationSchema = yup.object().shape({
     packageName: yup.string().required("*Package Name is required"),
-    noOfLesson: yup.string().required("*Number of Lesson is required"),
+    noOfLesson: yup.number()
+      .integer("Must be an integer")
+      .typeError("Must be a number")
+      .positive("Must be positive")
+      .required("*Number of Lesson is required"),
   });
   const formik = useFormik({
     initialValues: {
@@ -41,7 +45,7 @@ function AddPackage({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -64,7 +68,7 @@ function AddPackage({ id, onSuccess }) {
         centered
         onHide={handleClose}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
             e.preventDefault();  // Prevent default form submission
           }
@@ -83,11 +87,10 @@ function AddPackage({ id, onSuccess }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control   ${
-                      formik.touched.packageName && formik.errors.packageName
+                    className={`form-control   ${formik.touched.packageName && formik.errors.packageName
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("packageName")}
                   />
                   {formik.touched.packageName && formik.errors.packageName && (
@@ -97,23 +100,24 @@ function AddPackage({ id, onSuccess }) {
                   )}
                 </div>
               </div>
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">
-                  Number of Lesson<span class="text-danger">*</span>
-                </lable>
+              <div className="col-md-6 col-12 mb-2">
+                <label>
+                  Number of Lesson<span className="text-danger">*</span>
+                </label>
                 <input
                   type="text"
-                  className={`form-control   ${
-                    formik.touched.noOfLesson && formik.errors.noOfLesson
+                  pattern="^\d+$"
+                  className={`form-control ${formik.touched.noOfLesson && formik.errors.noOfLesson
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("noOfLesson")}
                 />
                 {formik.touched.noOfLesson && formik.errors.noOfLesson && (
                   <div className="invalid-feedback">{formik.errors.noOfLesson}</div>
                 )}
               </div>
+
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-5">
@@ -121,18 +125,18 @@ function AddPackage({ id, onSuccess }) {
               Cancel
             </Button>
             <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
+            </Button>
           </Modal.Footer>
         </form>
       </Modal>

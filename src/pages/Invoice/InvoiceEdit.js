@@ -26,7 +26,7 @@ const validationSchema = Yup.object({
     .required("*Receipt Amount is required")
     .typeError("*Must be a Number"),
     remark: Yup.string()
-    .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
+    .max(200, "*The maximum length is 200 characters").notRequired(),
 });
 
 export default function InvoiceEdit() {

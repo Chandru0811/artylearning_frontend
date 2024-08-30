@@ -49,7 +49,7 @@ const validationSchema = Yup.object({
     // .min(1, "At least one invoice item is required")
     .required("Invoice items are required"),
     remark: Yup.string()
-    .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
+    .max(200, "*The maximum length is 200 characters").notRequired(),
 });
 
 export default function InvoiceAdd() {
