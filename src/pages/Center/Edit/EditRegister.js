@@ -26,7 +26,10 @@ function EditRegisteration({ id, onSuccess }) {
   const validationSchema = yup.object().shape({
     // registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
-    amount: yup.string().required("*Amount is required"),
+    amount: yup.string()
+    .typeError("Amount must be a number")
+    .required("*Amount is required")
+    .matches(/^\d+(\.\d{1,2})?$/, "*Amount must be a valid number without special characters"),
     taxId: yup.string().required("*Tax Type is required"),
     status: yup.string().required("*Status is required"),
   });

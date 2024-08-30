@@ -12,7 +12,7 @@ function EditBreak({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => {
-    formik.resetForm();
+    // formik.resetForm();
     setShow(false);
   };
   const handleShow = () => setShow(true);
