@@ -387,7 +387,7 @@ function Admin({ handleLogout }) {
               <Route path="/course/add" element={<CourseAdd />} />
               <Route path="/course/edit/:id" element={<CourseEdit />} />
               <Route path="/course/view/:id" element={<CourseView />} />
-              <Route path="/curriculumoutlet/curriculum/:id" element={<Curriculum />} />
+              <Route path="/course/curriculumoutlet/curriculum/:id" element={<Curriculum />} />
               <Route path="/curriculum" element={<Curriculum />} />
               <Route path="/curriculum" element={<Curriculum />} />
               <Route path="/course/coursefees/:id" element={<CourseFees />} />

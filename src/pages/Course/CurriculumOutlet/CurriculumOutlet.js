@@ -158,7 +158,7 @@ function CurriculumOutlet() {
                     }
                   >
                     <Link
-                      to={`/curriculumoutlet/curriculum/${data.id}?courseId=${id}`}
+                      to={`/course/curriculumoutlet/curriculum/${data.id}?courseId=${id}`}
                     >
                       <button className="btn btn-sm">
                         <FaFileInvoice />
