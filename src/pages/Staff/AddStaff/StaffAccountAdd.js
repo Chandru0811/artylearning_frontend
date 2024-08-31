@@ -109,8 +109,10 @@ const StaffAccountAdd = forwardRef(
               },
             }
           );
-          if (response.status === 201) {
-            toast.success(response.data.message);
+          if (response.status === 200) {
+            console.log("Response Status:",response.status);
+            // console.log("Response Data Message:",response.data.message);
+            toast.success("User Account Created Successfully");
             setFormData((prv) => ({ ...prv, ...values }));
             handleNext();
           } else {
@@ -142,13 +144,13 @@ const StaffAccountAdd = forwardRef(
       }
     };
     useEffect(() => {
-      if (formik.values.centerIds) {
+      if (formik.values.centerIds && formik.values.centerIds.length ) {
         const initializedCenters = centerOptions.filter(option =>
           formik.values.centerIds.includes(option.value)
         );
         setSelectedCenters(initializedCenters);
       }
-    }, [formik.values.centerIds, centerOptions]);
+    }, [formik.values.centerIds.length, centerOptions]);
     
     return (
        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
