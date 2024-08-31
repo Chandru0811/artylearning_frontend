@@ -37,14 +37,24 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
     setShow(true);
   };
 
+  const getCurrentDate = () => {
+    const date = new Date();
+    return date.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+  };
+
+  const getCurrentTime = () => {
+    const date = new Date();
+    return date.toTimeString().split(":").slice(0, 2).join(":"); // Format: HH:MM
+  };
+
   const formik = useFormik({
     initialValues: {
       centerId: centerId || "",
       studentName: studentNames || "",
       studentId: 0,
-      assessmentDate: "",
+      assessmentDate: getCurrentDate(),
       assessment: "ENGLISH_ASSESSMENT",
-      time: "09:00",
+      time: getCurrentTime(),
       remarks: "",
     },
     // validationSchema: validationSchema, // Assign the validation schema
@@ -57,6 +67,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
         leadId: leadId,
         assessment: values.assessment,
         assessmentDate: values.assessmentDate,
+        time:values.time,
         remarks: values.remarks,
       };
       console.log("Payload:", payload);
