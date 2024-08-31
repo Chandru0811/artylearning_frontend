@@ -41,6 +41,10 @@ function CenterView() {
     fetchData();
     fetchTaxData();
   }, [id]);
+  const formatValue = (value) => {
+    return value === null || value === "null" ? "" : value;
+  };
+
   return (
     <div className="container ">
       <div className="d-flex justify-content-end align-item-end mt-4">
@@ -83,7 +87,7 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    :{data.centerManager}
+                  : {formatValue(data.centerManager) || "--"}
                      
                   </p>
                 </div>
@@ -238,7 +242,9 @@ function CenterView() {
                 </div>
                 <div className="col-6  ">
                   <p className="text-muted text-sm d-flex text-truncate">
-                    : {data.invoiceNotes || " "}
+                    : {data.invoiceNotes || "--"}
+                    {/* : {formatValue(data.invoiceNotes) || "--"} */}
+
                   </p>
                 </div>
               </div>

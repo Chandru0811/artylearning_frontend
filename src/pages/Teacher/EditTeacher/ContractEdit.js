@@ -52,6 +52,7 @@ const ContractEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData }, ref) => {
     const userName = localStorage.getItem("userName");
     const [employerData, setEmployerData] = useState(null);
+    const [datas, setDatas] = useState();
 
     const navigate = useNavigate();
     const formik = useFormik({
@@ -181,6 +182,8 @@ const ContractEdit = forwardRef(
             response.data.userContractCreationModels &&
             response.data.userContractCreationModels.length > 0
           ) {
+            setDatas(response.data.userContractCreationModels[0])
+
             const contractData = response.data.userContractCreationModels[0];
             formik.setValues({
               ...contractData,
@@ -343,7 +346,8 @@ const ContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.uen}
-                  readOnly
+                  readOnly={datas?.uen}
+
                 />
                 {formik.touched.uen && formik.errors.uen && (
                   <div className="error text-danger ">
@@ -362,8 +366,7 @@ const ContractEdit = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.addressOfEmployment}
-                readOnly
-              />
+                readOnly={datas?.addressOfEmployment}              />
               {formik.touched.addressOfEmployment &&
                 formik.errors.addressOfEmployment && (
                   <div className="error text-danger ">
@@ -383,7 +386,8 @@ const ContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.employee}
-                  readOnly
+                  readOnly={datas?.employee}
+
                 />
                 {formik.touched.employee && formik.errors.employee && (
                   <div className="error text-danger ">
@@ -418,7 +422,8 @@ const ContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractAddress}
-                  readOnly
+                  readOnly={datas?.userContractAddress}
+
                 />
                 {formik.touched.userContractAddress &&
                   formik.errors.userContractAddress && (
@@ -473,7 +478,8 @@ const ContractEdit = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.startDateOfEmployment}
                   min={new Date().toISOString().split("T")[0]}
-                  readOnly
+                  readOnly={datas?.startDateOfEmployment}
+
                 />
                 {formik.touched.startDateOfEmployment &&
                   formik.errors.startDateOfEmployment && (
@@ -523,7 +529,8 @@ const ContractEdit = forwardRef(
                   // onFocus={(e) => e.target.showPicker()}
                   className="form-control"
                   name="userContractStartDate"
-                  readOnly
+                  readOnly={datas?.userContractStartDate}
+
                   onChange={(e) => {
                     formik.handleChange(e);
 
@@ -541,6 +548,7 @@ const ContractEdit = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractStartDate}
                   min={new Date().toISOString().split("T")[0]}
+                  
                 />
                 {formik.touched.userContractStartDate &&
                   formik.errors.userContractStartDate && (
@@ -585,7 +593,7 @@ const ContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.contactPeriod}
-                  readOnly
+                  readOnly={datas?.contactPeriod}
                 />
                 {formik.touched.contactPeriod &&
                   formik.errors.contactPeriod && (
@@ -846,7 +854,7 @@ const ContractEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.contractDate}
-                    readOnly
+                    readOnly={datas?.contractDate}
                   />
                   {formik.touched.contractDate &&
                     formik.errors.contractDate && (

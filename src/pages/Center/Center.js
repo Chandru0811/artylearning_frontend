@@ -121,7 +121,7 @@ const Center = () => {
                 S No
               </th>
               <th scope="col">Centre Name</th>
-              <th scope="col">Centre Manager</th>
+              {/* <th scope="col">Centre Manager</th> */}
               <th scope="col">Code</th>
               <th scope="col">UEN Number</th>
               <th scope="col">Mobile</th>
@@ -133,15 +133,15 @@ const Center = () => {
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{data.centerName}</td>
-                <td>
+                {/* <td> */}
                   {/* {centerManagerData &&
                     centerManagerData.map((Cmanager) =>
                       parseInt(data.centerManager) === Cmanager.id
                         ? Cmanager.userNames || "--"
                         : ""
                     )} */}
-                    {data.centerManager}
-                </td>
+                    {/* {data.centerManager} */}
+                {/* </td> */}
                 <td>{data.code}</td>
                 <td>{data.uenNumber}</td>
                 <td>{data.mobile}</td>
