@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -24,6 +24,8 @@ const validationSchema = Yup.object().shape({
 const ContactEdit = forwardRef(
   ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName  = localStorage.getItem('userName');
+    const[datas,setDatas] = useState();
+
 
     const formik = useFormik({
       initialValues: {
@@ -125,6 +127,8 @@ const ContactEdit = forwardRef(
             response.data.userContactInfo &&
             response.data.userContactInfo.length > 0
           ) {
+            setDatas(response.data.userContactInfo[0])
+
             formik.setValues({
               ...response.data.userContactInfo[0],
               contactId: response.data.userContactInfo[0].id,
@@ -174,7 +178,7 @@ const ContactEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.email}
-                  disabled={formik.values.email && !formik.errors.email}                 />
+                  readOnly={datas?.email}   />             
                 {formik.touched.email && formik.errors.email && (
                   <div className="error text-danger ">
                     <small>{formik.errors.email}</small>

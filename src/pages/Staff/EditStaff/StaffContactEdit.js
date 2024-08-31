@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
-  .email('Invalid email format')
-  .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Invalid Email')
-  .required('Email is required'),
+    .email('Invalid email format')
+    // .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Invalid Email')
+    .required('Email is required'),
   contactNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
@@ -22,8 +22,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const StaffContactEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    console.log("form",formData);
+    const userName = localStorage.getItem('userName');
+  const[datas,setDatas] = useState();
 
     const formik = useFormik({
       initialValues: {
@@ -31,7 +33,7 @@ const StaffContactEdit = forwardRef(
         contactNumber: "",
         address: "",
         postalCode: "",
-        updatedBy:userName,
+        updatedBy: userName,
 
       },
       validationSchema: validationSchema,
@@ -97,12 +99,12 @@ const StaffContactEdit = forwardRef(
             }
           }
         } catch (error) {
-          if(error?.response?.status === 409){
+          if (error?.response?.status === 409) {
             toast.warning(error?.response?.data?.message)
           } else {
-            toast.error("Error Submiting data " ,error?.response?.data?.message )
+            toast.error("Error Submiting data ", error?.response?.data?.message)
           }
-        }finally{
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -130,7 +132,10 @@ const StaffContactEdit = forwardRef(
           if (
             response.data.userContactInfo &&
             response.data.userContactInfo.length > 0
-          ) {
+         
+          ) 
+        {
+          setDatas(response.data.userContactInfo[0])
             formik.setValues({
               ...response.data.userContactInfo[0],
               contactId: response.data.userContactInfo[0].id,
@@ -160,19 +165,20 @@ const StaffContactEdit = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <section>
           <div className="container">
             <p className="headColor my-4">Contact Information</p>
             <div class="row">
-              <div class="col-md-6 col-12 mb-2 mt-3">
+            <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Email Id<span class="text-danger">*</span>
                 </label>
+
                 <input
                   type="email"
                   className="form-control"
@@ -180,13 +186,15 @@ const StaffContactEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.email}
-                  disabled={formik.values.email && !formik.errors.email}                 />
+                  readOnly={datas?.email}                
+                   />
                 {formik.touched.email && formik.errors.email && (
                   <div className="error text-danger ">
                     <small>{formik.errors.email}</small>
                   </div>
                 )}
               </div>
+
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Contact Number<span class="text-danger">*</span>

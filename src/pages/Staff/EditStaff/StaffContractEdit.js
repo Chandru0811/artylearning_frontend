@@ -37,18 +37,18 @@ const validationSchema = Yup.object().shape({
     .required("*Salary is required"),
   salaryStartDate: Yup.string().required("*Start Date Of Salary is required"),
   userContractEndDate: Yup.string()
-  .required("*End Date Of Contract is required")
-  .test(
-    "is-greater",
-    "*End Date should be later than the Start Date",
-    function (value) {
-      const { userContractStartDate } = this.parent;
-      return (
-        !userContractStartDate ||
-        new Date(value) >= new Date(userContractStartDate)
-      );
-    }
-  ),
+    .required("*End Date Of Contract is required")
+    .test(
+      "is-greater",
+      "*End Date should be later than the Start Date",
+      function (value) {
+        const { userContractStartDate } = this.parent;
+        return (
+          !userContractStartDate ||
+          new Date(value) >= new Date(userContractStartDate)
+        );
+      }
+    ),
   contractDate: Yup.string().required("*Contract Date is required"),
   terminationNotice: Yup.string().required("*Termination Notice is required"),
   allowance: Yup.number().typeError("*Allowance Must be numbers").notRequired(),
@@ -60,6 +60,9 @@ const StaffContractEdit = forwardRef(
     const userName = localStorage.getItem("userName");
     const [centerData, setCenterData] = useState(null);
     const [employerData, setEmployerData] = useState(null);
+    const [datas, setDatas] = useState();
+
+
     const formik = useFormik({
       initialValues: {
         employer: "",
@@ -219,6 +222,8 @@ const StaffContractEdit = forwardRef(
             response.data.userContractCreationModels &&
             response.data.userContractCreationModels.length > 0
           ) {
+            setDatas(response.data.userContractCreationModels[0])
+
             const contractData = response.data.userContractCreationModels[0];
             formik.setValues({
               ...contractData,
@@ -334,7 +339,7 @@ const StaffContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.uen}
-                  readOnly
+                  readOnly={datas?.uen}
                 />
                 {formik.touched.uen && formik.errors.uen && (
                   <div className="error text-danger ">
@@ -353,8 +358,7 @@ const StaffContractEdit = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.addressOfEmployment}
-                readOnly
-              />
+                readOnly={datas?.addressOfEmployment} />
               {formik.touched.addressOfEmployment &&
                 formik.errors.addressOfEmployment && (
                   <div className="error text-danger ">
@@ -374,7 +378,7 @@ const StaffContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.employee}
-                  readOnly
+                  readOnly={datas?.employee}
                 />
                 {formik.touched.employee && formik.errors.employee && (
                   <div className="error text-danger ">
@@ -409,7 +413,7 @@ const StaffContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractAddress}
-                  readOnly
+                  readOnly={datas?.userContractAddress}
                 />
                 {formik.touched.userContractAddress &&
                   formik.errors.userContractAddress && (
@@ -464,7 +468,7 @@ const StaffContractEdit = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.startDateOfEmployment}
                   min={new Date().toISOString().split("T")[0]}
-                  readOnly
+                  readOnly={datas?.startDateOfEmployment}
                 />
                 {formik.touched.startDateOfEmployment &&
                   formik.errors.startDateOfEmployment && (
@@ -530,7 +534,7 @@ const StaffContractEdit = forwardRef(
                   }}
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractStartDate}
-                  readOnly
+                  readOnly={datas?.userContractStartDate}
                 />
                 {formik.touched.userContractStartDate &&
                   formik.errors.userContractStartDate && (
@@ -575,7 +579,7 @@ const StaffContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.contactPeriod}
-                  readOnly
+                  readOnly={datas?.contactPeriod}
                 />
                 {formik.touched.contactPeriod &&
                   formik.errors.contactPeriod && (
@@ -866,7 +870,7 @@ const StaffContractEdit = forwardRef(
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.contractDate}
-                    readOnly
+                    readOnly={datas?.contractDate}
                   />
                   {formik.touched.contractDate &&
                     formik.errors.contractDate && (

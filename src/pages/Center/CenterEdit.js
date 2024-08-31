@@ -14,7 +14,7 @@ import Delete from "../../components/common/Delete";
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
   code: Yup.string().required("*Code is required"),
-  userId: Yup.string().required("*Select the Centre Manager"),
+  // userId: Yup.string().required("*Select the Centre Manager"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
     .required("*Zip Code is required")
@@ -106,7 +106,9 @@ function CenterEdit() {
       const formData = new FormData();
       formData.append("centerName", values.centerName);
       formData.append("code", values.code);
-      formData.append("userId", values.userId);
+      if (values.userId) {
+        formData.append("userId", values.userId);
+      }      
       formData.append("address", values.address);
       formData.append("zipCode", values.zipCode);
       formData.append("mobile", values.mobile);
