@@ -120,7 +120,7 @@ function TaxEdit({ id, onSuccess }) {
                 </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                    Rat (%)<span className="text-danger">*</span>
+                    Rate (%)<span className="text-danger">*</span>
                   </label>
                   <input
                     type="number"
