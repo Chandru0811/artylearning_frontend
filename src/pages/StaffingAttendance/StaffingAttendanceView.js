@@ -37,6 +37,13 @@ function StaffingAttendanceView() {
     getData();
     fetchData();
   }, []);
+  const formatTimeTo12Hour = (time) => {
+    if (!time) return "--"; 
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12; 
+    return `${formattedHours}:${minutes} ${period}`;
+  };
 
   return (
     <div className="container ">
@@ -114,7 +121,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Check In</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.checkIn || "--"}</p>
+                  <p className="text-muted text-sm">: {formatTimeTo12Hour(data.checkIn)}</p>
                 </div>
               </div>
             </div>
@@ -125,7 +132,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">OT Start Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.otStartTime || "--"}</p>
+                  <p className="text-muted text-sm">: {formatTimeTo12Hour(data.otStartTime)}</p>
                 </div>
               </div>
             </div>
@@ -157,7 +164,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">Check Out</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.checkOut || "--"}</p>
+                  <p className="text-muted text-sm">: {formatTimeTo12Hour(data.checkOut)}</p>
                 </div>
               </div>
             </div>
@@ -167,7 +174,7 @@ function StaffingAttendanceView() {
                   <p className="fw-medium">OT End Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.otEndTime || "--"}</p>
+                  <p className="text-muted text-sm">: {formatTimeTo12Hour(data.otEndTime)}</p>
                 </div>
               </div>
             </div>

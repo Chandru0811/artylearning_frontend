@@ -9,7 +9,7 @@ import fetchAllCentreManager from "../List/CentreMangerList";
 const validationSchema = Yup.object().shape({
   centerName: Yup.string().required("*Centre Name is required"),
   code: Yup.string().required("*Code is required"),
-  // centerManager: Yup.string().required("*Select the Centre Manager"),
+  address: Yup.string().required("*Address is required"),
   zipCode: Yup.number()
     .typeError("*Zip Code must be number")
     .required("*Zip Code is required")
@@ -240,14 +240,23 @@ function CenterAdd() {
             <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  Address
+                  Address<span className="text-danger">*</span>
                 </label>
                 <textarea
-                  className="form-control"
+                  className={`form-control  ${
+                    formik.touched.address && formik.errors.address
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("address")}
                   id="exampleFormControlTextarea1"
                   rows="3"
                 ></textarea>
+                {formik.touched.address && formik.errors.address && (
+                <div className="invalid-feedback">
+                  {formik.errors.address}
+                </div>
+              )}
               </div>
             </div>
             <div className="col-md-6 col-12">

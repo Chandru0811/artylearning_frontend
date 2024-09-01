@@ -21,6 +21,7 @@ const Center = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerManagerData, setCenterManagerData] = useState(null);
+  const [extraData, setExtraData] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -47,13 +48,10 @@ const Center = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
- 
   const destroyDataTable = () => {
     const table = $(tableRef.current).DataTable();
     if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
@@ -73,7 +71,7 @@ const Center = () => {
     }
     setLoading(false);
   };
-  
+
   useEffect(() => {
     const getCenterData = async () => {
       try {
@@ -87,6 +85,16 @@ const Center = () => {
     getCenterData();
     fetchData();
   }, []);
+
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
 
   return (
     <div className="container my-4 center">
@@ -102,6 +110,9 @@ const Center = () => {
             </button>
           </Link>
         )}
+        <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button>
       </div>
       {loading ? (
         <div className="loader-container">
@@ -125,6 +136,34 @@ const Center = () => {
               <th scope="col">Code</th>
               <th scope="col">UEN Number</th>
               <th scope="col">Mobile</th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
               <th className="text-center">Action</th>
             </tr>
           </thead>
@@ -134,17 +173,19 @@ const Center = () => {
                 <th scope="row">{index + 1}</th>
                 <td>{data.centerName}</td>
                 {/* <td> */}
-                  {/* {centerManagerData &&
+                {/* {centerManagerData &&
                     centerManagerData.map((Cmanager) =>
                       parseInt(data.centerManager) === Cmanager.id
                         ? Cmanager.userNames || "--"
                         : ""
                     )} */}
-                    {/* {data.centerManager} */}
+                {/* {data.centerManager} */}
                 {/* </td> */}
                 <td>{data.code}</td>
                 <td>{data.uenNumber}</td>
                 <td>{data.mobile}</td>
+                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
                     {storedScreens?.centerListingCreate && (

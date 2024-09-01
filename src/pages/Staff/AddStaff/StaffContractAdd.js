@@ -101,7 +101,7 @@ const StaffContractAdd = forwardRef(
             }
           );
           if (response.status === 201) {
-            toast.success(response.data.message);
+            toast.success("User Contract Created Successfully");
             setFormData((prv) => ({ ...prv, ...values }));
             navigate("/staff");
           } else {

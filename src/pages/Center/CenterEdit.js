@@ -134,7 +134,6 @@ function CenterEdit() {
             "Content-Type": "multipart/form-data",
           },
         });
-        debugger;
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/center");

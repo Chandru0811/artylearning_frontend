@@ -33,8 +33,11 @@ const AddcourseDetail = forwardRef(
 
     const [selectedRow, setSelectedRow] = useState(null); // Add state for selected row
     const [selectedRowData, setSelectedRowData] = useState({}); // State for selected row data
+    const [courseFormData, setCourseFormData] = useState({}); // State for selected row data
     const userName  = localStorage.getItem('userName');
-
+    console.log("selectedRow",selectedRow)
+    console.log("selectedRowData",selectedRowData)
+    console.log("courseFormData",courseFormData)
 
     const formik = useFormik({
       initialValues: {
@@ -69,7 +72,8 @@ const AddcourseDetail = forwardRef(
           createdBy: userName,
 
         };
-        console.log("Payload Data:", payload);
+        setCourseFormData((prv)=>({...prv,...payload,scheduleId:selectedRow}))
+        console.log("Course Payload Data:", payload);
         try {
           const response = await api.post(
             `/createStudentCourseDetails`,
@@ -216,6 +220,29 @@ const AddcourseDetail = forwardRef(
 
       return days;
     };
+    useEffect(() => {
+      const getData = async () => {
+        if(formData.student_id){
+        try {
+          const response = await api.get(`/getAllStudentById/${formData.student_id}`);
+          if(response.data.status ===200){
+            formik.setValues({
+              lessonName: response.data.lessonName,
+              packageName: response.data.packageName
+            });
+            selectedRow(
+              courseFormData.scheduleId
+            )
+            console.log("Student Course Detail Id:", response.data);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+      };
+
+      getData();
+    }, [formData.student_id]);
 
     useImperativeHandle(ref, () => ({
       CourseDetail: formik.handleSubmit,

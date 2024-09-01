@@ -127,7 +127,7 @@ const StaffContractEdit = forwardRef(
               }
             );
             if (response.status === 200) {
-              toast.success(response.data.message);
+              toast.success("Staff Contract Updated Successfully");
               setFormData((prv) => ({ ...prv, ...values }));
               navigate("/staff");
             } else {
