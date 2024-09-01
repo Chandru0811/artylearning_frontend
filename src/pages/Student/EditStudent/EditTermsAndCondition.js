@@ -24,8 +24,8 @@ const EditTermsAndCondition = forwardRef(
   ({ formData, setFormData, setLoadIndicators }, ref) => {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
-    const userName  = localStorage.getItem('userName');
-
+    const [showEditSign, setShowEditSign] = useState(true);
+    const userName = localStorage.getItem("userName");
 
     const [sign, setSign] = useState();
     const [url, setUrl] = useState();
@@ -48,8 +48,7 @@ const EditTermsAndCondition = forwardRef(
           formData.termsAndConditionSignatureDate || "",
         agree: formData.agree || "",
         studentDetailId: formData.id || "",
-        updatedBy:userName,
-
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -138,6 +137,10 @@ const EditTermsAndCondition = forwardRef(
     //   });
     // };
 
+    const handleEdit = () => {
+      setShowEditSign(false);
+    };
+
     useEffect(() => {
       const getData = async () => {
         try {
@@ -176,11 +179,14 @@ const EditTermsAndCondition = forwardRef(
 
     return (
       <div className="container-fluid">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="border-0 mb-5">
             <div className="mb-5 ">
               <div className="border-0 my-2 px-2">
@@ -188,143 +194,88 @@ const EditTermsAndCondition = forwardRef(
                 <div className="container py-3">
                   <div className="row">
                     <div className="col-md-6 col-12">
-                      {/* <div className="text-start">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Parent Signature</small>
-                        </label>
-                        <br />
-                        <input
-                          type="file"
-                          className="form-control"
-                          name="file"
-                          onChange={(event) => {
-                            formik.setFieldValue("file", event.target.files[0]);
-                          }}
-                          onBlur={formik.handleBlur}
-                        />
-                        {data.studentTermsAndConditions &&
-                          data.studentTermsAndConditions.length > 0 &&
-                          data.studentTermsAndConditions.map((parent) => (
-                            <div className="container-fluid col-12 p-2">
-                              <p className="my-2 d-flex">
-                                {parent.parentSignature ? (
-                                  <img
-                                    src={parent.parentSignature}
-                                    onError={(e) => {
-                                      e.target.src = BlockImg;
-                                    }}
-                                    className="img-fluid rounded"
-                                    style={{ width: "60%" }}
-                                    alt="Parent Signature Img"
-                                  />
-                                ) : (
-                                  <img
-                                    src={BlockImg}
-                                    className="img-fluid rounded"
-                                    style={{ width: "60%" }}
-                                    alt="Parent Signature Img"
-                                  />
-                                )}
-                              </p>
-                            </div>
-                          ))}
-                        {(!data.studentTermsAndConditions ||
-                          data.studentTermsAndConditions.length === 0) && (
+                       {showEditSign ? (
+                        // SignatureCanvas Edit Mode
+                        <div className="text-start mt-3">
+                          <label htmlFor="" className="mb-1 fw-medium">
+                            <small>Parent Signature</small>
+                          </label>
+                          <br />
                           <div
-                            id="panelsStayOpen-collapseThree"
-                            class="accordion-collapse collapse"
-                          >
-                            <div class="accordion-body">
-                              <div className="text-muted">
-                                Parent Signature / not available !
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div> */}
-
-                      {/* SignatureCanvas */}
-                      <div className="text-start mt-3">
-                        <label htmlFor="" className="mb-1 fw-medium">
-                          <small>Parent Signature</small>
-                        </label>
-                        <br />
-                        <div
-                          style={{
-                            width: 423,
-                            height: 150,
-                          }}
-                          className="border border-secondary rounded-2"
-                        >
-                          <SignatureCanvas
-                            canvasProps={{
+                            style={{
                               width: 423,
                               height: 150,
-                              className: "sigCanvas",
                             }}
-                            name="file"
-                            ref={(data) => setSign(data)}
-                          />
-                        </div>
-                        <br />
-                        <button
-                          type="button"
-                          style={{ height: "30px", width: "60px" }}
-                          onClick={handleClear}
-                          className="btn btn-sm"
-                        >
-                          Clear
-                        </button>
-                        <button
-                          type="button"
-                          style={{ height: "30px", width: "60px" }}
-                          onClick={handleGenerate}
-                          className="btn btn-sm"
-                        >
-                          Save
-                        </button>
-                        <br />
-                        <img src={url} />
-                        {/* {data.studentTermsAndConditions &&
-                          data.studentTermsAndConditions.length > 0 &&
-                          data.studentTermsAndConditions.map((parent) => (
-                            <div className="container-fluid col-12 p-2">
-                              <p className="my-2 d-flex">
-                                {parent.parentSignature ? (
+                            className="border border-secondary rounded-2"
+                          >
+                            {data.studentTermsAndConditions &&
+                              data.studentTermsAndConditions.length > 0 &&
+                              data.studentTermsAndConditions.map(
+                                (parent, index) => (
                                   <img
                                     src={parent.parentSignature}
-                                    onError={(e) => {
-                                      e.target.src = BlockImg;
-                                    }}
-                                    className="img-fluid rounded"
-                                    style={{ width: "60%" }}
-                                    alt="Parent Signature Img"
+                                    className="img-fluid rounded ms-3 mt-2"
+                                    style={{ width: "35%" }}
+                                    alt=""
                                   />
-                                ) : (
-                                  <img
-                                    src={BlockImg}
-                                    className="img-fluid rounded"
-                                    style={{ width: "60%" }}
-                                    alt="Parent Signature Img"
-                                  />
-                                )}
-                              </p>
-                            </div>
-                          ))}
-                        {(!data.studentTermsAndConditions ||
-                          data.studentTermsAndConditions.length === 0) && (
-                          <div
-                            id="panelsStayOpen-collapseThree"
-                            class="accordion-collapse collapse"
-                          >
-                            <div class="accordion-body">
-                              <div className="text-muted">
-                                Parent Signature / not available !
-                              </div>
-                            </div>
+                                )
+                              )}
                           </div>
-                        )} */}
-                      </div>
+                          <br />
+                          <button
+                            type="button"
+                            style={{ height: "30px", width: "60px" }}
+                            onClick={handleEdit}
+                            className="btn btn-sm bg-light"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      ) : (
+                        // SignatureCanvas Save Mode
+                        <div className="text-start mt-3">
+                          <label htmlFor="" className="mb-1 fw-medium">
+                            <small>Parent Signature</small>
+                          </label>
+                          <br />
+                          <div
+                            style={{
+                              width: 423,
+                              height: 150,
+                            }}
+                            className="border border-secondary rounded-2"
+                          >
+                            <SignatureCanvas
+                              canvasProps={{
+                                width: 423,
+                                height: 150,
+                                className: "sigCanvas",
+                              }}
+                              name="file"
+                              ref={(data) => setSign(data)}
+                            />
+                          </div>
+                          <br />
+                          <button
+                            type="button"
+                            style={{ height: "30px", width: "60px" }}
+                            onClick={handleClear}
+                            className="btn btn-sm bg-light mx-1"
+                          >
+                            Clear
+                          </button>
+                          <button
+                            type="button"
+                            style={{ height: "30px", width: "60px" }}
+                            onClick={handleGenerate}
+                            className="btn btn-sm bg-light"
+                          >
+                            Save
+                          </button>
+                          <br />
+                          <img src={url} />
+                        </div>
+                      )}
                     </div>
                     <div className="col-md-6 col-12">
                       <div className="text-start mt-2">

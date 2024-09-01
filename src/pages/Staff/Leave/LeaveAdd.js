@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object({
-  leaveType: Yup.string().required("*Select a Leave Type"),
+  leaveTypeId: Yup.string().required("*Select a Leave Type"),
   fromDate: Yup.string().required("*From Date is required"),
   toDate: Yup.string()
     .required("*To Date is required")
@@ -49,7 +49,7 @@ function LeaveAdd() {
       centerId: "",
       centerName: "",
       employeeName: "",
-      leaveType: "",
+      leaveTypeId: "",
       noOfDays: "",
       fromDate: "",
       toDate: "",
@@ -78,7 +78,7 @@ function LeaveAdd() {
         formDatas.append("userId", userId);
         formDatas.append("centerName", selectedCenterName);
         formDatas.append("employeeName", datas && datas.employeeName);
-        formDatas.append("leaveType", data.leaveType);
+        formDatas.append("leaveTypeId", data.leaveTypeId);
         formDatas.append("noOfDays", data.noOfDays);
         formDatas.append("fromDate", data.fromDate);
         formDatas.append("toDate", data.toDate);
@@ -215,23 +215,23 @@ function LeaveAdd() {
               </label>
               <select
                 className={`form-select  ${
-                  formik.touched.leaveType && formik.errors.leaveType
+                  formik.touched.leaveTypeId && formik.errors.leaveTypeId
                     ? "is-invalid"
                     : ""
                 }`}
-                {...formik.getFieldProps("leaveType")}
+                {...formik.getFieldProps("leaveTypeId")}
               >
                 <option selected></option>
                 {leaveTypeData &&
                   leaveTypeData.map((leave) => (
-                    <option key={leave.id} value={leave.leaveType}>
+                    <option key={leave.id} value={leave.id}>
                       {leave.leaveType}
                     </option>
                   ))}
               </select>
-              {formik.touched.leaveType && formik.errors.leaveType && (
+              {formik.touched.leaveTypeId && formik.errors.leaveTypeId && (
                 <div className="invalid-feedback">
-                  {formik.errors.leaveType}
+                  {formik.errors.leaveTypeId}
                 </div>
               )}
             </div>

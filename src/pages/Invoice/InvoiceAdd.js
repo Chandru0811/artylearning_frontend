@@ -148,7 +148,7 @@ export default function InvoiceAdd() {
         });
 
         if (response.status === 201) {
-          toast.success(response.data.message);
+          toast.success("Invoice Generated successfully");
           navigate("/invoice");
         } else {
           toast.error(response.data.message);

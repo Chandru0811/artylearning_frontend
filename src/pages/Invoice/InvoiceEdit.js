@@ -126,7 +126,7 @@ export default function InvoiceEdit() {
           }
         );
         if (response.status === 200) {
-          toast.success(response.data.message);
+          toast.success(" Invoice Generated Update successfully");
           navigate("/invoice");
         } else {
           toast.error(response.data.message);
