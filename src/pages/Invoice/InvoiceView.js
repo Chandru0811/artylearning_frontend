@@ -15,7 +15,7 @@ function InvoiceView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [invoiceItem, setInvoiceItem] = useState([]);
   console.log("data", data);
   const [courseData, setCourseData] = useState(null);
@@ -67,7 +67,7 @@ function InvoiceView() {
 
       doc.setFontSize(15);
       doc.setFont("helvetica", "bold");
-      doc.text("Arty Learning @HG", 130, 25);
+      doc.text(`${data.center}`, 130, 25);
 
       doc.setFont("helvetica", "normal");
       doc.text("Tel No:87270752", 130, 35);
@@ -102,7 +102,6 @@ function InvoiceView() {
           index + 1,
           invoiceItem.item,
           invoiceItem.itemAmount,
-          // invoiceItem.taxType,
           taxData.find((tax) => parseInt(invoiceItem.taxType) === tax.id)
             ?.taxType || "--",
           invoiceItem.gstAmount,
@@ -129,49 +128,70 @@ function InvoiceView() {
         body: tableData,
       });
 
-      // Add Credit Advice Offset, GST, Total Amount
+      // Add Credit Advice Offset, GST, Total Amount below the table aligned to the right
+      const rightAlignX = 185;
+      const nextLineY = doc.autoTable.previous.finalY + 20;
+
       doc.setFontSize(11);
-      // doc.text(
-      //   `Remark: ${data.remark || "--"}`,
-      //   14,
-      //   doc.autoTable.previous.finalY + 10
-      // );
-      const remarkText = doc.splitTextToSize(
-        `Remark: ${data.remark || "--"}`,
-        180 // Width of the text area where you want to wrap the text
-      );
-      
-      doc.text(remarkText, 14, doc.autoTable.previous.finalY + 10);
-      
+
+      // Credit Advice Offset
+      doc.setFont("helvetica", "bold");
+      doc.text(`Credit Advice Offset:`, rightAlignX - 20, nextLineY, {
+        align: "right",
+      });
+      doc.setFont("helvetica", "normal");
+      doc.text(`${data.creditAdviceOffset || "--"}`, rightAlignX, nextLineY, {
+        align: "right",
+      });
+
+      // GST
+      doc.setFont("helvetica", "bold");
+      doc.text(`GST:`, rightAlignX - 20, nextLineY + 10, { align: "right" });
+      doc.setFont("helvetica", "normal");
+      doc.text(`${data.gst || "--"}`, rightAlignX, nextLineY + 10, {
+        align: "right",
+      });
+
+      // Total Amount
+      doc.setFont("helvetica", "bold");
+      doc.text(`Total Amount:`, rightAlignX - 20, nextLineY + 20, {
+        align: "right",
+      });
+      doc.setFont("helvetica", "normal");
+      doc.text(`${data.totalAmount || "--"}`, rightAlignX, nextLineY + 20, {
+        align: "right",
+      });
 
       // Load QR code image
       const qrCodeImage = await loadImage(qrCodeUrl);
 
       // Add QR code to PDF
       if (qrCodeImage) {
-        doc.addImage(
-          qrCodeImage,
-          "PNG",
-          145,
-          doc.autoTable.previous.finalY + 10,
-          40,
-          40
-        );
-        doc.text(`Send To Pay`, 175, doc.autoTable.previous.finalY + 55, {
+        doc.addImage(qrCodeImage, "PNG", 145, nextLineY + 30, 40, 40);
+        doc.text(`Send To Pay`, 175, nextLineY + 75, {
           align: "right",
           fontWeight: "bold",
         });
       } else {
-        doc.addImage(
-          QR,
-          "PNG",
-          145,
-          doc.autoTable.previous.finalY + 10,
-          40,
-          40
-        );
-        // doc.text("QR Code not available", 145, doc.autoTable.previous.finalY + 10);
+        doc.addImage(QR, "PNG", 145, nextLineY + 30, 40, 40);
       }
+
+      // Add Remarks at the end
+      const finalY = nextLineY + 80;
+
+      // "Remark" in bold
+      doc.setFont("helvetica", "bold");
+      doc.text("Remark:", 14, finalY);
+
+      // Remark text in normal (light) style
+      doc.setFont("helvetica", "normal");
+      const remarkText = doc.splitTextToSize(
+        data.remark || "--",
+        170 // Width of the text area where you want to wrap the text
+      );
+
+      // Display the remark text starting right after the bold "Remark:"
+      doc.text(remarkText, 34, finalY);
 
       // Save the PDF
       doc.save(`${data.invoiceNumber}.pdf`);
@@ -201,7 +221,7 @@ function InvoiceView() {
       // toast.success(response.data.message);
       if (response.status === 200) {
         toast.success(response.data.message);
-        navigate('/invoice')
+        navigate("/invoice");
       } else {
         toast.error(response.data.message);
       }
@@ -254,7 +274,7 @@ function InvoiceView() {
           >
             Void Invoice
           </button>
-          
+
           {/* <Link to="/sendAndPublish"> */}
           <SendAndPublish data={data} id={id} qr={qrCodeUrl} />
           {/* </Link> */}
