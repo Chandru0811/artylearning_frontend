@@ -1,11 +1,13 @@
-import React, { forwardRef, useEffect, useImperativeHandle }  from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState }  from 'react';
 import { useFormik } from "formik";
 import api from '../../../config/URL';
 import { toast } from 'react-toastify';
+import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handleNext }, ref)=>{
   const userName  = localStorage.getItem('userName');
-
+  const [datas,setDatas]=useState();
   console.log("required",formData)
   const formik = useFormik({
     initialValues: {
@@ -86,6 +88,7 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
           response.data.userRequireInformationModels &&
           response.data.userRequireInformationModels.length > 0
         ) {
+          setDatas(response.data.userRequireInformationModels[0])
           formik.setValues({
             ...response.data.userRequireInformationModels[0],
             userEnquireId: response.data.userRequireInformationModels[0].id,
@@ -129,6 +132,18 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
             onBlur={formik.handleBlur}
           />
           <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
+          {datas?.resume &&(
+                <div class="card border-0 shadow" style={{width: "18rem"}}>
+                <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(datas?.resume)}&embedded=true`} target="_blank" rel="noopener noreferrer" ><img class="card-img-top img-fluid" style={{height:"10rem"}} src={pdfLogo} alt="Card image cap" /></a>
+                <div class="card-body d-flex justify-content-between">
+                  <p class="card-title fw-semibold text-wrap">{datas?.resume?.split("/").pop()}</p>
+                  
+                  <a href={datas?.resume} class="btn btn-sm btn-primary">
+                    <MdOutlineDownloadForOffline size={25}/>
+                  </a>
+                </div>
+              </div>
+              )}
         </div>
         <div class="col-md-6 col-12 mb-2">
           <label>Education Certificate</label>
@@ -146,6 +161,18 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
             onBlur={formik.handleBlur}
           />
           <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
+          {datas?.educationCertificate &&(
+                <div class="card border-0 shadow" style={{width: "18rem"}}>
+                <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(datas?.educationCertificate)}&embedded=true`} target="_blank" rel="noopener noreferrer" ><img class="card-img-top img-fluid" style={{height:"10rem"}} src={pdfLogo} alt="Card image cap" /></a>
+                <div class="card-body d-flex justify-content-between">
+                  <p class="card-title fw-semibold text-wrap">{datas?.educationCertificate?.split("/").pop()}</p>
+                  
+                  <a href={datas?.educationCertificate} class="btn btn-sm btn-primary">
+                    <MdOutlineDownloadForOffline size={25}/>
+                  </a>
+                </div>
+              </div>
+              )}
         </div>
       </div>
     </div>

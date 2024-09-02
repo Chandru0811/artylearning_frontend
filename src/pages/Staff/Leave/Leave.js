@@ -163,7 +163,8 @@ const Leave = () => {
                           <FaEye />
                         </button>
                       </Link>
-                      <Link
+                      {data.leaveStatus === "APPROVED" ? "" : (
+                        <Link
                         to={`/leave/edit/${data.id}`}
                         style={{ display: "inline-block" }}
                       >
@@ -171,6 +172,7 @@ const Leave = () => {
                           <FaEdit />
                         </button>
                       </Link>
+                      )}
                     </div>
                   </td>
                 </tr>
