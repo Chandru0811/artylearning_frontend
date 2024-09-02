@@ -8,6 +8,8 @@ import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { SCREENS } from "../../config/ScreenFilter";
 import Lead from "../Lead/Lead";
+import { MdViewColumn } from "react-icons/md";
+
 
 const Student = () => {
   const tableRef = useRef(null);
@@ -81,6 +83,11 @@ const Student = () => {
       destroyDataTable();
     };
   };
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
+
 
   return (
     <div>
@@ -104,8 +111,9 @@ const Student = () => {
                 </button>
               </Link>
             )}
-              <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+                <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
         </button>
           </div>
           <div className="table-responsive" >
