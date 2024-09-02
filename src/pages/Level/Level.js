@@ -17,6 +17,7 @@ const Level = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [subjectData, setSubjectData] = useState(null);
+  const [extraData, setExtraData] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -83,11 +84,26 @@ const Level = () => {
     }
     setLoading(false);
   };
-
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
   return (
     <div className="container my-4">
-      {storedScreens?.levelCreate && <LevelAdd onSuccess={refreshData} />}
-
+    
+      <div className="d-flex justify-content-end align-items-center">
+            <span>
+            <LevelAdd onSuccess={refreshData} /></span>
+            {/* } */}
+           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button> </p>
+        </div>
       {loading ? (
         <div className="loader-container">
           <div className="loading">
@@ -100,6 +116,8 @@ const Level = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive" >
+
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -107,6 +125,62 @@ const Level = () => {
               <th scope="col">Level</th>
               <th scope="col">Subject</th>
               <th scope="col">Code</th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th scope="col">Status</th>
               <th scope="col">Action</th>
             </tr>
@@ -125,6 +199,10 @@ const Level = () => {
                     )}
                 </td>
                 <td className="text-break">{data.levelCode}</td>
+                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                 <td>
                   {data.status === "Active" ? (
                     <span className="badge badges-Green">Active</span>
@@ -154,6 +232,7 @@ const Level = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

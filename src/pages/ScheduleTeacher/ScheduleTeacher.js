@@ -20,6 +20,8 @@ const ScheduleTeacher = () => {
   const deleteButtonRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [extraData, setExtraData] = useState(false);
+
 
   console.log("courseId pass ScheduleTeacher:", datas.courseId);
 
@@ -124,6 +126,15 @@ const ScheduleTeacher = () => {
       deleteButtonRef.current?.focus(); // Focus on the Delete button when the modal is shown
     }
   }, [show]);
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
 
   return (
     <div className="container my-4">
@@ -140,6 +151,9 @@ const ScheduleTeacher = () => {
       ) : (
         <>
           <ScheduleTeacherAdd onSuccess={refreshData} />
+          <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button>
           <div className="table-responsive">
             <table ref={tableRef} className="display">
               {/* Table Header */}
@@ -151,6 +165,62 @@ const ScheduleTeacher = () => {
                   <th scope="col">Course</th>
                   <th scope="col">Class</th>
                   <th scope="col">Day</th>
+                  {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
                   <th scope="col" className="text-center">
                     Action
                   </th>
@@ -166,6 +236,10 @@ const ScheduleTeacher = () => {
                     <td>{data.course}</td>
                     <td>{data.className}</td>
                     <td>{data.days}</td>
+                    {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                     <td>
                       <div className="d-flex justify-content-center align-item-center">
                         {storedScreens?.scheduleTeacherRead && (

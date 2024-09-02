@@ -16,6 +16,8 @@ const Class = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showHideIcon, setShowHideIcon] = useState(false);
+  const [extraData, setExtraData] = useState(false);
+
   const [showColumns, setShowColumns] = useState({
     createdBy: false,
     updatedBy: false,
@@ -85,7 +87,15 @@ const Class = () => {
 
     destroyDataTable();
   };
-
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
   return (
     <div className="container my-4">
       <div className="my-3 d-flex justify-content-end mb-5">
@@ -96,6 +106,9 @@ const Class = () => {
             </button>
           </Link>
         )}
+         <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button>
       </div>
       {loading ? (
         <div className="loader-container">
@@ -108,14 +121,70 @@ const Class = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive" >
+
         <table ref={tableRef} className="display">
           <thead>
             <tr>
               <th scope="col">S No</th>
               <th scope="col">Class Name</th>
               <th scope="col">Class Type</th>
-              {showColumns.createdBy && <th scope="col">Created By</th>}
-              {showColumns.updatedBy && <th scope="col">Updated By</th>}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th scope="col" className="text-center">Action</th>
             </tr>
           </thead>
@@ -125,8 +194,10 @@ const Class = () => {
                 <th scope="row">{index + 1}</th>
                 <td>{data.className}</td>
                 <td>{data.classType}</td>
-                {showColumns.createdBy && <td>{data.createdBy}</td>}
-                {showColumns.updatedBy && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                 <td className="text-center">
                   {storedScreens?.classRead && (
                     <Link to={`/class/view/${data.id}`}>
@@ -159,6 +230,7 @@ const Class = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

@@ -14,6 +14,8 @@ const Shg = () => {
     // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [extraData, setExtraData] = useState(false);
+
 
     useEffect(() => {
         const getData = async () => {
@@ -71,11 +73,27 @@ const Shg = () => {
         }
         setLoading(false);
     };
-
+    const handleDataShow = () => {
+        if (!loading) {
+          setExtraData(!extraData);
+          initializeDataTable();
+        }
+        return () => {
+          destroyDataTable();
+        };
+      };
     return (
         <div className="container my-4">
             {/* {storedScreens?.levelCreate &&  */}
+            <div className="d-flex justify-content-end align-items-center">
+            <span>
             <ShgAdd onSuccess={refreshData} />
+            </span>
+            {/* } */}
+           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button> </p>
+        </div>
             {/* } */}
 
             {loading ? (
@@ -89,12 +107,70 @@ const Shg = () => {
                     </div>
                 </div>
             ) : (
+              <div className="table-responsive" >
+
                 <table ref={tableRef} className="display">
                     <thead>
                         <tr>
                             <th scope="col" style={{ whiteSpace: "nowrap" }}>S No</th>
                             <th scope="col" className="text-center">SHG Type</th>
                             <th scope="col" className="text-center">SHG Amount</th>
+                            {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
                             <th scope="col" className="text-center">Action</th>
                         </tr>
                     </thead>
@@ -104,6 +180,10 @@ const Shg = () => {
                                 <th scope="row">{index + 1}</th>
                                 <td className="text-center">{data.shgType}</td>
                                 <td className="text-center">{data.shgAmount}</td>
+                                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                                 <td className="text-center">
                                     {/* {storedScreens?.levelRead && ( */}
                                     {/* <Link to={`/shg/view/${data.id}`}>
@@ -126,7 +206,7 @@ const Shg = () => {
                         ))}
                     </tbody>
                 </table>
-
+</div>
             )}
         </div>
     );

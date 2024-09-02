@@ -16,6 +16,7 @@ const StaffingAttendance = () => {
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [extraData, setExtraData] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -80,6 +81,15 @@ const StaffingAttendance = () => {
     }
     setLoading(false);
   };
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
 
   return (
     <div className="container my-4">
@@ -91,6 +101,9 @@ const StaffingAttendance = () => {
             </button>
           </Link>
         )}
+         <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button>
       </div>
 
       {loading ? (
@@ -104,6 +117,8 @@ const StaffingAttendance = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive" >
+
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -114,6 +129,62 @@ const StaffingAttendance = () => {
               <th scope="col">Employee Name</th>
               <th scope="col">Date</th>
               <th scope="col">Status</th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th className="text-center">Action</th>
             </tr>
           </thead>
@@ -138,6 +209,10 @@ const StaffingAttendance = () => {
                     <span className="badge badges-Red">Absent</span>
                   )}
                 </td>
+                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
                     {storedScreens?.staffAttendanceRead && (
@@ -173,6 +248,7 @@ const StaffingAttendance = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

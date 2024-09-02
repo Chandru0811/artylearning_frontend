@@ -94,6 +94,8 @@ const SendNotification = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive" >
+
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -143,6 +145,7 @@ const SendNotification = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

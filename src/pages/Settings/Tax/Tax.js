@@ -15,6 +15,7 @@ const Tax = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [extraData, setExtraData] = useState(false);
 
   // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
@@ -75,11 +76,27 @@ const Tax = () => {
     }
     setLoading(false);
   };
-
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
   return (
     <div className="container my-4">
       {/* {storedScreens?.levelCreate &&  */}
-      <TaxAdd onSuccess={refreshData} />
+      <div className="d-flex justify-content-end align-items-center">
+            <span>
+            <TaxAdd onSuccess={refreshData} />
++            </span>
+            {/* } */}
+           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button> </p>
+        </div>
       {/* } */}
       {loading ? (
         <div className="loader-container">
@@ -92,6 +109,8 @@ const Tax = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive" >
+
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -101,7 +120,64 @@ const Tax = () => {
               <th scope="col">Tax Type</th>
               <th scope="col">Rate</th>
               <th scope="col">Effective Date</th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th scope="col">Status</th>
+             
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -112,12 +188,18 @@ const Tax = () => {
                 <td>{data.taxType}</td>
                 <td>{data.rate} %</td>
                 <td>{data.effectiveDate}</td>
+                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                 <td>{data.status === "ACTIVE" ? (
                   <span className="badge badges-Green">Active</span>
                 ) : (
                   <span className="badge badges-Red">Inactive</span>
                 )}</td>
                 <td>
+               
+                {extraData && <td>{data.updatedAt}</td>}
                   <div className="d-flex">
                     {/* {storedScreens?.invoiceRead && ( */}
                     {/* <Link to={`/tax/view/${data.id}`}>
@@ -141,6 +223,7 @@ const Tax = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

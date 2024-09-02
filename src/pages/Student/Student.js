@@ -14,6 +14,7 @@ const Student = () => {
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [extraData, setExtraData] = useState(false);
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   console.log("Screens : ", SCREENS);
@@ -71,6 +72,15 @@ const Student = () => {
     }
     setLoading(false);
   };
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
 
   return (
     <div>
@@ -94,7 +104,12 @@ const Student = () => {
                 </button>
               </Link>
             )}
+              <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button>
           </div>
+          <div className="table-responsive" >
+
           <table ref={tableRef} className="display">
             <thead>
               <tr>
@@ -106,6 +121,62 @@ const Student = () => {
                 <th scope="col">Age</th>
                 <th scope="col">Gender</th>
                 <th scope="col">Nationality</th>
+                {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
                 {/* <th scope="col">Join Class Date</th>
                 <th scope="col">Status</th> */}
                 <th scope="col" className="text-center">
@@ -122,6 +193,10 @@ const Student = () => {
                   <td>{data.age}</td>
                   <td>{data.gender}</td>
                   <td>{data.nationality}</td>
+                  {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                   {/* <td>{data.joinClassDate}</td>
                   <td>{data.status}</td> */}
                   <td>
@@ -160,6 +235,7 @@ const Student = () => {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>
