@@ -13,6 +13,7 @@ import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
+import { MdViewColumn } from "react-icons/md";
 
 const Center = () => {
   const tableRef = useRef(null);
@@ -110,8 +111,9 @@ const Center = () => {
             </button>
           </Link>
         )}
-        <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
         </button>
       </div>
       {loading ? (

@@ -126,8 +126,38 @@ const Form5 = forwardRef(
                 )}
               </div> */}
 
+           
               <div className="col-md-6 col-12 mb-3">
-                <label>Referred By</label>
+                <label>Refer Student Center</label>
+                <div className="input-group ">
+                  <select
+                    className="form-select"
+                    name="referedStudentCenterNameId"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.referedStudentCenterNameId}
+                  >
+                    <option selected></option>
+                    {centerData &&
+                      centerData.map((referedStudentCenterNameId) => (
+                        <option
+                          key={referedStudentCenterNameId.id}
+                          value={referedStudentCenterNameId.id}
+                        >
+                          {referedStudentCenterNameId.centerNames}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                {formik.touched.referedStudentCenterNameId &&
+                  formik.errors.referedStudentCenterNameId && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.referedStudentCenterNameId}</small>
+                    </div>
+                  )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label>Refer By(Child’s Name)</label>
                 <div className="input-group ">
                   <input
                     className="form-control"
@@ -143,7 +173,6 @@ const Form5 = forwardRef(
                   </div>
                 )}
               </div>
-
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Preferred Day<span className="text-danger">*</span>
@@ -360,7 +389,7 @@ const Form5 = forwardRef(
                   )}
               </div>
 
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12 mb-3">
                 <label>Name of Referal</label>
                 <div className="input-group ">
                   <input
@@ -377,7 +406,7 @@ const Form5 = forwardRef(
                       <small>{formik.errors.nameOfReferral}</small>
                     </div>
                   )}
-              </div>
+              </div> */}
 
               <div className="col-md-6 col-12">
                 <label>
@@ -398,36 +427,6 @@ const Form5 = forwardRef(
                     <small>{formik.errors.enquiryDate}</small>
                   </div>
                 )}
-              </div>
-
-              <div className="col-md-6 col-12 mb-3">
-                <label>Refer Student Center</label>
-                <div className="input-group ">
-                  <select
-                    className="form-select"
-                    name="referedStudentCenterNameId"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.referedStudentCenterNameId}
-                  >
-                    <option selected></option>
-                    {centerData &&
-                      centerData.map((referedStudentCenterNameId) => (
-                        <option
-                          key={referedStudentCenterNameId.id}
-                          value={referedStudentCenterNameId.id}
-                        >
-                          {referedStudentCenterNameId.centerNames}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                {formik.touched.referedStudentCenterNameId &&
-                  formik.errors.referedStudentCenterNameId && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.referedStudentCenterNameId}</small>
-                    </div>
-                  )}
               </div>
 
               <div className="col-md-6 col-12">

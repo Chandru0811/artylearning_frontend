@@ -80,7 +80,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
         if (response.status === 200) {
           onSuccess();
           handleClose();
-          toast.success("Arrangeing Assessment Updated Successfully");
+          toast.success("Arranging Assessment Updated Successfully");
           navigate("/lead/lead");
           setAll();
           try {

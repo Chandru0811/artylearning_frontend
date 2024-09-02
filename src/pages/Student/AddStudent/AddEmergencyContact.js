@@ -98,7 +98,7 @@ const AddEmergencyContact = forwardRef(
 
     // const handleNextStep = () => {
     //   formik.validateForm().then((errors) => {
-    //     formik.handleSubmit();
+    //     formik.handleSubmit();q
     //     if (Object.keys(errors).length === 0) {
     //       handleNext();
     //     }
@@ -117,7 +117,7 @@ const AddEmergencyContact = forwardRef(
             const leadData = response.data;
             console.log("Lead Data ", leadData);
             formik.setValues({
-              emergencyContactName: leadData.emergencyNric || "",
+              emergencyContactName: leadData.nameOfEmergency || "",
               emergencyContactNo: leadData.emergencyContact || "",
               authorizedRelation: "",
             });
@@ -125,7 +125,7 @@ const AddEmergencyContact = forwardRef(
               formik.setFieldValue("emergencyContactInformation", [
                 {
                   name: leadData.fathersFullName || "",
-                  emergencyRelation: "Father",
+                  authorizedRelation: leadData.relationToChils,
                   contactNo: leadData.emergencyContact || "",
                   postalCode: leadData.postalCode || "",
                   emergencyContactAddress:
@@ -283,9 +283,10 @@ const AddEmergencyContact = forwardRef(
                               <small>Emergency Contact Address</small>&nbsp;
                             </label>
                             <br />
-                            <input
+                            <textarea
                               className="form-control "
                               type="text"
+                              rows={5}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               name={`emergencyContactInformation[${index}].emergencyContactAddress`}

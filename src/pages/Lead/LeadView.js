@@ -122,13 +122,10 @@ function Leadview() {
       }
     };
 
-
     getData();
     getAssesmentData();
     getArrangeAssesmentData();
     fetchData();
-
-
   }, [id]);
 
   return (
@@ -288,11 +285,11 @@ function Leadview() {
                     </Link>
 
                     {doassesmentData.leadDoAssessmentAlphabet &&
-                      doassesmentData.leadDoAssessmentAlphabet.length > 0 &&
-                      doassesmentData.leadDoAssessmentArtyPursuers &&
-                      doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
-                      doassesmentData.leadDoAssessmentModel &&
-                      doassesmentData.leadDoAssessmentModel.length > 0 ? (
+                    doassesmentData.leadDoAssessmentAlphabet.length > 0 &&
+                    doassesmentData.leadDoAssessmentArtyPursuers &&
+                    doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
+                    doassesmentData.leadDoAssessmentModel &&
+                    doassesmentData.leadDoAssessmentModel.length > 0 ? (
                       <>
                         <AssesmentPdf doassesmentData={doassesmentData} />
                       </>
@@ -315,11 +312,11 @@ function Leadview() {
                     >
                       <span>Payment Status</span>
                     </button> */}
-                    {data.assessmentArrange &&
-                      data.assessmentArrange.length > 0 &&
-                      new Date(
-                        data.assessmentArrange[0].assessmentDate
-                      ).toDateString() === new Date().toDateString() ? (
+                    {/* {data.assessmentArrange &&
+                    data.assessmentArrange.length > 0 &&
+                    new Date(
+                      data.assessmentArrange[0].assessmentDate
+                    ).toDateString() === new Date().toDateString() ? (
                       <Link to={`/lead/lead/assessment/${id}`}>
                         <button type="button" class="btn btn-border btn-sm">
                           <span>Do Assessment</span>
@@ -327,26 +324,24 @@ function Leadview() {
                       </Link>
                     ) : (
                       ""
-                    )}
-                    {/* {data.leadStatus === "ARRANGING_ASSESSMENT" &&
-                    "ASSESSMENT_DONE" ? (
+                    )} */}
+                    {data.leadStatus === "ARRANGING_ASSESSMENT" ? (
                       <Link to={`/lead/lead/assessment/${id}`}>
-                        <button type="button" class="btn btn-border btn-sm">
+                        <button type="button" className="btn btn-border btn-sm">
                           <span>Do Assessment</span>
                         </button>
                       </Link>
+                    ) : data.leadStatus === "ASSESSMENT_DONE" ? (
+                      <></>
                     ) : (
                       <></>
-                    )} */}
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-
-
 
         <div className="container-fluid">
           <div class="accordion" id="accordionExample">
@@ -459,11 +454,16 @@ function Leadview() {
                           </div>
                           <div className="col-6">
                             <p className="text-muted text-sm">
-                              : {data.leadStatus
+                              :{" "}
+                              {data.leadStatus
                                 ? data.leadStatus
-                                  .split('_')
-                                  .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                                  .join(' ')
+                                    .split("_")
+                                    .map(
+                                      (word) =>
+                                        word.charAt(0).toUpperCase() +
+                                        word.slice(1).toLowerCase()
+                                    )
+                                    .join(" ")
                                 : "--"}
                             </p>
                           </div>
@@ -1127,42 +1127,50 @@ function Leadview() {
                 >
                   <div className="accordion-body">
                     <div className="container-fluid">
-                      <div className="row m-3">
-                        <h5 className="headColor mt-2 mb-4">Arranging Assessment</h5>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-2">
-                            <div className="col-6 d-flex align-items-center">
-                              <p className="text-sm fw-medium">Centre</p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {centerData && centerData.map((center) =>
-                                  parseInt(data.centerId) === center.id
-                                    ? center.centerNames || "--"
-                                    : ""
-                                )}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-2">
-                            <div className="col-6 d-flex align-items-center">
-                              <p className="text-sm fw-medium">Student Name</p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data.studentName || "--"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                      <div className="row">
+                        <h5 className="headColor mt-2 mb-4">
+                          Arranging Assessment
+                        </h5>
                         {data?.assessmentArrange?.map((arrange, index) => (
                           <div key={index} className="row">
                             <div className="col-md-6 col-12">
                               <div className="row mb-2">
                                 <div className="col-6 d-flex align-items-center">
-                                  <p className="text-sm fw-medium">Assessment</p>
+                                  <p className="text-sm fw-medium">Centre</p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {centerData &&
+                                      centerData.map((center) =>
+                                        parseInt(data.centerId) === center.id
+                                          ? center.centerNames || "--"
+                                          : ""
+                                      )}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Student Name
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    : {data.studentName || "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Assessment
+                                  </p>
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
@@ -1174,7 +1182,9 @@ function Leadview() {
                             <div className="col-md-6 col-12">
                               <div className="row mb-2">
                                 <div className="col-6 d-flex align-items-center">
-                                  <p className="text-sm fw-medium">Assessment Date</p>
+                                  <p className="text-sm fw-medium">
+                                    Assessment Date
+                                  </p>
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
@@ -1186,7 +1196,9 @@ function Leadview() {
                             <div className="col-md-6 col-12">
                               <div className="row mb-2">
                                 <div className="col-6 d-flex align-items-center">
-                                  <p className="text-sm fw-medium">Start Time</p>
+                                  <p className="text-sm fw-medium">
+                                    Start Time
+                                  </p>
                                 </div>
                                 <div className="col-6">
                                   <p className="text-muted text-sm">
@@ -1216,9 +1228,8 @@ function Leadview() {
               </div>
             )}
 
-
             {arrangeassesmentData.assessmentArrange &&
-              arrangeassesmentData.assessmentArrange.length > 0 ? (
+            arrangeassesmentData.assessmentArrange.length > 0 ? (
               <>
                 {/* Arrange Assessment */}
                 <div class="accordion-item">
@@ -1267,12 +1278,12 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {arrangeassesmentData &&
-                                    arrangeassesmentData.assessmentArrange &&
-                                    arrangeassesmentData.assessmentArrange
-                                      .length > 0 &&
-                                    arrangeassesmentData.assessmentArrange[0]
+                                  arrangeassesmentData.assessmentArrange &&
+                                  arrangeassesmentData.assessmentArrange
+                                    .length > 0 &&
+                                  arrangeassesmentData.assessmentArrange[0]
                                     ? arrangeassesmentData.assessmentArrange[0]
-                                      .studentName
+                                        .studentName
                                     : "--"}
                                 </p>
                               </div>
@@ -1288,14 +1299,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {arrangeassesmentData &&
-                                    arrangeassesmentData.assessmentArrange &&
-                                    arrangeassesmentData.assessmentArrange
-                                      .length > 0 &&
-                                    arrangeassesmentData.assessmentArrange[0] &&
-                                    arrangeassesmentData.assessmentArrange[0]
-                                      .assessmentDate
+                                  arrangeassesmentData.assessmentArrange &&
+                                  arrangeassesmentData.assessmentArrange
+                                    .length > 0 &&
+                                  arrangeassesmentData.assessmentArrange[0] &&
+                                  arrangeassesmentData.assessmentArrange[0]
+                                    .assessmentDate
                                     ? arrangeassesmentData.assessmentArrange[0]
-                                      .assessment
+                                        .assessment
                                     : "--"}
                                 </p>
                               </div>
@@ -1311,14 +1322,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {arrangeassesmentData &&
-                                    arrangeassesmentData.assessmentArrange &&
-                                    arrangeassesmentData.assessmentArrange
-                                      .length > 0 &&
-                                    arrangeassesmentData.assessmentArrange[0] &&
-                                    arrangeassesmentData.assessmentArrange[0]
-                                      .assessmentDate
+                                  arrangeassesmentData.assessmentArrange &&
+                                  arrangeassesmentData.assessmentArrange
+                                    .length > 0 &&
+                                  arrangeassesmentData.assessmentArrange[0] &&
+                                  arrangeassesmentData.assessmentArrange[0]
+                                    .assessmentDate
                                     ? arrangeassesmentData.assessmentArrange[0]
-                                      .assessmentDate
+                                        .assessmentDate
                                     : "--"}
                                 </p>
                               </div>
@@ -1334,13 +1345,13 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {arrangeassesmentData &&
-                                    arrangeassesmentData.assessmentArrange &&
-                                    arrangeassesmentData.assessmentArrange
-                                      .length > 0 &&
-                                    arrangeassesmentData.assessmentArrange[0] &&
-                                    arrangeassesmentData.assessmentArrange[0].time
+                                  arrangeassesmentData.assessmentArrange &&
+                                  arrangeassesmentData.assessmentArrange
+                                    .length > 0 &&
+                                  arrangeassesmentData.assessmentArrange[0] &&
+                                  arrangeassesmentData.assessmentArrange[0].time
                                     ? arrangeassesmentData.assessmentArrange[0]
-                                      .time
+                                        .time
                                     : "--"}
                                 </p>
                               </div>
@@ -1356,14 +1367,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {arrangeassesmentData &&
-                                    arrangeassesmentData.assessmentArrange &&
-                                    arrangeassesmentData.assessmentArrange
-                                      .length > 0 &&
-                                    arrangeassesmentData.assessmentArrange[0] &&
-                                    arrangeassesmentData.assessmentArrange[0]
-                                      .remarks
+                                  arrangeassesmentData.assessmentArrange &&
+                                  arrangeassesmentData.assessmentArrange
+                                    .length > 0 &&
+                                  arrangeassesmentData.assessmentArrange[0] &&
+                                  arrangeassesmentData.assessmentArrange[0]
+                                    .remarks
                                     ? arrangeassesmentData.assessmentArrange[0]
-                                      .remarks
+                                        .remarks
                                     : "--"}
                                 </p>
                               </div>
@@ -1380,11 +1391,11 @@ function Leadview() {
             )}
 
             {doassesmentData.leadDoAssessmentAlphabet &&
-              doassesmentData.leadDoAssessmentAlphabet.length > 0 &&
-              doassesmentData.leadDoAssessmentArtyPursuers &&
-              doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
-              doassesmentData.leadDoAssessmentModel &&
-              doassesmentData.leadDoAssessmentModel.length > 0 ? (
+            doassesmentData.leadDoAssessmentAlphabet.length > 0 &&
+            doassesmentData.leadDoAssessmentArtyPursuers &&
+            doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
+            doassesmentData.leadDoAssessmentModel &&
+            doassesmentData.leadDoAssessmentModel.length > 0 ? (
               <>
                 {/* Assessment Information */}
                 <div class="accordion-item">
@@ -1431,12 +1442,12 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0]
+                                  doassesmentData.leadDoAssessmentModel[0]
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .name
+                                        .name
                                     : "--"}
                                 </p>
                               </div>
@@ -1453,16 +1464,16 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .assessmentDate
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .assessmentDate
                                     ? doassesmentData.leadDoAssessmentModel[0].assessmentDate.substring(
-                                      0,
-                                      10
-                                    )
+                                        0,
+                                        10
+                                      )
                                     : "--"}
                                 </p>
                               </div>
@@ -1477,13 +1488,13 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0].age
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0].age
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .age
+                                        .age
                                     : "--"}
                                 </p>
                               </div>
@@ -1500,15 +1511,15 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0].year
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0].year
                                     ? doassesmentData.leadDoAssessmentModel[0].year.substring(
-                                      0,
-                                      10
-                                    )
+                                        0,
+                                        10
+                                      )
                                     : "--"}
                                 </p>
                               </div>
@@ -1525,14 +1536,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .pictureToken
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .pictureToken
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .pictureToken
+                                        .pictureToken
                                     : "--"}
                                 </p>
                               </div>
@@ -1549,14 +1560,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .paymentMode
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .paymentMode
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .paymentMode
+                                        .paymentMode
                                     : "--"}
                                 </p>
                               </div>
@@ -1573,14 +1584,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .timeSlotOffered
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .timeSlotOffered
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .timeSlotOffered
+                                        .timeSlotOffered
                                     : "--"}
                                 </p>
                               </div>
@@ -1597,14 +1608,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .referredBy
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .referredBy
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .referredBy
+                                        .referredBy
                                     : "--"}
                                 </p>
                               </div>
@@ -1621,14 +1632,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .tshirtSize
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .tshirtSize
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .tshirtSize
+                                        .tshirtSize
                                     : "--"}
                                 </p>
                               </div>
@@ -1645,14 +1656,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .levelAssessed
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .levelAssessed
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .levelAssessed
+                                        .levelAssessed
                                     : "--"}
                                 </p>
                               </div>
@@ -1667,14 +1678,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .sibling
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .sibling
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .sibling
+                                        .sibling
                                     : "--"}
                                 </p>
                               </div>
@@ -1691,14 +1702,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .whereFrom
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .whereFrom
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .whereFrom
+                                        .whereFrom
                                     : "--"}
                                 </p>
                               </div>
@@ -1713,14 +1724,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .remarks
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .remarks
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .remarks
+                                        .remarks
                                     : "--"}
                                 </p>
                               </div>
@@ -1743,25 +1754,25 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   : (
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .pencilGrip
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .pencilGrip
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .pencilGrip
+                                        .pencilGrip
                                     : "--"}
                                   )&nbsp;
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .pencilGripHandle
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .pencilGripHandle
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .pencilGripHandle
+                                        .pencilGripHandle
                                     : "--"}
                                 </p>
                               </div>
@@ -1853,14 +1864,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .comprehendingOfInstruction
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .comprehendingOfInstruction
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .comprehendingOfInstruction
+                                        .comprehendingOfInstruction
                                     : "--"}
                                 </p>
                               </div>
@@ -1875,14 +1886,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .artyRemarks
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .artyRemarks
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .artyRemarks
+                                        .artyRemarks
                                     : "--"}
                                 </p>
                               </div>
@@ -1899,14 +1910,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .verbalLanguageDevelopment
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .verbalLanguageDevelopment
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .verbalLanguageDevelopment
+                                        .verbalLanguageDevelopment
                                     : "--"}
                                 </p>
                               </div>
@@ -1923,14 +1934,14 @@ function Leadview() {
                                 <p className="text-muted text-sm">
                                   :{" "}
                                   {doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel.length >
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
                                     0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentModel[0]
-                                      .attentionMilestone
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentModel[0]
+                                    .attentionMilestone
                                     ? doassesmentData.leadDoAssessmentModel[0]
-                                      .attentionMilestone
+                                        .attentionMilestone
                                     : "--"}
                                 </p>
                               </div>
@@ -1941,7 +1952,7 @@ function Leadview() {
 
                       {/* Alphabet */}
                       {doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (
+                      doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (
                         <div className="container-fluid">
                           <div className="row  m-3">
                             <h5 className="headColor mt-5 mb-4">Alphabet</h5>
@@ -1970,20 +1981,20 @@ function Leadview() {
                                     <th scope="row">Uppercase</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseA ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -1996,17 +2007,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseB ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseB ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2019,17 +2030,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseC ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseC ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2042,17 +2053,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseD ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseD ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2065,17 +2076,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseE ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseE ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2088,17 +2099,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseF ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseF ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2111,17 +2122,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseG ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseG ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2134,17 +2145,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseH ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseH ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2157,17 +2168,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseI ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseI ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2180,17 +2191,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseJ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseJ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2203,17 +2214,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseK ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseK ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2226,17 +2237,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseL ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseL ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2249,17 +2260,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseM ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseM ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2275,17 +2286,17 @@ function Leadview() {
                                     <th scope="row">Written Strokes</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperA ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2298,17 +2309,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperB ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperB ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2321,17 +2332,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperC ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperC ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2344,17 +2355,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperD ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperD ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2367,17 +2378,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperE ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperE ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2390,17 +2401,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperF ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperF ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2413,17 +2424,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperG ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperG ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2436,17 +2447,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperH ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperH ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2459,17 +2470,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperI ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperI ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2482,17 +2493,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperJ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperJ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2505,17 +2516,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperK ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperK ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2528,17 +2539,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperL ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperL ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2551,17 +2562,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperM ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperM ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2577,17 +2588,17 @@ function Leadview() {
                                     <th scope="row">Lowercase</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseA ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2600,17 +2611,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseB ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseB ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2623,17 +2634,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseC ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseC ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2646,17 +2657,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseD ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseD ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2669,17 +2680,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseE ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseE ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2692,17 +2703,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseF ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseF ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2715,17 +2726,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseG ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseG ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2738,17 +2749,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseH ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseH ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2761,17 +2772,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseI ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseI ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2784,17 +2795,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseJ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseJ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2807,17 +2818,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseK ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseK ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2830,17 +2841,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseL ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseL ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2853,17 +2864,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseM ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseM ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2879,17 +2890,17 @@ function Leadview() {
                                     <th scope="row">Beginning Sound</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundA ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2902,17 +2913,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundA ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2925,17 +2936,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundC ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundC ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2948,17 +2959,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundD ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundD ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2971,17 +2982,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundE ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundE ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2994,17 +3005,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundF ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundF ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3017,17 +3028,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundG ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundG ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3040,17 +3051,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundH ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundH ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3063,17 +3074,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundI ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundI ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3086,17 +3097,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundJ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundJ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3109,17 +3120,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundK ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundK ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3132,17 +3143,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundL ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundL ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3155,17 +3166,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundM ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundM ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3181,17 +3192,17 @@ function Leadview() {
                                     <th scope="row">Written Strokes</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerA ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3204,17 +3215,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerB ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerB ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3227,17 +3238,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerC ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerC ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3250,17 +3261,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerD ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerD ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3273,17 +3284,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerE ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerE ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3296,17 +3307,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerF ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerF ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3319,17 +3330,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerG ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerG ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3342,17 +3353,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerH ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerH ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3365,17 +3376,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerI ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerI ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3388,17 +3399,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerJ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerJ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3411,17 +3422,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerK ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerK ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3434,17 +3445,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerL ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerL ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3457,17 +3468,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerM ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerM ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3507,17 +3518,17 @@ function Leadview() {
                                     <th scope="row">Uppercase</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseN ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseN ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3530,17 +3541,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseO ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseO ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3553,17 +3564,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseP ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseP ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3576,17 +3587,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseQ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseQ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3599,17 +3610,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseR ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseR ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3622,17 +3633,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseS ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseS ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3645,17 +3656,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseT ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseT ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3668,17 +3679,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseU ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseU ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3691,17 +3702,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseV ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseV ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3714,17 +3725,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseW ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseW ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3737,17 +3748,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseX ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseX ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3760,17 +3771,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseY ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseY ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3783,17 +3794,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .uppercaseZ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .uppercaseZ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3809,17 +3820,17 @@ function Leadview() {
                                     <th scope="row">Written Strokes</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperN ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperN ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3832,17 +3843,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperO ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperO ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3855,17 +3866,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperP ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperP ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3878,17 +3889,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperQ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperQ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3901,17 +3912,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperR ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperR ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3924,17 +3935,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperS ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperS ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3947,17 +3958,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperT ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperT ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3970,17 +3981,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperU ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperU ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3993,17 +4004,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperV ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperV ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4016,17 +4027,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperW ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperW ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4039,17 +4050,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperX ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperX ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4062,17 +4073,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperY ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperY ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4085,17 +4096,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesUpperZ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesUpperZ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4111,17 +4122,17 @@ function Leadview() {
                                     <th scope="row">Lowercase</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseN ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseN ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4134,17 +4145,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseO ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseO ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4157,17 +4168,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseP ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseP ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4180,17 +4191,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseQ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseQ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4203,17 +4214,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseR ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseR ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4226,17 +4237,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseS ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseS ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4249,17 +4260,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseT ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseT ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4272,17 +4283,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseU ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseU ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4295,17 +4306,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseV ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseV ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4318,17 +4329,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseW ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseW ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4341,17 +4352,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseX ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseX ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4364,17 +4375,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseY ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseY ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4387,17 +4398,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .lowercaseZ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .lowercaseZ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4413,17 +4424,17 @@ function Leadview() {
                                     <th scope="row">Beginning Sound</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundN ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundN ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4436,17 +4447,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundO ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundO ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4459,17 +4470,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundP ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundP ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4482,17 +4493,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundQ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundQ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4505,17 +4516,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundR ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundR ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4528,17 +4539,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundS ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundS ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4551,17 +4562,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundT ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundT ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4574,17 +4585,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundU ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundU ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4597,17 +4608,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundV ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundV ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4620,17 +4631,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundW ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundW ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4643,17 +4654,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundX ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundX ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4666,17 +4677,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundY ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundY ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4689,17 +4700,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .beginningSoundZ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundZ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4715,17 +4726,17 @@ function Leadview() {
                                     <th scope="row">Written Strokes</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerN ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerN ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4738,17 +4749,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerO ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerO ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4761,17 +4772,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerP ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerP ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4784,17 +4795,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerQ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerQ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4807,17 +4818,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerR ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerR ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4830,17 +4841,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerS ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerS ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4853,17 +4864,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerT ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerT ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4876,17 +4887,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerU ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerU ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4899,17 +4910,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerV ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerV ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4922,17 +4933,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerW ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerW ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4945,17 +4956,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerX ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerX ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4968,17 +4979,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerY ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerY ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4991,17 +5002,17 @@ function Leadview() {
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0]
-                                          .writtenStrokesLowerZ ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writtenStrokesLowerZ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5027,15 +5038,15 @@ function Leadview() {
                                   <p className="text-muted text-sm">
                                     :
                                     {doassesmentData &&
-                                      doassesmentData.leadDoAssessmentModel &&
-                                      doassesmentData.leadDoAssessmentModel
-                                        .length > 0 &&
-                                      doassesmentData.leadDoAssessmentModel[0] &&
-                                      doassesmentData.leadDoAssessmentAlphabet &&
-                                      doassesmentData
-                                        .leadDoAssessmentAlphabet[0] &&
-                                      doassesmentData.leadDoAssessmentAlphabet[0]
-                                        .association
+                                    doassesmentData.leadDoAssessmentModel &&
+                                    doassesmentData.leadDoAssessmentModel
+                                      .length > 0 &&
+                                    doassesmentData.leadDoAssessmentModel[0] &&
+                                    doassesmentData.leadDoAssessmentAlphabet &&
+                                    doassesmentData
+                                      .leadDoAssessmentAlphabet[0] &&
+                                    doassesmentData.leadDoAssessmentAlphabet[0]
+                                      .association
                                       ? "Yes"
                                       : "No"}
                                   </p>
@@ -5051,18 +5062,18 @@ function Leadview() {
                                   <p className="text-muted text-sm">
                                     :{" "}
                                     {doassesmentData &&
-                                      doassesmentData.leadDoAssessmentModel &&
-                                      doassesmentData.leadDoAssessmentModel
-                                        .length > 0 &&
-                                      doassesmentData.leadDoAssessmentModel[0] &&
-                                      doassesmentData.leadDoAssessmentAlphabet &&
-                                      doassesmentData
-                                        .leadDoAssessmentAlphabet[0] &&
-                                      doassesmentData.leadDoAssessmentAlphabet[0]
-                                        .alphabetRemarks
+                                    doassesmentData.leadDoAssessmentModel &&
+                                    doassesmentData.leadDoAssessmentModel
+                                      .length > 0 &&
+                                    doassesmentData.leadDoAssessmentModel[0] &&
+                                    doassesmentData.leadDoAssessmentAlphabet &&
+                                    doassesmentData
+                                      .leadDoAssessmentAlphabet[0] &&
+                                    doassesmentData.leadDoAssessmentAlphabet[0]
+                                      .alphabetRemarks
                                       ? doassesmentData
-                                        .leadDoAssessmentAlphabet[0]
-                                        .alphabetRemarks
+                                          .leadDoAssessmentAlphabet[0]
+                                          .alphabetRemarks
                                       : "--"}
                                   </p>
                                 </div>
@@ -5078,7 +5089,7 @@ function Leadview() {
 
                       {/* Arty Pursuers */}
                       {doassesmentData.leadDoAssessmentArtyPursuers &&
-                        doassesmentData.leadDoAssessmentArtyPursuers.length >
+                      doassesmentData.leadDoAssessmentArtyPursuers.length >
                         0 ? (
                         <div className="container-fluid">
                           <div className="row m-3">
@@ -5096,19 +5107,19 @@ function Leadview() {
                                   <p className="text-muted text-sm">
                                     :{" "}
                                     {doassesmentData &&
-                                      doassesmentData.leadDoAssessmentModel &&
-                                      doassesmentData.leadDoAssessmentModel
-                                        .length > 0 &&
-                                      doassesmentData.leadDoAssessmentModel[0] &&
-                                      doassesmentData.leadDoAssessmentAlphabet &&
-                                      doassesmentData
-                                        .leadDoAssessmentAlphabet[0] &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .sightWords
+                                    doassesmentData.leadDoAssessmentModel &&
+                                    doassesmentData.leadDoAssessmentModel
+                                      .length > 0 &&
+                                    doassesmentData.leadDoAssessmentModel[0] &&
+                                    doassesmentData.leadDoAssessmentAlphabet &&
+                                    doassesmentData
+                                      .leadDoAssessmentAlphabet[0] &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0]
+                                      .sightWords
                                       ? doassesmentData.leadDoAssessmentArtyPursuers[0].sightWords.join(
-                                        " , "
-                                      )
+                                          " , "
+                                        )
                                       : "--"}
                                   </p>
                                 </div>
@@ -5133,17 +5144,17 @@ function Leadview() {
                                     <td>
                                       Hag{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realHag ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realHag ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5157,17 +5168,17 @@ function Leadview() {
                                     <td>
                                       Keg{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realKeg ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realKeg ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5181,17 +5192,17 @@ function Leadview() {
                                     <td>
                                       Dip{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realDip ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realDip ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5205,17 +5216,17 @@ function Leadview() {
                                     <td>
                                       Lot{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realLot ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realLot ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5229,17 +5240,17 @@ function Leadview() {
                                     <td>
                                       Bud{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realBud ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realBud ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5255,92 +5266,92 @@ function Leadview() {
                                     <th scope="row">Spelling</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realHagSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realHagSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realHagSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .realHagSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realKegSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realKegSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realKegSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .realKegSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realDipSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realDipSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realDipSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .realDipSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realLotSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realLotSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realLotSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .realLotSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realBudSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .realBudSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .realBudSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .realBudSpelling
                                         : "--"}
                                     </td>
                                   </tr>
@@ -5349,17 +5360,17 @@ function Leadview() {
                                     <td>
                                       Zam{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseZam ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseZam ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5373,17 +5384,17 @@ function Leadview() {
                                     <td>
                                       Den{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseDen ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseDen ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5397,17 +5408,17 @@ function Leadview() {
                                     <td>
                                       Wip{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseWip ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseWip ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5421,17 +5432,17 @@ function Leadview() {
                                     <td>
                                       Sot{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseSot ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseSot ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5445,17 +5456,17 @@ function Leadview() {
                                     <td>
                                       Yub{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseYub ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseYub ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5471,92 +5482,92 @@ function Leadview() {
                                     <th scope="row">Spelling</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseZamSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseZamSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseZamSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .nonSenseZamSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseDenSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseDenSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseDenSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .nonSenseDenSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseWipSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseWipSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseWipSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .nonSenseWipSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseSotSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseSotSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseSotSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .nonSenseSotSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentAlphabet &&
-                                        doassesmentData
-                                          .leadDoAssessmentAlphabet[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseYubSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .nonSenseYubSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .nonSenseYubSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .nonSenseYubSpelling
                                         : "--"}
                                     </td>
                                   </tr>
@@ -5571,19 +5582,19 @@ function Leadview() {
                                 <div className="col-md-9 col-6">
                                   <p className="text-muted text-sm">
                                     {doassesmentData &&
-                                      doassesmentData.leadDoAssessmentModel &&
-                                      doassesmentData.leadDoAssessmentModel
-                                        .length > 0 &&
-                                      doassesmentData.leadDoAssessmentModel[0] &&
-                                      doassesmentData.leadDoAssessmentAlphabet &&
-                                      doassesmentData
-                                        .leadDoAssessmentAlphabet[0] &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .realRemarks
+                                    doassesmentData.leadDoAssessmentModel &&
+                                    doassesmentData.leadDoAssessmentModel
+                                      .length > 0 &&
+                                    doassesmentData.leadDoAssessmentModel[0] &&
+                                    doassesmentData.leadDoAssessmentAlphabet &&
+                                    doassesmentData
+                                      .leadDoAssessmentAlphabet[0] &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0]
+                                      .realRemarks
                                       ? doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .realRemarks
+                                          .leadDoAssessmentArtyPursuers[0]
+                                          .realRemarks
                                       : "--"}
                                   </p>
                                 </div>
@@ -5608,17 +5619,17 @@ function Leadview() {
                                     <td>
                                       Claf{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendClaf ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendClaf ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5632,17 +5643,17 @@ function Leadview() {
                                     <td>
                                       Fled{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendFled ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendFled ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5656,17 +5667,17 @@ function Leadview() {
                                     <td>
                                       Silm{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendSilm ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendSilm ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5680,17 +5691,17 @@ function Leadview() {
                                     <td>
                                       Glob{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendGlob ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendGlob ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5704,17 +5715,17 @@ function Leadview() {
                                     <td>
                                       Blum{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendBlum ? (
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendBlum ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5730,93 +5741,93 @@ function Leadview() {
                                     <th scope="row">Spelling</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendClafSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendClafSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendClafSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendClafSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendFledSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendFledSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendFledSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendFledSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendSilmSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendSilmSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendSilmSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendSilmSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendGlobSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendGlobSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendGlobSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendGlobSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendBlumSpelling
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendBlumSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendBlumSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendBlumSpelling
                                         : "--"}
                                     </td>
                                   </tr>
@@ -5825,18 +5836,18 @@ function Leadview() {
                                     <td>
                                       Drap{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendDrap ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendDrap ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5850,18 +5861,18 @@ function Leadview() {
                                     <td>
                                       Curd{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendCued ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendCued ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5875,18 +5886,18 @@ function Leadview() {
                                     <td>
                                       Brim{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendBrim ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendBrim ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5900,18 +5911,18 @@ function Leadview() {
                                     <td>
                                       Trop{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendTrop ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendTrop ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5925,18 +5936,18 @@ function Leadview() {
                                     <td>
                                       Crum{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendCrum ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendCrum ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5952,92 +5963,92 @@ function Leadview() {
                                     <th scope="row">Spelling</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendDrapSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendDrapSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendDrapSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .rblendDrapSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendCuedSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendCuedSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendCuedSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .rblendCuedSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendBrimSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendBrimSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendBrimSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .rblendBrimSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendTropSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendTropSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendTropSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .rblendTropSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendCrumSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .rblendCrumSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .rblendCrumSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .rblendCrumSpelling
                                         : "--"}
                                     </td>
                                   </tr>
@@ -6046,18 +6057,18 @@ function Leadview() {
                                     <td>
                                       Snap{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSnap ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendSnap ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6071,18 +6082,18 @@ function Leadview() {
                                     <td>
                                       Smeg{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSmeg ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendSmeg ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6096,18 +6107,18 @@ function Leadview() {
                                     <td>
                                       Spit{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSpit ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendSpit ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6121,18 +6132,18 @@ function Leadview() {
                                     <td>
                                       Stomp{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendStomp ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendStomp ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6146,18 +6157,18 @@ function Leadview() {
                                     <td>
                                       Swum{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSwum ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendSwum ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6173,92 +6184,92 @@ function Leadview() {
                                     <th scope="row">Spelling</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSnapSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendSnapSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSnapSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .sblendSnapSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSmegSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendSmegSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSmegSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .sblendSmegSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSpitSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendSpitSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSpitSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .sblendSpitSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendStompSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendStompSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendStompSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .sblendStompSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSwumSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .sblendSwumSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .sblendSwumSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .sblendSwumSpelling
                                         : "--"}
                                     </td>
                                   </tr>
@@ -6273,20 +6284,20 @@ function Leadview() {
                                 <div className="col-md-9 col-6">
                                   <p className="text-muted text-sm">
                                     {doassesmentData &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers
-                                        .length > 0 &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0] &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0] &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .blendRemarks
+                                    doassesmentData.leadDoAssessmentArtyPursuers &&
+                                    doassesmentData.leadDoAssessmentArtyPursuers
+                                      .length > 0 &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0] &&
+                                    doassesmentData.leadDoAssessmentArtyPursuers &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0] &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0]
+                                      .blendRemarks
                                       ? doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .blendRemarks
+                                          .leadDoAssessmentArtyPursuers[0]
+                                          .blendRemarks
                                       : "--"}
                                   </p>
                                 </div>
@@ -6311,18 +6322,18 @@ function Leadview() {
                                     <td>
                                       Shamrock{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendShamrock ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendShamrock ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6336,18 +6347,18 @@ function Leadview() {
                                     <td>
                                       Choose{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendChoose ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendChoose ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6361,18 +6372,18 @@ function Leadview() {
                                     <td>
                                       Whack{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendWhack ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendWhack ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6386,18 +6397,18 @@ function Leadview() {
                                     <td>
                                       Thrust{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendThrust ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendThrust ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6411,18 +6422,18 @@ function Leadview() {
                                     <td>
                                       Phobics{" "}
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendPhobics ? (
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendPhobics ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6438,93 +6449,93 @@ function Leadview() {
                                     <th scope="row">Spelling</th>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendShamrockSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendShamrockSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendShamrockSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendShamrockSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendChooseSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendChooseSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendChooseSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendChooseSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendWhackSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendWhackSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendWhackSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendWhackSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentModel &&
-                                        doassesmentData.leadDoAssessmentModel
-                                          .length > 0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentModel[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendThrustSpelling
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendThrustSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendThrustSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendThrustSpelling
                                         : "--"}
                                     </td>
                                     <td>
                                       {doassesmentData &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers.length >
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers.length >
                                         0 &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData.leadDoAssessmentArtyPursuers &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0] &&
-                                        doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendPhobicsSpelling
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData.leadDoAssessmentArtyPursuers &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentArtyPursuers[0]
+                                        .lblendPhobicsSpelling
                                         ? doassesmentData
-                                          .leadDoAssessmentArtyPursuers[0]
-                                          .lblendPhobicsSpelling
+                                            .leadDoAssessmentArtyPursuers[0]
+                                            .lblendPhobicsSpelling
                                         : "--"}
                                     </td>
                                   </tr>
@@ -6539,20 +6550,20 @@ function Leadview() {
                                 <div className="col-md-9 col-6">
                                   <p className="text-muted text-sm">
                                     {doassesmentData &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers
-                                        .length > 0 &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0] &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0] &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .hbrothersRemarks
+                                    doassesmentData.leadDoAssessmentArtyPursuers &&
+                                    doassesmentData.leadDoAssessmentArtyPursuers
+                                      .length > 0 &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0] &&
+                                    doassesmentData.leadDoAssessmentArtyPursuers &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0] &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0]
+                                      .hbrothersRemarks
                                       ? doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .hbrothersRemarks
+                                          .leadDoAssessmentArtyPursuers[0]
+                                          .hbrothersRemarks
                                       : "--"}
                                   </p>
                                 </div>
@@ -6569,20 +6580,20 @@ function Leadview() {
                                 <div className="col-md-9 col-6">
                                   <p className="text-muted text-sm">
                                     {doassesmentData &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers
-                                        .length > 0 &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0] &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0] &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .hbrothersSightWords
+                                    doassesmentData.leadDoAssessmentArtyPursuers &&
+                                    doassesmentData.leadDoAssessmentArtyPursuers
+                                      .length > 0 &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0] &&
+                                    doassesmentData.leadDoAssessmentArtyPursuers &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0] &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0]
+                                      .hbrothersSightWords
                                       ? doassesmentData.leadDoAssessmentArtyPursuers[0].hbrothersSightWords.join(
-                                        ", "
-                                      )
+                                          ", "
+                                        )
                                       : "--"}
                                   </p>
                                 </div>
@@ -6596,19 +6607,19 @@ function Leadview() {
                                 <div className="col-md-9 col-6">
                                   <p className="text-muted text-sm">
                                     {doassesmentData &&
-                                      doassesmentData.leadDoAssessmentModel &&
-                                      doassesmentData.leadDoAssessmentModel
-                                        .length > 0 &&
-                                      doassesmentData.leadDoAssessmentModel[0] &&
-                                      doassesmentData.leadDoAssessmentArtyPursuers &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0] &&
-                                      doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .sightWordsRemarks
+                                    doassesmentData.leadDoAssessmentModel &&
+                                    doassesmentData.leadDoAssessmentModel
+                                      .length > 0 &&
+                                    doassesmentData.leadDoAssessmentModel[0] &&
+                                    doassesmentData.leadDoAssessmentArtyPursuers &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0] &&
+                                    doassesmentData
+                                      .leadDoAssessmentArtyPursuers[0]
+                                      .sightWordsRemarks
                                       ? doassesmentData
-                                        .leadDoAssessmentArtyPursuers[0]
-                                        .sightWordsRemarks
+                                          .leadDoAssessmentArtyPursuers[0]
+                                          .sightWordsRemarks
                                       : "--"}
                                   </p>
                                 </div>

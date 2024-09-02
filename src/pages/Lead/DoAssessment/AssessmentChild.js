@@ -15,11 +15,11 @@ const validationSchema = Yup.object().shape({
   assessmentDate: Yup.date().required("*Assessment Date is required"),
   levelAssessed: Yup.string().required("*Level Assessed is required"),
   year: Yup.date()
-  .notRequired("*Date of Birth is required")
-  .max(
-    new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-    "*Date of Birth must be at least 1 year ago"
-  ),
+    .notRequired("*Date of Birth is required")
+    .max(
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      "*Date of Birth must be at least 1 year ago"
+    ),
   remarks: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
@@ -117,16 +117,17 @@ const AssessmentChild = forwardRef(
 
     const getArrangeAssesmentData = async () => {
       try {
-        const response = await api.get(`/getAllLeadInfoWithReferrerById/${leadId}`);
+        const response = await api.get(
+          `/getAllLeadInfoWithReferrerById/${leadId}`
+        );
         setArrangeassesmentData(response.data);
         // console.log("Lead Do Data:",response.data.assessmentArrange[0].time);
         const timeSlotOffered = response?.data?.assessmentArrange[0]?.time;
-        formik.setFieldValue('timeSlotOffered',timeSlotOffered);
+        formik.setFieldValue("timeSlotOffered", timeSlotOffered);
       } catch (error) {
         toast.error("Error Fetch Data ", error);
       }
     };
-
 
     useEffect(() => {
       const getData = async () => {
@@ -171,8 +172,6 @@ const AssessmentChild = forwardRef(
           //   formik.setFieldValue('timeSlotOffered', ''); // or set a default value
           // }
         }
-        
-        
       };
       getData();
       getArrangeAssesmentData();
@@ -211,11 +210,14 @@ const AssessmentChild = forwardRef(
 
     return (
       <section>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="mt-3">
             <h5 className="headColor mb-4">Child Particulars</h5>
             <div className="container-fluid row">
@@ -243,7 +245,6 @@ const AssessmentChild = forwardRef(
                 </label>
                 <input
                   type="date"
-
                   name="assessmentDate"
                   className="form-control"
                   onChange={formik.handleChange}
@@ -285,12 +286,11 @@ const AssessmentChild = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.year}
                 />
-                {formik.touched.year &&
-                        formik.errors.year && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.year}</small>
-                          </div>
-                        )}
+                {formik.touched.year && formik.errors.year && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.year}</small>
+                  </div>
+                )}
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <p>
@@ -466,7 +466,7 @@ const AssessmentChild = forwardRef(
                   {formik.errors.levelAssessed &&
                     formik.touched.levelAssessed && (
                       <div
-                        className="text-danger  "
+                        className="text-danger"
                         style={{ fontSize: ".875em" }}
                       >
                         {formik.errors.levelAssessed}

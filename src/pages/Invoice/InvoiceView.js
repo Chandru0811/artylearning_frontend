@@ -317,7 +317,7 @@ function InvoiceView() {
               <span>Email &nbsp;: Artylearning@gmail.com</span>
             </div>
             <div className="card-header my-5">
-              <h5>Voided Invoice</h5>
+              <h5>Official Receipt</h5>
             </div>
             <div className="col-lg-6 col-md-6 col-12">
               <div className="row my-1">

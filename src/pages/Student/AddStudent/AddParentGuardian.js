@@ -143,7 +143,8 @@ const AddParentGuardian = forwardRef(
                   occupations: leadData.fathersOccupation || "",
                   files: null || "",
                   mobileNumbers: leadData.fathersMobileNumber || "",
-                  addresses: "",
+                  addresses: leadData.addressOfAuthorisedPerson || "",
+                  postalCodes :leadData.postalCode || "",
                   primaryContacts: leadData.primaryContactFather || "",
                 },
                 {
@@ -155,8 +156,9 @@ const AddParentGuardian = forwardRef(
                   occupations: leadData.mothersOccupation || "",
                   files: null || "",
                   mobileNumbers: leadData.mothersMobileNumber || "",
-                  addresses: "",
-                  primaryContacts: leadData.primaryContactMother || "",
+                  addresses: leadData.addressOfAuthorisedPerson,
+                  postalCodes :leadData.postalCode || "",
+                  primaryContacts: leadData.primaryContactMother || ""
                 },
               ]);
               setRows(2);
