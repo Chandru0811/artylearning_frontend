@@ -1,10 +1,13 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const StaffRequiredEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const [datas,setDatas]=useState();
     // const formik = useFormik({
     //   initialValues: {
     //     resume: null || "",
@@ -19,9 +22,9 @@ const StaffRequiredEdit = forwardRef(
     //     setLoadIndicators(false);
     //   },
     // });
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
-    console.log("object",formData)
+    console.log("object", formData);
     const formik = useFormik({
       initialValues: {
         resume: null || "",
@@ -32,20 +35,23 @@ const StaffRequiredEdit = forwardRef(
         try {
           if (values.userEnquireId !== null || undefined) {
             const formDatas = new FormData();
-          // Add each data field manually to the FormData object
-          formDatas.append("resume", values.resume);
-          formDatas.append("educationCertificate", values.educationCertificate);
-          formDatas.append("updatedBy", userName);
+            // Add each data field manually to the FormData object
+            formDatas.append("resume", values.resume);
+            formDatas.append(
+              "educationCertificate",
+              values.educationCertificate
+            );
+            formDatas.append("updatedBy", userName);
 
-          const response = await api.put(
-            `/updateUserRequireInformation/${values.userEnquireId}`,
-            formDatas,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+            const response = await api.put(
+              `/updateUserRequireInformation/${values.userEnquireId}`,
+              formDatas,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
             if (response.status === 201) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
@@ -60,8 +66,11 @@ const StaffRequiredEdit = forwardRef(
             const userId = formData.staff_id;
             formDatas.append("userId", userId);
             formDatas.append("resume", values.resume);
-            formDatas.append("educationCertificate", values.educationCertificate);
-            
+            formDatas.append(
+              "educationCertificate",
+              values.educationCertificate
+            );
+
             const response = await api.post(
               `/createUserRequireInformation`,
               formDatas,
@@ -80,12 +89,15 @@ const StaffRequiredEdit = forwardRef(
             }
           }
         } catch (error) {
-          if(error?.response?.status === 409){
-            toast.warning(error?.response?.data?.message)
+          if (error?.response?.status === 409) {
+            toast.warning(error?.response?.data?.message);
           } else {
-            toast.error("Error Submiting data " ,error?.response?.data?.message )
+            toast.error(
+              "Error Submiting data ",
+              error?.response?.data?.message
+            );
           }
-        }finally{
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -101,6 +113,7 @@ const StaffRequiredEdit = forwardRef(
             response.data.userRequireInformationModels &&
             response.data.userRequireInformationModels.length > 0
           ) {
+            setDatas(response.data.userRequireInformationModels[0])
             formik.setValues({
               ...response.data.userRequireInformationModels[0],
               userEnquireId: response.data.userRequireInformationModels[0].id,
@@ -108,8 +121,8 @@ const StaffRequiredEdit = forwardRef(
           } else {
             formik.setValues({
               userEnquireId: null,
-              resume:null || "",
-              educationCertificate: null || ""
+              resume: null || "",
+              educationCertificate: null || "",
             });
             // console.log("Contact ID:", formik.values.contactId);
           }
@@ -127,11 +140,14 @@ const StaffRequiredEdit = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="container" style={{ minHeight: "60vh" }}>
           <p className="headColor my-4">Required Information</p>
           <div class="row">
@@ -148,6 +164,19 @@ const StaffRequiredEdit = forwardRef(
                 onBlur={formik.handleBlur}
               />
               <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
+              {datas?.resume &&(
+                <div class="card border-0 shadow" style={{width: "18rem"}}>
+                <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(datas?.resume)}&embedded=true`} target="_blank" rel="noopener noreferrer" ><img class="card-img-top img-fluid" style={{height:"10rem"}} src={pdfLogo} alt="Card image cap" /></a>
+                <div class="card-body d-flex justify-content-between">
+                  <p class="card-title fw-semibold text-wrap">{datas?.resume?.split("/").pop()}</p>
+                  
+                  <a href={datas?.resume} class="btn btn-sm btn-primary">
+                    <MdOutlineDownloadForOffline size={25}/>
+                  </a>
+                </div>
+              </div>
+              )}
+              
             </div>
             <div class="col-md-6 col-12 mb-2">
               <label>Education Certificate</label>
@@ -165,6 +194,18 @@ const StaffRequiredEdit = forwardRef(
                 onBlur={formik.handleBlur}
               />
               <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
+              {datas?.educationCertificate &&(
+                <div class="card border-0 shadow" style={{width: "18rem"}}>
+                <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(datas?.educationCertificate)}&embedded=true`} target="_blank" rel="noopener noreferrer" ><img class="card-img-top img-fluid" style={{height:"10rem"}} src={pdfLogo} alt="Card image cap" /></a>
+                <div class="card-body d-flex justify-content-between">
+                  <p class="card-title fw-semibold text-wrap">{datas?.educationCertificate?.split("/").pop()}</p>
+                  
+                  <a href={datas?.educationCertificate} class="btn btn-sm btn-primary">
+                    <MdOutlineDownloadForOffline size={25}/>
+                  </a>
+                </div>
+              </div>
+              )}
             </div>
           </div>
         </div>

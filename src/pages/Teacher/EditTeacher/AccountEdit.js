@@ -35,8 +35,7 @@ const AccountEdit = forwardRef(
       label: center.centerNames,
       value: center.id,
     }));
-    const userName  = localStorage.getItem('userName');
-
+    const userName = localStorage.getItem("userName");
 
     const fetchData = async () => {
       try {
@@ -84,7 +83,7 @@ const AccountEdit = forwardRef(
               }
             );
             if (response.status === 200) {
-              toast.success(response.data.message);
+              toast.success("User Account Updated Successfully");
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
             } else {
@@ -96,10 +95,9 @@ const AccountEdit = forwardRef(
             const updatedData = {
               ...values,
               approvelContentRequired: Approval,
-              updatedBy:userName,
-
+              updatedBy: userName,
+              userId: formData.staff_id,
             };
-            values.userId = formData.staff_id;
             const response = await api.post(
               `/createUserAccountInfos`,
               updatedData,
@@ -110,7 +108,7 @@ const AccountEdit = forwardRef(
               }
             );
             if (response.status === 200) {
-              toast.success(response.data.message);
+              toast.success("User Account Created Successfully");
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
             } else {
@@ -196,7 +194,7 @@ const AccountEdit = forwardRef(
       getData();
       fetchData();
       ShgType();
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -209,11 +207,14 @@ const AccountEdit = forwardRef(
     };
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="container courseAdd">
           <p className="headColor my-4">Account Information</p>
           <div class="row">
@@ -229,8 +230,7 @@ const AccountEdit = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.startDate}
-                min={new Date().toISOString().split("T")[0]} 
-
+                min={new Date().toISOString().split("T")[0]}
               />
               {formik.touched.startDate && formik.errors.startDate && (
                 <div className="error text-danger ">
@@ -601,8 +601,6 @@ const AccountEdit = forwardRef(
                 />
               </div>
             </div>
-
-          
           </div>
         </div>
       </form>

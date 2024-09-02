@@ -91,6 +91,7 @@ const StaffAccountEdit = forwardRef(
           ...values,
           approvelContentRequired: Approval,
         };
+
         try {
           if (values.accountId !== null) {
             const response = await api.put(
@@ -102,8 +103,8 @@ const StaffAccountEdit = forwardRef(
                 },
               }
             );
-            if (response.status === 200) {
-              toast.success(response.data.message);
+            if (response.status === 200){ 
+              toast.success("User Account Updated Successfully");
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
             } else {
@@ -114,11 +115,11 @@ const StaffAccountEdit = forwardRef(
               values.approvelContentRequired === "Yes" ? true : false;
             const updatedData = {
               ...values,
+              userId : formData.staff_id,
               approvelContentRequired: Approval,
-              updatedBy: userName,
-
+              createdBy: userName,
             };
-            values.userId = formData.staff_id;
+            
             const response = await api.post(
               `/createUserAccountInfos`,
               updatedData,
@@ -129,7 +130,7 @@ const StaffAccountEdit = forwardRef(
               }
             );
             if (response.status === 200) {
-              toast.success(response.data.message);
+              toast.success("User Account Created Successfully");
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
             } else {
