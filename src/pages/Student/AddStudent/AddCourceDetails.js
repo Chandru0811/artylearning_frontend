@@ -31,18 +31,17 @@ const AddcourseDetail = forwardRef(
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const [selectedRow, setSelectedRow] = useState(null); // Add state for selected row
+    const [selectedRow, setSelectedRow] = useState(formData.id); // Add state for selected row
     const [selectedRowData, setSelectedRowData] = useState({}); // State for selected row data
-    const [courseFormData, setCourseFormData] = useState({}); // State for selected row data
     const userName  = localStorage.getItem('userName');
     console.log("selectedRow",selectedRow)
     console.log("selectedRowData",selectedRowData)
-    console.log("courseFormData",courseFormData)
+    console.log("FormData",formData)
 
     const formik = useFormik({
       initialValues: {
-        lessonName: formData.lessonName || "",
-        packageName: "",
+        lessonName: formData?.lessonName || "",
+        packageName: formData?.packageName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -72,7 +71,6 @@ const AddcourseDetail = forwardRef(
           createdBy: userName,
 
         };
-        setCourseFormData((prv)=>({...prv,...payload,scheduleId:selectedRow}))
         console.log("Course Payload Data:", payload);
         try {
           const response = await api.post(
@@ -179,14 +177,14 @@ const AddcourseDetail = forwardRef(
     const handleRowSelect = (data) => {
       if (data.availableSlots === 0) {
         toast.error("Class is Full");
-        return; // Prevent further actions
+        return; 
       }
       setSelectedRow(data.id);
       setSelectedRowData(data);
       console.log("Selected Row Data:", data);
       console.log("Selected Row Data Valuess are:", selectedRowData);
-      setFormData((prev) => ({ ...prev, ...data })); // Store selected row data in formData
-      // Calculate days between startDate and endDate
+      setFormData((prev) => ({ ...prev, coursesData: data })); 
+
       if (data.startDate && data.endDate) {
         const days = calculateDays(data.startDate, data.endDate, data.days);
         setAvailableDays(days);
@@ -199,12 +197,20 @@ const AddcourseDetail = forwardRef(
       const start = new Date(startDate);
       const end = new Date(endDate);
       const days = [];
-
-      // Get the numeric representation of the selected day (0 for Sunday, 1 for Monday, etc.)
-      const targetDay = new Date(
-        `${selectedDay}, ${start.toDateString()}`
-      ).getDay();
-
+    
+      // Mapping selected day string to its corresponding numeric value
+      const dayMapping = {
+        SUNDAY: 0,
+        MONDAY: 1,
+        TUESDAY: 2,
+        WEDNESDAY: 3,
+        THURSDAY: 4,
+        FRIDAY: 5,
+        SATURDAY: 6,
+      };
+    
+      const targetDay = dayMapping[selectedDay.toUpperCase()];
+    
       for (
         let date = new Date(start);
         date <= end;
@@ -217,32 +223,15 @@ const AddcourseDetail = forwardRef(
           });
         }
       }
-
+    
       return days;
     };
-    useEffect(() => {
-      const getData = async () => {
-        if(formData.student_id){
-        try {
-          const response = await api.get(`/getAllStudentById/${formData.student_id}`);
-          if(response.data.status ===200){
-            formik.setValues({
-              lessonName: response.data.lessonName,
-              packageName: response.data.packageName
-            });
-            selectedRow(
-              courseFormData.scheduleId
-            )
-            console.log("Student Course Detail Id:", response.data);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      }
-      };
 
-      getData();
-    }, [formData.student_id]);
+    useEffect(()=>{
+      if(formData.coursesData){
+       handleRowSelect(formData.coursesData) 
+      }
+    },[formData.coursesData])
 
     useImperativeHandle(ref, () => ({
       CourseDetail: formik.handleSubmit,
