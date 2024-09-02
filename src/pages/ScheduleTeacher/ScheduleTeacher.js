@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { BsTable } from "react-icons/bs";
 import { Button, DropdownButton, Dropdown } from "react-bootstrap";
 import TeacherReplacement from "./TeacherReplacement";
+import { MdViewColumn } from "react-icons/md";
 
 const ScheduleTeacher = () => {
   const tableRef = useRef(null);
@@ -135,7 +136,10 @@ const ScheduleTeacher = () => {
       destroyDataTable();
     };
   };
-
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container my-4">
       {loading ? (
@@ -150,10 +154,16 @@ const ScheduleTeacher = () => {
         </div>
       ) : (
         <>
-          <ScheduleTeacherAdd onSuccess={refreshData} />
-          <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
-        </button>
+          <div className="d-flex justify-content-end align-items-center">
+            <span>
+            <ScheduleTeacherAdd onSuccess={refreshData} />
+            </span>
+            {/* } */}
+           <p>  <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
+        </button> </p>
+        </div>
           <div className="table-responsive">
             <table ref={tableRef} className="display">
               {/* Table Header */}

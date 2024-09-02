@@ -8,6 +8,8 @@ import api from "../../../config/URL";
 import RaceAdd from "./RaceAdd";
 import RaceEdit from "./RaceEdit";
 import Delete from "../../../components/common/Delete";
+import { MdViewColumn } from "react-icons/md";
+
 
 const Race = () => {
     const tableRef = useRef(null);
@@ -81,16 +83,25 @@ const Race = () => {
           destroyDataTable();
         };
       };
+      const extractDate = (dateString) => {
+        if (!dateString) return ""; // Handle null or undefined date strings
+        return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+      };
+
     return (
         <div className="container my-4">
             {/* {storedScreens?.levelCreate &&  */}
-            <div className="d-flex justify-content-end align-items-center">
+            
+        <div className="d-flex justify-content-end align-items-center">
             <span>
             <RaceAdd onSuccess={refreshData} />
             </span>
             {/* } */}
-           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+           <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
+
         </button> </p>
         </div>
             {/* } */}
@@ -178,9 +189,9 @@ const Race = () => {
                                 <th scope="row">{index + 1}</th>
                                 <td className="text-center">{data.race}</td>
                                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                                 <td className="text-end">
                                     {/* {storedScreens?.levelRead && ( */}
                                     {/* <Link to={`/race/view/${data.id}`}>

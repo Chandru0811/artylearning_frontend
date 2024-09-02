@@ -10,6 +10,7 @@ import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
+import { MdViewColumn } from "react-icons/md";
 
 const Level = () => {
   const tableRef = useRef(null);
@@ -93,6 +94,11 @@ const Level = () => {
       destroyDataTable();
     };
   };
+
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container my-4">
     
@@ -100,8 +106,11 @@ const Level = () => {
             <span>
             <LevelAdd onSuccess={refreshData} /></span>
             {/* } */}
-           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+           <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
+
         </button> </p>
         </div>
       {loading ? (
@@ -200,9 +209,9 @@ const Level = () => {
                 </td>
                 <td className="text-break">{data.levelCode}</td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td>
                   {data.status === "Active" ? (
                     <span className="badge badges-Green">Active</span>

@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import fetchAllStudentsWithIds from "../List/StudentList";
 import DocumentEdit from "./DocumentEdit";
 // import { SCREENS } from "../../config/ScreenFilter";
+import { MdViewColumn } from "react-icons/md";
 
 const Document = () => {
   const tableRef = useRef(null);
@@ -88,6 +89,10 @@ const Document = () => {
       destroyDataTable();
     };
   };
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container my-4">
       <div className="mb-5 mt-3 d-flex justify-content-end">
@@ -98,8 +103,9 @@ const Document = () => {
             </button>
           </Link>
         )}
-         <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+         <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
         </button>
       </div>
       {loading ? (
@@ -208,9 +214,9 @@ const Document = () => {
                   )}
                 </td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td>
                   <div className="d-flex">
                     {storedScreens?.documentListingRead && (

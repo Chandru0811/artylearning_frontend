@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../../components/common/Delete";
 import api from "../../../config/URL";
+import { MdViewColumn } from "react-icons/md";
+
 
 const Deduction = () => {
   const tableRef = useRef(null);
@@ -76,6 +78,10 @@ const Deduction = () => {
       destroyDataTable();
     };
   };
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
 
   return (
     <div className="container my-4">
@@ -87,8 +93,9 @@ const Deduction = () => {
             </button>
           </Link>
         )}
-         <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+         <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
         </button>
       </div>
       {loading ? (
@@ -102,6 +109,8 @@ const Deduction = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive" >
+
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -178,9 +187,9 @@ const Deduction = () => {
                 <td>{data.deductionName}</td>
                 <td>{data.deductionAmount}</td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td className="text-center">
                   <div className="d-flex">
                     {storedScreens?.deductionRead && (
@@ -209,6 +218,7 @@ const Deduction = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

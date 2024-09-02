@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import Delete from "../../../components/common/Delete";
 import TaxAdd from "./TaxAdd";
 import TaxEdit from "./TaxEdit";
+import { MdViewColumn } from "react-icons/md";
+
 // import { SCREENS } from "../../config/ScreenFilter";
 
 const Tax = () => {
@@ -85,16 +87,25 @@ const Tax = () => {
       destroyDataTable();
     };
   };
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
+
   return (
     <div className="container my-4">
       {/* {storedScreens?.levelCreate &&  */}
-      <div className="d-flex justify-content-end align-items-center">
+     
+        <div className="d-flex justify-content-end align-items-center">
             <span>
             <TaxAdd onSuccess={refreshData} />
-+            </span>
+            </span>
             {/* } */}
-           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+           <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
+
         </button> </p>
         </div>
       {/* } */}
@@ -189,9 +200,9 @@ const Tax = () => {
                 <td>{data.rate} %</td>
                 <td>{data.effectiveDate}</td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td>{data.status === "ACTIVE" ? (
                   <span className="badge badges-Green">Active</span>
                 ) : (

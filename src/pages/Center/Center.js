@@ -96,7 +96,10 @@ const Center = () => {
       destroyDataTable();
     };
   };
-
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container my-4 center">
       <div className="mb-5 mt-3 d-flex justify-content-end">
@@ -216,9 +219,9 @@ const Center = () => {
                 <td>{data.uenNumber}</td>
                 <td>{data.mobile}</td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td>
                   <div className="d-flex justify-content-center align-items-center ">
                     {storedScreens?.centerListingCreate && (

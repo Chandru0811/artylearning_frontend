@@ -10,6 +10,8 @@ import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllStudentsWithIds from "../List/StudentList";
 import { toast } from "react-toastify";
+import { MdViewColumn } from "react-icons/md";
+
 // import { SCREENS } from "../../config/ScreenFilter";
 
 const Invoice = () => {
@@ -106,7 +108,10 @@ const Invoice = () => {
     };
   };
 
-
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container my-4">
       <div className="my-3 d-flex justify-content-end mb-5">
@@ -117,8 +122,9 @@ const Invoice = () => {
             </button>
           </Link>
         )}
-         <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
         </button>
       </div>
       {loading ? (
@@ -250,9 +256,9 @@ const Invoice = () => {
                     )}
                 </td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td className="text-center">
                   <div>
                     {storedScreens?.invoiceRead && (

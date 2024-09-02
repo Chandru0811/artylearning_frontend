@@ -12,6 +12,8 @@ import CurriculumOutletEdit from "./CurriculumOutletEdit";
 import { Link, useParams } from "react-router-dom";
 import { FaFileInvoice } from "react-icons/fa";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { MdViewColumn } from "react-icons/md";
+
 
 function CurriculumOutlet() {
   const { id } = useParams();
@@ -19,6 +21,7 @@ function CurriculumOutlet() {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [extraData, setExtraData] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -77,12 +80,37 @@ function CurriculumOutlet() {
     }
     setLoading(false);
   };
-
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container my-4">
+  
       {storedScreens?.levelCreate && (
-        <CurriculumOutletAdd onSuccess={refreshData} />
-      )}
+
+       <div className="d-flex justify-content-end align-items-center">
+            <span>
+            <CurriculumOutletAdd onSuccess={refreshData} />
+            </span>
+            {/* } */}
+           <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
+
+        </button> </p>
+        </div>
+            )}
       {/* <div className="my-3 d-flex justify-content-end mb-5">
                 {storedScreens?.courseCreate && (
                     <Link to={{
@@ -113,6 +141,62 @@ function CurriculumOutlet() {
               <th scope="col">Effective Date</th>
               <th scope="col">Title</th>
               <th scope="col">Status</th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -129,6 +213,10 @@ function CurriculumOutlet() {
                     <span className="badge badges-Red">Inactive</span>
                   )}
                 </td>
+                {extraData && <td>{data.createdBy}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td className="d-flex">
                   {/* {storedScreens?.courseRead && (
                     <CurriculumOutletView

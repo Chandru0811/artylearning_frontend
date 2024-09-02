@@ -10,6 +10,8 @@ import SubjectEdit from "./SubjectEdit";
 import api from "../../config/URL";
 import { SCREENS } from "../../config/ScreenFilter";
 import { toast } from "react-toastify";
+import { MdViewColumn } from "react-icons/md";
+
 
 const Subject = () => {
   const tableRef = useRef(null);
@@ -84,7 +86,10 @@ const Subject = () => {
     };
   };
 
-
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container my-4">
       {storedScreens?.subjectCreate && (
@@ -94,8 +99,11 @@ const Subject = () => {
             <SubjectAdd onSuccess={refreshData} />
             </span>
             {/* } */}
-           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+           <p>         <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
+
         </button> </p>
         </div>
       )}
@@ -121,7 +129,7 @@ const Subject = () => {
               </th>
               <th scope="col">Subject</th>
               <th scope="col">Subject Code</th>
-              <th scope="col">Status</th>
+              
               {extraData && (
                 <th
                   scope="col"
@@ -178,6 +186,7 @@ const Subject = () => {
                   UpdatedAt
                 </th>
               )}
+              <th scope="col">Status</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -188,9 +197,9 @@ const Subject = () => {
                 <td>{data.subject}</td>
                 <td className="text-break">{data.code}</td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td>
                   {" "}
                   {data.status === "Active" ? (

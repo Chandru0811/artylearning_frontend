@@ -87,7 +87,7 @@ const navigates = () =>{
 
   return (
     <>
-      <div className="mb-5 mt-3 d-flex justify-content-end">
+      <div className="mb-5 mt-4 d-flex justify-content-end">
       {/* <Link to="/course/curriculumoutlet"> */}
             <button type="button " onClick={navigates} className="btn btn-sm btn-border   ">
               Back

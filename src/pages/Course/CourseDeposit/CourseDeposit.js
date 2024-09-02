@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import CourseDepositAdd from "./CourseDepositAdd";
 import CourseDepositEdit from "./CourseDepositEdit";
 import CourseDepositView from "./CourseDepositView";
+import { MdViewColumn } from "react-icons/md";
 
 const CourseDeposit = () => {
   const { id } = useParams();
@@ -19,6 +20,8 @@ const CourseDeposit = () => {
   const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [taxData, setTaxData] = useState([]);
+  const [extraData, setExtraData] = useState(false);
+
 
   const fetchTaxData = async () => {
     try {
@@ -87,12 +90,35 @@ const CourseDeposit = () => {
     }
     setLoading(false);
   };
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
 
   return (
     <div className="container my-4">
-      {storedScreens?.levelCreate && (
-        <CourseDepositAdd onSuccess={refreshData} />
-      )}
+     
+       <div className="d-flex justify-content-end align-items-center">
+            <span>
+            <CourseDepositAdd onSuccess={refreshData} />
+            </span>
+            {/* } */}
+           <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
+
+        </button> </p>
+        </div>
       {loading ? (
         <div className="loader-container">
           <div class="loading">
@@ -115,6 +141,62 @@ const CourseDeposit = () => {
               {/* <th scope="col">WeekEnd Fee</th>
                             <th scope="col">Tax Type</th> */}
               <th scope="col">Status</th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -140,6 +222,10 @@ const CourseDeposit = () => {
                     <span className="badge badges-Red">Inactive</span>
                   )}
                 </td>
+                {extraData && <td>{data.createdBy}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td className="d-flex">
                   {/* {storedScreens?.courseRead && (
                     <CourseDepositView id={data.id} onSuccess={refreshData} />

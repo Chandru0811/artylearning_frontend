@@ -8,6 +8,8 @@ import Delete from "../../../components/common/Delete";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
+import { MdViewColumn } from "react-icons/md";
+
 
 const Payroll = () => {
   const tableRef = useRef(null);
@@ -90,7 +92,10 @@ const Payroll = () => {
       destroyDataTable();
     };
   };
-
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container">
       <div className="col-12 text-end my-3">
@@ -101,8 +106,9 @@ const Payroll = () => {
             </button>
           </Link>
         )}
-        <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+         <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
         </button>
       </div>
       {loading ? (
@@ -215,9 +221,9 @@ const Payroll = () => {
                   )}
                 </td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td className="text-center">
                   {storedScreens?.payrollRead && (
                     <Link to={`/payrolladmin/view/${data.id}`}>

@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import CourseFeesAdd from "./CourseFeesAdd";
 import CourseFeesEdit from "./CourseFeesEdit";
 import fetchAllPackageList from "../../List/PackageList";
+import { MdViewColumn } from "react-icons/md";
 
 const CourseFees = () => {
   const { id } = useParams();
@@ -18,6 +19,8 @@ const CourseFees = () => {
   const [loading, setLoading] = useState(true);
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
+  const [extraData, setExtraData] = useState(false);
+
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
@@ -102,15 +105,38 @@ const CourseFees = () => {
     fetchTaxData();
     fetchPackageData();
   }, []);
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
 
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
 
   return (
     <div className="container my-4">
               
 
       
-      {storedScreens?.levelCreate && <CourseFeesAdd onSuccess={refreshData} />}
+      
+      <div className="d-flex justify-content-end align-items-center">
+            <span>
+            <CourseFeesAdd onSuccess={refreshData} /></span>
+            {/* } */}
+           <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
+
+        </button> </p>
+        </div>
       {loading ? (
         <div className="loader-container">
           <div class="loading">
@@ -134,6 +160,62 @@ const CourseFees = () => {
               <th scope="col">Tax Type</th>
               <th scope="col">Effective Date</th>
               <th scope="col">Status</th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -159,6 +241,10 @@ const CourseFees = () => {
                         : ""
                     )}</td>
                 <td>{data.effectiveDate}</td>
+                {extraData && <td>{data.createdBy}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td>
                   {data.status === "ACTIVE" ? (
                     <span className="badge badges-Green">Active</span>

@@ -9,6 +9,7 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import { FcAddColumn } from "react-icons/fc";
 import { FaEyeSlash } from "react-icons/fa";
+import { MdViewColumn } from "react-icons/md";
 
 const Class = () => {
   const tableRef = useRef(null);
@@ -96,6 +97,10 @@ const Class = () => {
       destroyDataTable();
     };
   };
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
   return (
     <div className="container my-4">
       <div className="my-3 d-flex justify-content-end mb-5">
@@ -106,8 +111,9 @@ const Class = () => {
             </button>
           </Link>
         )}
-         <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+          <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
         </button>
       </div>
       {loading ? (
@@ -195,9 +201,9 @@ const Class = () => {
                 <td>{data.className}</td>
                 <td>{data.classType}</td>
                 {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td className="text-center">
                   {storedScreens?.classRead && (
                     <Link to={`/class/view/${data.id}`}>

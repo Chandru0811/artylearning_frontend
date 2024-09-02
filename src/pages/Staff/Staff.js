@@ -7,6 +7,7 @@ import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import { MdViewColumn } from "react-icons/md";
 // import { SCREENS } from "../../config/ScreenFilter";
 
 const Staff = () => {
@@ -83,7 +84,10 @@ const Staff = () => {
       destroyDataTable();
     };
   };
-
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
 
   return (
     <div>
@@ -107,8 +111,9 @@ const Staff = () => {
                 </button>
               </Link>
             )}
-            <button className="btn btn-primary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
+            <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {/* {extraData?"Hide":'Show'} */}
+          <MdViewColumn className="fs-4 text-secondary"/>
         </button>
           </div>
           <table ref={tableRef} className="display">
@@ -206,9 +211,9 @@ const Staff = () => {
                     {data.contactNumber}
                   </td>
                   {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                  {extraData && <td>{extractDate(data.createdAt)}</td>}
+                  {extraData && <td>{data.updatedBy}</td>}
+                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
                   <td className="text-center">
                     <div>
                       {storedScreens?.staffRead && (
