@@ -14,6 +14,8 @@ const Leave = () => {
   // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [extraData, setExtraData] = useState(false);
+
 
   useEffect(() => {
     const getData = async () => {
@@ -71,10 +73,28 @@ const Leave = () => {
     setLoading(false);
   };
 
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
+
   return (
     <div className="container my-4">
       {/* {storedScreens?.levelCreate &&  */}
-      <LeaveAdd onSuccess={refreshData} />
+      <div className="d-flex justify-content-end align-items-center">
+            <span>
+            <LeaveAdd onSuccess={refreshData} />
+            </span>
+            {/* } */}
+           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button> </p>
+        </div>
       {/* } */}
 
       {loading ? (
@@ -88,6 +108,8 @@ const Leave = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive" >
+
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -97,6 +119,62 @@ const Leave = () => {
               <th scope="col" className="text-center">
                 Leave Type
               </th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th scope="col" className="text-center">
                 Action
               </th>
@@ -107,6 +185,10 @@ const Leave = () => {
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td className="text-center">{data.leaveType}</td>
+                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                 <td className="text-center">
                   {/* {storedScreens?.levelRead && ( */}
                   {/* <Link to={`/leavetype/view/${data.id}`}>
@@ -129,6 +211,7 @@ const Leave = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

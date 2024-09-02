@@ -14,6 +14,7 @@ const Country = () => {
     const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [extraData, setExtraData] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -70,13 +71,26 @@ const Country = () => {
         }
         setLoading(false);
     };
-
+    const handleDataShow = () => {
+        if (!loading) {
+          setExtraData(!extraData);
+          initializeDataTable();
+        }
+        return () => {
+          destroyDataTable();
+        };
+      };
     return (
         <div className="container my-4">
             {/* {storedScreens?.levelCreate &&  */}
-            <CountryAdd onSuccess={refreshData} />
+            <div className="d-flex justify-content-end align-items-center">
+            <span>
+            <CountryAdd onSuccess={refreshData} /></span>
             {/* } */}
-
+           <p> <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button> </p>
+        </div>
             {loading ? (
                 <div className="loader-container">
                     <div className="loading">
@@ -88,6 +102,8 @@ const Country = () => {
                     </div>
                 </div>
             ) : (
+              <div className="table-responsive" >
+
                 <table ref={tableRef} className="display">
                     <thead>
                         <tr>
@@ -95,6 +111,62 @@ const Country = () => {
                             <th scope="col">Country</th>
                             <th scope="col">Nationality</th>
                             <th scope="col">Citizenship</th>
+                            {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
                             <th scope="col" className="text-center">Action</th>
                         </tr>
                     </thead>
@@ -105,6 +177,10 @@ const Country = () => {
                                 <td>{data.country}</td>
                                 <td>{data.nationality}</td>
                                 <td>{data.citizenship}</td>
+                                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                                 <td className="text-center">
                                     {/* {storedScreens?.levelRead && ( */}
                                     {/* <Link to={`/country/view/${data.id}`}>
@@ -127,7 +203,7 @@ const Country = () => {
                         ))}
                     </tbody>
                 </table>
-
+</div>
             )}
         </div>
     );

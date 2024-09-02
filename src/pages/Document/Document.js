@@ -16,6 +16,8 @@ const Document = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [studentData, setStudentData] = useState(null);
+  const [extraData, setExtraData] = useState(false);
+
 
   const fetchData = async () => {
     try {
@@ -77,7 +79,15 @@ const Document = () => {
     }
     setLoading(false);
   };
-
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  };
   return (
     <div className="container my-4">
       <div className="mb-5 mt-3 d-flex justify-content-end">
@@ -88,6 +98,9 @@ const Document = () => {
             </button>
           </Link>
         )}
+         <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button>
       </div>
       {loading ? (
         <div className="loader-container">
@@ -100,6 +113,8 @@ const Document = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive" >
+
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -110,6 +125,62 @@ const Document = () => {
               <th scope="col">Class</th>
               <th scope="col">Batch</th>
               <th scope="col">Status</th>
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -136,6 +207,10 @@ const Document = () => {
                     <span className="badge badges-Green">Approval</span>
                   )}
                 </td>
+                {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                 <td>
                   <div className="d-flex">
                     {storedScreens?.documentListingRead && (
@@ -156,6 +231,7 @@ const Document = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

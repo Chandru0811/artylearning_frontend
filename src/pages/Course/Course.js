@@ -19,7 +19,7 @@
     const [loading, setLoading] = useState(true);
     const [subjectData, setSubjectData] = useState(null);
     const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
+    const [extraData, setExtraData] = useState(false);
     useEffect(() => {
       const getData = async () => {
         try {
@@ -87,6 +87,16 @@
       fetchSubData();
     }, [loading]);
 
+    const handleDataShow = () => {
+      if (!loading) {
+        setExtraData(!extraData);
+        initializeDataTable();
+      }
+      return () => {
+        destroyDataTable();
+      };
+    };
+  
     return (
       <div className="container my-4">
         <div className="my-3 d-flex justify-content-end mb-5">
@@ -100,6 +110,9 @@
               </button>
             </Link>
           )}
+           <button className="btn btn-primary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
+        </button>
         </div>
         {loading ? (
           <div className="loader-container">
@@ -112,6 +125,8 @@
             </div>
           </div>
         ) : (
+          <div className="table-responsive" >
+
           <table ref={tableRef} className="display">
             <thead>
               <tr>
@@ -120,6 +135,62 @@
                 <th scope="col">Course Name</th>
                 <th scope="col">Course Code</th>
                 <th scope="col">Course Type</th>
+                {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  CreatedAt
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedBy
+                </th>
+              )}
+              {extraData && (
+                <th
+                  scope="col"
+                  class="sorting"
+                  tabindex="0"
+                  aria-controls="DataTables_Table_0"
+                  rowspan="1"
+                  colspan="1"
+                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                  style={{ width: "92px" }}
+                >
+                  UpdatedAt
+                </th>
+              )}
                 <th scope="col">Status</th>
                 <th scope="col" className="text-center">Action</th>
               </tr>
@@ -132,6 +203,10 @@
                   <td>{data.courseName}</td>
                   <td>{data.courseCode}</td>
                   <td>{data.courseType}</td>
+                  {extraData && <td>{data.createdBy}</td>}
+                {extraData && <td>{data.createdAt}</td>}
+                {extraData && <td>{data.updatedBy}</td>}
+                {extraData && <td>{data.updatedAt}</td>}
                   <td>
                     {data.status === "Active" ? (
                       <span className="badge badges-Green">Active</span>
@@ -192,6 +267,7 @@
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     );
