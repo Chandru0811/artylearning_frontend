@@ -159,10 +159,10 @@ const ScheduleTeacher = () => {
             <ScheduleTeacherAdd onSuccess={refreshData} />
             </span>
             {/* } */}
-           <p>  <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-          {/* {extraData?"Hide":'Show'} */}
+           {/* <p>  <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
-        </button> </p>
+        </button> </p> */}
         </div>
           <div className="table-responsive">
             <table ref={tableRef} className="display">
