@@ -8,32 +8,38 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { Link, useParams } from "react-router-dom";
 import fetchAllPackageList from "../../List/PackageList";
+import fetchAllPackageListByCenter from "../../List/PackageListByCenter";
+import { forEach } from "jszip";
 
 const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),
   packageId: Yup.string().required("*Package Name is required"),
-  weekdayFee: Yup.string().required("*Weekday Fee is required"),
-  weekendFee: Yup.string().required("*Weekend Fee is required"),
+  weekdayFee: Yup.number().typeError("*Must be a Number").required("*Weekday Fee is required"),
+  weekendFee: Yup.number().typeError("*Must be a Number").required("*Weekend Fee is required"),
   taxType: Yup.string().required("*TaxType Fee is required"),
   status: Yup.string().required("*Status is required"),
 
 });
 
-function CourseFeesAdd({ onSuccess }) {
+function CourseFeesAdd({ onSuccess,centerId }) {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [packageData, setPackageData] = useState(null);
+  const [packageData, setPackageData] = useState([]);
   const [taxData, setTaxData] = useState([]);
   const userName  = localStorage.getItem('userName');
 
+console.log("centerId",centerId)
+console.log("packageData",packageData)
+  const fetchPackageData = async (id) => {
+    if(id){
 
-  const fetchPackageData = async () => {
-    try {
-      const packageData = await fetchAllPackageList();
-      setPackageData(packageData);
-    } catch (error) {
-      toast.error(error);
+      try {
+        const packageData = await fetchAllPackageListByCenter(id);
+        setPackageData((prev) => [ ...packageData]);
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
 
@@ -96,8 +102,15 @@ function CourseFeesAdd({ onSuccess }) {
   });
 
   useEffect(() => {
-    fetchTaxData();
-    fetchPackageData();
+    const fetchData = async () => {
+      await fetchTaxData();
+  
+      for (const center of centerId) {
+        await fetchPackageData(center.id);
+      }
+    };
+  
+    fetchData();
   }, [show]);
 
   return (

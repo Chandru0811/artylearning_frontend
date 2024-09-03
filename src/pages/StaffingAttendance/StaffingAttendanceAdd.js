@@ -272,7 +272,7 @@ function StaffingAttendanceAdd() {
               </div>
 
               <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Employee Name</lable>
+                <lable className="">Employee Name</lable><span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
                   class={`form-select  ${
@@ -281,7 +281,7 @@ function StaffingAttendanceAdd() {
                       : ""
                   }`}
                 >
-                  <option selected disabled></option>
+                  <option selected value={""}></option>
                   {userNamesData &&
                     userNamesData.map((userName) => (
                       <option key={userName.id} value={userName.id}>

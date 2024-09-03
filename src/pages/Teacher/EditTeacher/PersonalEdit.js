@@ -199,7 +199,7 @@ const PersonalEdit = forwardRef(
                 <option value=""></option>
                 {idTypeData &&
                   idTypeData.map((idTypeId) => (
-                    <option key={idTypeId.id} value={idTypeId.idTypeId}>
+                    <option key={idTypeId.id} value={idTypeId.id}>
                       {idTypeId.idType}
                     </option>
                   ))}

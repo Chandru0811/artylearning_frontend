@@ -18,6 +18,7 @@ const CourseFees = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [packageData, setPackageData] = useState(null);
+  const [centerId, setCenterId] = useState([]);
   const [taxData, setTaxData] = useState([]);
   const [extraData, setExtraData] = useState(false);
 
@@ -100,6 +101,21 @@ const CourseFees = () => {
     }
     setLoading(false);
   };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllCoursesById/${id}`);
+
+        if (response.status === 200) {
+          console.log("course id",response.data)
+          setCenterId(response.data.centers);
+        }
+      } catch (error) {
+        console.error("Error fetching data ", error);
+      }
+    };
+    getData();
+  }, [id]);
 
   useEffect(() => {
     fetchTaxData();
@@ -128,7 +144,7 @@ const CourseFees = () => {
       
       <div className="d-flex justify-content-end align-items-center">
             <span>
-            <CourseFeesAdd onSuccess={refreshData} /></span>
+            <CourseFeesAdd onSuccess={refreshData} centerId={centerId}/></span>
             {/* } */}
            <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 

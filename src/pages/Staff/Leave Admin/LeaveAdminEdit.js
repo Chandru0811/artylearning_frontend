@@ -52,7 +52,7 @@ function LeaveAdminEdit() {
       setLoadIndicator(true);
       try {
         const formDatas = new FormData();
-        formDatas.append("userId", userId);
+        formDatas.append("userId", id);
         formDatas.append("centerName", data.centerName);
         formDatas.append("employeeName", data.employeeName);
         formDatas.append("leaveType", data.leaveType);
