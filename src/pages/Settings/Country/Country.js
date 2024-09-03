@@ -210,7 +210,7 @@ const Country = () => {
                                         path={`/deleteCountrySetting/${data.id}`}
                                     />
                                     {/* )} */}
-                                    <MdViewColumn className="fs-4 text-secondary" onClick={handleDataShow}></MdViewColumn> 
+                                    <MdViewColumn className="fs-5 text-dark mt-1" onClick={handleDataShow}></MdViewColumn> 
                                 </td>
                             </tr>
                         ))}
