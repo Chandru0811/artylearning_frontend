@@ -4,25 +4,52 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../components/common/Delete";
+import Delete from "../../components/common/Delete"; // Ensure correct import
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { FcAddColumn } from "react-icons/fc";
-import { FaEyeSlash } from "react-icons/fa";
 import { MdViewColumn } from "react-icons/md";
+import Dropdown from 'react-bootstrap/Dropdown';
+import Form from 'react-bootstrap/Form';
+
+const ColumnToggleDropdown = ({ showColumns, onToggle }) => {
+  const columns = [
+    { key: 'createdBy', label: 'Created By' },
+    { key: 'createdAt', label: 'Created At' },
+    { key: 'updatedBy', label: 'Updated By' },
+    { key: 'updatedAt', label: 'Updated At' },
+    { key: 'className', label: 'Class Name' },
+    { key: 'classType', label: 'Class Type' }
+  ];
+
+  return (
+    <Dropdown.Menu>
+      {columns.map((column) => (
+        <Dropdown.Item key={column.key}>
+          <Form.Check
+            type="checkbox"
+            label={column.label}
+            checked={showColumns[column.key]}
+            onChange={() => onToggle(column.key)}
+          />
+        </Dropdown.Item>
+      ))}
+    </Dropdown.Menu>
+  );
+};
 
 const Class = () => {
   const tableRef = useRef(null);
-
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showHideIcon, setShowHideIcon] = useState(false);
-  const [extraData, setExtraData] = useState(false);
-
   const [showColumns, setShowColumns] = useState({
+    className: true,
+    classType: true,
     createdBy: false,
     updatedBy: false,
+    createdAt: false,
+    updatedAt: false,
   });
+
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -45,17 +72,29 @@ const Class = () => {
     return () => {
       destroyDataTable();
     };
-  }, [loading, showColumns]);
+  }, [loading]);
+
+  useEffect(() => {
+    if (!loading) {
+      refreshData();
+    }
+  }, [showColumns]);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      const table = $(tableRef.current).DataTable();
+      table.columns().every((index) => {
+        const column = table.column(index);
+        const header = $(column.header());
+        const columnKey = header.text().replace(/\s+/g, '').toLowerCase();
+        column.visible(showColumns[columnKey]);
+      });
+      table.draw();
       return;
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 },
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -72,35 +111,24 @@ const Class = () => {
     try {
       const response = await api.get("/getAllCourseClassListings");
       setDatas(response.data);
-      initializeDataTable();
+      setLoading(false);
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
-    setLoading(false);
   };
 
-  const handleToggleColumns = () => {
+  const handleColumnToggle = (column) => {
     setShowColumns((prevColumns) => ({
-      createdBy: !prevColumns.createdBy,
-      updatedBy: !prevColumns.updatedBy,
+      ...prevColumns,
+      [column]: !prevColumns[column],
     }));
-    setShowHideIcon((prevState) => !prevState);
+  };
 
-    destroyDataTable();
-  };
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
   const extractDate = (dateString) => {
     if (!dateString) return ""; // Handle null or undefined date strings
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
+
   return (
     <div className="container my-4">
       <div className="my-3 d-flex justify-content-end mb-5">
@@ -111,10 +139,12 @@ const Class = () => {
             </button>
           </Link>
         )}
-          <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-          {/* {extraData?"Hide":'Show'} */}
-          <MdViewColumn className="fs-4 text-secondary"/>
-        </button>
+        {/* <Dropdown>
+          <Dropdown.Toggle className="btn btn-light border-secondary mx-2" id="dropdown-basic">
+            <MdViewColumn className="fs-4 text-secondary" />
+          </Dropdown.Toggle>
+          <ColumnToggleDropdown showColumns={showColumns} onToggle={handleColumnToggle} />
+        </Dropdown> */}
       </div>
       {loading ? (
         <div className="loader-container">
@@ -127,115 +157,56 @@ const Class = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
-
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col">S No</th>
-              <th scope="col">Class Name</th>
-              <th scope="col">Class Type</th>
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-              <th scope="col" className="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.className}</td>
-                <td>{data.classType}</td>
-                {extraData && <td>{data.createdBy}</td>}
-                  {extraData && <td>{extractDate(data.createdAt)}</td>}
-                  {extraData && <td>{data.updatedBy}</td>}
-                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                <td className="text-center">
-                  {storedScreens?.classRead && (
-                    <Link to={`/class/view/${data.id}`}>
-                      <button className="btn btn-sm">
-                        <FaEye />
-                      </button>
-                    </Link>
-                  )}
-                  {storedScreens?.classUpdate && (
-                    <Link to={`/class/edit/${data.id}`}>
-                      <button className="btn btn-sm">
-                        <FaEdit />
-                      </button>
-                    </Link>
-                  )}
-                  {/* <button
-                    className="btn btn-sm"
-                    onClick={handleToggleColumns}
-                  >
-                    {showHideIcon ? <FaEyeSlash /> : <FcAddColumn />} 
-                  </button> */}
-                  {storedScreens?.classDelete && (
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteCourseClassListing/${data.id}`}
-                    />
-                  )}
-                </td>
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col">S No</th>
+                {showColumns.className && <th scope="col">Class Name</th>}
+                {showColumns.classType && <th scope="col">Class Type</th>}
+                {showColumns.createdBy && <th scope="col">Created By</th>}
+                {showColumns.createdAt && <th scope="col">Created At</th>}
+                {showColumns.updatedBy && <th scope="col">Updated By</th>}
+                {showColumns.updatedAt && <th scope="col">Updated At</th>}
+                <th scope="col" className="text-center">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  {showColumns.className && <td>{data.className}</td>}
+                  {showColumns.classType && <td>{data.classType}</td>}
+                  {showColumns.createdBy && <td>{data.createdBy}</td>}
+                  {showColumns.createdAt && <td>{extractDate(data.createdAt)}</td>}
+                  {showColumns.updatedBy && <td>{data.updatedBy}</td>}
+                  {showColumns.updatedAt && <td>{extractDate(data.updatedAt)}</td>}
+                  <td className="text-center">
+                    {storedScreens?.classRead && (
+                      <Link to={`/class/view/${data.id}`}>
+                        <button className="btn btn-sm">
+                          <FaEye />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.classUpdate && (
+                      <Link to={`/class/edit/${data.id}`}>
+                        <button className="btn btn-sm">
+                          <FaEdit />
+                        </button>
+                      </Link>
+                    )}
+                    {storedScreens?.classDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteCourseClassListing/${data.id}`}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

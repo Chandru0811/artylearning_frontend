@@ -112,12 +112,12 @@ const CourseDeposit = () => {
             <CourseDepositAdd onSuccess={refreshData} />
             </span>
             {/* } */}
-           <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+           {/* <p className="mb-4">        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
-          {/* {extraData?"Hide":'Show'} */}
+          {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
-        </button> </p>
+        </button> </p> */}
         </div>
       {loading ? (
         <div className="loader-container">
@@ -130,6 +130,7 @@ const CourseDeposit = () => {
           </div>
         </div>
       ) : (
+        <div className="table-responsive">
         <table ref={tableRef} className="display">
           <thead>
             <tr>
@@ -245,6 +246,7 @@ const CourseDeposit = () => {
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

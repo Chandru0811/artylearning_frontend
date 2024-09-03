@@ -111,10 +111,10 @@ const Staff = () => {
                 </button>
               </Link>
             )}
-            <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-          {/* {extraData?"Hide":'Show'} */}
+            {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
-        </button>
+        </button> */}
           </div>
           <table ref={tableRef} className="display">
             <thead>

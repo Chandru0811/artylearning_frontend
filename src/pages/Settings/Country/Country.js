@@ -95,12 +95,12 @@ const Country = () => {
             <span>
             <CountryAdd onSuccess={refreshData} /></span>
             {/* } */}
-           <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+           {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
-          {/* {extraData?"Hide":'Show'} */}
+          {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
-        </button> </p>
+        </button> </p> */}
         </div>
             {loading ? (
                 <div className="loader-container">
@@ -210,6 +210,7 @@ const Country = () => {
                                         path={`/deleteCountrySetting/${data.id}`}
                                     />
                                     {/* )} */}
+                                    <MdViewColumn className="fs-4 text-secondary" onClick={handleDataShow}></MdViewColumn> 
                                 </td>
                             </tr>
                         ))}
