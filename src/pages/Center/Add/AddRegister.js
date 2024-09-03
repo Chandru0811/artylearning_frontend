@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
@@ -10,6 +10,7 @@ function AddRegister({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
+  const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
     formik.resetForm();
@@ -28,21 +29,21 @@ function AddRegister({ id, onSuccess }) {
   const handleShow = () => {
     fetchTaxData();
     setShow(true);
+    setIsModified(false); 
   };
 
   const validationSchema = yup.object().shape({
-    // registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
     amount: yup.string()
-    .typeError("Amount must be a number")
-    .required("*Amount is required")
-    .matches(/^\d+(\.\d{1,2})?$/, "*Amount must be a valid number without special characters"),
+      .typeError("Amount must be a number")
+      .required("*Amount is required")
+      .matches(/^\d+(\.\d{1,2})?$/, "*Amount must be a valid number without special characters"),
     taxId: yup.string().required("*Tax Type is required"),
     status: yup.string().required("*Status is required"),
   });
+
   const formik = useFormik({
     initialValues: {
-      // registrationDate: "",
       effectiveDate: "",
       amount: "",
       taxId: "",
@@ -76,6 +77,16 @@ function AddRegister({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   return (
@@ -94,10 +105,12 @@ function AddRegister({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+            e.preventDefault();  
           }
         }}>
           <Modal.Header closeButton>
@@ -107,62 +120,29 @@ function AddRegister({ id, onSuccess }) {
           </Modal.Header>
           <Modal.Body>
             <div className="row">
-              {/* <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
-                  Registration Date<span className="text-danger">*</span>
-                </lable>
-                <div className="input-group mb-3">
-                  <input
-                    type="date"
-                    className={`form-control   ${
-                      formik.touched.registrationDate &&
-                      formik.errors.registrationDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("registrationDate")}
-                  />
-                  {formik.touched.registrationDate &&
-                    formik.errors.registrationDate && (
-                      <div className="invalid-feedback">
-                        {formik.errors.registrationDate}
-                      </div>
-                    )}
-                </div>
-              </div> */}
               <div className="col-md-6 col-12 mb-2">
-                <lable className="">
-                  Effective Date<span class="text-danger">*</span>
-                </lable>
+                <label>
+                  Effective Date<span className="text-danger">*</span>
+                </label>
                 <input
                   type="date"
-                  className={`form-control    ${
-                    formik.touched.effectiveDate && formik.errors.effectiveDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
- 
+                  className={`form-control ${formik.touched.effectiveDate && formik.errors.effectiveDate ? "is-invalid" : ""}`}
                   {...formik.getFieldProps("effectiveDate")}
                 />
-                {formik.touched.effectiveDate &&
-                  formik.errors.effectiveDate && (
-                    <div className="invalid-feedback">
-                      {formik.errors.effectiveDate}
-                    </div>
-                  )}
+                {formik.touched.effectiveDate && formik.errors.effectiveDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.effectiveDate}
+                  </div>
+                )}
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
+                <label>
                   Amount (Including GST)<span className="text-danger">*</span>
-                </lable>
+                </label>
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control    ${
-                      formik.touched.amount && formik.errors.amount
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.amount && formik.errors.amount ? "is-invalid" : ""}`}
                     {...formik.getFieldProps("amount")}
                   />
                   {formik.touched.amount && formik.errors.amount && (
@@ -173,25 +153,20 @@ function AddRegister({ id, onSuccess }) {
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <lable className="">
-                  Tax Type<span class="text-danger">*</span>
-                </lable>
+                <label>
+                  Tax Type<span className="text-danger">*</span>
+                </label>
                 <select
-                  className={`form-select ${
-                    formik.touched.taxId && formik.errors.taxId
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select ${formik.touched.taxId && formik.errors.taxId ? "is-invalid" : ""}`}
                   {...formik.getFieldProps("taxId")}
                   style={{ width: "100%" }}
                 >
                   <option value=""></option>
-                  {taxData &&
-                    taxData.map((tax) => (
-                      <option key={tax.id} value={tax.id}>
-                        {tax.taxType}
-                      </option>
-                    ))}
+                  {taxData && taxData.map((tax) => (
+                    <option key={tax.id} value={tax.id}>
+                      {tax.taxType}
+                    </option>
+                  ))}
                 </select>
                 {formik.touched.taxId && formik.errors.taxId && (
                   <div className="invalid-feedback">
@@ -200,15 +175,11 @@ function AddRegister({ id, onSuccess }) {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <lable className="">
-                  Status<span class="text-danger">*</span>
-                </lable>
+                <label>
+                  Status<span className="text-danger">*</span>
+                </label>
                 <select
-                  className={`form-select ${
-                    formik.touched.status && formik.errors.status
-                      ? "is-invalid"
-                      : ""
-                  }`}
+                  className={`form-select ${formik.touched.status && formik.errors.status ? "is-invalid" : ""}`}
                   {...formik.getFieldProps("status")}
                   style={{ width: "100%" }}
                 >
