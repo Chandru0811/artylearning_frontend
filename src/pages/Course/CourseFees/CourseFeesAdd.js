@@ -31,17 +31,29 @@ function CourseFeesAdd({ onSuccess,centerId }) {
 
 console.log("centerId",centerId)
 console.log("packageData",packageData)
-  const fetchPackageData = async (id) => {
-    if(id){
+const fetchPackageData = async (id) => {
+  if (id) {
+    try {
+      const newData = await fetchAllPackageListByCenter(id);
+      setPackageData((prev) => {
+        if (!Array.isArray(prev)) {
+          return newData;
+        }
+        const uniqueDataMap = new Map();
 
-      try {
-        const packageData = await fetchAllPackageListByCenter(id);
-        setPackageData((prev) => [ ...packageData]);
-      } catch (error) {
-        toast.error(error);
-      }
+        prev.forEach(item => {
+          uniqueDataMap.set(item.id, item); 
+        });
+        newData.forEach(item => {
+          uniqueDataMap.set(item.id, item);
+        });
+        return Array.from(uniqueDataMap.values());
+      });
+    } catch (error) {
+      toast.error(error);
     }
-  };
+  }
+};
 
   const fetchTaxData = async () => {
     try {
@@ -111,7 +123,7 @@ console.log("packageData",packageData)
     };
   
     fetchData();
-  }, [show]);
+  }, [show,centerId]);
 
   return (
     <>
