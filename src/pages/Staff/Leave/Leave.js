@@ -99,24 +99,24 @@ const Leave = () => {
           <div className="row pb-3">
             <div className="col-md-6 col-12">
               <div className="row mt-3 mb-2">
-                <div className="col-6">
+                <div className="col-auto">
                   <p className="fw-medium">Employee Name :</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {datas.employeeName || "--"}
+                    {datas.employeeName || "--"}
                   </p>
                 </div>
               </div>
             </div>
             <div className="col-md-6 col-12">
               <div className="row  mb-2 mt-3">
-                <div className="col-6  ">
+                <div className="col-auto">
                   <p className="fw-medium">Leave Limit :</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {datas.leaveLimit || "--"}
+                    {datas.leaveLimit || "--"}
                   </p>
                 </div>
               </div>
@@ -133,6 +133,7 @@ const Leave = () => {
                 <th scope="col">To Date</th>
                 <th scope="col">Leave Type</th>
                 <th scope="col">Leave Status</th>
+                <th scope="col">NO Of Days</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -144,6 +145,7 @@ const Leave = () => {
                   <td>{data.fromDate}</td>
                   <td>{data.toDate}</td>
                   <td>{data.leaveType}</td>
+                  <td>{data.noOfDays}</td>
                   <td>
                     {data.leaveStatus === "APPROVED" ? (
                       <span className="badge badges-Green">Approved</span>

@@ -171,6 +171,7 @@ function StaffingAttendanceEdit() {
       }
     },
   });
+
   const handleCenterChange = async (event) => {
     setUserNameData(null);
     const centerId = event.target.value;
@@ -181,6 +182,7 @@ function StaffingAttendanceEdit() {
       toast.error(error);
     }
   };
+
   const handleAttendanceChange = async (event) => {
     const attendance = event.target.value;
     formik.setFieldValue("attendanceStatus", attendance);
@@ -296,7 +298,7 @@ function StaffingAttendanceEdit() {
               </div>
 
               <div className="col-md-6 col-12 mb-3 ">
-                <label className="">Employee Name</label>
+                <label className="">Employee Name</label><span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
                   className={`form-select  ${
@@ -305,7 +307,7 @@ function StaffingAttendanceEdit() {
                       : ""
                   }`}
                 >
-                  <option selected disabled></option>
+                  <option selected value={""}></option>
                   {userNamesData &&
                     userNamesData.map((userName) => (
                       <option key={userName.id} value={userName.id}>
