@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../../List/CenterList";
 import api from "../../../../config/URL";
+import fetchAllStudentListByCenter from "../../../List/StudentListByCenter";
 
 const validationSchema = Yup.object().shape({
   // centerId: Yup.string().required("*Centre is required!"),
@@ -27,7 +28,7 @@ const validationSchema = Yup.object().shape({
 const EditForm5 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
-
+    const [studentData, setStudentData] = useState(null);
     const formik = useFormik({
       initialValues: {
         // centerId: formData.centerId,
@@ -77,6 +78,15 @@ const EditForm5 = forwardRef(
       }
     };
 
+    const fetchStudent = async (centerId) => {
+      try {
+        const student = await fetchAllStudentListByCenter(centerId);
+        setStudentData(student);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
     const getData = async () => {
       const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
       const enquiryDate =
@@ -89,6 +99,12 @@ const EditForm5 = forwardRef(
         preferredTimeSlot: response.data.preferredTimeSlot || [],
       });
     };
+
+    useEffect(() => {
+      if (formik.values.referedStudentCenterNameId) {
+        fetchStudent(formik.values.referedStudentCenterNameId);
+      }
+    }, [formik.values.referedStudentCenterNameId]);
 
     useEffect(() => {
       getData();
@@ -117,31 +133,6 @@ const EditForm5 = forwardRef(
                 <p className="headColor">Account Information</p>
               </div>
 
-              {/* <div className="col-md-6 col-12 ">
-                <lable className="">
-                  Centre<span className="text-danger">*</span>
-                </lable>
-                <select
-                  className="form-select"
-                  name="centerId"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.centerId}
-                >
-                  <option selected></option>
-                  {centerData &&
-                    centerData.map((centerId) => (
-                      <option key={centerId.id} value={centerId.id}>
-                        {centerId.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.centerId}</small>
-                  </div>
-                )}
-              </div> */}
               <div className="col-md-6 col-12 mb-3">
                 <label>Refer Student Center</label>
                 <div className="input-group">
@@ -174,13 +165,22 @@ const EditForm5 = forwardRef(
               <div className="col-md-6 col-12 mb-3">
                 <label>Refer By(Child’s Name)</label>
                 <div className="input-group ">
-                  <input
-                    className="form-control"
-                    name="referBy"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.referBy}
-                  />
+                  <select
+                    {...formik.getFieldProps("referBy")}
+                    className={`form-select ${
+                      formik.touched.referBy && formik.errors.referBy
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected></option>
+                    {studentData &&
+                      studentData.map((student) => (
+                        <option key={student.id} value={student.id}>
+                          {student.studentNames}{" "}
+                        </option>
+                      ))}
+                  </select>
                 </div>
                 {formik.touched.referBy && formik.errors.referBy && (
                   <div className="error text-danger">

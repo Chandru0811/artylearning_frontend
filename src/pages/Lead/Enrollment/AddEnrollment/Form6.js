@@ -5,16 +5,15 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 
+const validationSchema = Yup.object().shape({
+  agreeConditionOne: Yup.boolean().oneOf([true], "*Declare is required").required(),
+  agreeConditionTwo: Yup.boolean().oneOf([true], "*Declare is required").required(),
+  agreeConditionThree: Yup.boolean().oneOf([true], "*Declare is required").required(),
+});
+
 const Form6 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
-
-    const validationSchema = Yup.object().shape({
-      // addressOfAuthorisedPerson: Yup.string().required("*Address is required"),
-      agreeConditionOne: Yup.string().required("*Condition are required"),
-      agreeConditionTwo: Yup.string().required("*Condition are required"),
-      agreeConditionThree: Yup.string().required("*Condition are required"),
-    });
 
     const formik = useFormik({
       initialValues: {
@@ -23,7 +22,7 @@ const Form6 = forwardRef(
         agreeConditionTwo: false,
         agreeConditionThree: false,
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {

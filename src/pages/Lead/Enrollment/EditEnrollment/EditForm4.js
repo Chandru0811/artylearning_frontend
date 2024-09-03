@@ -5,7 +5,7 @@
   import { toast } from "react-toastify";
 
   const validationSchema = Yup.object().shape({
-    addressOfAuthorisedPerson: Yup.string().required("*Address is required"),
+    address: Yup.string().required("*Address is required"),
     postalCode: Yup.string()
       .matches(/^\d+$/, "*Must be a Number")
       .required("*Code is required"),
@@ -32,7 +32,7 @@
     ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
       const formik = useFormik({
         initialValues: {
-          addressOfAuthorisedPerson: formData.addressOfAuthorisedPerson || "",
+          address: formData.address || "",
           postalCode: formData.postalCode,
           nameOfEmergency: formData.nameOfEmergency || "",
           emergencyNric: formData.emergencyNric || "",
@@ -100,15 +100,15 @@
                   <div className="">
                     <textarea
                       type="text"
-                      name="addressOfAuthorisedPerson"
+                      name="address"
                       className="form-control"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.addressOfAuthorisedPerson}
+                      value={formik.values.address}
                     />
-                    {formik.touched.addressOfAuthorisedPerson && formik.errors.addressOfAuthorisedPerson && (
+                    {formik.touched.address && formik.errors.address && (
                       <div className="error text-danger ">
-                        <small>{formik.errors.addressOfAuthorisedPerson}</small>
+                        <small>{formik.errors.address}</small>
                       </div>
                     )}
                   </div>

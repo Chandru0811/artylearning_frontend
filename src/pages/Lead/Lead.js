@@ -372,7 +372,7 @@ const Lead = () => {
                     <th scope="col">Centre</th>
                     <th scope="col">Student Name</th>
                     <th scope="col">Subject</th>
-                    <th scope="col">Father Name</th>
+                    {/* <th scope="col">Father Name</th> */}
                     <th scope="col">Status</th>
                     <th scope="col" className="text-center">
                       Action
@@ -401,7 +401,7 @@ const Lead = () => {
                             : ""}
                         </td>
 
-                        <td>{data.fathersFullName}</td>
+                        {/* <td>{data.fathersFullName}</td> */}
 
                         <td>
                           {data.leadStatus === "NEW_WAITLIST" ? (

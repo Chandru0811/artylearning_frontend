@@ -13,6 +13,7 @@ import Logo from "../../assets/images/Logo.png";
 import html2canvas from "html2canvas";
 import "boxicons";
 import AssesmentPdf from "./AssesmentPdf";
+import fetchAllStudentsWithIds from "../List/StudentList";
 
 function Leadview() {
   const { id } = useParams();
@@ -41,13 +42,16 @@ function Leadview() {
   // console.log(data);
 
   const [centerData, setCenterData] = useState(null);
+  const [studentData, setStudentData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   console.log("subject", subjectData);
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
+      const studentData = await fetchAllStudentsWithIds();
       const subjectData = await fetchAllSubjectsWithIds();
       setCenterData(centerData);
+      setStudentData(studentData);
       setSubjectData(subjectData);
     } catch (error) {
       toast.error(error);
@@ -987,7 +991,37 @@ function Leadview() {
                       <h5 className="headColor mt-5  mb-4">
                         Account Information
                       </h5>
-
+                      <div className="col-md-6 col-12">
+                        <div className="row mb-2">
+                          <div className="col-6 d-flex  align-items-center">
+                            <p className="text-sm fw-medium ">
+                              Refer Center Name
+                            </p>
+                          </div>
+                          <div className="col-6">
+                            <p className="text-muted text-sm">
+                              : {data.referedStudentCenterName || "--"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <div className="row mb-2">
+                          <div className="col-6 d-flex  align-items-center">
+                            <p className="text-sm fw-medium ">Refer By</p>
+                          </div>
+                          <div className="col-6">
+                            <p className="text-muted text-sm">
+                               : {studentData &&
+                                studentData.map((std) =>
+                                  parseInt(data.referBy) === std.id
+                                    ? std.studentNames || "--"
+                                    : ""
+                                )}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                       <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex">
@@ -1034,19 +1068,7 @@ function Leadview() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-md-6 col-12">
-                        <div className="row mb-2">
-                          <div className="col-6 d-flex  align-items-center">
-                            <p className="text-sm fw-medium ">Refer By</p>
-                          </div>
-                          <div className="col-6">
-                            <p className="text-muted text-sm">
-                              : {data.referBy || "--"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-md-6 col-12">
+                      {/* <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">
                             <p className="text-sm fw-medium ">
@@ -1059,21 +1081,7 @@ function Leadview() {
                             </p>
                           </div>
                         </div>
-                      </div>
-                      <div className="col-md-6 col-12">
-                        <div className="row mb-2">
-                          <div className="col-6 d-flex  align-items-center">
-                            <p className="text-sm fw-medium ">
-                              Refer Center Name
-                            </p>
-                          </div>
-                          <div className="col-6">
-                            <p className="text-muted text-sm">
-                              : {data.referedStudentCenterName || "--"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                      </div> */}
                       <div className="col-md-6 col-12">
                         <div className="row mb-2">
                           <div className="col-6 d-flex  align-items-center">

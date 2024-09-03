@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import fetchAllStudentsWithIds from "../../List/StudentList";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
@@ -28,11 +29,13 @@ const validationSchema = Yup.object().shape({
 const AssessmentChild = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const { leadId } = useParams();
+    const [studentData, setStudentData] = useState(null);
     const [assessmentAvailable, setAssessmentAvailable] = useState(false);
     const [assessmentId, setAssessmentId] = useState(false);
     const [arrangeassesmentData, setArrangeassesmentData] = useState([]);
     console.log(assessmentId);
     const currentDate = new Date().toISOString().split("T")[0];
+
     const formik = useFormik({
       initialValues: {
         name: formData.name || "",
@@ -129,6 +132,15 @@ const AssessmentChild = forwardRef(
       }
     };
 
+    const fetchData = async () => {
+      try {
+        const studentData = await fetchAllStudentsWithIds();
+        setStudentData(studentData);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
     useEffect(() => {
       const getData = async () => {
         const response = await api.get(
@@ -155,6 +167,8 @@ const AssessmentChild = forwardRef(
           const leadResponse = await api.get(
             `/getAllLeadInfoWithReferrerById/${leadId}`
           );
+          console.log("leadResponse", leadResponse.data.marketingSource);
+
           const dob =
             leadResponse.data.dateOfBirth &&
             leadResponse.data.dateOfBirth.substring(0, 10);
@@ -164,6 +178,7 @@ const AssessmentChild = forwardRef(
             assessmentDate: currentDate,
             remarks: leadResponse.data.remark,
             referredBy: leadResponse.data.referBy,
+            whereFrom: leadResponse.data.marketingSource,
           });
           // if (response?.data?.assessmentArrange?.length > 0) {
           //   formik.setFieldValue('timeSlotOffered', response.data.assessmentArrange[0].time);
@@ -175,6 +190,7 @@ const AssessmentChild = forwardRef(
       };
       getData();
       getArrangeAssesmentData();
+      fetchData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -285,6 +301,7 @@ const AssessmentChild = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.year}
+                  readOnly
                 />
                 {formik.touched.year && formik.errors.year && (
                   <div className="error text-danger ">
@@ -369,14 +386,21 @@ const AssessmentChild = forwardRef(
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <lable>Referred By(Student Name)</lable>
-                <input
-                  type="text"
-                  name="referredBy"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.referredBy}
-                />
+                <select
+                  {...formik.getFieldProps("referredBy")}
+                  className={`form-control ${
+                    formik.touched.referredBy && formik.errors.referredBy
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                >
+                  {studentData &&
+                    studentData.map((student) => (
+                      <option key={student.id} value={student.id}>
+                        {student.studentNames}
+                      </option>
+                    ))}
+                </select>
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <p>T-Shirt Size</p>

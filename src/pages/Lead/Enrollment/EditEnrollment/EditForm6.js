@@ -21,7 +21,7 @@ const EditForm6 = forwardRef(
         agreeConditionTwo: formData.agreeConditionTwo ?? false,
         agreeConditionThree: formData.agreeConditionThree ?? false,
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {

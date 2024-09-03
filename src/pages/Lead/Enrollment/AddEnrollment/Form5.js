@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../../List/CenterList";
 import api from "../../../../config/URL";
+import fetchAllStudentListByCenter from "../../../List/StudentListByCenter";
 
 const validationSchema = Yup.object().shape({
   // centerId: Yup.string().required("*Centre is required"),
@@ -21,13 +22,14 @@ const validationSchema = Yup.object().shape({
     .required("*Select Preferred Time Slot"),
   enquiryDate: Yup.string().required("*Enquiry Date is required"),
   remark: Yup.string()
-      .max(200, "*The maximum length is 200 characters").notRequired(),
+    .max(200, "*The maximum length is 200 characters")
+    .notRequired(),
 });
 
 const Form5 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
-
+    const [studentData, setStudentData] = useState(null);
     const formik = useFormik({
       initialValues: {
         // centerId: formData.centerId || "",
@@ -78,9 +80,24 @@ const Form5 = forwardRef(
       }
     };
 
+    const fetchStudent = async (centerId) => {
+      try {
+        const student = await fetchAllStudentListByCenter(centerId);
+        setStudentData(student);
+      } catch (error) {
+        toast.error(error);
+      }
+    };
+
+    useEffect(() => {
+      if (formik.values.referedStudentCenterNameId) {
+        fetchStudent(formik.values.referedStudentCenterNameId);
+      }
+    }, [formik.values.referedStudentCenterNameId]);
+
     useEffect(() => {
       fetchData();
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -89,44 +106,20 @@ const Form5 = forwardRef(
 
     return (
       <section>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="container-fluid">
             <div className="row px-1">
               <div className="py-3">
                 <p className="headColor">Account Information</p>
               </div>
 
-              {/* <div className="col-md-6 col-12 ">
-                <lable className="">
-                  Centre<span className="text-danger">*</span>
-                </lable>
-                <select
-                  className="form-select"
-                  name="centerId"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.centerId}
-                >
-                  <option selected></option>
-                  {centerData &&
-                    centerData.map((centerId) => (
-                      <option key={centerId.id} value={centerId.id}>
-                        {centerId.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.centerId}</small>
-                  </div>
-                )}
-              </div> */}
-
-           
               <div className="col-md-6 col-12 mb-3">
                 <label>Refer Student Center</label>
                 <div className="input-group ">
@@ -159,13 +152,22 @@ const Form5 = forwardRef(
               <div className="col-md-6 col-12 mb-3">
                 <label>Refer By(Child’s Name)</label>
                 <div className="input-group ">
-                  <input
-                    className="form-control"
-                    name="referBy"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.referBy}
-                  />
+                  <select
+                    {...formik.getFieldProps("referBy")}
+                    className={`form-select ${
+                      formik.touched.referBy && formik.errors.referBy
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected></option>
+                    {studentData &&
+                      studentData.map((student) => (
+                        <option key={student.id} value={student.id}>
+                          {student.studentNames}{" "}
+                        </option>
+                      ))}
+                  </select>
                 </div>
                 {formik.touched.referBy && formik.errors.referBy && (
                   <div className="error text-danger">
@@ -440,7 +442,6 @@ const Form5 = forwardRef(
                     onBlur={formik.handleBlur}
                     value={formik.values.remark}
                     maxLength={200}
-
                   ></textarea>
                 </div>
               </div>

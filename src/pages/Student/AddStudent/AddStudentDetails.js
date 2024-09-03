@@ -398,12 +398,12 @@ const AddStudentDetails = forwardRef(
                           className="form-check-input mx-2"
                           type="radio"
                           name="schoolType"
-                          value="NA"
-                          checked={formik.values.schoolType === "NA"}
+                          value="OTHERS"
+                          checked={formik.values.schoolType === "OTHERS"}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         />
-                        <span style={{ color: "gray" }}>NA</span>
+                        <span style={{ color: "gray" }}>Others</span>
                       </div>
                       {formik.touched.schoolType &&
                         formik.errors.schoolType && (

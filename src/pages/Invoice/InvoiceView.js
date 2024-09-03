@@ -60,6 +60,14 @@ function InvoiceView() {
       }, "")
     : "";
 
+  const uenNumber = centerData
+    ? centerData.reduce((center) => {
+        return parseInt(data.centerId) === center.id
+          ? center.uenNumber || "--"
+          : "";
+      }, "")
+    : "";
+
   const generatePDF = async (qrCodeUrl) => {
     try {
       const doc = new jsPDF();
@@ -465,7 +473,7 @@ function InvoiceView() {
               )} */}
               <p className="text-center">
                 Arty Learning Pvt.Ltd <br />
-                UEN:202042173K{" "}
+                UEN:{uenNumber || " "}
               </p>
             </div>
           </div>
