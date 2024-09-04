@@ -12,6 +12,8 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName  = localStorage.getItem('userName');
+  const [isModified, setIsModified] = useState(false);
+
   const navigate = useNavigate();
 const navigates = () =>{
   navigate(-1)
@@ -23,8 +25,11 @@ const navigates = () =>{
     formik.resetForm();
   };
 
-  const handleShow = () => setShow(true);
-
+  const handleShow = () => {
+    
+    setShow(true);
+    setIsModified(false); 
+  };
   const validationSchema = Yup.object({
     curriculumCode: Yup.string().required("*Curriculum Code is required"),
     lessonNo: Yup.string().required("*Lesson No is required"),
@@ -83,6 +88,16 @@ const navigates = () =>{
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   return (
@@ -102,7 +117,10 @@ const navigates = () =>{
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered>
+      <Modal show={show} size="lg" onHide={handleClose} centered
+       backdrop={isModified ? "static" : true} 
+       keyboard={isModified ? false : true} 
+       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Curriculum</Modal.Title>
         </Modal.Header>

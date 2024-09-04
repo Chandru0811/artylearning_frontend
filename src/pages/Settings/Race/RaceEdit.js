@@ -12,10 +12,14 @@ function RaceEdit({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
     const userName = localStorage.getItem("userName"); 
+    const [isModified, setIsModified] = useState(false);
+
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
+    const handleShow = () => { 
+        setShow(true);
+        setIsModified(false); 
+      };
     const validationSchema = Yup.object({
         race: Yup.string().required("*Race is required"),
     });
@@ -50,6 +54,18 @@ function RaceEdit({ id, onSuccess }) {
             }
 
         },
+        enableReinitialize: true,
+        validateOnChange: true,
+        validateOnBlur: true,
+        validate: (values) => {
+          if (
+            Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+          ) {
+            setIsModified(true);
+          } else {
+            setIsModified(false);
+          }
+        }
     });
 
     useEffect(() => {
@@ -77,6 +93,8 @@ function RaceEdit({ id, onSuccess }) {
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
+                backdrop={isModified ? "static" : true} 
+                keyboard={isModified ? false : true} 
             >
                 <Modal.Header closeButton>
                     <Modal.Title className="headColor">Race Edit</Modal.Title>

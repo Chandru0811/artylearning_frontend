@@ -12,6 +12,8 @@ function LevelAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
+  const [isModified, setIsModified] = useState(false);
+
 
   const handleClose = () => {
     setShow(false);
@@ -22,6 +24,8 @@ function LevelAdd({ onSuccess }) {
   const handleShow = () => {
     fetchData();
     setShow(true);
+    setIsModified(false); 
+
   }
 
   useEffect(() => {
@@ -74,6 +78,16 @@ function LevelAdd({ onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
 
@@ -88,7 +102,8 @@ function LevelAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered>
+      <Modal show={show} size="lg" onHide={handleClose} centered   backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Level</Modal.Title>
         </Modal.Header>

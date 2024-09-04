@@ -28,6 +28,7 @@ function CourseFeesAdd({ onSuccess,centerId }) {
   const [packageData, setPackageData] = useState([]);
   const [taxData, setTaxData] = useState([]);
   const userName  = localStorage.getItem('userName');
+  const [isModified, setIsModified] = useState(false);
 
 console.log("centerId",centerId)
 console.log("packageData",packageData)
@@ -74,6 +75,8 @@ const fetchPackageData = async (id) => {
     fetchPackageData();
     fetchTaxData();
     setShow(true);
+    setIsModified(false); 
+
   };
 
   const formik = useFormik({
@@ -111,6 +114,16 @@ const fetchPackageData = async (id) => {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   useEffect(() => {
@@ -142,7 +155,8 @@ const fetchPackageData = async (id) => {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered>
+      <Modal show={show} size="lg" onHide={handleClose} centered  backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Course Fees</Modal.Title>
         </Modal.Header>

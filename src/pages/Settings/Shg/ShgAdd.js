@@ -10,12 +10,17 @@ import { toast } from "react-toastify";
 function ShgAdd({ onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
+    const [isModified, setIsModified] = useState(false);
+
     const handleClose = () => {
         setShow(false);
         formik.resetForm();
     };
-    const handleShow = () => setShow(true);
-    const userName  = localStorage.getItem('userName');
+    const handleShow = () => {
+    
+        setShow(true);
+        setIsModified(false); 
+      };    const userName  = localStorage.getItem('userName');
 
     const validationSchema = Yup.object({
         shgType: Yup.string().required("*Shg Type is required"),
@@ -52,6 +57,16 @@ function ShgAdd({ onSuccess }) {
                 setLoadIndicator(false);
             }
         },
+        enableReinitialize: true,
+        validateOnChange: true,
+        validateOnBlur: true,
+        validate: (values) => {
+          if (Object.values(values).some(value => value.trim() !== "")) {
+            setIsModified(true);
+          } else {
+            setIsModified(false);
+          }
+        },
     });
 
     return (
@@ -65,7 +80,9 @@ function ShgAdd({ onSuccess }) {
                     Add <i class="bx bx-plus"></i>
                 </button>
             </div>
-            <Modal show={show} size="lg" onHide={handleClose} centered>
+            <Modal show={show} size="lg" onHide={handleClose} centered
+             backdrop={isModified ? "static" : true} 
+             keyboard={isModified ? false : true} >
                 <Modal.Header closeButton>
                     <Modal.Title className="headColor">Add SHG</Modal.Title>
                 </Modal.Header>

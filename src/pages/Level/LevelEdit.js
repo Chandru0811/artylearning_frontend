@@ -13,6 +13,7 @@ function Edit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
+  const [isModified, setIsModified] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -69,6 +70,19 @@ function Edit({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
+    
   });
 
   const handleClose = () => {
@@ -80,6 +94,8 @@ function Edit({ id, onSuccess }) {
     fetchData();
     getData();
     setShow(true);
+    setIsModified(false); 
+
   };
 
   return (
@@ -93,6 +109,8 @@ function Edit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Level</Modal.Title>

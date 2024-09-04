@@ -10,9 +10,14 @@ import { toast } from "react-toastify";
 function EditPackage({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
+
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => { 
+    setShow(true);
+    setIsModified(false); 
+  };
 
   const validationSchema = yup.object().shape({
     packageName: yup.string().required("*Package Name is required"),
@@ -49,6 +54,19 @@ function EditPackage({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    }
+    
   });
   useEffect(() => {
     const getData = async () => {
@@ -75,6 +93,8 @@ function EditPackage({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {

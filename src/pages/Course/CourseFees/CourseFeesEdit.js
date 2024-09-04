@@ -26,6 +26,7 @@ function CourseFeesEdit({ id, onSuccess }) {
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
   const userName  = localStorage.getItem('userName');
+  const [isModified, setIsModified] = useState(false);
 
 
   const fetchPackageData = async () => {
@@ -56,6 +57,8 @@ function CourseFeesEdit({ id, onSuccess }) {
     fetchPackageData();
     fetchTaxData();
     setShow(true);
+    setIsModified(false); 
+
   };
 
   const formik = useFormik({
@@ -94,6 +97,18 @@ function CourseFeesEdit({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    }
   });
 
   useEffect(() => {
@@ -126,6 +141,8 @@ function CourseFeesEdit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Course Fees</Modal.Title>
