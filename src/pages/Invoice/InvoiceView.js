@@ -59,15 +59,13 @@ function InvoiceView() {
           : src;
       }, "")
     : "";
+    console.log("QR Code:", qrCodeUrl);
 
   const uenNumber = centerData
-    ? centerData.reduce((center) => {
-        return parseInt(data.centerId) === center.id
-          ? center.uenNumber || "--"
-          : "";
-      }, "")
+    ? centerData.find((center) => parseInt(data.centerId) === center.id)
+        ?.uenNumber || "--"
     : "";
-
+ 
   const generatePDF = async (qrCodeUrl) => {
     try {
       const doc = new jsPDF();
@@ -473,7 +471,7 @@ function InvoiceView() {
               )} */}
               <p className="text-center">
                 Arty Learning Pvt.Ltd <br />
-                UEN:{uenNumber || " "}
+                UEN : {uenNumber || " "}
               </p>
             </div>
           </div>

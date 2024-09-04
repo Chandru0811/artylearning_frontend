@@ -10,13 +10,12 @@ import { SCREENS } from "../../config/ScreenFilter";
 import Lead from "../Lead/Lead";
 import { MdViewColumn } from "react-icons/md";
 
-
 const Student = () => {
   const tableRef = useRef(null);
 
   const [datas, setDatas] = useState([]);
-  console.log("Student All datas:",datas);
-  
+  console.log("Student All datas:", datas);
+
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
 
@@ -90,7 +89,6 @@ const Student = () => {
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
 
-
   return (
     <div>
       {loading ? (
@@ -113,138 +111,133 @@ const Student = () => {
                 </button>
               </Link>
             )}
-                {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+            {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
         </button> */}
           </div>
-          <div className="table-responsive" >
-
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
-                <th scope="col">Student ID</th>
-                <th scope="col">Student Name</th>
-                <th scope="col">Age</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Nationality</th>
-                {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-                {/* <th scope="col">Join Class Date</th>
+          <div className="table-responsive">
+            <table ref={tableRef} className="display">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                    S No
+                  </th>
+                  <th scope="col">Student ID</th>
+                  <th scope="col">Student Name</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Gender</th>
+                  <th scope="col">Nationality</th>
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      CreatedBy
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      CreatedAt
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      UpdatedBy
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      UpdatedAt
+                    </th>
+                  )}
+                  {/* <th scope="col">Join Class Date</th>
                 <th scope="col">Status</th> */}
-                <th scope="col" className="text-center">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas.map((data, index) => (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{data.studentUniqueId}</td>
-                  <td>{data.studentName}</td>
-                  <td>{data.age}</td>
-                  <td>{data.gender}</td>
-                  <td>{data.nationality}</td>
-                  {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
-                  {/* <td>{data.joinClassDate}</td>
-                  <td>{data.status}</td> */}
-                  <td>
-                    <div className="d-flex">
-                      {storedScreens?.studentListingRead && (
-                        <Link to={`/student/view/${data.id}`}>
-                          <button className="btn btn-sm">
-                            <FaEye />
-                          </button>
-                        </Link>
-                      )}
-                      {storedScreens?.studentListingUpdate && (
-                        <Link to={`/student/edit/${data.id}`}>
-                          <button className="btn btn-sm">
-                            <FaEdit />
-                          </button>
-                        </Link>
-                      )}
-                      {storedScreens?.studentListingDelete && (
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteStudentDetail/${data.id}`}
-                        />
-                      )}
-                      {/* {data &&
-                      (data.studentParentsDetails?.length === 0 &&
-                        data.studentEmergencyContacts?.length === 0 &&
-                        data.studentCourseDetailModels?.length === 0 &&
-                        data.studentRelationModels?.length === 0 &&
-                        data.studentTermsAndConditions?.length === 0)
-                        ? <span className="fs-3 fw-bolder text-danger">.</span>
-                        : ' '} */}
-                    </div>
-                  </td>
+                  <th scope="col" className="text-center">
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {datas.map((data, index) => (
+                  <tr key={index}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{data.studentUniqueId}</td>
+                    <td>{data.studentName}</td>
+                    <td>{data.age}</td>
+                    <td>{data.gender}</td>
+                    <td>{data.nationality}</td>
+                    {extraData && <td>{data.createdBy}</td>}
+                    {extraData && <td>{data.createdAt}</td>}
+                    {extraData && <td>{data.updatedBy}</td>}
+                    {extraData && <td>{data.updatedAt}</td>}
+                    {/* <td>{data.joinClassDate}</td>
+                  <td>{data.status}</td> */}
+                    <td>
+                      <div className="d-flex">
+                        {/* {data?.formStatus === "INCOMPLETE" && (
+                          <span className="fs-3 fw-bolder text-danger">.</span>
+                        )} */}
+
+                        {storedScreens?.studentListingRead && (
+                          <Link to={`/student/view/${data.id}`}>
+                            <button className="btn btn-sm">
+                              <FaEye />
+                            </button>
+                          </Link>
+                        )}
+                        {storedScreens?.studentListingUpdate && (
+                          <Link to={`/student/edit/${data.id}`}>
+                            <button className="btn btn-sm">
+                              <FaEdit />
+                            </button>
+                          </Link>
+                        )}
+                        {storedScreens?.studentListingDelete && (
+                          <Delete
+                            onSuccess={refreshData}
+                            path={`/deleteStudentDetail/${data.id}`}
+                          />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

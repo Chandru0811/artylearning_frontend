@@ -179,6 +179,7 @@ const AssessmentChild = forwardRef(
             remarks: leadResponse.data.remark,
             referredBy: leadResponse.data.referBy,
             whereFrom: leadResponse.data.marketingSource,
+            levelAssessed : "",
           });
           // if (response?.data?.assessmentArrange?.length > 0) {
           //   formik.setFieldValue('timeSlotOffered', response.data.assessmentArrange[0].time);
@@ -248,6 +249,7 @@ const AssessmentChild = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.name}
+                  readOnly
                 />
                 {formik.touched.name && formik.errors.name && (
                   <div className="error text-danger ">
@@ -450,12 +452,13 @@ const AssessmentChild = forwardRef(
                       className="form-check-input"
                       type="radio"
                       name="levelAssessed"
-                      id="inlineRadio1"
+                      id="ARTY_BELIVER"
                       value="ARTY_BELIVER"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       checked={formik.values.levelAssessed === "ARTY_BELIVER"}
                     />
-                    <label className="form-check-label" htmlFor="inlineRadio1">
+                    <label className="form-check-label" htmlFor="ARTY_BELIVER">
                       Arty Beliver
                     </label>
                   </div>
@@ -464,12 +467,13 @@ const AssessmentChild = forwardRef(
                       className="form-check-input"
                       type="radio"
                       name="levelAssessed"
-                      id="inlineRadio2"
+                      id="ARTY_DREAMER"
                       value="ARTY_DREAMER"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       checked={formik.values.levelAssessed === "ARTY_DREAMER"}
                     />
-                    <label className="form-check-label" htmlFor="inlineRadio2">
+                    <label className="form-check-label" htmlFor="ARTY_DREAMER">
                       Arty Dreamer
                     </label>
                   </div>
@@ -478,12 +482,13 @@ const AssessmentChild = forwardRef(
                       className="form-check-input"
                       type="radio"
                       name="levelAssessed"
-                      id="inlineRadio3"
+                      id="ARTY_PURSUER"
                       value="ARTY_PURSUER"
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       checked={formik.values.levelAssessed === "ARTY_PURSUER"}
                     />
-                    <label className="form-check-label" htmlFor="inlineRadio3">
+                    <label className="form-check-label" htmlFor="ARTY_PURSUER">
                       Arty Pursuer
                     </label>
                   </div>
@@ -491,7 +496,7 @@ const AssessmentChild = forwardRef(
                     formik.touched.levelAssessed && (
                       <div
                         className="text-danger"
-                        style={{ fontSize: ".875em" }}
+                       
                       >
                         {formik.errors.levelAssessed}
                       </div>
