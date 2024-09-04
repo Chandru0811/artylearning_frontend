@@ -378,6 +378,12 @@ const Form4 = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.contactOfAuthorised}
                 />
+                 {formik.touched.contactOfAuthorised &&
+                  formik.errors.contactOfAuthorised && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.contactOfAuthorised}</small>
+                    </div>
+                  )}
                 {/* <textarea
                 type="text"
                 className="form-control "

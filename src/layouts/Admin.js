@@ -208,6 +208,7 @@ import CurriculumOutletEdit from "../pages/Course/CurriculumOutlet/CurriculumOut
 import CurriculumOutletView from "../pages/Course/CurriculumOutlet/CurriculumOutletView";
 import ScrollToTop from "../pages/ScrollToTop";
 import LeaveEdit from "../pages/Staff/Leave/LeaveEdit";
+import Blog from "../pages/CMS/Blog";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
 
@@ -515,6 +516,7 @@ function Admin({ handleLogout }) {
               {/* CMS  */}
               <Route path="/cms/footer" element={<CMSFooter />} />
               <Route path="/cms/header" element={<CmsTopbar />} />
+              <Route path="/cms/blog" element={<Blog />} />
               <Route path="/cms/products" element={<CMSProducts />} />
               <Route path="/cms/productsitem" element={<CMSProductsItems />} />
               <Route
