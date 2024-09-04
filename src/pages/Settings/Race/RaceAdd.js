@@ -11,13 +11,18 @@ function RaceAdd({ onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
     const userName  = localStorage.getItem('userName');
+    const [isModified, setIsModified] = useState(false);
+
 
     const handleClose = () => {
         setShow(false);
         formik.resetForm();
     };
-    const handleShow = () => setShow(true);
-    const validationSchema = Yup.object({
+    const handleShow = () => {
+    
+        setShow(true);
+        setIsModified(false); 
+      };    const validationSchema = Yup.object({
         race: Yup.string().required("*Race is required"),
     });
 
@@ -50,6 +55,16 @@ function RaceAdd({ onSuccess }) {
                 setLoadIndicator(false);
             }
         },
+        enableReinitialize: true,
+        validateOnChange: true,
+        validateOnBlur: true,
+        validate: (values) => {
+          if (Object.values(values).some(value => value.trim() !== "")) {
+            setIsModified(true);
+          } else {
+            setIsModified(false);
+          }
+        },
     });
 
     return (
@@ -63,7 +78,9 @@ function RaceAdd({ onSuccess }) {
                     Add <i class="bx bx-plus"></i>
                 </button>
             </div>
-            <Modal show={show} size="lg" onHide={handleClose} centered>
+            <Modal show={show} size="lg" onHide={handleClose} centered
+             backdrop={isModified ? "static" : true} 
+             keyboard={isModified ? false : true} >
                 <Modal.Header closeButton>
                     <Modal.Title className="headColor">Add Race</Modal.Title>
                 </Modal.Header>

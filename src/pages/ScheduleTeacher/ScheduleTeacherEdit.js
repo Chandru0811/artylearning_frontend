@@ -23,6 +23,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName  = localStorage.getItem('userName');
+  const [isModified, setIsModified] = useState(false);
 
   // const navigate = useNavigate();
 
@@ -39,6 +40,8 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       const response = await api.get(`/getAllScheduleTeacherById/${id}`);
       formik.setValues(response.data);
       setShow(true);
+      setIsModified(false); 
+
     }catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -210,6 +213,18 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    }
   });
 
   const handleCenterChange = (event) => {
@@ -249,7 +264,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
           <FaEdit />
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered>
+      <Modal show={show} size="lg" onHide={handleClose} centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit schedule Teacher</Modal.Title>
         </Modal.Header>

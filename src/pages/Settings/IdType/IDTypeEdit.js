@@ -12,10 +12,13 @@ function IDTypeEdit({ id, onSuccess }) {
     const [show, setShow] = useState(false);
     const [loadIndicator, setLoadIndicator] = useState(false);
     const userName = localStorage.getItem("userName"); 
+    const [isModified, setIsModified] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
+    const handleShow = () => { 
+        setShow(true);
+        setIsModified(false); 
+      };
     const validationSchema = Yup.object({
         idType: Yup.string().required("*ID Type is required"),
     });
@@ -50,6 +53,18 @@ function IDTypeEdit({ id, onSuccess }) {
             }
 
         },
+        enableReinitialize: true,
+        validateOnChange: true,
+        validateOnBlur: true,
+        validate: (values) => {
+          if (
+            Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+          ) {
+            setIsModified(true);
+          } else {
+            setIsModified(false);
+          }
+        }
     });
 
     useEffect(() => {
@@ -77,6 +92,8 @@ function IDTypeEdit({ id, onSuccess }) {
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
+                backdrop={isModified ? "static" : true} 
+                keyboard={isModified ? false : true} 
             >
                 <Modal.Header closeButton>
                     <Modal.Title className="headColor">Edit ID Type</Modal.Title>

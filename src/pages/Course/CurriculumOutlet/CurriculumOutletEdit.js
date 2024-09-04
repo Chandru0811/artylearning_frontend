@@ -14,6 +14,7 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const userName  = localStorage.getItem('userName');
+  const [isModified, setIsModified] = useState(false);
 
 
   const handleClose = () => {
@@ -23,6 +24,8 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
   const handleShow = () => {
     fetchData();
     setShow(true);
+    setIsModified(false); 
+
   };
 
   useEffect(() => {
@@ -81,6 +84,18 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    }
   });
 
   useEffect(() => {
@@ -108,6 +123,8 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">

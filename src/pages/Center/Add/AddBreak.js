@@ -9,13 +9,18 @@ import api from "../../../config/URL";
 function AddBreak({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
+
 
   const handleClose = () => {
     formik.resetForm();
     setShow(false);
   };
-  const handleShow = () => setShow(true);
-
+  const handleShow = () => {
+    
+    setShow(true);
+    setIsModified(false); 
+  };
   const validationSchema = yup.object().shape({
     breakName: yup.string().required("*Break Name is required"),
     fromDate: yup.string().required("*From Date is required"),
@@ -62,6 +67,16 @@ function AddBreak({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
   return (
     <>
@@ -79,6 +94,8 @@ function AddBreak({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
          <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {

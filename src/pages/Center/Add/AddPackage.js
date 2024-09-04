@@ -9,10 +9,15 @@ import api from "../../../config/URL";
 function AddPackage({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+  // const handleShow = () => setShow(true);
+  const handleShow = () => {
+    
+    setShow(true);
+    setIsModified(false); 
+  };
   const validationSchema = yup.object().shape({
     packageName: yup.string().required("*Package Name is required"),
     noOfLesson: yup.number()
@@ -49,6 +54,16 @@ function AddPackage({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   return (
@@ -67,6 +82,8 @@ function AddPackage({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
@@ -104,20 +121,28 @@ function AddPackage({ id, onSuccess }) {
                 <label>
                   Number of Lesson<span className="text-danger">*</span>
                 </label>
-                <input
-                  type="text"
-                  pattern="^\d+$"
-                  className={`form-control ${formik.touched.noOfLesson && formik.errors.noOfLesson
+                <select
+                  className={`form-select ${
+                    formik.touched.quantity && formik.errors.quantity
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("noOfLesson")}
-                />
+                  style={{ width: "100%" }}
+                >
+                  <option value=""></option>
+                  {Array.from({ length: 50 }, (_, i) => i + 1).map((number) => (
+                    <option key={number} value={number}>
+                      {number}
+                    </option>
+                  ))}
+                </select>
                 {formik.touched.noOfLesson && formik.errors.noOfLesson && (
-                  <div className="invalid-feedback">{formik.errors.noOfLesson}</div>
+                  <div className="invalid-feedback">
+                    {formik.errors.noOfLesson}
+                  </div>
                 )}
               </div>
-
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-5">
