@@ -160,7 +160,7 @@
                 <div className="mb-3">
                   <label for="exampleFormControlInput1" className="form-label">
                     Emergency Contact Person's NRIC/FIC No. (other Than
-                    Parents)Last $ Digits<span className="text-danger">*</span>
+                    Parents)<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -384,6 +384,12 @@
                     onBlur={formik.handleBlur}
                     value={formik.values.contactOfAuthorised}
                   />
+                   {formik.touched.contactOfAuthorised &&
+                    formik.errors.contactOfAuthorised && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.contactOfAuthorised}</small>
+                      </div>
+                    )}
                   {/* <textarea
                   type="text"
                   className="form-control "

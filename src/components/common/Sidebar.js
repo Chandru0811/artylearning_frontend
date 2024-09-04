@@ -280,6 +280,11 @@ function Sidebar() {
             access: storedScreens.homeIndex,
           },
           {
+            title: "Blog",
+            path: "/cms/blog",
+            access:true,
+          },
+          {
             title: "Testimonial",
             path: "/cms/testimonial",
             access: storedScreens.testimonialIndex,

@@ -197,6 +197,19 @@ const EditForm5 = forwardRef(
                     <input
                       className="form-check-input"
                       type="checkbox"
+                      id="MONDAY"
+                      name="preferredDay"
+                      value="MONDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("MONDAY")}
+                    />
+                    <label className="form-check-label">Monday</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
                       id="TUESDAY"
                       name="preferredDay"
                       value="TUESDAY"
@@ -245,6 +258,37 @@ const EditForm5 = forwardRef(
                     />
                     <label className="form-check-label">Friday</label>
                   </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="SATURDAY"
+                      name="preferredDay"
+                      value="SATURDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("SATURDAY")}
+                    />
+                    <label className="form-check-label">Saturday</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="SUNDAY"
+                      name="preferredDay"
+                      value="SUNDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("SUNDAY")}
+                    />
+                    <label className="form-check-label">Sunday</label>
+                  </div>
+                {formik.touched.preferredDay && formik.errors.preferredDay && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.preferredDay}</small>
+                  </div>
+                )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
@@ -282,47 +326,6 @@ const EditForm5 = forwardRef(
                     />
                     <label className="form-check-label">6PM - 9PM</label>
                   </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-3">
-                {/* <label className="form-label">Preferred Day</label> */}
-                <div>
-                  <div className="form-check form-check-inline">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="SATURDAY"
-                      name="preferredDay"
-                      value="SATURDAY"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      checked={formik.values.preferredDay.includes("SATURDAY")}
-                    />
-                    <label className="form-check-label">Saturday</label>
-                  </div>
-                  <div className="form-check form-check-inline">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="SUNDAY"
-                      name="preferredDay"
-                      value="SUNDAY"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      checked={formik.values.preferredDay.includes("SUNDAY")}
-                    />
-                    <label className="form-check-label">Sunday</label>
-                  </div>
-                </div>
-                {formik.touched.preferredDay && formik.errors.preferredDay && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.preferredDay}</small>
-                  </div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-3">
-                {/* <label className="form-label">Preferred Time Slot</label> */}
-                <div>
                   <div className="form-check form-check-inline">
                     <input
                       className="form-check-input"
@@ -368,13 +371,13 @@ const EditForm5 = forwardRef(
                     />
                     <label className="form-check-label">3AM - 6AM</label>
                   </div>
-                </div>
                 {formik.touched.preferredTimeSlot &&
                   formik.errors.preferredTimeSlot && (
                     <div className="error text-danger ">
                       <small>{formik.errors.preferredTimeSlot}</small>
                     </div>
                   )}
+                </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
                 <label>Marketing Source</label>
