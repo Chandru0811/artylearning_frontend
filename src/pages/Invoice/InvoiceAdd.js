@@ -255,9 +255,9 @@ export default function InvoiceAdd() {
             console.log("Response 1:", response1.data);
 
             const selectedTax = taxData.find(
-              (tax) => parseInt(response1.data.taxType) === tax.id
+              (tax) => parseInt(response1.data.taxId) === tax.id
             );
-            const gstRate = selectedTax ? selectedTax.rate : 0;
+            const gstRate = selectedTax ? selectedTax.rate : 0; 
             const amount = response1.data.amount || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
@@ -265,7 +265,7 @@ export default function InvoiceAdd() {
             invoiceItems.push({
               item: "Registration Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-              taxType: response1.data.taxType || "",
+              taxType: response1.data.taxId || "",
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
               totalAmount: isNaN(amount) ? 0 : amount,
             });

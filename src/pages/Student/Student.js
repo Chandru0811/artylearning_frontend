@@ -15,6 +15,8 @@ const Student = () => {
   const tableRef = useRef(null);
 
   const [datas, setDatas] = useState([]);
+  console.log("Student All datas:",datas);
+  
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
 
