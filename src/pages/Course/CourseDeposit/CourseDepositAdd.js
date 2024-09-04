@@ -21,6 +21,7 @@ function CourseFeesAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const userName  = localStorage.getItem('userName');
+  const [isModified, setIsModified] = useState(false);
 
 
   const handleClose = () => {
@@ -30,6 +31,8 @@ function CourseFeesAdd({ onSuccess }) {
 
   const handleShow = () => {
     setShow(true);
+    setIsModified(false); 
+
     fetchTaxData();
   };
   const fetchTaxData = async () => {
@@ -77,6 +80,16 @@ function CourseFeesAdd({ onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   useEffect(() => {
@@ -100,7 +113,10 @@ function CourseFeesAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered>
+      <Modal show={show} size="lg" onHide={handleClose} centered
+       backdrop={isModified ? "static" : true} 
+       keyboard={isModified ? false : true} 
+      >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Course Deposit</Modal.Title>
         </Modal.Header>

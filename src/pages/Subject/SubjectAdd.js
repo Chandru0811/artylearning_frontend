@@ -15,6 +15,7 @@ function SubjectAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [levelData, setLevelData] = useState(null);
   const userName  = localStorage.getItem('userName');
+  const [isModified, setIsModified] = useState(false);
 
 
 
@@ -24,8 +25,11 @@ function SubjectAdd({ onSuccess }) {
     setLevelData(null);
   };
   
-  const handleShow = () => setShow(true);
-
+  const handleShow = () => {
+    
+    setShow(true);
+    setIsModified(false); 
+  };
   // useEffect(() => {
   //   fetchData();
   // }, []);
@@ -86,6 +90,16 @@ function SubjectAdd({ onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   // const handleLevelChange = (event) => {
@@ -114,6 +128,8 @@ function SubjectAdd({ onSuccess }) {
         size="lg"
         aria-labelledby="contained-model-title-vcenter"
         centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
          <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {

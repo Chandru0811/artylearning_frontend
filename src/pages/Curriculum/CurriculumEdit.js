@@ -11,8 +11,13 @@ import { toast } from "react-toastify";
 function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
-  const handleShow = () => setShow(true);
+
+  const handleShow = () => { 
+    setShow(true);
+    setIsModified(false); 
+  };
   const handleClose = () => setShow(false);
   const userName  = localStorage.getItem('userName');
 
@@ -66,6 +71,19 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    }
+    
   });
 
   useEffect(() => {
@@ -89,6 +107,8 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Curriculum</Modal.Title>

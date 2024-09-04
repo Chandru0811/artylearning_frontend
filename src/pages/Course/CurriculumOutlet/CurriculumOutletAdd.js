@@ -15,6 +15,7 @@ function CurriculumOutletAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const userName = localStorage.getItem("userName");
+  const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
     setShow(false);
@@ -25,6 +26,8 @@ function CurriculumOutletAdd({ onSuccess }) {
   const handleShow = () => {
     fetchData();
     setShow(true);
+    setIsModified(false); 
+
   };
 
   useEffect(() => {
@@ -80,6 +83,16 @@ function CurriculumOutletAdd({ onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some(value => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   return (
@@ -99,7 +112,10 @@ function CurriculumOutletAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered>
+      <Modal show={show} size="lg" onHide={handleClose} centered
+       backdrop={isModified ? "static" : true} 
+       keyboard={isModified ? false : true} 
+       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Curriculum Outlet</Modal.Title>
         </Modal.Header>

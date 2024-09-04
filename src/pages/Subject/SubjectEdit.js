@@ -11,6 +11,7 @@ function SubjectEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName  = localStorage.getItem('userName');
+  const [isModified, setIsModified] = useState(false);
 
 
   const navigate = useState();
@@ -23,6 +24,7 @@ function SubjectEdit({ id, onSuccess }) {
   const handleShow = () => {
     getData();
     setShow(true);
+    setIsModified(false);
   };
 
   const validationSchema = yup.object().shape({
@@ -63,6 +65,19 @@ function SubjectEdit({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    }
+    
   });
 
   const getData = async () => {
@@ -86,6 +101,8 @@ function SubjectEdit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-model-title-vcenter"
         centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
          <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {

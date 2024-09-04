@@ -208,43 +208,7 @@ export default function InvoiceEdit() {
     fetchStudent(centerId);
   };
 
-  // OLD Code
-  // const handleSelectChange = (index, value) => {
-  //   // const selectedTax = taxData.find((tax) => tax.taxType === value);
-  //   const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
-  //   const gstRate = selectedTax ? selectedTax.rate : 0;
-  //   const itemAmount = formik.values.invoiceItems[index]?.itemAmount || 0;
-
-  //   // Calculate GST amount
-  //   const gstAmount = (parseFloat(itemAmount) * parseFloat(gstRate)) / 100;
-  //   const validGstAmount = isNaN(gstAmount) ? 0 : gstAmount;
-
-  //   // Calculate total amount
-  //   const totalAmount = parseFloat(itemAmount) + validGstAmount;
-  //   const validTotalAmount = isNaN(totalAmount) ? 0 : totalAmount;
-
-  //   // Update rows state
-  //   const updatedRows = [...rows];
-  //   updatedRows[index] = {
-  //     ...updatedRows[index],
-  //     taxType: value,
-  //     gstAmount: gstRate,
-  //     totalAmount: validTotalAmount,
-  //   };
-  //   setRows(updatedRows);
-
-  //   // Update formik values
-  //   formik.setFieldValue(`invoiceItems[${index}].taxType`, value);
-  //   formik.setFieldValue(
-  //     `invoiceItems[${index}].gstAmount`,
-  //     validGstAmount.toFixed(2)
-  //   );
-  //   formik.setFieldValue(
-  //     `invoiceItems[${index}].totalAmount`,
-  //     validTotalAmount.toFixed(2)
-  //   );
-  // };
-
+ 
   // NEW Code
   const handleSelectChange = (index, value) => {
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));

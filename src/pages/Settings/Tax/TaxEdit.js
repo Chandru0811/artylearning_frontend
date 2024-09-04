@@ -11,10 +11,14 @@ import { toast } from "react-toastify";
 function TaxEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
+
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const userName = localStorage.getItem("userName");
+  const handleShow = () => { 
+    setShow(true);
+    setIsModified(false); 
+  };  const userName = localStorage.getItem("userName");
 
   const validationSchema = Yup.object({
     taxType: Yup.string().required("*Tax Type is required"),
@@ -57,6 +61,18 @@ function TaxEdit({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    }
   });
 
   useEffect(() => {
@@ -84,6 +100,8 @@ function TaxEdit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Tax Edit</Modal.Title>
