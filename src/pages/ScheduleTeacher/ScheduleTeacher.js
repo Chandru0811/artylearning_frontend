@@ -281,19 +281,21 @@ const ScheduleTeacher = () => {
                           </Dropdown.Item> */}
                         </DropdownButton>
                         {storedScreens?.scheduleTeacherDelete && (
+                          <div>
                           <button
                             className="btn btn-sm"
                             onClick={() => handleShow(data)}
                           >
                             <FaTrash />
                           </button>
+                          </div>
                         )}
                         {storedScreens?.timeScheduleIndex && (
                           <Link
                             to={`/scheduleteacher/scheduletime/${data.userId}?centerId=${data.centerId}&courseId=${data.courseId}`}
                           >
-                            <button className="btn">
-                              <BsTable className="text-dark" />
+                            <button className="btn px-1 py-1">
+                              <BsTable className="text-dark" size={15} />
                             </button>
                           </Link>
                         )}
