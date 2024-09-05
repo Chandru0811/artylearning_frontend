@@ -15,7 +15,7 @@ function Delete({ onSuccess, path, staffmsg, teachermsg }) {
   const handelDelete = async () => {
     try {
       const response = await api.delete(path);
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         onSuccess();
         handleClose();
         if (staffmsg) {
