@@ -138,7 +138,7 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
                 <div class="card-body d-flex justify-content-between">
                   <p class="card-title fw-semibold text-wrap">{datas?.resume?.split("/").pop()}</p>
                   
-                  <a href={datas?.resume} class="btn btn-sm btn-primary">
+                  <a href={datas?.resume} class="btn text-dark">
                     <MdOutlineDownloadForOffline size={25}/>
                   </a>
                 </div>
@@ -167,7 +167,7 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
                 <div class="card-body d-flex justify-content-between">
                   <p class="card-title fw-semibold text-wrap">{datas?.educationCertificate?.split("/").pop()}</p>
                   
-                  <a href={datas?.educationCertificate} class="btn btn-sm btn-primary">
+                  <a href={datas?.educationCertificate} class="btn text-dark">
                     <MdOutlineDownloadForOffline size={25}/>
                   </a>
                 </div>

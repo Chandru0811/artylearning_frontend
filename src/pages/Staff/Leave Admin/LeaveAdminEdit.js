@@ -4,6 +4,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const validationSchema = Yup.object({
   centerName: Yup.string().required("*Select a Centre Name"),
@@ -18,6 +20,7 @@ const validationSchema = Yup.object({
 
 function LeaveAdminEdit() {
   const [datas, setDatas] = useState([]);
+  const [leaveDatas, setLeaveDatas] = useState([]);
   const { id } = useParams();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
@@ -53,16 +56,16 @@ function LeaveAdminEdit() {
       try {
         const formDatas = new FormData();
         formDatas.append("userId", id);
-        formDatas.append("centerName", data.centerName);
-        formDatas.append("employeeName", data.employeeName);
-        formDatas.append("leaveType", data.leaveType);
+        // formDatas.append("centerName", data.centerName);
+        // formDatas.append("employeeName", data.employeeName);
+        formDatas.append("leaveTypeId", leaveDatas.leaveTypeId);
         formDatas.append("noOfDays",daysDifference);
-        formDatas.append("fromDate", data.fromDate);
-        formDatas.append("toDate", data.toDate);
-        formDatas.append("dayType", data.dayType);
-        formDatas.append("leaveReason", data.leaveReason);
+        // formDatas.append("fromDate", data.fromDate);
+        // formDatas.append("toDate", data.toDate);
+        // formDatas.append("dayType", data.dayType);
+        // formDatas.append("leaveReason", data.leaveReason);
         formDatas.append("leaveStatus", data.leaveStatus);
-        formDatas.append("file", data.file);
+        // formDatas.append("file", data.file);
 
         const response = await api.put(
           `/updateUserLeaveRequestWithAttachment/${id}`,
@@ -101,6 +104,7 @@ function LeaveAdminEdit() {
       try {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
         console.log(response.data);
+        setLeaveDatas(response.data)
         formik.setValues(response.data);
         const daysDiff = calculateDays(
           response.data.fromDate,

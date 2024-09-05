@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Collapse, Nav } from "react-bootstrap";
+import { Collapse, Nav ,OverlayTrigger ,Tooltip  } from "react-bootstrap";
 import Logo from "../../assets/images/Logo-Portal_Access.png";
 import api from "../../config/URL";
 
@@ -282,7 +282,7 @@ function Sidebar() {
           {
             title: "Blog",
             path: "/cms/blog",
-            access:true,
+            access: true,
           },
           {
             title: "Testimonial",
@@ -440,7 +440,12 @@ function Sidebar() {
       <ul className="nav-links">
         <li>
           <NavLink to="/" onClick={() => handleMenuClick(null)}>
-            <i className="bx bx-grid-alt"></i>
+          <OverlayTrigger
+              placement="right"
+              overlay={<Tooltip id="home-tooltip">Home</Tooltip>}
+            >
+              <i className="bx bx-grid-alt"></i>
+            </OverlayTrigger>
             <span className="links_name">Home</span>
           </NavLink>
         </li>
@@ -459,7 +464,18 @@ function Sidebar() {
                     style={{ overflow: "hidden", whiteSpace: "nowrap" }}
                   >
                     <span>
-                      <i className={item.icon}></i>
+                      <OverlayTrigger
+                        placement="right"
+                        overlay={
+                          <Tooltip id={`${item.title}-tooltip`}>
+                            {item.title}
+                          </Tooltip>
+                        }
+                      >
+                        <span>
+                          <i className={item.icon}></i>
+                        </span>
+                      </OverlayTrigger>
                       <span className="links_name">{item.title}</span>
                     </span>
                     <span>
@@ -488,7 +504,16 @@ function Sidebar() {
                               className="links_name"
                               activeClassName="active-submenu"
                             >
-                              <i className="bx bx-radio-circle-marked"></i>
+                              <OverlayTrigger
+                                placement="right"
+                                overlay={
+                                  <Tooltip id={`${subMenu.title}-tooltip`}>
+                                    {subMenu.title}
+                                  </Tooltip>
+                                }
+                              >
+                                <i className="bx bx-radio-circle-marked"></i>
+                              </OverlayTrigger>
                               <span className="links_name links_names">
                                 {subMenu.title}
                               </span>
