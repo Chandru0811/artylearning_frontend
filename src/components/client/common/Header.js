@@ -114,6 +114,14 @@ function Header() {
                   >
                     Contact Us
                   </Nav.Link>
+                  <Nav.Link
+                    as={NavLink}
+                    style={{ whiteSpace: "nowrap" }}
+                    to="/blog"
+                    onClick={handleClick}
+                  >
+                    Blog
+                  </Nav.Link>
                 </Nav>
               </div>
               <Link to={"/login"}>
