@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const validationSchema = Yup.object({
   leaveTypeId: Yup.string().required("*Select a Leave Type"),
@@ -28,6 +30,7 @@ function LeaveEdit() {
   const { id } = useParams();
   const [centerData, setCenterData] = useState(null);
   const [datas, setDatas] = useState([]);
+  const [leavedatas, setLeaveDatas] = useState([]);
   console.log("Datas:", datas);
   const userId = localStorage.getItem("userId");
   const centerId = localStorage.getItem("centerId");
@@ -35,8 +38,7 @@ function LeaveEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [daysDifference, setDaysDifference] = useState(0);
   const [leaveTypeData, setLeaveTypeData] = useState([]);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -100,10 +102,14 @@ function LeaveEdit() {
           toast.success(response.data.message);
           navigate("/leave");
         } else {
-          toast.error(response.data.message);
+          toast(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if (error.response.status === 409) {
+          toast.error(error?.response?.data?.message);
+        } else {
+          toast.error(error?.response?.data?.message);
+        }
       } finally {
         setLoadIndicator(false);
       }
@@ -160,7 +166,7 @@ function LeaveEdit() {
     const getData = async () => {
       try {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
-        console.log(response.data);
+        setLeaveDatas(response.data);
         formik.setValues(response.data);
         const daysDiff = calculateDays(
           response.data.fromDate,
@@ -171,7 +177,6 @@ function LeaveEdit() {
         console.error("Error fetching data:", error);
       }
     };
-
     getData();
   }, [id]);
 
@@ -179,7 +184,7 @@ function LeaveEdit() {
   //   const getData = async () => {
   //     try {
   //       const response = await api.get(`/getUserLeaveRequestById/${id}`);
-    
+
   //       const fetchedData = response.data;
 
   //       formik.setValues({
@@ -213,11 +218,14 @@ function LeaveEdit() {
   return (
     <section>
       <div className="container">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="row my-3 mb-5">
             <div className="col-12 text-end">
               <Link to="/leave">
@@ -387,12 +395,61 @@ function LeaveEdit() {
                 type="file"
                 className="form-control"
                 name="file"
-                // {...formik.getFieldProps("file")}
                 onChange={(event) => {
                   formik.setFieldValue("file", event.currentTarget.files[0]);
                 }}
                 onBlur={formik.handleBlur}
               />
+              {formik.values.file instanceof File ? (
+                <div className="mt-3">
+                  {formik.values.file.type.startsWith("image/") && (
+                    <img
+                      src={URL.createObjectURL(formik.values.file)}
+                      alt="Preview"
+                      className="img-fluid"
+                    />
+                  )}
+                </div>
+              ) : leavedatas?.attachment ? (
+                <div className="mt-3">
+                  {leavedatas.attachment.endsWith(".pdf") ? (
+                    <div
+                      class="card border-0 shadow"
+                      style={{ width: "18rem" }}
+                    >
+                      <a
+                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                          leavedatas?.attachment
+                        )}&embedded=true`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          class="card-img-top img-fluid"
+                          style={{ height: "50%" }}
+                          src={pdfLogo}
+                          alt="Card image cap"
+                        />
+                      </a>
+                      <div class="card-body d-flex justify-content-between">
+                        <p class="card-title fw-semibold text-wrap">
+                          {leavedatas?.attachment?.split("/").pop()}
+                        </p>
+
+                        <a href={leavedatas?.attachment} class="btn text-dark">
+                          <MdOutlineDownloadForOffline size={25} />
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <img
+                      src={leavedatas.attachment}
+                      alt="Attachment"
+                      className="img-fluid"
+                    />
+                  )}
+                </div>
+              ) : null}
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">

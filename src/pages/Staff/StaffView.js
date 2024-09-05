@@ -8,15 +8,25 @@ import TeacherSummary from "../Teacher/TeacherSummary";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
 
 function StaffView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [centerData, setCenterData] = useState(null);
   const [shgData, setShgData] = useState([]);
+  const [salaryTypeData, setSalaryTypeData] = useState(null);
 
   console.log("Api Staff data:", data);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const fetchSalaryTypeData = async () => {
+    try {
+      const salarytype = await fetchAllSalaryTypeWithIds();
+      setSalaryTypeData(salarytype); 
+    } catch (error) {
+      toast.error(error.message || "Error fetching salary types");
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -29,6 +39,7 @@ function StaffView() {
     };
     getData();
     fetchData();
+    fetchSalaryTypeData();
   }, [id]);
 
   const fetchData = async () => {
@@ -212,7 +223,12 @@ function StaffView() {
   const educationCertificateUrl = userRequireInfo
     ? userRequireInfo.educationCertificate
     : "#";
-
+ 
+    const findSalaryType=(id)=>{
+      const name =salaryTypeData.find((datas)=>datas.id ===id);
+      return name.salaryType
+    }
+    
   return (
     <div class="container-fluid minHeight mb-5">
       <div class="container-fluid py-4">
@@ -752,8 +768,8 @@ function StaffView() {
                 :{" "}
                 {data.userSalaryCreationModels &&
                 data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salaryType
-                  ? data.userSalaryCreationModels[0].salaryType
+                data.userSalaryCreationModels[0].salaryTypeId
+                  ? findSalaryType(data.userSalaryCreationModels[0].salaryTypeId)
                   : "--"}
               </p>
             </div>

@@ -4,7 +4,8 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllTeachersWithIds from "../../List/TeacherList";
-
+import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 function LeaveView() {
   const [data, setData] = useState([]);
@@ -169,15 +170,55 @@ function LeaveView() {
       </div>
 
       <div>
-      <p className="headColor mt-5">Attachment</p>
-      <hr />
-      <div className="row mt-4">
-        <div className="container p-2">
-          
+        <p className="headColor mt-5">Attachment</p>
+        <hr />
+        <div className="row mt-4">
+          <div className="container p-2">
+            {data.attachment && (
+              <div className="mt-3">
+                {data?.attachment?.endsWith(".pdf") ? (
+                  <div class="card border-0 shadow" style={{ width: "18rem" }}>
+                    <a
+                      href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                        data?.attachment
+                      )}&embedded=true`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        class="card-img-top img-fluid"
+                        style={{ height: "50%" }}
+                        src={pdfLogo}
+                        alt="Card image cap"
+                      />
+                    </a>
+                    <div class="card-body d-flex justify-content-between">
+                      <p class="card-title fw-semibold text-wrap">
+                        {data?.attachment?.split("/").pop()}
+                      </p>
+
+                      <a
+                        href={data?.attachment}
+                        class="btn text-dark"
+                        download={data?.attachment?.split("/").pop()}
+                      >
+                        <MdOutlineDownloadForOffline size={25} />
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    src={data?.attachment}
+                    alt="Attachment"
+                    className="img-fluid"
+                    style={{ height: "40% " }}
+                  />
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-      
     </div>
   );
 }
