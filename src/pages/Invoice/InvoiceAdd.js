@@ -48,8 +48,9 @@ const validationSchema = Yup.object({
     .of(invoiceItemSchema)
     // .min(1, "At least one invoice item is required")
     .required("Invoice items are required"),
-    remark: Yup.string()
-    .max(200, "*The maximum length is 200 characters").notRequired(),
+  remark: Yup.string()
+    .max(200, "*The maximum length is 200 characters")
+    .notRequired(),
 });
 
 export default function InvoiceAdd() {
@@ -73,7 +74,7 @@ export default function InvoiceAdd() {
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   // const [isLoading, setIsLoading] = useState(true);
 
@@ -136,7 +137,6 @@ export default function InvoiceAdd() {
             gstAmount: parseFloat(item.gstAmount), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(item.totalAmount), // Ensure numerical values are parsed correctly
             createdBy: userName,
-
           })),
         };
 
@@ -257,7 +257,7 @@ export default function InvoiceAdd() {
             const selectedTax = taxData.find(
               (tax) => parseInt(response1.data.taxId) === tax.id
             );
-            const gstRate = selectedTax ? selectedTax.rate : 0; 
+            const gstRate = selectedTax ? selectedTax.rate : 0;
             const amount = response1.data.amount || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
@@ -390,7 +390,7 @@ export default function InvoiceAdd() {
       parseFloat(formik.values.invoiceItems[index]?.totalAmount) || 0;
 
     // Recalculate itemAmount based on totalAmount and gstRate
-    const gstAmount = (totalAmount * gstRate) / 100 ;
+    const gstAmount = (totalAmount * gstRate) / 100;
     const itemAmount = totalAmount - gstAmount;
 
     const updatedRows = [...rows];
@@ -420,14 +420,16 @@ export default function InvoiceAdd() {
 
   const handelTotalAmountChange = (index, value) => {
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
-    const selectedTax = taxData.find((tax) => tax.id === parseInt(selectedTaxType));
-  
+    const selectedTax = taxData.find(
+      (tax) => tax.id === parseInt(selectedTaxType)
+    );
+
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const totalAmount = parseFloat(value) || 0;
-    const itemAmount1 = (totalAmount) * (gstRate) / 100;
-    const gstAmount = itemAmount1
+    const itemAmount1 = (totalAmount * gstRate) / 100;
+    const gstAmount = itemAmount1;
     const itemAmount = totalAmount - gstAmount;
-  
+
     const updatedRows = [...rows];
     updatedRows[index] = {
       ...updatedRows[index],
@@ -436,13 +438,18 @@ export default function InvoiceAdd() {
       totalAmount: value,
     };
     setRows(updatedRows);
-  
-    formik.setFieldValue(`invoiceItems[${index}].itemAmount`, itemAmount.toFixed(2));
-    formik.setFieldValue(`invoiceItems[${index}].gstAmount`, gstAmount.toFixed(2));
+
+    formik.setFieldValue(
+      `invoiceItems[${index}].itemAmount`,
+      itemAmount.toFixed(2)
+    );
+    formik.setFieldValue(
+      `invoiceItems[${index}].gstAmount`,
+      gstAmount.toFixed(2)
+    );
     formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
-  
-  
+
   useEffect(() => {
     const getData = async () => {
       if (studentID) {
@@ -527,11 +534,14 @@ export default function InvoiceAdd() {
 
   return (
     <div className="container-fluid">
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="container py-3">
           <div className="row mt-3">
             <div className="col-lg-6 col-md-6 col-12 px-5">
@@ -702,55 +712,63 @@ export default function InvoiceAdd() {
                     height: "7rem",
                   }}
                   maxLength={200}
-
+                  onKeyDown={(e) => {
+                    console.log('Key pressed:', e.key); // Log the key pressed for debugging
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      e.stopPropagation(); // Stop the event from bubbling up to parent elements
+                    }
+                  }}
                 />
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 px-5">
-            <div className="text-start mt-3">
-  <label htmlFor="" className="mb-1 fw-medium">
-    Invoice Date<span className="text-danger">*</span>
-  </label>
-  <br />
-  <input
-    {...formik.getFieldProps("invoiceDate")}
-    className={`form-control ${
-      formik.touched.invoiceDate && formik.errors.invoiceDate
-        ? "is-invalid"
-        : ""
-    }`}
-    type="date"
-  />
-  {formik.touched.invoiceDate && formik.errors.invoiceDate && (
-    <div className="invalid-feedback">
-      {formik.errors.invoiceDate}
-    </div>
-  )}
-</div>
+              <div className="text-start mt-3">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  Invoice Date<span className="text-danger">*</span>
+                </label>
+                <br />
+                <input
+                  {...formik.getFieldProps("invoiceDate")}
+                  className={`form-control ${
+                    formik.touched.invoiceDate && formik.errors.invoiceDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  type="date"
+                />
+                {formik.touched.invoiceDate && formik.errors.invoiceDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.invoiceDate}
+                  </div>
+                )}
+              </div>
 
-<div className="text-start mt-3">
-  <label htmlFor="" className="mb-1 fw-medium">
-    Due Date<span className="text-danger">*</span>
-  </label>
-  <br />
-  <input
-    {...formik.getFieldProps("dueDate")}
-    className={`form-control ${
-      formik.touched.dueDate && formik.errors.dueDate
-        ? "is-invalid"
-        : ""
-    }`}
-    type="date"
-    // Set the minimum due date to the selected invoice date
-    min={formik.values.invoiceDate || new Date().toISOString().split("T")[0]} 
-  />
-  {formik.touched.dueDate && formik.errors.dueDate && (
-    <div className="invalid-feedback">
-      {formik.errors.dueDate}
-    </div>
-  )}
-</div>
-
+              <div className="text-start mt-3">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  Due Date<span className="text-danger">*</span>
+                </label>
+                <br />
+                <input
+                  {...formik.getFieldProps("dueDate")}
+                  className={`form-control ${
+                    formik.touched.dueDate && formik.errors.dueDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  type="date"
+                  // Set the minimum due date to the selected invoice date
+                  min={
+                    formik.values.invoiceDate ||
+                    new Date().toISOString().split("T")[0]
+                  }
+                />
+                {formik.touched.dueDate && formik.errors.dueDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.dueDate}
+                  </div>
+                )}
+              </div>
 
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
@@ -766,7 +784,6 @@ export default function InvoiceAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
- 
                   type="date"
                 />
                 {formik.touched.invoicePeriodFrom &&
@@ -789,7 +806,6 @@ export default function InvoiceAdd() {
                       ? "is-invalid"
                       : ""
                   }`}
- 
                   type="date"
                 />
                 {formik.touched.invoicePeriodTo &&

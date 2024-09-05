@@ -643,4 +643,12 @@
 .focused-button {
   outline: none;
 }
+@media (min-width: 768px) {
+  .fixed-form {
+    position: relative !important;
+    top: 20px;
+    right: 0;
+    width: 40%;
+  }
+}
 

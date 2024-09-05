@@ -23,8 +23,8 @@ function ShgAdd({ onSuccess }) {
       };    const userName  = localStorage.getItem('userName');
 
     const validationSchema = Yup.object({
-        shgType: Yup.string().required("*Shg Type is required"),
-        shgAmount: Yup.string().required("*Shg Amount is required"),
+        shgType: Yup.string().required("*SHG Type is required"),
+        shgAmount: Yup.string().required("*SHG Amount is required"),
     });
 
     const formik = useFormik({
