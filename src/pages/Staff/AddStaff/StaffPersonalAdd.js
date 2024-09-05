@@ -261,8 +261,8 @@ const StaffPersonalAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.role}
               >
-                <option selected>
-                  select the Role
+                <option disabled>
+                  Select the Role
                 </option>
                 <option value={"staff"}>Staff</option>
                 <option value={"branch_admin"}>Branch Admin</option>
