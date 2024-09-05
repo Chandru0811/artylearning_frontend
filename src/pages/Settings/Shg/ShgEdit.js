@@ -14,15 +14,14 @@ function ShgEdit({ id, onSuccess }) {
   const userName  = localStorage.getItem('userName');
   const [isModified, setIsModified] = useState(false);
 
-
   const handleClose = () => setShow(false);
   const handleShow = () => { 
     setShow(true);
     setIsModified(false); 
   };
   const validationSchema = Yup.object({
-    shgType: Yup.string().required("*Shg Type is required"),
-    shgAmount: Yup.string().required("*Shg Amount is required"),
+    shgType: Yup.string().required("*SHG Type is required"),
+    shgAmount: Yup.string().required("*SHG Amount is required"),
   });
 
   const formik = useFormik({

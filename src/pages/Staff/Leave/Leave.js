@@ -15,6 +15,7 @@ const Leave = () => {
   // console.log("Data:", datas.employeeData);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
+  const [leaveTypeData, setLeaveTypeData] = useState([]);
   // console.log("centerData", centerData);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
@@ -26,7 +27,14 @@ const Leave = () => {
       toast.error(error);
     }
   };
-
+  const fetchLeaveType = async () => {
+    try {
+      const response = await api.get(`getAllLeaveSetting`);
+      setLeaveTypeData(response.data); // Assuming response.data is an array
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   useEffect(() => {
     const getData = async () => {
       try {
@@ -42,6 +50,7 @@ const Leave = () => {
     };
     getData();
     fetchData();
+    fetchLeaveType();
   }, []);
 
   useEffect(() => {
@@ -72,6 +81,10 @@ const Leave = () => {
       table.destroy();
     }
   };
+  const findname=(id)=>{
+    const name =leaveTypeData?.find((item)=>item.id ===id)
+    return name.leaveType
+  }
 
   return (
     <div className="container my-4">
@@ -132,8 +145,8 @@ const Leave = () => {
                 <th scope="col">From Date</th>
                 <th scope="col">To Date</th>
                 <th scope="col">Leave Type</th>
-                <th scope="col">Leave Status</th>
                 <th scope="col">NO Of Days</th>
+                <th scope="col">Leave Status</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -144,7 +157,7 @@ const Leave = () => {
                   {/* <td>{data.centerName} </td> */}
                   <td>{data.fromDate}</td>
                   <td>{data.toDate}</td>
-                  <td>{data.leaveType}</td>
+                  <td>{findname(data?.leaveTypeId)}</td>
                   <td>{data.noOfDays}</td>
                   <td>
                     {data.leaveStatus === "APPROVED" ? (

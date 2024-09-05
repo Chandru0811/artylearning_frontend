@@ -100,11 +100,15 @@ function LeaveAdd() {
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/leave");
-        } else {
-          toast.error(response.data.message);
+        } else{
+          toast(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if(error.response.status === 409){
+          toast.error(error?.response?.data?.message);
+        }else{
+          toast.error(error?.response?.data?.message);
+        }
       } finally {
         setLoadIndicator(false);
       }
