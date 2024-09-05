@@ -24,35 +24,42 @@ function Footer() {
     <section className="footer">
       <div className="container">
         <div className="row">
-          {datas && datas.slice(0, 2).map((data, index) => (
+          <div className="col-md-4 col-12 mt-3">
+            {datas && datas.slice(0, 2).map((data, index) => (
               <>
-                <div className="col-md-4 col-12 mt-3">
-                  <h4 style={{ fontWeight: "700" }}>
-                    <b>{data.centerName || "Arty Learning @ Hougang"}</b>
-                  </h4>
+                <h4 style={{ fontWeight: "400" }}>
+                  <b>{data.centerName || "Arty Learning @ Hougang"}</b>
+                </h4>
 
-                  {data.address || (
-                    <>
-                      <p>
-                        806 Hougang Central, #04-146,
-                        <br /> Singapore 530806
-                      </p>
-                    </>
-                  )}
-
-                  <Iframe
-                    // url="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.673307615837!2d103.8430989749658!3d1.3727030986143165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da17835aa20b21%3A0x41c3c93369410510!2sArty%20Learning%20%40%20Ang%20Mo%20Kio%20%7C%20Enrichment%20Classes%20for%20Kids!5e0!3m2!1sen!2sin!4v1709642424960!5m2!1sen!2sin"
-                    src={data.map}
-                    width="100%"
-                    height="200"
-                    style={{ border: 0 }}
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                  />
-                </div>
+                {data.address || (
+                  <>
+                    <p>
+                      806 Hougang Central, #04-146,
+                      <br /> Singapore 530806
+                    </p>
+                  </>
+                )}
               </>
             ))}
+          </div>
+          <div className="col-md-4 col-12 mt-3">
+            {datas && datas.slice(2, 4).map((data, index) => (
+              <>
+                <h4 style={{ fontWeight: "400" }}>
+                  <b>{data.centerName || "Arty Learning @ Hougang"}</b>
+                </h4>
+
+                {data.address || (
+                  <>
+                    <p>
+                      806 Hougang Central, #04-146,
+                      <br /> Singapore 530806
+                    </p>
+                  </>
+                )}
+              </>
+            ))}
+          </div>
 
           <div className="col-md-4 col-12 mt-3">
             <p style={{ fontSize: "20px", fontWeight: "500" }}>
