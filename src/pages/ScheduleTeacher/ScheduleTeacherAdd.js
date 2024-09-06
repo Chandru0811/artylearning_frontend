@@ -20,8 +20,9 @@ function ScheduleTeacherAdd({ onSuccess }) {
   const [teacherData, setTeacherData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 
   const handleClose = () => {
@@ -34,9 +35,8 @@ function ScheduleTeacherAdd({ onSuccess }) {
   };
 
   const handleShow = () => {
-    
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
 
   useEffect(() => {
@@ -82,7 +82,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
     try {
       const classRoom = await fetchAllClassRoomWithCenterIds(centerId);
       setClassRoomData(classRoom);
-      console.log("first",setClassRoomData)
+      console.log("first", setClassRoomData);
     } catch (error) {
       toast.error(error.message);
     }
@@ -116,9 +116,9 @@ function ScheduleTeacherAdd({ onSuccess }) {
       classId: "",
       days: "",
       userId: "",
-      startDate:"",
-      endDate:"",
-      classRoom:"",
+      startDate: "",
+      endDate: "",
+      classRoom: "",
       // batch: "",
     },
     validationSchema: validationSchema,
@@ -178,7 +178,6 @@ function ScheduleTeacherAdd({ onSuccess }) {
         endDate: values.endDate,
         classRoom: selectedClassRoomName,
         createdBy: userName,
-
       };
 
       // console.log(requestBody);
@@ -201,7 +200,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error.message);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -209,7 +208,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -225,7 +224,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
     formik.setFieldValue("centerId", centerId);
     fetchCourses(centerId);
     fetchTeacher(centerId); // Fetch courses for the selected center
-    fetchClassRoom(centerId); 
+    fetchClassRoom(centerId);
   };
 
   const handleCourseChange = (event) => {
@@ -268,17 +267,25 @@ function ScheduleTeacherAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered
-       backdrop={isModified ? "static" : true} 
-       keyboard={isModified ? false : true} >
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Schedule Teacher</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -364,7 +371,6 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     </div>
                   )}
                 </div>
-
                 {/* <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Batch <span className="text-danger">*</span>
@@ -385,32 +391,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                       {formik.errors.batch}
                     </div>
                   )}
-                </div> */}
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Days<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    {...formik.getFieldProps("days")}
-                    class={`form-select  ${
-                      formik.touched.days && formik.errors.days
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  >
-                    <option></option>
-                    <option value="MONDAY">MONDAY</option>
-                    <option value="TUESDAY">TUESDAY</option>
-                    <option value="WEDNESDAY">WEDNESDAY</option>
-                    <option value="THURSDAY">THURSDAY</option>
-                    <option value="FRIDAY">FRIDAY</option>
-                    <option value="SATURDAY">SATURDAY</option>
-                    <option value="SUNDAY">SUNDAY</option>
-                  </select>
-                  {formik.touched.days && formik.errors.days && (
-                    <div className="invalid-feedback">{formik.errors.days}</div>
-                  )}
-                </div>
+                </div> */}{" "}
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Teacher<span className="text-danger">*</span>
@@ -437,6 +418,48 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     </div>
                   )}
                 </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Days<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...formik.getFieldProps("days")}
+                    class={`form-control  ${
+                      formik.touched.days && formik.errors.days
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    readOnly
+                  />
+                  {formik.touched.days && formik.errors.days && (
+                    <div className="invalid-feedback">{formik.errors.days}</div>
+                  )}
+                </div>
+                {/* <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Days<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    {...formik.getFieldProps("days")}
+                    class={`form-select  ${
+                      formik.touched.days && formik.errors.days
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option></option>
+                    <option value="MONDAY">MONDAY</option>
+                    <option value="TUESDAY">TUESDAY</option>
+                    <option value="WEDNESDAY">WEDNESDAY</option>
+                    <option value="THURSDAY">THURSDAY</option>
+                    <option value="FRIDAY">FRIDAY</option>
+                    <option value="SATURDAY">SATURDAY</option>
+                    <option value="SUNDAY">SUNDAY</option>
+                  </select>
+                  {formik.touched.days && formik.errors.days && (
+                    <div className="invalid-feedback">{formik.errors.days}</div>
+                  )}
+                </div> */}
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Class Room<span className="text-danger">*</span>
@@ -468,13 +491,20 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     Start Date<span className="text-danger">*</span>
                   </label>
                   <input
-                  type="date"
+                    type="date"
                     {...formik.getFieldProps("startDate")}
-                    class={`form-control  ${
+                    className={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
                         ? "is-invalid"
                         : ""
                     }`}
+                    onChange={(e) => {
+                      formik.handleChange(e); 
+                      const selectedDate = new Date(e.target.value);
+                      const dayOfWeek = selectedDate.getDay();
+                      const dayName = daysOfWeek[dayOfWeek]; 
+                      formik.setFieldValue("days", dayName);
+                    }}
                   />
                   {formik.touched.startDate && formik.errors.startDate && (
                     <div className="invalid-feedback">
@@ -487,7 +517,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     End Date<span className="text-danger">*</span>
                   </label>
                   <input
-                  type="date"
+                    type="date"
                     {...formik.getFieldProps("endDate")}
                     class={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate

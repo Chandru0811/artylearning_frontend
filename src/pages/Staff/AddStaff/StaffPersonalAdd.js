@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllIDTypeWithIds from "../../List/IDTypeList";
 import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const validationSchema = Yup.object().shape({
   teacherName: Yup.string().required("*Staff Name is required"),
@@ -16,11 +17,20 @@ const validationSchema = Yup.object().shape({
   citizenship: Yup.string().required("*Citizenship is required"),
   role: Yup.string().required("*Role is required"),
   file: Yup.string().required("*Photo is required"),
+  password: Yup.string()
+  .min(8, "*Password must be at least 8 characters")
+  .required("*Password is required"),
+confirmPassword: Yup.string()
+  .oneOf([Yup.ref("password"), null], "*Passwords must match")
+  .required("*Confirm Password is required"),
+  email: Yup.string().email('Invalid email format').required('Email is required'),
 });
 const StaffPersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
     const [citizenShipData, setCitizenShipData] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const userName  = localStorage.getItem('userName');
 
 
@@ -35,6 +45,9 @@ const StaffPersonalAdd = forwardRef(
         file: formData.file || "",
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
+        email: formData.email || "",
+        password: formData.password || "",
+        confirmPassword: formData.confirmPassword || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -52,6 +65,9 @@ const StaffPersonalAdd = forwardRef(
           formData.append("shortIntroduction", values.shortIntroduction);
           formData.append("gender", values.gender);
           formData.append("file", values.file);
+          formData.append("email", values.email);
+          formData.append("password", values.password);
+          formData.append("confirmPassword", values.confirmPassword);
           formData.append("createdBy", userName);
           
 
@@ -84,6 +100,14 @@ const StaffPersonalAdd = forwardRef(
         }
       },
     });
+
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+      setShowConfirmPassword(!showConfirmPassword);
+    };
 
     const fetchIDTypeData = async () => {
       try {
@@ -274,6 +298,102 @@ const StaffPersonalAdd = forwardRef(
                   <small>{formik.errors.role}</small>
                 </div>
               )}
+            </div>
+            <div class="col-md-6 col-12 mb-2 mt-3">
+                <label>
+                  Email Id<span class="text-danger">*</span>
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
+                />
+                {formik.touched.email && formik.errors.email && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.email}</small>
+                  </div>
+                )}
+              </div>
+              <div class="col-md-6 col-12 mb-2">
+              <div className="mb-3">
+                <label>
+                  Password<span class="text-danger">*</span>
+                </label>
+                <div className={`input-group mb-3`}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter password"
+                    className={`form-control ${
+                      formik.touched.password && formik.errors.password
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    style={{
+                      borderRadius: "3px",
+                      borderRight: "none",
+                      borderTopRightRadius: "0px",
+                      borderBottomRightRadius: "0px",
+                    }}
+                    name="password"
+                    {...formik.getFieldProps("password")}
+                  />
+                  <span
+                    className={`input-group-text iconInputBackground`}
+                    id="basic-addon1"
+                    onClick={togglePasswordVisibility}
+                    style={{ cursor: "pointer", borderRadius: "3px" }}
+                  >
+                    {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                  </span>
+                  {formik.touched.password && formik.errors.password && (
+                    <div className="invalid-feedback">
+                      {formik.errors.password}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+             <div class="col-md-6 col-12 mb-2">
+              <div className="mb-3">
+                <label>
+                  Confirm Password<span class="text-danger">*</span>
+                </label>
+                <div className={`input-group mb-3`}>
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Enter confirm password"
+                    className={`form-control ${
+                      formik.touched.confirmPassword && formik.errors.confirmPassword
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    style={{
+                      borderRadius: "3px",
+                      borderRight: "none",
+                      borderTopRightRadius: "0px",
+                      borderBottomRightRadius: "0px",
+                    }}
+                    name="confirmPassword"
+                    {...formik.getFieldProps("confirmPassword")}
+                  />
+                  <span
+                    className={`input-group-text iconInputBackground`}
+                    id="basic-addon1"
+                    onClick={toggleConfirmPasswordVisibility}
+                    style={{ cursor: "pointer", borderRadius: "3px" }}
+                  >
+                    {showConfirmPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                  </span>
+                  {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                    <div className="invalid-feedback">
+                      {formik.errors.confirmPassword}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
             <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>

@@ -126,6 +126,10 @@
 .navbar-nav .nav-link.show {
   background-color: #ffde00;
   color: #fff;
+  /* border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px; */
+  border-radius: 10px;
+
 }
 
 /* Footer  */
