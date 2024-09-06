@@ -6,10 +6,6 @@ import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   // email: Yup.string().email("*Invalid Email").required("*Email is required"),
-  email: Yup.string()
-  .email('Invalid email format')
-  .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Invalid Email')
-  .required('Email is required'),
   contactNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
@@ -136,7 +132,7 @@ const ContactEdit = forwardRef(
           } else {
             formik.setValues({
               contactId: null,
-              email: "",
+              // email: "",
               contactNumber: "",
               address: "",
               postalCode: "",
@@ -167,7 +163,7 @@ const ContactEdit = forwardRef(
           <div className="container">
             <p className="headColor my-4">Contact Information</p>
             <div class="row">
-              <div class="col-md-6 col-12 mb-2 mt-3">
+              {/* <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Email Id<span class="text-danger">*</span>
                 </label>
@@ -184,7 +180,7 @@ const ContactEdit = forwardRef(
                     <small>{formik.errors.email}</small>
                   </div>
                 )}
-              </div>
+              </div> */}
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Contact Number<span class="text-danger">*</span>

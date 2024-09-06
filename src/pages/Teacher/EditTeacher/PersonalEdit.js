@@ -18,6 +18,7 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), "*Date of Birth cannot be in the future"),
   idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
+  email: Yup.string().email("*Invalid Email").required("*Email is required"),
   citizenship: Yup.string().required("*CitizenShip is required"),
 });
 const PersonalEdit = forwardRef(
@@ -32,6 +33,7 @@ const PersonalEdit = forwardRef(
         dateOfBirth: formData.dateOfBirth || "",
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
+        email: formData.email || "",
         citizenship: formData.citizenship || "",
         photo: null || "",
         shortIntroduction: formData.shortIntroduction || "",
@@ -49,6 +51,7 @@ const PersonalEdit = forwardRef(
           formDatas.append("dateOfBirth", data.dateOfBirth);
           formDatas.append("idTypeId", data.idTypeId);
           formDatas.append("idNo", data.idNo);
+          formData.append("email", data.email);
           formDatas.append("citizenship", data.citizenship);
           formDatas.append("photo", data.photo);
           formDatas.append("shortIntroduction", data.shortIntroduction);
@@ -72,9 +75,9 @@ const PersonalEdit = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          if(error?.response?.status === 409){
-            toast.warning("ID Number already exists!")
-          } else{
+          if (error?.response?.status === 409) {
+            toast.warning("ID Number already exists!");
+          } else {
             toast.error(error?.response?.data?.message);
           }
         } finally {
@@ -104,7 +107,7 @@ const PersonalEdit = forwardRef(
         }
       };
       getData();
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -145,14 +148,14 @@ const PersonalEdit = forwardRef(
         }}
       >
         <div className="pb-4">
-          <p class="headColor">Personal Information</p>
-          <div class="container-fluid row d-flex my-4">
-            <div class="form-group  col-sm ">
+          <p className="headColor">Personal Information</p>
+          <div className="container-fluid row d-flex my-4">
+            <div className="form-group  col-sm ">
               <label>Teacher Name</label>
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                className="form-control "
                 name="teacherName"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -164,13 +167,13 @@ const PersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div class="form-group col-sm">
+            <div className="form-group col-sm">
               <label>Date of Birth</label>
               <span className="text-danger">*</span>
               <input
                 type="date"
                 // onFocus={(e) => e.target.showPicker()}
-                class="form-control "
+                className="form-control "
                 name="dateOfBirth"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -183,9 +186,8 @@ const PersonalEdit = forwardRef(
               )}
             </div>
           </div>
-
-          <div class="container row d-flex my-4 justify-align-content-around">
-            <div class="form-group col-sm">
+          <div className="container row d-flex my-4 justify-align-content-around">
+            <div className="form-group col-sm">
               <label>ID Type</label>
               <span className="text-danger">*</span>
               <select
@@ -210,12 +212,12 @@ const PersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div class="form-group col-sm ">
+            <div className="form-group col-sm ">
               <label>ID No</label>
               <span className="text-danger">*</span>
               <input
                 type="text"
-                class="form-control "
+                className="form-control "
                 name="idNo"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -228,8 +230,27 @@ const PersonalEdit = forwardRef(
               )}
             </div>
           </div>
-          <div class="container row d-flex my-4 justify-align-content-around">
-            <div class="form-group col-sm">
+          {/* <div className="container row d-flex my-4 justify-align-content-around">
+            <label>
+              Email ID<span className="text-danger">*</span>
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              name="email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+              readOnly
+            />
+            {formik.touched.email && formik.errors.email && (
+              <div className="error text-danger ">
+                <small>{formik.errors.email}</small>
+              </div>
+            )}
+          </div> */}
+          <div className="container row d-flex my-4 justify-align-content-around">
+            <div className="form-group col-sm">
               <label>Citizenship</label>
               <span className="text-danger">*</span>
               <select
@@ -254,19 +275,7 @@ const PersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-            {/* <div class="form-group  col-sm ">
-              <label>Photo</label>
-              <input
-                type="file"
-                class="form-control "
-                name="photo"
-                onChange={(event) => {
-                  formik.setFieldValue("photo", event.currentTarget.files[0]);
-                }}
-                onBlur={formik.handleBlur}
-              />
-            </div> */}
-            <div class="form-group  col-sm ">
+            <div className="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
                 <div className="me-4">
@@ -285,7 +294,7 @@ const PersonalEdit = forwardRef(
                   </label>
                 </div>
                 <input
-                  class="form-check-input mx-2"
+                  className="form-check-input mx-2"
                   type="radio"
                   name="gender"
                   value="Male"
@@ -299,16 +308,16 @@ const PersonalEdit = forwardRef(
               </div>
             </div>
           </div>
-          <div class="container row d-flex justify-content-start align-items-center">
-            <div class="form-group  col-sm ">
+          <div className="container row d-flex justify-content-start align-items-center">
+            <div className="form-group  col-sm ">
               <label
                 for="exampleFormControlTextarea1 "
-                class="form-label d-flex "
+                className="form-label d-flex "
               >
                 Short Introduction
               </label>
               <textarea
-                class="form-control "
+                className="form-control "
                 id="exampleFormControlTextarea1"
                 rows="4"
                 name="shortIntroduction"

@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("*Invalid Email").required("*Email is required"),
+  // email: Yup.string().email("*Invalid Email").required("*Email is required"),
   contactNumber: Yup.string()
     .matches(
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
@@ -22,7 +22,7 @@ const ContactAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
 
   const formik = useFormik({
     initialValues: {
-      email: formData.email,
+      // email: formData.email,
       contactNumber: formData.contactNumber,
       address: formData.address,
       postalCode: formData.postalCode,
@@ -71,7 +71,7 @@ const ContactAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
         <div className="container">
           <p className="headColor my-4">Contact Information</p>
           <div class="row">
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            {/* <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Email ID<span class="text-danger">*</span>
               </label>
@@ -88,7 +88,7 @@ const ContactAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
                   <small>{formik.errors.email}</small>
                 </div>
               )}
-            </div>
+            </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Contact Number<span class="text-danger">*</span>
