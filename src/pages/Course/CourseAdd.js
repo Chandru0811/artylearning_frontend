@@ -27,8 +27,8 @@ const validationSchema = Yup.object({
   ),
   replacementLessonStudentBuffer: Yup.number().typeError("*Must be a Number"),
   description: Yup.string()
-  .notRequired()
-  .max(200, "*The maximum length is 200 characters"),
+    .notRequired()
+    .max(200, "*The maximum length is 200 characters"),
 });
 
 function CourseAdd({ onSuccess }) {
@@ -44,11 +44,11 @@ function CourseAdd({ onSuccess }) {
     label: center.centerNames,
     value: center.id,
   }));
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem('userName');
 
   const formik = useFormik({
     initialValues: {
-      centerId:[],
+      centerId: [],
       courseName: "",
       courseCode: "",
       subjectId: "",
@@ -96,8 +96,26 @@ function CourseAdd({ onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    validateOnChange: true, // Enable validation on change
+    validateOnBlur: true,   // Enable validation on blur
   });
 
+  // Function to scroll to the first error field
+  const scrollToError = (errors) => {
+    const errorField = Object.keys(errors)[0]; // Get the first error field
+    const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+    if (errorElement) {
+      errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      errorElement.focus(); // Set focus to the error element
+    }
+  };
+
+  // Watch for form submit and validation errors
+  useEffect(() => {
+    if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+      scrollToError(formik.errors);
+    }
+  }, [formik.submitCount, formik.errors]);
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -144,7 +162,7 @@ function CourseAdd({ onSuccess }) {
   return (
     <section className="courseAdd">
       <div className="container">
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
             e.preventDefault();  // Prevent default form submission
           }
@@ -172,33 +190,32 @@ function CourseAdd({ onSuccess }) {
           </div>
           <div className="container">
             <div className="row">
-            <div className="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Centre<span className="text-danger">*</span>
-              </label>
-              <MultiSelect
-                options={centerOptions}
-                value={selectedCenters}
-                onChange={(selected) => {
-                  setSelectedCenters(selected);
-                  formik.setFieldValue(
-                    "centerId",
-                    selected.map((option) => option.value)
-                  );
-                }}
-                labelledBy="Select Centers"
-                className={`form-multi-select ${
-                  formik.touched.centerId && formik.errors.centerId
-                    ? "is-invalid"
-                    : ""
-                }`}
-              />
-              {formik.touched.centerId && formik.errors.centerId && (
-                <div className="invalid-feedback">
-                  {formik.errors.centerId}
-                </div>
-              )}
-            </div>
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Centre<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={centerOptions}
+                  value={selectedCenters}
+                  onChange={(selected) => {
+                    setSelectedCenters(selected);
+                    formik.setFieldValue(
+                      "centerId",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Centers"
+                  className={`form-multi-select ${formik.touched.centerId && formik.errors.centerId
+                      ? "is-invalid"
+                      : ""
+                    }`}
+                />
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.centerId}
+                  </div>
+                )}
+              </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">Color Code</lable>
                 <div className="input-group mb-3">
@@ -229,11 +246,10 @@ function CourseAdd({ onSuccess }) {
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select  ${
-                    formik.touched.subjectId && formik.errors.subjectId
+                  className={`form-select  ${formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("subjectId")}
                   onChange={handleSubjectChange}
                   aria-label="Default select example"
@@ -259,11 +275,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    className={`form-select  ${
-                      formik.touched.levelId && formik.errors.levelId
+                    className={`form-select  ${formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>
@@ -289,11 +304,10 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.courseName && formik.errors.courseName
+                  className={`form-control  ${formik.touched.courseName && formik.errors.courseName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("courseName")}
                 />
                 {formik.touched.courseName && formik.errors.courseName && (
@@ -309,11 +323,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.courseCode && formik.errors.courseCode
+                    className={`form-control  ${formik.touched.courseCode && formik.errors.courseCode
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("courseCode")}
                   />
                   {formik.touched.courseCode && formik.errors.courseCode && (
@@ -330,11 +343,10 @@ function CourseAdd({ onSuccess }) {
                 <lable className="form-lable">Max Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.maxClassSize && formik.errors.maxClassSize
+                  className={`form-control  ${formik.touched.maxClassSize && formik.errors.maxClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("maxClassSize")}
                   placeholder=""
                 />
@@ -348,12 +360,11 @@ function CourseAdd({ onSuccess }) {
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.replacementLessonStudentBuffer &&
-                    formik.errors.replacementLessonStudentBuffer
+                  className={`form-control  ${formik.touched.replacementLessonStudentBuffer &&
+                      formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("replacementLessonStudentBuffer")}
                 />
                 {formik.touched.replacementLessonStudentBuffer &&
@@ -369,11 +380,10 @@ function CourseAdd({ onSuccess }) {
                 <lable className="form-lable">Min Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.minClassSize && formik.errors.minClassSize
+                  className={`form-control  ${formik.touched.minClassSize && formik.errors.minClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("minClassSize")}
                   placeholder=""
                 />
@@ -477,11 +487,10 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select  ${
-                      formik.touched.status && formik.errors.status
+                    className={`form-select  ${formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>

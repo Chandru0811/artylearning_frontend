@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-// import * as React from "react";
-// import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-// import Typography from "@mui/material/Typography";
 import Form1 from "./AddEnrollment/Form1";
 import Form2 from "./AddEnrollment/Form2";
 import Form3 from "./AddEnrollment/Form3";
@@ -39,8 +36,11 @@ export default function EnrollmentAdd() {
   };
 
   const handleButtonClick = () => {
-    // console.log("1",childRef);
-    // Call the child function using the ref
+    if (loadIndicator) return; // Prevent double clicks
+
+    // Set loading to true to disable the button while processing
+    setLoadIndicator(true);
+
     switch (activeStep.toString()) {
       case "0":
         if (childRef.current) {
@@ -76,6 +76,12 @@ export default function EnrollmentAdd() {
       default:
         break;
     }
+
+    // Reset loading state after processing (you can adjust this logic to fit your needs)
+    // setTimeout(() => {
+    //   setLoadIndicator(false); // Allow button to be clicked again after a delay
+    //   handleNext(); // Proceed to the next step
+    // }, 1000); // Adjust this delay as needed
   };
 
   return (
@@ -151,16 +157,16 @@ export default function EnrollmentAdd() {
             />
           )}
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-          {activeStep > 1 && (
-            <button
-              className="btn btn-border btn-sm mt-5 mb-3"
-              style={{ padding: "7px" }}
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              Back
-            </button>
-          )}
+            {activeStep > 0 && (
+              <button
+                className="btn btn-border btn-sm mt-5 mb-3"
+                style={{ padding: "7px" }}
+                disabled={activeStep === 0}
+                onClick={handleBack}
+              >
+                Back
+              </button>
+            )}
 
             <div style={{ flex: "1 1 auto" }}></div>
 
@@ -177,15 +183,8 @@ export default function EnrollmentAdd() {
                   aria-hidden="true"
                 ></span>
               )}
-              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
+              {activeStep === steps.length - 1 ? "Submit" : "Save And Next"}
             </button>
-            {/* <button
-              className="btn btn-button btn-sm mt-5 mb-3"
-              onClick={handleButtonClick}
-              style={{ padding: "7px" }}
-            >
-              {activeStep === steps.length - 1 ? "Submit" : " Save And Next"}
-            </button> */}
           </div>
         </React.Fragment>
       </div>

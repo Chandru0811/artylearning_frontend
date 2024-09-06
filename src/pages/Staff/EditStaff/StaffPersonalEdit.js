@@ -39,6 +39,7 @@ const StaffPersonalEdit = forwardRef(
         photo: null || "",
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
+        email : formData.email || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -58,6 +59,7 @@ const StaffPersonalEdit = forwardRef(
           formDatas.append("shortIntroduction", data.shortIntroduction);
           formDatas.append("gender", data.gender);
           formDatas.append("role", data.role);
+          formDatas.append("email", data.email);
           formDatas.append("updatedBy", userName);
           const response = await api.put(
             `/updateUser/${formData.staff_id}`,
@@ -76,9 +78,9 @@ const StaffPersonalEdit = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          if(error?.response?.status === 409){
-            toast.warning("ID Number already exists!")
-          } else{
+          if (error?.response?.status === 409) {
+            toast.warning("ID Number already exists!");
+          } else {
             toast.error(error?.response?.data?.message);
           }
         } finally {
@@ -312,6 +314,28 @@ const StaffPersonalEdit = forwardRef(
                   Male
                 </label>
               </div>
+            </div>
+          </div>
+          <div class="container row d-flex my-4 justify-align-content-around">
+            <div class="col-md-6 col-12 mb-2 mt-3">
+              <label>
+                Email Id<span class="text-danger">*</span>
+              </label>
+
+              <input
+                type="email"
+                className="form-control"
+                name="email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+                readOnly
+              />
+              {formik.touched.email && formik.errors.email && (
+                <div className="error text-danger ">
+                  <small>{formik.errors.email}</small>
+                </div>
+              )}
             </div>
           </div>
           <div class="container row d-flex my-4 justify-align-content-around"></div>
