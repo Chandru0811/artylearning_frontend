@@ -22,14 +22,14 @@ const validationSchema = Yup.object().shape({
     new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
     "*Date of Birth must be at least 1 year ago"
   ),
-  medicalCondition: Yup.string().required("*Medical Condition is required"),
-  ethnicGroup: Yup.string().required("*Ethnic group is required"),
+  // medicalCondition: Yup.string().required("*Medical Condition is required"),
+  // ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
-  nameOfSchool: Yup.string().required("*School Name is required"),
+  // nameOfSchool: Yup.string().required("*School Name is required"),
   centerId: Yup.string().required("*Centre is required"),
 });
 
-const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const EditForm1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicators }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
   const [raceData, setRaceData] = useState(null);
   const [centerData, setCenterData] = useState(null);
@@ -51,6 +51,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       try {
         const response = await api.put(`/updateLeadInfo/${formData.id}`, data, {
           headers: {
@@ -66,6 +67,8 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally{
+        setLoadIndicators(false);
       }
     },
   });
@@ -219,7 +222,6 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <div>
                 <label for="exampleFormControlInput1" className="form-label">
                   Allergy / Medical Condition (For Instance: Asthma)
-                  <span className="text-danger">*</span>
                 </label>
               </div>
               <div className="">
@@ -328,7 +330,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <div className="mb-3">
               <div>
                 <label for="exampleFormControlInpu t1" className="form-label">
-                  Ethnic Group<span className="text-danger">*</span>
+                  Ethnic Group
                 </label>
               </div>
               <select
@@ -412,7 +414,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Name Of School<span className="text-danger">*</span>
+                Name Of School
               </label>
               <input
                 type="text"

@@ -135,7 +135,7 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
           {datas?.resume &&(
                 <div class="card border-0 shadow" style={{width: "18rem"}}>
                 <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(datas?.resume)}&embedded=true`} target="_blank" rel="noopener noreferrer" ><img class="card-img-top img-fluid" style={{height:"10rem"}} src={pdfLogo} alt="Card image cap" /></a>
-                <div class="card-body d-flex justify-content-between">
+                <div class="card-body d-flex justify-content-between flex-wrap">
                   <p class="card-title fw-semibold text-wrap">{datas?.resume?.split("/").pop()}</p>
                   
                   <a href={datas?.resume} class="btn text-dark">
@@ -164,7 +164,7 @@ const RequiredEdit=forwardRef(({ formData,setLoadIndicators, setFormData, handle
           {datas?.educationCertificate &&(
                 <div class="card border-0 shadow" style={{width: "18rem"}}>
                 <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(datas?.educationCertificate)}&embedded=true`} target="_blank" rel="noopener noreferrer" ><img class="card-img-top img-fluid" style={{height:"10rem"}} src={pdfLogo} alt="Card image cap" /></a>
-                <div class="card-body d-flex justify-content-between">
+                <div class="card-body d-flex justify-content-between flex-wrap">
                   <p class="card-title fw-semibold text-wrap">{datas?.educationCertificate?.split("/").pop()}</p>
                   
                   <a href={datas?.educationCertificate} class="btn text-dark">
