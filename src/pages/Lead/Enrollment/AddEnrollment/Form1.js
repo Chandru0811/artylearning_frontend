@@ -22,10 +22,10 @@ const validationSchema = Yup.object().shape({
       new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
       "*Date of Birth must be at least 1 year ago"
     ),
-  medicalCondition: Yup.string().required("*Medical Condition is required"),
-  ethnicGroup: Yup.string().required("*Ethnic group is required"),
+  // medicalCondition: Yup.string().required("*Medical Condition is required"),
+  // ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
-  nameOfSchool: Yup.string().required("*School Name is required"),
+  // nameOfSchool: Yup.string().required("*School Name is required"),
   centerId: Yup.string().required("*Centre is required"),
   // nameOfChildrenInTotal: Yup.number()
   //   .typeError("*Enter a valid number")
@@ -34,7 +34,7 @@ const validationSchema = Yup.object().shape({
   // leadStatus: Yup.string().required("*Status is required"),
 });
 
-const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
+const Form1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicators }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
   const [raceData, setRaceData] = useState(null);
   const [centerData, setCenterData] = useState(null);
@@ -42,7 +42,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
   const formik = useFormik({
     initialValues: {
       studentName: formData.studentName || "",
-      subject: "",
+      subject: formData.subject,
       gender: formData.gender || "",
       dateOfBirth: formData.dateOfBirth || "",
       medicalCondition: formData.medicalCondition || "",
@@ -56,6 +56,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      setLoadIndicators(true);
       try {
         const response = await api.post("/createLeadInfo", data, {
           headers: {
@@ -75,6 +76,8 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
         }
       } catch (error) {
         toast.error(error);
+      }finally{
+        setLoadIndicators(false)
       }
     },
     validateOnChange: true, // Enable validation on change
@@ -231,7 +234,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
               <div>
                 <label for="exampleFormControlInput1" className="form-label">
                   Allergy / Medical Condition (For Instance: Asthma)
-                  <span className="text-danger">*</span>
+                  {/* <span className="text-danger">*</span> */}
                 </label>
               </div>
               <div className="">
@@ -256,7 +259,8 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <div className="mb-3">
               <div>
                 <label for="exampleFormControlInpu t1" className="form-label">
-                  Ethnic Group<span className="text-danger">*</span>
+                  Ethnic Group
+                  {/* <span className="text-danger">*</span> */}
                 </label>
               </div>
               <select
@@ -285,7 +289,8 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
             <div className="mb-3">
               <div>
                 <label for="exampleFormControlInput1" className="form-label">
-                  School Type<span className="text-danger">*</span>
+                  School Type
+                  <span className="text-danger">*</span>
                 </label>
               </div>
               <div className="form-check form-check-inline">
@@ -341,7 +346,8 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext }, ref) => {
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <label for="exampleFormControlInput1" className="form-label">
-                Name Of School<span className="text-danger">*</span>
+                Name Of School
+                {/* <span className="text-danger">*</span> */}
               </label>
               <input
                 type="text"

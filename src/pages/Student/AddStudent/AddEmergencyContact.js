@@ -142,6 +142,11 @@ const AddEmergencyContact = forwardRef(
         }
       };
       getData();
+      formik.setValues((prevValues) => ({
+        ...prevValues,
+        emergencyContactInformation: formData.emergencyContactInformation,
+      }));
+      
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

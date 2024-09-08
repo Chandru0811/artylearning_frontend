@@ -39,7 +39,7 @@ export default function EnrollmentAdd() {
     if (loadIndicator) return; // Prevent double clicks
 
     // Set loading to true to disable the button while processing
-    setLoadIndicator(true);
+    // setLoadIndicator(true);
 
     switch (activeStep.toString()) {
       case "0":
