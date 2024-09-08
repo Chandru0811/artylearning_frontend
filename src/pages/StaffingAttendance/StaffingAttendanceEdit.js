@@ -22,23 +22,24 @@ const validationSchema = Yup.object({
   //   ),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   attendanceRemark: Yup.string()
-  .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
-  // modeOfWorking: Yup.string().test(
-  //   "check-mode-of-working",
-  //   "*Mode of working is required",
-  //   function (value) {
-  //     const { attendanceStatus } = this.parent;
-  //     return attendanceStatus === "Present" ? !!value : true;
-  //   }
-  // ),
-  checkIn: Yup.string().test(
-    "check-check-in",
-    "*Check-in is required",
+    .max(200, "*The maximum length is 200 characters")
+    .required("*Only 200 Letters"),
+  modeOfWorking: Yup.string().test(
+    "check-mode-of-working",
+    "*Mode of working is required",
     function (value) {
       const { attendanceStatus } = this.parent;
       return attendanceStatus === "Present" ? !!value : true;
     }
   ),
+  // checkIn: Yup.string().test(
+  //   "check-check-in",
+  //   "*Check-in is required",
+  //   function (value) {
+  //     const { attendanceStatus } = this.parent;
+  //     return attendanceStatus === "Present" ? !!value : true;
+  //   }
+  // ),
   // checkOut: Yup.string().required("*Check-out is required"),
   // otStartTime: Yup.string().required("*OT start time is required"),
   // otEndTime: Yup.string().required("*OT end time is required"),
@@ -50,7 +51,7 @@ function StaffingAttendanceEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [userNamesData, setUserNameData] = useState(null);
   const navigate = useNavigate();
-  const userName = localStorage.getItem("userName")
+  const userName = localStorage.getItem("userName");
   const { id } = useParams();
 
   const formik = useFormik({
@@ -188,7 +189,7 @@ function StaffingAttendanceEdit() {
     formik.setFieldValue("attendanceStatus", attendance);
     if (attendance === "Absent") {
       // Clear the fields if attendance is "Absent"
-      formik.setFieldValue("modeOfWorking",);
+      formik.setFieldValue("modeOfWorking");
       formik.setFieldValue("checkIn", "");
       formik.setFieldValue("checkOut", "");
       formik.setFieldValue("checkInmode", "");
@@ -298,7 +299,8 @@ function StaffingAttendanceEdit() {
               </div>
 
               <div className="col-md-6 col-12 mb-3 ">
-                <label className="">Employee Name</label><span className="text-danger">*</span>
+                <label className="">Employee Name</label>
+                <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
                   className={`form-select  ${
@@ -368,7 +370,7 @@ function StaffingAttendanceEdit() {
                 <>
                   <div className="col-md-6 col-12 mb-3 ">
                     <label className="">Check In</label>
-                    <span className="text-danger">*</span>
+                    {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
                       // onFocus={(e) => e.target.showPicker()}
@@ -447,28 +449,32 @@ function StaffingAttendanceEdit() {
                     )}
                   </div>
                   <div className="col-md-6 col-12 mb-3 ">
-                <label className="">Mode Of Working</label>
-                <span className="text-danger">*</span>
-                <select
-                  className={`form-select ${
-                    formik.touched.modeOfWorking && formik.errors.modeOfWorking
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("modeOfWorking")}
-                  aria-label="Default select example"
-                >
-                  <option selected></option>
-                  <option value="WORK_FROM_HOME">Work From Home</option>
-                  <option value="WORK_FROM_OFFICE">Work From Office</option>
-                </select>
-                {formik.touched.modeOfWorking &&
-                  formik.errors.modeOfWorking && (
-                    <div className="invalid-feedback">
-                      {formik.errors.modeOfWorking}
-                    </div>
-                  )}
-              </div>
+                    <label className="">Mode Of Working</label>
+                    <span className="text-danger">*</span>
+                    <select
+                      className={`form-select ${
+                        formik.touched.modeOfWorking &&
+                        formik.errors.modeOfWorking
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("modeOfWorking")}
+                      aria-label="Default select example"
+                    >
+                      <option value="" label="Select Mode" />
+                      <option value="WORK_FROM_HOME" label="Work From Home" />
+                      <option
+                        value="WORK_FROM_OFFICE"
+                        label="Work From Office"
+                      />
+                    </select>
+                    {formik.touched.modeOfWorking &&
+                      formik.errors.modeOfWorking && (
+                        <div className="invalid-feedback">
+                          {formik.errors.modeOfWorking}
+                        </div>
+                      )}
+                  </div>
                 </>
               )}
 
@@ -517,7 +523,6 @@ function StaffingAttendanceEdit() {
                 )}
               </div> */}
 
-         
               <div className="col-md-6 col-12">
                 <div className="text-start mt-2">
                   <label className="form-lable">Attendance Remark</label>
@@ -534,7 +539,6 @@ function StaffingAttendanceEdit() {
                     }`}
                     {...formik.getFieldProps("attendanceRemark")}
                     maxLength={200}
-
                   />
                   {formik.touched.attendanceRemark &&
                     formik.errors.attendanceRemark && (

@@ -23,22 +23,22 @@ const validationSchema = Yup.object({
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   attendanceRemark: Yup.string()
   .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
-  // modeOfWorking: Yup.string().test(
-  //   "check-mode-of-working",
-  //   "*Mode of working is required",
-  //   function (value) {
-  //     const { attendanceStatus } = this.parent;
-  //     return attendanceStatus === "Present" ? !!value : true;
-  //   }
-  // ),
-  checkIn: Yup.string().test(
-    "check-check-in",
-    "*Check-in is required",
+  modeOfWorking: Yup.string().test(
+    "check-mode-of-working",
+    "*Mode of working is required",
     function (value) {
       const { attendanceStatus } = this.parent;
       return attendanceStatus === "Present" ? !!value : true;
     }
   ),
+  // checkIn: Yup.string().test(
+  //   "check-check-in",
+  //   "*Check-in is required",
+  //   function (value) {
+  //     const { attendanceStatus } = this.parent;
+  //     return attendanceStatus === "Present" ? !!value : true;
+  //   }
+  // ),
   // checkOut: Yup.string().required("*Check-out is required"),
   // otStartTime: Yup.string().required("*OT start time is required"),
   // otEndTime: Yup.string().required("*OT end time is required"),
@@ -345,7 +345,7 @@ function StaffingAttendanceAdd() {
                 <>
                   <div className="col-md-6 col-12 mb-3">
                     <label>Check In</label>
-                    <span className="text-danger">*</span>
+                    {/* <span className="text-danger">*</span> */}
                     <input
                       type="time"
                       // onFocus={(e) => e.target.showPicker()}
@@ -436,12 +436,9 @@ function StaffingAttendanceAdd() {
                       }`}
                       {...formik.getFieldProps("modeOfWorking")}
                     >
-                      <option value="" label="Select mode" />
+                      <option value="" label="Select Mode" />
                       <option value="WORK_FROM_HOME" label="Work From Home" />
-                      <option
-                        value="WORK_FROM_OFFICE"
-                        label="Work From Office"
-                      />
+                      <option value="WORK_FROM_OFFICE" label="Work From Office"/>
                     </select>
                     {formik.touched.modeOfWorking &&
                       formik.errors.modeOfWorking && (
