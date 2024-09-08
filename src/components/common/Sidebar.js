@@ -81,8 +81,8 @@ function Sidebar() {
             access: storedScreens.leadListingIndex,
           },
           {
-            title: "Enrollment",
-            path: "/lead/enrollment",
+            title: "Contacted",
+            path: "/lead/contacted",
             access: storedScreens.enrollmentIndex,
           },
         ],
@@ -281,7 +281,7 @@ function Sidebar() {
           },
           {
             title: "Blog",
-            path: "/cms/blog",
+            path: "/cms/cmsBlog",
             access: true,
           },
           {

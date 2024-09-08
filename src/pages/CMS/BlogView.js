@@ -13,9 +13,6 @@ export default function BlogView() {
               <h3>
                 Guardians of the Pride: The Urgency of Lion Conservation Efforts
               </h3>
-              <button className="btn btn-outline-dark btn-sm rounded-5">
-                Species
-              </button>
             </div>
     </div>
   )

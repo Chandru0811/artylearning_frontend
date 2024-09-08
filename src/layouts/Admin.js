@@ -208,6 +208,10 @@ import CurriculumOutletEdit from "../pages/Course/CurriculumOutlet/CurriculumOut
 import CurriculumOutletView from "../pages/Course/CurriculumOutlet/CurriculumOutletView";
 import ScrollToTop from "../pages/ScrollToTop";
 import LeaveEdit from "../pages/Staff/Leave/LeaveEdit";
+import CMSBlog from "../pages/CMS/CMSBlog/CMSBlog";
+import CMSBlogAdd from "../pages/CMS/CMSBlog/CMSBlogAdd";
+import CMSBlogEdit from "../pages/CMS/CMSBlog/CMSBlogEdit";
+import Contacted from "../pages/Lead/Contacted/Contacted";
 // import Blog from "../pages/CMS/Blog";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
@@ -251,6 +255,8 @@ function Admin({ handleLogout }) {
               <Route path="/lead/enrollment" element={<EnrollmentAdd />} />
               <Route path="/video" element={<Video />} />
               <Route path="/displaymedia" element={<DisplayMedia />} />
+              <Route path="lead/contacted" element={<Contacted />} />
+
 
               {/* {/ Student /} */}
               <Route path="/student" element={<Student />} />
@@ -513,10 +519,14 @@ function Admin({ handleLogout }) {
                 element={<ContactLists />}
               />
 
+              {/* CMS Blog */}
+              <Route path="/cms/cmsBlog" element={<CMSBlog />} />
+              <Route path="/cms/cmsBlog/add" element={<CMSBlogAdd />} />
+              <Route path="/cms/cmsBlog/edit" element={<CMSBlogEdit />} />
+
               {/* CMS  */}
               <Route path="/cms/footer" element={<CMSFooter />} />
               <Route path="/cms/header" element={<CmsTopbar />} />
-              {/* <Route path="/cms/blog" element={<Blog />} /> */}
               <Route path="/cms/products" element={<CMSProducts />} />
               <Route path="/cms/productsitem" element={<CMSProductsItems />} />
               <Route

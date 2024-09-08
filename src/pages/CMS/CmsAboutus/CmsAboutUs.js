@@ -16,7 +16,7 @@ function CmsAboutUs() {
   const [datas, setDatas] = useState([]);
   const [adminImgUrl, setAdminImgUrl] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const toggleEdit = (field) => {
     setEditingField(field);
@@ -42,7 +42,6 @@ function CmsAboutUs() {
       const formData = new FormData();
       formData.append("imageOne", data.files);
       formData.append("updatedBy ", userName);
-
 
       try {
         const response = await api.put(
@@ -101,10 +100,14 @@ function CmsAboutUs() {
             <h4>About Us</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
-          {storedScreens?.aboutIndex && (
-            <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
-              Publish
-            </button>)}
+            {storedScreens?.aboutIndex && (
+              <button
+                className="btn btn-sm btn-outline-danger border ms-2"
+                onClick={publish}
+              >
+                Publish
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -126,11 +129,14 @@ function CmsAboutUs() {
               <div className="col-md-6 col-12 d-flex flex-column align-items-center justify-content-center">
                 {editingField === "AdminImg" ? (
                   <>
-                     <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+                    <form
+                      onSubmit={formik.handleSubmit}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !formik.isSubmitting) {
+                          e.preventDefault(); // Prevent default form submission
+                        }
+                      }}
+                    >
                       {/* <input
                       type="file"
                       onChange={(e) => {
@@ -178,7 +184,8 @@ function CmsAboutUs() {
                         style={{ border: "none !important" }}
                       >
                         <FaEdit />
-                      </button>)}
+                      </button>
+                    )}
                   </>
                 )}
                 <img
@@ -196,7 +203,10 @@ function CmsAboutUs() {
       <CmsAboutSupport getData={getData} datas={datas} />
 
       {/* About Michelle and Amanda*/}
-      <CmsAboutMCmsAboutMichelleandAmandaichelle getData={getData} datas={datas} />
+      <CmsAboutMCmsAboutMichelleandAmandaichelle
+        getData={getData}
+        datas={datas}
+      />
 
       {/* About Personalized */}
       <CmsAboutPersonalized getData={getData} datas={datas} />

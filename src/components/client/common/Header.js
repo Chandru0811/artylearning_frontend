@@ -69,7 +69,7 @@ function Header() {
                   <NavDropdown title="Courses">
                     <NavDropdown.Item
                       as={NavLink}
-                      to="/course/english"
+                      to="/course/english?subjects=ENGLISH_ASSESSMENT"
                       onClick={handleClick}
                       className="header-dropdown-menu mb-3"
                     >
@@ -82,7 +82,7 @@ function Header() {
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       as={NavLink}
-                      to="/course/chinesh"
+                      to="/course/chinesh?subjects=CHINESE_ASSESSMENT"
                       onClick={handleClick}
                       className="header-dropdown-menu"
                     >

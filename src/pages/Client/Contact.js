@@ -186,8 +186,8 @@ function Contact() {
                         Message<span className="text-danger">*</span>
                       </b>
                     </label>
-                    <input
-                      type="text"
+                    <textarea
+                      rows={5}
                       style={{ height: "50px" }}
                       className={`form-control  ${
                         formik.touched.message && formik.errors.message

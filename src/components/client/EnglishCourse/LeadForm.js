@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../../pages/List/CenterList";
+import { useSearchParams } from "react-router-dom";
 
 
 const validationSchema = Yup.object().shape({
@@ -12,7 +13,10 @@ const validationSchema = Yup.object().shape({
   gender: Yup.string().required("*Select a gender"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
-    .max(new Date(), "*Date of Birth cannot be in the future"),
+    .max(
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      "*Date of Birth must be at least 1 year ago"
+    ),
   pencilGrip: Yup.string().required("*Pencil Grip is required"),
   subject: Yup.string().required("*Subject is required"),
   marketingSource: Yup.string().required("*Marketing Source is required"),
@@ -39,6 +43,8 @@ const validationSchema = Yup.object().shape({
 
 function LeadForm() {
   const [centerData, setCenterData] = useState(null);
+  const [searchParams] = useSearchParams();
+  const subjects = searchParams.get('subjects');
   const formik = useFormik({
     initialValues: {
       centerId: "",
@@ -46,7 +52,7 @@ function LeadForm() {
       gender: "",
       dateOfBirth: "",
       pencilGrip: "",
-      subject: "",
+      subject: subjects,
       marketingSource: "",
       referBy: "",
       writeUpperAToZ: "",
@@ -256,7 +262,7 @@ function LeadForm() {
               <label for="exampleFormControlInput1" className="form-label">
                 Subject / 课程 <span className="text-danger">*</span>
               </label>
-              <select
+               {/*<select
                 {...formik.getFieldProps("subject")}
                 className={`form-select    ${formik.touched.subject && formik.errors.subject
                   ? "is-invalid"
@@ -265,9 +271,19 @@ function LeadForm() {
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
-                <option value="1">English / 英文</option>
-                <option value="2">Chinese / 中文</option>
-              </select>
+                <option value="ENGLISH_ASSESSMENT">English / 英文</option>
+                <option value="CHINESE_ASSESSMENT">Chinese / 中文</option>
+              </select> */}
+              <input
+                className={`form-control  ${formik.touched.subject && formik.errors.subject
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                name="subject"
+                {...formik.getFieldProps("subject")}
+                type="text"
+                readOnly
+              />
               {formik.touched.subject && formik.errors.subject && (
                 <div className="invalid-feedback">{formik.errors.subject}</div>
               )}
@@ -560,7 +576,7 @@ function LeadForm() {
             <label className="form-label">
               Relation / 关系 <span className="text-danger">*</span>
             </label>
-            <input
+            {/* <input
               className={`form-control  ${formik.touched.relation && formik.errors.relation
                 ? "is-invalid"
                 : ""
@@ -570,7 +586,22 @@ function LeadForm() {
               aria-describedby="basic-addon1"
               {...formik.getFieldProps("relation")}
               type="text"
-            ></input>
+            ></input> */}
+            <select
+                {...formik.getFieldProps("relation")}
+                className={`form-select    ${formik.touched.relation &&
+                  formik.errors.relation
+                  ? "is-invalid"
+                  : ""
+                  }`}
+                aria-label="Default select example"
+              >
+                <option selected>--Select--</option>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Brother">Brother</option>
+                <option value="Sister">Sister</option>
+              </select>
             {formik.touched.relation && formik.errors.relation && (
               <div className="invalid-feedback">{formik.errors.relation}</div>
             )}

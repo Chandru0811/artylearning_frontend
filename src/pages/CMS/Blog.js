@@ -1,14 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import img4 from "../../assets/clientimage/parent-img.jpeg";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+import api from "../../config/URL";
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("*Name is required"),
+  email: Yup.string()
+    .email("*Enter valid email")
+    .required("*Email is required"),
+  message: Yup.string().required("*Message is required"),
+});
 
 const Blog = () => {
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      setLoadIndicator(true);
+      console.log(values);
+      try {
+        const response = await api.post(
+          "/createTestimonialSaveWithProfileImages",
+          values,
+          {
+            // headers: {
+            //   "Content-Type": "application/json",
+            // },
+          }
+        );
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          formik.resetForm();
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
+    },
+  });
+
   return (
     <div className="container">
       <div className="row">
         {/* Main Content Section */}
-        <div className="col-md-8 col-12">
-          <h1 className="mt-4">Discover Our Latest Posts</h1>
+        <div className="col-md-9 col-12">
+          <h1 className="mt-3">Discover Our Latest Posts</h1>
           <div className="blog-post mb-4">
             <Link to="/blog/view">
               <img
@@ -37,66 +82,97 @@ const Blog = () => {
         </div>
 
         {/* Sidebar Section */}
-        <div className="col-md-4 col-12">
+        <div className="col-md-3 col-12">
           <div className="sticky-top mt-4">
-            <div className="sidebar-section mb-4">
-              <h2 className="mb-3">Top Posts</h2>
-              <div className="list-group">
-                <Link
-                  to="/blog/post-event-survey-questions"
-                  className="list-group-item"
+            <div className="sidebar-section my-4">
+              <h4 className="">Contact Us</h4>
+              <form
+                onSubmit={formik.handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !formik.isSubmitting) {
+                    e.preventDefault(); // Prevent default form submission
+                  }
+                }}
+              >
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    style={{ height: "50px" }}
+                    className={`form-control  ${
+                      formik.touched.name && formik.errors.name
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    {...formik.getFieldProps("name")}
+                  />
+                  {formik.touched.name && formik.errors.name && (
+                    <div className="invalid-feedback">{formik.errors.name}</div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    style={{ height: "50px" }}
+                    className={`form-control  ${
+                      formik.touched.email && formik.errors.email
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    {...formik.getFieldProps("email")}
+                  />
+                  {formik.touched.email && formik.errors.email && (
+                    <div className="invalid-feedback">
+                      {formik.errors.email}
+                    </div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="message" className="form-label">
+                    Message
+                  </label>
+                  <textarea
+                    rows={5}
+                    style={{ height: "50px" }}
+                    className={`form-control  ${
+                      formik.touched.message && formik.errors.message
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    {...formik.getFieldProps("message")}
+                  />
+                  {formik.touched.message && formik.errors.message && (
+                    <div className="invalid-feedback">
+                      {formik.errors.message}
+                    </div>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={loadIndicator}
+                  className="btn btn-button w-100 mb-3"
                 >
-                  <img
-                    className="img-fluid p-3"
-                    src="https://t4.ftcdn.net/jpg/03/31/65/71/360_F_331657169_RVqGjeodOikjhdNAZ7YH5reLhHX8hd6y.jpg"
-                    alt="Sidebar Ad"
-                  />
-                  Post-Event Survey Questions
-                </Link>
-                <Link to="/blog/welcome-to-skiddle" className="list-group-item">
-                  <img
-                    className="img-fluid p-3"
-                    src="https://t4.ftcdn.net/jpg/03/31/65/73/360_F_331657333_lv5rrLC0HX9xsEopASQsmcylWnYwZ33A.webp"
-                    alt="Sidebar Ad"
-                  />
-                  Welcome To Skiddle
-                </Link>
-                <Link
-                  to="/blog/how-to-put-on-your-own-festival"
-                  className="list-group-item"
-                >
-                  <img
-                    className="img-fluid p-3"
-                    src="https://i2-prod.chroniclelive.co.uk/incoming/article5792131.ece/ALTERNATES/s615/first-day-back.jpg"
-                  />
-                  How to... Put on your own festival
-                </Link>
-              </div>
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Submit
+                </button>
+              </form>
             </div>
-
-            {/* <div className="sidebar-section mb-4">
-              <h2 className="mb-3">Follow Us</h2>
-              <div className="d-flex justify-content-between">
-                <a
-                  href="#"
-                  className="btn btn-outline-dark btn-sm rounded-circle"
-                >
-                  <i className="bi bi-facebook"></i>
-                </a>
-                <a
-                  href="#"
-                  className="btn btn-outline-dark btn-sm rounded-circle"
-                >
-                  <i className="bi bi-twitter"></i>
-                </a>
-                <a
-                  href="#"
-                  className="btn btn-outline-dark btn-sm rounded-circle"
-                >
-                  <i className="bi bi-instagram"></i>
-                </a>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
