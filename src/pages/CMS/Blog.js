@@ -14,7 +14,8 @@ const validationSchema = Yup.object().shape({
   message: Yup.string().required("*Message is required"),
 });
 
-const Blog = () => {
+const Blog = ({datas}) => {
+  console.log("datas",datas)
   const [loadIndicator, setLoadIndicator] = useState(false);
   const formik = useFormik({
     initialValues: {

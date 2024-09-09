@@ -25,21 +25,21 @@ function CMSBlogAdd({ onSuccess }) {
 
 
   const initialValues = {
-    parentImage: '', // To store the uploaded image file
-    parentDescription: "",
-    parentName: "",// Details about the image
+    file: '', // To store the uploaded image file
+    description: "",
+    title: "",// Details about the image
   };
 
   const validationSchema = Yup.object().shape({
-    parentImage: Yup.mixed().required("Image file is required"),
-    parentDescription: Yup.string().required("Image details are required"),
-    parentName: Yup.string().required("Image details are required"),
+    file: Yup.mixed().required("Image file is required"),
+    description: Yup.string().required("Image details are required"),
+    title: Yup.string().required("Image details are required"),
   });
 
   const handleFileChange = event => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue('parentImage', file); // Update Formik's form state with the file
+    formik.setFieldValue('file', file); // Update Formik's form state with the file
   };
 
   const formik = useFormik({
@@ -51,13 +51,13 @@ function CMSBlogAdd({ onSuccess }) {
 
       console.log(values);
       const formData = new FormData();
-      formData.append("parentDescription", values.parentDescription)
-      formData.append("parentName ", values.parentName)
-      formData.append("file", values.parentImage)
+      formData.append("description", values.description)
+      formData.append("title ", values.title)
+      formData.append("file", values.file)
       formData.append("createdBy ", userName);
 
       try {
-        const response = await api.post("/createTestimonialSaveWithProfileImages", formData, {
+        const response = await api.post("/createBlogSave", formData, {
           // headers: {
           //   "Content-Type": "application/json",
           // },
@@ -121,19 +121,19 @@ function CMSBlogAdd({ onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
-                <label htmlFor="parentImage" className="form-label">
+                <label htmlFor="file" className="form-label">
                   Upload Image
                 </label>
                 <input
                   type="file"
-                  id="parentImage"
-                  name="parentImage"
+                  id="file"
+                  name="file"
                   className="form-control"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.parentImage && formik.errors.parentImage && (
-                  <div className="text-danger">{formik.errors.parentImage}</div>
+                {formik.touched.file && formik.errors.file && (
+                  <div className="text-danger">{formik.errors.file}</div>
                 )}
               </div>
               {selectedFile && (
@@ -146,35 +146,35 @@ function CMSBlogAdd({ onSuccess }) {
               )}
 
               <div className="mb-3">
-                <label htmlFor="parentName" className="form-label">
+                <label htmlFor="title" className="form-label">
                   Blog Title
                 </label>
                 <input
-                  id="parentName"
-                  name="parentName"
+                  id="title"
+                  name="title"
                   className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.parentName}
+                  value={formik.values.title}
                 />
-                {formik.touched.parentName && formik.errors.parentName && (
-                  <div className="text-danger">{formik.errors.parentName}</div>
+                {formik.touched.title && formik.errors.title && (
+                  <div className="text-danger">{formik.errors.title}</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="parentDescription" className="form-label">
+                <label htmlFor="description" className="form-label">
                   Blog Description
                 </label>
                 <textarea
-                  id="parentDescription"
-                  name="parentDescription"
+                  id="description"
+                  name="description"
                   className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.parentDescription}
+                  value={formik.values.description}
                 />
-                {formik.touched.parentDescription && formik.errors.parentDescription && (
-                  <div className="text-danger">{formik.errors.parentDescription}</div>
+                {formik.touched.description && formik.errors.description && (
+                  <div className="text-danger">{formik.errors.description}</div>
                 )}
               </div>
 

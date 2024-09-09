@@ -18,7 +18,7 @@ const CMSBlog = () => {
 
   const getTestimonial = async () => {
     try {
-      const response = await api.get("/getAllTestimonialSave");
+      const response = await api.get("/getAllBlogSave");
       setDatas(response.data);
       setLoading(false);
     } catch (error) {
@@ -61,7 +61,7 @@ const CMSBlog = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllTestimonialSave");
+      const response = await api.get("/getAllBlogSave");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -71,18 +71,27 @@ const CMSBlog = () => {
   };
 
   const testimonialPublish = async () => {
-    try {
-      const response = await api.post("/publishTestimonial");
+    for (const data of datas) {
+      const formData = new FormData();
+      formData.append("description", data.description); // Access individual data properties
+      formData.append("title", data.title);
+      formData.append("file", data.imagerOne); // Ensure file property is properly assigned
 
-      if (response.status === 201) {
-        toast.success(response.data.message)
-      } else {
-        toast.warning(response.data.message)
+      try {
+        const response = await api.post("/createBlogSavePublish", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data", // For file uploads
+          },
+        });
+        if (response.status === 201) {
+          toast.success(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error.message || "An error occurred during publishing.");
       }
-    } catch (error) {
-      toast.error("Error refreshing data:", error);
     }
   };
+
 
   return (
     <div className="container center">
@@ -131,10 +140,10 @@ const CMSBlog = () => {
               <tr key={index}>
                 <td className="text-center">{index + 1}</td>
                 <td className="text-center">
-                  <img src={data.parentImage} className="img-fluid" alt="image" width={150} />
+                  <img src={data.imagerOne} className="img-fluid" alt="image" width={150} />
                 </td>
-                <td className="text-center">{data.parentDescription}</td>
-                <td className="text-center"> {data.parentName}</td>
+                <td className="text-center">{data.description}</td>
+                <td className="text-center"> {data.title}</td>
                 <td className="text-center">
                   <div className="d-flex">
                     {storedScreens?.testimonialUpdate && (
@@ -142,7 +151,7 @@ const CMSBlog = () => {
                     {storedScreens?.testimonialDelete && (
                       <Delete
                         onSuccess={refreshData}
-                        path={`/deleteTestimonialSave/${data.id}`}
+                        path={`/deleteBlogSave/${data.id}`}
                         style={{ display: "inline-block" }}
                       />)}
                   </div>
