@@ -34,7 +34,7 @@ const validationSchema = Yup.object().shape({
   // leadStatus: Yup.string().required("*Status is required"),
 });
 
-const Form1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicators }, ref) => {
+const Form1 = forwardRef(({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
   const [raceData, setRaceData] = useState(null);
   const [centerData, setCenterData] = useState(null);
@@ -76,11 +76,11 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicators 
         }
       } catch (error) {
         toast.error(error);
-      }finally{
+      } finally {
         setLoadIndicators(false)
       }
     },
-    validateOnChange: true, // Enable validation on change
+    validateOnChange: false, // Enable validation on change
     validateOnBlur: true,   // Enable validation on blur
   });
 

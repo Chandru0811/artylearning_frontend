@@ -11,7 +11,7 @@ import ScheduleTeacherAdd from "../ScheduleTeacher/ScheduleTeacherAdd";
 import ScheduleTeacherView from "../ScheduleTeacher/ScheduleTeacherView";
 import { Link } from "react-router-dom";
 import { BsTable } from "react-icons/bs";
-import { Button, DropdownButton, Dropdown } from "react-bootstrap";
+import { Button, DropdownButton, Dropdown, OverlayTrigger, Tooltip } from "react-bootstrap";
 import TeacherReplacement from "./TeacherReplacement";
 import { MdViewColumn } from "react-icons/md";
 
@@ -36,7 +36,7 @@ const ScheduleTeacher = () => {
   };
 
   const handelDelete = async (rowData) => {
-    
+
     try {
       const { centerId, userId, courseId, classId, days } = selectedRowData;
       const formData = new FormData();
@@ -156,14 +156,14 @@ const ScheduleTeacher = () => {
         <>
           <div className="d-flex justify-content-end align-items-center">
             <span>
-            <ScheduleTeacherAdd onSuccess={refreshData} />
+              <ScheduleTeacherAdd onSuccess={refreshData} />
             </span>
             {/* } */}
-           {/* <p>  <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+            {/* <p>  <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
         </button> </p> */}
-        </div>
+          </div>
           <div className="table-responsive">
             <table ref={tableRef} className="display">
               {/* Table Header */}
@@ -176,61 +176,61 @@ const ScheduleTeacher = () => {
                   <th scope="col">Class</th>
                   <th scope="col">Day</th>
                   {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      CreatedBy
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      CreatedAt
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      UpdatedBy
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      UpdatedAt
+                    </th>
+                  )}
                   <th scope="col" className="text-center">
                     Action
                   </th>
@@ -247,60 +247,68 @@ const ScheduleTeacher = () => {
                     <td>{data.className}</td>
                     <td>{data.days}</td>
                     {extraData && <td>{data.createdBy}</td>}
-                {extraData && <td>{data.createdAt}</td>}
-                {extraData && <td>{data.updatedBy}</td>}
-                {extraData && <td>{data.updatedAt}</td>}
+                    {extraData && <td>{data.createdAt}</td>}
+                    {extraData && <td>{data.updatedBy}</td>}
+                    {extraData && <td>{data.updatedAt}</td>}
                     <td>
-                      <div className="d-flex justify-content-center align-item-center">
+                      <div className="d-flex justify-content-center align-items-center">
                         {storedScreens?.scheduleTeacherRead && (
-                          <ScheduleTeacherView id={data.id} />
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-schedule-view">View Schedule</Tooltip>}
+                          >
+                            <div>
+                              <ScheduleTeacherView id={data.id} />
+                            </div>
+                          </OverlayTrigger>
                         )}
-                        {/* {storedScreens?.scheduleTeacherUpdate && (
-                        <ScheduleTeacherEdit
-                          id={data.id}
-                          onSuccess={refreshData}
-                        />
-                      )} */}
-                        <DropdownButton
-                          title={<FaEdit />}
-                          variant="white"
-                          size="sm"
-                          id="dropdown-basic-button"
+
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={<Tooltip id="tooltip-edit">Edit Schedule</Tooltip>}
                         >
-                          <Dropdown.Item>
-                            <TeacherReplacement
-                              id={data.id}
-                              onSuccess={refreshData}
-                            />
-                          </Dropdown.Item>
-                          {/* <Dropdown.Item as={Link} to={`/course/coursedeposit/${data.id}`}>
-                            Course Deposit Fees
-                          </Dropdown.Item>
-                          <Dropdown.Item as={Link} to={`/course/curriculumoutlet/${data.id}`}>
-                            Curriculum Outline
-                          </Dropdown.Item> */}
-                        </DropdownButton>
+                          <DropdownButton
+                            title={<FaEdit />}
+                            variant="white"
+                            size="sm"
+                            id="dropdown-basic-button"
+                          >
+                            <Dropdown.Item>
+                              <TeacherReplacement id={data.id} onSuccess={refreshData} />
+                            </Dropdown.Item>
+                          </DropdownButton>
+                        </OverlayTrigger>
+
                         {storedScreens?.scheduleTeacherDelete && (
-                          <div>
-                          <button
-                            className="btn btn-sm"
-                            onClick={() => handleShow(data)}
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-delete">Delete Schedule</Tooltip>}
                           >
-                            <FaTrash />
-                          </button>
-                          </div>
+                            <div>
+                              <button className="btn btn-sm" onClick={() => handleShow(data)}>
+                                <FaTrash />
+                              </button>
+                            </div>
+                          </OverlayTrigger>
                         )}
+
                         {storedScreens?.timeScheduleIndex && (
-                          <Link
-                            to={`/scheduleteacher/scheduletime/${data.userId}?centerId=${data.centerId}&courseId=${data.courseId}`}
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-time-schedule">Time Schedule</Tooltip>}
                           >
-                            <button className="btn px-1 py-1">
-                              <BsTable className="text-dark" size={15} />
-                            </button>
-                          </Link>
+                            <Link
+                              to={`/scheduleteacher/scheduletime/${data.userId}?centerId=${data.centerId}&courseId=${data.courseId}`}
+                            >
+                              <button className="btn px-1 py-1">
+                                <BsTable className="text-dark" size={15} />
+                              </button>
+                            </Link>
+                          </OverlayTrigger>
                         )}
                       </div>
                     </td>
+
                   </tr>
                 ))}
               </tbody>

@@ -146,7 +146,7 @@ function CenterEdit() {
         setLoadIndicator(false);
       }
     },
-    validateOnChange: true, // Enable validation on change
+    validateOnChange: false, // Enable validation on change
     validateOnBlur: true,   // Enable validation on blur
   });
 
@@ -246,8 +246,8 @@ function CenterEdit() {
                   type="text"
                   name="centerName"
                   className={`form-control  ${formik.touched.centerName && formik.errors.centerName
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
@@ -269,8 +269,8 @@ function CenterEdit() {
                   {...formik.getFieldProps("code")}
                   type="text"
                   className={`form-control  ${formik.touched.code && formik.errors.code
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   placeholder=""
                 />
@@ -287,8 +287,8 @@ function CenterEdit() {
                 {...formik.getFieldProps("userId")}
                 name="userId"
                 className={`form-select  ${formik.touched.userId && formik.errors.userId
-                    ? "is-invalid"
-                    : ""
+                  ? "is-invalid"
+                  : ""
                   }`}
               >
                 <option selected></option>
@@ -327,8 +327,8 @@ function CenterEdit() {
                   {...formik.getFieldProps("zipCode")}
                   type="text"
                   className={`form-control    ${formik.touched.zipCode && formik.errors.zipCode
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.zipCode && formik.errors.zipCode && (
@@ -347,8 +347,8 @@ function CenterEdit() {
                   {...formik.getFieldProps("mobile")}
                   type="text"
                   className={`form-control   ${formik.touched.mobile && formik.errors.mobile
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.mobile && formik.errors.mobile && (
@@ -365,8 +365,8 @@ function CenterEdit() {
                   {...formik.getFieldProps("email")}
                   type="text"
                   className={`form-control   ${formik.touched.email && formik.errors.email
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
@@ -386,8 +386,8 @@ function CenterEdit() {
                   type="date"
                   // onFocus={(e) => e.target.showPicker()}
                   className={`form-control   ${formik.touched.openingDate && formik.errors.openingDate
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
@@ -450,8 +450,8 @@ function CenterEdit() {
                   {...formik.getFieldProps("uenNumber")}
                   type="text"
                   className={`form-control  ${formik.touched.uenNumber && formik.errors.uenNumber
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.uenNumber && formik.errors.uenNumber && (
@@ -470,9 +470,9 @@ function CenterEdit() {
                   {...formik.getFieldProps("taxRegistrationNumber")}
                   type="text"
                   className={`form-control   ${formik.touched.taxRegistrationNumber &&
-                      formik.errors.taxRegistrationNumber
-                      ? "is-invalid"
-                      : ""
+                    formik.errors.taxRegistrationNumber
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.taxRegistrationNumber &&
@@ -492,8 +492,8 @@ function CenterEdit() {
                   {...formik.getFieldProps("bankName")}
                   type="text"
                   className={`form-control    ${formik.touched.bankName && formik.errors.bankName
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.bankName && formik.errors.bankName && (
@@ -512,8 +512,8 @@ function CenterEdit() {
                   {...formik.getFieldProps("bankBranch")}
                   type="text"
                   className={`form-control   ${formik.touched.bankBranch && formik.errors.bankBranch
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.bankBranch && formik.errors.bankBranch && (
@@ -532,9 +532,9 @@ function CenterEdit() {
                   {...formik.getFieldProps("bankAccountName")}
                   type="text"
                   className={`form-control    ${formik.touched.bankAccountName &&
-                      formik.errors.bankAccountName
-                      ? "is-invalid"
-                      : ""
+                    formik.errors.bankAccountName
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.bankAccountName &&
@@ -554,9 +554,9 @@ function CenterEdit() {
                   {...formik.getFieldProps("bankAccountNumber")}
                   type="text"
                   className={`form-control    ${formik.touched.bankAccountNumber &&
-                      formik.errors.bankAccountNumber
-                      ? "is-invalid"
-                      : ""
+                    formik.errors.bankAccountNumber
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.bankAccountNumber &&

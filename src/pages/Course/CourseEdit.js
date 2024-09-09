@@ -56,7 +56,7 @@ function CourseEdit() {
   const formik = useFormik({
     initialValues: {
       centerId: [],
-      centers:[],
+      centers: [],
       courseName: "",
       courseCode: "",
       subjectId: "",
@@ -97,7 +97,7 @@ function CourseEdit() {
         setLoadIndicator(false);
       }
     },
-    validateOnChange: true, // Enable validation on change
+    validateOnChange: false, // Enable validation on change
     validateOnBlur: true,   // Enable validation on blur
   });
 
@@ -236,11 +236,10 @@ function CourseEdit() {
                     );
                   }}
                   labelledBy="Select Centers"
-                  className={`form-multi-select ${
-                    formik.touched.centerId && formik.errors.centerId
+                  className={`form-multi-select ${formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                 />
                 {formik.touched.centerId && formik.errors.centerId && (
                   <div className="invalid-feedback">
@@ -272,11 +271,10 @@ function CourseEdit() {
                   Subject<span className="text-danger">*</span>
                 </lable>
                 <select
-                  className={`form-select  ${
-                    formik.touched.subjectId && formik.errors.subjectId
+                  className={`form-select  ${formik.touched.subjectId && formik.errors.subjectId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("subjectId")}
                   onChange={handleSubjectChange}
                   aria-label="Default select example"
@@ -302,11 +300,10 @@ function CourseEdit() {
                 <div className="input-group mb-3">
                   <select
                     {...formik.getFieldProps("levelId")}
-                    className={`form-select  ${
-                      formik.touched.levelId && formik.errors.levelId
+                    className={`form-select  ${formik.touched.levelId && formik.errors.levelId
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                   >
                     <option></option>
                     {levelData &&
@@ -331,11 +328,10 @@ function CourseEdit() {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.courseName && formik.errors.courseName
+                  className={`form-control  ${formik.touched.courseName && formik.errors.courseName
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("courseName")}
                 />
                 {formik.touched.courseName && formik.errors.courseName && (
@@ -351,11 +347,10 @@ function CourseEdit() {
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control  ${
-                      formik.touched.courseCode && formik.errors.courseCode
+                    className={`form-control  ${formik.touched.courseCode && formik.errors.courseCode
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     {...formik.getFieldProps("courseCode")}
                   />
                   {formik.touched.courseCode && formik.errors.courseCode && (
@@ -372,11 +367,10 @@ function CourseEdit() {
                 <lable className="form-lable">Max Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.maxClassSize && formik.errors.maxClassSize
+                  className={`form-control  ${formik.touched.maxClassSize && formik.errors.maxClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("maxClassSize")}
                   placeholder=""
                 />
@@ -390,12 +384,11 @@ function CourseEdit() {
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.replacementLessonStudentBuffer &&
-                    formik.errors.replacementLessonStudentBuffer
+                  className={`form-control  ${formik.touched.replacementLessonStudentBuffer &&
+                      formik.errors.replacementLessonStudentBuffer
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("replacementLessonStudentBuffer")}
                 />
                 {formik.touched.replacementLessonStudentBuffer &&
@@ -411,11 +404,10 @@ function CourseEdit() {
                 <lable className="form-lable">Min Class Size</lable>
                 <input
                   type="text"
-                  className={`form-control  ${
-                    formik.touched.minClassSize && formik.errors.minClassSize
+                  className={`form-control  ${formik.touched.minClassSize && formik.errors.minClassSize
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   {...formik.getFieldProps("minClassSize")}
                   placeholder=""
                 />
@@ -519,11 +511,10 @@ function CourseEdit() {
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("status")}
-                    className={`form-select  ${
-                      formik.touched.status && formik.errors.status
+                    className={`form-select  ${formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                     aria-label="Default select example"
                   >
                     <option selected></option>

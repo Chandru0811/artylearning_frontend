@@ -135,7 +135,7 @@ function CenterAdd() {
         setLoadIndicator(false);
       }
     },
-    validateOnChange: true, // Enable validation on change
+    validateOnChange: false, // Enable validation on change
     validateOnBlur: true,   // Enable validation on blur
   });
 

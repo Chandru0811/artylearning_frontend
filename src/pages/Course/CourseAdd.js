@@ -96,7 +96,7 @@ function CourseAdd({ onSuccess }) {
         setLoadIndicator(false);
       }
     },
-    validateOnChange: true, // Enable validation on change
+    validateOnChange: false, // Enable validation on change
     validateOnBlur: true,   // Enable validation on blur
   });
 
@@ -206,8 +206,8 @@ function CourseAdd({ onSuccess }) {
                   }}
                   labelledBy="Select Centers"
                   className={`form-multi-select ${formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                 />
                 {formik.touched.centerId && formik.errors.centerId && (
@@ -247,8 +247,8 @@ function CourseAdd({ onSuccess }) {
                 </lable>
                 <select
                   className={`form-select  ${formik.touched.subjectId && formik.errors.subjectId
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("subjectId")}
                   onChange={handleSubjectChange}
@@ -276,8 +276,8 @@ function CourseAdd({ onSuccess }) {
                   <select
                     {...formik.getFieldProps("levelId")}
                     className={`form-select  ${formik.touched.levelId && formik.errors.levelId
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     aria-label="Default select example"
                   >
@@ -305,8 +305,8 @@ function CourseAdd({ onSuccess }) {
                 <input
                   type="text"
                   className={`form-control  ${formik.touched.courseName && formik.errors.courseName
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("courseName")}
                 />
@@ -324,8 +324,8 @@ function CourseAdd({ onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${formik.touched.courseCode && formik.errors.courseCode
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("courseCode")}
                   />
@@ -344,8 +344,8 @@ function CourseAdd({ onSuccess }) {
                 <input
                   type="text"
                   className={`form-control  ${formik.touched.maxClassSize && formik.errors.maxClassSize
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("maxClassSize")}
                   placeholder=""
@@ -361,9 +361,9 @@ function CourseAdd({ onSuccess }) {
                 <input
                   type="text"
                   className={`form-control  ${formik.touched.replacementLessonStudentBuffer &&
-                      formik.errors.replacementLessonStudentBuffer
-                      ? "is-invalid"
-                      : ""
+                    formik.errors.replacementLessonStudentBuffer
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("replacementLessonStudentBuffer")}
                 />
@@ -381,8 +381,8 @@ function CourseAdd({ onSuccess }) {
                 <input
                   type="text"
                   className={`form-control  ${formik.touched.minClassSize && formik.errors.minClassSize
-                      ? "is-invalid"
-                      : ""
+                    ? "is-invalid"
+                    : ""
                     }`}
                   {...formik.getFieldProps("minClassSize")}
                   placeholder=""
@@ -488,8 +488,8 @@ function CourseAdd({ onSuccess }) {
                   <select
                     {...formik.getFieldProps("status")}
                     className={`form-select  ${formik.touched.status && formik.errors.status
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     aria-label="Default select example"
                   >

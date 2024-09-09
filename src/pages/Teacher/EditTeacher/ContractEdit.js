@@ -23,18 +23,18 @@ const validationSchema = Yup.object().shape({
   training: Yup.string().required("*Training is required"),
   userContractStartDate: Yup.string().required("*Date is required"),
   userContractEndDate: Yup.string()
-  .required("*End Date Of Contract is required")
-  .test(
-    "is-greater",
-    "*End Date should be later than the Start Date",
-    function (value) {
-      const { userContractStartDate } = this.parent;
-      return (
-        !userContractStartDate ||
-        new Date(value) >= new Date(userContractStartDate)
-      );
-    }
-  ),
+    .required("*End Date Of Contract is required")
+    .test(
+      "is-greater",
+      "*End Date should be later than the Start Date",
+      function (value) {
+        const { userContractStartDate } = this.parent;
+        return (
+          !userContractStartDate ||
+          new Date(value) >= new Date(userContractStartDate)
+        );
+      }
+    ),
   contactPeriod: Yup.string().required("*Contact is required"),
   workingDays: Yup.array()
     .min(1, "*Working days are required")
@@ -106,7 +106,7 @@ const ContractEdit = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-        // console.log("Api Data:", values);
+        console.log("Api Data:", values);
         try {
           if (values.contractId !== null) {
             const response = await api.put(
@@ -119,6 +119,7 @@ const ContractEdit = forwardRef(
               }
             );
             if (response.status === 200) {
+
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
               navigate("/teacher");
@@ -366,7 +367,7 @@ const ContractEdit = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.addressOfEmployment}
-                readOnly={datas?.addressOfEmployment}              />
+                readOnly={datas?.addressOfEmployment} />
               {formik.touched.addressOfEmployment &&
                 formik.errors.addressOfEmployment && (
                   <div className="error text-danger ">
@@ -548,7 +549,7 @@ const ContractEdit = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractStartDate}
                   min={new Date().toISOString().split("T")[0]}
-                  
+
                 />
                 {formik.touched.userContractStartDate &&
                   formik.errors.userContractStartDate && (
@@ -632,7 +633,7 @@ const ContractEdit = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      disabled
+                      readOnly={datas?.workingDays}
                     />
                     <label for="myCheckbox1" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -654,7 +655,7 @@ const ContractEdit = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      disabled
+                      readOnly={datas?.workingDays}
                     />
                     <label for="myCheckbox2" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -676,7 +677,7 @@ const ContractEdit = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      disabled
+                      readOnly={datas?.workingDays}
                     />
                     <label for="myCheckbox3" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -698,7 +699,8 @@ const ContractEdit = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      disabled
+                      readOnly={datas?.workingDays}
+
                     />
                     <label for="myCheckbox4" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -720,7 +722,8 @@ const ContractEdit = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      disabled
+                      readOnly={datas?.workingDays}
+
                     />
                     <label for="myCheckbox5" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -742,7 +745,8 @@ const ContractEdit = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      disabled
+                      readOnly={datas?.workingDays}
+
                     />
                     <label for="myCheckbox6" class="custom-checkbox">
                       <div class="inner-square"></div>
@@ -764,7 +768,8 @@ const ContractEdit = forwardRef(
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      disabled
+                      readOnly={datas?.workingDays}
+
                     />
                     <label for="myCheckbox7" class="custom-checkbox">
                       <div class="inner-square"></div>
