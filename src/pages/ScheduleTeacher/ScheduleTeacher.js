@@ -253,43 +253,43 @@ const ScheduleTeacher = () => {
                     <td>
                       <div className="d-flex justify-content-center align-items-center">
                         {storedScreens?.scheduleTeacherRead && (
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip id="tooltip-schedule-view">View Schedule</Tooltip>}
-                          >
-                            <div>
-                              <ScheduleTeacherView id={data.id} />
-                            </div>
-                          </OverlayTrigger>
+                          // <OverlayTrigger
+                          //   placement="top"
+                          //   overlay={<Tooltip id="tooltip-schedule-view">View Schedule</Tooltip>}
+                          // >
+                          <div>
+                            <ScheduleTeacherView id={data.id} />
+                          </div>
+                          // </OverlayTrigger>
                         )}
 
-                        <OverlayTrigger
+                        {/* <OverlayTrigger
                           placement="top"
                           overlay={<Tooltip id="tooltip-edit">Edit Schedule</Tooltip>}
+                        > */}
+                        <DropdownButton
+                          title={<FaEdit />}
+                          variant="white"
+                          size="sm"
+                          id="dropdown-basic-button"
                         >
-                          <DropdownButton
-                            title={<FaEdit />}
-                            variant="white"
-                            size="sm"
-                            id="dropdown-basic-button"
-                          >
-                            <Dropdown.Item>
-                              <TeacherReplacement id={data.id} onSuccess={refreshData} />
-                            </Dropdown.Item>
-                          </DropdownButton>
-                        </OverlayTrigger>
+                          <Dropdown.Item>
+                            <TeacherReplacement id={data.id} onSuccess={refreshData} />
+                          </Dropdown.Item>
+                        </DropdownButton>
+                        {/* </OverlayTrigger> */}
 
                         {storedScreens?.scheduleTeacherDelete && (
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip id="tooltip-delete">Delete Schedule</Tooltip>}
-                          >
-                            <div>
-                              <button className="btn btn-sm" onClick={() => handleShow(data)}>
-                                <FaTrash />
-                              </button>
-                            </div>
-                          </OverlayTrigger>
+                          // <OverlayTrigger
+                          //   placement="top"
+                          //   overlay={<Tooltip id="tooltip-delete">Delete Schedule</Tooltip>}
+                          // >
+                          <div>
+                            <button className="btn btn-sm" onClick={() => handleShow(data)}>
+                              <FaTrash />
+                            </button>
+                          </div>
+                          // </OverlayTrigger>
                         )}
 
                         {storedScreens?.timeScheduleIndex && (
