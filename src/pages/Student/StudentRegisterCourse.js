@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
 import api from "../../config/URL";
@@ -10,6 +10,8 @@ import "datatables.net";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllPackageList from "../List/PackageList";
 import * as Yup from "yup";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
+import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
 const validationSchema = Yup.object().shape({
   packageName: Yup.string().required("Package Name is required"),
@@ -35,80 +37,11 @@ function StudentRegisterCourse() {
   const [availableDays, setAvailableDays] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  // const formik = useFormik({
-  //   initialValues: {
-  //     lessonName: "",
-  //     packageName: ""
-  //   },
-  //   validationSchema: validationSchema,
-  //   onSubmit: async (data) => {
-  //     if (!selectedRow) {
-  //       toast.warning("Please select a course");
-  //       return;
-  //     }
-  //     setLoadIndicator(true);
-  //     const payload = {
-  //       ...data,
-  //       studentId: id,
-  //       centerId: selectedRowData.centerId,
-  //       centerName: selectedRowData.centerName,
-  //       classId: selectedRowData.classId,
-  //       className: selectedRowData.className,
-  //       course: selectedRowData.course,
-  //       courseId: selectedRowData.courseId,
-  //       batchId: selectedRowData.batchId,
-  //       batch: selectedRowData.batch,
-  //       days: selectedRowData.days,
-  //       classRoom: selectedRowData.classRoom,
-  //       startDate: selectedRowData.startDate,
-  //       endDate: selectedRowData.endDate,
-  //       studentCount: selectedRowData.studentCount,
-  //       teacher: selectedRowData.teacher,
-  //       userId: selectedRowData.userId,
-  //     };
-  //     console.log("Payload Data:", payload);
-  //     try {
-  //       if (data.studentCourseDetailsId !== null) {
-  //         const response = await api.put(
-  //           `/updateStudentCourseDetails/${studentCourseDetailsId}`,
-  //           data,
-  //           {
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //           }
-  //         );
-  //         if (response.status === 200) {
-  //           toast.success(response.data.message);
-  //           navigate("/student");
-  //         } else {
-  //           toast.error(response.data.message);
-  //         }
-  //       } else {
-  //         const response = await api.post(
-  //           `/createStudentCourseDetails`,
-  //           data,
-  //           {
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //           }
-  //         );
-  //         if (response.status === 201) {
-  //           toast.success(response.data.message);
-  //           navigate("/student");
-  //         } else {
-  //           toast.error(response.data.message);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       toast.error(error);
-  //     } finally {
-  //       setLoadIndicator(false);
-  //     }
-  //   },
-  // });
+  const centerId = searchParams.get('centerId');
+  const courseId = searchParams.get('courseId');
+  const packageName = searchParams.get('packageName');
 
   const formik = useFormik({
     initialValues: {
@@ -179,7 +112,7 @@ function StudentRegisterCourse() {
 
   const fetchCourseData = async () => {
     try {
-      const courseData = await fetchAllCoursesWithIds();
+      const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
     } catch (error) {
       toast.error(error);
@@ -188,7 +121,7 @@ function StudentRegisterCourse() {
 
   const fetchPackageData = async () => {
     try {
-      const packageData = await fetchAllPackageList();
+      const packageData = await fetchAllPackageListByCenter(centerId);
       setPackageData(packageData);
     } catch (error) {
       toast.error(error);
