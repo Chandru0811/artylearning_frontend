@@ -348,7 +348,7 @@ export default function InvoiceEdit() {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Error deleting data:", error);
+      console.error("Error deleting data:", error);
     }
   };
 
@@ -811,7 +811,7 @@ export default function InvoiceEdit() {
                             }
                           />
                         </td>
-                        <td>
+                        <td className="text-center">
                           <button
                             type="button"
                             className="btn btn-white border-danger btn-sm rounded-5"
@@ -830,7 +830,7 @@ export default function InvoiceEdit() {
 
           <div className="row mt-3">
             <div className="col-12 text-end mt-3">
-              {rows.length > 1 && (
+              {/* {rows.length > 1 && (
                 <button
                   type="button"
                   className="btn btn-sm mx-2 text-danger border-danger bg-white"
@@ -845,7 +845,7 @@ export default function InvoiceEdit() {
                 >
                   Delete
                 </button>
-              )}
+              )} */}
               <button
                 className="btn btn-sm btn-danger me-2"
                 type="button"
