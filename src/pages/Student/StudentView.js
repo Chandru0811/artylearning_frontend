@@ -18,6 +18,16 @@ function StudentView() {
   const { id } = useParams();
   const [data, setData] = useState({});
   console.log("Student Datas:", data);
+  const centerId = data?.studentCourseDetailModels?.[0]?.centerId;
+  const courseId = data?.studentCourseDetailModels?.[0]?.courseId;
+  const packageName = data?.studentCourseDetailModels?.[0]?.packageName;
+  console.log(
+    "centerId , courseId , packageName:",
+    centerId,
+    courseId,
+    packageName
+  );
+
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const [centerData, setCenterData] = useState(null);
@@ -143,7 +153,9 @@ function StudentView() {
               </Link>
             )}
             {storedScreens?.registerNewCreate && (
-              <Link to={`/student/register/course/${data.id}`}>
+              <Link
+                to={`/student/register/course/${data.id}?centerId=${centerId}?courseId=${courseId}?packageNaem=${packageName}`}
+              >
                 <button
                   className="btn btn-border btn-sm mx-2 stdViewBtn"
                   style={{ padding: "7px" }}

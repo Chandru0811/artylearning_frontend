@@ -59,13 +59,17 @@ function InvoiceView() {
           : src;
       }, "")
     : "";
-    console.log("QR Code:", qrCodeUrl);
+  console.log("QR Code:", qrCodeUrl);
 
   const uenNumber = centerData
     ? centerData.find((center) => parseInt(data.centerId) === center.id)
         ?.uenNumber || "--"
     : "";
- 
+    const invoiceNotes = centerData
+    ? centerData.find((center) => parseInt(data.centerId) === center.id)
+        ?.invoiceNotes || "--"
+    : "";
+
   const generatePDF = async (qrCodeUrl) => {
     try {
       const doc = new jsPDF();
@@ -87,9 +91,14 @@ function InvoiceView() {
       doc.text(`Student Id : ${data.studentUniqueId || " "}`, 14, 100);
       doc.text(`Course Name : ${data.courseName || " "}`, 120, 80);
       doc.text(
-        `Due Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
+        `Invoice Date : ${data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"}`,
         120,
         90
+      );
+      doc.text(
+        `Due Date : ${data.dueDate ? data.dueDate.substring(0, 10) : "--"}`,
+        120,
+        100
       );
 
       doc.setFont("helvetica", "bold");
@@ -185,19 +194,19 @@ function InvoiceView() {
       // Add Remarks at the end
       const finalY = nextLineY + 80;
 
-      // "Remark" in bold
+      // "Invoice Notes" in bold
       doc.setFont("helvetica", "bold");
-      doc.text("Remark:", 14, finalY);
+      doc.text("Invoice Notes:", 14, finalY);
 
-      // Remark text in normal (light) style
+      // Invoice Notes text in normal (light) style
       doc.setFont("helvetica", "normal");
-      const remarkText = doc.splitTextToSize(
-        data.remark || "--",
+      const invoiceNotes = doc.splitTextToSize(
+        data.invoiceNotes || "--",
         170 // Width of the text area where you want to wrap the text
       );
 
-      // Display the remark text starting right after the bold "Remark:"
-      doc.text(remarkText, 34, finalY);
+      // Display the invoiceNotes text starting right after the bold "invoiceNotes:"
+      doc.text(invoiceNotes, 34, finalY);
 
       // Save the PDF
       doc.save(`${data.invoiceNumber}.pdf`);
@@ -352,6 +361,15 @@ function InvoiceView() {
             <div className="col-lg-6 col-md-6 col-12">
               <div className="row my-1">
                 <div className="col-6 ">
+                  <p>Invoice Date</p>
+                </div>
+                <div className="col-6">
+                  - &nbsp;{" "}
+                  {data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"}
+                </div>
+              </div>
+              <div className="row my-1">
+                <div className="col-6 ">
                   <p>Due Date</p>
                 </div>
                 <div className="col-6">
@@ -364,12 +382,6 @@ function InvoiceView() {
                 </div>
                 <div className="col-6">- &nbsp; {data.courseName || "--"}</div>
               </div>
-              {/* <div className="row my-1">
-                <div className="col-6 ">
-                  <p>Course Id</p>
-                </div>
-                <div className="col-6">- &nbsp; {data.courseId || "--"}</div>
-              </div> */}
             </div>
           </div>
         </div>
@@ -429,12 +441,20 @@ function InvoiceView() {
           </div>
         </div>
         <div className="row mt-5 ms-2">
-          <h5>Remark</h5>
+          {/* <h5>Remark</h5> */}
+          <div className="col-lg-8 col-md-8 col-12 mt-5">
+            <div>
+              <h5>Remarks:</h5>
+              <div className="container">
+                <p>{data.remark || "--"}</p>
+              </div>
+            </div>
+          </div>
           <div className="col-lg-8 col-md-8 col-12 mt-5">
             <div>
               <h5>Notes:</h5>
               <div className="container">
-                <p>{data.remark || "--"}</p>
+                <p>{invoiceNotes || "--"}</p>
               </div>
             </div>
           </div>

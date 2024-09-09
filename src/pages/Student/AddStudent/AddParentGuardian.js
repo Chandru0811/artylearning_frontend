@@ -135,19 +135,6 @@ const AddParentGuardian = forwardRef(
             if (!formData.parentInformation) {
               formik.setFieldValue("parentInformation", [
                 {
-                  parentNames: leadData.fathersFullName || "",
-                  parentDateOfBirths:
-                    leadData?.fathersDateOfBirth?.substring(0, 10) || "",
-                  emails: leadData.fathersEmailAddress || "",
-                  relations: "Father" || "",
-                  occupations: leadData.fathersOccupation || "",
-                  files: null || "",
-                  mobileNumbers: leadData.fathersMobileNumber || "",
-                  addresses: leadData.addressOfAuthorisedPerson || "",
-                  postalCodes :leadData.postalCode || "",
-                  primaryContacts: leadData.primaryContactFather || "",
-                },
-                {
                   parentNames: leadData.mothersFullName || "",
                   parentDateOfBirths:
                     leadData?.mothersDateOfBirth?.substring(0, 10) || "",
@@ -156,10 +143,23 @@ const AddParentGuardian = forwardRef(
                   occupations: leadData.mothersOccupation || "",
                   files: null || "",
                   mobileNumbers: leadData.mothersMobileNumber || "",
-                  addresses: leadData.addressOfAuthorisedPerson,
+                  addresses: leadData.address,
                   postalCodes :leadData.postalCode || "",
                   primaryContacts: leadData.primaryContactMother || ""
                 },
+                {
+                  parentNames: leadData.fathersFullName || "",
+                  parentDateOfBirths:
+                    leadData?.fathersDateOfBirth?.substring(0, 10) || "",
+                  emails: leadData.fathersEmailAddress || "",
+                  relations: "Father" || "",
+                  occupations: leadData.fathersOccupation || "",
+                  files: null || "",
+                  mobileNumbers: leadData.fathersMobileNumber || "",
+                  addresses: leadData.address || "",
+                  postalCodes :leadData.postalCode || "",
+                  primaryContacts: leadData.primaryContactFather || "",
+                }
               ]);
               setRows(2);
               setSelectedPrimaryContactIndex(leadData.primaryContactFather ? 0 : 1)

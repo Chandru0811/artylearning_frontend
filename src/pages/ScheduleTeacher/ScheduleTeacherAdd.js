@@ -22,7 +22,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
 
   const handleClose = () => {
@@ -418,7 +418,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     </div>
                   )}
                 </div>
-                <div className="col-md-6 col-12 mb-2">
+                {/* <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Days<span className="text-danger">*</span>
                   </label>
@@ -434,8 +434,8 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   {formik.touched.days && formik.errors.days && (
                     <div className="invalid-feedback">{formik.errors.days}</div>
                   )}
-                </div>
-                {/* <div className="col-md-6 col-12 mb-2">
+                </div> */}
+                <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Days<span className="text-danger">*</span>
                   </label>
@@ -459,7 +459,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   {formik.touched.days && formik.errors.days && (
                     <div className="invalid-feedback">{formik.errors.days}</div>
                   )}
-                </div> */}
+                </div>
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Class Room<span className="text-danger">*</span>

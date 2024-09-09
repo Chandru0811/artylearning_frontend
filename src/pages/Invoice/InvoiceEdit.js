@@ -10,7 +10,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
-
+import { IoMdTrash } from "react-icons/io";
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Select a Centre"),
   parent: Yup.string().required("*Select a parent"),
@@ -25,8 +25,9 @@ const validationSchema = Yup.object({
   receiptAmount: Yup.number()
     .required("*Receipt Amount is required")
     .typeError("*Must be a Number"),
-    remark: Yup.string()
-    .max(200, "*The maximum length is 200 characters").notRequired(),
+  remark: Yup.string()
+    .max(200, "*The maximum length is 200 characters")
+    .notRequired(),
 });
 
 export default function InvoiceEdit() {
@@ -39,7 +40,7 @@ export default function InvoiceEdit() {
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {
@@ -111,8 +112,7 @@ export default function InvoiceEdit() {
           taxType: item.taxType,
           gstAmount: parseFloat(item.gstAmount), // Ensure numerical values are parsed correctly
           totalAmount: parseFloat(item.totalAmount), // Ensure numerical values are parsed correctly
-          updatedBy:userName,
-
+          updatedBy: userName,
         })),
       };
       try {
@@ -208,7 +208,6 @@ export default function InvoiceEdit() {
     fetchStudent(centerId);
   };
 
- 
   // NEW Code
   const handleSelectChange = (index, value) => {
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
@@ -217,7 +216,7 @@ export default function InvoiceEdit() {
       parseFloat(formik.values.invoiceItems[index]?.totalAmount) || 0;
 
     // Recalculate itemAmount based on totalAmount and gstRate
-    const gstAmount = (totalAmount * gstRate) / 100 ;
+    const gstAmount = (totalAmount * gstRate) / 100;
     const itemAmount = totalAmount - gstAmount;
 
     const updatedRows = [...rows];
@@ -247,14 +246,16 @@ export default function InvoiceEdit() {
 
   const handelTotalAmountChange = (index, value) => {
     const selectedTaxType = formik.values.invoiceItems[index]?.taxType;
-    const selectedTax = taxData.find((tax) => tax.id === parseInt(selectedTaxType));
-  
+    const selectedTax = taxData.find(
+      (tax) => tax.id === parseInt(selectedTaxType)
+    );
+
     const gstRate = selectedTax ? selectedTax.rate : 0;
     const totalAmount = parseFloat(value) || 0;
-    const itemAmount1 = (totalAmount) * (gstRate) / 100;
-    const gstAmount = itemAmount1
+    const itemAmount1 = (totalAmount * gstRate) / 100;
+    const gstAmount = itemAmount1;
     const itemAmount = totalAmount - gstAmount;
-  
+
     const updatedRows = [...rows];
     updatedRows[index] = {
       ...updatedRows[index],
@@ -263,12 +264,17 @@ export default function InvoiceEdit() {
       totalAmount: value,
     };
     setRows(updatedRows);
-  
-    formik.setFieldValue(`invoiceItems[${index}].itemAmount`, itemAmount.toFixed(2));
-    formik.setFieldValue(`invoiceItems[${index}].gstAmount`, gstAmount.toFixed(2));
+
+    formik.setFieldValue(
+      `invoiceItems[${index}].itemAmount`,
+      itemAmount.toFixed(2)
+    );
+    formik.setFieldValue(
+      `invoiceItems[${index}].gstAmount`,
+      gstAmount.toFixed(2)
+    );
     formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
-  
 
   useEffect(() => {
     const getData = async () => {
@@ -322,7 +328,10 @@ export default function InvoiceEdit() {
     formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
   }, [formik.values.invoiceItems]);
 
-  const handleRowDelete = (index) => {
+  const handleRowDelete = async (index) => {
+    const itemToDelete = formik.values.invoiceItems[index];
+    console.log("itemToDelete:",itemToDelete);
+    
     const updatedInvoiceItems = formik.values.invoiceItems.filter(
       (_, i) => i !== index
     );
@@ -330,6 +339,17 @@ export default function InvoiceEdit() {
     // Update the rows and formik values
     setRows(updatedInvoiceItems);
     formik.setFieldValue("invoiceItems", updatedInvoiceItems);
+
+    try {
+      const response = await api.delete(`deleteInvoiceItems/${itemToDelete.id}`);
+      if (response.status === 201) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error deleting data:", error);
+    }
   };
 
   return (
@@ -519,55 +539,56 @@ export default function InvoiceEdit() {
                     height: "7rem",
                   }}
                   maxLength={200}
-
                 />
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-12 px-5">
-            <div className="text-start mt-3">
-  <label htmlFor="" className="mb-1 fw-medium">
-    Invoice Date<span className="text-danger">*</span>
-  </label>
-  <br />
-  <input
-    {...formik.getFieldProps("invoiceDate")}
-    className={`form-control ${
-      formik.touched.invoiceDate && formik.errors.invoiceDate
-        ? "is-invalid"
-        : ""
-    }`}
-    type="date"
-  />
-  {formik.touched.invoiceDate && formik.errors.invoiceDate && (
-    <div className="invalid-feedback">
-      {formik.errors.invoiceDate}
-    </div>
-  )}
-</div>
+              <div className="text-start mt-3">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  Invoice Date<span className="text-danger">*</span>
+                </label>
+                <br />
+                <input
+                  {...formik.getFieldProps("invoiceDate")}
+                  className={`form-control ${
+                    formik.touched.invoiceDate && formik.errors.invoiceDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  type="date"
+                />
+                {formik.touched.invoiceDate && formik.errors.invoiceDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.invoiceDate}
+                  </div>
+                )}
+              </div>
 
-<div className="text-start mt-3">
-  <label htmlFor="" className="mb-1 fw-medium">
-    Due Date<span className="text-danger">*</span>
-  </label>
-  <br />
-  <input
-    {...formik.getFieldProps("dueDate")}
-    className={`form-control ${
-      formik.touched.dueDate && formik.errors.dueDate
-        ? "is-invalid"
-        : ""
-    }`}
-    type="date"
-    // Set the minimum due date to the selected invoice date
-    min={formik.values.invoiceDate || new Date().toISOString().split("T")[0]} 
-  />
-  {formik.touched.dueDate && formik.errors.dueDate && (
-    <div className="invalid-feedback">
-      {formik.errors.dueDate}
-    </div>
-  )}
-</div>
-
+              <div className="text-start mt-3">
+                <label htmlFor="" className="mb-1 fw-medium">
+                  Due Date<span className="text-danger">*</span>
+                </label>
+                <br />
+                <input
+                  {...formik.getFieldProps("dueDate")}
+                  className={`form-control ${
+                    formik.touched.dueDate && formik.errors.dueDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  type="date"
+                  // Set the minimum due date to the selected invoice date
+                  min={
+                    formik.values.invoiceDate ||
+                    new Date().toISOString().split("T")[0]
+                  }
+                />
+                {formik.touched.dueDate && formik.errors.dueDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.dueDate}
+                  </div>
+                )}
+              </div>
 
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
@@ -583,7 +604,6 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
- 
                   type="date"
                 />
                 {formik.touched.invoicePeriodFrom &&
@@ -607,7 +627,6 @@ export default function InvoiceEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
- 
                   type="date"
                 />
                 {formik.touched.invoicePeriodTo &&
@@ -681,6 +700,9 @@ export default function InvoiceEdit() {
                       <th>
                         Total Amount (Inc GST)
                         <span className="text-danger">*</span>
+                      </th>
+                      <th>
+                        Action
                       </th>
                     </tr>
                   </thead>
@@ -789,6 +811,15 @@ export default function InvoiceEdit() {
                             }
                           />
                         </td>
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-white border-danger btn-sm rounded-5"
+                            onClick={() => handleRowDelete(index)}
+                          >
+                            <IoMdTrash className="fs-6 text-danger"/>
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -799,7 +830,7 @@ export default function InvoiceEdit() {
 
           <div className="row mt-3">
             <div className="col-12 text-end mt-3">
-            {rows.length > 1 && (
+              {rows.length > 1 && (
                 <button
                   type="button"
                   className="btn btn-sm mx-2 text-danger border-danger bg-white"
