@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
 
 const SalaryEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName');
 
     const [salaryTypeData, setSalaryTypeData] = useState(null);
     const fetchData = async () => {
@@ -37,8 +37,8 @@ const SalaryEdit = forwardRef(
       initialValues: {
         salary: "",
         effectiveDate: "",
-        salaryType: "",
-        updatedBy:userName,
+        salaryTypeId: "",
+        updatedBy: userName,
 
       },
       validationSchema: validationSchema,
@@ -69,9 +69,9 @@ const SalaryEdit = forwardRef(
         setLoadIndicators(true);
         console.log("Api Data:", values);
         try {
-          if (values.salaryId !== null) {
+          if (values.salaryInfoId !== null) {
             const response = await api.put(
-              `/updateUserSalaryCreation/${values.salaryId}`,
+              `/updateUserSalaryCreation/${values.salaryInfoId}`,
               values,
               {
                 headers: {
@@ -136,13 +136,14 @@ const SalaryEdit = forwardRef(
           const response = await api.get(
             `/getAllUserById/${formData.staff_id}`
           );
+          console.log("cc", response.data.userSalaryCreationModels[0].id);
           if (
             response.data.userSalaryCreationModels &&
             response.data.userSalaryCreationModels.length > 0
           ) {
             formik.setValues({
               ...response.data.userSalaryCreationModels[0],
-              salaryId: response.data.userSalaryCreationModels[0].id,
+              salaryInfoId: response.data.userSalaryCreationModels[0].id,
               effectiveDate:
                 response.data.userSalaryCreationModels[0].effectiveDate.substring(
                   0,
@@ -151,10 +152,10 @@ const SalaryEdit = forwardRef(
             });
           } else {
             formik.setValues({
-              salaryId: null,
+              salaryInfoId: null,
               salary: "",
               effectiveDate: "",
-              salaryType: "",
+              salaryTypeId: "",
             });
             // console.log("Salary ID:", formik.values.salaryId);
           }
@@ -172,11 +173,11 @@ const SalaryEdit = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <section>
           <div className="container" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>
@@ -214,15 +215,15 @@ const SalaryEdit = forwardRef(
                 <select
                   type="text"
                   className="form-select"
-                  name="salaryType"
+                  name="salaryTypeId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.salaryType}
+                  value={formik.values.salaryTypeId}
                 >
                   <option value=""></option>
                   {salaryTypeData &&
                     salaryTypeData.map((salaryId) => (
-                      <option key={salaryId.id} value={salaryId.salaryType}>
+                      <option key={salaryId.id} value={salaryId.id}>
                         {salaryId.salaryType}
                       </option>
                     ))}

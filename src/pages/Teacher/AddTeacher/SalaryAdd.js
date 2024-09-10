@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 const SalaryAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName');
 
     const fetchData = async () => {
       try {
@@ -37,7 +37,7 @@ const SalaryAdd = forwardRef(
       initialValues: {
         salary: formData.salary || "",
         effectiveDate: formData.effectiveDate || "",
-        salaryType: formData.salaryType || "",
+        salaryTypeId: formData.salaryTypeId || "",
         createdBy: userName,
 
       },
@@ -74,11 +74,11 @@ const SalaryAdd = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <section>
           <div className="container" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>
@@ -116,15 +116,15 @@ const SalaryAdd = forwardRef(
                 <select
                   type="text"
                   className="form-select"
-                  name="salaryType"
+                  name="salaryTypeId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.salaryType}
+                  value={formik.values.salaryTypeId}
                 >
                   <option value=""></option>
                   {salaryTypeData &&
                     salaryTypeData.map((salaryId) => (
-                      <option key={salaryId.id} value={salaryId.salaryType}>
+                      <option key={salaryId.id} value={salaryId.id}>
                         {salaryId.salaryType}
                       </option>
                     ))}

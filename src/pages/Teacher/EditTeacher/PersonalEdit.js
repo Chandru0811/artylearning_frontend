@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), "*Date of Birth cannot be in the future"),
   idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
-  email: Yup.string().email("*Invalid Email").required("*Email is required"),
+  // email: Yup.string().email("*Invalid Email").required("*Email is required"),
   citizenship: Yup.string().required("*CitizenShip is required"),
 });
 const PersonalEdit = forwardRef(
@@ -33,7 +33,7 @@ const PersonalEdit = forwardRef(
         dateOfBirth: formData.dateOfBirth || "",
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
-        email: formData.email || "",
+        // email: formData.email || "",
         citizenship: formData.citizenship || "",
         photo: null || "",
         shortIntroduction: formData.shortIntroduction || "",
@@ -51,7 +51,7 @@ const PersonalEdit = forwardRef(
           formDatas.append("dateOfBirth", data.dateOfBirth);
           formDatas.append("idTypeId", data.idTypeId);
           formDatas.append("idNo", data.idNo);
-          formData.append("email", data.email);
+          // formData.append("email", data.email);
           formDatas.append("citizenship", data.citizenship);
           formDatas.append("photo", data.photo);
           formDatas.append("shortIntroduction", data.shortIntroduction);
