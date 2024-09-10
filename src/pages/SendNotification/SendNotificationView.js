@@ -17,11 +17,11 @@ function SendNotificationView() {
   console.log("Data", data);
 
   const renderAttachment = (attachment) => {
-    if (!attachment || !attachment.attachment) {
+    if (!attachment || !attachment.fileUrl) {
       return <span>No attachment available</span>;
     }
-
-    const url = attachment.attachment;
+    // console.log("firstAttachment", attachment)
+    const url = attachment.fileUrl;
     const extension = url.split(".").pop().toLowerCase();
     const fileName = url.split("/").pop();
 
@@ -241,30 +241,20 @@ function SendNotificationView() {
                 <div className="col-12">
                   <p className="fw-medium">Attachments &nbsp; : &nbsp;</p>
                 </div>
-                {/* {data.smsPushNotificationAttachments && data.smsPushNotificationAttachments.length > 0 ? (
-                    <img
-                      src={data.smsPushNotificationAttachments[0]?.attachment}
-                      alt="Attachment"
-                      style={{ width: '50%', height: '15rem' }}
-                    />
-                  ) : (
-                    <div key={index} className="col-md-4 col-12 mb-2">
-                          {renderAttachment(attachment)}
-                        </div>
-                  )} */}
-                <span className="text-dark">
+                {data.attachments && data.attachments.length > 0 ? (
                   <div className="row">
-                    {data.smsPushNotificationAttachments?.map(
-                      (attachment, index) => (
-                        <div key={index} className="col-md-3 col-12 mb-2">
-                          {renderAttachment(attachment)}
-                        </div>
-                      )
-                    )}
+                    {data.attachments.map((attachment, index) => (
+                      <div key={index} className="col-md-3 col-12 mb-2">
+                        {renderAttachment(attachment)}
+                      </div>
+                    ))}
                   </div>
-                </span>
+                ) : (
+                  <p className="text-muted">No attachments available</p>
+                )}
               </div>
             </div>
+
           </div>
         </div>
       </div>
