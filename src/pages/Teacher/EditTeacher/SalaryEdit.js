@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 const SalaryEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem('userName');
-
+    const [id, setId] = useState();
     const [salaryTypeData, setSalaryTypeData] = useState(null);
     const fetchData = async () => {
       try {
@@ -32,6 +32,7 @@ const SalaryEdit = forwardRef(
     useEffect(() => {
       fetchData();
     }, []);
+    console.log("first", id)
 
     const formik = useFormik({
       initialValues: {
@@ -69,9 +70,9 @@ const SalaryEdit = forwardRef(
         setLoadIndicators(true);
         console.log("Api Data:", values);
         try {
-          if (values.salaryInfoId !== null) {
+          if (id) {
             const response = await api.put(
-              `/updateUserSalaryCreation/${values.salaryInfoId}`,
+              `/updateUserSalaryCreation/${id}`,
               values,
               {
                 headers: {
@@ -136,11 +137,14 @@ const SalaryEdit = forwardRef(
           const response = await api.get(
             `/getAllUserById/${formData.staff_id}`
           );
-          console.log("cc", response.data.userSalaryCreationModels[0].id);
+          console.log("ofirst", response)
           if (
             response.data.userSalaryCreationModels &&
             response.data.userSalaryCreationModels.length > 0
           ) {
+
+            console.log("cc", response.data.userSalaryCreationModels[0].id);
+            setId(response.data.userSalaryCreationModels[0].id)
             formik.setValues({
               ...response.data.userSalaryCreationModels[0],
               salaryInfoId: response.data.userSalaryCreationModels[0].id,
@@ -166,7 +170,7 @@ const SalaryEdit = forwardRef(
       // console.log(formik.values);
       getData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [formData]);
 
     useImperativeHandle(ref, () => ({
       salaryEdit: formik.handleSubmit,

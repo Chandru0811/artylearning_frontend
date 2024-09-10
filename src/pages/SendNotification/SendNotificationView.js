@@ -170,10 +170,10 @@ function SendNotificationView() {
                   <p className="fw-medium">Centre</p>
                 </div>
                 <div className="col-6">
-                  <span>&nbsp; : &nbsp;</span>
+
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      {data?.centerIds?.map(center => center.centerName).join(", ")}
+                      &nbsp; : &nbsp;{data?.centerIds?.map(center => center.centerName).join(", ")}
                     </p>
                   </div>
                 </div>
@@ -186,10 +186,9 @@ function SendNotificationView() {
                   <p className="fw-medium">Course</p>
                 </div>
                 <div className="col-6">
-                  <span>&nbsp; : &nbsp;</span>
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      {data?.courseIds?.map(course => course.courseName).join(", ")}
+                      &nbsp; : &nbsp;{data?.courseIds?.map(course => course.courseName).join(", ")}
                     </p>
                   </div>
                 </div>
@@ -202,10 +201,10 @@ function SendNotificationView() {
                   <p className="fw-medium">Class</p>
                 </div>
                 <div className="col-6">
-                  <span>&nbsp; : &nbsp;</span>
+
                   <div className="col-6 text-start">
                     <p className="text-muted text-sm">
-                      {data?.classIds?.map(cls => cls.className).join(", ")}
+                      &nbsp; : &nbsp;{data?.classIds?.map(cls => cls.className).join(", ")}
                     </p>
                   </div>
                 </div>

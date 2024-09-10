@@ -29,13 +29,13 @@ function SendNotificationEdit() {
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem('userName');
 
 
   const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
   const courseOptions = courseData.map(course => ({ label: course.courseName, value: course.courseId }));
   const classOptions = classData.map(classes => ({ label: classes.className, value: classes.classId }));
- console.log("centerdta",centerData)
+  console.log("centerdta", centerData)
   useEffect(() => {
     fetchAllCentersWithIds().then(setCenterData).catch(error => toast.error(error.message));
   }, []);
@@ -175,11 +175,11 @@ function SendNotificationEdit() {
 
   return (
     <div className="container">
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/sendNotification">
             <button type="button" className="btn btn-sm btn-border">
@@ -347,7 +347,7 @@ function SendNotificationEdit() {
 
             <div class="col-md-6 col-12 mb-4">
               <label className="form-label">Attachement</label>
-              <span className="text-danger">*</span>
+
               <input
                 type="file"
                 multiple

@@ -39,7 +39,7 @@ const StaffPersonalEdit = forwardRef(
         photo: null || "",
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
-        email : formData.email || "",
+        email: formData.email || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -316,7 +316,7 @@ const StaffPersonalEdit = forwardRef(
               </div>
             </div>
           </div>
-          <div class="container row d-flex my-4 justify-align-content-around">
+          {/* <div class="container row d-flex my-4 justify-align-content-around">
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Email Id<span class="text-danger">*</span>
@@ -337,7 +337,7 @@ const StaffPersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
           <div class="container row d-flex my-4 justify-align-content-around"></div>
           <div class="container row d-flex justify-content-start align-items-center">
             <div class="form-group  col-sm ">
