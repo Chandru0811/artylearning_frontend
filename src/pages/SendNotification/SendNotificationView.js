@@ -60,7 +60,7 @@ function SendNotificationView() {
           <div className="card-body">
             <div className="row">
               <div className="col-md-8 col-12 text-end">
-                <p>{label}</p>
+                <p>{fileName}</p>
               </div>
               <div className="col-md-4 col-12 text-end">
                 <p>
@@ -80,14 +80,7 @@ function SendNotificationView() {
           <Delete path={`/deleteSmsPushNotifications/${deletedId}`} id={attachmentId} onSuccess={getData} />
           <Delete id={attachmentId} onSuccess={getData} />
         </div> */}
-        <div className="row">
-          <div className="col-6">
-            <p className="fw-medium">File Name</p>
-          </div>
-          <div className="col-6">
-            &nbsp; : &nbsp;{fileName}
-          </div>
-        </div>
+
       </div>
     );
 
