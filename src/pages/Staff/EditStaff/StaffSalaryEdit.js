@@ -81,7 +81,7 @@ const StaffSalaryEdit = forwardRef(
             }
           }
         } catch (error) {
-          toast.error(error.message || "Error submitting data");
+          toast.error(error);
         } finally {
           setLoadIndicators(false);
         }
@@ -120,7 +120,7 @@ const StaffSalaryEdit = forwardRef(
             });
           }
         } catch (error) {
-          toast.error("Error fetching data");
+          console.error("Error fetching data:", error);
         }
       };
 

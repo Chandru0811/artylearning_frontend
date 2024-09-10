@@ -80,6 +80,14 @@ function SendNotificationView() {
           <Delete path={`/deleteSmsPushNotifications/${deletedId}`} id={attachmentId} onSuccess={getData} />
           <Delete id={attachmentId} onSuccess={getData} />
         </div> */}
+        <div className="row">
+          <div className="col-6">
+            <p className="fw-medium">File Name</p>
+          </div>
+          <div className="col-6">
+            &nbsp; : &nbsp;{fileName}
+          </div>
+        </div>
       </div>
     );
 
@@ -244,7 +252,7 @@ function SendNotificationView() {
                 {data.attachments && data.attachments.length > 0 ? (
                   <div className="row">
                     {data.attachments.map((attachment, index) => (
-                      <div key={index} className="col-md-3 col-12 mb-2">
+                      <div key={index} className="col-md-6 col-12 mb-2">
                         {renderAttachment(attachment)}
                       </div>
                     ))}
