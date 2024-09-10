@@ -73,13 +73,13 @@ function SendNotificationView() {
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           className="delete-icon-container"
           style={{ marginLeft: "10px", marginBottom: "8rem" }}
         >
-          {/* <Delete path={`/deleteSmsPushNotifications/${deletedId}`} id={attachmentId} onSuccess={getData} /> */}
+          <Delete path={`/deleteSmsPushNotifications/${deletedId}`} id={attachmentId} onSuccess={getData} />
           <Delete id={attachmentId} onSuccess={getData} />
-        </div>
+        </div> */}
       </div>
     );
 
