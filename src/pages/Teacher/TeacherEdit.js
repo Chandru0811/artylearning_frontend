@@ -70,11 +70,6 @@ export default function TeacherEdit() {
           childRef.current.contactEdit();
         }
         break;
-      // case "3":
-      //   if (childRef.current) {
-      //     childRef.current.loginEdit();
-      //   }
-      //   break;
       case "3":
         if (childRef.current) {
           childRef.current.requireEdit();
@@ -172,15 +167,6 @@ export default function TeacherEdit() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {/* {activeStep === 3 && (
-                <LoginEdit
-                  formData={formData}
-                  ref={childRef}
-                  setFormData={setFormData}
-                  handleNext={handleNext}
-                  setLoadIndicators={setLoadIndicator}
-                />
-              )} */}
               {activeStep === 3 && (
                 <RequiredEdit
                   formData={formData}
