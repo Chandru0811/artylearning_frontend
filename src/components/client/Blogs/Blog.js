@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import img4 from "../../assets/clientimage/parent-img.jpeg";
+import img4 from "../../../assets/clientimage/parent-img.jpeg";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import api from "../../config/URL";
+import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("*Name is required"),
@@ -14,28 +14,26 @@ const validationSchema = Yup.object().shape({
   message: Yup.string().required("*Message is required"),
 });
 
-const Blog = ({datas}) => {
-  console.log("datas",datas)
+const Blog = ({ datas }) => {
+  console.log("datas", datas);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
       message: "",
-      createdBy:"",
-      createdAt:"",
+      createdBy: "",
+      createdAt: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.post(`/createContactUs`,values,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await api.post(`/createContactUs`, values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (response.status === 201) {
           toast.success(response.data.message);
           formik.resetForm();
@@ -56,31 +54,42 @@ const Blog = ({datas}) => {
         {/* Main Content Section */}
         <div className="col-md-9 col-12">
           <h1 className="mt-3">Discover Our Latest Posts</h1>
-          <div className="blog-post mb-4">
+          {/* <div className="blog-post mb-4">
+          <h4 className="mt-3">(parentName)</h4>
             <Link to="/blog/view">
               <img
                 src={img4}
                 className="img-fluid py-3 rounded"
                 alt="Article"
+                name="parentImage"
               />
             </Link>
-            <h3 className="mb-2">How to... Host the best New Year's event</h3>
-            <p className="text-muted">Ryan Mooss | 29th Nov 2022</p>
-          </div>
-
-          <div className="blog-post mb-4">
-            <Link to="/blog/view">
-              <img
-                src={img4}
-                className="img-fluid py-3 rounded"
-                alt="Article"
-              />
-            </Link>
-            <h3 className="mb-2">
-              How to... List a screening event for the 2022 World Cup final
-            </h3>
-            <p className="text-muted">Ryan Mooss | 29th Nov 2022</p>
-          </div>
+            <h3 className="mb-2">parentDescription</h3>
+            <p className="text-muted">createdBy | createdAt</p>
+          </div> */}
+          {datas && datas.length > 0 ? (
+            datas.map((data) => (
+              <div className="blog-post mb-4" key={data.id}>
+                <h4 className="mt-3">{data.title}</h4>
+                <Link to={`/blog/view/${data.id}`}>
+                  <img
+                    src={data.imagerOne || img4} // Use the provided image or fallback to a default one
+                    className="img-fluid py-3 rounded"
+                    alt={data.parentName}
+                  />
+                </Link>
+                <p className="mb-2">{data.description}</p>
+                <p className="text-muted">
+                  {data.createdBy || "Anonymous"} |{" "}
+                  {data.createdAt
+                    ? new Date(data.createdAt).toLocaleDateString()
+                    : "Unknown Date"}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p>No posts available</p>
+          )}
         </div>
 
         {/* Sidebar Section */}

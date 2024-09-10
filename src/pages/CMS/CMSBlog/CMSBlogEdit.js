@@ -18,13 +18,13 @@ function CMSBlogEdit({ id, onSuccess }) {
   const handleShow = () => setShow(true);
 
   const initialValues = {
-    file: null,
+    imagerOne: null,
     description: "",
     title: "",
   };
 
   const validationSchema = Yup.object().shape({
-    file: Yup.mixed().required("Image file is required"),
+    imagerOne: Yup.mixed().required("Image is required"),
     description: Yup.string().required("Image details are required"),
     title: Yup.string().required("Image details are required"),
   });
@@ -35,7 +35,7 @@ function CMSBlogEdit({ id, onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       const formData = new FormData();
-      formData.append("file", values.file);
+      formData.append("file", values.imagerOne);
       formData.append("description", values.description);
       formData.append("title", values.title);
       formData.append("updatedBy ", userName);
@@ -64,11 +64,11 @@ function CMSBlogEdit({ id, onSuccess }) {
     try {
       const response = await api.get(`/getBlogSaveById/${id}`);
       formik.setValues({
-        file: response.data.file,
+        imagerOne: response.data.imagerOne,
         description: response.data.description,
         title: response.data.title,
       });
-      setSelectedFile(response.data.file);
+      setSelectedFile(response.data.imagerOne);
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
     }
@@ -83,7 +83,7 @@ function CMSBlogEdit({ id, onSuccess }) {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue("file", file);
+    formik.setFieldValue("imagerOne", file);
   };
 
   return (
@@ -94,7 +94,7 @@ function CMSBlogEdit({ id, onSuccess }) {
 
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.file className="headColor">Edit Blog</Modal.file>
+          <Modal.Title  className="headColor">Edit Blog</Modal.Title >
         </Modal.Header>
          <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
@@ -104,19 +104,19 @@ function CMSBlogEdit({ id, onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
-                <label htmlFor="file" className="form-label">
+                <label htmlFor="imagerOne" className="form-label">
                   Upload Image
                 </label>
                 <input
                   type="file"
-                  id="file"
-                  name="file"
+                  id="imagerOne"
+                  name="imagerOne"
                   className="form-control"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.file && formik.errors.file && (
-                  <div className="text-danger">{formik.errors.file}</div>
+                {formik.touched.imagerOne && formik.errors.imagerOne && (
+                  <div className="text-danger">{formik.errors.imagerOne}</div>
                 )}
               </div>
               {selectedFile && (
@@ -138,7 +138,7 @@ function CMSBlogEdit({ id, onSuccess }) {
               )}
               <div className="mb-3">
                 <label htmlFor="title" className="form-label">
-                  Blog file
+                  Blog Title
                 </label>
                 <input
                   id="title"

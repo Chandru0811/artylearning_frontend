@@ -70,7 +70,7 @@ const CMSBlog = () => {
     setLoading(false);
   };
 
-  const testimonialPublish = async () => {
+  const blogsPublish = async () => {
     for (const data of datas) {
       const formData = new FormData();
       formData.append("description", data.description); // Access individual data properties
@@ -78,7 +78,7 @@ const CMSBlog = () => {
       formData.append("file", data.imagerOne); // Ensure file property is properly assigned
 
       try {
-        const response = await api.post("/createBlogSavePublish", formData, {
+        const response = await api.post("/publishBlogSave", {
           headers: {
             "Content-Type": "multipart/form-data", // For file uploads
           },
@@ -104,7 +104,7 @@ const CMSBlog = () => {
             {storedScreens?.testimonialCreate && (
               <CMSBlogAdd onSuccess={refreshData} />)}
             {storedScreens?.testimonialIndex && (
-              <button onClick={testimonialPublish} className="btn btn-sm btn-outline-danger border ms-2" style={{ whiteSpace: 'nowrap' }}>
+              <button onClick={blogsPublish} className="btn btn-sm btn-outline-danger border ms-2" style={{ whiteSpace: 'nowrap' }}>
                 Publish
               </button>
             )}

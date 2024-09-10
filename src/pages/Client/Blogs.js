@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Blog from "../CMS/Blog";
+import Blog from "../../components/client/Blogs/Blog";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 
-function Blog1() {
-  // const [datas, setDatas] = useState([]);
-  const datas = "hello"
+function Blogs() {
+  const [datas, setDatas] = useState([]);
+  // const datas = "hello"
+
+  console.log("Blog Data:",datas);
 
   const getData = async () => {
     try {
       const response = await api.get(`/getAllBlogSavePublish`);
-      // setDatas(response.data);
+      setDatas(response.data);
     } catch (error) {
       toast.error("Error Fetch Data ", error);
     }
@@ -25,4 +27,4 @@ function Blog1() {
   );
 }
 
-export default Blog1;
+export default Blogs;
