@@ -17,8 +17,10 @@ import PrivacyPolicy from "../pages/Client/PrivacyPolicy";
 import TermsConditions from "../pages/Client/TermsConditions";
 import Login from "../pages/auth/Login.js";
 import { ToastContainer } from "react-toastify";
-import Blog from "../pages/CMS/Blog.js";
-import BlogView from "../pages/CMS/BlogView.js";
+import Blog from "../components/client/Blogs/Blog.js";
+import BlogView from "../components/client/Blogs/BlogView.js";
+import Blog1 from "../pages/Client/Blogs.js";
+import Blogs from "../pages/Client/Blogs.js";
 function Auth({ handleLogin }) {
   return (
     <BrowserRouter>
@@ -38,8 +40,8 @@ function Auth({ handleLogin }) {
         <Route path="/course/chinesh" element={<ChineshCourse />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />
         <Route path="/terms&conditions" element={<TermsConditions />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/view" element={<BlogView />} />
+        <Route path="/blog" element={<Blogs />} />
+        <Route path="/blog/view/:id" element={<BlogView />} />
         <Route path="*" element={<Login onLogin={handleLogin} />} />
       </Routes>
       <Footer />

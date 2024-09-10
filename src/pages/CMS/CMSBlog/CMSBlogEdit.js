@@ -18,15 +18,15 @@ function CMSBlogEdit({ id, onSuccess }) {
   const handleShow = () => setShow(true);
 
   const initialValues = {
-    parentImage: null,
-    parentDescription: "",
-    parentName: "",
+    imagerOne: null,
+    description: "",
+    title: "",
   };
 
   const validationSchema = Yup.object().shape({
-    parentImage: Yup.mixed().required("Image file is required"),
-    parentDescription: Yup.string().required("Image details are required"),
-    parentName: Yup.string().required("Image details are required"),
+    imagerOne: Yup.mixed().required("Image is required"),
+    description: Yup.string().required("Image details are required"),
+    title: Yup.string().required("Image details are required"),
   });
 
   const formik = useFormik({
@@ -35,14 +35,14 @@ function CMSBlogEdit({ id, onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       const formData = new FormData();
-      formData.append("file", values.parentImage);
-      formData.append("parentDescription", values.parentDescription);
-      formData.append("parentName", values.parentName);
+      formData.append("file", values.imagerOne);
+      formData.append("description", values.description);
+      formData.append("title", values.title);
       formData.append("updatedBy ", userName);
 
       try {
         const response = await api.put(
-          `/updateTestimonialSaveWithProfileImages/${id}`,
+          `/updateUpdateBlogSave/${id}`,
           formData
         );
         if (response.status === 201) {
@@ -62,13 +62,13 @@ function CMSBlogEdit({ id, onSuccess }) {
 
   const getData = async () => {
     try {
-      const response = await api.get(`/getAllTestimonialSaveById/${id}`);
+      const response = await api.get(`/getBlogSaveById/${id}`);
       formik.setValues({
-        parentImage: response.data.parentImage,
-        parentDescription: response.data.parentDescription,
-        parentName: response.data.parentName,
+        imagerOne: response.data.imagerOne,
+        description: response.data.description,
+        title: response.data.title,
       });
-      setSelectedFile(response.data.parentImage);
+      setSelectedFile(response.data.imagerOne);
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
     }
@@ -83,7 +83,7 @@ function CMSBlogEdit({ id, onSuccess }) {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue("parentImage", file);
+    formik.setFieldValue("imagerOne", file);
   };
 
   return (
@@ -94,7 +94,7 @@ function CMSBlogEdit({ id, onSuccess }) {
 
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Blog</Modal.Title>
+          <Modal.Title  className="headColor">Edit Blog</Modal.Title >
         </Modal.Header>
          <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
@@ -104,19 +104,19 @@ function CMSBlogEdit({ id, onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
-                <label htmlFor="parentImage" className="form-label">
+                <label htmlFor="imagerOne" className="form-label">
                   Upload Image
                 </label>
                 <input
                   type="file"
-                  id="parentImage"
-                  name="parentImage"
+                  id="imagerOne"
+                  name="imagerOne"
                   className="form-control"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.parentImage && formik.errors.parentImage && (
-                  <div className="text-danger">{formik.errors.parentImage}</div>
+                {formik.touched.imagerOne && formik.errors.imagerOne && (
+                  <div className="text-danger">{formik.errors.imagerOne}</div>
                 )}
               </div>
               {selectedFile && (
@@ -137,37 +137,39 @@ function CMSBlogEdit({ id, onSuccess }) {
                 </div>
               )}
               <div className="mb-3">
-                <label htmlFor="parentName" className="form-label">
+                <label htmlFor="title" className="form-label">
                   Blog Title
                 </label>
                 <input
-                  id="parentName"
-                  name="parentName"
+                  id="title"
+                  type="text"
+                  name="title"
                   className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.parentName}
+                  value={formik.values.title}
                 />
-                {formik.touched.parentName && formik.errors.parentName && (
-                  <div className="text-danger">{formik.errors.parentName}</div>
+                {formik.touched.title && formik.errors.title && (
+                  <div className="text-danger">{formik.errors.title}</div>
                 )}
               </div>
               <div className="mb-3">
-                <label htmlFor="parentDescription" className="form-label">
+                <label htmlFor="description" className="form-label">
                   Blog Description
                 </label>
                 <textarea
-                  id="parentDescription"
-                  name="parentDescription"
+                  id="description"
+                  name="description"
+                  type="text"
                   className="form-control"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.parentDescription}
+                  value={formik.values.description}
                 />
-                {formik.touched.parentDescription &&
-                  formik.errors.parentDescription && (
+                {formik.touched.description &&
+                  formik.errors.description && (
                     <div className="text-danger">
-                      {formik.errors.parentDescription}
+                      {formik.errors.description}
                     </div>
                   )}
               </div>

@@ -337,6 +337,19 @@ function RolesAdd() {
       salarySettingUpdate: true,
       salarySettingDelete: true,
 
+      blogIndex : true,
+      blogRead : true,
+      blogCreate : true,
+      blogUpdate : true,
+      blogDelete : true,
+      blogPublish : true,
+
+      contactUsSettingIndex: true,
+      contactUsSettingRead: true,
+      contactUsSettingCreate: true,
+      contactUsSettingUpdate: true,
+      contactUsSettingDelete: true
+
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -4190,6 +4203,128 @@ function RolesAdd() {
                           checked={formik.values.contactUsPublish}
                           onChange={handleCheckboxChange(`contactUsPublish`)}
                         />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Blob
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="blogIndex"
+                          checked={formik.values.blogIndex}
+                          onChange={handleCheckboxChange(`blogIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="blogCreate"
+                          checked={formik.values.blogCreate}
+                          onChange={handleCheckboxChange(`blogCreate`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="blogUpdate"
+                          checked={formik.values.blogUpdate}
+                          onChange={handleCheckboxChange(`blogUpdate`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="blogRead"
+                          checked={formik.values.blogRead}
+                          onChange={handleCheckboxChange(`blogRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="blogDelete"
+                          checked={formik.values.blogDelete}
+                          onChange={handleCheckboxChange(`blogDelete`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="blogPublish"
+                          checked={formik.values.blogPublish}
+                          onChange={handleCheckboxChange(`blogPublish`)}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Contacted 
+                        </p>
+                      </td>
+                      <td>
+                        {/* <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="contactUsSettingIndex"
+                          checked={formik.values.contactUsSettingIndex}
+                          onChange={handleCheckboxChange(`contactUsSettingIndex`)}
+                        /> */}
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="contactUsSettingCreate"
+                          checked={formik.values.contactUsSettingCreate}
+                          onChange={handleCheckboxChange(`contactUsSettingCreate`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="contactUsSettingUpdate"
+                          checked={formik.values.contactUsSettingUpdate}
+                          onChange={handleCheckboxChange(`contactUsSettingUpdate`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="contactUsSettingRead"
+                          checked={formik.values.contactUsSettingRead}
+                          onChange={handleCheckboxChange(`contactUsSettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="contactUsSettingDelete"
+                          checked={formik.values.contactUsSettingDelete}
+                          onChange={handleCheckboxChange(`contactUsSettingDelete`)}
+                        />
+                      </td>
+                      <td>
+                        {/* <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="blogPublish"
+                          checked={formik.values.blogPublish}
+                          onChange={handleCheckboxChange(`blogPublish`)}
+                        /> */}
                       </td>
                     </tr>
                   </tbody>

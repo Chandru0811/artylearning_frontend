@@ -282,7 +282,7 @@ function Sidebar() {
           {
             title: "Blog",
             path: "/cms/cmsBlog",
-            access: true,
+            access:storedScreens.blogIndex,
           },
           {
             title: "Testimonial",

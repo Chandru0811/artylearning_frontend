@@ -522,7 +522,7 @@ function Admin({ handleLogout }) {
               {/* CMS Blog */}
               <Route path="/cms/cmsBlog" element={<CMSBlog />} />
               <Route path="/cms/cmsBlog/add" element={<CMSBlogAdd />} />
-              <Route path="/cms/cmsBlog/edit" element={<CMSBlogEdit />} />
+              <Route path="/cms/cmsBlog/edit/:id" element={<CMSBlogEdit />} />
 
               {/* CMS  */}
               <Route path="/cms/footer" element={<CMSFooter />} />
