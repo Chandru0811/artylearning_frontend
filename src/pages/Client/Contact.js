@@ -17,14 +17,38 @@ const validationSchema = Yup.object().shape({
 
 function Contact() {
   const [datas, setDatas] = useState([]);
+  const [loadIndicator, setLoadIndicator] = useState(false);
   const formik = useFormik({
     initialValues: {
       name: "",
       email: "",
       message: "",
+      createdBy: "",
+      createdAt: "",
     },
     validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      setLoadIndicator(true);
+      try {
+        const response = await api.post(`/createContactUs`, values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          formik.resetForm();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
+    },
   });
+
   useEffect(() => {
     const getContactData = async () => {
       try {
@@ -36,6 +60,7 @@ function Contact() {
     };
     getContactData();
   }, []);
+
   console.log(datas);
   return (
     <div className="contact">
@@ -127,11 +152,14 @@ function Contact() {
           <div className="col-md-6 col-12 d-flex align-items-center justify-content-center">
             <div className="card p-3" style={{ width: "100%" }}>
               <div className="card-body">
-                 <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+                <form
+                  onSubmit={formik.handleSubmit}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !formik.isSubmitting) {
+                      e.preventDefault(); // Prevent default form submission
+                    }
+                  }}
+                >
                   <div className="mb-2 form-group">
                     <label className="form-label">
                       <b>
@@ -204,7 +232,15 @@ function Contact() {
                       </div>
                     )}
                   </div>
-                  <button className="btn btn-primary">Submit</button>
+                  <button type="submit" className="btn btn-primary" disabled={loadIndicator}>
+                    {loadIndicator && (
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                    Submit
+                  </button>
                 </form>
               </div>
             </div>

@@ -19,7 +19,7 @@ const steps = [
   { tooltip: "Personal Information" },
   { tooltip: "Account Information" },
   { tooltip: "Contact Information" },
-  { tooltip: "Login Information" },
+  // { tooltip: "Login Information" },
   { tooltip: "Required Information" },
   { tooltip: "Salary Information" },
   { tooltip: "Leave Information" },
@@ -77,25 +77,20 @@ export default function TeacherAdd() {
         break;
       case "3":
         if (childRef.current) {
-          childRef.current.loginAdd();
+          childRef.current.requireAdd();
         }
         break;
       case "4":
         if (childRef.current) {
-          childRef.current.requireAdd();
+          childRef.current.salaryAdd();
         }
         break;
       case "5":
         if (childRef.current) {
-          childRef.current.salaryAdd();
-        }
-        break;
-      case "6":
-        if (childRef.current) {
           childRef.current.leaveAdd();
         }
         break;
-      case "7":
+      case "6":
         if (childRef.current) {
           childRef.current.contractAdd();
         }
@@ -179,15 +174,6 @@ export default function TeacherAdd() {
                 />
               )}
               {activeStep === 3 && (
-                <LoginAdd
-                  formData={formData}
-                  ref={childRef}
-                  setFormData={setFormData}
-                  handleNext={handleNext}
-                  setLoadIndicators={setLoadIndicator}
-                />
-              )}
-              {activeStep === 4 && (
                 <RequiredAdd
                   formData={formData}
                   ref={childRef}
@@ -196,7 +182,7 @@ export default function TeacherAdd() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {activeStep === 5 && (
+              {activeStep === 4 && (
                 <SalaryAdd
                   formData={formData}
                   ref={childRef}
@@ -205,7 +191,7 @@ export default function TeacherAdd() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {activeStep === 6 && (
+              {activeStep === 5 && (
                 <LeaveAdd
                   formData={formData}
                   ref={childRef}
@@ -214,7 +200,7 @@ export default function TeacherAdd() {
                   setLoadIndicators={setLoadIndicator}
                 />
               )}
-              {activeStep === 7 && (
+              {activeStep === 6 && (
                 <ContractAdd
                   formData={formData}
                   ref={childRef}

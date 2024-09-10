@@ -21,24 +21,25 @@ const Blog = () => {
       name: "",
       email: "",
       message: "",
+      createdBy:"",
+      createdAt:"",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      console.log(values);
       try {
-        const response = await api.post(
-          "/createTestimonialSaveWithProfileImages",
-          values,
+        const response = await api.post(`/createContactUs`,values,
           {
-            // headers: {
-            //   "Content-Type": "application/json",
-            // },
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
         );
         if (response.status === 201) {
           toast.success(response.data.message);
           formik.resetForm();
+        } else {
+          toast.error(response.data.message);
         }
       } catch (error) {
         toast.error(error);
@@ -106,8 +107,6 @@ const Blog = () => {
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
                     {...formik.getFieldProps("name")}
                   />
                   {formik.touched.name && formik.errors.name && (
@@ -126,8 +125,6 @@ const Blog = () => {
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
                     {...formik.getFieldProps("email")}
                   />
                   {formik.touched.email && formik.errors.email && (
@@ -148,8 +145,6 @@ const Blog = () => {
                         ? "is-invalid"
                         : ""
                     }`}
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
                     {...formik.getFieldProps("message")}
                   />
                   {formik.touched.message && formik.errors.message && (

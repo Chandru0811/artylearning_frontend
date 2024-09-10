@@ -16,7 +16,7 @@ const Level = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllTestimonialSave");
+        const response = await api.get("/getAllContactUs");
         setDatas(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -59,7 +59,7 @@ const Level = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllTestimonialSave");
+      const response = await api.get("/getAllContactUs");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -181,7 +181,7 @@ const Level = () => {
                   {storedScreens?.levelDelete && (
                     <Delete
                       onSuccess={refreshData}
-                      path={`/deleteCourseLevel/${data.id}`}
+                      path={`/deleteContactUs/${data.id}`}
                     />
                   )}
                 </td>
