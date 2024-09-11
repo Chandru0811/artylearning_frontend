@@ -11,6 +11,11 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { IoMdTrash } from "react-icons/io";
+import { Modal, Button } from "react-bootstrap";
+
+const invoiceItemSchema = Yup.object().shape({
+  item: Yup.string().required("Item name is required"),
+});
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Select a Centre"),
   parent: Yup.string().required("*Select a parent"),
@@ -25,6 +30,10 @@ const validationSchema = Yup.object({
   receiptAmount: Yup.number()
     .required("*Receipt Amount is required")
     .typeError("*Must be a Number"),
+    invoiceItems: Yup.array()
+    .of(invoiceItemSchema)
+    // .min(1, "At least one invoice item is required")
+    .required("Invoice items are required"),
   remark: Yup.string()
     .max(200, "*The maximum length is 200 characters")
     .notRequired(),
@@ -39,6 +48,8 @@ export default function InvoiceEdit() {
   const [studentData, setStudentData] = useState(null);
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
 
@@ -307,50 +318,74 @@ export default function InvoiceEdit() {
 
   useEffect(() => {
     // Calculate total Item Amounts
-    const totalItemAmount = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item.itemAmount || 0),
-      0
-    );
+    const totalItemAmount = formik.values.invoiceItems?.reduce((total, item) => {
+      // Ensure the item is defined and has an itemAmount property
+      if (item && item.itemAmount) {
+        return total + parseFloat(item.itemAmount || 0);
+      }
+      return total;
+    }, 0);
     formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
-
-    // Calculate total Gst
-    const totalGst = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item.gstAmount || 0),
-      0
-    );
+  
+    // Calculate total GST
+    const totalGst = formik.values.invoiceItems?.reduce((total, item) => {
+      // Ensure the item is defined and has a gstAmount property
+      if (item && item.gstAmount) {
+        return total + parseFloat(item.gstAmount || 0);
+      }
+      return total;
+    }, 0);
     formik.setFieldValue("gst", totalGst.toFixed(2));
-
+  
     // Calculate total Amount
-    const totalAmount = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item.totalAmount || 0),
-      0
-    );
+    const totalAmount = formik.values.invoiceItems?.reduce((total, item) => {
+      // Ensure the item is defined and has a totalAmount property
+      if (item && item.totalAmount) {
+        return total + parseFloat(item.totalAmount || 0);
+      }
+      return total;
+    }, 0);
     formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
   }, [formik.values.invoiceItems]);
+  
 
-  const handleRowDelete = async (index) => {
-    const itemToDelete = formik.values.invoiceItems[index];
-    console.log("itemToDelete:",itemToDelete);
-    
-    const updatedInvoiceItems = formik.values.invoiceItems.filter(
-      (_, i) => i !== index
-    );
-
-    // Update the rows and formik values
-    setRows(updatedInvoiceItems);
-    formik.setFieldValue("invoiceItems", updatedInvoiceItems);
-
-    try {
-      const response = await api.delete(`deleteInvoiceItems/${itemToDelete.id}`);
-      if (response.status === 201) {
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error("Error deleting data:", error);
+  const handleRowDelete = (index) => {
+    const selectedItem = formik.values.invoiceItems[index];
+  
+    if (!selectedItem || !selectedItem.item) {
+      const updatedInvoiceItems = formik.values.invoiceItems.filter(
+        (_, i) => i !== index
+      );
+      setRows(updatedInvoiceItems);
+      formik.setFieldValue("invoiceItems", updatedInvoiceItems);
+      return;
+    }
+  // Database data
+    if (selectedItem.id) {
+      setItemToDelete({ ...selectedItem, index });
+      setShowDeleteModal(true);
+    } else {
+      const updatedInvoiceItems = formik.values.invoiceItems.filter(
+        (_, i) => i !== index
+      );
+      setRows(updatedInvoiceItems);
+      formik.setFieldValue("invoiceItems", updatedInvoiceItems);
     }
   };
+
+  const handleAddRow = () => {
+    const newItem = {
+      id: null,
+      item: "",
+      itemAmount: "",
+      taxType: "",
+      gstAmount: "",
+      totalAmount: "",
+    };
+    setRows([...rows, newItem]);
+    formik.setFieldValue("invoiceItems", [...formik.values.invoiceItems, newItem]);
+  };
+  
 
   return (
     <div className="container-fluid">
@@ -701,15 +736,13 @@ export default function InvoiceEdit() {
                         Total Amount (Inc GST)
                         <span className="text-danger">*</span>
                       </th>
-                      <th>
-                        Action
-                      </th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {rows.map((row, index) => (
                       <tr key={index}>
-                        <td>
+                          <td>
                           <input
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].item`
@@ -817,7 +850,7 @@ export default function InvoiceEdit() {
                             className="btn btn-white border-danger btn-sm rounded-5"
                             onClick={() => handleRowDelete(index)}
                           >
-                            <IoMdTrash className="fs-6 text-danger"/>
+                            <IoMdTrash className="fs-6 text-danger" />
                           </button>
                         </td>
                       </tr>
@@ -849,9 +882,7 @@ export default function InvoiceEdit() {
               <button
                 className="btn btn-sm btn-danger me-2"
                 type="button"
-                onClick={() => {
-                  setRows((pr) => [...pr, {}]);
-                }}
+                onClick={handleAddRow}
               >
                 Add Row
               </button>
@@ -921,6 +952,44 @@ export default function InvoiceEdit() {
           </div>
         </div>
       </form>
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this item?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={async () => {
+              // Perform deletion on confirm
+              try {
+                const response = await api.delete(
+                  `deleteInvoiceItems/${itemToDelete.id}`
+                );
+                if (response.status === 201) {
+                  // Remove the item from formik values and rows
+                  const updatedInvoiceItems = formik.values.invoiceItems.filter(
+                    (_, i) => i !== itemToDelete.index
+                  );
+                  setRows(updatedInvoiceItems);
+                  formik.setFieldValue("invoiceItems", updatedInvoiceItems);
+                  toast.success(response.data.message);
+                } else {
+                  toast.error(response.data.message);
+                }
+              } catch (error) {
+                console.error("Error deleting data:", error);
+              }
+              setShowDeleteModal(false); // Close the modal after deletion
+            }}
+          >
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
