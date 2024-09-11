@@ -646,10 +646,12 @@ const StaffContractEdit = forwardRef(
                           formik.values.workingDays &&
                           formik.values.workingDays.includes(day)
                         }
-                        onChange={formik.handleChange}
+                        onChange={(e) => {
+                          formik.handleChange(e);
+                        }}
                         onBlur={formik.handleBlur}
-                        // Disable only if the checkbox is checked
-                        disabled={formik.values.workingDays && formik.values.workingDays.includes(day)}
+                        // Disable only if the form is submitted
+                        disabled={formik.isSubmitting}
                       />
                       <label htmlFor={`myCheckbox${index + 1}`} className="custom-checkbox">
                         <div className="inner-square"></div>
