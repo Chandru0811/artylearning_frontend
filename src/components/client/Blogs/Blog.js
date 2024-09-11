@@ -96,7 +96,7 @@ const Blog = ({ datas }) => {
         <div className="col-md-3 col-12">
           <div className="sticky-top mt-4">
             <div className="sidebar-section my-4">
-              <h4 className="">Contact Us</h4>
+              {/* <h4 className="">Contact Us</h4> */}
               <form
                 onSubmit={formik.handleSubmit}
                 onKeyDown={(e) => {

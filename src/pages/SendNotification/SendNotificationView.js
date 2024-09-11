@@ -219,7 +219,7 @@ function SendNotificationView() {
                 </div>
                 <div className="col-6 text-start">
                   <p className="text-muted text-sm">
-                    &nbsp; : &nbsp;{data.day}
+                    &nbsp; : &nbsp;{data.days}
                   </p>
                 </div>
               </div>

@@ -54,29 +54,19 @@ function LeaveAdminEdit() {
     onSubmit: async (data) => {
       setLoadIndicator(true);
       try {
-        const formDatas = new FormData();
-        formDatas.append("userId", id);
-        // formDatas.append("centerName", data.centerName);
-        // formDatas.append("employeeName", data.employeeName);
-        formDatas.append("leaveTypeId", leaveDatas.leaveTypeId);
-        formDatas.append("noOfDays",daysDifference);
-        // formDatas.append("fromDate", data.fromDate);
-        // formDatas.append("toDate", data.toDate);
-        // formDatas.append("dayType", data.dayType);
-        // formDatas.append("leaveReason", data.leaveReason);
-        formDatas.append("leaveStatus", data.leaveStatus);
-        // formDatas.append("file", data.file);
-
+        const payload = {
+          leaveStatus : data.leaveStatus
+        };
         const response = await api.put(
-          `/updateUserLeaveRequestWithAttachment/${id}`,
-          formDatas,
+          `/updateUserLeaveRequestStatus/${id}`,
+          payload,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
             },
           }
         );
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/leaveadmin");
         } else {

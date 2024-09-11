@@ -122,7 +122,7 @@ const StaffPersonalEdit = forwardRef(
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
-            shortIntroduction: response.data.shortIntroduction || " ",
+            // shortIntroduction: response.data.shortIntroduction || " ",
           });
         } catch (error) {
           toast.error("Error Fetching Data");

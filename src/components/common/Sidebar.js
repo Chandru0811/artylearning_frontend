@@ -81,7 +81,7 @@ function Sidebar() {
             access: storedScreens.leadListingIndex,
           },
           {
-            title: "Contacted",
+            title: "Contacts",
             path: "/lead/contacted",
             access: storedScreens.enrollmentIndex,
           },

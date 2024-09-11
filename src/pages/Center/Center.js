@@ -131,158 +131,158 @@ const Center = () => {
         </div>
       ) : (
         <div className="table-responsive" >
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col">Centre Name</th>
-              {/* <th scope="col">Centre Manager</th> */}
-              <th scope="col">Code</th>
-              <th scope="col">UEN Number</th>
-              <th scope="col">Mobile</th>
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                  S No
                 </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-              <th className="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.centerName}</td>
-                {/* <td> */}
-                {/* {centerManagerData &&
-                    centerManagerData.map((Cmanager) =>
-                      parseInt(data.centerManager) === Cmanager.id
-                        ? Cmanager.userNames || "--"
-                        : ""
-                    )} */}
-                {/* {data.centerManager} */}
-                {/* </td> */}
-                <td>{data.code}</td>
-                <td>{data.uenNumber}</td>
-                <td>{data.mobile}</td>
-                {extraData && <td>{data.createdBy}</td>}
-                  {extraData && <td>{extractDate(data.createdAt)}</td>}
-                  {extraData && <td>{data.updatedBy}</td>}
-                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                <td>
-                  <div className="d-flex justify-content-center align-items-center ">
-                    {storedScreens?.centerListingCreate && (
-                      <div class="dropdown" style={{ display: "inline-block" }}>
-                        <button
-                          class="btn dropdown-toggle"
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <IoMdAdd />
-                        </button>
-                        <ul class="dropdown-menu">
-                          <li>
-                            <AddRegister id={data.id} onSuccess={refreshData} />
-                          </li>
-                          <li style={{ width: "100%" }}>
-                            <AddBreak id={data.id} onSuccess={refreshData} />
-                          </li>
-                          <li style={{ width: "100%" }}>
-                            <AddClass id={data.id} onSuccess={refreshData} />
-                          </li>
-                          <li style={{ width: "100%" }}>
-                            <AddPackage id={data.id} onSuccess={refreshData} />
-                          </li>
-                        </ul>
-                      </div>
-                    )}
-                    {storedScreens?.centerListingRead && (
-                      <Link
-                        to={`/center/view/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      >
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                    )}
-                    {storedScreens?.centerListingUpdate && (
-                      <Link
-                        to={`/center/edit/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      >
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                    )}
-                    {storedScreens?.centerListingDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteCenter/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      />
-                    )}
-                  </div>
-                </td>
+                <th scope="col">Centre Name</th>
+                {/* <th scope="col">Centre Manager</th> */}
+                <th scope="col">Code</th>
+                <th scope="col">UEN Number</th>
+                <th scope="col">Mobile</th>
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th className="text-center">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            {Array.isArray(datas) && datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{data.centerName}</td>
+                  {/* <td> */}
+                  {/* {centerManagerData &&
+                      centerManagerData.map((Cmanager) =>
+                        parseInt(data.centerManager) === Cmanager.id
+                          ? Cmanager.userNames || "--"
+                          : ""
+                      )} */}
+                  {/* {data.centerManager} */}
+                  {/* </td> */}
+                  <td>{data.code}</td>
+                  <td>{data.uenNumber}</td>
+                  <td>{data.mobile}</td>
+                  {extraData && <td>{data.createdBy}</td>}
+                    {extraData && <td>{extractDate(data.createdAt)}</td>}
+                    {extraData && <td>{data.updatedBy}</td>}
+                    {extraData && <td>{extractDate(data.updatedAt)}</td>}
+                  <td>
+                    <div className="d-flex justify-content-center align-items-center ">
+                      {storedScreens?.centerListingCreate && (
+                        <div class="dropdown" style={{ display: "inline-block" }}>
+                          <button
+                            class="btn dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <IoMdAdd />
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li>
+                              <AddRegister id={data.id} onSuccess={refreshData} />
+                            </li>
+                            <li style={{ width: "100%" }}>
+                              <AddBreak id={data.id} onSuccess={refreshData} />
+                            </li>
+                            <li style={{ width: "100%" }}>
+                              <AddClass id={data.id} onSuccess={refreshData} />
+                            </li>
+                            <li style={{ width: "100%" }}>
+                              <AddPackage id={data.id} onSuccess={refreshData} />
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                      {storedScreens?.centerListingRead && (
+                        <Link
+                          to={`/center/view/${data.id}`}
+                          style={{ display: "inline-block" }}
+                        >
+                          <button className="btn btn-sm">
+                            <FaEye />
+                          </button>
+                        </Link>
+                      )}
+                      {storedScreens?.centerListingUpdate && (
+                        <Link
+                          to={`/center/edit/${data.id}`}
+                          style={{ display: "inline-block" }}
+                        >
+                          <button className="btn btn-sm">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                      )}
+                      {storedScreens?.centerListingDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCenter/${data.id}`}
+                          style={{ display: "inline-block" }}
+                        />
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

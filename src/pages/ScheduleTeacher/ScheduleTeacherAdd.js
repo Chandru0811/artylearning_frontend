@@ -11,25 +11,50 @@ import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import api from "../../config/URL";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
+import fetchAvailableTeacherDays from "../List/AvailableTeacherDays";
+import fetchAvailableCentersWithIds from "../List/AvailableCenterList";
+
+const validationSchema = Yup.object({
+  centerId: Yup.string().required("*Centre is required"),
+  courseId: Yup.string().required("*Course  is required"),
+  classId: Yup.string().required("*Class is required"),
+  days: Yup.string().required("*Days is required"),
+  userId: Yup.string().required("*Teacher is required"),
+  classRoom: Yup.string().required("*Class Room is required"),
+  startDate: Yup.string().required("*Start Date is required"),
+  endDate: Yup.string().required("*End Date is required"),
+  // batch: Yup.string().required("*From Time is required"),
+});
 
 function ScheduleTeacherAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
+  const [daysData, setDaysData] = useState([]);
+  console.log("Days:",daysData);
+  
   const [teacherData, setTeacherData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-  const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-
+  const daysOfWeek = [
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+  ];
 
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
     setCourseData(null);
     setClassData(null);
+    setDaysData(null);
     setTeacherData(null);
     setClassRoomData(null);
   };
@@ -88,26 +113,14 @@ function ScheduleTeacherAdd({ onSuccess }) {
     }
   };
 
-  // const fetchTeacher = async (teacherId) => {
-  //   try {
-  //     const teachers = await fetchAllTeachersWithIdsC(teacherId);
-  //     setClassData(teachers);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
-  const validationSchema = Yup.object({
-    centerId: Yup.string().required("*Centre is required"),
-    courseId: Yup.string().required("*Course  is required"),
-    classId: Yup.string().required("*Class is required"),
-    days: Yup.string().required("*Days is required"),
-    userId: Yup.string().required("*Teacher is required"),
-    classRoom: Yup.string().required("*Class Room is required"),
-    startDate: Yup.string().required("*Start Date is required"),
-    endDate: Yup.string().required("*End Date is required"),
-    // batch: Yup.string().required("*From Time is required"),
-  });
+  const fetchDays = async (userId) => {
+    try {
+      const teachersDays = await fetchAvailableTeacherDays(userId);
+      setDaysData(teachersDays);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -221,10 +234,13 @@ function ScheduleTeacherAdd({ onSuccess }) {
     setClassData(null);
     setTeacherData(null);
     const centerId = event.target.value;
+    const userId = event.target.value;
     formik.setFieldValue("centerId", centerId);
+    formik.setFieldValue("userId", userId);
     fetchCourses(centerId);
     fetchTeacher(centerId); // Fetch courses for the selected center
     fetchClassRoom(centerId);
+    fetchDays(userId);
   };
 
   const handleCourseChange = (event) => {
@@ -234,27 +250,12 @@ function ScheduleTeacherAdd({ onSuccess }) {
     fetchClasses(courseId); // Fetch class for the selected center
   };
 
-  // const handleClassChange = (event) => {
-  //   const teacherId = event.target.value;
-  //   formik.setFieldValue("class", teacherId);
-  //   fetchTeacher(teacherId); // Fetch teacher for the selected center
-  // };
-
-  // const convertTo12Hour = (time24h) => {
-  //   let [hours, minutes] = time24h.split(":");
-  //   let modifier = "AM";
-
-  //   if (parseInt(hours) >= 12) {
-  //     modifier = "PM";
-  //     hours = (parseInt(hours) - 12).toString();
-  //   }
-
-  //   if (hours === "0") {
-  //     hours = "12";
-  //   }
-
-  //   return `${hours}:${minutes} ${modifier}`;
-  // };
+  useEffect(() => {
+    if (daysData) {
+      console.log("Available Days:", daysData);
+    }
+  }, [daysData]);
+  
 
   return (
     <>
@@ -455,6 +456,12 @@ function ScheduleTeacherAdd({ onSuccess }) {
                     <option value="FRIDAY">FRIDAY</option>
                     <option value="SATURDAY">SATURDAY</option>
                     <option value="SUNDAY">SUNDAY</option>
+                    {/* {daysData &&
+                      daysData.map((day, index) => (
+                        <option key={index} value={day}>
+                          {day}
+                        </option>
+                      ))} */}
                   </select>
                   {formik.touched.days && formik.errors.days && (
                     <div className="invalid-feedback">{formik.errors.days}</div>
@@ -492,6 +499,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <input
                     type="date"
+                    name="startDate"
                     {...formik.getFieldProps("startDate")}
                     className={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
@@ -499,10 +507,10 @@ function ScheduleTeacherAdd({ onSuccess }) {
                         : ""
                     }`}
                     onChange={(e) => {
-                      formik.handleChange(e); 
+                      formik.handleChange(e);
                       const selectedDate = new Date(e.target.value);
                       const dayOfWeek = selectedDate.getDay();
-                      const dayName = daysOfWeek[dayOfWeek]; 
+                      const dayName = daysOfWeek[dayOfWeek];
                       formik.setFieldValue("days", dayName);
                     }}
                   />

@@ -74,6 +74,8 @@ export default function InvoiceAdd() {
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
+  console.log("Tax type:",taxData);
+  
   const userName = localStorage.getItem("userName");
 
   // const [isLoading, setIsLoading] = useState(true);
@@ -949,7 +951,7 @@ export default function InvoiceAdd() {
                             <option value=""></option>
                             {taxData &&
                               taxData.map((tax) => (
-                                <option key={tax.id} value={tax.id}>
+                                <option key={tax.id} value={tax.taxType}>
                                   {tax.taxType}
                                 </option>
                               ))}
