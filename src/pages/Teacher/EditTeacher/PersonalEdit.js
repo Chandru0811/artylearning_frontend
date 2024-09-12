@@ -36,14 +36,14 @@ const PersonalEdit = forwardRef(
         // email: formData.email || "",
         citizenship: formData.citizenship || "",
         photo: null || "",
-        shortIntroduction: formData.shortIntroduction || "",
+        shortIntroduction: "",
         gender: formData.gender || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         setFormData((prv) => ({ ...prv, ...data }));
-        // console.log("Api Data:", data);
+
         data.photo = null;
         try {
           const formDatas = new FormData();
@@ -71,6 +71,7 @@ const PersonalEdit = forwardRef(
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
             handleNext();
+            console.log("Api Data:", formData);
           } else {
             toast.error(response.data.message);
           }
@@ -97,10 +98,8 @@ const PersonalEdit = forwardRef(
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
-            shortIntroduction:
-              response.data.shortIntroduction === undefined
-                ? response.data.shortIntroduction
-                : " " || "",
+            shortIntroduction: formData.shortIntroduction || "",
+
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -109,7 +108,7 @@ const PersonalEdit = forwardRef(
       getData();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [formData]);
 
     const fetchIDTypeData = async () => {
       try {
@@ -317,14 +316,20 @@ const PersonalEdit = forwardRef(
                 Short Introduction
               </label>
               <textarea
-                className="form-control "
-                id="exampleFormControlTextarea1"
+                type="text"
+                className="form-control"
                 rows="4"
                 name="shortIntroduction"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.shortIntroduction}
-              ></textarea>
+              // value={formData.shortIntroduction}
+              />
+              {formik.touched.shortIntroduction &&
+                formik.errors.shortIntroduction && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.shortIntroduction}</small>
+                  </div>
+                )}
             </div>
           </div>
         </div>

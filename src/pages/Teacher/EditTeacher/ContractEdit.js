@@ -57,28 +57,29 @@ const ContractEdit = forwardRef(
     const navigate = useNavigate();
     const formik = useFormik({
       initialValues: {
-        employer: "",
-        uen: "",
-        addressOfEmployment: "",
-        employee: "",
-        nric: "",
-        userContractAddress: "",
-        jobTitle: "",
-        mainDuties: "",
-        startDateOfEmployment: "",
-        training: "",
-        allowance: "",
-        userContractStartDate: "",
-        contactPeriod: "",
-        probation: "",
-        workingDays: [] || "",
-        userContractSalary: "",
-        salaryStartDate: "",
-        userContractEndDate: "",
-        payNow: "",
-        internetBanking: "",
-        contractDate: "",
-        terminationNotice: "",
+        employer: formData.employer || "",
+        employee: formData.teacherName || "",
+        uen: formData.uen || "",
+        addressOfEmployment: formData.addressOfEmployment || "",
+        detailsEmployee: formData.detailsEmployee || "",
+        nric: formData.nric || "",
+        userContractAddress: formData.address || "",
+        jobTitle: formData.jobTitle || "",
+        mainDuties: formData.mainDuties || "",
+        startDateOfEmployment: formData.startDate || "",
+        training: formData.training || "",
+        allowance: formData.allowance || "",
+        userContractStartDate: formData.startDate || "",
+        contactPeriod: formData.contactPeriod || "",
+        probation: formData.probation || "",
+        workingDays: formData.workingDays || "",
+        userContractSalary: formData.salary || "",
+        salaryStartDate: formData.effectiveDate || "",
+        userContractEndDate: formData.endDate || "",
+        payNow: formData.payNow || "",
+        internetBanking: formData.internetBanking || "",
+        contractDate: formData.contractDate || "",
+        terminationNotice: formData.terminationNotice || "",
         updatedBy: userName,
       },
       // onSubmit: async (data) => {
@@ -103,7 +104,7 @@ const ContractEdit = forwardRef(
       //     toast.error(error);
       //   }
       // },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         console.log("Api Data:", values);
@@ -205,28 +206,29 @@ const ContractEdit = forwardRef(
           } else {
             formik.setValues({
               contractId: null,
-              employer: "",
-              uen: "",
-              addressOfEmployment: "",
-              employee: "",
-              nric: "",
-              userContractAddress: "",
-              jobTitle: "",
-              mainDuties: "",
-              startDateOfEmployment: "",
-              training: "",
-              allowance: "",
-              userContractStartDate: "",
-              contactPeriod: "",
-              probation: "",
-              workingDays: "",
-              userContractSalary: "",
-              salaryStartDate: "",
-              userContractEndDate: "",
-              payNow: "",
-              internetBanking: "",
-              contractDate: "",
-              terminationNotice: "",
+              employer: formData.employer || "",
+              employee: formData.teacherName || "",
+              uen: formData.uen || "",
+              addressOfEmployment: formData.addressOfEmployment || "",
+              detailsEmployee: formData.detailsEmployee || "",
+              nric: formData.nric || "",
+              userContractAddress: formData.address || "",
+              jobTitle: formData.jobTitle || "",
+              mainDuties: formData.mainDuties || "",
+              startDateOfEmployment: formData.startDate || "",
+              training: formData.training || "",
+              allowance: formData.allowance || "",
+              userContractStartDate: formData.startDate || "",
+              contactPeriod: formData.contactPeriod || "",
+              probation: formData.probation || "",
+              workingDays: formData.workingDays || "",
+              userContractSalary: formData.salary || "",
+              salaryStartDate: formData.effectiveDate || "",
+              userContractEndDate: formData.endDate || "",
+              payNow: formData.payNow || "",
+              internetBanking: formData.internetBanking || "",
+              contractDate: formData.contractDate || "",
+              terminationNotice: formData.terminationNotice || "",
             });
             // console.log("Contract ID:", formik.values.contractId);
           }
@@ -239,6 +241,11 @@ const ContractEdit = forwardRef(
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // const filteredCenters = centerData?.filter((center) =>
+    //   formData.centerIds.includes(center.id)
+    // );
+
     const getData1 = async (id) => {
       try {
         const response = await api.get(`/getAllCenterById/${id}`);
@@ -285,6 +292,7 @@ const ContractEdit = forwardRef(
         formik.setFieldValue("contactPeriod", "");
       }
     };
+
     useEffect(() => {
       // Set the contractDate to match the userContractStartDate initially
       if (formik.values.userContractStartDate) {

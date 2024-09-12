@@ -18,11 +18,11 @@ const validationSchema = Yup.object().shape({
   role: Yup.string().required("*Role is required"),
   file: Yup.string().required("*Photo is required"),
   password: Yup.string()
-  .min(8, "*Password must be at least 8 characters")
-  .required("*Password is required"),
-confirmPassword: Yup.string()
-  .oneOf([Yup.ref("password"), null], "*Passwords must match")
-  .required("*Confirm Password is required"),
+    .min(8, "*Password must be at least 8 characters")
+    .required("*Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "*Passwords must match")
+    .required("*Confirm Password is required"),
   email: Yup.string().email('Invalid email format').required('Email is required'),
 });
 const StaffPersonalAdd = forwardRef(
@@ -31,7 +31,7 @@ const StaffPersonalAdd = forwardRef(
     const [citizenShipData, setCitizenShipData] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName');
 
 
     const formik = useFormik({
@@ -69,7 +69,7 @@ const StaffPersonalAdd = forwardRef(
           formData.append("password", values.password);
           formData.append("confirmPassword", values.confirmPassword);
           formData.append("createdBy", userName);
-          
+
 
           const response = await api.post(
             "/createUserWithProfileImage",
@@ -90,9 +90,9 @@ const StaffPersonalAdd = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          if(error?.response?.status === 409){
+          if (error?.response?.status === 409) {
             toast.warning("ID Number already exists!")
-          }else{
+          } else {
             toast.error(error?.response?.data?.message);
           }
         } finally {
@@ -137,11 +137,11 @@ const StaffPersonalAdd = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
           <div class="container row d-flex my-4">
@@ -197,7 +197,7 @@ const StaffPersonalAdd = forwardRef(
                 {idTypeData &&
                   idTypeData.map((idTypeId) => (
                     <option key={idTypeId.id} value={idTypeId.id}>
-                      {idTypeId.idType} 
+                      {idTypeId.idType}
                     </option>
                   ))}
               </select>
@@ -288,6 +288,7 @@ const StaffPersonalAdd = forwardRef(
                 <option disabled>
                   Select the Role
                 </option>
+                <option></option>
                 <option value={"staff"}>Staff</option>
                 <option value={"branch_admin"}>Branch Admin</option>
                 <option value={"staff_admin"}>Staff Admin</option>
@@ -300,24 +301,24 @@ const StaffPersonalAdd = forwardRef(
               )}
             </div>
             <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>
-                  Email Id<span class="text-danger">*</span>
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  name="email"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                />
-                {formik.touched.email && formik.errors.email && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.email}</small>
-                  </div>
-                )}
-              </div>
-              <div class="col-md-6 col-12 mb-2">
+              <label>
+                Email Id<span class="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                name="email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <div className="error text-danger ">
+                  <small>{formik.errors.email}</small>
+                </div>
+              )}
+            </div>
+            <div class="col-md-6 col-12 mb-2">
               <div className="mb-3">
                 <label>
                   Password<span class="text-danger">*</span>
@@ -326,11 +327,10 @@ const StaffPersonalAdd = forwardRef(
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
-                    className={`form-control ${
-                      formik.touched.password && formik.errors.password
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.password && formik.errors.password
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     style={{
                       borderRadius: "3px",
                       borderRight: "none",
@@ -356,7 +356,7 @@ const StaffPersonalAdd = forwardRef(
                 </div>
               </div>
             </div>
-             <div class="col-md-6 col-12 mb-2">
+            <div class="col-md-6 col-12 mb-2">
               <div className="mb-3">
                 <label>
                   Confirm Password<span class="text-danger">*</span>
@@ -365,11 +365,10 @@ const StaffPersonalAdd = forwardRef(
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Enter confirm password"
-                    className={`form-control ${
-                      formik.touched.confirmPassword && formik.errors.confirmPassword
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.confirmPassword && formik.errors.confirmPassword
+                      ? "is-invalid"
+                      : ""
+                      }`}
                     style={{
                       borderRadius: "3px",
                       borderRight: "none",
@@ -437,14 +436,20 @@ const StaffPersonalAdd = forwardRef(
                 Short Introduction
               </label>
               <textarea
-                class="form-control"
-                id="exampleFormControlTextarea1"
+                type="text"
+                className="form-control"
                 rows="4"
                 name="shortIntroduction"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.shortIntroduction}
-              ></textarea>
+              />
+              {formik.touched.shortIntroduction &&
+                formik.errors.shortIntroduction && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.shortIntroduction}</small>
+                  </div>
+                )}
             </div>
           </div>
         </div>

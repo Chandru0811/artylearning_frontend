@@ -20,6 +20,8 @@ const validationSchema = Yup.object({
 
 function LeaveAdminEdit() {
   const [datas, setDatas] = useState([]);
+  const [data, setData] = useState([]);
+
   const [leaveDatas, setLeaveDatas] = useState([]);
   const { id } = useParams();
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -55,7 +57,7 @@ function LeaveAdminEdit() {
       setLoadIndicator(true);
       try {
         const payload = {
-          leaveStatus : data.leaveStatus
+          leaveStatus: data.leaveStatus
         };
         const response = await api.put(
           `/updateUserLeaveRequestStatus/${id}`,
@@ -95,6 +97,8 @@ function LeaveAdminEdit() {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
         console.log(response.data);
         setLeaveDatas(response.data)
+        setData(response.data);
+
         formik.setValues(response.data);
         const daysDiff = calculateDays(
           response.data.fromDate,
@@ -115,7 +119,7 @@ function LeaveAdminEdit() {
         const response = await api.get(
           `/getUserLeaveRequestByUserId/${userId}`
         );
-        setDatas(response.data);
+        setData(response.data);
       } catch (error) {
         toast.error("Error Fetching Data : ", error);
       }
@@ -126,7 +130,7 @@ function LeaveAdminEdit() {
   return (
     <section>
       <div className="container">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
             e.preventDefault();  // Prevent default form submission
           }
@@ -188,11 +192,10 @@ function LeaveAdminEdit() {
               </label>
               <input
                 type="date"
-                className={`form-control  ${
-                  formik.touched.fromDate && formik.errors.fromDate
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.fromDate && formik.errors.fromDate
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 readOnly
                 {...formik.getFieldProps("fromDate")}
                 onChange={(e) => {
@@ -216,11 +219,10 @@ function LeaveAdminEdit() {
               <input
                 type="date"
                 readOnly
-                className={`form-control  ${
-                  formik.touched.toDate && formik.errors.toDate
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.toDate && formik.errors.toDate
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 {...formik.getFieldProps("toDate")}
                 onChange={(e) => {
                   formik.handleChange(e);
@@ -236,17 +238,16 @@ function LeaveAdminEdit() {
               )}
             </div>
 
-             <div className="col-md-6 col-12 mb-3">
+            <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 No.Of.Days<span className="text-danger">*</span>
               </label>
               <input
                 type="text"
-                className={`form-control  ${
-                  formik.touched.noOfDays && formik.errors.noOfDays
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.noOfDays && formik.errors.noOfDays
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 {...formik.getFieldProps("noOfDays")}
                 value={daysDifference || "0"}
                 readOnly
@@ -262,11 +263,10 @@ function LeaveAdminEdit() {
               </label>
               <input
                 type="text"
-                className={`form-control  ${
-                  formik.touched.dayType && formik.errors.dayType
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.dayType && formik.errors.dayType
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 {...formik.getFieldProps("dayType")}
                 readOnly
               />
@@ -281,11 +281,10 @@ function LeaveAdminEdit() {
               </label>
               <input
                 type="text"
-                className={`form-control  ${
-                  formik.touched.leaveType && formik.errors.leaveType
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.leaveType && formik.errors.leaveType
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 {...formik.getFieldProps("leaveType")}
                 readOnly
               />
@@ -302,11 +301,10 @@ function LeaveAdminEdit() {
               </label>
               <select
                 name="leaveStatus"
-                className={`form-select ${
-                  formik.touched.leaveStatus && formik.errors.leaveStatus
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-select ${formik.touched.leaveStatus && formik.errors.leaveStatus
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 {...formik.getFieldProps("leaveStatus")}
               >
                 <option value="PENDING">Pending</option>
@@ -326,11 +324,10 @@ function LeaveAdminEdit() {
               </label>
               <textarea
                 rows={5}
-                className={`form-control  ${
-                  formik.touched.leaveReason && formik.errors.leaveReason
-                    ? "is-invalid"
-                    : ""
-                }`}
+                className={`form-control  ${formik.touched.leaveReason && formik.errors.leaveReason
+                  ? "is-invalid"
+                  : ""
+                  }`}
                 {...formik.getFieldProps("leaveReason")}
                 readOnly
               ></textarea>
@@ -339,6 +336,57 @@ function LeaveAdminEdit() {
                   {formik.errors.leaveReason}
                 </div>
               )}
+            </div>
+            <div className="col-md-6 col-12 mb-3">
+              <p class="headColor mt-5">Attachment</p>
+              {/* <hr></hr> */}
+              {/* <div className="row mt-4">
+                <div className="container p-2"> */}
+              {data.attachment && (
+                <div className="mt-3">
+                  {data?.attachment?.endsWith(".pdf") ? (
+                    <div class="card border-0 shadow" style={{ width: "18rem" }}>
+                      <a
+                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                          data?.attachment
+                        )}&embedded=true`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          class="card-img-top img-fluid"
+                          style={{ height: "50%" }}
+                          src={pdfLogo}
+                          alt="Card image cap"
+                        />
+                      </a>
+                      <div class="card-body d-flex justify-content-between">
+                        <p class="card-title fw-semibold text-wrap">
+                          {data?.attachment?.split("/").pop()}
+                        </p>
+
+                        <a
+                          href={data?.attachment}
+                          class="btn text-dark"
+                          download={data?.attachment?.split("/").pop()}
+                        >
+                          <MdOutlineDownloadForOffline size={25} />
+                        </a>
+                      </div>
+
+                    </div>
+                  ) : (
+                    <img
+                      src={data?.attachment}
+                      alt="Attachment"
+                      className="img-fluid"
+                      style={{ height: "50%" }}
+                    />
+                  )}
+                </div>
+              )}
+              {/* </div>
+              </div> */}
             </div>
           </div>
         </form>

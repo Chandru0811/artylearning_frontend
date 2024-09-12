@@ -178,55 +178,56 @@ function LeaveAdminView() {
           </div>
         </div>
       </div>
-     <p class="headColor mt-5">Attachment</p>
+      <p class="headColor mt-5">Attachment</p>
       <hr></hr>
       <div className="row mt-4">
-          <div className="container p-2">
+        <div className="container p-2">
           {data.attachment && (
-              <div className="mt-3">
-                {data?.attachment?.endsWith(".pdf") ? (
-                  <div class="card border-0 shadow" style={{ width: "18rem" }}>
-                    <a
-                      href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                        data?.attachment
-                      )}&embedded=true`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img
-                        class="card-img-top img-fluid"
-                        style={{ height: "50%" }}
-                        src={pdfLogo}
-                        alt="Card image cap"
-                      />
-                    </a>
-                    <div class="card-body d-flex justify-content-between">
-                      <p class="card-title fw-semibold text-wrap">
-                        {data?.attachment?.split("/").pop()}
-                      </p>
+            <div className="mt-3">
+              {data?.attachment?.endsWith(".pdf") ? (
+                <div class="card border-0 shadow" style={{ width: "18rem" }}>
+                  <a
+                    href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                      data?.attachment
+                    )}&embedded=true`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      class="card-img-top img-fluid"
+                      style={{ height: "50%" }}
+                      src={pdfLogo}
+                      alt="Card image cap"
+                    />
+                  </a>
+                  <div class="card-body d-flex justify-content-between">
+                    <p class="card-title fw-semibold text-wrap">
+                      {data?.attachment?.split("/").pop()}
+                    </p>
 
-                      <a
-                        href={data?.attachment}
-                        class="btn text-dark"
-                        download={data?.attachment?.split("/").pop()}
-                      >
-                        <MdOutlineDownloadForOffline size={25} />
-                      </a>
-                    </div>
+                    <a
+                      href={data?.attachment}
+                      class="btn text-dark"
+                      download={data?.attachment?.split("/").pop()}
+                    >
+                      <MdOutlineDownloadForOffline size={25} />
+                    </a>
                   </div>
-                ) : (
-                  <img
-                    src={data?.attachment}
-                    alt="Attachment"
-                    className="img-fluid"
-                    style={{ height: "50%" }}
-                  />
-                )}
-              </div>
-            )}
-          </div>
+
+                </div>
+              ) : (
+                <img
+                  src={data?.attachment}
+                  alt="Attachment"
+                  className="img-fluid"
+                  style={{ height: "50%" }}
+                />
+              )}
+            </div>
+          )}
         </div>
-       {/* <div className="row ">
+      </div>
+      {/* <div className="row ">
         <div className="">
           <div className="row mb-3 d-flex">
             <div className="col-4 ">

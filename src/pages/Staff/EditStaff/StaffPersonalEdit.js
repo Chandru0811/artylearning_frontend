@@ -122,7 +122,7 @@ const StaffPersonalEdit = forwardRef(
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
-            // shortIntroduction: response.data.shortIntroduction || " ",
+            shortIntroduction: response.data.shortIntroduction || " ",
           });
         } catch (error) {
           toast.error("Error Fetching Data");
@@ -345,14 +345,20 @@ const StaffPersonalEdit = forwardRef(
                 Short Introduction
               </label>
               <textarea
-                class="form-control "
-                id="shortIntroduction"
+                type="text"
+                className="form-control"
                 rows="4"
                 name="shortIntroduction"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.shortIntroduction}
-              ></textarea>
+              />
+              {formik.touched.shortIntroduction &&
+                formik.errors.shortIntroduction && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.shortIntroduction}</small>
+                  </div>
+                )}
             </div>
           </div>
         </div>
