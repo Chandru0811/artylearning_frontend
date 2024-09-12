@@ -808,7 +808,7 @@ export default function InvoiceEdit() {
                             {taxData &&
                               taxData.map((tax) => (
                                 <option key={tax.id} value={tax.id}>
-                                  {tax.taxType}
+                                   {`${tax.taxType} ${tax.rate}%`}
                                 </option>
                               ))}
                           </select>

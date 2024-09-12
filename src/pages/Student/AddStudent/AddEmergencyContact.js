@@ -8,7 +8,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { data } from "jquery";
 
 const validationSchema = Yup.object().shape({
   emergencyContactNo: Yup.string()
@@ -16,13 +15,13 @@ const validationSchema = Yup.object().shape({
       /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
       "Invalid Phone Number"
     )
-    .notRequired(""),
+    .notRequired(),
   contactNo: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
-    .notRequired(""),
+    .notRequired(),
   postalCode: Yup.string()
     .matches(/^\d+$/, "Invalid Phone Number")
-    .notRequired(""),
+    .notRequired(),
 });
 
 const AddEmergencyContact = forwardRef(
@@ -48,7 +47,8 @@ const AddEmergencyContact = forwardRef(
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        setLoadIndicators(true);
+        // setLoadIndicators(true);
+        console.log("emer",data)
         // handleNext();
         const formDatas = new FormData();
 
@@ -58,7 +58,7 @@ const AddEmergencyContact = forwardRef(
         formDatas.append("emergencyContactNo", data.emergencyContactNo);
 
         // Append fields for each emergency contact information
-        data.emergencyContactInformation.forEach((contact) => {
+        data.emergencyContactInformation?.map((contact) => {
           formDatas.append("name", contact.name);
           formDatas.append("contactNo", contact.contactNo);
           formDatas.append("authorizedRelation", contact.authorizedRelation);

@@ -952,7 +952,7 @@ export default function InvoiceAdd() {
                             {taxData &&
                               taxData.map((tax) => (
                                 <option key={tax.id} value={tax.id}>
-                                  {tax.taxType}
+                                  {`${tax.taxType} ${tax.rate}%`}
                                 </option>
                               ))}
                           </select>

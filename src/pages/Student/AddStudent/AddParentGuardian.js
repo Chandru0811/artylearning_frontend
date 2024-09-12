@@ -36,15 +36,27 @@ const validationSchema = Yup.object().shape({
 
 const AddParentGuardian = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
-
+    const userName = localStorage.getItem("userName");
+    const [parentDetailIds, setParentDetailIds] = useState([]);
+    const [parentDetailId, setParentDetailId] = useState(null);
+    console.log("object1",parentDetailIds)
+    console.log("object2",parentDetailId)
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
     const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
-      useState(0);
+      useState(null);
 
     console.log("FormData is ", formData);
+
+    useEffect(() => {
+      // Find the parent with primaryContacts set to true, if any
+      const primaryContactIndex = formData.parentInformation?.findIndex(
+        (parent) => parent.primaryContacts === true
+      );
+      setSelectedPrimaryContactIndex(primaryContactIndex >= 0 ? primaryContactIndex : 0); 
+      // Default to 0 if no parent has primaryContacts set to true
+    }, [formData.parentInformation]);
 
     const formik = useFormik({
       initialValues: {
@@ -70,7 +82,7 @@ const AddParentGuardian = forwardRef(
         // console.log("Add ParentGuardian", values);
         try {
           const formDatas = new FormData();
-          values.parentInformation.map((parent) => {
+          values.parentInformation.map((parent, index) => {
             formDatas.append(`parentNames`, parent.parentNames);
             formDatas.append(`parentDateOfBirths`, parent.parentDateOfBirths);
             formDatas.append(`emails`, parent.emails);
@@ -83,31 +95,77 @@ const AddParentGuardian = forwardRef(
             formDatas.append("createdBy", userName);
 
             // formDatas.append(`primaryContact`, parent.primaryContact);
+
             formDatas.append(
               `primaryContacts`,
-              parent.primaryContacts ? true : false
+              index === selectedPrimaryContactIndex ? true : false
             );
           });
 
-          const response = await api.post(
-            `/createMultipleStudentParentsDetailsWithProfileImages/${formData.student_id}`,
-            formDatas,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
+          if (parentDetailId) {
+            const formData = new FormData();
+          values.parentInformation.map((parent, index) => {
+            formData.append(`parentName`, parent.parentNames);
+            formData.append(`parentDateOfBirth`, parent.parentDateOfBirths);
+            formData.append(`email`, parent.emails);
+            formData.append(`relation`, parent.relations);
+            formData.append(`occupation`, parent.occupations);
+            formData.append(`file`, parent.files);
+            formData.append(`mobileNumber`, parent.mobileNumbers);
+            formData.append(`postalCode`, parent.postalCodes);
+            formData.append(`address`, parent.addresses);
+            formData.append("updatedBy", userName);
+            formData.append("parentId", parentDetailId);
+
+            // formDatas.append(`primaryContact`, parent.primaryContact);
+
+            formData.append(
+              `primaryContacts`,
+              index === selectedPrimaryContactIndex ? true : false
+            );
+          });
+            // If parentDetailId exists, make PUT request (update)
+            const response = await api.put(
+              `/updateStudentParentsDetailsWithProfileImages/${parentDetailId}`,
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+
+            if (response.status === 201) {
+              toast.success(response.data.message);
+              setFormData((prev) => ({ ...prev, ...values }));
+              handleNext();
+            } else {
+              toast.error(response.data.message);
             }
-          );
-          if (response.status === 201) {
-            toast.success(response.data.message);
-            setFormData((prev) => ({ ...prev, ...values }));
-            handleNext();
           } else {
-            toast.error(response.data.message);
+            const response = await api.post(
+              `/createMultipleStudentParentsDetailsWithProfileImages/${formData.student_id}`,
+              formDatas,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+
+            if (response.status === 201) {
+              const createdIds = response.data.id;
+              setParentDetailIds(createdIds);
+              toast.success(response.data.message);
+              setFormData((prev) => ({ ...prev, ...values }));
+              handleNext();
+            } else {
+              toast.error(response.data.message);
+            }
           }
         } catch (error) {
           if (error?.response?.status === 500) {
-            toast.warning("Please Fill All the fields to continue");
+            toast.warning("Please fill all the fields to continue");
           } else {
             toast.error(error?.response?.data?.message);
           }
@@ -116,6 +174,22 @@ const AddParentGuardian = forwardRef(
         }
       },
     });
+
+    const getData = async () => {
+      setLoadIndicators(true);
+      try {
+        const response = await api.get(`/getAllStudentById/${formData.student_id}`);
+        setParentDetailId(response.data.studentParentsDetails[0].id);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoadIndicators(false);
+      }
+    };
+
+    useEffect(() => {
+      getData();
+    }, []);
 
     useEffect(() => {
       formik.setFieldValue(`parentInformation[0].primaryContacts`, true);
@@ -131,7 +205,7 @@ const AddParentGuardian = forwardRef(
             );
 
             const leadData = response.data;
-            console.log("Lead Data", leadData)
+            console.log("Lead Data", leadData);
             if (!formData.parentInformation) {
               formik.setFieldValue("parentInformation", [
                 {
@@ -144,8 +218,8 @@ const AddParentGuardian = forwardRef(
                   files: null || "",
                   mobileNumbers: leadData.mothersMobileNumber || "",
                   addresses: leadData.address,
-                  postalCodes :leadData.postalCode || "",
-                  primaryContacts: leadData.primaryContactMother || ""
+                  postalCodes: leadData.postalCode || "",
+                  primaryContacts: leadData.primaryContactMother || "",
                 },
                 {
                   parentNames: leadData.fathersFullName || "",
@@ -157,12 +231,14 @@ const AddParentGuardian = forwardRef(
                   files: null || "",
                   mobileNumbers: leadData.fathersMobileNumber || "",
                   addresses: leadData.address || "",
-                  postalCodes :leadData.postalCode || "",
+                  postalCodes: leadData.postalCode || "",
                   primaryContacts: leadData.primaryContactFather || "",
-                }
+                },
               ]);
               setRows(2);
-              setSelectedPrimaryContactIndex(leadData.primaryContactFather ? 0 : 1)
+              setSelectedPrimaryContactIndex(
+                leadData.primaryContactFather ? 0 : 1
+              );
             }
           } catch (error) {
             console.error("Error fetching lead data:", error);
@@ -190,8 +266,8 @@ const AddParentGuardian = forwardRef(
       }
     };
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-     }, []);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
 
     return (
       <div className="container-fluid">
@@ -199,11 +275,14 @@ const AddParentGuardian = forwardRef(
           <div className="border-0 mb-5" key={index}>
             <div>
               <div className=" border-0 my-2">
-                 <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+                <form
+                  onSubmit={formik.handleSubmit}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !formik.isSubmitting) {
+                      e.preventDefault(); // Prevent default form submission
+                    }
+                  }}
+                >
                   <p className="headColor">Parents / Guardian</p>
                   <div className="container pt-3">
                     <div className="row mt-2">
@@ -360,13 +439,13 @@ const AddParentGuardian = forwardRef(
                               const isChecked = e.target.checked;
                               const newIndex = isChecked ? index : null;
 
-                              // If a radio button is checked, set its value to true
+                              // Update the selected row's primaryContacts field
                               formik.setFieldValue(
                                 `parentInformation[${index}].primaryContacts`,
                                 isChecked ? true : false
                               );
 
-                              // If a radio button is checked, deselect the previously selected radio button
+                              // Deselect the previously selected row if a new one is checked
                               if (
                                 isChecked &&
                                 selectedPrimaryContactIndex !== null &&
@@ -378,11 +457,13 @@ const AddParentGuardian = forwardRef(
                                 );
                               }
 
+                              // Update the selectedPrimaryContactIndex
                               setSelectedPrimaryContactIndex(newIndex);
                             }}
                             onBlur={formik.handleBlur}
                           />
                         </div>
+
                         <div className="text-start">
                           <label htmlFor="" className="mb-1 fw-medium">
                             <small>Occupation</small>

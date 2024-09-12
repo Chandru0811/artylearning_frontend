@@ -92,7 +92,7 @@ const PersonalAdd = forwardRef(
           }
         } catch (error) {
           if (error?.response?.status === 409) {
-            toast.warning("ID Number already exists!");
+            toast.warning(error?.response?.data?.message);
           } else {
             toast.error(error?.response?.data?.message);
           }
