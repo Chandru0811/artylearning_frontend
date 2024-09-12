@@ -120,15 +120,15 @@ function Dashboard() {
   const previousMonthRevenue = dashboardData?.totalRevenueOfPreviousMonth;
   const currentMonthRevenue = dashboardData?.totalRevenueOfMonth;
 
-  let salesIncreasePercentage;
-  if (previousMonthRevenue === 0) {
-    // Handle division by zero case
-    salesIncreasePercentage = 100;
-  } else {
-    salesIncreasePercentage =
-      ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) *
-      100;
-  }
+  // let salesIncreasePercentage;
+  // if (previousMonthRevenue === 0) {
+  //   // Handle division by zero case
+  //   salesIncreasePercentage = 100;
+  // } else {
+  //   salesIncreasePercentage =
+  //     ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) *
+  //     100;
+  // }
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
       <div className="container">
@@ -257,11 +257,9 @@ function Dashboard() {
                   </strong>
                 </h2>
                 <h6 className="card-text text-secondary">
-                  Sales {salesIncreasePercentage <= 0 ? "Decrease" : "Increase"}{" "}
-                  {isNaN(salesIncreasePercentage)
-                    ? 0
-                    : salesIncreasePercentage.toFixed(0)}
+                  Sales {dashboardData?.salesPercentage <= 0 ? ` Decrease ${dashboardData?.salesPercentage}` : `Increase ${dashboardData?.salesPercentage}`}
                   %
+                  {/* Sales {dashboardData?.salesPercentage || "0.0"} % */}
                 </h6>
               </div>
             </div>
