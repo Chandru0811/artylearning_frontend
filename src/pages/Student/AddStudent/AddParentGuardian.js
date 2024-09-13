@@ -39,8 +39,8 @@ const AddParentGuardian = forwardRef(
     const userName = localStorage.getItem("userName");
     const [parentDetailIds, setParentDetailIds] = useState([]);
     const [parentDetailId, setParentDetailId] = useState(null);
-    console.log("object1",parentDetailIds)
-    console.log("object2",parentDetailId)
+    console.log("object1", parentDetailIds)
+    console.log("object2", parentDetailId)
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
@@ -54,7 +54,7 @@ const AddParentGuardian = forwardRef(
       const primaryContactIndex = formData.parentInformation?.findIndex(
         (parent) => parent.primaryContacts === true
       );
-      setSelectedPrimaryContactIndex(primaryContactIndex >= 0 ? primaryContactIndex : 0); 
+      setSelectedPrimaryContactIndex(primaryContactIndex >= 0 ? primaryContactIndex : 0);
       // Default to 0 if no parent has primaryContacts set to true
     }, [formData.parentInformation]);
 
@@ -62,18 +62,18 @@ const AddParentGuardian = forwardRef(
       initialValues: {
         parentInformation: formData.parentInformation
           ? formData.parentInformation.map((parent) => ({
-              parentNames: parent.parentNames || "",
-              parentDateOfBirths: parent.parentDateOfBirths || "",
-              emails: parent.emails || "",
-              relations: parent.relations || "",
-              occupations: parent.occupations || "",
-              files: null || "",
-              passwords: parent.passwords || "",
-              mobileNumbers: parent.mobileNumbers || "",
-              postalCodes: parent.postalCodes || "",
-              addresses: parent.addresses || "",
-              primaryContacts: parent.primaryContacts || "",
-            }))
+            parentNames: parent.parentNames || "",
+            parentDateOfBirths: parent.parentDateOfBirths || "",
+            emails: parent.emails || "",
+            relations: parent.relations || "",
+            occupations: parent.occupations || "",
+            files: null || "",
+            passwords: parent.passwords || "",
+            mobileNumbers: parent.mobileNumbers || "",
+            postalCodes: parent.postalCodes || "",
+            addresses: parent.addresses || "",
+            primaryContacts: parent.primaryContacts || "",
+          }))
           : [],
       },
       validationSchema: validationSchema,
@@ -104,26 +104,26 @@ const AddParentGuardian = forwardRef(
 
           if (parentDetailId) {
             const formData = new FormData();
-          values.parentInformation.map((parent, index) => {
-            formData.append(`parentName`, parent.parentNames);
-            formData.append(`parentDateOfBirth`, parent.parentDateOfBirths);
-            formData.append(`email`, parent.emails);
-            formData.append(`relation`, parent.relations);
-            formData.append(`occupation`, parent.occupations);
-            formData.append(`file`, parent.files);
-            formData.append(`mobileNumber`, parent.mobileNumbers);
-            formData.append(`postalCode`, parent.postalCodes);
-            formData.append(`address`, parent.addresses);
-            formData.append("updatedBy", userName);
-            formData.append("parentId", parentDetailId);
+            values.parentInformation.map((parent, index) => {
+              formData.append(`parentName`, parent.parentNames);
+              formData.append(`parentDateOfBirth`, parent.parentDateOfBirths);
+              formData.append(`email`, parent.emails);
+              formData.append(`relation`, parent.relations);
+              formData.append(`occupation`, parent.occupations);
+              formData.append(`file`, parent.files);
+              formData.append(`mobileNumber`, parent.mobileNumbers);
+              formData.append(`postalCode`, parent.postalCodes);
+              formData.append(`address`, parent.addresses);
+              formData.append("updatedBy", userName);
+              formData.append("parentId", parentDetailId);
 
-            // formDatas.append(`primaryContact`, parent.primaryContact);
+              // formDatas.append(`primaryContact`, parent.primaryContact);
 
-            formData.append(
-              `primaryContacts`,
-              index === selectedPrimaryContactIndex ? true : false
-            );
-          });
+              formData.append(
+                `primaryContacts`,
+                index === selectedPrimaryContactIndex ? true : false
+              );
+            });
             // If parentDetailId exists, make PUT request (update)
             const response = await api.put(
               `/updateStudentParentsDetailsWithProfileImages/${parentDetailId}`,
@@ -191,9 +191,9 @@ const AddParentGuardian = forwardRef(
       getData();
     }, []);
 
-    useEffect(() => {
-      formik.setFieldValue(`parentInformation[0].primaryContacts`, true);
-    }, []);
+    // useEffect(() => {
+    //   formik.setFieldValue(`parentInformation[0].primaryContacts`, true);
+    // }, []);
 
     useEffect(() => {
       const getData = async () => {
@@ -219,7 +219,7 @@ const AddParentGuardian = forwardRef(
                   mobileNumbers: leadData.mothersMobileNumber || "",
                   addresses: leadData.address,
                   postalCodes: leadData.postalCode || "",
-                  primaryContacts: leadData.primaryContactMother || "",
+                  primaryContacts: leadData.primaryContactMother ? true : false,
                 },
                 {
                   parentNames: leadData.fathersFullName || "",
@@ -232,7 +232,7 @@ const AddParentGuardian = forwardRef(
                   mobileNumbers: leadData.fathersMobileNumber || "",
                   addresses: leadData.address || "",
                   postalCodes: leadData.postalCode || "",
-                  primaryContacts: leadData.primaryContactFather || "",
+                  primaryContacts: leadData.primaryContactFather ? true : false,
                 },
               ]);
               setRows(2);
