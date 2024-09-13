@@ -95,7 +95,7 @@ const CMSContact = () => {
       {storedScreens?.contactUsPublish && (
         <button
           type="button"
-          className="btn btn-button btn-sm"
+          className="btn btn-outline-danger border"
           onClick={contactPublish}
         >
           Publish 

@@ -13,6 +13,7 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 import fetchAvailableTeacherDays from "../List/AvailableTeacherDays";
 import fetchAvailableCentersWithIds from "../List/AvailableCenterList";
+import { event } from "jquery";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Centre is required"),
@@ -48,6 +49,16 @@ function ScheduleTeacherAdd({ onSuccess }) {
     "FRIDAY",
     "SATURDAY",
   ];
+  const getNextDateForDay = (selectedDay) => {
+    const today = new Date();
+    const dayIndex = daysOfWeek.indexOf(selectedDay);
+    const nextDate = new Date(today);
+
+    nextDate.setDate(
+      today.getDate() + ((dayIndex + 7 - today.getDay()) % 7)
+    );
+    return nextDate.toISOString().split("T")[0];
+  };
 
   const handleClose = () => {
     setShow(false);
@@ -238,14 +249,19 @@ function ScheduleTeacherAdd({ onSuccess }) {
     setClassData(null);
     setTeacherData(null);
     const centerId = event.target.value;
-    const userId = event.target.value;
-    formik.setFieldValue("centerId", centerId);
-    formik.setFieldValue("userId", userId);
+    formik.setFieldValue("centerId", centerId); 
+    console.log("object1",centerId)
     fetchCourses(centerId);
-    fetchTeacher(centerId); // Fetch courses for the selected center
+    fetchTeacher(centerId);
     fetchClassRoom(centerId);
-    fetchDays(userId);
   };
+
+const handleTeacherChange = (event) => {
+  const userId = event.target.value; 
+  console.log("object2",userId)
+  formik.setFieldValue("userId", userId);
+  fetchDays(userId);
+}
 
   const handleCourseChange = (event) => {
     setClassData(null);
@@ -408,6 +424,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
+                    onChange={handleTeacherChange}
                   >
                     <option></option>
                     {teacherData &&
@@ -451,21 +468,27 @@ function ScheduleTeacherAdd({ onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                      const selectedDay = e.target.value;
+                      const nextAvailableDate = getNextDateForDay(selectedDay);
+                      formik.setFieldValue("startDate", nextAvailableDate); // Automatically set the closest date
+                    }}
                   >
-                    <option></option>
+                    {/* <option></option>
                     <option value="MONDAY">MONDAY</option>
                     <option value="TUESDAY">TUESDAY</option>
                     <option value="WEDNESDAY">WEDNESDAY</option>
                     <option value="THURSDAY">THURSDAY</option>
                     <option value="FRIDAY">FRIDAY</option>
                     <option value="SATURDAY">SATURDAY</option>
-                    <option value="SUNDAY">SUNDAY</option>
-                    {/* {daysData &&
+                    <option value="SUNDAY">SUNDAY</option> */}
+                    {daysData &&
                       daysData.map((day, index) => (
                         <option key={index} value={day}>
                           {day}
                         </option>
-                      ))} */}
+                      ))}
                   </select>
                   {formik.touched.days && formik.errors.days && (
                     <div className="invalid-feedback">{formik.errors.days}</div>
@@ -510,13 +533,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
-                    onChange={(e) => {
-                      formik.handleChange(e);
-                      const selectedDate = new Date(e.target.value);
-                      const dayOfWeek = selectedDate.getDay();
-                      const dayName = daysOfWeek[dayOfWeek];
-                      formik.setFieldValue("days", dayName);
-                    }}
+                    min={formik.values.days ? getNextDateForDay(formik.values.days) : ""}
                   />
                   {formik.touched.startDate && formik.errors.startDate && (
                     <div className="invalid-feedback">
@@ -530,17 +547,21 @@ function ScheduleTeacherAdd({ onSuccess }) {
                   </label>
                   <input
                     type="date"
+                    name="endDate"
                     {...formik.getFieldProps("endDate")}
-                    class={`form-control  ${
-                      formik.touched.endDate && formik.errors.endDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                    className={`form-control ${formik.touched.endDate && formik.errors.endDate ? "is-invalid" : ""
+                      }`}
+                    // Add one day to the start date so that the end date only allows dates after the start date
+                    min={
+                      formik.values.startDate
+                        ? new Date(new Date(formik.values.startDate).setDate(new Date(formik.values.startDate).getDate() + 1))
+                          .toISOString()
+                          .split("T")[0]
+                        : new Date().toISOString().split("T")[0]
+                    }
                   />
                   {formik.touched.endDate && formik.errors.endDate && (
-                    <div className="invalid-feedback">
-                      {formik.errors.endDate}
-                    </div>
+                    <div className="invalid-feedback">{formik.errors.endDate}</div>
                   )}
                 </div>
               </div>
