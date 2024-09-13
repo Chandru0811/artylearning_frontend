@@ -53,6 +53,7 @@ const StaffPersonalEdit = forwardRef(
           formDatas.append("dateOfBirth", data.dateOfBirth);
           formDatas.append("idTypeId", data.idTypeId);
           formDatas.append("idNo", data.idNo);
+          formData.append("age", 25);
           formDatas.append("citizenship", data.citizenship);
           formDatas.append("photo", data.photo);
           formDatas.append("file", data.file);

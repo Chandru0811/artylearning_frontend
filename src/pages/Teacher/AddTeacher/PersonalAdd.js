@@ -67,6 +67,7 @@ const PersonalAdd = forwardRef(
           formData.append("email", values.email);
           formData.append("password", values.password);
           formData.append("idNo", values.idNo);
+          formData.append("age", 25);
           formData.append("citizenship", values.citizenship);
           formData.append("shortIntroduction", values.shortIntroduction);
           formData.append("gender", values.gender);

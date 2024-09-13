@@ -61,6 +61,7 @@ const StaffPersonalAdd = forwardRef(
           formData.append("dateOfBirth", values.dateOfBirth);
           formData.append("idTypeId", values.idTypeId);
           formData.append("idNo", values.idNo);
+          formData.append("age", 25);
           formData.append("citizenship", values.citizenship);
           formData.append("shortIntroduction", values.shortIntroduction);
           formData.append("gender", values.gender);
