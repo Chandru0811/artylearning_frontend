@@ -145,8 +145,8 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicat
               value={formik.values.subject}
             >
               <option selected></option>
-              <option value="ENGLISH_ASSESSMENT">English Assessment</option>
-              <option value="CHINESE_ASSESSMENT" >Chinese Assessment</option>
+              <option value="ENGLISH">English</option>
+              <option value="CHINESE" >Chinese</option>
             </select>
             {formik.touched.subject && formik.errors.subject && (
               <div className="text-danger">

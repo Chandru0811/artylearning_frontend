@@ -198,15 +198,17 @@ function InvoiceView() {
       doc.setFont("helvetica", "bold");
       doc.text("Invoice Notes:", 14, finalY);
 
+      const invoiceNotesY = finalY + 10; // Adjust the 10 value to set the desired gap between the label and the notes
+
       // Invoice Notes text in normal (light) style
       doc.setFont("helvetica", "normal");
-      const invoiceNotes = doc.splitTextToSize(
-        data.invoiceNotes || "--",
+      const invoiceNote = doc.splitTextToSize(
+        invoiceNotes || "--",
         170 // Width of the text area where you want to wrap the text
       );
-
-      // Display the invoiceNotes text starting right after the bold "invoiceNotes:"
-      doc.text(invoiceNotes, 34, finalY);
+      
+      // Display the invoiceNotes text starting on the next line
+      doc.text(invoiceNote, 14, invoiceNotesY);
 
       // Save the PDF
       doc.save(`${data.invoiceNumber}.pdf`);

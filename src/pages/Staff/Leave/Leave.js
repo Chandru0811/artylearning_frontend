@@ -83,7 +83,7 @@ const Leave = () => {
   };
   const findname=(id)=>{
     const name =leaveTypeData?.find((item)=>item.id ===id)
-    return name.leaveType
+    return name?.leaveType
   }
 
   return (
@@ -151,7 +151,7 @@ const Leave = () => {
               </tr>
             </thead>
             <tbody>
-              {datas.employeeData.map((data, index) => (
+              {datas?.employeeData.map((data, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   {/* <td>{data.centerName} </td> */}

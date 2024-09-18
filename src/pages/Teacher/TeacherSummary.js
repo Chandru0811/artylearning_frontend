@@ -89,7 +89,7 @@ function TeacherSummary({ data }) {
                       Contact Information
                     </li>
                   </div>
-                  <div className="d-flex align-items-center mb-3">
+                  {/* <div className="d-flex align-items-center mb-3">
                     {data.userLoginInfoModels.length === 0 ? (
                       <box-icon
                         name="x-circle"
@@ -107,7 +107,7 @@ function TeacherSummary({ data }) {
                     <li className="list-unstyled d-flex align-items-center">
                       Login Information
                     </li>
-                  </div>
+                  </div> */}
                   <div className="d-flex align-items-center mb-3">
                     {data.userRequireInformationModels.length === 0 ? (
                       <box-icon

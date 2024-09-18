@@ -58,27 +58,18 @@ export default function InvoiceAdd() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const studentID = searchParams.get("studentID");
-  const lessonOptions = [];
-  for (let i = 1; i <= 50; i++) {
-    lessonOptions.push(
-      <option key={i} value={i}>
-        {i}
-      </option>
-    );
-  }
-
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-  const [packageData, setPackageData] = useState(null);
+  const userName = localStorage.getItem("userName");
   const [studentData, setStudentData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
-  console.log("Tax type:",taxData);
-  
-  const userName = localStorage.getItem("userName");
+  const [packageData, setPackageData] = useState(null);
+  console.log("packageData:", packageData);
 
-  // const [isLoading, setIsLoading] = useState(true);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [lessonsOptions, setLessonsOptions] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -248,6 +239,11 @@ export default function InvoiceAdd() {
         const packageId = studentCourseDetails?.packageName;
         const studentData = response.data;
         let invoiceItems = [];
+          // Find the package details based on packageId
+      const selectedPackage = packageData.find(pkg => pkg.id === parseInt(packageId));
+
+      // Get the number of lessons from the selected package
+      const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
 
         if (centerId) {
           try {
@@ -356,7 +352,7 @@ export default function InvoiceAdd() {
           course: studentData.studentCourseDetailModels[0].courseId,
           packageId: studentData.studentCourseDetailModels[0].packageName,
           schedule: studentData.studentCourseDetailModels[0].batch,
-          noOfLessons: studentData.noOfLessons,
+          noOfLessons: noOfLessons,
           remark: studentData.remark,
           invoiceDate: "",
           dueDate: "",
@@ -377,13 +373,57 @@ export default function InvoiceAdd() {
     if (courseData && taxData && formik.values.student) {
       fetchStudentData(); // Call fetchStudentData only if courseData and taxData are available
     }
-  }, [courseData, taxData, formik.values.student]);
+  }, [courseData, taxData, formik.values.student ,packageData]);
 
   useEffect(() => {
     if (studentID) {
       handleStudentChange(studentID);
     }
   }, [studentID]);
+
+  // useEffect(() => {
+  //   // Update the lessons dropdown options based on the selected package
+  //   if (selectedPackage && packageData) {
+  //     const selectedPackageDetails = packageData.find(
+  //       (pkg) => pkg.id === parseInt(selectedPackage)
+  //     );
+  //     {lessonsOptions.map((lesson) => (
+  //       {lesson}
+  //     ))}
+  //     if (selectedPackageDetails) {
+  //       setLessonsOptions([selectedPackageDetails.noOfLesson]);
+  //     }
+  //   }
+
+  // }, [selectedPackage, packageData]);
+
+  useEffect(() => {
+    // Update the lessons dropdown options based on the selected package
+    if (selectedPackage && packageData) {
+      const selectedPackageDetails = packageData.find(
+        (pkg) => pkg.id === parseInt(selectedPackage)
+      );
+  
+      if (selectedPackageDetails) {
+        const lessonsArray = [selectedPackageDetails.noOfLesson];
+        setLessonsOptions(lessonsArray);
+  
+        // Set the default value for noOfLessons
+        if (lessonsArray.length > 0) {
+          formik.setFieldValue("noOfLessons", lessonsArray[0]); // Set the default value
+        }
+      } else {
+        // Reset to empty if no package is found
+        setLessonsOptions([]);
+        formik.setFieldValue("noOfLessons", "");
+      }
+    } else {
+      // Reset to empty if no package is selected
+      setLessonsOptions([]);
+      formik.setFieldValue("noOfLessons", "");
+    }
+  }, [selectedPackage, packageData]);
+  
 
   const handleSelectChange = (index, value) => {
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
@@ -452,60 +492,62 @@ export default function InvoiceAdd() {
     formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      if (studentID) {
-        try {
-          const response = await api.get(`/getAllStudentById/${studentID}`);
-          const studentData = response.data;
-          console.log("Student Data:", studentData);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     if (studentID) {
+  //       try {
+  //         const response = await api.get(`/getAllStudentById/${studentID}`);
+  //         const studentData = response.data;
+  //         console.log("Student Data:", studentData);
 
-          // Uncomment and update this section if you want to set values in a form
-          formik.setValues({
-            center: studentData.centerId || "",
-            parent: studentData?.studentParentsDetails[0]?.parentName || "",
-            student: studentID,
-            course: studentData.studentCourseDetailModels[0].courseId,
-            packageId: studentData.studentCourseDetailModels[0].packageName,
-            schedule: studentData.studentCourseDetailModels[0].batch,
-            noOfLessons: studentData.noOfLessons,
-            remark: studentData.remark,
-            invoiceDate: "",
-            dueDate: "",
-            invoicePeriodTo: "",
-            invoicePeriodFrom: "",
-            receiptAmount: "",
-            creditAdviceOffset: "",
-            gst: "",
-            totalAmount: "",
-          });
-          fetchCourses(studentData.centerId); // Fetch courses for the selected studentData.centerId
-          fetchPackage(studentData.centerId); // Fetch courses for the selected center
-          fetchStudent(studentData.centerId);
-          formik.setFieldValue("center", studentData.centerId);
-          formik.setFieldValue("invoiceItems", [
-            {
-              item: "",
-              itemAmount: "",
-              taxType: "",
-              gstAmount: "",
-              totalAmount: "",
-            },
-          ]);
-          setRows(formik.values.invoiceItems);
-        } catch (error) {
-          console.error("Error fetching Student Data:", error);
-          toast.error("Error fetching Student Data");
-        }
-      }
-    };
-    getData();
-  }, [studentID]);
+  //         // Uncomment and update this section if you want to set values in a form
+  //         formik.setValues({
+  //           center: studentData.centerId || "",
+  //           parent: studentData?.studentParentsDetails[0]?.parentName || "",
+  //           student: studentID,
+  //           course: studentData.studentCourseDetailModels[0].courseId,
+  //           packageId: studentData.studentCourseDetailModels[0].packageName,
+  //           schedule: studentData.studentCourseDetailModels[0].batch,
+  //           noOfLessons: "",
+  //           remark: studentData.remark,
+  //           invoiceDate: "",
+  //           dueDate: "",
+  //           invoicePeriodTo: "",
+  //           invoicePeriodFrom: "",
+  //           receiptAmount: "",
+  //           creditAdviceOffset: "",
+  //           gst: "",
+  //           totalAmount: "",
+  //         });
+  //         fetchCourses(studentData.centerId); // Fetch courses for the selected studentData.centerId
+  //         fetchPackage(studentData.centerId); // Fetch courses for the selected center
+  //         fetchStudent(studentData.centerId);
+  //         formik.setFieldValue("center", studentData.centerId);
+  //         console.log("student data:", studentData);
+
+  //         formik.setFieldValue("invoiceItems", [
+  //           {
+  //             item: "",
+  //             itemAmount: "",
+  //             taxType: "",
+  //             gstAmount: "",
+  //             totalAmount: "",
+  //           },
+  //         ]);
+  //         setRows(formik.values.invoiceItems);
+  //       } catch (error) {
+  //         console.error("Error fetching Student Data:", error);
+  //         toast.error("Error fetching Student Data");
+  //       }
+  //     }
+  //   };
+  //   getData();
+  // }, [studentID]);
+
   const handleRowDelete = (index) => {
     const updatedInvoiceItems = formik.values.invoiceItems.filter(
       (_, i) => i !== index
     );
-
     // Update the rows and formik values
     setRows(updatedInvoiceItems);
     formik.setFieldValue("invoiceItems", updatedInvoiceItems);
@@ -620,7 +662,6 @@ export default function InvoiceAdd() {
                   <div className="invalid-feedback">{formik.errors.parent}</div>
                 )}
               </div>
-
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
                   Course<span class="text-danger">*</span>
@@ -679,12 +720,17 @@ export default function InvoiceAdd() {
                 </label>
                 <br />
                 <select
+                  name="packageId"
                   {...formik.getFieldProps("packageId")}
                   className={`form-select ${
                     formik.touched.packageId && formik.errors.packageId
                       ? "is-invalid"
                       : ""
                   }`}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    setSelectedPackage(e.target.value); // Update the selected package
+                  }}
                 >
                   <option selected></option>
                   {packageData &&
@@ -715,7 +761,7 @@ export default function InvoiceAdd() {
                   }}
                   maxLength={200}
                   onKeyDown={(e) => {
-                    console.log('Key pressed:', e.key); // Log the key pressed for debugging
+                    console.log("Key pressed:", e.key); // Log the key pressed for debugging
                     if (e.key === "Enter") {
                       e.preventDefault();
                       e.stopPropagation(); // Stop the event from bubbling up to parent elements
@@ -724,6 +770,7 @@ export default function InvoiceAdd() {
                 />
               </div>
             </div>
+
             <div className="col-lg-6 col-md-6 col-12 px-5">
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
@@ -745,7 +792,6 @@ export default function InvoiceAdd() {
                   </div>
                 )}
               </div>
-
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
                   Due Date<span className="text-danger">*</span>
@@ -771,7 +817,6 @@ export default function InvoiceAdd() {
                   </div>
                 )}
               </div>
-
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
                   Invoice Period From<span class="text-danger">*</span>
@@ -817,7 +862,6 @@ export default function InvoiceAdd() {
                     </div>
                   )}
               </div>
-
               <div className="text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
                   Receipt Amount<span class="text-danger">*</span>
@@ -845,15 +889,31 @@ export default function InvoiceAdd() {
                   Number of Lesson
                 </label>
                 <br />
-                <select
+                {/* <select
                   name="noOfLessons"
                   {...formik.getFieldProps("noOfLessons")}
                   class="form-select "
                   aria-label="Default select example"
                 >
-                  <option value="" selected></option>
-                  {lessonOptions}
-                </select>
+                  {lessonsOptions.map((lesson, index) => (
+                    <option key={index} value={lesson}>
+                      {lesson}
+                    </option>
+                  ))}
+                </select> */}
+                <input
+                  id="noOfLessons"
+                  name="noOfLessons"
+                  type="text"
+                  className="form-control"
+                  {...formik.getFieldProps("noOfLessons")}
+                  // If you want to show the default value based on lessonsOptions array
+                  value={formik.values.noOfLessons || lessonsOptions[0] || ""}
+                  onChange={(e) => {
+                    formik.setFieldValue("noOfLessons", e.target.value);
+                  }}
+                  readOnly
+                />
               </div>
             </div>
           </div>
@@ -1002,13 +1062,6 @@ export default function InvoiceAdd() {
                 <button
                   type="button"
                   className="btn btn-sm mx-2 text-danger border-danger bg-white"
-                  // onClick={() => {
-                  //   setRows((pr) => pr.slice(0, -1));
-                  //   formik.setFieldValue(
-                  //     "invoiceItems",
-                  //     formik.values.invoiceItems.slice(0, -1)
-                  //   );
-                  // }}
                   onClick={() => handleRowDelete(rows.length - 1)}
                 >
                   Delete

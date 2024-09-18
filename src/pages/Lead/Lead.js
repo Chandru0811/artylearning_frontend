@@ -335,11 +335,11 @@ const Lead = () => {
                           {subject.subjects}
                         </option>
                       ))} */}
-                    <option value="ENGLISH_ASSESSMENT">
-                      English Assessment
+                    <option value="ENGLISH">
+                      English
                     </option>
-                    <option value="CHINESE_ASSESSMENT">
-                      Chinese Assessment
+                    <option value="CHINESE">
+                      Chinese
                     </option>
                   </select>
                   <button
@@ -394,10 +394,10 @@ const Lead = () => {
                         </td>
                         <td>{data.studentName}</td>
                         <td>
-                          {data.subject === "ENGLISH_ASSESSMENT"
-                            ? "English Assessment"
-                            : data.subject === "CHINESE_ASSESSMENT"
-                            ? "Chinese Assessment"
+                          {data.subject === "ENGLISH"
+                            ? "English"
+                            : data.subject === "CHINESE"
+                            ? "Chinese"
                             : ""}
                         </td>
 

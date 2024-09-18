@@ -130,7 +130,7 @@ const StaffAccountAdd = forwardRef(
       staffAccountAdd: formik.handleSubmit,
     }));
 
-    const handleSubjectChange = (event) => {
+    const handleSHGTypeChange = (event) => {
       const shgTypeId = parseInt(event.target.value, 10);
       formik.setFieldValue("shgTypeId", shgTypeId);
       const shg = shgData.find((shg) => shg.id === shgTypeId);
@@ -259,7 +259,7 @@ const StaffAccountAdd = forwardRef(
                 className="form-select"
                 name="shgTypeId"
                 {...formik.getFieldProps("shgTypeId")}
-                onChange={handleSubjectChange}
+                onChange={handleSHGTypeChange}
               >
                 {" "}
                 <option selected></option>
@@ -283,41 +283,6 @@ const StaffAccountAdd = forwardRef(
                 readOnly
               />
             </div>
-
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
-              <lable class="">
-                Status<span class="text-danger">*</span>
-              </lable>
-              <select
-                class="form-select"
-                name="status"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.status}
-              >
-                <option value=""></option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-              {formik.touched.status && formik.errors.status && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.status}</small>
-                </div>
-              )}
-            </div> */}
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                End Date<span class="text-danger">*</span>
-              </label>
-              <input
-                type="date"
-                className="form-control"
-                name="endDate"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.endDate}
-              />
-            </div> */}
             <div className="col-lg-6 col-md-6 col-12 mb-2 mt-3">
               <label>
                 Approval Required for photos / videos upload

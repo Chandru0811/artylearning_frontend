@@ -207,7 +207,7 @@ const StaffAccountEdit = forwardRef(
       staffAccountEdit: formik.handleSubmit,
     }));
 
-    const handleSubjectChange = (event) => {
+    const handleSHGTypeChange = (event) => {
       const shgTypeId = parseInt(event.target.value, 10);
       formik.setFieldValue("shgTypeId", shgTypeId);
       const shg = shgData.find((shg) => shg.id === shgTypeId);
@@ -313,7 +313,7 @@ const StaffAccountEdit = forwardRef(
                 className="form-select"
                 name="shgTypeId"
                 {...formik.getFieldProps("shgTypeId")}
-                onChange={handleSubjectChange}
+                onChange={handleSHGTypeChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.shgTypeId}
               >

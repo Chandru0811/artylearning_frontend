@@ -52,7 +52,7 @@ function LeadForm() {
       gender: "",
       dateOfBirth: "",
       pencilGrip: "",
-      subject: subjects,
+      subject: subjects || "CHINESE_ASSESSMENT",
       marketingSource: "",
       referBy: "",
       writeUpperAToZ: "",
