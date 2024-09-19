@@ -89,8 +89,12 @@ const CmsTeacherAdd = ({ getData }) => {
   return (
     <div>
       <div className="d-flex justify-content-end">
-        <button className="btn btn-outline-primary" onClick={handleShowModal}>
-          Add Teacher
+        <button
+          type="button"
+          className="btn btn-button btn-sm me-2"
+          onClick={handleShowModal}
+        >
+          Add <i class="bx bx-plus"></i>
         </button>
       </div>
       <Modal show={showModal} onHide={handleCloseModal}>

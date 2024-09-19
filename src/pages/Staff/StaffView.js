@@ -225,7 +225,7 @@ function StaffView() {
     : "#";
  
     const findSalaryType=(id)=>{
-      const name =salaryTypeData.find((datas)=>datas.id ===id);
+      const name =salaryTypeData?.find((datas)=>datas.id ===id);
       return name.salaryType
     }
     
@@ -466,7 +466,7 @@ function StaffView() {
             data.userAccountInfo.length > 0 &&
             data.userAccountInfo[0].shgTypeId
               ? (
-                  shgData.find(
+                  shgData?.find(
                     (item) => item.id == data.userAccountInfo[0].shgTypeId
                   ) || {}
                 ).shgType || "--"

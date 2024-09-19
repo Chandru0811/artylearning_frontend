@@ -8,6 +8,12 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithCenterIds from "../List/CourseListByCenterIdS";
 import fetchAllClassByCourseIds from "../List/ClassListByCourseIdS";
 import { MultiSelect } from 'react-multi-select-component';
+import AttactmentPdf from "../../assets/images/Attactmentpdf.jpg";
+import AttactmentExcel from "../../assets/images/AttactmentExcel.jpg";
+import AttactmentOther from "../../assets/images/Attactmentothers.jpg";
+import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
+import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
+import { IoMdDownload } from "react-icons/io";
 
 const validationSchema = Yup.object({
   recipient: Yup.string().required("*Recipient Name is required"),
@@ -21,6 +27,7 @@ const validationSchema = Yup.object({
 
 function SendNotificationEdit() {
   const { id } = useParams();
+  const [data, setData] = useState({});
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
@@ -31,11 +38,11 @@ function SendNotificationEdit() {
   const [selectedClasses, setSelectedClasses] = useState([]);
   const userName = localStorage.getItem('userName');
 
-
   const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
   const courseOptions = courseData.map(course => ({ label: course.courseName, value: course.courseId }));
   const classOptions = classData.map(classes => ({ label: classes.className, value: classes.classId }));
   console.log("centerdta", centerData)
+
   useEffect(() => {
     fetchAllCentersWithIds().then(setCenterData).catch(error => toast.error(error.message));
   }, []);
@@ -57,6 +64,100 @@ function SendNotificationEdit() {
       setClassData([]);
     }
   }, [selectedCourses]);
+
+  const renderAttachment = (attachment) => {
+    if (!attachment || !attachment.fileUrl) {
+      return <span>No attachment available</span>;
+    }
+    // console.log("firstAttachment", attachment)
+    const url = attachment.fileUrl;
+    const extension = url.split(".").pop().toLowerCase();
+    const fileName = url.split("/").pop();
+
+    const downloadFile = () => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+
+    // const deletedId = data.smsPushNotificationAttachments[0]?.id;
+
+    const renderCard = (src, label, attachmentId, isVideo = false) => (
+      <div className="position-relative d-flex align-items-center mb-3">
+        <div className="card" style={{ width: "18rem", marginTop: "20px" }}>
+          {isVideo ? (
+            <video
+              width="100%"
+              height="auto"
+              controls
+              style={{ maxHeight: "150px" }}
+            >
+              <source src={src} type="video/mp4" />
+              <source src={src} type="video/ogg" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img
+              src={src}
+              alt={label}
+              style={{ width: "100%", maxHeight: "150px", objectFit: "cover" }}
+            />
+          )}
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-8 col-12 text-end">
+                <p>{fileName}</p>
+              </div>
+              <div className="col-md-4 col-12 text-end">
+                <p>
+                  <IoMdDownload
+                    onClick={downloadFile}
+                    style={{ cursor: "pointer" }}
+                  />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <div
+          className="delete-icon-container"
+          style={{ marginLeft: "10px", marginBottom: "8rem" }}
+        >
+          <Delete path={`/deleteSmsPushNotifications/${deletedId}`} id={attachmentId} onSuccess={getData} />
+          <Delete id={attachmentId} onSuccess={getData} />
+        </div> */}
+
+      </div>
+    );
+
+    switch (extension) {
+      case "jpg":
+      case "jpeg":
+      case "png":
+      case "gif":
+        return renderCard(url, "Image", attachment.id);
+      case "pdf":
+        return renderCard(AttactmentPdf, "PDF", attachment.id);
+      case "xls":
+      case "xlsx":
+      case "csv":
+        return renderCard(AttactmentExcel, "Excel", attachment.id);
+      case "mp4":
+      case "ogg":
+        return renderCard(url, "Video", attachment.id, true);
+      case "doc":
+      case "docx":
+        return renderCard(AttactmentWord, "Word", attachment.id);
+      case "ppt":
+      case "pptx":
+        return renderCard(AttactmentPpt, "PPT", attachment.id);
+      default:
+        return renderCard(AttactmentOther, "Other", attachment.id);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -132,46 +233,13 @@ function SendNotificationEdit() {
         setSelectedCenters(transformedCenterIds);
         setSelectedCourses(transformedCourseIds);
         setSelectedClasses(transformedClassIds);
+        setData(announcementData);
       } catch (error) {
         toast.error("Error fetching data:", error.message);
       }
     };
     getData();
   }, []); // Ensure that classData is available before mapping classes
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllSmsPushNotificationsById/${id}`);
-  //       const announcementData = response.data;
-
-  //       // Transform the data for MultiSelect components
-  //       const transformedCenterIds = announcementData.centers.map(center => ({ label: center.centerName, value: center.id }));
-  //       const transformedCourseIds = announcementData.courses.map(course => ({ label: course.courseName, value: course.id }));
-  //       const transformedClassIds = announcementData.classes.map(classes => ({ label: classes.className, value: classes.id }));
-
-  //       // Set the form values
-  //       formik.setValues({
-  //         recipient: announcementData.recipient,
-  //         messageTitle: announcementData.messageTitle,
-  //         centerIds: transformedCenterIds.map(option => option.value),
-  //         courseIds: transformedCourseIds.map(option => option.value),
-  //         classIds: transformedClassIds.map(option => option.value),
-  //         days: announcementData.days,
-  //         messageDescription: announcementData.messageDescription,
-  //         attachments: announcementData.smsPushNotificationAttachments[0]?.attachment || "",
-  //       });
-
-  //       // Set the selected options for MultiSelect components
-  //       setSelectedCenters(transformedCenterIds);
-  //       setSelectedCourses(transformedCourseIds);
-  //       setSelectedClasses(transformedClassIds);
-  //     } catch (error) {
-  //       toast.error("Error fetching data:", error.message);
-  //     }
-  //   };
-  //   getData();
-  // }, []); 
 
   return (
     <div className="container">
@@ -385,6 +453,25 @@ function SendNotificationEdit() {
               {formik.touched.messageDescription && formik.errors.messageDescription && (
                 <div className="invalid-feedback">{formik.errors.messageDescription}</div>
               )}
+            </div>
+
+            <div className="col-12">
+              <div className="row mb-2">
+                <div className="col-12">
+                  <p className="fw-medium">Attachments &nbsp; : &nbsp;</p>
+                </div>
+                {data.attachments && data.attachments.length > 0 ? (
+                  <div className="row">
+                    {data.attachments.map((attachment, index) => (
+                      <div key={index} className="col-md-6 col-12 mb-2">
+                        {renderAttachment(attachment)}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-muted">No attachments available</p>
+                )}
+              </div>
             </div>
           </div>
         </div>

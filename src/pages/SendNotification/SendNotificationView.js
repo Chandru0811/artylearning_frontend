@@ -4,12 +4,9 @@ import api from "../../config/URL";
 import AttactmentPdf from "../../assets/images/Attactmentpdf.jpg";
 import AttactmentExcel from "../../assets/images/AttactmentExcel.jpg";
 import AttactmentOther from "../../assets/images/Attactmentothers.jpg";
-// import AttactmentYoutube from "../../assets/AttachmentYoutube.jpg";
 import AttactmentWord from "../../assets/images/AttactmentWord.jpg";
 import AttactmentPpt from "../../assets/images/AttachmentPpt.png";
-// import { MdDeleteOutline } from "react-icons/md";
 import { IoMdDownload } from "react-icons/io";
-import Delete from "../../components/common/Delete";
 
 function SendNotificationView() {
   const { id } = useParams();

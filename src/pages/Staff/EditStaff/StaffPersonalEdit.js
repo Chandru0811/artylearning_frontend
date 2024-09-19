@@ -39,9 +39,9 @@ const StaffPersonalEdit = forwardRef(
         photo: null || "",
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
-        email: formData.email || "",
+        // email: formData.email || "",
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         setFormData((prv) => ({ ...prv, ...data }));
@@ -60,7 +60,7 @@ const StaffPersonalEdit = forwardRef(
           formDatas.append("shortIntroduction", data.shortIntroduction);
           formDatas.append("gender", data.gender);
           formDatas.append("role", data.role);
-          formDatas.append("email", data.email);
+          // formDatas.append("email", data.email);
           formDatas.append("updatedBy", userName);
           const response = await api.put(
             `/updateUser/${formData.staff_id}`,
