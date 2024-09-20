@@ -35,45 +35,29 @@ const StaffPersonalEdit = forwardRef(
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
         citizenship: formData.citizenship || "",
-        file: formData.file || "",
-        photo: null || "",
+        photo:  formData.photo|| "",
+        employeeType: null || null ,
+        nationality: formData.nationality || "",
+        age: 0,
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
-        // email: formData.email || "",
+        email: formData.email || "",
+        password :formData.password || "",
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
-        setFormData((prv) => ({ ...prv, ...data }));
-        // console.log("Api Data:", data);
-        data.photo = null;
+        setFormData((prev) => ({ ...prev, ...data }));
         try {
-          const formDatas = new FormData();
-          formDatas.append("teacherName", data.teacherName);
-          formDatas.append("dateOfBirth", data.dateOfBirth);
-          formDatas.append("idTypeId", data.idTypeId);
-          formDatas.append("idNo", data.idNo);
-          formData.append("age", 25);
-          formDatas.append("citizenship", data.citizenship);
-          formDatas.append("photo", data.photo);
-          formDatas.append("file", data.file);
-          formDatas.append("shortIntroduction", data.shortIntroduction);
-          formDatas.append("gender", data.gender);
-          formDatas.append("role", data.role);
-          // formDatas.append("email", data.email);
-          formDatas.append("updatedBy", userName);
-          const response = await api.put(
-            `/updateUser/${formData.staff_id}`,
-            formDatas,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+          const response = await api.put(`/updateUser/${formData.staff_id}`, data ,{
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+      
           if (response.status === 200) {
             toast.success(response.data.message);
-            setFormData((prv) => ({ ...prv, ...data }));
+            setFormData((prev) => ({ ...prev, ...data }));
             handleNext();
           } else {
             toast.error(response.data.message);
@@ -88,6 +72,7 @@ const StaffPersonalEdit = forwardRef(
           setLoadIndicators(false);
         }
       },
+      
     });
 
     const fetchIDTypeData = async () => {
@@ -255,35 +240,6 @@ const StaffPersonalEdit = forwardRef(
                 </div>
               )}
             </div>
-            {/* <div class="form-group  col-sm ">
-              <label>Photo</label><span className="text-danger">*</span>
-              <input
-                type="file"
-                name="file"
-                className="form-control"
-                onChange={(event) => {
-                  formik.setFieldValue("file", event.target.files[0]);
-                }}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.file && !formik.values.file && (
-                <div className="error text-danger">
-                  <small>Photo is required</small>
-                </div>
-              )}
-            </div> */}
-            {/* <div class="form-group  col-sm ">
-              <label>Photo</label>
-              <input
-                type="file"
-                class="form-control "
-                name="photo"
-                onChange={(event) => {
-                  formik.setFieldValue("photo", event.currentTarget.files[0]);
-                }}
-                onBlur={formik.handleBlur}
-              />
-            </div> */}
             <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
@@ -317,28 +273,6 @@ const StaffPersonalEdit = forwardRef(
               </div>
             </div>
           </div>
-          {/* <div class="container row d-flex my-4 justify-align-content-around">
-            <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Email Id<span class="text-danger">*</span>
-              </label>
-
-              <input
-                type="email"
-                className="form-control"
-                name="email"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
-                readOnly
-              />
-              {formik.touched.email && formik.errors.email && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.email}</small>
-                </div>
-              )}
-            </div>
-          </div> */}
           <div class="container row d-flex my-4 justify-align-content-around"></div>
           <div class="container row d-flex justify-content-start align-items-center">
             <div class="form-group  col-sm ">

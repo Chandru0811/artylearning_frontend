@@ -238,8 +238,8 @@ const AccountEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div className="col-md-6 col-12  mb-2 mt-3">
-              <label className="form-label">
+            <div className="col-md-6 col-12 my-2">
+              <label className="form-label m-0">
                 Centre<span className="text-danger">*</span>
               </label>
               {centerOptions.length > 0 && (
@@ -579,7 +579,7 @@ const AccountEdit = forwardRef(
               )}
             </div>
 
-            <div className="col-md-6 col-12 mb-2">
+            <div className="col-md-6 col-12 mt-3">
               <lable className="form-lable">Color Code</lable>
               <div className="input-group mb-3">
                 <div className="input-group-text inputGroup">

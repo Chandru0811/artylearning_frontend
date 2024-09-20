@@ -274,8 +274,8 @@ const StaffPersonalAdd = forwardRef(
             </div>
           </div>
 
-          <div class="container row d-flex my-4 justify-align-content-around">
-            <div class="form-group col-sm">
+          <div class="container row d-flex my-3 justify-align-content-around">
+            <div class="form-group col-sm mb-2">
               <label>Role</label>
               <span className="text-danger">*</span>
               <select
@@ -301,9 +301,9 @@ const StaffPersonalAdd = forwardRef(
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            <div class="col-md-6 col-12 mb-2">
               <label>
-                Email Id<span class="text-danger">*</span>
+                Email ID<span class="text-danger">*</span>
               </label>
               <input
                 type="email"
@@ -319,7 +319,7 @@ const StaffPersonalAdd = forwardRef(
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2">
+            <div class="col-md-6 col-12 mb-2 mt-3">
               <div className="mb-3">
                 <label>
                   Password<span class="text-danger">*</span>
@@ -357,7 +357,7 @@ const StaffPersonalAdd = forwardRef(
                 </div>
               </div>
             </div>
-            <div class="col-md-6 col-12 mb-2">
+            <div class="col-md-6 col-12 mb-2 mt-3">
               <div className="mb-3">
                 <label>
                   Confirm Password<span class="text-danger">*</span>
