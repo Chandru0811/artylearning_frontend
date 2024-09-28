@@ -52,7 +52,7 @@ function LeadForm() {
       gender: "",
       dateOfBirth: "",
       pencilGrip: "",
-      subject: subjects || "CHINESE_ASSESSMENT",
+      subject: subjects || "CHINESE",
       marketingSource: "",
       referBy: "",
       writeUpperAToZ: "",
@@ -262,7 +262,7 @@ function LeadForm() {
               <label for="exampleFormControlInput1" className="form-label">
                 Subject / 课程 <span className="text-danger">*</span>
               </label>
-               {/*<select
+               <select
                 {...formik.getFieldProps("subject")}
                 className={`form-select    ${formik.touched.subject && formik.errors.subject
                   ? "is-invalid"
@@ -271,10 +271,10 @@ function LeadForm() {
                 aria-label="Default select example"
               >
                 <option selected>--Select--</option>
-                <option value="ENGLISH_ASSESSMENT">English / 英文</option>
-                <option value="CHINESE_ASSESSMENT">Chinese / 中文</option>
-              </select> */}
-              <input
+                <option value="ENGLISH">English / 英文</option>
+                <option value="CHINESE">Chinese / 中文</option>
+              </select>
+              {/* <input
                 className={`form-control  ${formik.touched.subject && formik.errors.subject
                   ? "is-invalid"
                   : ""
@@ -283,7 +283,7 @@ function LeadForm() {
                 {...formik.getFieldProps("subject")}
                 type="text"
                 readOnly
-              />
+              /> */}
               {formik.touched.subject && formik.errors.subject && (
                 <div className="invalid-feedback">{formik.errors.subject}</div>
               )}
