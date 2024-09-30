@@ -143,7 +143,7 @@ function SendNotificationView() {
                 <div className="col-6 text-start">
                   <p className="text-muted text-sm">
                     {" "}
-                    &nbsp; : &nbsp;{data.recipient}
+                    : {data.recipient}
                   </p>
                 </div>
               </div>
@@ -153,61 +153,47 @@ function SendNotificationView() {
                 <div className="col-6">
                   <p className="fw-medium">Title </p>
                 </div>
-                <div className="col-6">
+                <div className="col-6 text-start">
                   <p className="text-muted text-sm">
                     {" "}
-                    &nbsp; : &nbsp;{data.messageTitle}
+                    : {data.messageTitle}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6">
-                  <p className="fw-medium">Centre</p>
-                </div>
-                <div className="col-6">
-
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      &nbsp; : &nbsp;{data?.centerIds?.map(center => center.centerName).join(", ")}
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <div className="col-md-6 col-12 mb-3">
+          <div className="row">
+            <div className="col-6">
+              <p className="fw-medium">Centre</p>
             </div>
-
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6">
-                  <p className="fw-medium">Course</p>
-                </div>
-                <div className="col-6">
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      &nbsp; : &nbsp;{data?.courseIds?.map(course => course.courseName).join(", ")}
-                    </p>
-                  </div>
-                </div>
-              </div>
+            <div className="col-6 text-start">
+              <p className="text-muted">: {data?.centerIds?.map(center => center.centerName).join(", ")}</p>
             </div>
+          </div>
+        </div>
 
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6">
-                  <p className="fw-medium">Class</p>
-                </div>
-                <div className="col-6">
-
-                  <div className="col-6 text-start">
-                    <p className="text-muted text-sm">
-                      &nbsp; : &nbsp;{data?.classIds?.map(cls => cls.className).join(", ")}
-                    </p>
-                  </div>
-                </div>
-              </div>
+        <div className="col-md-6 col-12 mb-3">
+          <div className="row">
+            <div className="col-6">
+              <p className="fw-medium">Course</p>
             </div>
+            <div className="col-6 text-start">
+              <p className="text-muted">: {data?.courseIds?.map(course => course.courseName).join(", ")}</p>
+            </div>
+          </div>
+        </div>
+
+            <div className="col-md-6 col-12 mb-3">
+          <div className="row">
+            <div className="col-6">
+              <p className="fw-medium">Class</p>
+            </div>
+            <div className="col-6 text-start">
+              <p className="text-muted">: {data?.classIds?.map(cls => cls.className).join(", ")}</p>
+            </div>
+          </div>
+        </div>
 
             <div className="col-md-6 col-12">
               <div className="row mb-2">
@@ -216,43 +202,45 @@ function SendNotificationView() {
                 </div>
                 <div className="col-6 text-start">
                   <p className="text-muted text-sm">
-                    &nbsp; : &nbsp;{data.days}
+                     : {data.days}
                   </p>
                 </div>
               </div>
             </div>
-
-            <div className="col-12">
-              <div className="row mb-2">
-                <div className="col-12">
-                  <p className="fw-medium">Message &nbsp; : &nbsp;</p>
-                </div>
-                <div className="col-12">
-                  <p className="text-muted text-sm">
-                    {data.messageDescription}
-                  </p>
-                </div>
-              </div>
+            <div className="col-md-6 col-12 mb-3">
+          <div className="row">
+            <div className="col-6">
+              <p className="fw-medium">Message</p>
             </div>
-            <div className="col-12">
+            <div className="col-6">
+              <p className="text-muted">: {data.messageDescription}</p>
+            </div>
+          </div>
+        </div>
+          
+            <div className="col-md-6 col-12 mb-3">
               <div className="row mb-2">
-                <div className="col-12">
-                  <p className="fw-medium">Attachments &nbsp; : &nbsp;</p>
+                <div className="col-6">
+                  <p className="fw-medium">Attachments</p>
                 </div>
                 {data.attachments && data.attachments.length > 0 ? (
-                  <div className="row">
+                  <div className="col-6">
+                  <p className="my-2 d-flex">
+                  :{" "}
                     {data.attachments.map((attachment, index) => (
                       <div key={index} className="col-md-6 col-12 mb-2">
                         {renderAttachment(attachment)}
                       </div>
                     ))}
+                    </p>
                   </div>
                 ) : (
                   <p className="text-muted">No attachments available</p>
                 )}
+
               </div>
             </div>
-
+          
           </div>
         </div>
       </div>
