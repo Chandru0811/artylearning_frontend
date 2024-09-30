@@ -91,8 +91,12 @@ function EditPayroll() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
-      }finally {
+        if(error?.response?.status === 409){
+          toast.warning(error?.response?.data?.message)
+        }else{
+          toast.error(error?.response?.data?.message);
+        }
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -137,7 +141,7 @@ function EditPayroll() {
   const fetchUserSalaryInfo = async (userId, payrollMonth) => {
     // alert(userId, payrollMonth);
     const queryParams = new URLSearchParams({
-      userId: 110,
+      userId: userId,
       deductionMonth: payrollMonth,
     });
 
@@ -212,11 +216,14 @@ function EditPayroll() {
 
   return (
     <div className="container-fluid">
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="container py-3">
           <div className="row">
             <div className="col-12 text-end">
@@ -226,13 +233,17 @@ function EditPayroll() {
                 </button>
               </Link>
               &nbsp;&nbsp;
-              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
                 {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Update
               </button>
             </div>
@@ -265,7 +276,8 @@ function EditPayroll() {
               )}
             </div>
             <div className="col-md-6 col-12 mb-3 ">
-              <lable className="">Employee Name</lable> <span className="text-danger">*</span>
+              <lable className="">Employee Name</lable>{" "}
+              <span className="text-danger">*</span>
               <select
                 {...formik.getFieldProps("userId")}
                 class={`form-select  ${
