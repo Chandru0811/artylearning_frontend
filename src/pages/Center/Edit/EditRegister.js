@@ -13,11 +13,36 @@ function EditRegisteration({ id, onSuccess }) {
   const [taxData, setTaxData] = useState([]);
   const [isModified, setIsModified] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const fetchData = async () => {
+    try {
+      const taxResponse = await api.get("getAllTaxSetting");
+      setTaxData(taxResponse.data);
+
+      const response = await api.get(`/getAllCenterRegistrationsById/${id}`);
+      const formattedData = {
+        ...response.data,
+        registrationDate: response.data.registrationDate
+          ? response.data.registrationDate.substring(0, 10)
+          : null,
+        effectiveDate: response.data.effectiveDate
+          ? response.data.effectiveDate.substring(0, 10)
+          : null,
+      };
+      formik.setValues(formattedData); // Set form data to fetched values
+    } catch (error) {
+      toast.error("Error Fetching Data");
+    }
+  };
+
+  const handleClose = () => {
+    fetchData();
+    setShow(false);
+  };
+
   const handleShow = async () => {
     setShow(true);
-    setIsModified(false); 
-
+    setIsModified(false);
+    fetchData();
     try {
       const response = await api.get("getAllTaxSetting");
       setTaxData(response.data);
@@ -27,15 +52,16 @@ function EditRegisteration({ id, onSuccess }) {
   };
 
   const validationSchema = yup.object().shape({
-    // registrationDate: yup.string().required("*Registeration Date is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
-    amount: yup.string()
-    .typeError("Amount must be a number")
-    .required("*Amount is required")
-    .matches(/^\d+(\.\d{1,2})?$/, "*Amount must be a valid number without special characters"),
+    amount: yup
+      .string()
+      .typeError("Amount must be a number")
+      .required("*Amount is required")
+      .matches(/^\d+(\.\d{1,2})?$/, "*Amount must be a valid number without special characters"),
     taxId: yup.string().required("*Tax Type is required"),
     status: yup.string().required("*Status is required"),
   });
+
   const formik = useFormik({
     initialValues: {
       registrationDate: "",
@@ -48,15 +74,11 @@ function EditRegisteration({ id, onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.put(
-          `/updateCenterRegistrations/${id}`,
-          values,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await api.put(`/updateCenterRegistrations/${id}`, values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         if (response.status === 200) {
           toast.success(response.data.message);
           onSuccess();
@@ -74,46 +96,25 @@ function EditRegisteration({ id, onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
-      ) {
+      if (Object.values(values).some((value) => typeof value === "string" && value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
-    
+    },
   });
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllCenterRegistrationsById/${id}`);
-        const formattedData = {
-          ...response.data,
-          registrationDate: response.data.registrationDate
-            ? response.data.registrationDate.substring(0, 10)
-            : null,
-          effectiveDate: response.data.effectiveDate
-            ? response.data.effectiveDate.substring(0, 10)
-            : null,
-        };
-        formik.setValues(formattedData);
-      } catch (error) {
-        toast.error("Error Fetching Data");
-      }
-    };
 
-    getData();
+  useEffect(() => {
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const handleSubmit = () => {
     const selectedTaxType = formik.values.taxId;
 
     const activeTaxTypes = taxData.filter((tax) => tax.status === "ACTIVE");
 
-    const isValidTaxType = activeTaxTypes.some(
-      (tax) => tax.id === parseInt(selectedTaxType)
-    );
+    const isValidTaxType = activeTaxTypes.some((tax) => tax.id === parseInt(selectedTaxType));
 
     if (!isValidTaxType) {
       formik.setFieldValue("taxId", "");
@@ -135,14 +136,17 @@ function EditRegisteration({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Edit Registration Fees</p>
@@ -150,80 +154,45 @@ function EditRegisteration({ id, onSuccess }) {
           </Modal.Header>
           <Modal.Body>
             <div className="row">
-              {/* <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
-                  Registration Date<span className="text-danger">*</span>
-                </lable>
-                <div className="input-group mb-3">
-                  <input
-                    type="date"
-                    className={`form-control   ${
-                      formik.touched.registrationDate &&
-                      formik.errors.registrationDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("registrationDate")}
-                  />
-                  {formik.touched.registrationDate &&
-                    formik.errors.registrationDate && (
-                      <div className="invalid-feedback">
-                        {formik.errors.registrationDate}
-                      </div>
-                    )}
-                </div>
-              </div> */}
               <div className="col-md-6 col-12 mb-2">
-                <lable className="">
-                  Effective Date<span class="text-danger">*</span>
-                </lable>
+                <label className="">
+                  Effective Date<span className="text-danger">*</span>
+                </label>
                 <input
                   type="date"
-                  className={`form-control    ${
-                    formik.touched.effectiveDate && formik.errors.effectiveDate
-                      ? "is-invalid"
-                      : ""
+                  className={`form-control ${
+                    formik.touched.effectiveDate && formik.errors.effectiveDate ? "is-invalid" : ""
                   }`}
- 
                   {...formik.getFieldProps("effectiveDate")}
                 />
-                {formik.touched.effectiveDate &&
-                  formik.errors.effectiveDate && (
-                    <div className="invalid-feedback">
-                      {formik.errors.effectiveDate}
-                    </div>
-                  )}
+                {formik.touched.effectiveDate && formik.errors.effectiveDate && (
+                  <div className="invalid-feedback">{formik.errors.effectiveDate}</div>
+                )}
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
+                <label className="form-lable">
                   Amount (Including GST)<span className="text-danger">*</span>
-                </lable>
+                </label>
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control    ${
-                      formik.touched.amount && formik.errors.amount
-                        ? "is-invalid"
-                        : ""
+                    className={`form-control ${
+                      formik.touched.amount && formik.errors.amount ? "is-invalid" : ""
                     }`}
                     {...formik.getFieldProps("amount")}
                   />
                   {formik.touched.amount && formik.errors.amount && (
-                    <div className="invalid-feedback">
-                      {formik.errors.amount}
-                    </div>
+                    <div className="invalid-feedback">{formik.errors.amount}</div>
                   )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <lable className="">
+                <label className="">
                   Tax Type<span className="text-danger">*</span>
-                </lable>
+                </label>
                 <select
                   className={`form-select ${
-                    formik.touched.taxId && formik.errors.taxId
-                      ? "is-invalid"
-                      : ""
+                    formik.touched.taxId && formik.errors.taxId ? "is-invalid" : ""
                   }`}
                   {...formik.getFieldProps("taxId")}
                   style={{ width: "100%" }}
@@ -237,20 +206,16 @@ function EditRegisteration({ id, onSuccess }) {
                     ))}
                 </select>
                 {formik.touched.taxId && formik.errors.taxId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.taxId}
-                  </div>
+                  <div className="invalid-feedback">{formik.errors.taxId}</div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <lable className="">
-                  Status<span class="text-danger">*</span>
-                </lable>
+                <label className="">
+                  Status<span className="text-danger">*</span>
+                </label>
                 <select
                   className={`form-select ${
-                    formik.touched.status && formik.errors.status
-                      ? "is-invalid"
-                      : ""
+                    formik.touched.status && formik.errors.status ? "is-invalid" : ""
                   }`}
                   {...formik.getFieldProps("status")}
                   style={{ width: "100%" }}
@@ -276,10 +241,7 @@ function EditRegisteration({ id, onSuccess }) {
               disabled={loadIndicator}
             >
               {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
+                <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
               )}
               Update
             </Button>

@@ -49,7 +49,7 @@ function LeaveAdminEdit() {
       dayType: "",
       leaveStatus: "",
       leaveReason: "",
-      file: "",
+      attachment: "",
     },
     // validationSchema: validationSchema,
 
@@ -338,56 +338,50 @@ function LeaveAdminEdit() {
               )}
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <p class="headColor mt-5">Attachment</p>
-              {/* <hr></hr> */}
-              {/* <div className="row mt-4">
-                <div className="container p-2"> */}
-              {data.attachment && (
-                <div className="mt-3">
-                  {data?.attachment?.endsWith(".pdf") ? (
-                    <div class="card border-0 shadow" style={{ width: "18rem" }}>
-                      <a
-                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                          data?.attachment
-                        )}&embedded=true`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          class="card-img-top img-fluid"
-                          style={{ height: "50%" }}
-                          src={pdfLogo}
-                          alt="Card image cap"
-                        />
-                      </a>
-                      <div class="card-body d-flex justify-content-between">
-                        <p class="card-title fw-semibold text-wrap">
-                          {data?.attachment?.split("/").pop()}
-                        </p>
+  <p className="headColor mt-5">Attachment</p>
+  {data.attachment && (
+    <div className="mt-3">
+      {data?.attachment?.endsWith(".pdf") ? (
+        <div className="card border-0 shadow" style={{ width: "12rem" }}> 
+          <a
+            href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+              data?.attachment
+            )}&embedded=true`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              className="card-img-top img-fluid"
+              style={{ height: "100px", objectFit: "contain" }} 
+              src={pdfLogo}
+              alt="Card image cap"
+            />
+          </a>
+          <div className="card-body d-flex justify-content-between">
+            <p className="card-title fw-semibold text-wrap" style={{ fontSize: "0.85rem" }}>
+              {data?.attachment?.split("/").pop()}
+            </p>
+            <a
+              href={data?.attachment}
+              className="btn text-dark"
+              download={data?.attachment?.split("/").pop()}
+            >
+              <MdOutlineDownloadForOffline size={20} /> 
+            </a>
+          </div>
+        </div>
+      ) : (
+        <img
+          src={data?.attachment}
+          alt="Attachment"
+          className="img-fluid"
+          style={{ height: "100px", objectFit: "contain" }} 
+        />
+      )}
+    </div>
+  )}
+</div>
 
-                        <a
-                          href={data?.attachment}
-                          class="btn text-dark"
-                          download={data?.attachment?.split("/").pop()}
-                        >
-                          <MdOutlineDownloadForOffline size={25} />
-                        </a>
-                      </div>
-
-                    </div>
-                  ) : (
-                    <img
-                      src={data?.attachment}
-                      alt="Attachment"
-                      className="img-fluid"
-                      style={{ height: "50%" }}
-                    />
-                  )}
-                </div>
-              )}
-              {/* </div>
-              </div> */}
-            </div>
           </div>
         </form>
       </div>

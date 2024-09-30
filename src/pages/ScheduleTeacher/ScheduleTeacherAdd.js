@@ -105,6 +105,10 @@ function ScheduleTeacherAdd({ onSuccess }) {
       toast.error(error.message);
     }
   };
+  const handleClassChange = (event) => {
+    const { value } = event.target;
+    formik.setFieldValue("classId", value); 
+  };
 
   const fetchClasses = async (courseId) => {
     try {
@@ -376,7 +380,7 @@ const handleTeacherChange = (event) => {
                         ? "is-invalid"
                         : ""
                     }`}
-                    // onChange={handleClassChange}
+                     onChange={handleClassChange}
                   >
                     <option></option>
                     {classData &&
