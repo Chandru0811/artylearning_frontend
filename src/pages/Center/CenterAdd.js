@@ -30,7 +30,7 @@ const validationSchema = Yup.object().shape({
   openingDate: Yup.date().required("*Date is required"),
   uenNumber: Yup.string().required("*UEN number is required"),
   gst: Yup.string().required("*Choose an option"),
-  taxRegistrationNumber: Yup.string().required("*Tax Registration Number is required"),
+  // taxRegistrationNumber: Yup.string().required("*Tax Registration Number is required"),
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
   bankAccountNumber: Yup.number()
@@ -420,7 +420,7 @@ function CenterAdd() {
             <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  Tax Registration Number<span className="text-danger">*</span>
+                  Tax Registration Number
                 </label>
                 <input
                   {...formik.getFieldProps("taxRegistrationNumber")}

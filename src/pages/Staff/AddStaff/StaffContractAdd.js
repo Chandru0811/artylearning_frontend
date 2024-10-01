@@ -488,7 +488,7 @@ const StaffContractAdd = forwardRef(
                   )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Probation</label>
+                <label>Probation (Day/Month)</label>
                 <input
                   type="text"
                   className="form-control"
@@ -747,7 +747,7 @@ const StaffContractAdd = forwardRef(
                     )}
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
-                  <label>Termination Notice</label>
+                  <label>Termination Notice (Day/Month)</label>
                   <span className="text-danger">*</span>
                   <input
                     type="text"
