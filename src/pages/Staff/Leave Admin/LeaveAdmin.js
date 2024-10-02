@@ -15,6 +15,7 @@ const LeaveAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [leaveTypeData, setLeaveTypeData] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -23,6 +24,20 @@ const LeaveAdmin = () => {
     } catch (error) {
       toast.error(error);
     }
+  };
+
+  const fetchLeaveType = async () => {
+    try {
+      const response = await api.get(`getAllLeaveSetting`);
+      setLeaveTypeData(response.data); // Assuming response.data is an array
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  
+  const findname = (id) => {
+    const name = leaveTypeData?.find((item) => item.id === id);
+    return name?.leaveType;
   };
 
   useEffect(() => {
@@ -37,6 +52,8 @@ const LeaveAdmin = () => {
     };
     getData();
     fetchData();
+    fetchLeaveType();
+
   }, []);
 
   useEffect(() => {
@@ -67,6 +84,8 @@ const LeaveAdmin = () => {
       table.destroy();
     }
   };
+
+
 
   return (
     <div className="container my-4">
@@ -107,7 +126,7 @@ const LeaveAdmin = () => {
                     ):data.centerName}
                 </td>
                 <td>{data.employeeName}</td>
-                <td>{data.leaveType}</td>
+                <td>{findname(data?.leaveTypeId)}</td>
                 <td>
                   {data.leaveStatus === "APPROVED" ? (
                     <span className="badge badges-Green">Approved</span>

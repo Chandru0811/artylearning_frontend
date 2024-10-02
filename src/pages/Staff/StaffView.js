@@ -9,6 +9,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
+import { MdOutlineFileDownload } from "react-icons/md";
 
 function StaffView() {
   const { id } = useParams();
@@ -22,7 +23,7 @@ function StaffView() {
   const fetchSalaryTypeData = async () => {
     try {
       const salarytype = await fetchAllSalaryTypeWithIds();
-      setSalaryTypeData(salarytype); 
+      setSalaryTypeData(salarytype);
     } catch (error) {
       toast.error(error.message || "Error fetching salary types");
     }
@@ -75,8 +76,8 @@ function StaffView() {
     };
 
     getData();
-   
   }, []);
+
   const generatePDF = async () => {
     const mailContent = `
  <!DOCTYPE html>
@@ -192,14 +193,17 @@ function StaffView() {
       toast.error("Error generating PDF");
     }
   };
-  const shouldShowDownloadButton =
-    data.userContractCreationModels?.length > 0 &&
-    data.userAccountInfo?.length > 0 &&
-    data.userContactInfo?.length > 0 &&
-    data.userLoginInfoModels?.length > 0 &&
-    data.userSalaryCreationModels?.length > 0 &&
-    data.userLeaveCreationModels?.length > 0 &&
-    data.userRequireInformationModels?.length > 0;
+
+  const isAllCompleted = () => {
+    return (
+      data.userAccountInfo?.completedStatus === true &&
+      data.userContactInfo?.completedStatus === true &&
+      data.userContractCreationModels?.completedStatus === true &&
+      data.userLeaveCreationModels?.completedStatus === true &&
+      data.userRequireInformationModels?.completedStatus === true &&
+      data.userSalaryCreationModels?.completedStatus === true
+    );
+  };
 
   const getFileNameFromUrl = (url) => {
     if (url) {
@@ -223,12 +227,12 @@ function StaffView() {
   const educationCertificateUrl = userRequireInfo
     ? userRequireInfo.educationCertificate
     : "#";
- 
-    const findSalaryType=(id)=>{
-      const name =salaryTypeData?.find((datas)=>datas.id ===id);
-      return name.salaryType
-    }
-    
+
+  const findSalaryType = (id) => {
+    const name = salaryTypeData?.find((datas) => datas.id === id);
+    return name.salaryType;
+  };
+
   return (
     <div class="container-fluid minHeight mb-5">
       <div class="container-fluid py-4">
@@ -238,12 +242,12 @@ function StaffView() {
           </div>
           <div class="col-auto">
             <div class="hstack gap-2 justify-content-end">
-              {shouldShowDownloadButton && (
+              {isAllCompleted() && (
                 <button
-                  className="btn btn-button btn-sm ms-1"
+                  className="btn btn-border btn-sm ms-1"
                   onClick={generatePDF}
                 >
-                  Download Contract
+                  <MdOutlineFileDownload /> Contract
                 </button>
               )}
               <Link to="/staff">
@@ -365,9 +369,7 @@ function StaffView() {
               <p className="text-sm fw-medium">Email</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">
-                : {data.email || "--"}
-              </p>
+              <p className="text-muted text-sm">: {data.email || "--"}</p>
             </div>
           </div>
         </div>
@@ -455,26 +457,26 @@ function StaffView() {
           </div>
         </div>
         <div className="col-md-6 col-12">
-      <div className="row mb-3">
-        <div className="col-6 d-flex">
-          <p className="text-sm fw-medium">SHG(S) Type</p>
+          <div className="row mb-3">
+            <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">SHG(S) Type</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">
+                :{" "}
+                {data.userAccountInfo &&
+                data.userAccountInfo.length > 0 &&
+                data.userAccountInfo[0].shgTypeId
+                  ? (
+                      shgData?.find(
+                        (item) => item.id == data.userAccountInfo[0].shgTypeId
+                      ) || {}
+                    ).shgType || "--"
+                  : "--"}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="col-6">
-          <p className="text-muted text-sm">
-            :{" "}
-            {data.userAccountInfo &&
-            data.userAccountInfo.length > 0 &&
-            data.userAccountInfo[0].shgTypeId
-              ? (
-                  shgData?.find(
-                    (item) => item.id == data.userAccountInfo[0].shgTypeId
-                  ) || {}
-                ).shgType || "--"
-              : "--"}
-          </p>
-        </div>
-      </div>
-    </div>
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
@@ -590,7 +592,6 @@ function StaffView() {
       </div>
       <p class="headColor mt-5">Contact Information</p>
       <div className="row mt-4">
-        
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
@@ -765,7 +766,9 @@ function StaffView() {
                 {data.userSalaryCreationModels &&
                 data.userSalaryCreationModels.length > 0 &&
                 data.userSalaryCreationModels[0].salaryTypeId
-                  ? findSalaryType(data.userSalaryCreationModels[0].salaryTypeId)
+                  ? findSalaryType(
+                      data.userSalaryCreationModels[0].salaryTypeId
+                    )
                   : "--"}
               </p>
             </div>

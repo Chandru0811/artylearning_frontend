@@ -410,7 +410,7 @@ function InvoiceView() {
                       {taxData &&
                         taxData.map((tax) =>
                           parseInt(InvoiceItemRow.taxType) === tax.id
-                            ? tax.taxType || "--"
+                            ? `${tax.taxType +" "+ tax.rate} %` || "--"
                             : ""
                         )}
                     </td>

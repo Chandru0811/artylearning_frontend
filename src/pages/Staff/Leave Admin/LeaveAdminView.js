@@ -59,7 +59,7 @@ function LeaveAdminView() {
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
-                :{data.centerName || "--"}
+                : {data.centerName || "--"}
               </p>
             </div>
           </div>
@@ -128,7 +128,7 @@ function LeaveAdminView() {
               <p className="text-sm fw-medium">Day Type</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: {data.days || "--"}</p>
+              <p className="text-muted text-sm">: {data.dayType || "--"}</p>
             </div>
           </div>
         </div>

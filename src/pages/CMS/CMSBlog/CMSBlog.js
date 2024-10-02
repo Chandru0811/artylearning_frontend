@@ -70,28 +70,59 @@ const CMSBlog = () => {
     setLoading(false);
   };
 
+  // const blogsPublish = async () => {
+  //   for (const data of datas) {
+  //     const formData = new FormData();
+  //     formData.append("description", data.description); // Access individual data properties
+  //     formData.append("title", data.title);
+  //     formData.append("file", data.imagerOne); // Ensure file property is properly assigned
+
+  //     try {
+  //       const response = await api.post("/publishBlogSave", {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data", // For file uploads
+  //         },
+  //       });
+  //       if (response.status === 201) {
+  //         toast.success(response.data.message);
+  //       }
+  //     } catch (error) {
+  //       toast.error(error.message || "An error occurred during publishing.");
+  //     }
+  //   }
+  // };
+
   const blogsPublish = async () => {
+    let isPublished = false;
+  
     for (const data of datas) {
       const formData = new FormData();
-      formData.append("description", data.description); // Access individual data properties
+      formData.append("description", data.description); 
       formData.append("title", data.title);
-      formData.append("file", data.imagerOne); // Ensure file property is properly assigned
-
+      formData.append("file", data.imagerOne);
+  
       try {
-        const response = await api.post("/publishBlogSave", {
+        const response = await api.post("/publishBlogSave", formData, {
           headers: {
-            "Content-Type": "multipart/form-data", // For file uploads
+            "Content-Type": "multipart/form-data", 
           },
         });
+  
         if (response.status === 201) {
-          toast.success(response.data.message);
+          isPublished = true; // Set flag if at least one blog is published successfully
         }
       } catch (error) {
-        toast.error(error.message || "An error occurred during publishing.");
+        console.error("Error publishing blog:", error);
       }
     }
+  
+    // Show the toast only once after all blogs are processed
+    if (isPublished) {
+      toast.success("Blogs Published Successfully.");
+    }
   };
-
+  
+  
 
   return (
     <div className="container center">

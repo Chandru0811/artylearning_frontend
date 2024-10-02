@@ -112,6 +112,7 @@ function CMSBlogEdit({ id, onSuccess }) {
                   id="imagerOne"
                   name="imagerOne"
                   className="form-control"
+                  accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
                 />

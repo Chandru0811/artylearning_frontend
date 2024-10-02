@@ -7,6 +7,7 @@ import { FaEdit, FaEye } from "react-icons/fa";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import Delete from "../../../components/common/Delete";
 
 const Leave = () => {
   const tableRef = useRef(null);
@@ -35,6 +36,20 @@ const Leave = () => {
       toast.error(error.message);
     }
   };
+
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await api.get("/getAllLeaveSetting");
+      setDatas(response.data);
+      initializeDataTable(); // Reinitialize DataTable after successful data update
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -69,9 +84,7 @@ const Leave = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -81,10 +94,10 @@ const Leave = () => {
       table.destroy();
     }
   };
-  const findname=(id)=>{
-    const name =leaveTypeData?.find((item)=>item.id ===id)
-    return name?.leaveType
-  }
+  const findname = (id) => {
+    const name = leaveTypeData?.find((item) => item.id === id);
+    return name?.leaveType;
+  };
 
   return (
     <div className="container my-4">
@@ -178,15 +191,27 @@ const Leave = () => {
                           <FaEye />
                         </button>
                       </Link>
-                      {data.leaveStatus === "APPROVED" ? "" : (
+                      {data.leaveStatus === "PENDING" ? (
                         <Link
-                        to={`/leave/edit/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      >
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
+                          to={`/leave/edit/${data.id}`}
+                          style={{ display: "inline-block" }}
+                        >
+                          <button className="btn btn-sm">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                      ) : (
+                        <></>
+                      )}
+
+                      {data.leaveStatus === "PENDING" ? (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteUserHoliday/${data.id}`}
+                          style={{ display: "inline-block" }}
+                        />
+                      ) : (
+                        <></>
                       )}
                     </div>
                   </td>

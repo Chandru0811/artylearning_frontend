@@ -128,7 +128,7 @@ function CMSBlogAdd({ onSuccess }) {
                   type="file"
                   id="file"
                   name="file"
-                  accept=".jpeg,.png"
+                  accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
                   className="form-control"
                   onChange={handleFileChange}
                   onBlur={formik.handleBlur}
