@@ -295,6 +295,11 @@ function Sidebar() {
             access: storedScreens.aboutIndex,
           },
           {
+            title: "Courses",
+            path: "/cms/CmsCourses",
+            access: storedScreens.englishCourseIndex,
+          },
+          {
             title: "English Course",
             path: "/cms/englishcourse",
             access: storedScreens.englishCourseIndex,

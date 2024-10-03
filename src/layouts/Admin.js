@@ -212,6 +212,10 @@ import CMSBlog from "../pages/CMS/CMSBlog/CMSBlog";
 import CMSBlogAdd from "../pages/CMS/CMSBlog/CMSBlogAdd";
 import CMSBlogEdit from "../pages/CMS/CMSBlog/CMSBlogEdit";
 import Contacted from "../pages/Lead/Contacted/Contacted";
+import CmsCourses from "../pages/CMS/CMSCourses/CmsCourses";
+import CmsCourseAdd from "../pages/CMS/CMSCourses/CmsCourseAdd";
+import CmsCourseEdit from "../pages/CMS/CMSCourses/CmsCourseEdit";
+import CmsCourseView from "../pages/CMS/CMSCourses/CmsCourseView";
 // import Blog from "../pages/CMS/Blog";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
@@ -527,6 +531,19 @@ function Admin({ handleLogout }) {
               {/* CMS  */}
               <Route path="/cms/footer" element={<CMSFooter />} />
               <Route path="/cms/header" element={<CmsTopbar />} />
+                          
+              <Route path="/cms/home" element={<CmsHome />} />
+              <Route path="/cms/aboutus" element={<CmsAboutUs />} />
+
+              {/* CMS Courses */}
+              <Route path="/cms/CmsCourses" element={<CmsCourses />} />
+              <Route path="/cms/CmsCourses/add" element={<CmsCourseAdd />} />
+              <Route path="/cms/CmsCourses/edit" element={<CmsCourseEdit />} />
+              <Route path="/cms/CmsCourses/view" element={<CmsCourseView />} />
+
+              <Route path="/cms/englishcourse" element={<CmsEnglish />} />
+              <Route path="/cms/chineshcourse" element={<CmsChinesh />} />
+
               <Route path="/cms/products" element={<CMSProducts />} />
               <Route path="/cms/productsitem" element={<CMSProductsItems />} />
               <Route
@@ -542,11 +559,6 @@ function Admin({ handleLogout }) {
               <Route path="/calender" element={<CmsCalender />} />
 
               <Route path="/cms/teacher" element={<CmsTeacher />} />
-
-              <Route path="/cms/englishcourse" element={<CmsEnglish />} />
-
-              <Route path="/cms/home" element={<CmsHome />} />
-              <Route path="/cms/aboutus" element={<CmsAboutUs />} />
 
               {/* CMS Contact  */}
               <Route path="/cms/contact" element={<CMSContact />} />
@@ -564,7 +576,7 @@ function Admin({ handleLogout }) {
                 element={<CMSTestMonialEdit />}
               />
 
-              <Route path="/cms/chineshcourse" element={<CmsChinesh />} />
+              
 
               {/* Setting */}
               {/* Tax */}
