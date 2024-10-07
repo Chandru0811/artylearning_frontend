@@ -538,7 +538,7 @@ function Admin({ handleLogout }) {
               {/* CMS Courses */}
               <Route path="/cms/CmsCourses" element={<CmsCourses />} />
               <Route path="/cms/CmsCourses/add" element={<CmsCourseAdd />} />
-              <Route path="/cms/CmsCourses/edit" element={<CmsCourseEdit />} />
+              <Route path="/cms/CmsCourses/edit/:id" element={<CmsCourseEdit />} />
               <Route path="/cms/CmsCourses/view" element={<CmsCourseView />} />
 
               <Route path="/cms/englishcourse" element={<CmsEnglish />} />

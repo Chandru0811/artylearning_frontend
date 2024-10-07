@@ -1,68 +1,92 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
-// import api from "../../config/URL";
-// import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../../config/URL";
+import { toast } from "react-toastify";
 
-const validationSchema = Yup.object({
-  center: Yup.string().required("*Select a Centre"),
-});
+const validationSchema = Yup.object({});
 
 function CmsCourseAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      menuLogo: "",
+      menuLogo: null || "",
       menuTitle: "",
 
-      backgroundImage: "",
+      backgroundImage: null || "",
       heading: "",
-      content1: "",
-      content2: "",
+      contentOne: "",
+      contentTwo: "",
 
-      card1Heading: "",
-      card1Image: "",
-      card1Content: "",
+      cardOneHeading: "",
+      cardOneImage: null || "",
+      cardOneContent: "",
 
-      card2Heading: "",
-      card2Image: "",
-      card2Content: "",
+      cardTwoHeading: "",
+      cardTwoImage: null || "",
+      cardTwoContent: "",
 
-      card3Heading: "",
-      card3Image: "",
-      card3Content: "",
+      cardThreeHeading: "",
+      cardThreeImage: null || "",
+      cardThreeContent: "",
 
       finalContent: "",
-
-      createdAt: "",
       createdBy: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // setLoadIndicator(true);
-      // try {
-      //   // Send the request to the API
-      //   const response = await api.post("/generateInvoice", values, {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   });
+      setLoadIndicator(true);
+      const formData = new FormData();
+      // Append form values to formData
+      formData.append("menuTitle", values.menuTitle);
+      formData.append("heading", values.heading);
+      formData.append("contentOne", values.contentOne);
+      formData.append("contentTwo", values.contentTwo);
+      formData.append("cardOneHeading", values.cardOneHeading);
+      formData.append("cardOneContent", values.cardOneContent);
+      formData.append("cardTwoHeading", values.cardTwoHeading);
+      formData.append("cardTwoContent", values.cardTwoContent);
+      formData.append("cardThreeHeading", values.cardThreeHeading);
+      formData.append("cardThreeContent", values.cardThreeContent);
+      formData.append("finalContent", values.finalContent);
+      formData.append("createdBy", userName);
 
-      //   if (response.status === 201) {
-      //     toast.success("Invoice Generated successfully");
-      //     navigate("/invoice");
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(
-      //     error.message || "An error occurred while submitting the form"
-      //   );
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
+      // File Upload
+      if (values.menuLogo) {
+        formData.append("menuLogo", values.menuLogo);
+      }
+      if (values.backgroundImage) {
+        formData.append("backgroundImage", values.backgroundImage);
+      }
+      if (values.cardOneImage) {
+        formData.append("cardOneImage", values.cardOneImage);
+      }
+      if (values.cardTwoImage) {
+        formData.append("cardTwoImage", values.cardTwoImage);
+      }
+      if (values.cardThreeImage) {
+        formData.append("cardThreeImage", values.cardThreeImage);
+      }
+
+      try {
+        const response = await api.post("/createCoursesSave", formData);
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/cms/CmsCourses");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(
+          error.message || "An error occurred while submitting the form"
+        );
+      } finally {
+        setLoadIndicator(false);
+      }
       console.log("Courses Data:", values);
     },
   });
@@ -77,40 +101,40 @@ function CmsCourseAdd() {
           }
         }}
       >
-      <div className="container cms-header shadow-sm py-2">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            <h4>Course</h4>
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {/* {storedScreens?.chineseCoursePublish && ( */}
-            <button
+        <div className="container cms-header shadow-sm py-2">
+          <div className="row p-1">
+            <div className="col-md-6 col-12">
+              <h4>Course</h4>
+            </div>
+            <div className="col-md-6 col-12 d-flex justify-content-end">
+              {/* {storedScreens?.chineseCoursePublish && ( */}
+              <button
                 type="submit"
-              className="btn btn-sm ms-2 text-white"
-              style={{background:"#e60504"}}
-              disabled={loadIndicator}
+                className="btn btn-sm ms-2 text-white"
+                style={{ background: "#e60504" }}
+                disabled={loadIndicator}
               >
                 {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Save
               </button>
-            {/* )} */}
-            <Link to={"/cms/CmsCourses"}>
-              <button
-                className="btn btn-sm btn-outline-danger border ms-2 p-2"
-                type="button"
-              >
-                Back
-              </button>
-            </Link>
+              {/* )} */}
+              <Link to={"/cms/CmsCourses"}>
+                <button
+                  className="btn btn-sm btn-outline-danger border ms-2 p-2"
+                  type="button"
+                >
+                  Back
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-      
+
         <div className="container py-3">
           <div className="row mt-3">
             <div className="col-lg-6 col-md-6 col-12 px-5">
@@ -120,13 +144,18 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
-                  {...formik.getFieldProps("menuLogo")}
+                  type="file"
+                  name="menuLogo"
                   className={`form-control ${
                     formik.touched.menuLogo && formik.errors.menuLogo
                       ? "is-invalid"
                       : ""
                   }`}
-                  type="file"
+                  // {...formik.getFieldProps("menuLogo")}
+                  accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
+                   onChange={(e) =>
+                    formik.setFieldValue("menuLogo", e.target.files[0])
+                  }
                 />
                 {formik.touched.menuLogo && formik.errors.menuLogo && (
                   <div className="invalid-feedback">
@@ -140,14 +169,18 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
-                  {...formik.getFieldProps("backgroundImage")}
+                  type="file"
+                  name="backgroundImage"
                   className={`form-control ${
-                    formik.touched.backgroundImage &&
-                    formik.errors.backgroundImage
+                    formik.touched.backgroundImage && formik.errors.backgroundImage
                       ? "is-invalid"
                       : ""
                   }`}
-                  type="file"
+                  // {...formik.getFieldProps("backgroundImage")}
+                  accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
+                   onChange={(e) =>
+                    formik.setFieldValue("backgroundImage", e.target.files[0])
+                  }
                 />
                 {formik.touched.backgroundImage &&
                   formik.errors.backgroundImage && (
@@ -163,18 +196,19 @@ function CmsCourseAdd() {
                 <br />
                 <textarea
                   rows={5}
-                  {...formik.getFieldProps("content1")}
+                  name="contentOne"
+                  {...formik.getFieldProps("contentOne")}
                   className={`form-control  ${
-                    formik.touched.content1 && formik.errors.content1
+                    formik.touched.contentOne && formik.errors.contentOne
                       ? "is-invalid"
                       : ""
                   }`}
                   type="text"
                   placeholder="Enter Content"
                 />
-                {formik.touched.content1 && formik.errors.content1 && (
+                {formik.touched.contentOne && formik.errors.contentOne && (
                   <div className="text-danger" style={{ fontSize: ".875em" }}>
-                    {formik.errors.content1}
+                    {formik.errors.contentOne}
                   </div>
                 )}
               </div>
@@ -187,6 +221,7 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
+                  name="menuTitle"
                   {...formik.getFieldProps("menuTitle")}
                   className={`form-control ${
                     formik.touched.menuTitle && formik.errors.menuTitle
@@ -207,6 +242,7 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
+                  name="heading"
                   {...formik.getFieldProps("heading")}
                   className={`form-control ${
                     formik.touched.heading && formik.errors.heading
@@ -228,18 +264,19 @@ function CmsCourseAdd() {
                 <br />
                 <textarea
                   rows={5}
-                  {...formik.getFieldProps("content2")}
+                  name="contentTwo"
+                  {...formik.getFieldProps("contentTwo")}
                   className={`form-control  ${
-                    formik.touched.content2 && formik.errors.content2
+                    formik.touched.contentTwo && formik.errors.contentTwo
                       ? "is-invalid"
                       : ""
                   }`}
                   type="text"
                   placeholder="Enter Content"
                 />
-                {formik.touched.content2 && formik.errors.content2 && (
+                {formik.touched.contentTwo && formik.errors.contentTwo && (
                   <div className="text-danger" style={{ fontSize: ".875em" }}>
-                    {formik.errors.content2}
+                    {formik.errors.contentTwo}
                   </div>
                 )}
               </div>
@@ -254,19 +291,22 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
-                  {...formik.getFieldProps("card1Heading")}
+                  name="cardOneHeading"
+                  {...formik.getFieldProps("cardOneHeading")}
                   className={`form-control ${
-                    formik.touched.card1Heading && formik.errors.card1Heading
+                    formik.touched.cardOneHeading &&
+                    formik.errors.cardOneHeading
                       ? "is-invalid"
                       : ""
                   }`}
                   type="text"
                 />
-                {formik.touched.card1Heading && formik.errors.card1Heading && (
-                  <div className="invalid-feedback">
-                    {formik.errors.card1Heading}
-                  </div>
-                )}
+                {formik.touched.cardOneHeading &&
+                  formik.errors.cardOneHeading && (
+                    <div className="invalid-feedback">
+                      {formik.errors.cardOneHeading}
+                    </div>
+                  )}
               </div>
               <div className="col-lg-6 col-md-6 col-12 text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
@@ -274,17 +314,22 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
-                  {...formik.getFieldProps("card1Image")}
+                  type="file"
+                  name="cardOneImage"
                   className={`form-control ${
-                    formik.touched.card1Image && formik.errors.card1Image
+                    formik.touched.cardOneImage && formik.errors.cardOneImage
                       ? "is-invalid"
                       : ""
                   }`}
-                  type="file"
+                  // {...formik.getFieldProps("cardOneImage")}
+                  accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
+                   onChange={(e) =>
+                    formik.setFieldValue("cardOneImage", e.target.files[0])
+                  }
                 />
-                {formik.touched.card1Image && formik.errors.card1Image && (
+                {formik.touched.cardOneImage && formik.errors.cardOneImage && (
                   <div className="invalid-feedback">
-                    {formik.errors.card1Image}
+                    {formik.errors.cardOneImage}
                   </div>
                 )}
               </div>
@@ -297,20 +342,23 @@ function CmsCourseAdd() {
                 <br />
                 <textarea
                   rows={10}
-                  {...formik.getFieldProps("card1Content")}
+                  name="cardOneContent"
+                  {...formik.getFieldProps("cardOneContent")}
                   className={`form-control  ${
-                    formik.touched.card1Content && formik.errors.card1Content
+                    formik.touched.cardOneContent &&
+                    formik.errors.cardOneContent
                       ? "is-invalid"
                       : ""
                   }`}
                   type="text"
                   placeholder="Enter Content"
                 />
-                {formik.touched.card1Content && formik.errors.card1Content && (
-                  <div className="text-danger" style={{ fontSize: ".875em" }}>
-                    {formik.errors.card1Content}
-                  </div>
-                )}
+                {formik.touched.cardOneContent &&
+                  formik.errors.cardOneContent && (
+                    <div className="text-danger" style={{ fontSize: ".875em" }}>
+                      {formik.errors.cardOneContent}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -323,19 +371,22 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
-                  {...formik.getFieldProps("card2Heading")}
+                  name="cardTwoHeading"
+                  {...formik.getFieldProps("cardTwoHeading")}
                   className={`form-control ${
-                    formik.touched.card2Heading && formik.errors.card2Heading
+                    formik.touched.cardTwoHeading &&
+                    formik.errors.cardTwoHeading
                       ? "is-invalid"
                       : ""
                   }`}
                   type="text"
                 />
-                {formik.touched.card2Heading && formik.errors.card2Heading && (
-                  <div className="invalid-feedback">
-                    {formik.errors.card2Heading}
-                  </div>
-                )}
+                {formik.touched.cardTwoHeading &&
+                  formik.errors.cardTwoHeading && (
+                    <div className="invalid-feedback">
+                      {formik.errors.cardTwoHeading}
+                    </div>
+                  )}
               </div>
               <div className="col-lg-6 col-md-6 col-12 text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
@@ -343,17 +394,22 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
-                  {...formik.getFieldProps("card2Image")}
+                  type="file"
+                  name="cardTwoImage"
                   className={`form-control ${
-                    formik.touched.card2Image && formik.errors.card2Image
+                    formik.touched.cardTwoImage && formik.errors.cardTwoImage
                       ? "is-invalid"
                       : ""
                   }`}
-                  type="file"
+                  // {...formik.getFieldProps("cardTwoImage")}
+                  accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
+                   onChange={(e) =>
+                    formik.setFieldValue("cardTwoImage", e.target.files[0])
+                  }
                 />
-                {formik.touched.card2Image && formik.errors.card2Image && (
+                {formik.touched.cardTwoImage && formik.errors.cardTwoImage && (
                   <div className="invalid-feedback">
-                    {formik.errors.card2Image}
+                    {formik.errors.cardTwoImage}
                   </div>
                 )}
               </div>
@@ -366,20 +422,23 @@ function CmsCourseAdd() {
                 <br />
                 <textarea
                   rows={10}
-                  {...formik.getFieldProps("card2Content")}
+                  name="cardTwoContent"
+                  {...formik.getFieldProps("cardTwoContent")}
                   className={`form-control  ${
-                    formik.touched.card2Content && formik.errors.card2Content
+                    formik.touched.cardTwoContent &&
+                    formik.errors.cardTwoContent
                       ? "is-invalid"
                       : ""
                   }`}
                   type="text"
                   placeholder="Enter Content"
                 />
-                {formik.touched.card2Content && formik.errors.card2Content && (
-                  <div className="text-danger" style={{ fontSize: ".875em" }}>
-                    {formik.errors.card2Content}
-                  </div>
-                )}
+                {formik.touched.cardTwoContent &&
+                  formik.errors.cardTwoContent && (
+                    <div className="text-danger" style={{ fontSize: ".875em" }}>
+                      {formik.errors.cardTwoContent}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -392,19 +451,22 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
-                  {...formik.getFieldProps("card3Heading")}
+                  name="cardThreeHeading"
+                  {...formik.getFieldProps("cardThreeHeading")}
                   className={`form-control ${
-                    formik.touched.card3Heading && formik.errors.card3Heading
+                    formik.touched.cardThreeHeading &&
+                    formik.errors.cardThreeHeading
                       ? "is-invalid"
                       : ""
                   }`}
                   type="text"
                 />
-                {formik.touched.card3Heading && formik.errors.card3Heading && (
-                  <div className="invalid-feedback">
-                    {formik.errors.card3Heading}
-                  </div>
-                )}
+                {formik.touched.cardThreeHeading &&
+                  formik.errors.cardThreeHeading && (
+                    <div className="invalid-feedback">
+                      {formik.errors.cardThreeHeading}
+                    </div>
+                  )}
               </div>
               <div className="col-lg-6 col-md-6 col-12 text-start mt-3">
                 <label htmlFor="" className="mb-1 fw-medium">
@@ -412,19 +474,25 @@ function CmsCourseAdd() {
                 </label>
                 <br />
                 <input
-                  {...formik.getFieldProps("card3Image")}
+                  type="file"
+                  name="cardThreeImage"
                   className={`form-control ${
-                    formik.touched.card3Image && formik.errors.card3Image
+                    formik.touched.cardThreeImage && formik.errors.cardThreeImage
                       ? "is-invalid"
                       : ""
                   }`}
-                  type="file"
+                  // {...formik.getFieldProps("cardThreeImage")}
+                  accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
+                   onChange={(e) =>
+                    formik.setFieldValue("cardThreeImage", e.target.files[0])
+                  }
                 />
-                {formik.touched.card3Image && formik.errors.card3Image && (
-                  <div className="invalid-feedback">
-                    {formik.errors.card3Image}
-                  </div>
-                )}
+                {formik.touched.cardThreeImage &&
+                  formik.errors.cardThreeImage && (
+                    <div className="invalid-feedback">
+                      {formik.errors.cardThreeImage}
+                    </div>
+                  )}
               </div>
             </div>
             <div className="col-lg-12 col-md-12 col-12 px-5">
@@ -435,20 +503,23 @@ function CmsCourseAdd() {
                 <br />
                 <textarea
                   rows={10}
-                  {...formik.getFieldProps("card3Content")}
+                  name="cardThreeContent"
+                  {...formik.getFieldProps("cardThreeContent")}
                   className={`form-control  ${
-                    formik.touched.card3Content && formik.errors.card3Content
+                    formik.touched.cardThreeContent &&
+                    formik.errors.cardThreeContent
                       ? "is-invalid"
                       : ""
                   }`}
                   type="text"
                   placeholder="Enter Content"
                 />
-                {formik.touched.card3Content && formik.errors.card3Content && (
-                  <div className="text-danger" style={{ fontSize: ".875em" }}>
-                    {formik.errors.card3Content}
-                  </div>
-                )}
+                {formik.touched.cardThreeContent &&
+                  formik.errors.cardThreeContent && (
+                    <div className="text-danger" style={{ fontSize: ".875em" }}>
+                      {formik.errors.cardThreeContent}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -461,6 +532,7 @@ function CmsCourseAdd() {
                 <br />
                 <textarea
                   rows={10}
+                  name="finalContent"
                   {...formik.getFieldProps("finalContent")}
                   className={`form-control  ${
                     formik.touched.finalContent && formik.errors.finalContent

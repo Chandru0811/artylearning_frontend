@@ -54,6 +54,7 @@ function CenterAdd() {
   useEffect(() => {
     fetchTeacher();
   }, []);
+  
   const fetchTeacher = async () => {
     try {
       const manager = await fetchAllCentreManager();

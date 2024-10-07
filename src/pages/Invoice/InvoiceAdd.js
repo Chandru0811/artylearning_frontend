@@ -10,10 +10,10 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+import fetchAllCentersWithStudentList from "../List/CenterAvailableStudentLidt";
 
 const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
@@ -160,7 +160,7 @@ export default function InvoiceAdd() {
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
+      const centerData = await fetchAllCentersWithStudentList();
       setCenterData(centerData);
     } catch (error) {
       toast.error(error);
@@ -610,7 +610,7 @@ export default function InvoiceAdd() {
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
-                        {center.centerNames}
+                        {center.centerName}
                       </option>
                     ))}
                 </select>

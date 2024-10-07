@@ -5,13 +5,12 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
-// import fetchAllStudentsWithIds from "../List/StudentList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import { IoMdTrash } from "react-icons/io";
 import { Modal, Button } from "react-bootstrap";
+import fetchAllCentersWithStudentList from "../List/CenterAvailableStudentLidt";
 
 const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
@@ -157,7 +156,7 @@ export default function InvoiceEdit() {
   const fetchData = async (id) => {
     try {
       const centerId = id; // Set the default center ID
-      const centerData = await fetchAllCentersWithIds();
+      const centerData = await fetchAllCentersWithStudentList();
       setCenterData(centerData);
 
       const studentData = await fetchAllStudentListByCenter(centerId);
@@ -423,7 +422,7 @@ export default function InvoiceEdit() {
                   {centerData &&
                     centerData.map((centerId) => (
                       <option key={centerId.id} value={centerId.id}>
-                        {centerId.centerNames}
+                        {centerId.centerName}
                       </option>
                     ))}
                 </select>

@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Believer from "../../../assets/clientimage/Arty-Believer.png";
 import Dreamer from "../../../assets/clientimage/Arty-Dreamer.png";
 import Pursuer from "../../../assets/clientimage/Arty-Pursuer.png";
 
-function EnglishCourseListing({datas}) {
+function CoursesListing({datas ,getData}) {
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div className="container">
       <div className="row">
         <div className="col-12 my-5 ">
        
-        {datas.content2?.split("\n\n").map((paragraph, index) => (
+        {datas.contentTwo?.split("\n\n").map((paragraph, index) => (
                 <div key={index} className="edit-container mb-3">
                   <p
                     className="headbody preserve-whitespace"
@@ -37,10 +42,10 @@ function EnglishCourseListing({datas}) {
         <div className="col-md-4 col-12 mt-3">
           <div className="card h-100 p-3 shadow mb-5 bg-white rounded">
             <div className="p-3">
-              <img src={datas.card1Image||Believer} alt="..." className="img-fluid"></img>
+              <img src={datas.cardOneImage || Believer} alt="course img" className="img-fluid"></img>
             </div>
-            <h1 className="">{datas.card1Heading}</h1>
-            {datas.card1Content?.split("\n\n").map((paragraph, index) => (
+            <h1 className="">{datas.cardOneHeading}</h1>
+            {datas.cardOneContent?.split("\n\n").map((paragraph, index) => (
                 <div key={index} className="edit-container mb-3">
                   <p
                     className="headbody preserve-whitespace"
@@ -62,10 +67,10 @@ function EnglishCourseListing({datas}) {
         <div className="col-md-4 col-12 mt-3">
           <div className="card p-3 h-100 shadow mb-5 bg-white rounded">
             <div className="p-3">
-              <img src={datas.card2Image||Dreamer} alt="..." className="img-fluid mb-3"></img>
+              <img src={datas.cardTwoImage || Dreamer} alt="course img" className="img-fluid mb-3"></img>
             </div>
-            <h1 className=""> {datas.card2Heading}</h1>
-            {datas.card2Content?.split("\n\n").map((paragraph, index) => (
+            <h1 className=""> {datas.cardTwoHeading}</h1>
+            {datas.cardTwoContent?.split("\n\n").map((paragraph, index) => (
                 <div key={index} className="edit-container mb-3">
                   <p
                     className="headbody preserve-whitespace"
@@ -88,10 +93,10 @@ function EnglishCourseListing({datas}) {
         <div className="col-md-4 col-12 mt-3">
           <div className="card h-100 p-3 shadow mb-5 bg-white rounded">
             <div className="p-3">
-              <img src={datas.card3Image||Pursuer} alt="..." className="img-fluid"></img>
+              <img src={datas.cardThreeImage || Pursuer} alt="course img" className="img-fluid"></img>
             </div>
-            <h1 className=""> {datas.card3Heading}</h1>
-            {datas.card3Content?.split("\n\n").map((paragraph, index) => (
+            <h1 className=""> {datas.cardThreeHeading}</h1>
+            {datas.cardThreeContent?.split("\n\n").map((paragraph, index) => (
                 <div key={index} className="edit-container mb-3">
                   <p
                     className="headbody preserve-whitespace"
@@ -144,4 +149,4 @@ function EnglishCourseListing({datas}) {
   );
 }
 
-export default EnglishCourseListing;
+export default  CoursesListing;

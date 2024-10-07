@@ -4,11 +4,23 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+import fetchAllCentersWithScheduleStudentList from "../List/CenterAvailableScheduleStudentLidt";
+
+const validationSchema = Yup.object({
+  center: Yup.string().required("*Centre is required"),
+  course: Yup.string().required("*Course is required"),
+  userId: Yup.string().required("*Teacher is required"),
+  days: Yup.string().required("*Days is required"),
+  classListing: Yup.string().required("*Class Listing is required"),
+  date: Yup.string().required("*Date is required"),
+  folderCategoryListing: Yup.string().required("*FolderCategory is required"),
+  batchId: Yup.string().required("*Batch Time is required"),
+  expiredDate: Yup.string().required("*Expired Date is required"),
+});
 
 function DocumentAdd() {
   const navigate = useNavigate();
@@ -20,68 +32,6 @@ function DocumentAdd() {
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName  = localStorage.getItem('userName');
-
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchCourses = async (centerId) => {
-    try {
-      const courses = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courses);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchTeacher = async (centerId) => {
-    try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setUserData(teacher);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchStudent = async (centerId) => {
-    try {
-      const teacher = await fetchAllStudentListByCenter(centerId);
-      setStudentData(teacher);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchClasses = async (courseId) => {
-    try {
-      const classes = await fetchAllClassesWithIdsC(courseId);
-      setClassData(classes);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const validationSchema = Yup.object({
-    center: Yup.string().required("*Centre is required"),
-    course: Yup.string().required("*Course is required"),
-    userId: Yup.string().required("*Teacher is required"),
-    days: Yup.string().required("*Days is required"),
-    classListing: Yup.string().required("*Class Listing is required"),
-    date: Yup.string().required("*Date is required"),
-    folderCategoryListing: Yup.string().required("*FolderCategory is required"),
-    batchId: Yup.string().required("*Batch Time is required"),
-    expiredDate: Yup.string().required("*Expired Date is required"),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -184,6 +134,57 @@ function DocumentAdd() {
     },
   });
 
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithScheduleStudentList();
+
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchCourses = async (centerId) => {
+    try {
+      const courses = await fetchAllCoursesWithIdsC(centerId);
+      setCourseData(courses);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchTeacher = async (centerId) => {
+    try {
+      const teacher = await fetchAllTeacherListByCenter(centerId);
+      setUserData(teacher);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchStudent = async (centerId) => {
+    try {
+      const teacher = await fetchAllStudentListByCenter(centerId);
+      setStudentData(teacher);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchClasses = async (courseId) => {
+    try {
+      const classes = await fetchAllClassesWithIdsC(courseId);
+      setClassData(classes);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+
   useEffect(() => {
     if (formik.values.date) {
       const calculatedExpiredDate = calculateExpiryDate(formik.values.date);
@@ -271,7 +272,7 @@ function DocumentAdd() {
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
-                      {center.centerNames}
+                      {center.centerName}
                     </option>
                   ))}
               </select>

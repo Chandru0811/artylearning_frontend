@@ -18,7 +18,7 @@ const CmsCourses = () => {
 
   const getAllCourses = async () => {
     try {
-      const response = await api.get("/getAllBlogSave");
+      const response = await api.get("/getAllCoursesSave");
       setDatas(response.data);
       setLoading(false);
     } catch (error) {
@@ -61,7 +61,7 @@ const CmsCourses = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllBlogSave");
+      const response = await api.get("/getAllCoursesSave");
       setDatas(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
@@ -70,33 +70,22 @@ const CmsCourses = () => {
     setLoading(false);
   };
 
-  const blogsPublish = async () => {
-    let isPublished = false;
+  const coursesPublish = async () => {
+    try {
+      const response = await api.post(`/publishCourses`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    for (const data of datas) {
-      const formData = new FormData();
-      formData.append("description", data.description);
-      formData.append("title", data.title);
-      formData.append("file", data.imagerOne);
-
-      try {
-        const response = await api.post("/publishBlogSave", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (response.status === 201) {
-          isPublished = true; // Set flag if at least one blog is published successfully
-        }
-      } catch (error) {
-        console.error("Error publishing blog:", error);
+      if (response.status === 201) {
+        toast.success(response.data.message);
+        getAllCourses();
+      } else {
+        toast.error(response.data.message);
       }
-    }
-
-    // Show the toast only once after all blogs are processed
-    if (isPublished) {
-      toast.success("Blogs Published Successfully.");
+    } catch (error) {
+      console.error("Error saving data:", error.message);
     }
   };
 
@@ -121,7 +110,7 @@ const CmsCourses = () => {
             )}
             {storedScreens?.testimonialIndex && (
               <button
-                // onClick={blogsPublish}
+                onClick={coursesPublish}
                 className="btn btn-sm btn-outline-danger border ms-2"
                 style={{ whiteSpace: "nowrap" }}
               >
@@ -154,13 +143,13 @@ const CmsCourses = () => {
                 S No
               </th>
               <th scope="col" className="text-center">
-                Blog Image
+                Menu Logo
               </th>
               <th scope="col" className="text-center">
-                Blog Description
+                Menu Title
               </th>
               <th scope="col" className="text-center">
-                Blog Title
+                Heading
               </th>
               <th scope="col" className="text-center">
                 Action
@@ -173,18 +162,18 @@ const CmsCourses = () => {
                 <td className="text-center">{index + 1}</td>
                 <td className="text-center">
                   <img
-                    src={data.imagerOne}
+                    src={data.menuLogo}
                     className="img-fluid"
                     alt="image"
-                    width={150}
+                    width={50}
                   />
                 </td>
-                <td className="text-center">{data.description}</td>
-                <td className="text-center"> {data.title}</td>
+                <td className="text-center">{data.menuTitle}</td>
+                <td className="text-center"> {data.heading}</td>
                 <td className="text-center">
-                  <div className="d-flex">
+                  <div className="d-flex justify-content-center">
                     {storedScreens?.testimonialUpdate && (
-                      <Link to={`/cms/CmsCourses/edit`}>
+                      <Link to={`/cms/CmsCourses/edit/${data.id}`}>
                         <button className="btn btn-sm">
                           <FaEdit />
                         </button>
@@ -194,7 +183,7 @@ const CmsCourses = () => {
                     {storedScreens?.testimonialDelete && (
                       <Delete
                         onSuccess={refreshData}
-                        path={`/deleteBlogSave/${data.id}`}
+                        path={`/deleteCoursesSave/${data.id}`}
                         style={{ display: "inline-block" }}
                       />
                     )}

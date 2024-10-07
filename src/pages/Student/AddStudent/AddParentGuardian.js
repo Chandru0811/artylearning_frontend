@@ -44,19 +44,9 @@ const AddParentGuardian = forwardRef(
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
-    const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
-      useState(null);
+    const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] = useState(null);
 
     console.log("FormData is ", formData);
-
-    useEffect(() => {
-      // Find the parent with primaryContacts set to true, if any
-      const primaryContactIndex = formData.parentInformation?.findIndex(
-        (parent) => parent.primaryContacts === true
-      );
-      setSelectedPrimaryContactIndex(primaryContactIndex >= 0 ? primaryContactIndex : 0);
-      // Default to 0 if no parent has primaryContacts set to true
-    }, [formData.parentInformation]);
 
     const formik = useFormik({
       initialValues: {
@@ -93,9 +83,6 @@ const AddParentGuardian = forwardRef(
             formDatas.append(`postalCodes`, parent.postalCodes);
             formDatas.append(`addresses`, parent.addresses);
             formDatas.append("createdBy", userName);
-
-            // formDatas.append(`primaryContact`, parent.primaryContact);
-
             formDatas.append(
               `primaryContacts`,
               index === selectedPrimaryContactIndex ? true : false
@@ -124,6 +111,7 @@ const AddParentGuardian = forwardRef(
                 index === selectedPrimaryContactIndex ? true : false
               );
             });
+
             // If parentDetailId exists, make PUT request (update)
             const response = await api.put(
               `/updateStudentParentsDetailsWithProfileImages/${parentDetailId}`,
@@ -152,7 +140,6 @@ const AddParentGuardian = forwardRef(
                 },
               }
             );
-
             if (response.status === 201) {
               const createdIds = response.data.id;
               setParentDetailIds(createdIds);
@@ -165,7 +152,7 @@ const AddParentGuardian = forwardRef(
           }
         } catch (error) {
           if (error?.response?.status === 500) {
-            toast.warning("Please fill all the fields to continue");
+            toast.warning(error?.response?.data?.message);
           } else {
             toast.error(error?.response?.data?.message);
           }
@@ -175,11 +162,87 @@ const AddParentGuardian = forwardRef(
       },
     });
 
+    useEffect(() => {
+      const getData = async () => {
+        // console.log(formData.LeadId)
+        if (formData.LeadId) {
+          try {
+            const response = await api.get(
+              `/getAllLeadInfoById/${formData.LeadId}`
+            );
+
+            const leadData = response.data;
+            console.log("Lead Data", leadData);
+            if (!formData.parentInformation) {
+
+              const primaryContactMother = leadData.primaryContactMother ? true : false;
+              const primaryContactFather = leadData.primaryContactFather ? true : false;
+              formik.setFieldValue("parentInformation", [
+                {
+                  parentNames: leadData.mothersFullName || "",
+                  parentDateOfBirths:
+                    leadData?.mothersDateOfBirth?.substring(0, 10) || "",
+                  emails: leadData.mothersEmailAddress || "",
+                  relations: "Mother" || "",
+                  occupations: leadData.mothersOccupation || "",
+                  files: null || "",
+                  mobileNumbers: leadData.mothersMobileNumber || "",
+                  addresses: leadData.address,
+                  postalCodes: leadData.postalCode || "",
+                  primaryContacts: primaryContactMother,
+                },
+                {
+                  parentNames: leadData.fathersFullName || "",
+                  parentDateOfBirths:
+                    leadData?.fathersDateOfBirth?.substring(0, 10) || "",
+                  emails: leadData.fathersEmailAddress || "",
+                  relations: "Father" || "",
+                  occupations: leadData.fathersOccupation || "",
+                  files: null || "",
+                  mobileNumbers: leadData.fathersMobileNumber || "",
+                  addresses: leadData.address || "",
+                  postalCodes: leadData.postalCode || "",
+                  primaryContacts: primaryContactFather,
+                },
+              ]);
+              
+              if (primaryContactMother) {
+                setSelectedPrimaryContactIndex(0); // Mother is the primary contact
+              } else if (primaryContactFather) {
+                setSelectedPrimaryContactIndex(1); // Father is the primary contact
+              } else {
+                setSelectedPrimaryContactIndex(null); // Neither parent is selected as primary contact
+              }
+            
+              setRows(2);
+            }
+          } catch (error) {
+            console.error("Error fetching lead data:", error);
+            toast.error("Error fetching lead data");
+          }
+        }
+      };
+      getData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+      // Find the parent with primaryContacts set to true, if any
+      const primaryContactIndex = formData.parentInformation?.findIndex(
+        (parent) => parent.primaryContacts === true
+      );
+      setSelectedPrimaryContactIndex(primaryContactIndex >= 0 ? primaryContactIndex : 0);
+      // Default to 0 if no parent has primaryContacts set to true
+    }, [formData.parentInformation]);
+
     const getData = async () => {
       setLoadIndicators(true);
       try {
         const response = await api.get(`/getAllStudentById/${formData.student_id}`);
         setParentDetailId(response.data.studentParentsDetails[0].id);
+        const studentData = response.data;
+        console.log("getAllStudentById : ",studentData);
+        
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -194,61 +257,6 @@ const AddParentGuardian = forwardRef(
     // useEffect(() => {
     //   formik.setFieldValue(`parentInformation[0].primaryContacts`, true);
     // }, []);
-
-    useEffect(() => {
-      const getData = async () => {
-        // console.log(formData.LeadId)
-        if (formData.LeadId) {
-          try {
-            const response = await api.get(
-              `/getAllLeadInfoById/${formData.LeadId}`
-            );
-
-            const leadData = response.data;
-            console.log("Lead Data", leadData);
-            if (!formData.parentInformation) {
-              formik.setFieldValue("parentInformation", [
-                {
-                  parentNames: leadData.mothersFullName || "",
-                  parentDateOfBirths:
-                    leadData?.mothersDateOfBirth?.substring(0, 10) || "",
-                  emails: leadData.mothersEmailAddress || "",
-                  relations: "Mother" || "",
-                  occupations: leadData.mothersOccupation || "",
-                  files: null || "",
-                  mobileNumbers: leadData.mothersMobileNumber || "",
-                  addresses: leadData.address,
-                  postalCodes: leadData.postalCode || "",
-                  primaryContacts: leadData.primaryContactMother ? true : false,
-                },
-                {
-                  parentNames: leadData.fathersFullName || "",
-                  parentDateOfBirths:
-                    leadData?.fathersDateOfBirth?.substring(0, 10) || "",
-                  emails: leadData.fathersEmailAddress || "",
-                  relations: "Father" || "",
-                  occupations: leadData.fathersOccupation || "",
-                  files: null || "",
-                  mobileNumbers: leadData.fathersMobileNumber || "",
-                  addresses: leadData.address || "",
-                  postalCodes: leadData.postalCode || "",
-                  primaryContacts: leadData.primaryContactFather ? true : false,
-                },
-              ]);
-              setRows(2);
-              setSelectedPrimaryContactIndex(
-                leadData.primaryContactFather ? 0 : 1
-              );
-            }
-          } catch (error) {
-            console.error("Error fetching lead data:", error);
-            toast.error("Error fetching lead data");
-          }
-        }
-      };
-      getData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useImperativeHandle(ref, () => ({
       ParentGuardian: formik.handleSubmit,
@@ -265,6 +273,7 @@ const AddParentGuardian = forwardRef(
         setSelectedPrimaryContactIndex(selectedPrimaryContactIndex - 1);
       }
     };
+
     useEffect(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);

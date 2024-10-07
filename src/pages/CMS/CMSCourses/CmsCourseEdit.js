@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import CmsChineseBanner from "../CMSChineshCourse/CmsChineshBanner";
-import CmsChineseCourseListing from "../CMSChineshCourse/CmsChineshCourseListing";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import CmsBanner from "./CmsBanner";
+import CmsCourseListing from "./CmsCourseListing";
 
 export default function CmsCourseEdit() {
+  const { id } = useParams();
   const [data, setData] = useState([]);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const getData = async () => {
     try {
-      const response = await api.get(`/getChineseCourse`);
+      const response = await api.get(`/getCoursesSaveById/${id}`);
       const fetchedData = response.data;
       setData(fetchedData);
     } catch (error) {
@@ -62,26 +63,30 @@ export default function CmsCourseEdit() {
         </div>
       </div>
 
-      <CmsChineseBanner
+      <CmsBanner
         data={data}
+        menuLogo={data.menuLogo}
+        menuTitle={data.menuTitle}
         backgroundImage={data.backgroundImage}
         heading={data.heading}
-        content1={data.content1}
+        contentOne={data.contentOne}
         getData={getData}
+        courseId={id}
       />
-      <CmsChineseCourseListing
-        content2={data.content2}
-        card1Image={data.card1Image}
-        card1Heading={data.card1Heading}
-        card1Content={data.card1Content}
-        card2Image={data.card2Image}
-        card2Heading={data.card2Heading}
-        card2Content={data.card2Content}
-        card3Image={data.card3Image}
-        card3Heading={data.card3Heading}
-        card3Content={data.card3Content}
+      <CmsCourseListing
+        contentTwo={data.contentTwo}
+        cardOneImage={data.cardOneImage}
+        cardOneHeading={data.cardOneHeading}
+        cardOneContent={data.cardOneContent}
+        cardTwoImage={data.cardTwoImage}
+        cardTwoHeading={data.cardTwoHeading}
+        cardTwoContent={data.cardTwoContent}
+        cardThreeImage={data.cardThreeImage}
+        cardThreeHeading={data.cardThreeHeading}
+        cardThreeContent={data.cardThreeContent}
         finalContent={data.finalContent}
         getData={getData}
+        courseId={id}
       />
     </section>
   );

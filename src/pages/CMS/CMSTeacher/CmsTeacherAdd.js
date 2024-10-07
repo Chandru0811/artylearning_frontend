@@ -19,10 +19,8 @@ const validationSchema = Yup.object().shape({
 const CmsTeacherAdd = ({ getData }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
-  // const handleCloseModal = () => setShowModal(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const userName  = localStorage.getItem('userName');
-
 
   const handleSaveChanges = () => {
     setShowModal(false);
@@ -57,13 +55,7 @@ const CmsTeacherAdd = ({ getData }) => {
 
 
       try {
-        const response = await api.post(
-          "/createTeacherSave",
-          formData
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
-        );
+        const response = await api.post("/createTeacherSave",formData);
         if (response.status === 201) {
           toast.success(response.data.message);
           getData();

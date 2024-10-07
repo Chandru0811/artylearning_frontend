@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import img from "../../../assets/clientimage/eng.png";
 import img1 from "../../../assets/clientimage/IMG_195.png";
 
-function EnglishBanner({datas}) {
-  // console.log("object",datas)
+function CoursesBanner({datas ,getData}) {
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div className="container-fluid">
       <div className="row remove-padding">
@@ -15,7 +19,7 @@ function EnglishBanner({datas}) {
         </div>
         <div className="col-md-4 col-12 p-5">
           <h3 className="mb-3 headcolor">{datas.heading}</h3>
-          {datas.content1?.split("\n\n").map((paragraph, index) => (
+          {datas.contentOne?.split("\n\n").map((paragraph, index) => (
                 <div key={index} className="edit-container mb-3">
                   <p
                     className="headbody preserve-whitespace"
@@ -58,4 +62,4 @@ function EnglishBanner({datas}) {
   );
 }
 
-export default EnglishBanner;
+export default CoursesBanner;

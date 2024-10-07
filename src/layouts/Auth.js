@@ -8,7 +8,7 @@ import Contact from "../pages/Client/Contact";
 import Teacher from "../pages/Client/Teacher";
 import Products from "../pages/Client/Products";
 import News from "../pages/Client/News";
-import EnglishCourse from "../pages/Client/EnglishCourse";
+import EnglishCourse from "../pages/Client/ParticulerCourse.js";
 import ChineshCourse from "../pages/Client/ChineshCourse";
 import Footer from "../components/client/common/Footer";
 import TopBar from "../components/client/common/TopBar";
@@ -21,6 +21,8 @@ import Blog from "../components/client/Blogs/Blog.js";
 import BlogView from "../components/client/Blogs/BlogView.js";
 import Blog1 from "../pages/Client/Blogs.js";
 import Blogs from "../pages/Client/Blogs.js";
+import ParticulerCourse from "../pages/Client/ParticulerCourse.js";
+
 function Auth({ handleLogin }) {
   return (
     <BrowserRouter>
@@ -36,8 +38,8 @@ function Auth({ handleLogin }) {
         <Route path="/products" element={<Products />} />
         <Route path="/news" element={<News />} />
         <Route path="/calender/:id" element={<Calender />} />
-        <Route path="/course/english" element={<EnglishCourse />} />
-        <Route path="/course/chinesh" element={<ChineshCourse />} />
+        <Route path="/courses/:id" element={<ParticulerCourse />} />
+        {/* <Route path="/course/chinesh" element={<ChineshCourse />} /> */}
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />
         <Route path="/terms&conditions" element={<TermsConditions />} />
         <Route path="/blog" element={<Blogs />} />

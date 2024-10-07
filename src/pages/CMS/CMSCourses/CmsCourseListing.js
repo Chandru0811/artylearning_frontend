@@ -7,7 +7,7 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { FaTimes } from "react-icons/fa";
 
-function CmsChineseCourseListing({
+function CmsCourseListing({
   contentTwo,
   cardOneImage,
   cardOneHeading,
@@ -20,7 +20,7 @@ function CmsChineseCourseListing({
   cardThreeContent,
   finalContent,
   getData,
-  courseId
+  courseId,
 }) {
   const [editingField, setEditingField] = useState(null);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -98,11 +98,15 @@ function CmsChineseCourseListing({
 
   const updateData = async (formData) => {
     try {
-      const response = await api.put(`/updateCoursesSave/${courseId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await api.put(
+        `/updateCoursesSave/${courseId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       if (response.status === 200) {
         toast.success(response.data.message);
         getData();
@@ -131,9 +135,19 @@ function CmsChineseCourseListing({
 
   const saveCardContent = async (index) => {
     const formData = new FormData();
-    formData.append(`card${index + 1}Image`, sections[index].image);
-    formData.append(`card${index + 1}Heading`, sections[index].title);
-    formData.append(`card${index + 1}Content`, sections[index].content);
+    if (index === 0) {
+      formData.append(`cardOneImage`, sections[index].image);
+      formData.append(`cardOneHeading`, sections[index].title);
+      formData.append(`cardOneContent`, sections[index].content);
+    } else if (index === 1) {
+      formData.append(`cardTwoImage`, sections[index].image);
+      formData.append(`cardTwoHeading`, sections[index].title);
+      formData.append(`cardTwoContent`, sections[index].content);
+    } else if (index === 2){
+      formData.append(`cardThreeImage`, sections[index].image);
+      formData.append(`cardThreeHeading`, sections[index].title);
+      formData.append(`cardThreeContent`, sections[index].content);
+    }
     updateData(formData);
   };
 
@@ -177,6 +191,7 @@ function CmsChineseCourseListing({
       );
       setSections(updatedSections);
       saveCardContent(editingIndex);
+      setEditingSection(null);
     }
   };
   const cancelEdit = () => {
@@ -214,13 +229,13 @@ function CmsChineseCourseListing({
               <>
                 <p className="preserve-whitespace">{contentTwo}</p>
                 {storedScreens?.chineseCourseUpdate && (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={() => toggleEdit("paragraph1")}
-                >
-
-                  <FaEdit />
-                </button>)}
+                  <button
+                    className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                    onClick={() => toggleEdit("paragraph1")}
+                  >
+                    <FaEdit />
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -239,12 +254,13 @@ function CmsChineseCourseListing({
               <h1 className="">{section.title}</h1>
               <p className="headbody preserve-whitespace">{section.content}</p>
               {storedScreens?.chineseCourseUpdate && (
-              <button
-                className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                onClick={() => handleEdit(section, index)}
-              >
-                <FaEdit />
-              </button>)}
+                <button
+                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                  onClick={() => handleEdit(section, index)}
+                >
+                  <FaEdit />
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -275,12 +291,13 @@ function CmsChineseCourseListing({
               <>
                 <p className="preserve-whitespace">{finalContent}</p>
                 {storedScreens?.chineseCourseUpdate && (
-                <button
-                  className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                  onClick={() => toggleEdit("paragraph2")}
-                >
-                  <FaEdit />
-                </button>)}
+                  <button
+                    className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                    onClick={() => toggleEdit("paragraph2")}
+                  >
+                    <FaEdit />
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -336,4 +353,4 @@ function CmsChineseCourseListing({
   );
 }
 
-export default CmsChineseCourseListing;
+export default CmsCourseListing;
