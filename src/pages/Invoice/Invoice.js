@@ -114,7 +114,7 @@ const Invoice = () => {
   };
   return (
     <div className="container my-4">
-      <div className="my-3 d-flex justify-content-end mb-5">
+      <div className="mb-3 d-flex justify-content-end">
         {storedScreens?.invoiceCreate && (
           <Link to="/invoice/add">
             <button type="button" className="btn btn-button btn-sm">

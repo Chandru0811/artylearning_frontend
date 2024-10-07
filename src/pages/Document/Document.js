@@ -95,7 +95,7 @@ const Document = () => {
   };
   return (
     <div className="container my-4">
-      <div className="mb-5 mt-3 d-flex justify-content-end">
+      <div className="mb-3 d-flex justify-content-end">
         {storedScreens?.documentListingCreate && (
           <Link to="/document/add">
             <button type="button" className="btn btn-button btn-sm">

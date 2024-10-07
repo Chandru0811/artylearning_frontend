@@ -102,7 +102,7 @@ const Teacher = () => {
         </div>
       ) : (
         <div className="container my-4">
-          <div className="my-3 d-flex justify-content-end mb-5">
+          <div className="d-flex justify-content-end mb-3">
             {storedScreens?.teacherCreate && (
               <Link to="/teacher/add">
                 <button type="button" className="btn btn-button btn-sm">

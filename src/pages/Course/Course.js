@@ -103,7 +103,7 @@
     };
     return (
       <div className="container my-4">
-        <div className="my-3 d-flex justify-content-end mb-5">
+        <div className="mb-3 d-flex justify-content-end">
           {storedScreens?.courseCreate && (
             <Link to={{
               pathname: "/course/add",

@@ -103,7 +103,7 @@ const Student = () => {
         </div>
       ) : (
         <div className="container my-4">
-          <div className="my-3 d-flex justify-content-end">
+          <div className="mb-3 d-flex justify-content-end">
             {storedScreens?.studentListingCreate && (
               <Link to="/student/add">
                 <button type="button" className="btn btn-button btn-sm">

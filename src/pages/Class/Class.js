@@ -131,7 +131,7 @@ const Class = () => {
 
   return (
     <div className="container my-4">
-      <div className="my-3 d-flex justify-content-end mb-5">
+      <div className="d-flex justify-content-end mb-3">
         {storedScreens?.classCreate && (
           <Link to={`/class/add`}>
             <button type="button" className="btn btn-button btn-sm">

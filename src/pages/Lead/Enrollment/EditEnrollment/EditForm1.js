@@ -147,6 +147,12 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicat
               <option selected></option>
               <option value="ENGLISH">English</option>
               <option value="CHINESE" >Chinese</option>
+              {/* {subjectData &&
+                  subjectData.map((subject) => (  
+                    <option key={subject.id} value={subject.id}>
+                      {subject.subjects}
+                    </option>
+                  ))} */}
             </select>
             {formik.touched.subject && formik.errors.subject && (
               <div className="text-danger">
@@ -242,90 +248,6 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicat
               </div>
             </div>
           </div>
-          {/* <div className="col-md-6 col-12 ">
-            <div className="mb-3">
-              <div>
-                <label for="exampleFormControlInpu  t1" className="form-label">
-                  Ethnic Group<span className="text-danger">*</span>
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="CHINESE"
-                  checked={formik.values.ethnicGroup === "CHINESE"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio1">
-                  Chinese
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="MALAY"
-                  checked={formik.values.ethnicGroup === "MALAY"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Malay
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="INDIA"
-                  checked={formik.values.ethnicGroup === "INDIA"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Indian
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="EURASIAN"
-                  checked={formik.values.ethnicGroup === "EURASIAN"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Eurasian
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="ethnicGroup"
-                  value="OTHERS"
-                  checked={formik.values.ethnicGroup === "OTHERS"}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <label className="form-check-label" for="inlineRadio2">
-                  Others
-                </label>
-              </div>
-              {formik.touched.ethnicGroup && formik.errors.ethnicGroup && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.ethnicGroup}</small>
-                </div>
-              )}
-            </div>
-          </div> */}
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <div>

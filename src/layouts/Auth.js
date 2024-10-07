@@ -8,8 +8,6 @@ import Contact from "../pages/Client/Contact";
 import Teacher from "../pages/Client/Teacher";
 import Products from "../pages/Client/Products";
 import News from "../pages/Client/News";
-import EnglishCourse from "../pages/Client/ParticulerCourse.js";
-import ChineshCourse from "../pages/Client/ChineshCourse";
 import Footer from "../components/client/common/Footer";
 import TopBar from "../components/client/common/TopBar";
 import Calender from "../pages/Client/Calender";

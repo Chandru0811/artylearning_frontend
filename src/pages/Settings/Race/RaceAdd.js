@@ -69,7 +69,7 @@ function RaceAdd({ onSuccess }) {
 
     return (
         <>
-            <div className="mb-5 mt-4 d-flex justify-content-end">
+            <div className="mb-3 d-flex justify-content-end">
                 <button
                     type="button"
                     className="btn btn-button btn-sm"

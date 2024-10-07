@@ -110,28 +110,28 @@ function StudentRegisterCourse() {
     },
   });
 
-  // const fetchCourseData = async () => {
-  //   try {
-  //     const courseData = await fetchAllCoursesWithIdsC(centerId);
-  //     setCourseData(courseData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
+  const fetchCourseData = async () => {
+    try {
+      const courseData = await fetchAllCoursesWithIdsC(centerId);
+      setCourseData(courseData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
-  // const fetchPackageData = async () => {
-  //   try {
-  //     const packageData = await fetchAllPackageListByCenter(centerId);
-  //     setPackageData(packageData);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
+  const fetchPackageData = async () => {
+    try {
+      const packageData = await fetchAllPackageListByCenter(centerId);
+      setPackageData(packageData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
-  // useEffect(() => {
-  //   fetchCourseData();
-  //   fetchPackageData();
-  // }, []);
+  useEffect(() => {
+    fetchCourseData();
+    fetchPackageData();
+  }, []);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -193,12 +193,17 @@ function StudentRegisterCourse() {
       try {
         const response = await api.get(`/getAllStudentById/${id}`);
         setData(response.data);
+        
         const studentCourseDetail = response.data.studentCourseDetailModels[0];
         setStudentCourseDetailsId(studentCourseDetail.id);
+        console.log("studentCourseDetail:",studentCourseDetail);
         formik.setValues({
           // ...studentCourseDetail,
           studentCourseDetailsId: studentCourseDetail.id,
+          courseId : courseId,
+          packageName : packageName,
         });
+
         console.log("Student Course Detail Id:", studentCourseDetail.id);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -339,7 +344,7 @@ function StudentRegisterCourse() {
                         : ""
                     }`}
                     id="courseId"
-                    name="courseId"
+                    name="courseId" 
                   >
                     <option value="" disabled selected>
                       Select Course

@@ -34,6 +34,7 @@ const Lead = () => {
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
+      // const subjectData = await fetchAllSubjectsWithIds();
       const subjectData = await fetchAllSubjectsWithIds();
       setCenterData(centerData);
       setSubjectData(subjectData);
