@@ -87,7 +87,11 @@ function EditRegisteration({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if(error.response.status === 409){
+          toast.warning(error?.response?.data?.message)
+        }else{
+          toast.error(error.response.data.message);
+        }
       } finally {
         setLoadIndicator(false);
       }
@@ -126,7 +130,7 @@ function EditRegisteration({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn" onClick={handleShow}>
+      <button className="btn p-0" onClick={handleShow}>
         <FaEdit />
       </button>
 

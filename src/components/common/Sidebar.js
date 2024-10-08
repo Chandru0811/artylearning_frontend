@@ -299,16 +299,16 @@ function Sidebar() {
             path: "/cms/CmsCourses",
             access: storedScreens.englishCourseIndex,
           },
-          {
-            title: "English Course",
-            path: "/cms/englishcourse",
-            access: storedScreens.englishCourseIndex,
-          },
-          {
-            title: "Chinese Course",
-            path: "/cms/chineshcourse",
-            access: storedScreens.chineseCourseIndex,
-          },
+          // {
+          //   title: "English Course",
+          //   path: "/cms/englishcourse",
+          //   access: storedScreens.englishCourseIndex,
+          // },
+          // {
+          //   title: "Chinese Course",
+          //   path: "/cms/chineshcourse",
+          //   access: storedScreens.chineseCourseIndex,
+          // },
           {
             title: "Teachers",
             path: "/cms/teacher",

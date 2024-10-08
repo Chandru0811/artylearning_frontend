@@ -5,6 +5,7 @@ import api from "../../config/URL";
 import TeacherSummary from "./TeacherSummary";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
+import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
 
 function TeacherView() {
   const { id } = useParams();
@@ -12,8 +13,18 @@ function TeacherView() {
   console.log("Api data:", data);
   const [centerData, setCenterData] = useState(null);
   const [shgData, setShgData] = useState([]);
+  const [salaryTypeData, setSalaryTypeData] = useState(null);
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+
+  const fetchSalaryTypeData = async () => {
+    try {
+      const salarytype = await fetchAllSalaryTypeWithIds();
+      setSalaryTypeData(salarytype);
+    } catch (error) {
+      toast.error(error.message || "Error fetching salary types");
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -26,6 +37,8 @@ function TeacherView() {
     };
     getData();
     fetchData();
+    fetchSalaryTypeData();
+
   }, [id]);
 
   const fetchData = async () => {
@@ -36,6 +49,7 @@ function TeacherView() {
       toast.error(error);
     }
   };
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -46,10 +60,9 @@ function TeacherView() {
         console.error("Error fetching data:", error);
       }
     };
-
     getData();
-   
-  }, []);
+  }, [shgData]);
+
   const getFileNameFromUrl = (url) => {
     if (url) {
       const parts = url.split("/");
@@ -72,6 +85,11 @@ function TeacherView() {
   const educationCertificateUrl = userRequireInfo
     ? userRequireInfo.educationCertificate
     : "#";
+
+    const findSalaryType = (id) => {
+      const name = salaryTypeData?.find((datas) => datas.id === id);
+      return name?.salaryType;
+    };
 
   return (
     <div class="container-fluid minHeight mb-5">
@@ -296,7 +314,7 @@ function TeacherView() {
             data.userAccountInfo[0].shgTypeId
               ? (
                   shgData.find(
-                    (item) => item.id == data.userAccountInfo[0].shgTypeId
+                    (item) => item.id === data.userAccountInfo[0].shgTypeId
                   ) || {}
                 ).shgType || "--"
               : "--"}
@@ -584,11 +602,13 @@ function TeacherView() {
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
-                :{" "}
+              :{" "}
                 {data.userSalaryCreationModels &&
                 data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salaryType
-                  ? data.userSalaryCreationModels[0].salaryType
+                data.userSalaryCreationModels[0].salaryTypeId
+                  ? findSalaryType(
+                      data.userSalaryCreationModels[0].salaryTypeId
+                    )
                   : "--"}
               </p>
             </div>

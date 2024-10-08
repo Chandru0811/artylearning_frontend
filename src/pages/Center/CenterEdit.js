@@ -671,13 +671,13 @@ function CenterEdit() {
                               : ""
                           )}
                       </td>
-                      <td>
+                      <td className="text-center">
                         <EditRegisteration
                           id={registration.id}
                           onSuccess={refreshData}
                         />
                       </td>
-                      <td>
+                      <td className="text-center">
                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteCenterRegistrations/${registration.id}`}

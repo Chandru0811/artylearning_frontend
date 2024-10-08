@@ -218,15 +218,14 @@ function SendNotificationView() {
           </div>
         </div>
           
-            <div className="col-md-6 col-12 mb-3">
+            <div className="col-md-12 col-12 mb-3">
               <div className="row mb-2">
-                <div className="col-6">
-                  <p className="fw-medium">Attachments</p>
+                <div className="col-12">
+                  <p className="fw-medium">Attachments :</p>
                 </div>
                 {data.attachments && data.attachments.length > 0 ? (
                   <div className="col-6">
                   <p className="my-2 d-flex">
-                  :{" "}
                     {data.attachments.map((attachment, index) => (
                       <div key={index} className="col-md-6 col-12 mb-2">
                         {renderAttachment(attachment)}

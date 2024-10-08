@@ -60,7 +60,11 @@ function EditBreak({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if(error.response.status === 409){
+          toast.warning(error?.response?.data?.message)
+        }else{
+          toast.error(error.response.data.message);
+        }
       } finally {
         setLoadIndicator(false);
       }

@@ -507,7 +507,7 @@ const ContractAdd = forwardRef(
                   )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Probation (Day/Month)</label>
+                <label>Probation (Day)</label>
                 <input
                   type="text"
                   className="form-control"

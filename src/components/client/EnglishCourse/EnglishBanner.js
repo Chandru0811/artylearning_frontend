@@ -13,7 +13,7 @@ function CoursesBanner({datas ,getData}) {
       <div className="row remove-padding">
         <div className="col-md-8 col-12 bgimage " style={{backgroundImage:`url(${datas.backgroundImage || img1})`}}>
           <div className="py-5 firsthead  d-flex flex-column  justify-content-center align-items-center">
-            <img src={img} alt="english" width={80}></img>
+            <img src={datas.menuLogo} alt="english" width={80}></img>
             <h1>{datas.heading}</h1>
           </div>
         </div>

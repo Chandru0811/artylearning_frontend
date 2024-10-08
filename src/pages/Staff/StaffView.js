@@ -230,7 +230,7 @@ function StaffView() {
 
   const findSalaryType = (id) => {
     const name = salaryTypeData?.find((datas) => datas.id === id);
-    return name.salaryType;
+    return name?.salaryType;
   };
 
   return (

@@ -94,7 +94,7 @@ const EditForm5 = forwardRef(
 
       formik.setValues({
         ...response.data,
-        enquiryDate: enquiryDate,
+        enquiryDate: enquiryDate || response.data.createdAt.substring(0, 10),
         preferredDay: response.data.preferredDay || [],
         preferredTimeSlot: response.data.preferredTimeSlot || [],
       });

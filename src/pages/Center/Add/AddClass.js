@@ -11,7 +11,11 @@ function AddClass({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    formik.resetForm();
+    setShow(false);
+  };
+
   const handleShow = () => {
     
     setShow(true);
@@ -55,7 +59,11 @@ function AddClass({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if(error.response.status === 409){
+          toast.warning(error?.response?.data?.message)
+        }else{
+          toast.error(error.response.data.message);
+        }
       } finally {
         setLoadIndicator(false);
       }
@@ -192,7 +200,7 @@ function AddClass({ id, onSuccess }) {
               <div className="form-floating">
                 <lable>Description</lable>
                 <textarea
-                  class="form-control"
+                  className="form-control p-1"
                   {...formik.getFieldProps("description")}
                   placeholder=""
                   id="floatingTextarea2"

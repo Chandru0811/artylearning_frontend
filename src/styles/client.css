@@ -129,7 +129,21 @@
   /* border-top-right-radius: 15px;
   border-bottom-right-radius: 15px; */
   border-radius: 10px;
+}
 
+/* Adding hover effect for dropdown items */
+.navbar-nav .dropdown-menu .dropdown-item:hover,
+.navbar-nav .dropdown-menu .dropdown-item:focus {
+  background-color: #ffde00;
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* Adding active effect for dropdown items */
+.navbar-nav .dropdown-menu .dropdown-item.active {
+  background-color: #ffde00 !important;
+  color: #fff !important;
+  border-radius: 5px;
 }
 
 /* Footer  */

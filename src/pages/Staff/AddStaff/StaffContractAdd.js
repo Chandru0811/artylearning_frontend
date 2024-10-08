@@ -488,7 +488,7 @@ const StaffContractAdd = forwardRef(
                   )}
               </div>
               <div class="col-md-6 col-12 mb-2 mt-3">
-                <label>Probation (Day/Month)</label>
+                <label>Probation (Day)</label>
                 <input
                   type="text"
                   className="form-control"
@@ -675,6 +675,7 @@ const StaffContractAdd = forwardRef(
                   name="userContractSalary"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  readOnly
                   value={formik.values.userContractSalary}
                 />
                 {formik.touched.userContractSalary &&

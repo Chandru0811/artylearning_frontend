@@ -92,33 +92,7 @@ function Header() {
                   >
                     About us
                   </Nav.Link>
-                  {/* <NavDropdown title="Courses">
-                    <NavDropdown.Item
-                      as={NavLink}
-                      to="/course/english?subjects=ENGLISH"
-                      onClick={handleClick}
-                      className="header-dropdown-menu mb-3"
-                    >
-                      <div style={{ verticalAlign: "middle" }}>
-                        <span className="course-icons">
-                          <img src={English} alt="english" width={30}></img>
-                        </span>
-                        English
-                      </div>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      as={NavLink}
-                      to="/course/chinesh?subjects=CHINESE"
-                      onClick={handleClick}
-                      className="header-dropdown-menu"
-                    >
-                      <span className="course-icons">
-                        <img src={Chinesh} alt="english" width={30}></img>
-                      </span>
-                      Chinese
-                    </NavDropdown.Item>
-                  </NavDropdown> */}
-                  <NavDropdown title="Courses" id="courses-dropdown">
+                  <NavDropdown title="Courses" id="courses-dropdown" className="">
                     {loading ? (
                       <NavDropdown.Item disabled>Loading...</NavDropdown.Item> // Loading state
                     ) : error ? (
@@ -137,8 +111,8 @@ function Header() {
                           //     ""
                           //   )}?subjects=${course.menuTitle.toUpperCase()}`}
                           to={`/courses/${course.id}`}
-                          // onClick={() => handleCourseClick(course.id)}
-                          className="header-dropdown-menu mb-3"
+                          className="header-dropdown-menu mb-3 "
+                          activeClassName="active"  // This ensures active styling is applied
                         >
                           <div style={{ verticalAlign: "middle" }}>
                             <span className="course-icons">

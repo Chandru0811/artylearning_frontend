@@ -3759,7 +3759,7 @@ function RolesAdd() {
                     <tr>
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
-                          English Course
+                          Courses
                         </p>
                       </td>
                       <td>
@@ -3821,7 +3821,7 @@ function RolesAdd() {
                         />
                       </td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
                           Chinese Course
@@ -3837,13 +3837,13 @@ function RolesAdd() {
                         />
                       </td>
                       <td>
-                        {/* <input
+                        <input
                           class="form-check-input"
                           type="checkbox"
                           name="chineseCourseRead"
                           checked={formik.values.chineseCourseRead}
                           onChange={handleCheckboxChange(`chineseCourseRead`)}
-                        /> */}
+                        />
                       </td>
                       <td>
                         <input
@@ -3866,13 +3866,13 @@ function RolesAdd() {
                         />
                       </td>
                       <td>
-                        {/* <input
+                        <input
                           class="form-check-input"
                           type="checkbox"
                           name="timeScheduleDelete"
                           checked={formik.values.timeScheduleDelete}
                           onChange={handleCheckboxChange(`timeScheduleDelete`)}
-                        /> */}
+                        />
                       </td>
                       <td>
                         <input
@@ -3885,7 +3885,7 @@ function RolesAdd() {
                           )}
                         />
                       </td>
-                    </tr>
+                    </tr> */}
                     <tr>
                       <td>
                         <p style={{ marginLeft: "30px", marginBottom: "0px" }}>

@@ -11,8 +11,11 @@ function AddPackage({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
-  const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
+  const handleClose = () => {
+    formik.resetForm();
+    setShow(false);
+  };
+  
   const handleShow = () => {
     
     setShow(true);
@@ -49,7 +52,11 @@ function AddPackage({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        if(error.response.status === 409){
+          toast.warning(error?.response?.data?.message)
+        }else{
+          toast.error(error.response.data.message);
+        }
       } finally {
         setLoadIndicator(false);
       }

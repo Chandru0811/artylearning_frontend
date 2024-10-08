@@ -3,6 +3,7 @@
   import * as Yup from "yup";
   import api from "../../../../config/URL";
   import { toast } from "react-toastify";
+import { dark } from "@mui/material/styles/createPalette";
 
   const validationSchema = Yup.object().shape({
     address: Yup.string().required("*Address is required"),
@@ -75,6 +76,12 @@
         const getData = async () => {
           const response = await api.get(`/getAllLeadInfoById/${formData.id}`);
           formik.setValues(response.data);
+          formik.setValues({
+            ...response.data,
+            relationToChils : response.data.relation
+          });
+          console.log("relationToChils",response.data.relation);
+          
         };
         window.scrollTo({ top: 0, left: 0, behavior: "instant" });
         getData();

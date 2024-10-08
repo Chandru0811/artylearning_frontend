@@ -34,8 +34,9 @@ const Lead = () => {
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      // const subjectData = await fetchAllSubjectsWithIds();
       const subjectData = await fetchAllSubjectsWithIds();
+      console.log("subjectData",subjectData);
+      
       setCenterData(centerData);
       setSubjectData(subjectData);
     } catch (error) {
@@ -138,7 +139,7 @@ const Lead = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllLeadInfo");
+      const response = await api.get("/getAllLeadInfos");
       setDatas(response.data);
       initializeDataTable();
     } catch (error) {
@@ -166,7 +167,7 @@ const Lead = () => {
     }
 
     try {
-      const response = await api.get("/getAllLeadInfo", { params });
+      const response = await api.get("/getAllLeadInfos", { params });
       setDatas(response.data);
       initializeDataTable();
       // Update activeButton state to reflect the current leadStatus
@@ -330,18 +331,18 @@ const Lead = () => {
                     <option value="" disabled selected>
                       Select Subject
                     </option>
-                    {/* {subjectData &&
+                    {subjectData &&
                       subjectData.map((subject) => (
                         <option key={subject.id} value={subject.id}>
                           {subject.subjects}
                         </option>
-                      ))} */}
-                    <option value="ENGLISH">
+                      ))}
+                    {/* <option value="ENGLISH">
                       English
                     </option>
                     <option value="CHINESE">
                       Chinese
-                    </option>
+                    </option> */}
                   </select>
                   <button
                     type="button"
@@ -395,11 +396,18 @@ const Lead = () => {
                         </td>
                         <td>{data.studentName}</td>
                         <td>
-                          {data.subject === "ENGLISH"
+                          {/* {data.subject === "ENGLISH"
                             ? "English"
                             : data.subject === "CHINESE"
                             ? "Chinese"
-                            : ""}
+                            : ""} */}
+                            {/* {data.subject} */}
+                            {subjectData &&
+                            subjectData.map((subject) =>
+                              parseInt(data.subject) === subject.id
+                                ? subject.subjects || "--"
+                                : ""
+                            )}
                         </td>
 
                         {/* <td>{data.fathersFullName}</td> */}

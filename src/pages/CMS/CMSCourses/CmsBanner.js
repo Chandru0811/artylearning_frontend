@@ -243,12 +243,12 @@ function CmsBanner({
           <div className="py-5 firsthead d-flex flex-column justify-content-center align-items-center">
             <div className="edit-container d-flex flex-column justify-content-center align-items-center">
               <img
-                src={Alphabet}
+                src={menuLogo}
                 alt="english"
                 className="img-fluid w-25"
               ></img>
             </div>
-            <h1>Arty Learning</h1>
+            <h1>{heading}</h1>
           </div>
         </div>
         <div className="col-md-4 col-12 p-5">
