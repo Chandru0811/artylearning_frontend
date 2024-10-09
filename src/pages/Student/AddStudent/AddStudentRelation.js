@@ -45,6 +45,7 @@ const Addrelation = forwardRef(
     const formik = useFormik({
       initialValues: {
         studentRelationCenter: formData.studentRelationCenter || "",
+        centerId: formData.studentRelationCenter || "",
         studentRelation: formData.studentRelation || "",
         studentRelationStudentName: formData.studentRelationStudentName || "",
         createdBy: userName,

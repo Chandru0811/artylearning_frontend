@@ -949,7 +949,7 @@ function Leadview() {
                           </div>
                           <div className="col-6">
                             <p className="text-muted text-sm">
-                              : {data.relationToChils || ""}
+                              : {data.relationToChils || data.relation || ""}
                             </p>
                           </div>
                         </div>
@@ -1090,9 +1090,10 @@ function Leadview() {
                           <div className="col-6">
                             <p className="text-muted text-sm">
                               :{" "}
-                              {data.enquiryDate
+                              {/* {data.enquiryDate
                                 ? data.enquiryDate.substring(0, 10)
-                                : "--"}
+                                : data.createdAt?.substring(0, 10) || "--"} */}
+                                {data.enquiryDate || data.createdAt || ""}
                             </p>
                           </div>
                         </div>

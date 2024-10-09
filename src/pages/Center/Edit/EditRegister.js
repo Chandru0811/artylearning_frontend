@@ -130,7 +130,7 @@ function EditRegisteration({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn p-0" onClick={handleShow}>
+      <button className="btn" onClick={handleShow}>
         <FaEdit />
       </button>
 

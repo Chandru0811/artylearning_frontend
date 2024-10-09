@@ -724,7 +724,7 @@ const ContractEdit = forwardRef(
                     )}
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
-                  <label>Termination Notice (Day/Month)</label>
+                  <label>Termination Notice (Month)</label>
                   <span className="text-danger">*</span>
                   <input
                     type="text"

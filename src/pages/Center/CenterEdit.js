@@ -647,22 +647,21 @@ function CenterEdit() {
                   <th scope="col" className="fw-medium">
                     Tax Type
                   </th>
-                  <th scope="col" className="fw-medium">
-                    Edit
+                  <th scope="col" className="fw-medium text-center">
+                    Action
                   </th>
-                  <th scope="col" className="fw-medium">
+                  {/* <th scope="col" className="fw-medium">
                     Delete
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
               <tbody>
                 {data.centerRegistrations &&
                   data.centerRegistrations.map((registration, index) => (
-                    <tr key={index}>
+                    <tr key={index} className="mt-1">
                       <td>{index + 1}</td>
                       <td>{registration.effectiveDate?.substring(0, 10)}</td>
                       <td>{registration.amount}</td>
-                      {/* <td>{registration.taxType}</td> */}
                       <td>
                         {taxTypeData &&
                           taxTypeData.map((tax) =>
@@ -676,9 +675,7 @@ function CenterEdit() {
                           id={registration.id}
                           onSuccess={refreshData}
                         />
-                      </td>
-                      <td className="text-center">
-                        <Delete
+                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteCenterRegistrations/${registration.id}`}
                         />
@@ -706,11 +703,8 @@ function CenterEdit() {
                   <th scope="col" className="fw-medium">
                     To date
                   </th>
-                  <th scope="col" className="fw-medium">
-                    Edit
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Delete
+                  <th scope="col" className="fw-medium text-center">
+                    Action
                   </th>
                 </tr>
               </thead>
@@ -722,14 +716,12 @@ function CenterEdit() {
                       <td>{centerBreak.breakName}</td>
                       <td>{centerBreak.fromDate.substring(0, 10)}</td>
                       <td>{centerBreak.toDate.substring(0, 10)}</td>
-                      <td>
+                      <td className="text-center">
                         <EditBreak
                           id={centerBreak.id}
                           onSuccess={refreshData}
                         />
-                      </td>
-                      <td>
-                        <Delete
+                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteCenterBreaks/${centerBreak.id}`}
                         />
@@ -785,10 +777,7 @@ function CenterEdit() {
                       Description
                     </th>
                     <th scope="col" className="fw-medium">
-                      Edit
-                    </th>
-                    <th scope="col" className="fw-medium">
-                      Delete
+                      Action
                     </th>
                   </tr>
                 </thead>
@@ -809,8 +798,6 @@ function CenterEdit() {
                             id={centerClassRoom.id}
                             onSuccess={refreshData}
                           />
-                        </td>
-                        <td>
                           <Delete
                             onSuccess={refreshData}
                             path={`/deleteCenterClassRooms/${centerClassRoom.id}`}
@@ -837,11 +824,8 @@ function CenterEdit() {
                   <th scope="col" className="fw-medium">
                     Number Of Lesson
                   </th>
-                  <th scope="col" className="fw-medium">
-                    Edit
-                  </th>
-                  <th scope="col" className="fw-medium">
-                    Delete
+                  <th scope="col" className="fw-medium text-center">
+                    Action
                   </th>
                 </tr>
               </thead>
@@ -852,14 +836,12 @@ function CenterEdit() {
                       <td>{index + 1}</td>
                       <td>{centerPackage.packageName || "--"}</td>
                       <td>{centerPackage.noOfLesson || "--"}</td>
-                      <td>
+                      <td className="text-center">
                         <EditPackage
                           id={centerPackage.id}
                           onSuccess={refreshData}
                         />
-                      </td>
-                      <td>
-                        <Delete
+                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteCenterPackages/${centerPackage.id}`}
                         />

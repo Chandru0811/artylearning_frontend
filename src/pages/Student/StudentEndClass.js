@@ -251,37 +251,32 @@ const StudentEndClass = () => {
                 aria-label="Default select example"
               >
                 <option selected></option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="Withdraw">Withdraw</option>
+                <option value="Graduate ">Graduate</option>
               </select>
               {formik.touched.reason && formik.errors.reason && (
                 <div className="invalid-feedback">{formik.errors.reason}</div>
               )}
             </div>
           </div>
-          <div className="col-md-6 col-12 mb-4">
+          <div className=" mb-4">
             <lable className="form-lable">
               Other Reason<span className="text-danger">*</span>
             </lable>
-            <div className="input-group mb-3">
-              <input
-                type="text"
-                className={`form-control  ${
-                  formik.touched.otherReason && formik.errors.otherReason
-                    ? "is-invalid"
-                    : ""
-                }`}
-                aria-label="Username"
-                aria-describedby="basic-addon1"
-                {...formik.getFieldProps("otherReason")}
-              />
-              {formik.touched.otherReason && formik.errors.otherReason && (
-                <div className="invalid-feedback">
-                  {formik.errors.otherReason}
-                </div>
-              )}
-            </div>
+
+            <textarea
+              className={`form-control   ${
+                formik.touched.otherReason && formik.errors.otherReason
+                  ? "is-invalid"
+                  : ""
+              }`}
+              {...formik.getFieldProps("otherReason")}
+            ></textarea>
+            {formik.touched.otherReason && formik.errors.otherReason && (
+              <div className="invalid-feedback">
+                {formik.errors.otherReason}
+              </div>
+            )}
           </div>
           <div className=" mb-4">
             <lable className="form-lable">

@@ -102,12 +102,12 @@ const Center = () => {
   };
   return (
     <div className="container my-4 center">
-      <div className="mb-5 mt-3 d-flex justify-content-end">
+      <div className="mb-3 d-flex justify-content-end">
         {storedScreens?.centerListingCreate && (
           <Link to="/center/add">
             <button
               type="button"
-              className="btn btn-button "
+              className="btn btn-button"
               style={{ fontWeight: "600px !important" }}
             >
               Add <i className="bx bx-plus"></i>

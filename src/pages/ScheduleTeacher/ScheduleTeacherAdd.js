@@ -248,18 +248,44 @@ function ScheduleTeacherAdd({ onSuccess }) {
     },
   });
 
+  // const handleCenterChange = (event) => {
+  //   setCourseData(null);
+  //   setClassData(null);
+  //   setTeacherData(null);
+  //   const centerId = event.target.value;
+  //   formik.setFieldValue("centerId", centerId); 
+  //   console.log("object1",centerId)
+  //   fetchCourses(centerId);
+  //   fetchTeacher(centerId);
+  //   fetchClassRoom(centerId);
+  //   formik.resetForm();
+  // };
+
   const handleCenterChange = (event) => {
+    const centerId = event.target.value;
+  
+    // Reset specific dependent form fields
+    formik.setFieldValue("centerId", centerId); // Set centerId
+    formik.setFieldValue("courseId", ""); // Reset courseId
+    formik.setFieldValue("classId", ""); // Reset classId
+    formik.setFieldValue("userId", ""); // Reset teacher/userId
+    formik.setFieldValue("days", ""); // Reset days
+    formik.setFieldValue("classRoom", ""); // Reset classRoom
+  
+    // Reset the dependent data arrays in the state
     setCourseData(null);
     setClassData(null);
     setTeacherData(null);
-    const centerId = event.target.value;
-    formik.setFieldValue("centerId", centerId); 
-    console.log("object1",centerId)
+    setDaysData(null);
+    setClassRoomData(null);
+  
+    // Fetch new data for the selected center
     fetchCourses(centerId);
     fetchTeacher(centerId);
     fetchClassRoom(centerId);
   };
 
+  
 const handleTeacherChange = (event) => {
   const userId = event.target.value; 
   console.log("object2",userId)
@@ -479,14 +505,7 @@ const handleTeacherChange = (event) => {
                       formik.setFieldValue("startDate", nextAvailableDate); // Automatically set the closest date
                     }}
                   >
-                    {/* <option></option>
-                    <option value="MONDAY">MONDAY</option>
-                    <option value="TUESDAY">TUESDAY</option>
-                    <option value="WEDNESDAY">WEDNESDAY</option>
-                    <option value="THURSDAY">THURSDAY</option>
-                    <option value="FRIDAY">FRIDAY</option>
-                    <option value="SATURDAY">SATURDAY</option>
-                    <option value="SUNDAY">SUNDAY</option> */}
+                    <option value=""></option>
                     {daysData &&
                       daysData.map((day, index) => (
                         <option key={index} value={day}>
@@ -510,7 +529,7 @@ const handleTeacherChange = (event) => {
                         : ""
                     }`}
                   >
-                    <option></option>
+                    <option value=""></option>
                     {classRoomData &&
                       classRoomData.map((classRoom) => (
                         <option key={classRoom.id} value={classRoom.id}>

@@ -307,7 +307,7 @@ const AssessmentBeliever = forwardRef(
                   onBlur={formik.handleBlur}
                 />
                 <label className="form-check-label" for="inlineRadio1">
-                  Focussing
+                  Focusing
                 </label>
               </div>
               <div className="form-check form-check-inline">
