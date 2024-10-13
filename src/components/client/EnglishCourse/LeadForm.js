@@ -5,9 +5,10 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../../pages/List/CenterList";
 import { useSearchParams } from "react-router-dom";
+import fetchAllStudentListByCenterWOT from "../../../pages/List/StudentListByCenterWithoutToken";
 
 const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Center name is required"),
+  centerId: Yup.string().required("*Centre name is required"),
   studentName: Yup.string().required("*Child name is required"),
   gender: Yup.string().required("*Select a gender"),
   dateOfBirth: Yup.date()
@@ -57,9 +58,11 @@ const validationSchema = Yup.object().shape({
 function LeadForm() {
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
+  const [studentData, setStudentData] = useState(null);
 
   const [searchParams] = useSearchParams();
   const subjects = searchParams.get("subjects");
+
   const formik = useFormik({
     initialValues: {
       centerId: "",
@@ -130,6 +133,13 @@ function LeadForm() {
     }
   };
 
+  const handleCenterChange = (event) => {
+    setStudentData(null);
+    const center = event.target.value;
+    formik.setFieldValue("centerId", center);
+    fetchStudent(center);
+  };
+
   const fetchAllSubjectsList = async () => {
     try {
       const response = await api.get("getAllSubjectWithoutToken");
@@ -138,6 +148,15 @@ function LeadForm() {
     } catch (error) {
       toast.error("Error fetching center data:", error);
       throw error;
+    }
+  };
+
+  const fetchStudent = async (centerId) => {
+    try {
+      const student = await fetchAllStudentListByCenterWOT(centerId);
+      setStudentData(student);
+    } catch (error) {
+      toast.error(error);
     }
   };
 
@@ -160,7 +179,7 @@ function LeadForm() {
           <h1 className="form-font mb-3">Waitlist Request Form</h1>
           <div className="col-md-6 col-12 mb-3">
             <label for="exampleFormControlInput1" className="form-label">
-              Center / 中心 <span className="text-danger">*</span>
+              Centre / 中心 <span className="text-danger">*</span>
             </label>
             <select
               {...formik.getFieldProps("centerId")}
@@ -169,7 +188,8 @@ function LeadForm() {
                   ? "is-invalid"
                   : ""
               }`}
-              aria-label="Default select example"
+              onChange={handleCenterChange}
+
             >
               <option selected>--Select--</option>
               {centerData &&
@@ -358,7 +378,7 @@ function LeadForm() {
               <label for="exampleFormControlInput1" className="form-label">
                 Referred by / 介绍人 <span className="text-danger">*</span>
               </label>
-              <input
+              {/* <input
                 className={`form-control  ${
                   formik.touched.referBy && formik.errors.referBy
                     ? "is-invalid"
@@ -368,7 +388,23 @@ function LeadForm() {
                 aria-describedby="basic-addon1"
                 {...formik.getFieldProps("referBy")}
                 type="text"
-              />
+              /> */}
+               <select
+                  {...formik.getFieldProps("referBy")}
+                  className={`form-select ${
+                    formik.touched.referBy && formik.errors.referBy
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                >
+                  <option selected></option>
+                  {studentData &&
+                    studentData.map((referBy) => (
+                      <option key={referBy.id} value={referBy.id}>
+                        {referBy.studentNames}
+                      </option>
+                    ))}
+                </select>
               {formik.touched.referBy && formik.errors.referBy && (
                 <div className="invalid-feedback">{formik.errors.referBy}</div>
               )}

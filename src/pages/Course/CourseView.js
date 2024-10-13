@@ -9,7 +9,6 @@ import fetchAllLevelsWithIds from "../List/LevelList";
 function CourseView() {
   const { id } = useParams();
   const [data, setData] = useState([]);
-
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [levelData, setLevelData] = useState(null);
@@ -90,8 +89,8 @@ function CourseView() {
               </div>
             </div>
             <div className="col-md-6 col-12">
-              <div className="row  mb-2">
-                <div className="col-6  ">
+              <div className="row  mb-2 mt-3">
+                <div className="col-6">
                   <p className="fw-medium">Course Code</p>
                 </div>
                 <div className="col-6">

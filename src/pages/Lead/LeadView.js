@@ -420,7 +420,13 @@ function Leadview() {
                           </div>
                           <div className="col-6">
                             <p className="text-muted text-sm">
-                              : {data.subject || "--"}
+                              {/* : {data.subject || "--"} */}
+                              : {subjectData &&
+                                subjectData.map((subject) =>
+                                  parseInt(data.subject) === subject.id
+                                    ? subject.subjects || "--"
+                                    : ""
+                                )}
                             </p>
                           </div>
                         </div>
@@ -1012,7 +1018,8 @@ function Leadview() {
                           </div>
                           <div className="col-6">
                             <p className="text-muted text-sm">
-                               : {studentData &&
+                              :{" "}
+                              {studentData &&
                                 studentData.map((std) =>
                                   parseInt(data.referBy) === std.id
                                     ? std.studentNames || "--"
@@ -1093,7 +1100,7 @@ function Leadview() {
                               {/* {data.enquiryDate
                                 ? data.enquiryDate.substring(0, 10)
                                 : data.createdAt?.substring(0, 10) || "--"} */}
-                                {data.enquiryDate || data.createdAt || ""}
+                              {data.enquiryDate || data.createdAt || ""}
                             </p>
                           </div>
                         </div>

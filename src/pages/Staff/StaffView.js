@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaCloudDownloadAlt } from "react-icons/fa";
-// import teacher from "../../assets/images/teacher.jpg";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import TeacherSummary from "../Teacher/TeacherSummary";
@@ -52,18 +51,6 @@ function StaffView() {
     }
   };
 
-  // const generatePDF = () => {
-  //   const doc = new jsPDF();
-
-  //   // Add text to the PDF
-  //   doc.text('Hello world!', 10, 10);
-
-  //   // Add more content as needed
-  //   doc.text('This is a generated PDF document.', 10, 20);
-
-  //   // Save the PDF
-  //   doc.save('generated.pdf');
-  // };
   useEffect(() => {
     const getData = async () => {
       try {
@@ -194,17 +181,6 @@ function StaffView() {
     }
   };
 
-  const isAllCompleted = () => {
-    return (
-      data.userAccountInfo?.completedStatus === true &&
-      data.userContactInfo?.completedStatus === true &&
-      data.userContractCreationModels?.completedStatus === true &&
-      data.userLeaveCreationModels?.completedStatus === true &&
-      data.userRequireInformationModels?.completedStatus === true &&
-      data.userSalaryCreationModels?.completedStatus === true
-    );
-  };
-
   const getFileNameFromUrl = (url) => {
     if (url) {
       const parts = url.split("/");
@@ -242,7 +218,14 @@ function StaffView() {
           </div>
           <div class="col-auto">
             <div class="hstack gap-2 justify-content-end">
-              {isAllCompleted() && (
+              {data.userAccountInfo?.length === 0 ||
+              data.userContactInfo?.length === 0 ||
+              data.userRequireInformationModels?.length === 0 ||
+              data.userSalaryCreationModels?.length === 0 ||
+              data.userLeaveCreationModels?.length === 0 ||
+              data.userContractCreationModels?.length === 0 ? (
+                <></>
+              ) : (
                 <button
                   className="btn btn-border btn-sm ms-1"
                   onClick={generatePDF}
@@ -250,11 +233,7 @@ function StaffView() {
                   <MdOutlineFileDownload /> Contract
                 </button>
               )}
-              <Link to="/staff">
-                <button type="button" className="btn btn-border btn-sm">
-                  <span>Back</span>
-                </button>
-              </Link>
+              
               <TeacherSummary data={data} />
               {/* {storedScreens?.payrollIndex && (
                 <Link to="/staff/payslip">
@@ -262,14 +241,12 @@ function StaffView() {
                     <span>Payroll</span>
                   </button>
                 </Link>
-              )}
-              {storedScreens?.leaveRequestIndex && (
-                <Link to="/staff/leave">
-                  <button type="button" class="btn btn-border">
-                    <span>Leave Request</span>
-                  </button>
-                </Link>
               )} */}
+              <Link to="/staff">
+                <button type="button" className="btn btn-border btn-sm">
+                  <span>Back</span>
+                </button>
+              </Link>
             </div>
           </div>
         </div>

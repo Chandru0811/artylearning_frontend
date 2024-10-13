@@ -87,7 +87,7 @@ const AddParentDetailModel = forwardRef(
             formDatas.append(`emails`, parent.emails);
             formDatas.append(`relations`, parent.relations);
             formDatas.append(`occupations`, parent.occupations);
-            formDatas.append(`files`, parent.files);
+            formDatas.append(`file`, parent.files);
             formDatas.append(`mobileNumbers`, parent.mobileNumbers);
             formDatas.append(`postalCodes`, parent.postalCodes);
             formDatas.append(`addresses`, parent.addresses);

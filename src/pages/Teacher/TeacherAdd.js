@@ -8,7 +8,6 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
-import LoginAdd from "./AddTeacher/LoginAdd";
 import LeaveAdd from "./AddTeacher/LeaveAdd";
 import SalaryAdd from "./AddTeacher/SalaryAdd";
 import ContractAdd from "./AddTeacher/ContractAdd";
@@ -211,7 +210,7 @@ export default function TeacherAdd() {
               )}
 
               <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-                {activeStep > 0 && (
+                {activeStep > 1 && (
                   <button
                     className="btn btn-sm btn-border mt-4"
                     style={{ padding: "7px" }}

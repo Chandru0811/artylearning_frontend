@@ -13,17 +13,30 @@ const MyMessages = () => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const id = localStorage.getItem("userId");
+  const userName = localStorage.getItem("userName");
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
-      try {
-        const response = await api.get(`/getAllMessagesByTeacherId/${id}`);
-        setDatas(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+      if (userName === "SMS_BRANCH_ADMIN") {
+        try {
+          const response = await api.get(`/getAllMessagesByAdminId/${id}`);
+          setDatas(response.data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        try {
+          const response = await api.get(`/getAllMessagesByTeacherId/${id}`);
+          setDatas(response.data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false);
+        }
       }
     };
     getData();
@@ -45,9 +58,7 @@ const MyMessages = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -96,7 +107,8 @@ const MyMessages = () => {
                 <th scope="col" style={{ whiteSpace: "nowrap" }}>
                   S No
                 </th>
-                <th scope="col">Name</th>
+                <th scope="col">Student Name</th>
+                <th scope="col">Receiver Name</th>
                 <th scope="col">Message</th>
                 <th scope="col">Created Date</th>
                 <th scope="col">Action</th>
@@ -108,25 +120,26 @@ const MyMessages = () => {
                   <tr key={index}>
                     <th scope="row">{index + 1}</th>
                     <td>{data.senderName}</td>
+                    <td>{data.receiverName}</td>
                     <td>{data.message}</td>
                     <td>{data.createdAt.substring(0, 10)}</td>
                     <td>
                       <div className="d-flex">
-                        {/* {storedScreens?.messagingRead && (
-                        <Link to={`/messaging/view/${data.receiverId}`}>
+                        {/* {storedScreens?.messagingRead && ( */}
+                        <Link to={`/messaging/view/${data.senderId}`}>
                           <button className="btn btn-sm">
                             <FaEye />
                           </button>
                         </Link>
-                        )}  */}
+                        {/* )}  */}
                         {/* {storedScreens?.levelUpdate && (
                           <LevelEdit id={data.id} onSuccess={refreshData} />
                         )} */}
                         {/* {storedScreens?.levelDelete && ( */}
-                          <Delete
-                            onSuccess={refreshData}
-                            path={`/deleteMessage/${data.id}`}
-                          />
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteMessage/${data.id}`}
+                        />
                         {/* )} */}
                       </div>
                     </td>

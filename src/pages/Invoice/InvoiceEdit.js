@@ -51,6 +51,7 @@ export default function InvoiceEdit() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
+  const [description, setDescription] = useState("");
 
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {
@@ -152,6 +153,10 @@ export default function InvoiceEdit() {
       }
     },
   });
+
+  const handleInputChange = (e) => {
+    setDescription(e.target.value);
+  };
 
   const fetchData = async (id) => {
     try {
@@ -577,6 +582,14 @@ export default function InvoiceEdit() {
                     height: "7rem",
                   }}
                   maxLength={200}
+                  onKeyDown={(e) => {
+                    // Allow "Enter" inside the textarea to create a new line
+                    if (e.key === "Enter") {
+                      e.stopPropagation(); // Prevent the event from bubbling up to the parent
+                    }
+                  }}
+                  value={description}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>

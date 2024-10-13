@@ -8,7 +8,6 @@ import StudentSummary from "./StudentSummary";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import Logo from "../../assets/images/Logo.png";
-import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllPackageList from "../List/PackageList";
 
 function StudentView() {
@@ -18,15 +17,7 @@ function StudentView() {
   const { id } = useParams();
   const [data, setData] = useState({});
   console.log("Student Datas:", data);
-  const centerId = data?.studentCourseDetailModels?.[0]?.centerId;
-  const courseId = data?.studentCourseDetailModels?.[0]?.courseId;
-  const packageName = data?.studentCourseDetailModels?.[0]?.packageName;
-  console.log(
-    "centerId , courseId , packageName:",
-    centerId,
-    courseId,
-    packageName
-  );
+  const centerId = data.centerId;
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
@@ -154,7 +145,7 @@ function StudentView() {
             )}
             {storedScreens?.registerNewCreate && (
               <Link
-                to={`/student/register/course/${data.id}?centerId=${centerId}?courseId=${courseId}?packageNaem=${packageName}`}
+                to={`/student/register/course/${data.id}?centerId=${centerId}`}
               >
                 <button
                   className="btn btn-border btn-sm mx-2 stdViewBtn"

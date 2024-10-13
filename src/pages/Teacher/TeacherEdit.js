@@ -8,7 +8,6 @@ import PersonalEdit from "./EditTeacher/PersonalEdit";
 import AccountEdit from "./EditTeacher/AccountEdit";
 import ContactEdit from "./EditTeacher/ContactEdit";
 import RequiredEdit from "./EditTeacher/RequiredEdit";
-import LoginEdit from "./EditTeacher/LoginEdit";
 import SalaryEdit from "./EditTeacher/SalaryEdit";
 import LeaveEdit from "./EditTeacher/LeaveEdit";
 import ContractEdit from "./EditTeacher/ContractEdit";
@@ -205,7 +204,7 @@ export default function TeacherEdit() {
               )}
 
               <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-              {activeStep > 0 && (
+              {activeStep > 1 && (
                 <button
                   className="btn btn-sm btn-border mt-4"
                   style={{ padding: "7px" }}

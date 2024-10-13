@@ -7,8 +7,6 @@ import { toast } from "react-toastify";
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.css";
 import "datatables.net";
-import fetchAllCoursesWithIds from "../List/CourseList";
-import fetchAllPackageList from "../List/PackageList";
 import * as Yup from "yup";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
@@ -22,6 +20,7 @@ function StudentRegisterCourse() {
   const { id } = useParams();
   const [data, setData] = useState({});
   console.log("Data ....:", data);
+  console.log("ID ....:", id);
 
   const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
 
@@ -38,10 +37,7 @@ function StudentRegisterCourse() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const centerId = searchParams.get('centerId');
-  const courseId = searchParams.get('courseId');
-  const packageName = searchParams.get('packageName');
 
   const formik = useFormik({
     initialValues: {
@@ -115,7 +111,7 @@ function StudentRegisterCourse() {
       const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
     } catch (error) {
-      toast.error(error);
+      console.error(error);
     }
   };
 
@@ -124,7 +120,7 @@ function StudentRegisterCourse() {
       const packageData = await fetchAllPackageListByCenter(centerId);
       setPackageData(packageData);
     } catch (error) {
-      toast.error(error);
+      console.error(error);
     }
   };
 
@@ -200,8 +196,8 @@ function StudentRegisterCourse() {
         formik.setValues({
           // ...studentCourseDetail,
           studentCourseDetailsId: studentCourseDetail.id,
-          courseId : courseId,
-          packageName : packageName,
+          // courseId : courseId,
+          // packageName : packageName,
         });
 
         console.log("Student Course Detail Id:", studentCourseDetail.id);

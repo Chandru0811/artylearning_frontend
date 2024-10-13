@@ -66,7 +66,7 @@ export default function InvoiceAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const [packageData, setPackageData] = useState(null);
-  console.log("packageData:", packageData);
+  const [description, setDescription] = useState("");
 
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [lessonsOptions, setLessonsOptions] = useState([]);
@@ -147,9 +147,9 @@ export default function InvoiceAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
@@ -157,6 +157,10 @@ export default function InvoiceAdd() {
       }
     },
   });
+
+  const handleInputChange = (e) => {
+    setDescription(e.target.value);
+  };
 
   const fetchData = async () => {
     try {
@@ -241,11 +245,13 @@ export default function InvoiceAdd() {
         const packageId = studentCourseDetails?.packageName;
         const studentData = response.data;
         let invoiceItems = [];
-          // Find the package details based on packageId
-      const selectedPackage = packageData.find(pkg => pkg.id === parseInt(packageId));
+        // Find the package details based on packageId
+        const selectedPackage = packageData.find(
+          (pkg) => pkg.id === parseInt(packageId)
+        );
 
-      // Get the number of lessons from the selected package
-      const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
+        // Get the number of lessons from the selected package
+        const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
 
         if (centerId) {
           try {
@@ -375,7 +381,7 @@ export default function InvoiceAdd() {
     if (courseData && taxData && formik.values.student) {
       fetchStudentData(); // Call fetchStudentData only if courseData and taxData are available
     }
-  }, [courseData, taxData, formik.values.student ,packageData]);
+  }, [courseData, taxData, formik.values.student, packageData]);
 
   useEffect(() => {
     if (studentID) {
@@ -405,11 +411,11 @@ export default function InvoiceAdd() {
       const selectedPackageDetails = packageData.find(
         (pkg) => pkg.id === parseInt(selectedPackage)
       );
-  
+
       if (selectedPackageDetails) {
         const lessonsArray = [selectedPackageDetails.noOfLesson];
         setLessonsOptions(lessonsArray);
-  
+
         // Set the default value for noOfLessons
         if (lessonsArray.length > 0) {
           formik.setFieldValue("noOfLessons", lessonsArray[0]); // Set the default value
@@ -425,7 +431,6 @@ export default function InvoiceAdd() {
       formik.setFieldValue("noOfLessons", "");
     }
   }, [selectedPackage, packageData]);
-  
 
   const handleSelectChange = (index, value) => {
     const selectedTax = taxData.find((tax) => tax.id === parseInt(value));
@@ -494,57 +499,57 @@ export default function InvoiceAdd() {
     formik.setFieldValue(`invoiceItems[${index}].totalAmount`, value);
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     if (studentID) {
-  //       try {
-  //         const response = await api.get(`/getAllStudentById/${studentID}`);
-  //         const studentData = response.data;
-  //         console.log("Student Data:", studentData);
+  useEffect(() => {
+    const getData = async () => {
+      if (studentID) {
+        try {
+          const response = await api.get(`/getAllStudentById/${studentID}`);
+          const studentData = response.data;
+          console.log("Student Data:", studentData);
 
-  //         // Uncomment and update this section if you want to set values in a form
-  //         formik.setValues({
-  //           center: studentData.centerId || "",
-  //           parent: studentData?.studentParentsDetails[0]?.parentName || "",
-  //           student: studentID,
-  //           course: studentData.studentCourseDetailModels[0].courseId,
-  //           packageId: studentData.studentCourseDetailModels[0].packageName,
-  //           schedule: studentData.studentCourseDetailModels[0].batch,
-  //           noOfLessons: "",
-  //           remark: studentData.remark,
-  //           invoiceDate: "",
-  //           dueDate: "",
-  //           invoicePeriodTo: "",
-  //           invoicePeriodFrom: "",
-  //           receiptAmount: "",
-  //           creditAdviceOffset: "",
-  //           gst: "",
-  //           totalAmount: "",
-  //         });
-  //         fetchCourses(studentData.centerId); // Fetch courses for the selected studentData.centerId
-  //         fetchPackage(studentData.centerId); // Fetch courses for the selected center
-  //         fetchStudent(studentData.centerId);
-  //         formik.setFieldValue("center", studentData.centerId);
-  //         console.log("student data:", studentData);
+          // Uncomment and update this section if you want to set values in a form
+          formik.setValues({
+            center: studentData.centerId || "",
+            parent: studentData?.studentParentsDetails[0]?.parentName || "",
+            student: studentID,
+            course: studentData.studentCourseDetailModels[0].courseId,
+            packageId: studentData.studentCourseDetailModels[0].packageName,
+            schedule: studentData.studentCourseDetailModels[0].batch,
+            noOfLessons: "",
+            remark: studentData.remark,
+            invoiceDate: "",
+            dueDate: "",
+            invoicePeriodTo: "",
+            invoicePeriodFrom: "",
+            receiptAmount: "",
+            creditAdviceOffset: "",
+            gst: "",
+            totalAmount: "",
+          });
+          fetchCourses(studentData.centerId); // Fetch courses for the selected studentData.centerId
+          fetchPackage(studentData.centerId); // Fetch courses for the selected center
+          fetchStudent(studentData.centerId);
+          formik.setFieldValue("center", studentData.centerId);
+          console.log("student data:", studentData);
 
-  //         formik.setFieldValue("invoiceItems", [
-  //           {
-  //             item: "",
-  //             itemAmount: "",
-  //             taxType: "",
-  //             gstAmount: "",
-  //             totalAmount: "",
-  //           },
-  //         ]);
-  //         setRows(formik.values.invoiceItems);
-  //       } catch (error) {
-  //         console.error("Error fetching Student Data:", error);
-  //         toast.error("Error fetching Student Data");
-  //       }
-  //     }
-  //   };
-  //   getData();
-  // }, [studentID]);
+          formik.setFieldValue("invoiceItems", [
+            {
+              item: "",
+              itemAmount: "",
+              taxType: "",
+              gstAmount: "",
+              totalAmount: "",
+            },
+          ]);
+          setRows(formik.values.invoiceItems);
+        } catch (error) {
+          console.error("Error fetching Student Data:", error);
+          toast.error("Error fetching Student Data");
+        }
+      }
+    };
+    getData();
+  }, [studentID]);
 
   const handleRowDelete = (index) => {
     const updatedInvoiceItems = formik.values.invoiceItems.filter(
@@ -763,12 +768,13 @@ export default function InvoiceAdd() {
                   }}
                   maxLength={200}
                   onKeyDown={(e) => {
-                    console.log("Key pressed:", e.key); // Log the key pressed for debugging
+                    // Allow "Enter" inside the textarea to create a new line
                     if (e.key === "Enter") {
-                      e.preventDefault();
-                      e.stopPropagation(); // Stop the event from bubbling up to parent elements
+                      e.stopPropagation(); // Prevent the event from bubbling up to the parent
                     }
                   }}
+                  value={description}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>

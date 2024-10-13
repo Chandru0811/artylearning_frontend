@@ -6,7 +6,7 @@ import {
   NavDropdown,
   Offcanvas,
 } from "react-bootstrap";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../../assets/clientimage/Logo.png";
 import api from "../../../config/URL";
 
@@ -14,6 +14,7 @@ function Header() {
   const expand = "xl";
   const navigate = useNavigate();
   const [data, setData] = useState({});
+  const location = useLocation();
   const [coursesListData, setCoursesListData] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -54,6 +55,8 @@ function Header() {
     fetchAllCoursesList();
   }, []);
 
+  const isCourseActive = location.pathname.startsWith("/courses");
+
   return (
     <>
       <Navbar
@@ -92,27 +95,28 @@ function Header() {
                   >
                     About us
                   </Nav.Link>
-                  <NavDropdown title="Courses" id="courses-dropdown" className="">
+            
+                 {/* Apply active class to the "Courses" link */}
+                 <NavDropdown
+                    title="Courses"
+                    id="courses-dropdown"
+                    className={isCourseActive ? "bgActive" : ""}
+                  >
                     {loading ? (
-                      <NavDropdown.Item disabled>Loading...</NavDropdown.Item> // Loading state
+                      <NavDropdown.Item disabled>Loading...</NavDropdown.Item>
                     ) : error ? (
                       <NavDropdown.Item disabled>
                         Error fetching courses
-                      </NavDropdown.Item> // Error state
+                      </NavDropdown.Item>
                     ) : (
                       coursesListData.map((course) => (
                         <NavDropdown.Item
                           key={course.id}
                           as={NavLink}
-                          // to={`/course/${course.id
-                          //   .toLowerCase()
-                          //   .replace(
-                          //     / /g,
-                          //     ""
-                          //   )}?subjects=${course.menuTitle.toUpperCase()}`}
                           to={`/courses/${course.id}`}
-                          className="header-dropdown-menu mb-3 "
-                          activeClassName="active"  // This ensures active styling is applied
+                          className={`header-dropdown-menu mb-3 ${
+                            location.pathname === `/courses/${course.id}` ? "active" : ""
+                          }`}
                         >
                           <div style={{ verticalAlign: "middle" }}>
                             <span className="course-icons">
@@ -128,6 +132,7 @@ function Header() {
                       ))
                     )}
                   </NavDropdown>
+                  
                   <Nav.Link as={NavLink} to="/teachers" onClick={handleClick}>
                     Teachers
                   </Nav.Link>

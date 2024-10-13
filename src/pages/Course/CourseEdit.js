@@ -61,8 +61,8 @@ function CourseEdit() {
       courseCode: "",
       subjectId: "",
       levelId: "",
-      minClassSize: "",
-      maxClassSize: "",
+      minClassSize: "" || 0,
+      maxClassSize: "" || 0,
       replacementLessonStudentBuffer: "",
       colorCode: "",
       courseType: "",
@@ -77,10 +77,13 @@ function CourseEdit() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       console.log(values);
-      // values.updatedBy = userName
-      // values.classReplacementAllowed = values.classReplacementAllowed === true;
+      const updatedValues = {
+        ...values,
+        minClassSize: values.minClassSize === "" ? 0 : values.minClassSize,
+        maxClassSize: values.maxClassSize === "" ? 0 : values.maxClassSize,
+      };
       try {
-        const response = await api.put(`/updateCourses/${id}`, values, {
+        const response = await api.put(`/updateCourses/${id}`, updatedValues, {
           headers: {
             "Content-Type": "application/json",
           },

@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import fetchAllRaceWithIds from "../../List/RaceList";
 import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
+import fetchAllStudentsWithIds from "../../List/StudentList";
 
 const validationSchema = Yup.object().shape({
   centerId: Yup.string().required("*Centre is required"),
@@ -46,6 +47,7 @@ const validationSchema = Yup.object().shape({
 const EditStudentDetails = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
+    const [studentData, setStudentData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
     const userName  = localStorage.getItem('userName');
@@ -55,6 +57,9 @@ const EditStudentDetails = forwardRef(
       try {
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
+
+        const studentData = await fetchAllStudentsWithIds();
+        setStudentData(studentData);
 
         const raceData = await fetchAllRaceWithIds();
         setRaceData(raceData);
@@ -582,18 +587,34 @@ const EditStudentDetails = forwardRef(
                         )}
                     </div>
                     <div className="text-start mt-4">
-                      <label htmlFor="" className="mb-1 fw-medium">
+                      <label htmlFor="" className=" fw-medium">
                         <small>Refer By Student</small>
                         {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
-                      <input
+                      {/* <input
+                        className="form-control "
+                        type="text"
                         name="referByStudent"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByStudent}
-                        className="form-control"
-                      />
+                      /> */}
+                      <select
+                        name="referByStudent"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.referByStudent}
+                        className="form-select"
+                      >
+                        <option selected></option>
+                        {studentData &&
+                          studentData.map((student) => (
+                            <option key={student.id} value={student.id}>
+                              {student.studentNames}
+                            </option>
+                          ))}
+                      </select>
                       {formik.touched.referByStudent &&
                         formik.errors.referByStudent && (
                           <div className="error text-danger ">

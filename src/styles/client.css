@@ -187,6 +187,14 @@
   background-color: #ff1e1e !important;
 }
 
+/* Dropdown active styling */
+.bgActive {
+  background-color: #ffde00 !important;
+  color: #fff !important;
+  border-radius: 5px;
+}
+
+
 /* Home  */
 
 /* / Hero  / */

@@ -25,9 +25,19 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditEmergencyContact = forwardRef(
-  ({ formData,setLoadIndicators, handleNext }, ref) => {
-    const [rows, setRows] = useState([{}]);
-    const userName  = localStorage.getItem('userName');
+  ({ formData, setLoadIndicators, handleNext }, ref) => {
+    // const [rows, setRows] = useState([{}]);
+    const [rows, setRows] = useState([
+      {
+        name: "",
+        emergencyRelation: "",
+        contactNo: "",
+        postalCode: "",
+        emergencyContactAddress: "",
+        files: null,
+      },
+    ]); // Always start with one empty row
+    const userName = localStorage.getItem("userName");
 
     const handleDelete = () => {
       formik.setFieldValue(
@@ -75,30 +85,55 @@ const EditEmergencyContact = forwardRef(
         setLoadIndicators(true);
         try {
           if (data.emergencyContactId !== null) {
-            // console.log("ID :",data.emergencyContactId);
             const formDatas = new FormData();
             formDatas.append("emergencyContactName", data.emergencyContactName);
             formDatas.append("emergencyRelation", "Father");
             formDatas.append("emergencyContactNo", data.emergencyContactNo);
-            data.emergencyAuthorizedContactModels.forEach((contact) => {
-              if (contact.id) {
-                formDatas.append("emergencyAuthorizedContactIds", contact.id);
-              }
-              formDatas.append("name", contact.name);
-              formDatas.append("contactNo", contact.contactNo);
-              formDatas.append(
-                "authorizedRelation",
-                contact.authorizedRelation
-              );
-              formDatas.append("postalCode", contact.postalCode);
-              formDatas.append(
-                "emergencyContactAddress",
-                contact.emergencyContactAddress
-              );
-              formDatas.append("files", contact.files);
-            });
-            formDatas.append("deleteEmergencyAuthorizedContactIds", 1);
-            formDatas.append("updatedBy", userName);
+            // data.emergencyAuthorizedContactModels.forEach((contact) => {
+            //   if (contact.id) {
+            //     formDatas.append("emergencyAuthorizedContactIds", contact.id);
+            //   }
+            //   formDatas.append("name", contact.name);
+            //   formDatas.append("contactNo", contact.contactNo);
+            //   formDatas.append(
+            //     "authorizedRelation",
+            //     contact.authorizedRelation
+            //   );
+            //   formDatas.append("postalCode", contact.postalCode);
+            //   formDatas.append(
+            //     "emergencyContactAddress",
+            //     contact.emergencyContactAddress
+            //   );
+            //   formDatas.append("files", contact.files);
+            // });
+            // formDatas.append("deleteEmergencyAuthorizedContactIds", 1);
+            // formDatas.append("updatedBy", userName);
+
+            // Loop through emergencyAuthorizedContactModels and append fields, even if empty
+            if (data.emergencyAuthorizedContactModels.length === 0) {
+              formDatas.append("name", "");
+              formDatas.append("contactNo", "");
+              formDatas.append("authorizedRelation", "");
+              formDatas.append("postalCode", "");
+              formDatas.append("emergencyContactAddress", "");
+              formDatas.append("files", null);
+            } else {
+              data.emergencyAuthorizedContactModels.forEach((contact) => {
+                formDatas.append("name", contact.name || "");
+                formDatas.append("contactNo", contact.contactNo || "");
+                formDatas.append(
+                  "authorizedRelation",
+                  contact.authorizedRelation || ""
+                );
+                formDatas.append("postalCode", contact.postalCode || "");
+                formDatas.append(
+                  "emergencyContactAddress",
+                  contact.emergencyContactAddress || ""
+                );
+                formDatas.append("files", contact.files || null);
+              });
+            }
+
             const response = await api.put(
               `/updateEmergencyContactWithEmergencyAuthorizedContact/${data.emergencyContactId}`,
               formDatas,
@@ -153,7 +188,7 @@ const EditEmergencyContact = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -201,12 +236,22 @@ const EditEmergencyContact = forwardRef(
             ],
           });
         }
+        setRows([
+          {
+            name: "",
+            emergencyRelation: "",
+            contactNo: "",
+            postalCode: "",
+            emergencyContactAddress: "",
+            files: null,
+          },
+        ]); // Default empty row
       } catch (error) {
         console.error("Error fetching data:", error);
       }
       // console.log("Emergency Contact ID:", response.data.emergencyContactId);
     };
-    
+
     useEffect(() => {
       fetchData();
     }, [formData.id]);
@@ -229,11 +274,14 @@ const EditEmergencyContact = forwardRef(
         <div className="container-fluid">
           <div className="border-0 mb-5">
             <div className="border-0 my-2">
-               <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+              <form
+                onSubmit={formik.handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !formik.isSubmitting) {
+                    e.preventDefault(); // Prevent default form submission
+                  }
+                }}
+              >
                 <div className="border-0 mb-5">
                   <div className="mb-5">
                     <div className="border-0 my-2">
@@ -293,11 +341,14 @@ const EditEmergencyContact = forwardRef(
             {rows.map((row, index) => (
               <div className="border-0 mb-5" key={index}>
                 <div className="border-0 my-2">
-                   <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+                  <form
+                    onSubmit={formik.handleSubmit}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !formik.isSubmitting) {
+                        e.preventDefault(); // Prevent default form submission
+                      }
+                    }}
+                  >
                     <p className="headColor">
                       Authorized Person to Take Child from Class
                     </p>
@@ -431,7 +482,6 @@ const EditEmergencyContact = forwardRef(
                                 {row.personProfile ? (
                                   <img
                                     src={row.personProfile}
-                                    
                                     alt=""
                                     style={{ width: "60%" }}
                                     className="img-fluid rounded"

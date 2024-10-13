@@ -194,8 +194,15 @@ const Student = () => {
               <tbody>
                 {datas.map((data, index) => (
                   <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.studentUniqueId}</td>
+                    <th scope="row">{index + 1} </th>
+                    <td>
+                      {data.studentUniqueId}{" "}
+                      {/* {data?.formStatus === "INCOMPLETE" ? (
+                        <span className="fs-3 fw-bolder text-danger">.</span>
+                      ) : (
+                        <></>
+                      )} */}
+                    </td>
                     <td>{data.studentName}</td>
                     <td>{data.age}</td>
                     <td>{data.gender}</td>
@@ -208,10 +215,6 @@ const Student = () => {
                   <td>{data.status}</td> */}
                     <td>
                       <div className="d-flex">
-                        {/* {data?.formStatus === "INCOMPLETE" && (
-                          <span className="fs-3 fw-bolder text-danger">.</span>
-                        )} */}
-
                         {storedScreens?.studentListingRead && (
                           <Link to={`/student/view/${data.id}`}>
                             <button className="btn btn-sm">
