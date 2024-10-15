@@ -18,8 +18,7 @@ const validationSchema = Yup.object().shape({
 const AddTermsAndCondition = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
-    const userName  = localStorage.getItem('userName');
-
+    const userName = localStorage.getItem("userName");
 
     const [sign, setSign] = useState();
     const [url, setUrl] = useState();
@@ -46,13 +45,27 @@ const AddTermsAndCondition = forwardRef(
         setLoadIndicators(true);
         const formDatas = new FormData();
 
-        // Generate a random number
-        const randomNumber = Math.floor(Math.random() * 1000);
+        // Check if the URL (signature) exists
+        if (!url) {
+          // If no signature, append an empty string or null for the file
+          formDatas.append("file", ""); // This will send an empty file field
+        } else {
+          // Generate a random number for file name if signature exists
+          const randomNumber = Math.floor(Math.random() * 1000);
+          // Convert signature URL to Blob
+          const apiResponse = await fetch(url);
+          const blob = await apiResponse.blob();
 
+          formDatas.append("file", blob, `${randomNumber}Signature.png`);
+        }
+
+        // Generate a random number
+        // const randomNumber = Math.floor(Math.random() * 1000);
         // Convert URL to Blob
-        const apiResponse = await fetch(url);
-        const blob = await apiResponse.blob();
-        formDatas.append("file", blob, `${randomNumber}Signature.png`);
+        // const apiResponse = await fetch(url);
+        // const blob = await apiResponse.blob();
+        // formDatas.append("file", blob, `${randomNumber}Signature.png` || null);
+
         formDatas.append(
           "termsAndConditionSignatureDate",
           data.termsAndConditionSignatureDate
@@ -108,11 +121,14 @@ const AddTermsAndCondition = forwardRef(
 
     return (
       <div className="container-fluid">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="border-0 mb-5">
             <div className="mb-5 ">
               <div className="border-0 my-2 px-2">

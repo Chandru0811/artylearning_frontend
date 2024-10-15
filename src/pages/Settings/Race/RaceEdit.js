@@ -14,11 +14,20 @@ function RaceEdit({ id, onSuccess }) {
     const userName = localStorage.getItem("userName"); 
     const [isModified, setIsModified] = useState(false);
 
+    const getData = async () => {
+        try {
+            const response = await api.get(`/getAllRaceSettingById/${id}`);
+            formik.setValues(response.data);
+        } catch (error) {
+            console.error("Error fetching data ", error);
+        }
+    };
 
     const handleClose = () => setShow(false);
     const handleShow = () => { 
         setShow(true);
         setIsModified(false); 
+        getData();
       };
     const validationSchema = Yup.object({
         race: Yup.string().required("*Race is required"),
@@ -69,17 +78,7 @@ function RaceEdit({ id, onSuccess }) {
     });
 
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await api.get(`/getAllRaceSettingById/${id}`);
-                formik.setValues(response.data);
-            } catch (error) {
-                console.error("Error fetching data ", error);
-            }
-        };
-
-        getData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+           getData();
     }, []);
 
     return (

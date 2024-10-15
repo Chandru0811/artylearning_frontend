@@ -652,3 +652,16 @@
   }
 }
 
+/* Parent Signature */
+.parentSignature {
+  width: 423px !important;
+  height: 150px !important;
+}
+
+@media (max-width: 563px) {
+  .parentSignature {
+    width: 210px !important;
+    height: 100px !important;
+  }
+}
+

@@ -84,7 +84,7 @@ const Center = () => {
       }
     };
     getCenterData();
-    fetchData();
+    // fetchData();
   }, []);
 
   const handleDataShow = () => {

@@ -132,6 +132,22 @@ function Leadview() {
     fetchData();
   }, [id]);
 
+  const daysOrder = [
+    "SUNDAY",
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+  ];
+
+  const sortedPreferredDays = data.preferredDay
+    ? data.preferredDay.sort(
+        (a, b) => daysOrder.indexOf(a) - daysOrder.indexOf(b)
+      )
+    : [];
+
   return (
     <>
       <Modal
@@ -420,8 +436,8 @@ function Leadview() {
                           </div>
                           <div className="col-6">
                             <p className="text-muted text-sm">
-                              {/* : {data.subject || "--"} */}
-                              : {subjectData &&
+                              {/* : {data.subject || "--"} */}:{" "}
+                              {subjectData &&
                                 subjectData.map((subject) =>
                                   parseInt(data.subject) === subject.id
                                     ? subject.subjects || "--"
@@ -1037,8 +1053,8 @@ function Leadview() {
                           <div className="col-6">
                             <p className="text-muted text-sm">
                               :{" "}
-                              {data.preferredDay
-                                ? data.preferredDay.join(", ")
+                              {sortedPreferredDays.length > 0
+                                ? sortedPreferredDays.join(", ")
                                 : "--"}
                             </p>
                           </div>
@@ -1097,10 +1113,9 @@ function Leadview() {
                           <div className="col-6">
                             <p className="text-muted text-sm">
                               :{" "}
-                              {/* {data.enquiryDate
-                                ? data.enquiryDate.substring(0, 10)
-                                : data.createdAt?.substring(0, 10) || "--"} */}
-                              {data.enquiryDate || data.createdAt || ""}
+                              {data.enquiryDate?.substring(0, 10) ||
+                                data.createdAt?.substring(0, 10) ||
+                                ""}
                             </p>
                           </div>
                         </div>

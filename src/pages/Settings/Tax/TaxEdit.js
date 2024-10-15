@@ -8,27 +8,30 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
+const validationSchema = Yup.object({
+  taxType: Yup.string().required("*Tax Type is required"),
+  rate: Yup.number()
+    .required("*Rate is required")
+    .min(0, "Rate must be at least 0")
+    .max(100, "Rate must be at most 100"),
+  effectiveDate: Yup.string().required("*effectiveDate is required"),
+  status: Yup.string().required("*Status is required"),
+});
+
 function TaxEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
-
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => { 
-    setShow(true);
-    setIsModified(false); 
-  };  const userName = localStorage.getItem("userName");
-
-  const validationSchema = Yup.object({
-    taxType: Yup.string().required("*Tax Type is required"),
-    rate: Yup.number()
-      .required("*Rate is required")
-      .min(0, "Rate must be at least 0")
-      .max(100, "Rate must be at most 100"),
-    effectiveDate: Yup.string().required("*effectiveDate is required"),
-    status: Yup.string().required("*Status is required"),
-  });
+  const userName = localStorage.getItem("userName");
+  
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllTaxSettingById/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -75,16 +78,14 @@ function TaxEdit({ id, onSuccess }) {
     }
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllTaxSettingById/${id}`);
-        formik.setValues(response.data);
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      }
-    };
+  const handleClose = () => setShow(false);
+  const handleShow = () => { 
+    setShow(true);
+    setIsModified(false); 
+    getData();
+  };  
 
+  useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -329,6 +329,7 @@ function LeadForm() {
                 {/* <option selected>--Select--</option> */}
                 {/* <option value="ENGLISH">English / 英文</option>
                 <option value="CHINESE">Chinese / 中文</option> */}
+                <option value="" selected>--Select--</option>
                 {subjectData &&
                   subjectData.map((subject) => (
                     <option key={subject.id} value={subject.id}>

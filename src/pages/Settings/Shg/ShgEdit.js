@@ -8,21 +8,25 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
+const validationSchema = Yup.object({
+  shgType: Yup.string().required("*SHG Type is required"),
+  shgAmount: Yup.string().required("*SHG Amount is required"),
+});
+
 function ShgEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName  = localStorage.getItem('userName');
   const [isModified, setIsModified] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => { 
-    setShow(true);
-    setIsModified(false); 
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllSHGSettingById/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
   };
-  const validationSchema = Yup.object({
-    shgType: Yup.string().required("*SHG Type is required"),
-    shgAmount: Yup.string().required("*SHG Amount is required"),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -68,16 +72,17 @@ function ShgEdit({ id, onSuccess }) {
     }
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllSHGSettingById/${id}`);
-        formik.setValues(response.data);
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      }
-    };
+  const handleClose = () => setShow(false);
+  const handleShow = () => { 
+    setShow(true);
+    setIsModified(false); 
+    getData();
+  };
 
+
+ 
+
+  useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

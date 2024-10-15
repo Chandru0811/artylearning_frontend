@@ -14,11 +14,20 @@ function LeaveEdit({ id, onSuccess }) {
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
  
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllLeaveSettingById/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
 
   const handleClose = () => setShow(false);
   const handleShow = () => { 
     setShow(true);
     setIsModified(false); 
+    getData();
   };
   const validationSchema = Yup.object({
     leaveType: Yup.string().required("*Leave Type is required"),
@@ -68,15 +77,6 @@ function LeaveEdit({ id, onSuccess }) {
   });
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllLeaveSettingById/${id}`);
-        formik.setValues(response.data);
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      }
-    };
-
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

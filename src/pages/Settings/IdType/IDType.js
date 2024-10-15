@@ -6,7 +6,6 @@ import api from "../../../config/URL";
 import Delete from "../../../components/common/Delete";
 import IDTypeEdit from "./IDTypeEdit";
 import IDTypeAdd from "./IDTypeAdd";
-import { MdViewColumn } from "react-icons/md";
 
 const IDType = () => {
   const tableRef = useRef(null);
@@ -15,18 +14,18 @@ const IDType = () => {
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
 
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllIdTypeSetting");
+      setDatas(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllIdTypeSetting");
-        setDatas(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useEffect(() => {  
     getData();
   }, []);
 
@@ -71,6 +70,7 @@ const IDType = () => {
     }
     setLoading(false);
   };
+
   const handleDataShow = () => {
     if (!loading) {
       setExtraData(!extraData);
@@ -80,6 +80,7 @@ const IDType = () => {
       destroyDataTable();
     };
   };
+  
   const extractDate = (dateString) => {
     if (!dateString) return ""; // Handle null or undefined date strings
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
@@ -198,7 +199,7 @@ const IDType = () => {
 
                   <Delete
                     onSuccess={refreshData}
-                    path={`/deleteRaceSetting/${data.id}`}
+                    path={`/deleteIdTypeSetting/${data.id}`}
                   />
                 </td>
               </tr>
