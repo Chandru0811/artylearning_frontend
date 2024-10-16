@@ -46,9 +46,7 @@ const CMSContact = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -76,10 +74,10 @@ const CMSContact = () => {
     try {
       const response = await api.post("/publishContactUs");
 
-      if(response.status === 201){
-        toast.success(response.data.message)
-      }else{
-        toast.warning(response.data.message)
+      if (response.status === 201) {
+        toast.success(response.data.message);
+      } else {
+        toast.warning(response.data.message);
       }
     } catch (error) {
       toast.error("Error refreshing data:", error);
@@ -87,19 +85,27 @@ const CMSContact = () => {
   };
 
   return (
- 
-    <div className="container">
-      <div className="col-12 my-4 text-end gap-3 d-flex align-items-center justify-content-end">
-      {storedScreens?.contactUsCreate && (
-        <CMSContactAdd onSuccess={refreshData}/>)}
-      {storedScreens?.contactUsPublish && (
-        <button
-          type="button"
-          className="btn btn-outline-danger border"
-          onClick={contactPublish}
-        >
-          Publish 
-        </button>)}
+    <div className="container center p-0">
+      <div className="container cms-header shadow-sm py-2 mb-4">
+        <div className="row p-1">
+          <div className="col-md-6 col-12">
+            <h4>Contact</h4>
+          </div>
+          <div className="col-md-6 col-12 d-flex justify-content-end gap-2">
+            {storedScreens?.contactUsCreate && (
+              <CMSContactAdd onSuccess={refreshData} />
+            )}
+            {storedScreens?.contactUsPublish && (
+              <button
+                type="button"
+                className="btn btn-outline-danger border"
+                onClick={contactPublish}
+              >
+                Publish
+              </button>
+            )}
+          </div>
+        </div>
       </div>
       {loading ? (
         <div className="loader-container">
@@ -112,41 +118,59 @@ const CMSContact = () => {
           </div>
         </div>
       ) : (
-      <table ref={tableRef} className="display">
-        <thead>
-          <tr>
-            <th scope="col" className="text-center">S No</th>
-            <th scope="col" className="text-center">Centre Name</th>
-            <th scope="col" className="text-center">Email</th>
-            <th scope="col" className="text-center">Mobile Number</th>
-            <th scope="col" className="text-center">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {datas.map((data, index) => (
-            <tr key={index}>
-              <th scope="row" className="text-center">{index + 1}</th>
-              <td className="text-center">{data.centerName}</td>
-              <td className="text-center">{data.email}</td>
-              <td className="text-center">{data.mobileNo}</td>
-              <td className="text-center">
-              {storedScreens?.contactUsRead && (
-                <CMSContactView id={data.id} />)}
-                {storedScreens?.contactUsUpdate && (
-                  <CMSContactEdit id={data.id} onSuccess={refreshData}/>)}
-                  {storedScreens?.contactUsDelete && (
-                <Delete onSuccess={refreshData}
-                  path={`/deleteContactUsSave/${data.id}`}
-                />)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col" className="text-center">
+                  S No
+                </th>
+                <th scope="col" className="text-center">
+                  Centre Name
+                </th>
+                <th scope="col" className="text-center">
+                  Email
+                </th>
+                <th scope="col" className="text-center">
+                  Mobile Number
+                </th>
+                <th scope="col" className="text-center">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row" className="text-center">
+                    {index + 1}
+                  </th>
+                  <td className="text-center">{data.centerName}</td>
+                  <td className="text-center">{data.email}</td>
+                  <td className="text-center">{data.mobileNo}</td>
+                  <td className="text-center">
+                    <div className="d-flex justify-content-center">
+                      {storedScreens?.contactUsRead && (
+                        <CMSContactView id={data.id} />
+                      )}
+                      {storedScreens?.contactUsUpdate && (
+                        <CMSContactEdit id={data.id} onSuccess={refreshData} />
+                      )}
+                      {storedScreens?.contactUsDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteContactUsSave/${data.id}`}
+                        />
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
-
-   
   );
 };
 

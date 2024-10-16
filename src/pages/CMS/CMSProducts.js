@@ -18,7 +18,7 @@ function CMSProducts() {
   const handleShow = () => setShow(true);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(true);
+  const [data, setData] = useState(null); // initialize as null for better checks
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const handleClose = () => {
     setShow(false);
@@ -33,8 +33,10 @@ function CMSProducts() {
         imageProduct: response.data.imageProduct,
         contentCard: response.data.contentCard,
       });
+      setLoading(false);
     } catch (error) {
       toast.error("Error Fetching Data: " + error.message);
+      setLoading(false);
     }
   };
 
@@ -60,7 +62,7 @@ function CMSProducts() {
         if (response.status === 200) {
           setShow(false);
           toast.success(response.data.message);
-          refreshData();
+          getData(); // Refresh data after update
         } else {
           toast.error(response.data.message);
         }
@@ -71,37 +73,21 @@ function CMSProducts() {
       }
     },
   });
-  const refreshData = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllProductSaves");
-      setData(response.data);
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    refreshData();
-  }, []);
 
   const publish = async () => {
     try {
       const response = await api.post(`/publishProductSave`);
-      // formik.setValues(response.data);
-      // setDatas(response.data)
       if (response.status === 201) {
         toast.success(response?.data.message);
       }
     } catch (error) {
-      toast.error("Error Fetch Data ", error);
+      toast.error("Error Fetching Data: " + error.message);
     }
   };
 
   return (
     <>
-      <div className="container">
+      <div className="">
         <div className="container cms-header shadow-sm py-2">
           <div className="row p-1">
             <div className="col-md-6 col-12">
@@ -128,7 +114,6 @@ function CMSProducts() {
                   size={30}
                   style={{ cursor: "pointer" }}
                   onClick={handleShow}
-                  onSuccess={refreshData}
                 />
               )}
             </div>
@@ -137,18 +122,18 @@ function CMSProducts() {
                 className="text-center fw-bolder "
                 style={{ fontSize: "xxx-large" }}
               >
-                {data.boxA}
+                {data?.boxA}
               </h1>
             </div>
             <div className="d-flex justify-content-center align-items-center mt-4">
-              <img className="img-fluid" src={data.imageProduct} alt="gif" />
+              <img className="img-fluid" src={data?.imageProduct} alt="gif" />
             </div>
             <div className="d-flex flex-column justify-content-center align-items-center">
               <p
                 className="text-center fw-small mt-3 preserve-whitespace"
                 style={{ fontSize: "large" }}
               >
-                {data.contentCard}
+                {data?.contentCard}
               </p>
             </div>
           </div>
@@ -162,18 +147,21 @@ function CMSProducts() {
         centered
         onHide={handleClose}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Edit Product</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="row">
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">Title</lable>
+              <div className="col-md-6 col-12 mb-2">
+                <label>Title</label>
                 <div className="input-group mb-3">
                   <input
                     type="text"
@@ -192,8 +180,8 @@ function CMSProducts() {
                 </div>
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Upload Image File</lable>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">Upload Image File</label>
                 <div className="input-group mb-3">
                   <input
                     type="file"
@@ -218,8 +206,8 @@ function CMSProducts() {
                 </div>
               </div>
 
-              <div class="col-md-6 col-12 mb-2">
-                <lable class="">Description</lable>
+              <div className="col-md-6 col-12 mb-2">
+                <label>Description</label>
                 <textarea
                   type="text"
                   className={`form-control ${
@@ -243,7 +231,6 @@ function CMSProducts() {
             </Button>
             <Button
               type="submit"
-              onSubmit={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >

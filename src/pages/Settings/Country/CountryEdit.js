@@ -82,9 +82,9 @@ function CountryEdit({ id, onSuccess }) {
     getData();
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return (
     <>

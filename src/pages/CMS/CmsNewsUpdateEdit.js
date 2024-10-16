@@ -16,10 +16,7 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const handleShow = () => setShow(true);
   const currentData = new Date().toISOString().split("T")[0];
-  const userName  = localStorage.getItem('userName');
-
-
- 
+  const userName = localStorage.getItem("userName");
 
   const formik = useFormik({
     initialValues: {
@@ -77,9 +74,9 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -93,7 +90,6 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
         <MdEdit />
       </button>
       <Modal
-       
         show={show}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -106,11 +102,14 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
             <div className="row">
               <div class=" col-12 mb-2">
                 <lable className="form-lable">Upload Image File</lable>
@@ -200,8 +199,12 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
           </form>
         </Modal.Body>
         <Modal.Footer className="mt-5">
-        {storedScreens?.newsUpdatesDelete && (
-          <Delete path={`/deleteNewsUpdatedSave/${id}`} onSuccess={onSuccess} />)}
+          {storedScreens?.newsUpdatesDelete && (
+            <Delete
+              path={`/deleteNewsUpdatedSave/${id}`}
+              onSuccess={onSuccess}
+            />
+          )}
           <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>

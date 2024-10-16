@@ -94,26 +94,27 @@ function CmsAboutUs() {
   return (
     <>
       {/* Header */}
-      <div className="container card my-2 py-2">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            <h4>About Us</h4>
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {storedScreens?.aboutIndex && (
-              <button
-                className="btn btn-sm btn-outline-danger border ms-2"
-                onClick={publish}
-              >
-                Publish
-              </button>
-            )}
+      <div>
+        <div className="container cms-header shadow-sm py-2">
+          <div className="row p-1">
+            <div className="col-md-6 col-12">
+              <h4>About Us</h4>
+            </div>
+            <div className="col-md-6 col-12 d-flex justify-content-end">
+              {storedScreens?.aboutIndex && (
+                <button
+                  className="btn btn-sm btn-outline-danger border ms-2"
+                  onClick={publish}
+                >
+                  Publish
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-
       {/* About Section1 */}
-      <div className="container-fluid about">
+      <div className="container-fluid about mt-2">
         <div className="row py-5 about2">
           <div className="offset-md-1 col-md-10 col-12">
             <div className="row">

@@ -12,28 +12,27 @@ import api from "../../../config/URL";
 function CMSContactEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
-  
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const validationSchema = Yup.object({
     centerName: Yup.string().required("*Centre Name is required"),
     email: Yup.string()
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "*Enter a valid email address"
-    )
-    .required("*Email is required"),
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "*Enter a valid email address"
+      )
+      .required("*Email is required"),
     address: Yup.string().required("*Address is required"),
     map: Yup.string().required("*Google Address is required"),
     mobileNo: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number"
-    )
-    .required("*Mobile Number is required"),
+      .matches(
+        /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+        "*Invalid Phone Number"
+      )
+      .required("*Mobile Number is required"),
   });
 
   const formik = useFormik({
@@ -43,8 +42,7 @@ function CMSContactEdit({ id, onSuccess }) {
       address: "",
       map: "",
       mobileNo: "",
-      updatedBy:userName,
-
+      updatedBy: userName,
     },
     // validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -65,26 +63,25 @@ function CMSContactEdit({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
-
     },
   });
   const getData = async () => {
-    if(id){ 
-    try {
-      const response = await api.get(`/getContactUsSaveById/${id}`);
-      formik.setValues(response.data);
-    } catch (error) {
-      console.error("Error fetching data ", error);
+    if (id) {
+      try {
+        const response = await api.get(`/getContactUsSaveById/${id}`);
+        formik.setValues(response.data);
+      } catch (error) {
+        console.error("Error fetching data ", error);
+      }
     }
-  }
   };
-  useEffect(() => {
-  getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show]);
+  // useEffect(() => {
+  // getData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [show]);
 
   return (
     <>
@@ -101,18 +98,19 @@ function CMSContactEdit({ id, onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Contact</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
-          <div className="container">
+            <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Centre Name
-                  </label>
+                  <label className="form-label">Centre Name</label>
                   <input
                     type="text"
                     className={`form-control  ${
@@ -129,9 +127,7 @@ function CMSContactEdit({ id, onSuccess }) {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Email
-                  </label>
+                  <label className="form-label">Email</label>
                   <input
                     type="text"
                     className={`form-control  ${
@@ -148,9 +144,7 @@ function CMSContactEdit({ id, onSuccess }) {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Mobile
-                  </label>
+                  <label className="form-label">Mobile</label>
                   <input
                     type="text"
                     className={`form-control  ${
@@ -167,9 +161,7 @@ function CMSContactEdit({ id, onSuccess }) {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Address
-                  </label>
+                  <label className="form-label">Address</label>
                   <textarea
                     type="text"
                     className={`form-control  ${
@@ -187,9 +179,7 @@ function CMSContactEdit({ id, onSuccess }) {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Google Address
-                  </label>
+                  <label className="form-label">Google Address</label>
                   <input
                     type="text"
                     className={`form-control  ${
@@ -200,9 +190,7 @@ function CMSContactEdit({ id, onSuccess }) {
                     {...formik.getFieldProps("map")}
                   />
                   {formik.touched.map && formik.errors.map && (
-                    <div className="invalid-feedback">
-                      {formik.errors.map}
-                    </div>
+                    <div className="invalid-feedback">{formik.errors.map}</div>
                   )}
                 </div>
               </div>

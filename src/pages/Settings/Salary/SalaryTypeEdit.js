@@ -15,7 +15,7 @@ const validationSchema = Yup.object({
 function SalaryEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem("userName"); 
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
 
   const getData = async () => {
@@ -31,7 +31,6 @@ function SalaryEdit({ id, onSuccess }) {
     initialValues: {
       salaryType: "",
       updatedBy: userName,
-
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -61,26 +60,28 @@ function SalaryEdit({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
+    },
   });
 
   const handleClose = () => setShow(false);
-  const handleShow = () => { 
+  const handleShow = () => {
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
     getData();
   };
 
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <>
@@ -93,17 +94,20 @@ function SalaryEdit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Salary Type Edit </Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">

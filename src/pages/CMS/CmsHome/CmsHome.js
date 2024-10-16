@@ -20,9 +20,7 @@ function CmsHome() {
   });
   const [editingField, setEditingField] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const userName  = localStorage.getItem('userName');
-
-
+  const userName = localStorage.getItem("userName");
 
   const toggleEdit = (field) => {
     setEditingField(field);
@@ -70,14 +68,13 @@ function CmsHome() {
       formData.append("childVideo", values.childVideo);
       formData.append("updatedBy ", userName);
 
-
-      for (let pair of formData.entries()) {
-        if (pair[1] instanceof File) {
-          console.log(pair[0] + ": " + pair[1].name); // Log file name
-        } else {
-          console.log(pair[0] + ": " + pair[1]);
-        }
-      }
+      // for (let pair of formData.entries()) {
+      //   if (pair[1] instanceof File) {
+      //     console.log(pair[0] + ": " + pair[1].name); // Log file name
+      //   } else {
+      //     console.log(pair[0] + ": " + pair[1]);
+      //   }
+      // }
 
       try {
         const response = await api.put(
@@ -179,38 +176,42 @@ function CmsHome() {
 
   return (
     <>
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
-        <div className="container card my-2 py-2">
-          <div className="row p-1">
-            <div className="col-md-6 col-12">
-              <h4>Home</h4>
-            </div>
-            <div className="col-md-6 col-12 d-flex justify-content-end">
-              {/* <button
+        }}
+      >
+        <div>
+          <div className="container cms-header shadow-sm py-2">
+            <div className="row p-1">
+              <div className="col-md-6 col-12">
+                <h4>Home</h4>
+              </div>
+              <div className="col-md-6 col-12 d-flex justify-content-end">
+                {/* <button
                 type="submit"
                 className="btn btn-sm btn-outline-primary border ms-2"
               >
                 Save
               </button> */}
-              {storedScreens?.homeIndex && (
-                <button
-                  type="button"
-                  onClick={PublishHomeSection}
-                  className="btn btn-sm btn-outline-danger border ms-2"
-                >
-                  Publish
-                </button>
-              )}
+                {storedScreens?.homeIndex && (
+                  <button
+                    type="button"
+                    onClick={PublishHomeSection}
+                    className="btn btn-sm btn-outline-danger border ms-2"
+                  >
+                    Publish
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-
         {/* Hero Section */}
-        <section className="heroSection">
+        <section className="heroSection mt-2">
           <div className="container-fluid p-0 edit-container">
             <div style={{ position: "relative" }} className="heroPicture">
               {editingField === "heroBackground" ? (

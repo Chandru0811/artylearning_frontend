@@ -19,20 +19,23 @@ function CMSContactView({ id }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getContactUsSaveById/${id}`);
-        setData(response.data);
-      } catch (error) {
-        toast.error("Error fetching data ", error);
-      }
-    };
+  const handleShow = () => {
+    setShow(true);
     getData();
-    // fetchData();
-  }, [id]);
+  };
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getContactUsSaveById/${id}`);
+      setData(response.data);
+    } catch (error) {
+      toast.error("Error fetching data ", error);
+    }
+  };
+  // useEffect(() => {
+
+  //   getData();
+  //   // fetchData();
+  // }, [id]);
 
   return (
     <>
@@ -43,7 +46,7 @@ function CMSContactView({ id }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">View Contact</Modal.Title>
         </Modal.Header>
-        <form >
+        <form>
           <Modal.Body>
             <div className="contact">
               <div className="container">
@@ -98,7 +101,7 @@ function CMSContactView({ id }) {
                         src={data.map}
                         width="100%"
                         height="500px"
-                        style={{ border: 'none' }}
+                        style={{ border: "none" }}
                         title="Map"
                       ></iframe>
                     )}

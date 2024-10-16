@@ -47,9 +47,7 @@ const CMSProductsItem = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-       columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -93,7 +91,7 @@ const CMSProductsItem = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="container center p-0">
       <div className="container cms-header shadow-sm py-2 mb-5">
         <div className="row p-1">
           <div className="col-md-6 col-12">
@@ -126,46 +124,48 @@ const CMSProductsItem = () => {
           </div>
         </div>
       ) : (
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col">S No</th>
-              <th scope="col">Image Upload</th>
-              <th scope="col">Image Details</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>
-                  <img
-                    style={{ width: "100px" }}
-                    className="rounded-5"
-                    src={data.image}
-                    alt="product"
-                  ></img>
-                </td>
-                <td>{data.imageDetails}</td>
-                <td>
-                  <div className="d-flex">
-                    {storedScreens?.productImageSaveUpdate && (
-                      <CMSProductsItemEdit id={data.id} getData={getData} />
-                    )}
-                    {storedScreens?.productImageSaveDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteProductImageSave/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      />
-                    )}
-                  </div>
-                </td>
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col">S No</th>
+                <th scope="col">Image Upload</th>
+                <th scope="col">Image Details</th>
+                <th scope="col">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td>
+                    <img
+                      style={{ width: "100px" }}
+                      className="rounded-5"
+                      src={data.image}
+                      alt="product"
+                    ></img>
+                  </td>
+                  <td>{data.imageDetails}</td>
+                  <td>
+                    <div className="d-flex">
+                      {storedScreens?.productImageSaveUpdate && (
+                        <CMSProductsItemEdit id={data.id} getData={getData} />
+                      )}
+                      {storedScreens?.productImageSaveDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteProductImageSave/${data.id}`}
+                          style={{ display: "inline-block" }}
+                        />
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

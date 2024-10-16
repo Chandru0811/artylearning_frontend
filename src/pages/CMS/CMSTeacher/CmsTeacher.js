@@ -44,27 +44,27 @@ export const CmsTeacher = () => {
     setEditingField(null);
   };
 
- const getData = async () => {
-      try {
-        const response = await api.get(`/getAllTeacherSaves`);
-        // formik.setValues(response.data);
-        setDatas(response.data)
-      } catch (error) {
-        toast.error("Error Fetch Data ", error);
-      }
-    };
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllTeacherSaves`);
+      // formik.setValues(response.data);
+      setDatas(response.data);
+    } catch (error) {
+      toast.error("Error Fetch Data ", error);
+    }
+  };
   useEffect(() => {
     getData();
   }, []);
 
-  const adminData = datas.filter(data => data.role === "ADMIN");
-  const cTeacherData = datas.filter(data => data.role === "CHINESE");
-  const engTeacherData = datas.filter(data => data.role === "ENGLISH");
+  const adminData = datas.filter((data) => data.role === "ADMIN");
+  const cTeacherData = datas.filter((data) => data.role === "CHINESE");
+  const engTeacherData = datas.filter((data) => data.role === "ENGLISH");
 
   const publish = async () => {
     try {
       const response = await api.post(`/publishTeacherSave`);
-      if(response.status === 201){ 
+      if (response.status === 201) {
         toast.success("successfully Teacher published ");
       }
     } catch (error) {
@@ -74,7 +74,7 @@ export const CmsTeacher = () => {
 
   return (
     <section style={{ backgroundColor: "#f9fafb" }}>
-      <div className="container card my-2 py-2">
+      <div className="container cms-header shadow-sm py-2 mb-4">
         <div className="row p-1">
           <div className="col-md-6 col-12">
             <h4>Teacher</h4>
@@ -84,18 +84,20 @@ export const CmsTeacher = () => {
               Save
             </button> */}
             {storedScreens?.teacherSaveCreate && (
-             <CmsTeacherAdd getData={getData}/>
+              <CmsTeacherAdd getData={getData} />
             )}
             {storedScreens?.teacherSavePublish && (
-            <button className="btn btn-sm btn-outline-danger border ms-2" onClick={publish}>
-              Publish
-            </button>
+              <button
+                className="btn btn-sm btn-outline-danger border ms-2"
+                onClick={publish}
+              >
+                Publish
+              </button>
             )}
           </div>
         </div>
       </div>
       <div className="container py-5">
-       
         <Tabs
           defaultActiveKey="profile"
           id="fill-tab-example"
@@ -104,70 +106,73 @@ export const CmsTeacher = () => {
         >
           <Tab eventKey="home" title="English Phonics Teachers">
             <div className="row mt-5">
-              {engTeacherData && engTeacherData.map((data,i)=>(
-                <div className="col-md-6 col-12">
-                <div className="row">
+              {engTeacherData &&
+                engTeacherData.map((data, i) => (
                   <div className="col-md-6 col-12">
-                    <img
-                      src={data.image}
-                      alt="Teacher"
-                      style={{ borderRadius: "10px" }}
-                      className="img-fluid"
-                    />
-                  </div>
-                  <div className="col-md-6 col-12">
-                  <div className="d-flex justify-content-end">
-                  {storedScreens?.teacherSaveUpdate && (
-                         <CmsTeacherEdit id={data.id} fetchData={getData}/>
-                   )}
-                         </div>
-                    <div className="mx-2">
-                      <h1 className="fw-bold">{data.teacherName}</h1>
-                      <h4 className="text-danger">{data.teacherRoleName}</h4>
-                      <p style={{ fontSize: "20px" }}>
-                        {data.teacherDescription}
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12">
+                        <img
+                          src={data.image}
+                          alt="Teacher"
+                          style={{ borderRadius: "10px" }}
+                          className="img-fluid"
+                        />
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <div className="d-flex justify-content-end">
+                          {storedScreens?.teacherSaveUpdate && (
+                            <CmsTeacherEdit id={data.id} fetchData={getData} />
+                          )}
+                        </div>
+                        <div className="mx-2">
+                          <h1 className="fw-bold">{data.teacherName}</h1>
+                          <h4 className="text-danger">
+                            {data.teacherRoleName}
+                          </h4>
+                          <p style={{ fontSize: "20px" }}>
+                            {data.teacherDescription}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              ))}
-              
+                ))}
             </div>
           </Tab>
           <Tab eventKey="profile" title="Chinese Teachers">
             <div className="row mt-5">
-              {cTeacherData&& cTeacherData.map((data,i)=>(
-                <div className="col-md-6 col-12">
-                <div className="row">
+              {cTeacherData &&
+                cTeacherData.map((data, i) => (
                   <div className="col-md-6 col-12">
-                    <img
-                      src={data.image}
-                      alt="Teacher"
-                      style={{ borderRadius: "10px" }}
-                      className="img-fluid"
-                    />
-                  </div>
-                  <div className="col-md-6 col-12">
-                    <div className="d-flex justify-content-end">
-                    {storedScreens?.teacherSaveUpdate && (
-                         <CmsTeacherEdit id={data.id} fetchData={getData}/>
-                  )}
-                         </div>
-                    <div className="mx-2">
-                      <h1 className="fw-bold">{data.teacherName}</h1>
-                      <h5 className="text-danger">
-                        {data.teacherRoleName}
-                      </h5>
-                      <p style={{ fontSize: "20px" }}>{data.experience}</p>
-                      <p style={{ fontSize: "20px" }}>
-                       {data.teacherDescription}
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12">
+                        <img
+                          src={data.image}
+                          alt="Teacher"
+                          style={{ borderRadius: "10px" }}
+                          className="img-fluid"
+                        />
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <div className="d-flex justify-content-end">
+                          {storedScreens?.teacherSaveUpdate && (
+                            <CmsTeacherEdit id={data.id} fetchData={getData} />
+                          )}
+                        </div>
+                        <div className="mx-2">
+                          <h1 className="fw-bold">{data.teacherName}</h1>
+                          <h5 className="text-danger">
+                            {data.teacherRoleName}
+                          </h5>
+                          <p style={{ fontSize: "20px" }}>{data.experience}</p>
+                          <p style={{ fontSize: "20px" }}>
+                            {data.teacherDescription}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              ))}
+                ))}
             </div>
           </Tab>
           <Tab eventKey="longer-tab" title="Admin">
@@ -186,15 +191,22 @@ export const CmsTeacher = () => {
                           />
                         </div>
                         <div className="col-md-6 col-12">
-                         <div className="d-flex justify-content-end">
-                         {storedScreens?.teacherSaveUpdate && (
-                         <CmsTeacherEdit id={data.id} fetchData={getData}/>
-                  )}
-                         </div>
+                          <div className="d-flex justify-content-end">
+                            {storedScreens?.teacherSaveUpdate && (
+                              <CmsTeacherEdit
+                                id={data.id}
+                                fetchData={getData}
+                              />
+                            )}
+                          </div>
                           <div className="mx-2">
                             <h1 className="fw-bold">{data.teacherName}</h1>
-                            <h4 className="text-danger">{data.teacherRoleName}</h4>
-                            <p style={{ fontSize: "20px" }}>{data.teacherDescription}</p>
+                            <h4 className="text-danger">
+                              {data.teacherRoleName}
+                            </h4>
+                            <p style={{ fontSize: "20px" }}>
+                              {data.teacherDescription}
+                            </p>
                           </div>
                         </div>
                       </div>

@@ -90,7 +90,7 @@ const CmsCourses = () => {
   };
 
   return (
-    <div className="container center">
+    <div className="container center p-0">
       <div className="container cms-header shadow-sm py-2 mb-4">
         <div className="row p-1">
           <div className="col-md-6 col-12">
@@ -98,15 +98,11 @@ const CmsCourses = () => {
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
             {storedScreens?.testimonialCreate && (
-              <Link to={'/cms/CmsCourses/add'}>
-              <button
-               type="button"
-                className="btn btn-button btn-sm"
-              >
-                 Add <i class="bx bx-plus"></i>
-              </button>
+              <Link to={"/cms/CmsCourses/add"}>
+                <button type="button" className="btn btn-button btn-sm">
+                  Add <i class="bx bx-plus"></i>
+                </button>
               </Link>
-              
             )}
             {storedScreens?.testimonialIndex && (
               <button
@@ -132,67 +128,69 @@ const CmsCourses = () => {
           </div>
         </div>
       ) : (
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th
-                scope="col"
-                className="text-center"
-                style={{ whiteSpace: "nowrap" }}
-              >
-                S No
-              </th>
-              <th scope="col" className="text-center">
-                Menu Logo
-              </th>
-              <th scope="col" className="text-center">
-                Menu Title
-              </th>
-              <th scope="col" className="text-center">
-                Heading
-              </th>
-              <th scope="col" className="text-center">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <td className="text-center">{index + 1}</td>
-                <td className="text-center">
-                  <img
-                    src={data.menuLogo}
-                    className="img-fluid"
-                    alt="image"
-                    width={50}
-                  />
-                </td>
-                <td className="text-center">{data.menuTitle}</td>
-                <td className="text-center"> {data.heading}</td>
-                <td className="text-center">
-                  <div className="d-flex justify-content-center">
-                    {storedScreens?.testimonialUpdate && (
-                      <Link to={`/cms/CmsCourses/edit/${data.id}`}>
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                    )}
-
-                    {storedScreens?.testimonialDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteCoursesSave/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      />
-                    )}
-                  </div>
-                </td>
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                  className="text-center"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  S No
+                </th>
+                <th scope="col" className="text-center">
+                  Menu Logo
+                </th>
+                <th scope="col" className="text-center">
+                  Menu Title
+                </th>
+                <th scope="col" className="text-center">
+                  Heading
+                </th>
+                <th scope="col" className="text-center">
+                  Action
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <td className="text-center">{index + 1}</td>
+                  <td className="text-center">
+                    <img
+                      src={data.menuLogo}
+                      className="img-fluid"
+                      alt="image"
+                      width={50}
+                    />
+                  </td>
+                  <td className="text-center">{data.menuTitle}</td>
+                  <td className="text-center"> {data.heading}</td>
+                  <td className="text-center">
+                    <div className="d-flex justify-content-center">
+                      {storedScreens?.testimonialUpdate && (
+                        <Link to={`/cms/CmsCourses/edit/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                      )}
+
+                      {storedScreens?.testimonialDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCoursesSave/${data.id}`}
+                          style={{ display: "inline-block" }}
+                        />
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

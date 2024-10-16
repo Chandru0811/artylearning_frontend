@@ -23,7 +23,7 @@ function TaxEdit({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const userName = localStorage.getItem("userName");
-  
+
   const getData = async () => {
     try {
       const response = await api.get(`/getAllTaxSettingById/${id}`);
@@ -69,26 +69,29 @@ function TaxEdit({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
+    },
   });
 
   const handleClose = () => setShow(false);
-  const handleShow = () => { 
+  const handleShow = () => {
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
     getData();
-  };  
+  };
 
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  //   console.log("dcsdc", id);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [id]);
 
   return (
     <>
@@ -101,8 +104,8 @@ function TaxEdit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Tax Edit</Modal.Title>
