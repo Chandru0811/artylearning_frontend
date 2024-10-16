@@ -39,7 +39,7 @@ const StaffAccountEdit = forwardRef(
         toast.error(error);
       }
     };
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName');
 
     const formik = useFormik({
       initialValues: {
@@ -103,7 +103,7 @@ const StaffAccountEdit = forwardRef(
                 },
               }
             );
-            if (response.status === 200){ 
+            if (response.status === 200) {
               toast.success("User Account Updated Successfully");
               setFormData((prv) => ({ ...prv, ...values }));
               handleNext();
@@ -115,11 +115,11 @@ const StaffAccountEdit = forwardRef(
               values.approvelContentRequired === "Yes" ? true : false;
             const updatedData = {
               ...values,
-              userId : formData.staff_id,
+              userId: formData.staff_id,
               approvelContentRequired: Approval,
               createdBy: userName,
             };
-            
+
             const response = await api.post(
               `/createUserAccountInfos`,
               updatedData,
@@ -143,7 +143,26 @@ const StaffAccountEdit = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     const ShgType = async () => {
       try {
@@ -217,11 +236,11 @@ const StaffAccountEdit = forwardRef(
     };
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <div className="container courseAdd">
           <p className="headColor my-4">Account Information</p>
           <div class="row">
@@ -264,7 +283,7 @@ const StaffAccountEdit = forwardRef(
                 </div>
               )}
             </div>
-           
+
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Staff ID<span class="text-danger">*</span>

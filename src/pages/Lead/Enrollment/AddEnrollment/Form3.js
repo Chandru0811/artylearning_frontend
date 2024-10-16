@@ -5,25 +5,13 @@ import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  fathersFullName: Yup.string().required("*Father Full Name is required"),
-  fathersOccupation: Yup.string().required("*Father Occupation is required"),
-  fathersDateOfBirth: Yup.date()
-    .required("*Date of Birth is required")
-    .max(new Date(), "*Date of Birth cannot be in the future"),
-  fathersMobileNumber: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number"
-    )
-    .required("*Emergency Person Contact Number is required"),
-  // fathersEmailAddress: Yup.string()
-  //   .email("*Invalid Email")
-  //   .required("*Email is required"),
-  fathersEmailAddress: Yup.string()
-    .email("*Invalid Email")
-    .required("*Email is required"),
-  monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
 
+  primaryContact: Yup.string()
+    .oneOf(
+      ["father", "mother"],
+      "*Primary Contact must be either 'father' or 'mother'"
+    )
+    .required("*Primary Contact is required"),
   mothersFullName: Yup.string().required("*Mother Name is required"),
   mothersOccupation: Yup.string().required("*Mother Occupation is required"),
   mothersDateOfBirth: Yup.date()
@@ -42,12 +30,24 @@ const validationSchema = Yup.object().shape({
     .email("*Invalid Email")
     .required("*Email is required"),
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
-  primaryContact: Yup.string()
-    .oneOf(
-      ["father", "mother"],
-      "*Primary Contact must be either 'father' or 'mother'"
+  fathersFullName: Yup.string().required("*Father Full Name is required"),
+  fathersOccupation: Yup.string().required("*Father Occupation is required"),
+  fathersDateOfBirth: Yup.date()
+    .required("*Date of Birth is required")
+    .max(new Date(), "*Date of Birth cannot be in the future"),
+  fathersMobileNumber: Yup.string()
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
     )
-    .required("*Primary Contact is required"),
+    .required("*Emergency Person Contact Number is required"),
+  // fathersEmailAddress: Yup.string()
+  //   .email("*Invalid Email")
+  //   .required("*Email is required"),
+  fathersEmailAddress: Yup.string()
+    .email("*Invalid Email")
+    .required("*Email is required"),
+  monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
 });
 
 const Form3 = forwardRef(
@@ -99,21 +99,41 @@ const Form3 = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useImperativeHandle(ref, () => ({
       form3: formik.handleSubmit,
     }));
     useEffect(() => {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-     }, []);
+    }, []);
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <div className="container py-4">
           <h5 className="headColor mb-5">Parent Information</h5>
           <div className="row">

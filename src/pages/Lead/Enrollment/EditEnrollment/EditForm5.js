@@ -67,7 +67,26 @@ const EditForm5 = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     const fetchData = async () => {
       try {
@@ -167,11 +186,10 @@ const EditForm5 = forwardRef(
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("referBy")}
-                    className={`form-select ${
-                      formik.touched.referBy && formik.errors.referBy
+                    className={`form-select ${formik.touched.referBy && formik.errors.referBy
                         ? "is-invalid"
                         : ""
-                    }`}
+                      }`}
                   >
                     <option selected></option>
                     {studentData &&
@@ -284,11 +302,11 @@ const EditForm5 = forwardRef(
                     />
                     <label className="form-check-label">Sunday</label>
                   </div>
-                {formik.touched.preferredDay && formik.errors.preferredDay && (
-                  <div className="error text-danger ">
-                    <small>{formik.errors.preferredDay}</small>
-                  </div>
-                )}
+                  {formik.touched.preferredDay && formik.errors.preferredDay && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.preferredDay}</small>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
@@ -371,12 +389,12 @@ const EditForm5 = forwardRef(
                     />
                     <label className="form-check-label">3AM - 6AM</label>
                   </div>
-                {formik.touched.preferredTimeSlot &&
-                  formik.errors.preferredTimeSlot && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.preferredTimeSlot}</small>
-                    </div>
-                  )}
+                  {formik.touched.preferredTimeSlot &&
+                    formik.errors.preferredTimeSlot && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.preferredTimeSlot}</small>
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">

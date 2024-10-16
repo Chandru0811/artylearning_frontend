@@ -89,25 +89,6 @@ const EditEmergencyContact = forwardRef(
             formDatas.append("emergencyContactName", data.emergencyContactName);
             formDatas.append("emergencyRelation", "Father");
             formDatas.append("emergencyContactNo", data.emergencyContactNo);
-            // data.emergencyAuthorizedContactModels.forEach((contact) => {
-            //   if (contact.id) {
-            //     formDatas.append("emergencyAuthorizedContactIds", contact.id);
-            //   }
-            //   formDatas.append("name", contact.name);
-            //   formDatas.append("contactNo", contact.contactNo);
-            //   formDatas.append(
-            //     "authorizedRelation",
-            //     contact.authorizedRelation
-            //   );
-            //   formDatas.append("postalCode", contact.postalCode);
-            //   formDatas.append(
-            //     "emergencyContactAddress",
-            //     contact.emergencyContactAddress
-            //   );
-            //   formDatas.append("files", contact.files);
-            // });
-            // formDatas.append("deleteEmergencyAuthorizedContactIds", 1);
-            // formDatas.append("updatedBy", userName);
 
             // Loop through emergencyAuthorizedContactModels and append fields, even if empty
             if (data.emergencyAuthorizedContactModels.length === 0) {

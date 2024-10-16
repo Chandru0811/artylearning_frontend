@@ -17,11 +17,11 @@ const validationSchema = Yup.object().shape({
   subject: Yup.string().required("*Subject is required"), // Adding validation for subject field
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
-  .required("*Date of Birth is required")
-  .max(
-    new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
-    "*Date of Birth must be at least 1 year ago"
-  ),
+    .required("*Date of Birth is required")
+    .max(
+      new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+      "*Date of Birth must be at least 1 year ago"
+    ),
   // medicalCondition: Yup.string().required("*Medical Condition is required"),
   // ethnicGroup: Yup.string().required("*Ethnic group is required"),
   schoolType: Yup.string().required("*School type is required"),
@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
   centerId: Yup.string().required("*Centre is required"),
 });
 
-const EditForm1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicators }, ref) => {
+const EditForm1 = forwardRef(({ formData, setFormData, handleNext, setLoadIndicators }, ref) => {
   const [subjectData, setSubjectData] = useState(null);
   const [raceData, setRaceData] = useState(null);
   const [centerData, setCenterData] = useState(null);
@@ -67,12 +67,30 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicat
         }
       } catch (error) {
         toast.error(error);
-      }finally{
+      } finally {
         setLoadIndicators(false);
       }
     },
+    validateOnChange: false, // Enable validation on change
+    validateOnBlur: true,   // Enable validation on blur
   });
 
+  // Function to scroll to the first error field
+  const scrollToError = (errors) => {
+    const errorField = Object.keys(errors)[0]; // Get the first error field
+    const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+    if (errorElement) {
+      errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      errorElement.focus(); // Set focus to the error element
+    }
+  };
+
+  // Watch for form submit and validation errors
+  useEffect(() => {
+    if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+      scrollToError(formik.errors);
+    }
+  }, [formik.submitCount, formik.errors]);
 
   const fetchData = async () => {
     try {
@@ -148,11 +166,11 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext,setLoadIndicat
               {/* <option value="ENGLISH">English</option>
               <option value="CHINESE" >Chinese</option> */}
               {subjectData &&
-                  subjectData.map((subject) => (  
-                    <option key={subject.id} value={subject.id}>
-                      {subject.subjects}
-                    </option>
-                  ))}
+                subjectData.map((subject) => (
+                  <option key={subject.id} value={subject.id}>
+                    {subject.subjects}
+                  </option>
+                ))}
             </select>
             {formik.touched.subject && formik.errors.subject && (
               <div className="text-danger">

@@ -11,25 +11,6 @@ import { toast } from "react-toastify";
 import { data } from "jquery";
 
 const validationSchema = Yup.object().shape({
-  fathersFullName: Yup.string().required("*Father Full Name is required"),
-  fathersOccupation: Yup.string().required("*Father Occupation is required"),
-  fathersDateOfBirth: Yup.date()
-    .required("Date of Birth is required")
-    .max(new Date(), "Date of Birth cannot be in the future"),
-  fathersMobileNumber: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number"
-    )
-    .required("*Emergency Person Contact Number is required"),
-  // fathersEmailAddress: Yup.string()
-  //   .email("*Invalid Email")
-  //   .required("*Email is required!"),
-  fathersEmailAddress: Yup.string()
-    .email("*Invalid Email")
-    .required("*Email is required"),
-  monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
-
   mothersFullName: Yup.string().required("*Mother Name is required"),
   mothersOccupation: Yup.string().required("*Mother Occupation is required"),
   // mothersDateOfBirth: Yup.date().required("*Date of Birth is required"),
@@ -49,6 +30,26 @@ const validationSchema = Yup.object().shape({
     .email("*Invalid Email")
     .required("*Email is required"),
   monthlyIncomeOfMother: Yup.string().required("*Mother Income is required"),
+
+  fathersFullName: Yup.string().required("*Father Full Name is required"),
+  fathersOccupation: Yup.string().required("*Father Occupation is required"),
+  fathersDateOfBirth: Yup.date()
+    .required("Date of Birth is required")
+    .max(new Date(), "Date of Birth cannot be in the future"),
+  fathersMobileNumber: Yup.string()
+    .matches(
+      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+      "*Invalid Phone Number"
+    )
+    .required("*Emergency Person Contact Number is required"),
+  // fathersEmailAddress: Yup.string()
+  //   .email("*Invalid Email")
+  //   .required("*Email is required!"),
+  fathersEmailAddress: Yup.string()
+    .email("*Invalid Email")
+    .required("*Email is required"),
+  monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
+
 });
 
 const EditForm3 = forwardRef(
@@ -102,7 +103,26 @@ const EditForm3 = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useEffect(() => {
       const getData = async () => {
@@ -133,11 +153,11 @@ const EditForm3 = forwardRef(
 
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <div className="container py-4">
           <h5 className="headColor mb-5">Parent Information</h5>
           <div className="row">
