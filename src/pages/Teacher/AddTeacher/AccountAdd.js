@@ -114,7 +114,26 @@ const AccountAdd = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     const handleSubjectChange = (event) => {
       const shgTypeId = parseInt(event.target.value, 10);
@@ -141,7 +160,7 @@ const AccountAdd = forwardRef(
         setSelectedCenters(initializedCenters);
       }
     }, [formik.values.centerIds, centerOptions]);
-    
+
 
     return (
       <form
@@ -190,11 +209,10 @@ const AccountAdd = forwardRef(
                   );
                 }}
                 labelledBy="Select Centers"
-                className={`form-multi-select ${
-                  formik.touched.centerIds && formik.errors.centerIds
+                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
               />
               {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
@@ -345,7 +363,7 @@ const AccountAdd = forwardRef(
                 </div>
               </div>
               {formik.touched.approvelContentRequired &&
-              formik.errors.approvelContentRequired ? (
+                formik.errors.approvelContentRequired ? (
                 <div className="error text-danger ">
                   <small>{formik.errors.approvelContentRequired}</small>
                 </div>

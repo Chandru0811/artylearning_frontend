@@ -29,7 +29,7 @@ const validationSchema = Yup.object({
   receiptAmount: Yup.number()
     .required("*Receipt Amount is required")
     .typeError("*Must be a Number"),
-    invoiceItems: Yup.array()
+  invoiceItems: Yup.array()
     .of(invoiceItemSchema)
     // .min(1, "At least one invoice item is required")
     .required("Invoice items are required"),
@@ -143,16 +143,35 @@ export default function InvoiceEdit() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
+        if (error.response.status === 409) {
           toast.warning(error?.response?.data?.message)
-        }else{
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
         setLoadIndicator(false);
       }
     },
+    validateOnChange: false, // Enable validation on change
+    validateOnBlur: true,   // Enable validation on blur
   });
+
+  // Function to scroll to the first error field
+  const scrollToError = (errors) => {
+    const errorField = Object.keys(errors)[0]; // Get the first error field
+    const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+    if (errorElement) {
+      errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      errorElement.focus(); // Set focus to the error element
+    }
+  };
+
+  // Watch for form submit and validation errors
+  useEffect(() => {
+    if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+      scrollToError(formik.errors);
+    }
+  }, [formik.submitCount, formik.errors]);
 
   const handleInputChange = (e) => {
     setDescription(e.target.value);
@@ -334,7 +353,7 @@ export default function InvoiceEdit() {
       return total;
     }, 0);
     formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
-  
+
     // Calculate total GST
     const totalGst = formik.values.invoiceItems?.reduce((total, item) => {
       // Ensure the item is defined and has a gstAmount property
@@ -344,7 +363,7 @@ export default function InvoiceEdit() {
       return total;
     }, 0);
     formik.setFieldValue("gst", totalGst.toFixed(2));
-  
+
     // Calculate total Amount
     const totalAmount = formik.values.invoiceItems?.reduce((total, item) => {
       // Ensure the item is defined and has a totalAmount property
@@ -355,11 +374,11 @@ export default function InvoiceEdit() {
     }, 0);
     formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
   }, [formik.values.invoiceItems]);
-  
+
 
   const handleRowDelete = (index) => {
     const selectedItem = formik.values.invoiceItems[index];
-  
+
     if (!selectedItem || !selectedItem.item) {
       const updatedInvoiceItems = formik.values.invoiceItems.filter(
         (_, i) => i !== index
@@ -368,7 +387,7 @@ export default function InvoiceEdit() {
       formik.setFieldValue("invoiceItems", updatedInvoiceItems);
       return;
     }
-  // Database data
+    // Database data
     if (selectedItem.id) {
       setItemToDelete({ ...selectedItem, index });
       setShowDeleteModal(true);
@@ -393,7 +412,7 @@ export default function InvoiceEdit() {
     setRows([...rows, newItem]);
     formik.setFieldValue("invoiceItems", [...formik.values.invoiceItems, newItem]);
   };
-  
+
 
   return (
     <div className="container-fluid">
@@ -416,11 +435,10 @@ export default function InvoiceEdit() {
                 <select
                   {...formik.getFieldProps("centerId")}
                   name="centerId"
-                  className={`form-select ${
-                    formik.touched.centerId && formik.errors.centerId
+                  className={`form-select ${formik.touched.centerId && formik.errors.centerId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   onChange={handleCenterChange}
                 >
                   <option selected></option>
@@ -444,11 +462,10 @@ export default function InvoiceEdit() {
                 <br />
                 <input
                   {...formik.getFieldProps("parent")}
-                  className={`form-control  ${
-                    formik.touched.parent && formik.errors.parent
+                  className={`form-control  ${formik.touched.parent && formik.errors.parent
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   type="text"
                 />
                 {formik.touched.parent && formik.errors.parent && (
@@ -463,11 +480,10 @@ export default function InvoiceEdit() {
                 <select
                   name="studentId"
                   {...formik.getFieldProps("studentId")}
-                  className={`form-select ${
-                    formik.touched.studentId && formik.errors.studentId
+                  className={`form-select ${formik.touched.studentId && formik.errors.studentId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                 >
                   <option selected></option>
                   {studentData &&
@@ -491,11 +507,10 @@ export default function InvoiceEdit() {
                 <select
                   name="courseId"
                   {...formik.getFieldProps("courseId")}
-                  className={`form-select ${
-                    formik.touched.courseId && formik.errors.courseId
+                  className={`form-select ${formik.touched.courseId && formik.errors.courseId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                 >
                   <option></option>
                   {courseData &&
@@ -519,11 +534,10 @@ export default function InvoiceEdit() {
                 <select
                   name="schedule"
                   {...formik.getFieldProps("schedule")}
-                  className={`form-select ${
-                    formik.touched.schedule && formik.errors.schedule
+                  className={`form-select ${formik.touched.schedule && formik.errors.schedule
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                 >
                   <option value=""></option>
                   <option value="2:30 pm">2:30 pm</option>
@@ -546,11 +560,10 @@ export default function InvoiceEdit() {
                 <br />
                 <select
                   {...formik.getFieldProps("packageId")}
-                  className={`form-select ${
-                    formik.touched.packageId && formik.errors.packageId
+                  className={`form-select ${formik.touched.packageId && formik.errors.packageId
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                 >
                   <option selected></option>
                   {packageData &&
@@ -601,11 +614,10 @@ export default function InvoiceEdit() {
                 <br />
                 <input
                   {...formik.getFieldProps("invoiceDate")}
-                  className={`form-control ${
-                    formik.touched.invoiceDate && formik.errors.invoiceDate
+                  className={`form-control ${formik.touched.invoiceDate && formik.errors.invoiceDate
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   type="date"
                 />
                 {formik.touched.invoiceDate && formik.errors.invoiceDate && (
@@ -622,11 +634,10 @@ export default function InvoiceEdit() {
                 <br />
                 <input
                   {...formik.getFieldProps("dueDate")}
-                  className={`form-control ${
-                    formik.touched.dueDate && formik.errors.dueDate
+                  className={`form-control ${formik.touched.dueDate && formik.errors.dueDate
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   type="date"
                   // Set the minimum due date to the selected invoice date
                   min={
@@ -649,12 +660,11 @@ export default function InvoiceEdit() {
                 <input
                   name="invoicePeriodFrom"
                   {...formik.getFieldProps("invoicePeriodFrom")}
-                  className={`form-control  ${
-                    formik.touched.invoicePeriodFrom &&
-                    formik.errors.invoicePeriodFrom
+                  className={`form-control  ${formik.touched.invoicePeriodFrom &&
+                      formik.errors.invoicePeriodFrom
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   type="date"
                 />
                 {formik.touched.invoicePeriodFrom &&
@@ -672,12 +682,11 @@ export default function InvoiceEdit() {
                 <input
                   name="invoicePeriodTo"
                   {...formik.getFieldProps("invoicePeriodTo")}
-                  className={`form-control  ${
-                    formik.touched.invoicePeriodTo &&
-                    formik.errors.invoicePeriodTo
+                  className={`form-control  ${formik.touched.invoicePeriodTo &&
+                      formik.errors.invoicePeriodTo
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   type="date"
                 />
                 {formik.touched.invoicePeriodTo &&
@@ -696,11 +705,10 @@ export default function InvoiceEdit() {
                 <input
                   name="receiptAmount"
                   {...formik.getFieldProps("receiptAmount")}
-                  className={`form-control  ${
-                    formik.touched.receiptAmount && formik.errors.receiptAmount
+                  className={`form-control  ${formik.touched.receiptAmount && formik.errors.receiptAmount
                       ? "is-invalid"
                       : ""
-                  }`}
+                    }`}
                   type="text"
                   placeholder=""
                 />
@@ -758,17 +766,16 @@ export default function InvoiceEdit() {
                   <tbody>
                     {rows.map((row, index) => (
                       <tr key={index}>
-                          <td>
+                        <td>
                           <input
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].item`
                             )}
-                            className={`form-control ${
-                              formik.touched.invoiceItems?.[index]?.item &&
-                              formik.errors.invoiceItems?.[index]?.item
+                            className={`form-control ${formik.touched.invoiceItems?.[index]?.item &&
+                                formik.errors.invoiceItems?.[index]?.item
                                 ? "is-invalid"
                                 : ""
-                            }`}
+                              }`}
                             type="text"
                             style={{ width: "80%" }}
                           />
@@ -784,13 +791,12 @@ export default function InvoiceEdit() {
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].itemAmount`
                             )}
-                            className={`form-control ${
-                              formik.touched.invoiceItems?.[index]
+                            className={`form-control ${formik.touched.invoiceItems?.[index]
                                 ?.itemAmount &&
-                              formik.errors.invoiceItems?.[index]?.itemAmount
+                                formik.errors.invoiceItems?.[index]?.itemAmount
                                 ? "is-invalid"
                                 : ""
-                            }`}
+                              }`}
                             type="number"
                             min={0}
                             style={{ width: "80%" }}
@@ -806,12 +812,11 @@ export default function InvoiceEdit() {
                         </td>
                         <td>
                           <select
-                            className={`form-select ${
-                              formik.touched.invoiceItems?.[index]?.taxType &&
-                              formik.errors.invoiceItems?.[index]?.taxType
+                            className={`form-select ${formik.touched.invoiceItems?.[index]?.taxType &&
+                                formik.errors.invoiceItems?.[index]?.taxType
                                 ? "is-invalid"
                                 : ""
-                            }`}
+                              }`}
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].taxType`
                             )}
@@ -824,7 +829,7 @@ export default function InvoiceEdit() {
                             {taxData &&
                               taxData.map((tax) => (
                                 <option key={tax.id} value={tax.id}>
-                                   {`${tax.taxType} ${tax.rate}%`}
+                                  {`${tax.taxType} ${tax.rate}%`}
                                 </option>
                               ))}
                           </select>

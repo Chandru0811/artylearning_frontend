@@ -141,7 +141,26 @@ const EditTermsAndCondition = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useEffect(() => {
       const getData = async () => {
@@ -279,7 +298,7 @@ const EditTermsAndCondition = forwardRef(
                         </div>
                       )}
                     </div> */}
-                
+
                     <div className="col-md-6 col-12">
                       {showImage && !isEditing ? (
                         // Show the image and Edit button if not in edit mode
@@ -359,7 +378,7 @@ const EditTermsAndCondition = forwardRef(
                           >
                             Cancel
                           </button>
-                          <br/>
+                          <br />
                           {showImage && <img src={url} className="mt-2" alt="Signature" />}
                         </div>
                       )}

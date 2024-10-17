@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { file } from "jszip";
 
 const validationSchema = Yup.object().shape({
   parentInformation: Yup.array().of(
@@ -110,6 +111,7 @@ const AddParentGuardian = forwardRef(
                 `primaryContacts`,
                 index === selectedPrimaryContactIndex ? true : false
               );
+              console.log("file",file)
             });
 
             // If parentDetailId exists, make PUT request (update)
@@ -160,7 +162,26 @@ const AddParentGuardian = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useEffect(() => {
       const getData = async () => {
@@ -205,7 +226,7 @@ const AddParentGuardian = forwardRef(
                   primaryContacts: primaryContactFather,
                 },
               ]);
-              
+
               if (primaryContactMother) {
                 setSelectedPrimaryContactIndex(0); // Mother is the primary contact
               } else if (primaryContactFather) {
@@ -213,7 +234,7 @@ const AddParentGuardian = forwardRef(
               } else {
                 setSelectedPrimaryContactIndex(null); // Neither parent is selected as primary contact
               }
-            
+
               setRows(2);
             }
           } catch (error) {
@@ -241,8 +262,8 @@ const AddParentGuardian = forwardRef(
         const response = await api.get(`/getAllStudentById/${formData.student_id}`);
         setParentDetailId(response.data.studentParentsDetails[0].id);
         const studentData = response.data;
-        console.log("getAllStudentById : ",studentData);
-        
+        console.log("getAllStudentById : ", studentData);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

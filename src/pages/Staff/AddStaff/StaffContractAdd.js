@@ -28,18 +28,18 @@ const validationSchema = Yup.object().shape({
     "*Start Date Of Contract is required"
   ),
   userContractEndDate: Yup.string()
-  .required("*End Date Of Contract is required")
-  .test(
-    "is-greater",
-    "*End Date should be later than the Start Date",
-    function (value) {
-      const { userContractStartDate } = this.parent;
-      return (
-        !userContractStartDate ||
-        new Date(value) >= new Date(userContractStartDate)
-      );
-    }
-  ),
+    .required("*End Date Of Contract is required")
+    .test(
+      "is-greater",
+      "*End Date should be later than the Start Date",
+      function (value) {
+        const { userContractStartDate } = this.parent;
+        return (
+          !userContractStartDate ||
+          new Date(value) >= new Date(userContractStartDate)
+        );
+      }
+    ),
   contactPeriod: Yup.string().required("*Contract Period is required"),
   workingDays: Yup.array()
     .min(1, "*Working days are required")
@@ -113,7 +113,26 @@ const StaffContractAdd = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useImperativeHandle(ref, () => ({
       staffContractAdd: formik.handleSubmit,

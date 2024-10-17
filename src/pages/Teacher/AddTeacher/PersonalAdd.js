@@ -101,15 +101,34 @@ const PersonalAdd = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-  
+
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword);
     };
-  
+
     const toggleConfirmPasswordVisibility = () => {
       setShowConfirmPassword(!showConfirmPassword);
     };
@@ -305,11 +324,10 @@ const PersonalAdd = forwardRef(
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter password"
-                      className={`form-control ${
-                        formik.touched.password && formik.errors.password
+                      className={`form-control ${formik.touched.password && formik.errors.password
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       style={{
                         borderRadius: "3px",
                         borderRight: "none",
@@ -387,12 +405,11 @@ const PersonalAdd = forwardRef(
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Enter confirm password"
-                      className={`form-control ${
-                        formik.touched.confirmPassword &&
-                        formik.errors.confirmPassword
+                      className={`form-control ${formik.touched.confirmPassword &&
+                          formik.errors.confirmPassword
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       style={{
                         borderRadius: "3px",
                         borderRight: "none",

@@ -39,7 +39,7 @@ const validationSchema = Yup.object().shape({
     "*Medical Condition Result is required"
   ),
   remark: Yup.string()
-      .max(200, "*The maximum length is 200 characters").notRequired(),
+    .max(200, "*The maximum length is 200 characters").notRequired(),
   // nationality: Yup.string().required("*Select a Nationality!"),
   primaryLanguage: Yup.string().required("*Primary Language is required"),
   race: Yup.string().required("*Select a Race"),
@@ -52,7 +52,7 @@ const AddStudentDetails = forwardRef(
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName');
 
     console.log("FormData is ", formData);
 
@@ -186,7 +186,26 @@ const AddStudentDetails = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useEffect(() => {
       const getData = async () => {
@@ -249,7 +268,7 @@ const AddStudentDetails = forwardRef(
 
     return (
       <div className="container-fluid">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
             e.preventDefault();  // Prevent default form submission
           }
@@ -325,7 +344,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.dateOfBirth}
-                        // max={maxDate.toISOString().split("T")[0]}
+                      // max={maxDate.toISOString().split("T")[0]}
                       />
                       {formik.touched.dateOfBirth &&
                         formik.errors.dateOfBirth && (

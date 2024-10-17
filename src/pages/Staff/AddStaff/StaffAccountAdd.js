@@ -42,7 +42,7 @@ const StaffAccountAdd = forwardRef(
       label: center.centerNames,
       value: center.id,
     }));
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName');
 
     const fetchData = async () => {
       try {
@@ -96,7 +96,7 @@ const StaffAccountAdd = forwardRef(
         const updatedData = {
           ...values,
           approvelContentRequired: Approval,
-                  createdBy: userName,
+          createdBy: userName,
 
         };
         try {
@@ -110,7 +110,7 @@ const StaffAccountAdd = forwardRef(
             }
           );
           if (response.status === 200) {
-            console.log("Response Status:",response.status);
+            console.log("Response Status:", response.status);
             // console.log("Response Data Message:",response.data.message);
             toast.success("User Account Created Successfully");
             setFormData((prv) => ({ ...prv, ...values }));
@@ -124,7 +124,26 @@ const StaffAccountAdd = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useImperativeHandle(ref, () => ({
       staffAccountAdd: formik.handleSubmit,
@@ -144,20 +163,20 @@ const StaffAccountAdd = forwardRef(
       }
     };
     useEffect(() => {
-      if (formik.values.centerIds && formik.values.centerIds.length ) {
+      if (formik.values.centerIds && formik.values.centerIds.length) {
         const initializedCenters = centerOptions.filter(option =>
           formik.values.centerIds.includes(option.value)
         );
         setSelectedCenters(initializedCenters);
       }
     }, [formik.values.centerIds.length, centerOptions]);
-    
+
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <div className="container courseAdd">
           <p className="headColor my-4">Account Information</p>
           <div class="row">
@@ -172,9 +191,9 @@ const StaffAccountAdd = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.startDate}
-                min={new Date().toISOString().split("T")[0]} 
+                min={new Date().toISOString().split("T")[0]}
 
-                
+
               />
               {formik.touched.startDate && formik.errors.startDate && (
                 <div className="error text-danger ">
@@ -182,7 +201,7 @@ const StaffAccountAdd = forwardRef(
                 </div>
               )}
             </div>
-           
+
             <div className="col-md-6 col-12 mb-4">
               <label className="form-label">
                 Centre<span className="text-danger">*</span>
@@ -199,11 +218,10 @@ const StaffAccountAdd = forwardRef(
                 }}
                 labelledBy="Select Centers"
                 menuPlacement="top"
-                className={`form-multi-select ${
-                  formik.touched.centerIds && formik.errors.centerIds
+                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds
                     ? "is-invalid"
                     : ""
-                }`}
+                  }`}
               />
               {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
@@ -321,7 +339,7 @@ const StaffAccountAdd = forwardRef(
                 </div>
               </div>
               {formik.touched.approvelContentRequired &&
-              formik.errors.approvelContentRequired ? (
+                formik.errors.approvelContentRequired ? (
                 <div className="error text-danger ">
                   <small>{formik.errors.approvelContentRequired}</small>
                 </div>

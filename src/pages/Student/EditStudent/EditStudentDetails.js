@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
   //   "*Pre-Assessment Result is required!"
   // ),
   remark: Yup.string()
-      .max(200, "*The maximum length is 200 characters").notRequired(),
+    .max(200, "*The maximum length is 200 characters").notRequired(),
   medicalCondition: Yup.string().required(
     "*Medical Condition Result is required"
   ),
@@ -50,7 +50,7 @@ const EditStudentDetails = forwardRef(
     const [studentData, setStudentData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem('userName');
 
 
     const fetchData = async () => {
@@ -107,7 +107,7 @@ const EditStudentDetails = forwardRef(
         remark: formData.remark || "",
         allowMagazine: false || "",
         allowSocialMedia: false || "",
-        updatedBy:userName,
+        updatedBy: userName,
 
       },
       validationSchema: validationSchema,
@@ -157,7 +157,26 @@ const EditStudentDetails = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useEffect(() => {
       const getData = async () => {
@@ -192,7 +211,7 @@ const EditStudentDetails = forwardRef(
 
     return (
       <div className="container-fluid">
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
             e.preventDefault();  // Prevent default form submission
           }

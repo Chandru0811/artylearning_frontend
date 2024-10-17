@@ -93,26 +93,26 @@ const PersonalEdit = forwardRef(
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
         citizenship: formData.citizenship || "",
-        photo:  formData.photo|| "",
-        employeeType: null || null ,
+        photo: formData.photo || "",
+        employeeType: null || null,
         nationality: formData.nationality || "",
         age: 0,
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
         email: formData.email || "",
-        password :formData.password || "",
+        password: formData.password || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         setFormData((prev) => ({ ...prev, ...data }));
         try {
-          const response = await api.put(`/updateUser/${formData.staff_id}`, data ,{
+          const response = await api.put(`/updateUser/${formData.staff_id}`, data, {
             headers: {
               "Content-Type": "application/json",
             },
           });
-      
+
           if (response.status === 200) {
             toast.success(response.data.message);
             setFormData((prev) => ({ ...prev, ...data }));
@@ -130,9 +130,27 @@ const PersonalEdit = forwardRef(
           setLoadIndicators(false);
         }
       },
-      
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
-    
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
+
     useEffect(() => {
       const getData = async () => {
         try {

@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   year: Yup.number()
-  .min(1990, "*Year is required")
-  .max(2050, "*Year is required")
-  .required("*Year is required"),
+    .min(1990, "*Year is required")
+    .max(2050, "*Year is required")
+    .required("*Year is required"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Annual Leave Must be numbers")
@@ -24,8 +24,8 @@ const validationSchema = Yup.object().shape({
     .required("*Carry Forward Leave is required"),
 });
 const StaffLeaveEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem('userName');
 
     const formik = useFormik({
       initialValues: {
@@ -34,7 +34,7 @@ const StaffLeaveEdit = forwardRef(
         medicalLeave: "",
         otherLeave: "",
         carryForwardLeave: "",
-        updatedBy:userName,
+        updatedBy: userName,
 
       },
       validationSchema: validationSchema,
@@ -101,11 +101,30 @@ const StaffLeaveEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally{
+        } finally {
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     // useEffect(() => {
     //   const getData = async () => {
@@ -164,11 +183,11 @@ const StaffLeaveEdit = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
+        if (e.key === 'Enter' && !formik.isSubmitting) {
+          e.preventDefault();  // Prevent default form submission
+        }
+      }}>
         <section>
           <div className="container" style={{ minHeight: "60vh" }}>
             <p className="headColor my-4">Leave Information</p>
@@ -178,15 +197,15 @@ const StaffLeaveEdit = forwardRef(
                   Year<span class="text-danger">*</span>
                 </label>
                 <input
-                   type="number"
-                   className="form-control mt-3"
-                   name="year"
-                   onChange={formik.handleChange}
-                   onBlur={formik.handleBlur}
-                   value={formik.values.year}
-                   // max={new Date().getFullYear()}
-                   step="1"
-                   placeholder="YYYY"
+                  type="number"
+                  className="form-control mt-3"
+                  name="year"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.year}
+                  // max={new Date().getFullYear()}
+                  step="1"
+                  placeholder="YYYY"
                 />
                 {formik.touched.year && formik.errors.year && (
                   <div className="error text-danger ">

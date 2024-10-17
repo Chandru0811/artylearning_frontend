@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -6,9 +6,9 @@ import api from "../../../config/URL";
 
 const validationSchema = Yup.object().shape({
   year: Yup.number()
-  .min(1990, "*Year is required")
-  .max(2050, "*Year is required")
-  .required("*Year is required"),
+    .min(1990, "*Year is required")
+    .max(2050, "*Year is required")
+    .required("*Year is required"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+(?:\.[0-9]+)?$/, "*Annual Leave Must be numbers")
@@ -62,7 +62,26 @@ const StaffLeaveAdd = forwardRef(
           setLoadIndicators(false);
         }
       },
+      validateOnChange: false, // Enable validation on change
+      validateOnBlur: true,   // Enable validation on blur
     });
+
+    // Function to scroll to the first error field
+    const scrollToError = (errors) => {
+      const errorField = Object.keys(errors)[0]; // Get the first error field
+      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
+        errorElement.focus(); // Set focus to the error element
+      }
+    };
+
+    // Watch for form submit and validation errors
+    useEffect(() => {
+      if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
+        scrollToError(formik.errors);
+      }
+    }, [formik.submitCount, formik.errors]);
 
     useImperativeHandle(ref, () => ({
       staffLeaveAdd: formik.handleSubmit,
