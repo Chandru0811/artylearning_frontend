@@ -136,7 +136,7 @@ const AddcourseDetail = forwardRef(
       }
 
       try {
-        const response = await api.get("/getAllScheduleTeachers", { params });
+        const response = await api.get(`/getAllScheduleTeachers/${formData.centerId}`, { params });
         setDatas(response.data);
         initializeDataTable();
       } catch (error) {

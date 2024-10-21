@@ -161,7 +161,7 @@ function StudentRegisterCourse() {
     }
 
     try {
-      const response = await api.get("/getAllScheduleTeachers", { params });
+      const response = await api.get(`/getAllScheduleTeachers/${centerId}`, { params });
       setDatas(response.data);
       initializeDataTable();
     } catch (error) {
@@ -441,7 +441,7 @@ function StudentRegisterCourse() {
                         </tr>
                       </thead>
                       <tbody>
-                        {datas.map((data, index) => (
+                        {Array.isArray(datas) && datas.map((data, index) => (
                           <tr
                             key={index}
                             onClick={() => handleRowSelect(data)}

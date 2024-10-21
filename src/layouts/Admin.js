@@ -234,7 +234,7 @@ function Admin({ handleLogout }) {
 
   return (
     <div>
-      <BrowserRouter>
+      <BrowserRouter basename="/sms">
         <ToastContainer position="top-center" />
         <Sidebar />
         <section className="home-section">

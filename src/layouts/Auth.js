@@ -23,7 +23,7 @@ import ParticulerCourse from "../pages/Client/ParticulerCourse.js";
 
 function Auth({ handleLogin }) {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/sms">
       <ToastContainer position="top-center" />
       <TopBar />
       <Header />
