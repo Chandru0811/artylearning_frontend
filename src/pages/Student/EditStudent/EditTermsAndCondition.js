@@ -142,7 +142,7 @@ const EditTermsAndCondition = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -300,50 +300,14 @@ const EditTermsAndCondition = forwardRef(
                     </div> */}
 
                     <div className="col-md-6 col-12">
-                      {showImage && !isEditing ? (
-                        // Show the image and Edit button if not in edit mode
+                      {!data.parentSignature || isEditing ? (
+                        // Show the signature canvas with Save, Clear, and Cancel buttons if there's no signature or in edit mode
                         <div className="text-start mt-3">
                           <label className="mb-1 fw-medium">
                             <small>Parent Signature</small>
                           </label>
                           <br />
-                          <div
-                            className="border border-secondary rounded-2 parentSignature"
-                          >
-                            {data.studentTermsAndConditions &&
-                              data.studentTermsAndConditions.map(
-                                (parent, index) =>
-                                  parent.parentSignature && (
-                                    <img
-                                      key={index}
-                                      src={parent.parentSignature}
-                                      className="img-fluid rounded ms-3 mt-2"
-                                      style={{ width: "75%" }}
-                                      alt="Parent Signature"
-                                    />
-                                  )
-                              )}
-                          </div>
-                          <br />
-                          <button
-                            type="button"
-                            style={{ height: "30px", width: "60px" }}
-                            onClick={handleEdit}
-                            className="btn btn-sm bg-light"
-                          >
-                            Edit
-                          </button>
-                        </div>
-                      ) : (
-                        // Show the signature canvas with Save, Clear, and Cancel buttons
-                        <div className="text-start mt-3">
-                          <label className="mb-1 fw-medium">
-                            <small>Parent Signature</small>
-                          </label>
-                          <br />
-                          <div
-                            className="border border-secondary rounded-2 parentSignature"
-                          >
+                          <div className="border border-secondary rounded-2 parentSignature">
                             <SignatureCanvas
                               canvasProps={{
                                 width: 423,
@@ -370,16 +334,54 @@ const EditTermsAndCondition = forwardRef(
                           >
                             Save
                           </button>
-                          <button
-                            type="button"
-                            style={{ height: "30px", width: "70px" }}
-                            onClick={handleCancel}
-                            className="btn btn-sm bg-light ms-1"
-                          >
-                            Cancel
-                          </button>
+                          {isEditing && (
+                            <button
+                              type="button"
+                              style={{ height: "30px", width: "70px" }}
+                              onClick={handleCancel}
+                              className="btn btn-sm bg-light ms-1"
+                            >
+                              Cancel
+                            </button>
+                          )}
                           <br />
-                          {showImage && <img src={url} className="mt-2" alt="Signature" />}
+                          {showImage && (
+                            <img src={url} className="mt-2" alt="Signature" />
+                          )}
+                        </div>
+                      ) : (
+                        // Show the image and Edit button if a signature exists and not in edit mode
+                        <div className="text-start mt-3">
+                          <label className="mb-1 fw-medium">
+                            <small>Parent Signature</small>
+                          </label>
+                          <br />
+                          <div className="border border-secondary rounded-2 parentSignature">
+                            {data.studentTermsAndConditions &&
+                              data.studentTermsAndConditions.map(
+                                (parentData, index) =>
+                                  parentData.parentSignature ? (
+                                    <img
+                                      key={index}
+                                      src={parentData.parentSignature}
+                                      className="img-fluid rounded ms-3 mt-2"
+                                      style={{ width: "75%" }}
+                                      alt="Parent Signature"
+                                    />
+                                  ) : null
+                              )}
+                          </div>
+                          <br />
+                          {data.parentSignature && (
+                            <button
+                              type="button"
+                              style={{ height: "30px", width: "60px" }}
+                              onClick={handleEdit}
+                              className="btn btn-sm bg-light"
+                            >
+                              Edit
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>
