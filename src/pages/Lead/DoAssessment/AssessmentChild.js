@@ -33,7 +33,7 @@ const AssessmentChild = forwardRef(
     const [assessmentAvailable, setAssessmentAvailable] = useState(false);
     const [assessmentId, setAssessmentId] = useState(false);
     const [arrangeassesmentData, setArrangeassesmentData] = useState([]);
-    console.log(assessmentId);
+    console.log("refer", arrangeassesmentData)
     const currentDate = new Date().toISOString().split("T")[0];
 
     const formik = useFormik({
@@ -124,6 +124,7 @@ const AssessmentChild = forwardRef(
           `/getAllLeadInfoWithReferrerById/${leadId}`
         );
         setArrangeassesmentData(response.data);
+        console.log("getAllLeadInfoWithReferrerById", response)
         // console.log("Lead Do Data:",response.data.assessmentArrange[0].time);
         const timeSlotOffered = response?.data?.assessmentArrange[0]?.time;
         formik.setFieldValue("timeSlotOffered", timeSlotOffered);
@@ -179,7 +180,7 @@ const AssessmentChild = forwardRef(
             remarks: leadResponse.data.remark,
             referredBy: leadResponse.data.referBy,
             whereFrom: leadResponse.data.marketingSource,
-            levelAssessed : "",
+            levelAssessed: "",
           });
           // if (response?.data?.assessmentArrange?.length > 0) {
           //   formik.setFieldValue('timeSlotOffered', response.data.assessmentArrange[0].time);
@@ -387,22 +388,20 @@ const AssessmentChild = forwardRef(
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-4">
-                <lable>Referred By(Student Name)</lable>
-                <select
+                <label>Referred By (Student Name)</label>
+                <input
                   {...formik.getFieldProps("referredBy")}
-                  className={`form-control ${
-                    formik.touched.referredBy && formik.errors.referredBy
-                      ? "is-invalid"
+                  className={`form-control ${formik.touched.referredBy && formik.errors.referredBy ? "is-invalid" : ""
+                    }`}
+                  value={
+                    studentData && studentData.length > 0
+                      ? studentData.find(
+                        (std) => parseInt(arrangeassesmentData.referBy) === std.id
+                      )?.studentNames || "--"
                       : ""
-                  }`}
-                >
-                  {studentData &&
-                    studentData.map((student) => (
-                      <option key={student.id} value={student.id}>
-                        {student.studentNames}
-                      </option>
-                    ))}
-                </select>
+                  }
+                  readOnly
+                />
               </div>
               <div className="col-md-6 col-12 mb-4">
                 <p>T-Shirt Size</p>
@@ -496,7 +495,7 @@ const AssessmentChild = forwardRef(
                     formik.touched.levelAssessed && (
                       <div
                         className="text-danger"
-                       
+
                       >
                         {formik.errors.levelAssessed}
                       </div>
