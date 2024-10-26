@@ -189,7 +189,7 @@ function TeacherView() {
               <p className="text-sm fw-medium">Citizenship</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: {data.citizenship || "--"}</p>
+              <p className="text-muted text-sm">: {data.nationality || "--"}</p>
             </div>
           </div>
         </div>

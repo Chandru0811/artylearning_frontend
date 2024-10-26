@@ -4,8 +4,8 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllIDTypeWithIds from "../../List/IDTypeList";
-import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import fetchAllNationality from "../../List/NationalityAndCountryList";
 
 const validationSchema = Yup.object().shape({
   teacherName: Yup.string().required("*Staff Name is required"),
@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), "*Date of Birth cannot be in the future"),
   idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
-  citizenship: Yup.string().required("*Citizenship is required"),
+  nationality: Yup.string().required("*Nationality is required"),
   role: Yup.string().required("*Role is required"),
   file: Yup.string().required("*Photo is required"),
   password: Yup.string()
@@ -28,11 +28,10 @@ const validationSchema = Yup.object().shape({
 const StaffPersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
-    const [citizenShipData, setCitizenShipData] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const userName = localStorage.getItem('userName');
-
+    const [nationalityData, setNationalityData] = useState(null);
 
     const formik = useFormik({
       initialValues: {
@@ -41,20 +40,23 @@ const StaffPersonalAdd = forwardRef(
         dateOfBirth: formData.dateOfBirth || "",
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
-        citizenship: formData.citizenship || "",
         file: formData.file || "",
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
         email: formData.email || "",
         password: formData.password || "",
         confirmPassword: formData.confirmPassword || "",
+        nationality: formData.nationality || "",
+        nationalityId: formData.nationalityId || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
           const formData = new FormData();
-
+          let nationalityName;
+          if (values.nationalityId) nationalityName = nationalityData.find((prv) =>
+            prv.id === parseInt(values.nationalityId))
           // Add each data field manually to the FormData object
           formData.append("role", values.role);
           formData.append("teacherName", values.teacherName);
@@ -62,15 +64,15 @@ const StaffPersonalAdd = forwardRef(
           formData.append("idTypeId", values.idTypeId);
           formData.append("idNo", values.idNo);
           formData.append("age", 25);
-          formData.append("citizenship", values.citizenship);
           formData.append("shortIntroduction", values.shortIntroduction);
           formData.append("gender", values.gender);
           formData.append("file", values.file);
           formData.append("email", values.email);
           formData.append("password", values.password);
           formData.append("confirmPassword", values.confirmPassword);
+          formData.append("nationality", nationalityName.nationality);
+          formData.append("nationalityId", values.nationalityId);
           formData.append("createdBy", userName);
-
 
           const response = await api.post(
             "/createUserWithProfileImage",
@@ -140,12 +142,13 @@ const StaffPersonalAdd = forwardRef(
 
     const fetchCitizenShipData = async () => {
       try {
-        const citizenShipData = await fetchAllNationalityeWithIds();
-        setCitizenShipData(citizenShipData);
+        const nationalityData = await fetchAllNationality();
+        setNationalityData(nationalityData);
       } catch (error) {
         toast.error(error);
       }
     };
+
 
     useEffect(() => {
       fetchIDTypeData();
@@ -248,27 +251,26 @@ const StaffPersonalAdd = forwardRef(
 
           <div class="container row d-flex my-4 justify-align-content-around">
             <div class="form-group col-sm">
-              <label>Citizenship</label>
+              <label>Nationality</label>
               <span className="text-danger">*</span>
               <select
-                type="text"
                 className="form-select"
-                name="citizenship"
+                name="nationalityId"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.citizenship}
+                value={formik.values.nationalityId}
               >
-                <option value=""></option>
-                {citizenShipData &&
-                  citizenShipData.map((citizen) => (
-                    <option key={citizen.id} value={citizen.citizenship}>
-                      {citizen.citizenship}
+                <option selected></option>
+                {nationalityData &&
+                  nationalityData.map((nationalityId) => (
+                    <option key={nationalityId.id} value={nationalityId.id}>
+                      {nationalityId.nationality}
                     </option>
                   ))}
               </select>
-              {formik.touched.citizenship && formik.errors.citizenship && (
+              {formik.touched.nationalityId && formik.errors.nationalityId && (
                 <div className="error text-danger">
-                  <small>{formik.errors.citizenship}</small>
+                  <small>{formik.errors.nationalityId}</small>
                 </div>
               )}
             </div>

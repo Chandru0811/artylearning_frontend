@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllIDTypeWithIds from "../../List/IDTypeList";
-import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
+import fetchAllNationality from "../../List/NationalityAndCountryList";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const validationSchema = Yup.object().shape({
@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), "*Date of Birth cannot be in the future"),
   idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
-  citizenship: Yup.string().required("*Citizenship is required"),
+  nationality: Yup.string().required("*Nationality is required"),
   email: Yup.string().email("*Invalid Email").required("*Email is required"),
   // shortIntroduction: Yup.string().required("*Short Introduction is required!"),
   gender: Yup.string().required("*Gender is required"),
@@ -34,7 +34,7 @@ const validationSchema = Yup.object().shape({
 const PersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
-    const [citizenShipData, setCitizenShipData] = useState(null);
+    const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
@@ -47,7 +47,8 @@ const PersonalAdd = forwardRef(
         password: formData.password,
         confirmPassword: formData.confirmPassword,
         idNo: formData.idNo,
-        citizenship: formData.citizenship,
+        nationality: formData.nationality || "",
+        nationalityId: formData.nationalityId || "",
         file: null || "",
         shortIntroduction: formData.shortIntroduction,
         gender: formData.gender,
@@ -59,6 +60,9 @@ const PersonalAdd = forwardRef(
 
         try {
           const formData = new FormData();
+          let nationalityName;
+          if (values.nationalityId) nationalityName = nationalityData.find((prv) =>
+            prv.id === parseInt(values.nationalityId))
           // Add each data field manually to the FormData object
           formData.append("role", "teacher");
           formData.append("teacherName", values.teacherName);
@@ -71,6 +75,8 @@ const PersonalAdd = forwardRef(
           formData.append("citizenship", values.citizenship);
           formData.append("shortIntroduction", values.shortIntroduction);
           formData.append("gender", values.gender);
+          formData.append("nationality", nationalityName.nationality);
+          formData.append("nationalityId", values.nationalityId);
           formData.append("file", values.file);
 
           const response = await api.post(
@@ -144,8 +150,8 @@ const PersonalAdd = forwardRef(
 
     const fetchCitizenShipData = async () => {
       try {
-        const citizenShipData = await fetchAllNationalityeWithIds();
-        setCitizenShipData(citizenShipData);
+        const nationalityData = await fetchAllNationality();
+        setNationalityData(nationalityData);
       } catch (error) {
         toast.error(error);
       }
@@ -254,27 +260,26 @@ const PersonalAdd = forwardRef(
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
-                <label>Citizenship</label>
+                <label>Nationality</label>
                 <span className="text-danger">*</span>
                 <select
-                  type="text"
                   className="form-select"
-                  name="citizenship"
+                  name="nationalityId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.citizenship}
+                  value={formik.values.nationalityId}
                 >
-                  <option value=""></option>
-                  {citizenShipData &&
-                    citizenShipData.map((citizen) => (
-                      <option key={citizen.id} value={citizen.citizenship}>
-                        {citizen.citizenship}
+                  <option selected></option>
+                  {nationalityData &&
+                    nationalityData.map((nationalityId) => (
+                      <option key={nationalityId.id} value={nationalityId.id}>
+                        {nationalityId.nationality}
                       </option>
                     ))}
                 </select>
-                {formik.touched.citizenship && formik.errors.citizenship && (
+                {formik.touched.nationalityId && formik.errors.nationalityId && (
                   <div className="error text-danger">
-                    <small>{formik.errors.citizenship}</small>
+                    <small>{formik.errors.nationalityId}</small>
                   </div>
                 )}
               </div>
@@ -325,8 +330,8 @@ const PersonalAdd = forwardRef(
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter password"
                       className={`form-control ${formik.touched.password && formik.errors.password
-                          ? "is-invalid"
-                          : ""
+                        ? "is-invalid"
+                        : ""
                         }`}
                       style={{
                         borderRadius: "3px",
@@ -406,9 +411,9 @@ const PersonalAdd = forwardRef(
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Enter confirm password"
                       className={`form-control ${formik.touched.confirmPassword &&
-                          formik.errors.confirmPassword
-                          ? "is-invalid"
-                          : ""
+                        formik.errors.confirmPassword
+                        ? "is-invalid"
+                        : ""
                         }`}
                       style={{
                         borderRadius: "3px",

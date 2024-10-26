@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllIDTypeWithIds from "../../List/IDTypeList";
-import fetchAllNationalityeWithIds from "../../List/NationalityAndCountryList";
+import fetchAllNationality from "../../List/NationalityAndCountryList";
 
 const validationSchema = Yup.object().shape({
   teacherName: Yup.string().required("*Staff Name is required"),
@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
     .max(new Date(), "*Date of Birth cannot be in the future"),
   idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
-  citizenship: Yup.string().required("*CitizenShip is required"),
+  nationalityId: Yup.string().required("*Nationality is required"),
   // file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalEdit = forwardRef(
@@ -26,7 +26,7 @@ const StaffPersonalEdit = forwardRef(
     const userName = localStorage.getItem("userName");
 
     const [idTypeData, setIdTypeData] = useState(null);
-    const [citizenShipData, setCitizenShipData] = useState(null);
+    const [nationalityData, setNationalityData] = useState(null);
 
     const formik = useFormik({
       initialValues: {
@@ -34,7 +34,6 @@ const StaffPersonalEdit = forwardRef(
         dateOfBirth: formData.dateOfBirth || "",
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
-        citizenship: formData.citizenship || "",
         photo: formData.photo || "",
         employeeType: null || null,
         nationality: formData.nationality || "",
@@ -43,11 +42,17 @@ const StaffPersonalEdit = forwardRef(
         gender: formData.gender || "",
         email: formData.email || "",
         password: formData.password || "",
+        nationality: formData.nationality || "",
+        nationalityId: formData.nationalityId || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
         setFormData((prev) => ({ ...prev, ...data }));
+        let nationalityName;
+        if (data.nationalityId) nationalityName = nationalityData.find((prv) =>
+          prv.id === parseInt(data.nationalityId))
+
         try {
           const response = await api.put(`/updateUser/${formData.staff_id}`, data, {
             headers: {
@@ -104,8 +109,8 @@ const StaffPersonalEdit = forwardRef(
 
     const fetchCitizenShipData = async () => {
       try {
-        const citizenShipData = await fetchAllNationalityeWithIds();
-        setCitizenShipData(citizenShipData);
+        const nationalityData = await fetchAllNationality();
+        setNationalityData(nationalityData);
       } catch (error) {
         toast.error(error);
       }
@@ -234,27 +239,26 @@ const StaffPersonalEdit = forwardRef(
           </div>
           <div class="container row d-flex my-4 justify-align-content-around">
             <div class="form-group col-sm">
-              <label>Citizenship</label>
+              <label>Nationality</label>
               <span className="text-danger">*</span>
               <select
-                type="text"
                 className="form-select"
-                name="citizenship"
+                name="nationalityId"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.citizenship}
+                value={formik.values.nationalityId}
               >
-                <option value=""></option>
-                {citizenShipData &&
-                  citizenShipData.map((citizen) => (
-                    <option key={citizen.id} value={citizen.citizenship}>
-                      {citizen.citizenship}
+                <option selected></option>
+                {nationalityData &&
+                  nationalityData.map((nationalityId) => (
+                    <option key={nationalityId.id} value={nationalityId.id}>
+                      {nationalityId.nationality}
                     </option>
                   ))}
               </select>
-              {formik.touched.citizenship && formik.errors.citizenship && (
+              {formik.touched.nationalityId && formik.errors.nationalityId && (
                 <div className="error text-danger">
-                  <small>{formik.errors.citizenship}</small>
+                  <small>{formik.errors.nationalityId}</small>
                 </div>
               )}
             </div>
