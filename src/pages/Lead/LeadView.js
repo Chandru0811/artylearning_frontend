@@ -23,7 +23,7 @@ function Leadview() {
   const [doassesmentData, setDoassesmentData] = useState([]);
   const [arrangeassesmentData, setArrangeassesmentData] = useState([]);
 
-  // console.log("Doassesment Data:", doassesmentData.leadDoAssessmentAlphabet[0].uppercaseA);
+  // console.log("Doassesment Data:", doassesmentData.leadDoAssessmentAlphabet[0].recognitionOfSoundA);
   const [paymentStatus, setPaymentStatus] = useState("PENDING");
 
   // Payment Status & Summary Modal
@@ -317,34 +317,6 @@ function Leadview() {
                       <></>
                     )}
 
-                    {/* <button
-                      type="button"
-                      onClick={handleSummaryShow}
-                      class="btn btn-border btn-sm"
-                    >
-                      <span>Summary</span>
-                    </button> */}
-
-                    {/* <button
-                      type="button"
-                      onClick={handlePaymentStatusShow}
-                      class="btn btn-border btn-sm"
-                    >
-                      <span>Payment Status</span>
-                    </button> */}
-                    {/* {data.assessmentArrange &&
-                    data.assessmentArrange.length > 0 &&
-                    new Date(
-                      data.assessmentArrange[0].assessmentDate
-                    ).toDateString() === new Date().toDateString() ? (
-                      <Link to={`/lead/lead/assessment/${id}`}>
-                        <button type="button" class="btn btn-border btn-sm">
-                          <span>Do Assessment</span>
-                        </button>
-                      </Link>
-                    ) : (
-                      ""
-                    )} */}
                     {data.leadStatus === "ARRANGING_ASSESSMENT" ? (
                       <Link to={`/lead/lead/assessment/${id}`}>
                         <button type="button" className="btn btn-border btn-sm">
@@ -538,34 +510,6 @@ function Leadview() {
                           </div>
                         </div>
                       </div>
-                      {/* <div className="col-md-6 col-12">
-                        <div className="row mb-2">
-                          <div className="col-6 d-flex  align-items-center">
-                            <p className="text-sm fw-medium ">
-                              Name Of Children In Total
-                            </p>
-                          </div>
-                          <div className="col-6">
-                            <p className="text-muted text-sm">
-                              : {data.nameOfChildrenInTotal || "--"}
-                            </p>
-                          </div>
-                        </div>
-                      </div> */}
-                      {/* <div className="col-md-6 col-12">
-                        <div className="row mb-2">
-                          <div className="col-6 d-flex  align-items-center">
-                            <p className="text-sm fw-medium ">
-                              Father's Full Name
-                            </p>
-                          </div>
-                          <div className="col-6">
-                            <p className="text-muted text-sm">
-                              : {data.fathersFullName || "--"}
-                            </p>
-                          </div>
-                        </div>
-                      </div> */}
                     </div>
                   </div>
                   <div className="container-fluid">
@@ -1421,6 +1365,7 @@ function Leadview() {
               <></>
             )}
 
+            {/* Arrange Assessment */}
             {doassesmentData.leadDoAssessmentAlphabet &&
             doassesmentData.leadDoAssessmentAlphabet.length > 0 &&
             doassesmentData.leadDoAssessmentArtyPursuers &&
@@ -1455,13 +1400,6 @@ function Leadview() {
                             <h5 className="headColor mt-2 mb-4">
                               Child Particulars
                             </h5>
-                            {/* <button
-                            onClick={generatePDF}
-                            className="btn btn-border btn-sm mx-3"
-                            style={{ padding: "2px 8px", fontSize: "0.8rem" }}
-                          >
-                            Generate PDF
-                          </button> */}
                           </div>
 
                           <div className="col-md-6 col-12">
@@ -1770,6 +1708,7 @@ function Leadview() {
                           </div>
                         </div>
                       </div>
+
                       {/* Child Pencil Grip */}
                       <div className="container-fluid">
                         <div className="row  m-3">
@@ -1809,75 +1748,9 @@ function Leadview() {
                               </div>
                             </div>
                           </div>
-                          {/* <div className="col-md-6 col-12">
-                          <div className="row mb-2">
-                            <div className="col-6 d-flex  align-items-center">
-                              <p className="text-sm fw-medium ">Plamer Grasp</p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                :{" "}
-                                {doassesmentData &&
-                                doassesmentData.leadDoAssessmentModel &&
-                                doassesmentData.leadDoAssessmentModel.length >
-                                  0 &&
-                                doassesmentData.leadDoAssessmentModel[0] &&
-                                doassesmentData.leadDoAssessmentModel[0]
-                                  .plamerGrap
-                                  ? doassesmentData.leadDoAssessmentModel[0]
-                                      .plamerGrap
-                                  : "--"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-2">
-                            <div className="col-6 d-flex  align-items-center">
-                              <p className="text-sm fw-medium">Tripod</p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                :{" "}
-                                {doassesmentData &&
-                                doassesmentData.leadDoAssessmentModel &&
-                                doassesmentData.leadDoAssessmentModel.length >
-                                  0 &&
-                                doassesmentData.leadDoAssessmentModel[0] &&
-                                doassesmentData.leadDoAssessmentModel[0].tripod
-                                  ? doassesmentData.leadDoAssessmentModel[0]
-                                      .tripod
-                                  : "--"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row mb-2">
-                            <div className="col-6 d-flex  align-items-center">
-                              <p className="text-sm fw-medium">
-                                Fore Finger And Thumb
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                :{" "}
-                                {doassesmentData &&
-                                doassesmentData.leadDoAssessmentModel &&
-                                doassesmentData.leadDoAssessmentModel.length >
-                                  0 &&
-                                doassesmentData.leadDoAssessmentModel[0] &&
-                                doassesmentData.leadDoAssessmentModel[0]
-                                  .foreFinger
-                                  ? doassesmentData.leadDoAssessmentModel[0]
-                                      .foreFinger
-                                  : "--"}
-                              </p>
-                            </div>
-                          </div>
-                        </div> */}
                         </div>
                       </div>
+
                       {/* Arty Beliver & Arty Dreamers */}
                       <div className="container-fluid">
                         <div className="row  m-3">
@@ -2025,7 +1898,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseA ? (
+                                        .recognitionOfSoundA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2048,7 +1921,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseB ? (
+                                        .recognitionOfSoundB ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2071,7 +1944,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseC ? (
+                                        .recognitionOfSoundC ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2094,7 +1967,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseD ? (
+                                        .recognitionOfSoundD ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2117,7 +1990,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseE ? (
+                                        .recognitionOfSoundE ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2140,7 +2013,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseF ? (
+                                        .recognitionOfSoundF ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2163,7 +2036,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseG ? (
+                                        .recognitionOfSoundG ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2186,7 +2059,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseH ? (
+                                        .recognitionOfSoundH ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2209,7 +2082,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseI ? (
+                                        .recognitionOfSoundI ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2232,7 +2105,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseJ ? (
+                                        .recognitionOfSoundJ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2255,7 +2128,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseK ? (
+                                        .recognitionOfSoundK ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2278,7 +2151,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseL ? (
+                                        .recognitionOfSoundL ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2301,7 +2174,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseM ? (
+                                        .recognitionOfSoundM ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2882,7 +2755,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .lowercaseL ? (
+                                        .recognitionOfLetter ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3233,7 +3106,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerA ? (
+                                        .writingLetterA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3256,7 +3129,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerB ? (
+                                        .writingLetterB ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3279,7 +3152,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerC ? (
+                                        .writingLetterC ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3302,7 +3175,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerD ? (
+                                        .writingLetterD ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3325,7 +3198,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerE ? (
+                                        .writingLetterE ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3348,7 +3221,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerF ? (
+                                        .writingLetterF ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3371,7 +3244,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerG ? (
+                                        .writingLetterG ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3394,7 +3267,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerH ? (
+                                        .writingLetterH ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3417,7 +3290,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerI ? (
+                                        .writingLetterI ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3440,7 +3313,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerJ ? (
+                                        .writingLetterJ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3463,7 +3336,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerK ? (
+                                        .writingLetterK ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3486,7 +3359,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerL ? (
+                                        .writingLetterL ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3509,7 +3382,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerM ? (
+                                        .writingLetterM ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3559,7 +3432,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseN ? (
+                                        .recognitionOfSoundN ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3582,7 +3455,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseO ? (
+                                        .recognitionOfSoundO ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3605,7 +3478,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseP ? (
+                                        .recognitionOfSoundP ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3628,7 +3501,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseQ ? (
+                                        .recognitionOfSoundQ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3651,7 +3524,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseR ? (
+                                        .recognitionOfSoundR ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3674,7 +3547,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseS ? (
+                                        .recognitionOfSoundS ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3697,7 +3570,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseT ? (
+                                        .recognitionOfSoundT ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3720,7 +3593,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseU ? (
+                                        .recognitionOfSoundU ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3743,7 +3616,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseV ? (
+                                        .recognitionOfSoundV ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3766,7 +3639,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseW ? (
+                                        .recognitionOfSoundW ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3789,7 +3662,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseX ? (
+                                        .recognitionOfSoundX ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3812,7 +3685,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseY ? (
+                                        .recognitionOfSoundY ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3835,7 +3708,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .uppercaseZ ? (
+                                        .recognitionOfSoundZ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4767,7 +4640,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerN ? (
+                                        .writingLetterN ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4790,7 +4663,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerO ? (
+                                        .writingLetterO ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4813,7 +4686,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerP ? (
+                                        .writingLetterP ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4836,7 +4709,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerQ ? (
+                                        .writingLetterQ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4859,7 +4732,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerR ? (
+                                        .writingLetterR ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4882,7 +4755,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerS ? (
+                                        .writingLetterS ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4905,7 +4778,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerT ? (
+                                        .writingLetterT ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4928,7 +4801,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerU ? (
+                                        .writingLetterU ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4951,7 +4824,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerV ? (
+                                        .writingLetterV ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4974,7 +4847,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerW ? (
+                                        .writingLetterW ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4997,7 +4870,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerX ? (
+                                        .writingLetterX ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5020,7 +4893,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerY ? (
+                                        .writingLetterY ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -5043,7 +4916,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesLowerZ ? (
+                                        .writingLetterZ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -6661,6 +6534,485 @@ function Leadview() {
                       ) : (
                         <div className="text-center">
                           <p>Arty Pursuers Information not available </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+
+            {/* Arrange Assessment */}
+            {doassesmentData.leadDoAssessmentAlphabet &&
+            doassesmentData.leadDoAssessmentAlphabet.length > 0 &&
+            doassesmentData.leadDoAssessmentArtyPursuers &&
+            doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
+            doassesmentData.leadDoAssessmentModel &&
+            doassesmentData.leadDoAssessmentModel.length > 0 ? (
+              <>
+                {/* Assessment Information */}
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseFour"
+                      aria-expanded="false"
+                      aria-controls="collapseFour"
+                    >
+                      <b>Assessment Scoring</b>
+                    </button>
+                  </h2>
+                  <div
+                    id="collapseFour"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample"
+                  >
+                    <div class="accordion-body">
+                      {/* Assessment Scoring */}
+                      {doassesmentData.leadDoAssessmentAlphabet &&
+                      doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (
+                        <div className="container-fluid">
+                          <div className="row  m-3">
+                            <h5 className="headColor mt-2 mb-4">
+                              Beginning Sounds
+                            </h5>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Beginning Sounds Total Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundsTotalScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Beginning Sounds Total Weightage
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundsTotalWeightage) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Beginning Sounds Total Weighted Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundsTotalWeightedScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row  m-3">
+                            <h5 className="headColor mt-2 mb-4">
+                              Recognition Of Letters
+                            </h5>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Recognition Of Letters Total Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .recognitionOfLettersTotalScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Recognition Of Letters Total Weightage
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .recognitionOfLettersTotalWeightage) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Recognition Of Letters Total Weighted Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .beginningSoundsTotalWeightedScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row  m-3">
+                            <h5 className="headColor mt-2 mb-4">
+                              Recognition Of Sounds
+                            </h5>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Recognition Of Sounds Total Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .recognitionOfSoundsTotalScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Recognition Of Sounds Total Weightage
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .recognitionOfSoundsTotalWeightage) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Recognition Of Sounds Total Weighted Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .recognitionOfSoundsTotalWeightedScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row  m-3">
+                            <h5 className="headColor mt-2 mb-4">
+                              Writing Letter
+                            </h5>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Writing Letter Total Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterTotalScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Writing Letter Total Weightage
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterTotalWeightage) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Writing Letter Total Weighted Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterTotalWeightedScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="row  m-3">
+                            <h5 className="headColor mt-2 mb-4">
+                              Over ALL Score
+                            </h5>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Grade Category
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .gradeCategory) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Grade Level
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .gradeLevel) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-md-6 col-12">
+                              <div className="row mb-2">
+                                <div className="col-6 d-flex  align-items-center">
+                                  <p className="text-sm fw-medium">
+                                    Over All Weighted Score
+                                  </p>
+                                </div>
+                                <div className="col-6">
+                                  <p className="text-muted text-sm">
+                                    :{" "}
+                                    {(doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .overallWeightedScore) ||
+                                      "--"}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <p>Alphabet Scoring not available </p>
                         </div>
                       )}
                     </div>

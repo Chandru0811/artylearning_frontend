@@ -127,7 +127,7 @@ const Lead = () => {
   const formik = useFormik({
     initialValues: {
       centerId: "",
-      subject: "",
+      subjectId: "",
       leadStatus: "ALL",
     },
     onSubmit: async (data) => {
@@ -158,8 +158,8 @@ const Lead = () => {
       params.centerId = formik.values.centerId;
     }
 
-    if (formik.values.subject !== "") {
-      params.subject = formik.values.subject;
+    if (formik.values.subjectId !== "") {
+      params.subjectId = formik.values.subjectId;
     }
 
     if (formik.values.leadStatus !== "" && formik.values.leadStatus !== "ALL") {
@@ -208,7 +208,7 @@ const Lead = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     formik.values.centerId,
-    formik.values.subject,
+    formik.values.subjectId,
     formik.values.leadStatus,
   ]);
 
@@ -325,8 +325,8 @@ const Lead = () => {
                   </select>
                   <select
                     className="form-select mb-2 mb-md-0"
-                    name="subject"
-                    {...formik.getFieldProps("subject")}
+                    name="subjectId"
+                    {...formik.getFieldProps("subjectId")}
                   >
                     <option value="" disabled selected>
                       Select Subject
@@ -404,7 +404,7 @@ const Lead = () => {
                             {/* {data.subject} */}
                             {subjectData &&
                             subjectData.map((subject) =>
-                              parseInt(data.subject) === subject.id
+                              parseInt(data.subjectId) === subject.id
                                 ? subject.subjects || "--"
                                 : ""
                             )}

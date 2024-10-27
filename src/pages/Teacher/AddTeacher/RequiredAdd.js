@@ -4,8 +4,11 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 const RequiredAdd = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+  ({ formData, setLoadIndicators, setFormData, handleNext ,roleF}, ref) => {
     const userName  = localStorage.getItem('userName');
+    const role = formData.role ;
+    console.log("Role:",formData.role);
+    
 
     const formik = useFormik({
       initialValues: {

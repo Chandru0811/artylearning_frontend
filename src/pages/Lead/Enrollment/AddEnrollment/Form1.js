@@ -14,7 +14,7 @@ import fetchAllCentersWithIds from "../../../List/CenterList";
 
 const validationSchema = Yup.object().shape({
   studentName: Yup.string().required("*Name is required"),
-  subject: Yup.string().required("*Subject is required"), // Adding validation for subject field
+  subjectId: Yup.string().required("*Subject is required"), // Adding validation for subjectId field
   gender: Yup.string().required("*Gender is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
@@ -42,7 +42,7 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext, setLoadIndicators
   const formik = useFormik({
     initialValues: {
       studentName: formData.studentName || "",
-      subject: formData.subject,
+      subjectId: formData.subjectId,
       gender: formData.gender || "",
       dateOfBirth: formData.dateOfBirth || "",
       medicalCondition: formData.medicalCondition || "",
@@ -151,24 +151,24 @@ const Form1 = forwardRef(({ formData, setFormData, handleNext, setLoadIndicators
             <span className="text-danger">*</span>
             <select
               className="form-select"
-              name="subject"
+              name="subjectId"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.subject}
+              value={formik.values.subjectId}
             >
               <option selected></option>
               {/* <option value="ENGLISH">English</option>
               <option value="CHINESE" >Chinese</option> */}
               {subjectData &&
-                  subjectData.map((subject) => (  
-                    <option key={subject.id} value={subject.id}>
-                      {subject.subjects}
+                  subjectData.map((subjectId) => (  
+                    <option key={subjectId.id} value={subjectId.id}>
+                      {subjectId.subjects}
                     </option>
                   ))}
             </select>
-            {formik.touched.subject && formik.errors.subject && (
+            {formik.touched.subjectId && formik.errors.subjectId && (
               <div className="text-danger">
-                <small>{formik.errors.subject}</small>
+                <small>{formik.errors.subjectId}</small>
               </div>
             )}
           </div>
