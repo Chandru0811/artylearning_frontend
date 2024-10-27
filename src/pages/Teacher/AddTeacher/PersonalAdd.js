@@ -14,12 +14,14 @@ import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const validationSchema = Yup.object().shape({
   teacherName: Yup.string().required("*Teacher Name is required"),
+  role: Yup.string().required("*Role is required"),
   dateOfBirth: Yup.date()
     .required("*Date of Birth is required")
     .max(new Date(), "*Date of Birth cannot be in the future"),
   idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
   nationality: Yup.string().required("*Nationality is required"),
+  citizenship: Yup.string().required("*Citizenship is required"),
   email: Yup.string().email("*Invalid Email").required("*Email is required"),
   // shortIntroduction: Yup.string().required("*Short Introduction is required!"),
   gender: Yup.string().required("*Gender is required"),
@@ -39,7 +41,7 @@ const PersonalAdd = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        role: "teacher",
+        role: formData.role,
         teacherName: formData.teacherName,
         dateOfBirth: formData.dateOfBirth,
         idTypeId: formData.idTypeId,
@@ -47,6 +49,7 @@ const PersonalAdd = forwardRef(
         password: formData.password,
         confirmPassword: formData.confirmPassword,
         idNo: formData.idNo,
+        citizenship:formData.citizenship,
         nationality: formData.nationality || "",
         nationalityId: formData.nationalityId || "",
         file: null || "",
@@ -54,7 +57,7 @@ const PersonalAdd = forwardRef(
         gender: formData.gender,
         createdBy: userName,
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
 
@@ -64,7 +67,7 @@ const PersonalAdd = forwardRef(
           if (values.nationalityId) nationalityName = nationalityData.find((prv) =>
             prv.id === parseInt(values.nationalityId))
           // Add each data field manually to the FormData object
-          formData.append("role", "teacher");
+          formData.append("role", values.role);
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
           formData.append("idTypeId", values.idTypeId);
@@ -260,6 +263,30 @@ const PersonalAdd = forwardRef(
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
+                <label>Citizenship</label>
+                <span className="text-danger">*</span>
+                <select
+                  className="form-select"
+                  name="citizenship"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.citizenship}
+                >
+                  <option selected></option>
+                  {nationalityData &&
+                    nationalityData.map((citizenship) => (
+                      <option key={citizenship.id} value={citizenship.citizenship}>
+                        {citizenship.citizenship}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.citizenship && formik.errors.citizenship && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.citizenship}</small>
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Nationality</label>
                 <span className="text-danger">*</span>
                 <select
@@ -359,6 +386,50 @@ const PersonalAdd = forwardRef(
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
+                <div className="mb-3">
+                  <label>
+                    Confirm Password<span className="text-danger">*</span>
+                  </label>
+                  <div className={`input-group mb-3`}>
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Enter confirm password"
+                      className={`form-control ${formik.touched.confirmPassword &&
+                        formik.errors.confirmPassword
+                        ? "is-invalid"
+                        : ""
+                        }`}
+                      style={{
+                        borderRadius: "3px",
+                        borderRight: "none",
+                        borderTopRightRadius: "0px",
+                        borderBottomRightRadius: "0px",
+                      }}
+                      name="confirmPassword"
+                      {...formik.getFieldProps("confirmPassword")}
+                    />
+                    <span
+                      className={`input-group-text iconInputBackground`}
+                      id="basic-addon1"
+                      onClick={toggleConfirmPasswordVisibility}
+                      style={{ cursor: "pointer", borderRadius: "3px" }}
+                    >
+                      {showConfirmPassword ? (
+                        <IoEyeOffOutline />
+                      ) : (
+                        <IoEyeOutline />
+                      )}
+                    </span>
+                    {formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword && (
+                        <div className="invalid-feedback">
+                          {formik.errors.confirmPassword}
+                        </div>
+                      )}
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Gender<span className="text-danger">*</span>
                 </label>
@@ -402,48 +473,24 @@ const PersonalAdd = forwardRef(
                 ) : null}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
-                <div className="mb-3">
-                  <label>
-                    Confirm Password<span className="text-danger">*</span>
-                  </label>
-                  <div className={`input-group mb-3`}>
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      placeholder="Enter confirm password"
-                      className={`form-control ${formik.touched.confirmPassword &&
-                        formik.errors.confirmPassword
-                        ? "is-invalid"
-                        : ""
-                        }`}
-                      style={{
-                        borderRadius: "3px",
-                        borderRight: "none",
-                        borderTopRightRadius: "0px",
-                        borderBottomRightRadius: "0px",
-                      }}
-                      name="confirmPassword"
-                      {...formik.getFieldProps("confirmPassword")}
-                    />
-                    <span
-                      className={`input-group-text iconInputBackground`}
-                      id="basic-addon1"
-                      onClick={toggleConfirmPasswordVisibility}
-                      style={{ cursor: "pointer", borderRadius: "3px" }}
-                    >
-                      {showConfirmPassword ? (
-                        <IoEyeOffOutline />
-                      ) : (
-                        <IoEyeOutline />
-                      )}
-                    </span>
-                    {formik.touched.confirmPassword &&
-                      formik.errors.confirmPassword && (
-                        <div className="invalid-feedback">
-                          {formik.errors.confirmPassword}
-                        </div>
-                      )}
+                <label>Role</label>
+                <span className="text-danger">*</span>
+                <select
+                  className="form-select"
+                  name="role"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.role}
+                >
+                  <option value=""></option>
+                  <option value="teacher">Teacher</option>
+                  <option value="freelancer">Freelancer</option>
+                </select>
+                {formik.touched.role && formik.errors.role && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.role}</small>
                   </div>
-                </div>
+                )}
               </div>
             </div>
             <div className="row mt-2">

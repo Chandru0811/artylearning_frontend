@@ -9,13 +9,13 @@ import api from "../../config/URL";
 import { SCREENS } from "../../config/ScreenFilter";
 import { MdViewColumn } from "react-icons/md";
 
-
 const Teacher = () => {
   const tableRef = useRef(null);
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
+  const roles = localStorage.getItem("userName");
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   console.log("Screens : ", SCREENS);
@@ -23,16 +23,31 @@ const Teacher = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllUsersByRole/teacher");
-        setDatas(response.data);
+        let response;
+  
+        // Check role and call the appropriate API
+        if (roles === "SMS_ADMIN") {
+          response = await api.get("/getAllTeachersAndFreelancers");
+        } else if (roles === "SMS_TEACHER") {
+          response = await api.get("/getAllUsersByRole/teacher");
+        } else if (roles === "SMS_FREELANCER") {
+          response = await api.get("/getAllFreelance");
+        }
+  
+        // If a response was received, set the data
+        if (response) {
+          setDatas(response.data);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
+  
     getData();
-  }, []);
+  }, [roles]); // Add "role" as a dependency
+  
 
   useEffect(() => {
     if (!loading) {
@@ -50,9 +65,7 @@ const Teacher = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -63,18 +76,47 @@ const Teacher = () => {
     }
   };
 
+  // const refreshData = async () => {
+  //   destroyDataTable();
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.get("/getAllTeachersAndFreelancers");
+  //     setDatas(response.data);
+  //     initializeDataTable(); // Reinitialize DataTable after successful data update
+  //   } catch (error) {
+  //     console.error("Error refreshing data:", error);
+  //   }
+  //   setLoading(false);
+  // };
+
   const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllUsersByRole/teacher");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      let response;
+  
+      // Check role and call the appropriate API
+      if (roles === "SMS_ADMIN") {
+        response = await api.get("/getAllTeachersAndFreelancers");
+      } else if (roles === "SMS_TEACHER") {
+        response = await api.get("/getAllUsersByRole/teacher");
+      } else if (roles === "SMS_FREELANCER") {
+        response = await api.get("/getAllFreelance");
+      }
+  
+      // If a response was received, set the data and initialize the DataTable
+      if (response) {
+        setDatas(response.data);
+        initializeDataTable(); // Reinitialize DataTable after successful data update
+      }
     } catch (error) {
       console.error("Error refreshing data:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+  
+
   const handleDataShow = () => {
     if (!loading) {
       setExtraData(!extraData);
@@ -110,141 +152,135 @@ const Teacher = () => {
                 </button>
               </Link>
             )}
-             {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+            {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
         </button> */}
           </div>
-          <div className="table-responsive" >
-
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
-                <th scope="col">Teacher Id</th>
-                <th scope="col">Teacher Name</th>
-                <th scope="col">Teacher Type</th>
-                <th scope="col">Mobile</th>
-                {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-                {/* <th scope="col">Status</th> */}
-                <th scope="col" className="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas.map((data, index) => (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
-                  <td>
-                    {data.teacherId}
-                  </td>
-                  {/* <td>{data.teacherId}</td> */}
-                  <td>{data.teacherName}</td>
-                  <td>
-                    {data.teacherType}
-                  </td>
-                  <td>
-                    {data.contactNumber}
-                  </td>
-                  {extraData && <td>{data.createdBy}</td>}
-                  {extraData && <td>{extractDate(data.createdAt)}</td>}
-                  {extraData && <td>{data.updatedBy}</td>}
-                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                  {/* <td>
-                    {data.userAccountInfo.length > 0 &&
-                    data.userAccountInfo[0]?.status === "Active" ? (
-                      <span className="badge badges-Green">Active</span>
-                    ) : data.userAccountInfo[0]?.status === "Pending" ? (
-                      <span className="badge badges-Yellow ">Pending</span>
-                    ) : (
-                      <span className="badge badges-Red ">In Active</span>
-                    )}
-                  </td> */}
-                  <td className="text-center">
-                    <div>
-                      {storedScreens?.teacherRead && (
-                        <Link to={`/teacher/view/${data.id}`}>
-                          <button className="btn btn-sm">
-                            <FaEye />
-                          </button>
-                        </Link>
-                      )}
-                      {storedScreens?.teacherUpdate && (
-                        <Link to={`/teacher/edit/${data.id}`}>
-                          <button className="btn btn-sm">
-                            <FaEdit />
-                          </button>
-                        </Link>
-                      )}
-                      {storedScreens?.teacherDelete && (
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteUser/${data.id}`}
-                          teachermsg = "Teacher deleted successfully"
-                        />
-                      )}
-                    </div>
-                  </td>
+          <div className="table-responsive">
+            <table ref={tableRef} className="display">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                    S No
+                  </th>
+                  <th scope="col">Teacher Id</th>
+                  <th scope="col">Teacher Name</th>
+                  <th scope="col">Email</th>
+                  {roles === "SMS_ADMIN" ? <th scope="col">Role</th> : <></>}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      CreatedBy
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      CreatedAt
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      UpdatedBy
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      UpdatedAt
+                    </th>
+                  )}
+                  <th scope="col" className="text-center">
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {datas.map((data, index) => (
+                  <tr key={index}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{data.userUniqueId}</td>
+                    <td>{data.teacherName}</td>
+                    <td>{data.email}</td>
+                    {roles === "SMS_ADMIN" ? (
+                      <td>
+                        {data.role === "teacher" ? (
+                          <span className="badge badges-Green">Teacher</span>
+                        ) : (
+                          <span className="badge badges-Red">Freelancer</span>
+                        )}
+                      </td>
+                    ) : (
+                      <></>
+                    )}
+                    {extraData && <td>{data.createdBy}</td>}
+                    {extraData && <td>{extractDate(data.createdAt)}</td>}
+                    {extraData && <td>{data.updatedBy}</td>}
+                    {extraData && <td>{extractDate(data.updatedAt)}</td>}
+
+                    <td className="text-center">
+                      <div>
+                        {storedScreens?.teacherRead && (
+                          <Link to={`/teacher/view/${data.id}`}>
+                            <button className="btn btn-sm">
+                              <FaEye />
+                            </button>
+                          </Link>
+                        )}
+                        {storedScreens?.teacherUpdate && (
+                          <Link to={`/teacher/edit/${data.id}?role=${data.role}`}>
+                            <button className="btn btn-sm">
+                              <FaEdit />
+                            </button>
+                          </Link>
+                        )}
+                        {storedScreens?.teacherDelete && (
+                          <Delete
+                            onSuccess={refreshData}
+                            path={`/deleteUser/${data.id}`}
+                            teachermsg="Teacher deleted successfully"
+                          />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

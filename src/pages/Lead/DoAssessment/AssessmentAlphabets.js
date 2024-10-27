@@ -54,6 +54,7 @@ const AssessmentAlphabets = forwardRef(
       initialValues: {
         association: formData.association || false,
         alphabetRemarks: formData.alphabetRemarks || "",
+
         beginningSoundA: formData.beginningSoundA || false,
         beginningSoundB: formData.beginningSoundB || false,
         beginningSoundC: formData.beginningSoundC || false,
@@ -80,110 +81,87 @@ const AssessmentAlphabets = forwardRef(
         beginningSoundX: formData.beginningSoundX || false,
         beginningSoundY: formData.beginningSoundY || false,
         beginningSoundZ: formData.beginningSoundZ || false,
-        lowercaseA: formData.lowercaseA || false,
-        lowercaseB: formData.lowercaseB || false,
-        lowercaseC: formData.lowercaseC || false,
-        lowercaseD: formData.lowercaseD || false,
-        lowercaseE: formData.lowercaseE || false,
-        lowercaseF: formData.lowercaseF || false,
-        lowercaseG: formData.lowercaseG || false,
-        lowercaseH: formData.lowercaseH || false,
-        lowercaseI: formData.lowercaseI || false,
-        lowercaseJ: formData.lowercaseJ || false,
-        lowercaseK: formData.lowercaseK || false,
-        lowercaseL: formData.lowercaseL || false,
-        lowercaseM: formData.lowercaseM || false,
-        lowercaseN: formData.lowercaseN || false,
-        lowercaseO: formData.lowercaseO || false,
-        lowercaseP: formData.lowercaseP || false,
-        lowercaseQ: formData.lowercaseQ || false,
-        lowercaseR: formData.lowercaseR || false,
-        lowercaseS: formData.lowercaseS || false,
-        lowercaseT: formData.lowercaseT || false,
-        lowercaseU: formData.lowercaseU || false,
-        lowercaseV: formData.lowercaseV || false,
-        lowercaseW: formData.lowercaseW || false,
-        lowercaseX: formData.lowercaseX || false,
-        lowercaseY: formData.lowercaseY || false,
-        lowercaseZ: formData.lowercaseZ || false,
-        uppercaseA: formData.uppercaseA || false,
-        uppercaseB: formData.uppercaseB || false,
-        uppercaseC: formData.uppercaseC || false,
-        uppercaseD: formData.uppercaseD || false,
-        uppercaseE: formData.uppercaseE || false,
-        uppercaseF: formData.uppercaseF || false,
-        uppercaseG: formData.uppercaseG || false,
-        uppercaseH: formData.uppercaseH || false,
-        uppercaseI: formData.uppercaseI || false,
-        uppercaseJ: formData.uppercaseJ || false,
-        uppercaseK: formData.uppercaseK || false,
-        uppercaseL: formData.uppercaseL || false,
-        uppercaseM: formData.uppercaseM || false,
-        uppercaseN: formData.uppercaseN || false,
-        uppercaseO: formData.uppercaseO || false,
-        uppercaseP: formData.uppercaseP || false,
-        uppercaseQ: formData.uppercaseQ || false,
-        uppercaseR: formData.uppercaseR || false,
-        uppercaseS: formData.uppercaseS || false,
-        uppercaseT: formData.uppercaseT || false,
-        uppercaseU: formData.uppercaseU || false,
-        uppercaseV: formData.uppercaseV || false,
-        uppercaseW: formData.uppercaseW || false,
-        uppercaseX: formData.uppercaseX || false,
-        uppercaseY: formData.uppercaseY || false,
-        uppercaseZ: formData.uppercaseZ || false,
-        writtenStrokesLowerA: formData.writtenStrokesLowerA || false,
-        writtenStrokesLowerB: formData.writtenStrokesLowerB || false,
-        writtenStrokesLowerC: formData.writtenStrokesLowerC || false,
-        writtenStrokesLowerD: formData.writtenStrokesLowerD || false,
-        writtenStrokesLowerE: formData.writtenStrokesLowerE || false,
-        writtenStrokesLowerF: formData.writtenStrokesLowerF || false,
-        writtenStrokesLowerG: formData.writtenStrokesLowerG || false,
-        writtenStrokesLowerH: formData.writtenStrokesLowerH || false,
-        writtenStrokesLowerI: formData.writtenStrokesLowerI || false,
-        writtenStrokesLowerJ: formData.writtenStrokesLowerJ || false,
-        writtenStrokesLowerK: formData.writtenStrokesLowerK || false,
-        writtenStrokesLowerL: formData.writtenStrokesLowerL || false,
-        writtenStrokesLowerM: formData.writtenStrokesLowerM || false,
-        writtenStrokesLowerN: formData.writtenStrokesLowerN || false,
-        writtenStrokesLowerO: formData.writtenStrokesLowerO || false,
-        writtenStrokesLowerP: formData.writtenStrokesLowerP || false,
-        writtenStrokesLowerQ: formData.writtenStrokesLowerQ || false,
-        writtenStrokesLowerR: formData.writtenStrokesLowerR || false,
-        writtenStrokesLowerS: formData.writtenStrokesLowerS || false,
-        writtenStrokesLowerT: formData.writtenStrokesLowerT || false,
-        writtenStrokesLowerU: formData.writtenStrokesLowerU || false,
-        writtenStrokesLowerV: formData.writtenStrokesLowerV || false,
-        writtenStrokesLowerW: formData.writtenStrokesLowerW || false,
-        writtenStrokesLowerX: formData.writtenStrokesLowerX || false,
-        writtenStrokesLowerY: formData.writtenStrokesLowerY || false,
-        writtenStrokesLowerZ: formData.writtenStrokesLowerZ || false,
-        writtenStrokesUpperA: formData.writtenStrokesUpperA || false,
-        writtenStrokesUpperB: formData.writtenStrokesUpperB || false,
-        writtenStrokesUpperC: formData.writtenStrokesUpperC || false,
-        writtenStrokesUpperD: formData.writtenStrokesUpperD || false,
-        writtenStrokesUpperE: formData.writtenStrokesUpperE || false,
-        writtenStrokesUpperF: formData.writtenStrokesUpperF || false,
-        writtenStrokesUpperG: formData.writtenStrokesUpperG || false,
-        writtenStrokesUpperH: formData.writtenStrokesUpperH || false,
-        writtenStrokesUpperI: formData.writtenStrokesUpperI || false,
-        writtenStrokesUpperJ: formData.writtenStrokesUpperJ || false,
-        writtenStrokesUpperK: formData.writtenStrokesUpperK || false,
-        writtenStrokesUpperL: formData.writtenStrokesUpperL || false,
-        writtenStrokesUpperM: formData.writtenStrokesUpperM || false,
-        writtenStrokesUpperN: formData.writtenStrokesUpperN || false,
-        writtenStrokesUpperO: formData.writtenStrokesUpperO || false,
-        writtenStrokesUpperP: formData.writtenStrokesUpperP || false,
-        writtenStrokesUpperQ: formData.writtenStrokesUpperQ || false,
-        writtenStrokesUpperR: formData.writtenStrokesUpperR || false,
-        writtenStrokesUpperS: formData.writtenStrokesUpperS || false,
-        writtenStrokesUpperT: formData.writtenStrokesUpperT || false,
-        writtenStrokesUpperU: formData.writtenStrokesUpperU || false,
-        writtenStrokesUpperV: formData.writtenStrokesUpperV || false,
-        writtenStrokesUpperW: formData.writtenStrokesUpperW || false,
-        writtenStrokesUpperX: formData.writtenStrokesUpperX || false,
-        writtenStrokesUpperY: formData.writtenStrokesUpperY || false,
-        writtenStrokesUpperZ: formData.writtenStrokesUpperZ || false,
+
+        recognitionOfLetterA: formData.recognitionOfLetterA || false,
+        recognitionOfLetterB: formData.recognitionOfLetterB || false,
+        recognitionOfLetterC: formData.recognitionOfLetterC || false,
+        recognitionOfLetterD: formData.recognitionOfLetterD || false,
+        recognitionOfLetterE: formData.recognitionOfLetterE || false,
+        recognitionOfLetterF: formData.recognitionOfLetterF || false,
+        recognitionOfLetterG: formData.recognitionOfLetterG || false,
+        recognitionOfLetterH: formData.recognitionOfLetterH || false,
+        recognitionOfLetterI: formData.recognitionOfLetterI || false,
+        recognitionOfLetterJ: formData.recognitionOfLetterJ || false,
+        recognitionOfLetterK: formData.recognitionOfLetterK || false,
+        recognitionOfLetterL: formData.recognitionOfLetterL || false,
+        recognitionOfLetterM: formData.recognitionOfLetterM || false,
+        recognitionOfLetterN: formData.recognitionOfLetterN || false,
+        recognitionOfLetterO: formData.recognitionOfLetterO || false,
+        recognitionOfLetterP: formData.recognitionOfLetterP || false,
+        recognitionOfLetterQ: formData.recognitionOfLetterQ || false,
+        recognitionOfLetterR: formData.recognitionOfLetterR || false,
+        recognitionOfLetterS: formData.recognitionOfLetterS || false,
+        recognitionOfLetterT: formData.recognitionOfLetterT || false,
+        recognitionOfLetterU: formData.recognitionOfLetterU || false,
+        recognitionOfLetterV: formData.recognitionOfLetterV || false,
+        recognitionOfLetterW: formData.recognitionOfLetterW || false,
+        recognitionOfLetterX: formData.recognitionOfLetterX || false,
+        recognitionOfLetterY: formData.recognitionOfLetterY || false,
+        recognitionOfLetterZ: formData.recognitionOfLetterZ || false,
+
+        recognitionOfSoundA: formData.recognitionOfSoundA || false,
+        recognitionOfSoundB: formData.recognitionOfSoundB || false,
+        recognitionOfSoundC: formData.recognitionOfSoundC || false,
+        recognitionOfSoundD: formData.recognitionOfSoundD || false,
+        recognitionOfSoundE: formData.recognitionOfSoundE || false,
+        recognitionOfSoundF: formData.recognitionOfSoundF || false,
+        recognitionOfSoundG: formData.recognitionOfSoundG || false,
+        recognitionOfSoundH: formData.recognitionOfSoundH || false,
+        recognitionOfSoundI: formData.recognitionOfSoundI || false,
+        recognitionOfSoundJ: formData.recognitionOfSoundJ || false,
+        recognitionOfSoundK: formData.recognitionOfSoundK || false,
+        recognitionOfSoundL: formData.recognitionOfSoundL || false,
+        recognitionOfSoundM: formData.recognitionOfSoundM || false,
+        recognitionOfSoundN: formData.recognitionOfSoundN || false,
+        recognitionOfSoundO: formData.recognitionOfSoundO || false,
+        recognitionOfSoundP: formData.recognitionOfSoundP || false,
+        recognitionOfSoundQ: formData.recognitionOfSoundQ || false,
+        recognitionOfSoundR: formData.recognitionOfSoundR || false,
+        recognitionOfSoundS: formData.recognitionOfSoundS || false,
+        recognitionOfSoundT: formData.recognitionOfSoundT || false,
+        recognitionOfSoundU: formData.recognitionOfSoundU || false,
+        recognitionOfSoundV: formData.recognitionOfSoundV || false,
+        recognitionOfSoundW: formData.recognitionOfSoundW || false,
+        recognitionOfSoundX: formData.recognitionOfSoundX || false,
+        recognitionOfSoundY: formData.recognitionOfSoundY || false,
+        recognitionOfSoundZ: formData.recognitionOfSoundZ || false,
+
+        writingLetterA: formData.writingLetterA || false,
+        writingLetterB: formData.writingLetterB || false,
+        writingLetterC: formData.writingLetterC || false,
+        writingLetterD: formData.writingLetterD || false,
+        writingLetterE: formData.writingLetterE || false,
+        writingLetterF: formData.writingLetterF || false,
+        writingLetterG: formData.writingLetterG || false,
+        writingLetterH: formData.writingLetterH || false,
+        writingLetterI: formData.writingLetterI || false,
+        writingLetterJ: formData.writingLetterJ || false,
+        writingLetterK: formData.writingLetterK || false,
+        writingLetterL: formData.writingLetterL || false,
+        writingLetterM: formData.writingLetterM || false,
+        writingLetterN: formData.writingLetterN || false,
+        writingLetterO: formData.writingLetterO || false,
+        writingLetterP: formData.writingLetterP || false,
+        writingLetterQ: formData.writingLetterQ || false,
+        writingLetterR: formData.writingLetterR || false,
+        writingLetterS: formData.writingLetterS || false,
+        writingLetterT: formData.writingLetterT || false,
+        writingLetterU: formData.writingLetterU || false,
+        writingLetterV: formData.writingLetterV || false,
+        writingLetterW: formData.writingLetterW || false,
+        writingLetterX: formData.writingLetterX || false,
+        writingLetterY: formData.writingLetterY || false,
+        writingLetterZ: formData.writingLetterZ || false,
       },
 
       validationSchema: validationSchema,
@@ -241,7 +219,7 @@ const AssessmentAlphabets = forwardRef(
             }
           } catch (error) {
             toast.error(error);
-          }finally {
+          } finally {
             setLoadIndicators(false);
           }
         }
@@ -278,8 +256,8 @@ const AssessmentAlphabets = forwardRef(
       AssessmentAlphabets: formik.handleSubmit,
     }));
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-     }, []);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
 
     return (
       <div className="container-fluid py-3">
@@ -307,63 +285,49 @@ const AssessmentAlphabets = forwardRef(
                 </thead>
                 <tbody>
                   <tr>
-                    <th className="text-end fw-medium">Recognition of sounds:</th>
+                    <th className="text-end fw-medium">
+                      Recognition of sounds:
+                    </th>
                     {firstHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
                           <input
                             className="on-off-toggle__input"
                             type="checkbox"
-                            id={`uppercase${char}`}
-                            onChange={handleCheckboxChange(`uppercase${char}`)}
-                            checked={formik.values[`uppercase${char}`]}
+                            id={`recognitionOfSound${char}`}
+                            onChange={handleCheckboxChange(
+                              `recognitionOfSound${char}`
+                            )}
+                            checked={formik.values[`recognitionOfSound${char}`]}
                           />
                           <label
-                            htmlFor={`uppercase${char}`}
+                            htmlFor={`recognitionOfSound${char}`}
                             className="on-off-toggle__slider"
                           ></label>
                         </div>
                       </td>
                     ))}
-                 </tr>
-                  {/* <tr>
-                    <th className="text-end fw-medium">Written Strokes:</th>
+                  </tr>
+                  <tr>
+                    <th className="text-end fw-medium">
+                      Recognition of letters:
+                    </th>
                     {firstHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
                           <input
                             className="on-off-toggle__input"
                             type="checkbox"
-                            id={`writtenStrokesUpper${char}`}
+                            id={`recognitionOfLetter${char}`}
                             onChange={handleCheckboxChange(
-                              `writtenStrokesUpper${char}`
+                              `recognitionOfLetter${char}`
                             )}
                             checked={
-                              formik.values[`writtenStrokesUpper${char}`]
+                              formik.values[`recognitionOfLetter${char}`]
                             }
                           />
                           <label
-                            htmlFor={`writtenStrokesUpper${char}`}
-                            className="on-off-toggle__slider"
-                          ></label>
-                        </div>
-                      </td>
-                    ))}
-                  </tr> */}
-                  <tr>
-                    <th className="text-end fw-medium">Recognition of letters:</th>
-                    {firstHalfArray.map((char) => (
-                      <td key={char}>
-                        <div className="on-off-toggle">
-                          <input
-                            className="on-off-toggle__input"
-                            type="checkbox"
-                            id={`lowercase${char}`}
-                            onChange={handleCheckboxChange(`lowercase${char}`)}
-                            checked={formik.values[`lowercase${char}`]}
-                          />
-                          <label
-                            htmlFor={`lowercase${char}`}
+                            htmlFor={`recognitionOfLetter${char}`}
                             className="on-off-toggle__slider"
                           ></label>
                         </div>
@@ -378,16 +342,16 @@ const AssessmentAlphabets = forwardRef(
                           <input
                             className="on-off-toggle__input"
                             type="checkbox"
-                            id={`writtenStrokesLower${char}`}
+                            id={`writingLetter${char}`}
                             onChange={handleCheckboxChange(
-                              `writtenStrokesLower${char}`
+                              `writingLetter${char}`
                             )}
                             checked={
-                              formik.values[`writtenStrokesLower${char}`]
+                              formik.values[`writingLetter${char}`]
                             }
                           />
                           <label
-                            htmlFor={`writtenStrokesLower${char}`}
+                            htmlFor={`writingLetter${char}`}
                             className="on-off-toggle__slider"
                           ></label>
                         </div>
@@ -444,63 +408,49 @@ const AssessmentAlphabets = forwardRef(
                 </thead>
                 <tbody>
                   <tr>
-                    <th className="text-end fw-medium">Recognition of sounds:</th>
+                    <th className="text-end fw-medium">
+                      Recognition of sounds:
+                    </th>
                     {secondHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
                           <input
                             className="on-off-toggle__input"
                             type="checkbox"
-                            id={`uppercase${char}`}
-                            onChange={handleCheckboxChange(`uppercase${char}`)}
-                            checked={formik.values[`uppercase${char}`]}
+                            id={`recognitionOfSound${char}`}
+                            onChange={handleCheckboxChange(
+                              `recognitionOfSound${char}`
+                            )}
+                            checked={formik.values[`recognitionOfSound${char}`]}
                           />
                           <label
-                            htmlFor={`uppercase${char}`}
+                            htmlFor={`recognitionOfSound${char}`}
                             className="on-off-toggle__slider"
                           ></label>
                         </div>
                       </td>
                     ))}
                   </tr>
-                  {/* <tr>
-                    <th className="text-end fw-medium">Written Strokes:</th>
+                  <tr>
+                    <th className="text-end fw-medium">
+                      Recognition of letters:
+                    </th>
                     {secondHalfArray.map((char) => (
                       <td key={char}>
                         <div className="on-off-toggle">
                           <input
                             className="on-off-toggle__input"
                             type="checkbox"
-                            id={`writtenStrokesUpper${char}`}
+                            id={`recognitionOfLetter${char}`}
                             onChange={handleCheckboxChange(
-                              `writtenStrokesUpper${char}`
+                              `recognitionOfLetter${char}`
                             )}
                             checked={
-                              formik.values[`writtenStrokesUpper${char}`]
+                              formik.values[`recognitionOfLetter${char}`]
                             }
                           />
                           <label
-                            htmlFor={`writtenStrokesUpper${char}`}
-                            className="on-off-toggle__slider"
-                          ></label>
-                        </div>
-                      </td>
-                    ))}
-                  </tr> */}
-                  <tr>
-                    <th className="text-end fw-medium">Recognition of letters:</th>
-                    {secondHalfArray.map((char) => (
-                      <td key={char}>
-                        <div className="on-off-toggle">
-                          <input
-                            className="on-off-toggle__input"
-                            type="checkbox"
-                            id={`lowercase${char}`}
-                            onChange={handleCheckboxChange(`lowercase${char}`)}
-                            checked={formik.values[`lowercase${char}`]}
-                          />
-                          <label
-                            htmlFor={`lowercase${char}`}
+                            htmlFor={`recognitionOfLetter${char}`}
                             className="on-off-toggle__slider"
                           ></label>
                         </div>
@@ -515,16 +465,16 @@ const AssessmentAlphabets = forwardRef(
                           <input
                             className="on-off-toggle__input"
                             type="checkbox"
-                            id={`writtenStrokesLower${char}`}
+                            id={`writingLetter${char}`}
                             onChange={handleCheckboxChange(
-                              `writtenStrokesLower${char}`
+                              `writingLetter${char}`
                             )}
                             checked={
-                              formik.values[`writtenStrokesLower${char}`]
+                              formik.values[`writingLetter${char}`]
                             }
                           />
                           <label
-                            htmlFor={`writtenStrokesLower${char}`}
+                            htmlFor={`writingLetter${char}`}
                             className="on-off-toggle__slider"
                           ></label>
                         </div>
