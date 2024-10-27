@@ -8,24 +8,43 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
-const validationSchema = Yup.object({
+const validationSchema = Yup.object().shape({
   centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
   grossPay: Yup.number()
     .required("*Basic pay is required")
     .typeError("Basic pay must be a number"),
-  payrollMonth: Yup.string().required("*Select the Payroll Month"),
-  bonus: Yup.number()
-    .required("*Bonus is required")
-    .typeError("Bonus must be a number"),
-  deductionAmount: Yup.number()
-    .required("*Deduction is required")
-    .typeError("Deduction must be a number"),
+    payrollMonth: Yup.string().when("userId", {
+      is: (userId) => userId !== "1126",
+      then: (schema) => schema.required("*Select the Payroll Month"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    bonus: Yup.number().when("userId", {
+      is: (userId) => userId !== "1126",
+      then: (schema) => schema.required("*Bonus is required").typeError("Bonus must be a number"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    deductionAmount: Yup.number().when("userId", {
+      is: (userId) => userId !== "1126",
+      then: (schema) => schema.required("*Deduction is required").typeError("Deduction must be a number"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    sgh: Yup.string().when("userId", {
+      is: (userId) => userId !== "1126",
+      then: (schema) => schema.required("*SGH is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    cpf: Yup.string().when("userId", {
+      is: (userId) => userId !== "1126",
+      then: (schema) => schema.required("*CPF is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
   netPay: Yup.number()
     .required("*Net pay is required")
     .typeError("Net pay must be a number"),
   status: Yup.string().required("*Status is required"),
 });
+
 
 function AddPayroll() {
   const [centerData, setCenterData] = useState(null);
@@ -46,6 +65,8 @@ function AddPayroll() {
       deductionAmount: 0,
       netPay: 0,
       status: "",
+      shg: "",
+      cpf: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -299,6 +320,8 @@ function AddPayroll() {
                 )}
               </div>
             </div>
+            {formik.values.userId !== "1126" && (
+          <>
             <div className="col-md-6 col-12">
               <div className="text-start mt-2 mb-3">
                 <label className="form-label">
@@ -367,6 +390,60 @@ function AddPayroll() {
                   )}
               </div>
             </div>
+            <div className="  col-md-6 col-12">
+              <div className="text-start mt-2 mb-3">
+                <lable className="form-lable">
+                  SHG<span className="text-danger">*</span>
+                </lable>
+                <input
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.sgh &&
+                    formik.errors.sgh
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  {...formik.getFieldProps("sgh")}
+                  readOnly
+                />
+                {formik.touched.sgh &&
+                  formik.errors.sgh && (
+                    <div className="invalid-feedback">
+                      {formik.errors.sgh}
+                    </div>
+                  )}
+              </div>
+            </div>
+            <div className="  col-md-6 col-12">
+              <div className="text-start mt-2 mb-3">
+                <lable className="form-lable">
+                  CPF<span className="text-danger">*</span>
+                </lable>
+                <input
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.cpf &&
+                    formik.errors.cpf
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  {...formik.getFieldProps("cpf")}
+                  readOnly
+                />
+                {formik.touched.cpf &&
+                  formik.errors.cpf && (
+                    <div className="invalid-feedback">
+                      {formik.errors.cpf}
+                    </div>
+                  )}
+              </div>
+            </div>
+            </>
+            )}
             <div className="  col-md-6 col-12">
               <div className="text-start mt-2 mb-3">
                 <lable className="form-lable">
