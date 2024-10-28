@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -15,22 +20,25 @@ const validationSchema = Yup.object().shape({
   idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
   nationality: Yup.string().required("*Nationality is required"),
+  citizenship: Yup.string().required("*Citizenship is required"),
   role: Yup.string().required("*Role is required"),
-  file: Yup.string().required("*Photo is required"),
+  file: Yup.mixed().required("*Photo is required"),
   password: Yup.string()
     .min(8, "*Password must be at least 8 characters")
     .required("*Password is required"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "*Passwords must match")
     .required("*Confirm Password is required"),
-  email: Yup.string().email('Invalid email format').required('Email is required'),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
 });
 const StaffPersonalAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [idTypeData, setIdTypeData] = useState(null);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const userName = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
     const [nationalityData, setNationalityData] = useState(null);
 
     const formik = useFormik({
@@ -47,16 +55,19 @@ const StaffPersonalAdd = forwardRef(
         password: formData.password || "",
         confirmPassword: formData.confirmPassword || "",
         nationality: formData.nationality || "",
+        citizenship: formData.citizenship || "",
         nationalityId: formData.nationalityId || "",
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
           const formData = new FormData();
           let nationalityName;
-          if (values.nationalityId) nationalityName = nationalityData.find((prv) =>
-            prv.id === parseInt(values.nationalityId))
+          if (values.nationalityId)
+            nationalityName = nationalityData.find(
+              (prv) => prv.id === parseInt(values.nationalityId)
+            );
           // Add each data field manually to the FormData object
           formData.append("role", values.role);
           formData.append("teacherName", values.teacherName);
@@ -70,6 +81,7 @@ const StaffPersonalAdd = forwardRef(
           formData.append("email", values.email);
           formData.append("password", values.password);
           formData.append("confirmPassword", values.confirmPassword);
+          formData.append("citizenship", values.citizenship);
           formData.append("nationality", nationalityName.nationality);
           formData.append("nationalityId", values.nationalityId);
           formData.append("createdBy", userName);
@@ -94,7 +106,7 @@ const StaffPersonalAdd = forwardRef(
           }
         } catch (error) {
           if (error?.response?.status === 409) {
-            toast.warning(error?.response?.data?.message)
+            toast.warning(error?.response?.data?.message);
           } else {
             toast.error(error?.response?.data?.message);
           }
@@ -103,7 +115,7 @@ const StaffPersonalAdd = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -149,7 +161,6 @@ const StaffPersonalAdd = forwardRef(
       }
     };
 
-
     useEffect(() => {
       fetchIDTypeData();
       fetchCitizenShipData();
@@ -160,11 +171,14 @@ const StaffPersonalAdd = forwardRef(
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
           <div class="container row d-flex my-4">
@@ -274,6 +288,36 @@ const StaffPersonalAdd = forwardRef(
                 </div>
               )}
             </div>
+            <div class="form-group col-sm">
+              <label>Cityzenship</label>
+              <span className="text-danger">*</span>
+              <select
+                className="form-select"
+                name="citizenship"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.citizenship}
+              >
+                <option selected></option>
+                {nationalityData &&
+                  nationalityData.map((citizenship) => (
+                    <option
+                      key={citizenship.id}
+                      value={citizenship.citizenship}
+                    >
+                      {citizenship.citizenship}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.citizenship && formik.errors.citizenship && (
+                <div className="error text-danger">
+                  <small>{formik.errors.citizenship}</small>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div class="container row d-flex my-3 justify-align-content-around">
             <div class="form-group  col-sm ">
               <label>Photo</label>
               <span className="text-danger">*</span>
@@ -290,35 +334,6 @@ const StaffPersonalAdd = forwardRef(
               {formik.touched.file && !formik.values.file && (
                 <div className="error text-danger">
                   <small>Photo is required</small>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div class="container row d-flex my-3 justify-align-content-around">
-            <div class="form-group col-sm mb-2">
-              <label>Role</label>
-              <span className="text-danger">*</span>
-              <select
-                type="text"
-                class="form-select"
-                name="role"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.role}
-              >
-                <option disabled>
-                  Select the Role
-                </option>
-                <option></option>
-                <option value={"staff"}>Staff</option>
-                <option value={"branch_admin"}>Branch Admin</option>
-                <option value={"staff_admin"}>Staff Admin</option>
-                <option value={"center_manager"}>Centre Manager</option>
-              </select>
-              {formik.touched.role && formik.errors.role && (
-                <div className="error text-danger ">
-                  <small>{formik.errors.role}</small>
                 </div>
               )}
             </div>
@@ -349,10 +364,11 @@ const StaffPersonalAdd = forwardRef(
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
-                    className={`form-control ${formik.touched.password && formik.errors.password
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.password && formik.errors.password
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     style={{
                       borderRadius: "3px",
                       borderRight: "none",
@@ -387,10 +403,12 @@ const StaffPersonalAdd = forwardRef(
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Enter confirm password"
-                    className={`form-control ${formik.touched.confirmPassword && formik.errors.confirmPassword
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     style={{
                       borderRadius: "3px",
                       borderRight: "none",
@@ -406,17 +424,47 @@ const StaffPersonalAdd = forwardRef(
                     onClick={toggleConfirmPasswordVisibility}
                     style={{ cursor: "pointer", borderRadius: "3px" }}
                   >
-                    {showConfirmPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                    {showConfirmPassword ? (
+                      <IoEyeOffOutline />
+                    ) : (
+                      <IoEyeOutline />
+                    )}
                   </span>
-                  {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                    <div className="invalid-feedback">
-                      {formik.errors.confirmPassword}
-                    </div>
-                  )}
+                  {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword && (
+                      <div className="invalid-feedback">
+                        {formik.errors.confirmPassword}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
-            <div class="form-group  col-sm ">
+            {/* <div class="container row d-flex my-3 justify-align-content-around"> */}
+            <div class="form-group col-sm">
+              <label>Role</label>
+              <span className="text-danger">*</span>
+              <select
+                type="text"
+                class="form-select"
+                name="role"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.role}
+              >
+                <option disabled>Select the Role</option>
+                <option></option>
+                <option value={"staff"}>Staff</option>
+                <option value={"branch_admin"}>Branch Admin</option>
+                <option value={"staff_admin"}>Staff Admin</option>
+                <option value={"center_manager"}>Centre Manager</option>
+              </select>
+              {formik.touched.role && formik.errors.role && (
+                <div className="error text-danger ">
+                  <small>{formik.errors.role}</small>
+                </div>
+              )}
+            </div>
+            <div class="form-group  col-sm ms-2">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
                 <div className="me-4">
@@ -448,6 +496,7 @@ const StaffPersonalAdd = forwardRef(
                 </label>
               </div>
             </div>
+            {/* </div> */}
           </div>
           <div class="container row d-flex justify-content-start align-items-center">
             <div class="form-group  col-sm ">

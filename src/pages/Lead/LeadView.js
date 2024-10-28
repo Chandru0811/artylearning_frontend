@@ -1882,7 +1882,7 @@ function Leadview() {
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <th scope="row">Uppercase</th>
+                                    <th scope="row">Recognition of sounds</th>
                                     <td>
                                       {doassesmentData &&
                                       doassesmentData.leadDoAssessmentModel &&
@@ -2187,7 +2187,7 @@ function Leadview() {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">Written Strokes</th>
+                                    <th scope="row">Recognition of letters</th>
                                     <td>
                                       {doassesmentData &&
                                       doassesmentData.leadDoAssessmentModel &&
@@ -2200,7 +2200,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperA ? (
+                                        .recognitionOfLetterA ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2223,7 +2223,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperB ? (
+                                        .recognitionOfLetterB ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2246,7 +2246,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperC ? (
+                                        .recognitionOfLetterC ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2269,7 +2269,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperD ? (
+                                        .recognitionOfLetterD ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2292,7 +2292,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperE ? (
+                                        .recognitionOfLetterE ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2315,7 +2315,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperF ? (
+                                        .recognitionOfLetterF ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2338,7 +2338,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperG ? (
+                                        .recognitionOfLetterG ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2361,7 +2361,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperH ? (
+                                        .recognitionOfLetterH ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2384,7 +2384,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperI ? (
+                                        .recognitionOfLetterI ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2407,7 +2407,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperJ ? (
+                                        .recognitionOfLetterJ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2430,7 +2430,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperK ? (
+                                        .recognitionOfLetterK ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2453,7 +2453,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperL ? (
+                                        .recognitionOfLetterL ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2476,7 +2476,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperM ? (
+                                        .recognitionOfLetterM ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -2489,7 +2489,7 @@ function Leadview() {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">Lowercase</th>
+                                    <th scope="row">Writing</th>
                                     <td>
                                       {doassesmentData &&
                                       doassesmentData.leadDoAssessmentModel &&
@@ -3092,7 +3092,7 @@ function Leadview() {
                                       )}
                                     </td>
                                   </tr>
-                                  <tr>
+                                  {/* <tr>
                                     <th scope="row">Written Strokes</th>
                                     <td>
                                       {doassesmentData &&
@@ -3393,7 +3393,7 @@ function Leadview() {
                                         <ImCross style={{ color: "red" }} />
                                       )}
                                     </td>
-                                  </tr>
+                                  </tr> */}
                                 </tbody>
                               </table>
                             </div>
@@ -3419,7 +3419,7 @@ function Leadview() {
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <th scope="row">Uppercase</th>
+                                    <th scope="row">Recognition of sounds</th>
                                     <td>
                                       {doassesmentData &&
                                       doassesmentData.leadDoAssessmentModel &&
@@ -3721,7 +3721,7 @@ function Leadview() {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">Written Strokes</th>
+                                    <th scope="row">Recognition of letters</th>
                                     <td>
                                       {doassesmentData &&
                                       doassesmentData.leadDoAssessmentModel &&
@@ -3734,7 +3734,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperN ? (
+                                        .recognitionOfLetterN ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3757,7 +3757,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperO ? (
+                                        .recognitionOfLetterO ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3780,7 +3780,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperP ? (
+                                        .recognitionOfLetterP ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3803,7 +3803,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperQ ? (
+                                        .recognitionOfLetterQ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3826,7 +3826,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperR ? (
+                                        .recognitionOfLetterR ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3849,7 +3849,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperS ? (
+                                        .recognitionOfLetterS ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3872,7 +3872,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperT ? (
+                                        .recognitionOfLetterT ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3895,7 +3895,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperU ? (
+                                        .recognitionOfLetterU ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3918,7 +3918,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperV ? (
+                                        .recognitionOfLetterV ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3941,7 +3941,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperW ? (
+                                        .recognitionOfLetterW ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3964,7 +3964,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperX ? (
+                                        .recognitionOfLetterX ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -3987,7 +3987,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperY ? (
+                                        .recognitionOfLetterY ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4010,7 +4010,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .writtenStrokesUpperZ ? (
+                                        .recognitionOfLetterZ ? (
                                         <TiTick
                                           style={{
                                             color: "green",
@@ -4023,7 +4023,7 @@ function Leadview() {
                                     </td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">Lowercase</th>
+                                    <th scope="row">Writing</th>
                                     <td>
                                       {doassesmentData &&
                                       doassesmentData.leadDoAssessmentModel &&
@@ -4626,7 +4626,7 @@ function Leadview() {
                                       )}
                                     </td>
                                   </tr>
-                                  <tr>
+                                  {/* <tr>
                                     <th scope="row">Written Strokes</th>
                                     <td>
                                       {doassesmentData &&
@@ -4927,7 +4927,7 @@ function Leadview() {
                                         <ImCross style={{ color: "red" }} />
                                       )}
                                     </td>
-                                  </tr>
+                                  </tr> */}
                                 </tbody>
                               </table>
                             </div>

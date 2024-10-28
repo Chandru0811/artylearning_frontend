@@ -53,6 +53,8 @@ const ContractEdit = forwardRef(
     const userName = localStorage.getItem("userName");
     const [employerData, setEmployerData] = useState(null);
     const [datas, setDatas] = useState();
+    const [submitted, setSubmitted] = useState(false);
+    const [contactId, setContactId] = useState(null);
 
     const navigate = useNavigate();
     const formik = useFormik({
@@ -82,14 +84,15 @@ const ContractEdit = forwardRef(
         terminationNotice: formData.terminationNotice || "",
         updatedBy: userName,
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         console.log("Api Data:", values);
+        values.workingDays = contactId.workingDays;
         try {
-          if (values.contractId !== null) {
+          if (contactId !== null) {
             const response = await api.put(
-              `/updateUserContractCreation/${values.contractId}`,
+              `/updateUserContractCreation/${contactId.id}`,
               values,
               {
                 headers: {
@@ -129,7 +132,7 @@ const ContractEdit = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -165,17 +168,38 @@ const ContractEdit = forwardRef(
             setDatas(response.data.userContractCreationModels[0]);
 
             const contractData = response.data.userContractCreationModels[0];
+            console.log("first", contractData.id);
+            setContactId(contractData);
             formik.setValues({
               ...contractData,
-              employee: formData.teacherName || response.data.teacherName || "",
-              userContractAddress: formData.address || response.data.userContactInfo[0].address || "",
-              startDateOfEmployment: formData.startDate || response.data.userAccountInfo[0].startDate || "",
-              userContractStartDate: formData.startDate || response.data.userAccountInfo[0].startDate || "",
-              workingDays: formData.workingDays || response.data.userAccountInfo[0].workingDays || "",
-              userContractSalary: formData.salary || response.data.userSalaryCreationModels[0].salary || "",
-              contractDate: formData.contractDate || response.data.userAccountInfo[0].startDate || "",
+              employee: formData.teacherName || contractData.employee || "",
+              userContractAddress:
+                formData.address ||
+                response.data.userContactInfo[0].address ||
+                "",
+              startDateOfEmployment:
+                formData.startDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
+              userContractStartDate:
+                formData.startDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
+              workingDays:
+                formData.workingDays ||
+                response.data.userAccountInfo[0].workingDays ||
+                "",
+              userContractSalary:
+                formData.salary ||
+                response.data.userSalaryCreationModels[0].salary ||
+                "",
+              contractDate:
+                formData.contractDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
 
               contractId: contractData.id,
+
               startDateOfEmployment: contractData.startDateOfEmployment
                 ? contractData.startDateOfEmployment.substring(0, 10)
                 : "",
@@ -201,22 +225,40 @@ const ContractEdit = forwardRef(
               addressOfEmployment: formData.addressOfEmployment || "",
               detailsEmployee: formData.detailsEmployee || "",
               nric: formData.nric || "",
-              userContractAddress: formData.address || response.data.userContactInfo[0].address || "",
+              userContractAddress:
+                formData.address ||
+                response.data.userContactInfo[0].address ||
+                "",
               jobTitle: formData.jobTitle || "",
               mainDuties: formData.mainDuties || "",
-              startDateOfEmployment: formData.startDate || response.data.userAccountInfo[0].startDate || "",
+              startDateOfEmployment:
+                formData.startDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
               training: formData.training || "",
               allowance: formData.allowance || "",
-              userContractStartDate: formData.startDate || response.data.userAccountInfo[0].startDate || "",
+              userContractStartDate:
+                formData.startDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
               contactPeriod: formData.contactPeriod || "",
               probation: formData.probation || "",
-              workingDays: formData.workingDays || response.data.userAccountInfo[0].workingDays || "",
-              userContractSalary: formData.salary || response.data.userSalaryCreationModels[0].salary || "",
+              workingDays:
+                formData.workingDays ||
+                response.data.userAccountInfo[0].workingDays ||
+                "",
+              userContractSalary:
+                formData.salary ||
+                response.data.userSalaryCreationModels[0].salary ||
+                "",
               salaryStartDate: formData.effectiveDate || "",
               userContractEndDate: formData.endDate || "",
               payNow: formData.payNow || "",
               internetBanking: formData.internetBanking || "",
-              contractDate: formData.contractDate || response.data.userAccountInfo[0].startDate || "",
+              contractDate:
+                formData.contractDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
               terminationNotice: formData.terminationNotice || "",
             });
             // console.log("Contract ID:", formik.values.contractId);
@@ -293,7 +335,9 @@ const ContractEdit = forwardRef(
         onSubmit={formik.handleSubmit}
         onKeyDown={(e) => {
           if (e.key === "Enter" && !formik.isSubmitting) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
+            setSubmitted(true); // Set submitted to true on form submit
+            // Prevent default form submission
           }
         }}
       >
@@ -315,7 +359,8 @@ const ContractEdit = forwardRef(
                     getData1(selectedId);
                   }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.employer}
+                  // value={formik.values.employer}
+                  value={contactId?.employer}
                 >
                   <option selected></option>
                   {employerData?.map((center) => (
@@ -339,7 +384,8 @@ const ContractEdit = forwardRef(
                   name="uen"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.uen}
+                  // value={formik.values.uen}
+                  value={contactId?.uen}
                   // readOnly={datas?.uen}
                   readOnly
                 />
@@ -359,7 +405,8 @@ const ContractEdit = forwardRef(
                 name="addressOfEmployment"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.addressOfEmployment}
+                // value={formik.values.addressOfEmployment}
+                value={contactId?.addressOfEmployment}
                 readOnly
               />
               {formik.touched.addressOfEmployment &&
@@ -380,6 +427,7 @@ const ContractEdit = forwardRef(
                   name="employee"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  // value={contactId?.employee}
                   value={formik.values.employee}
                   readOnly={datas?.employee}
                 />
@@ -398,7 +446,8 @@ const ContractEdit = forwardRef(
                   name="nric"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.nric}
+                  // value={formik.values.nric}
+                  value={contactId?.nric}
                 />
                 {formik.touched.nric && formik.errors.nric && (
                   <div className="error text-danger ">
@@ -415,7 +464,7 @@ const ContractEdit = forwardRef(
                   name="userContractAddress"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.userContractAddress}
+                  value={contactId?.userContractAddress}
                   readOnly={datas?.userContractAddress}
                 />
                 {formik.touched.userContractAddress &&
@@ -434,7 +483,8 @@ const ContractEdit = forwardRef(
                   name="jobTitle"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.jobTitle}
+                  // value={formik.values.jobTitle}
+                  value={contactId?.jobTitle}
                 />
                 {formik.touched.jobTitle && formik.errors.jobTitle && (
                   <div className="error text-danger ">
@@ -451,7 +501,8 @@ const ContractEdit = forwardRef(
                   name="mainDuties"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.mainDuties}
+                  // value={formik.values.mainDuties}
+                  value={contactId?.mainDuties}
                 />
                 {formik.touched.mainDuties && formik.errors.mainDuties && (
                   <div className="error text-danger ">
@@ -469,7 +520,7 @@ const ContractEdit = forwardRef(
                   name="startDateOfEmployment"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.startDateOfEmployment}
+                  value={contactId?.startDateOfEmployment.slice(0, 10)}
                   min={new Date().toISOString().split("T")[0]}
                   readOnly={datas?.startDateOfEmployment}
                 />
@@ -489,7 +540,8 @@ const ContractEdit = forwardRef(
                   name="training"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.training}
+                  // value={formik.values.training}
+                  value={contactId?.training}
                 />
                 {formik.touched.training && formik.errors.training && (
                   <div className="error text-danger ">
@@ -505,7 +557,8 @@ const ContractEdit = forwardRef(
                   name="allowance"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.allowance}
+                  // value={formik.values.allowance}
+                  value={contactId?.allowance}
                 />
                 {formik.touched.allowance && formik.errors.allowance && (
                   <div className="error text-danger ">
@@ -538,7 +591,7 @@ const ContractEdit = forwardRef(
                     }
                   }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.userContractStartDate}
+                  value={contactId?.userContractStartDate?.slice(0, 10)}
                   min={new Date().toISOString().split("T")[0]}
                 />
                 {formik.touched.userContractStartDate &&
@@ -559,13 +612,14 @@ const ContractEdit = forwardRef(
                   onChange={(e) => {
                     formik.handleChange(e);
                     const startDate = new Date(
-                      formik.values.userContractStartDate
+                      contactId?.userContractStartDate
                     );
                     const endDate = new Date(e.target.value);
                     calculateContractPeriod(startDate, endDate);
                   }}
                   onBlur={formik.handleBlur}
-                  value={formik.values.userContractEndDate}
+                  // value={formik.values.userContractEndDate}
+                  value={contactId?.userContractEndDate}
                 />
                 {formik.touched.userContractEndDate &&
                   formik.errors.userContractEndDate && (
@@ -583,7 +637,8 @@ const ContractEdit = forwardRef(
                   name="contactPeriod"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.contactPeriod}
+                  // value={formik.values.contactPeriod}
+                  value={contactId?.contactPeriod}
                   readOnly
                 />
                 {formik.touched.contactPeriod &&
@@ -601,7 +656,9 @@ const ContractEdit = forwardRef(
                   name="probation"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.probation}
+                  value={contactId?.probation}
+
+                  // value={formik.values.probation}
                 />
               </div>
 
@@ -624,11 +681,11 @@ const ContractEdit = forwardRef(
                         type="checkbox"
                         className="form-check-input"
                         id={`myCheckbox${index + 1}`}
-                        value={day}
+                        value={contactId?.day}
                         name="workingDays"
                         checked={
-                          formik.values.workingDays &&
-                          formik.values.workingDays.includes(day)
+                          contactId?.workingDays &&
+                          contactId?.workingDays.includes(day)
                         }
                         onChange={(e) => {
                           formik.handleChange(e);
@@ -668,8 +725,9 @@ const ContractEdit = forwardRef(
                   name="userContractSalary"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  readOnly
-                  value={formik.values.userContractSalary}
+                  readOnly={submitted}
+                  // value={formik.values.userContractSalary}
+                  value={contactId?.userContractSalary}
                 />
                 {formik.touched.userContractSalary &&
                   formik.errors.userContractSalary && (
@@ -688,7 +746,9 @@ const ContractEdit = forwardRef(
                   name="salaryStartDate"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.salaryStartDate}
+                  value={contactId?.salaryStartDate}
+
+                  // value={formik.values.salaryStartDate}
                 />
                 {formik.touched.salaryStartDate &&
                   formik.errors.salaryStartDate && (
@@ -708,7 +768,8 @@ const ContractEdit = forwardRef(
                     name="payNow"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.payNow}
+                    // value={formik.values.payNow}
+                    value={contactId?.payNow}
                   />
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
@@ -719,7 +780,8 @@ const ContractEdit = forwardRef(
                     name="internetBanking"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.internetBanking}
+                    // value={formik.values.internetBanking}
+                    value={contactId?.internetBanking}
                   />
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
@@ -732,7 +794,7 @@ const ContractEdit = forwardRef(
                     name="contractDate"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.contractDate}
+                    value={contactId?.contractDate?.slice(0, 10)}
                     readOnly
                   />
                   {formik.touched.contractDate &&
@@ -751,7 +813,8 @@ const ContractEdit = forwardRef(
                     name="terminationNotice"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.terminationNotice}
+                    // value={formik.values.terminationNotice}
+                    value={contactId?.terminationNotice}
                   />
                   {formik.touched.terminationNotice &&
                     formik.errors.terminationNotice && (
