@@ -11,34 +11,45 @@ import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 const validationSchema = Yup.object().shape({
   centerId: Yup.string().required("*Centre name is required"),
   userId: Yup.string().required("*Employee name is required"),
-  grossPay: Yup.number()
-    .required("*Basic pay is required")
-    .typeError("Basic pay must be a number"),
-    payrollMonth: Yup.string().when("userId", {
-      is: (userId) => userId !== "1126",
-      then: (schema) => schema.required("*Select the Payroll Month"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-    bonus: Yup.number().when("userId", {
-      is: (userId) => userId !== "1126",
-      then: (schema) => schema.required("*Bonus is required").typeError("Bonus must be a number"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-    deductionAmount: Yup.number().when("userId", {
-      is: (userId) => userId !== "1126",
-      then: (schema) => schema.required("*Deduction is required").typeError("Deduction must be a number"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-    sgh: Yup.string().when("userId", {
-      is: (userId) => userId !== "1126",
-      then: (schema) => schema.required("*SGH is required"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
-    cpf: Yup.string().when("userId", {
-      is: (userId) => userId !== "1126",
-      then: (schema) => schema.required("*CPF is required"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
+  payrollMonth: Yup.string().when("userId", {
+    is: (empRole) => empRole !== "freelancer",
+    then: (schema) => schema.required("*Select the Payroll Month"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  bonus: Yup.number().when("userId", {
+    is: (empRole) => empRole !== "freelancer",
+    then: (schema) =>
+      schema.required("*Bonus is required").typeError("Bonus must be a number"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  deductionAmount: Yup.number().when("userId", {
+    is: (empRole) => empRole !== "freelancer",
+    then: (schema) =>
+      schema
+        .required("*Deduction is required")
+        .typeError("Deduction must be a number"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  shgContribution: Yup.string().when("userId", {
+    is: (empRole) => empRole !== "freelancer",
+    then: (schema) => schema.required("*shgContribution is required"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  cpfContribution: Yup.string().when("userId", {
+    is: (empRole) => empRole !== "freelancer",
+    then: (schema) => schema.required("*cpfContribution is required"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  freelanceCount: Yup.string().when("userId", {
+    is: (empRole) => empRole === "freelancer",
+    then: (schema) => schema.required(),
+    otherwise: (schema) => schema.notRequired(),
+  }),
+  payrollType: Yup.string().when("userId", {
+    is: (empRole) => empRole === "freelancer",
+    then: (schema) => schema.required(),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   netPay: Yup.number()
     .required("*Net pay is required")
     .typeError("Net pay must be a number"),
@@ -49,6 +60,7 @@ function EditPayroll() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const { id } = useParams();
+  const [empRole, setEmpRole] = useState(null)
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
 
@@ -64,6 +76,10 @@ function EditPayroll() {
       deductionAmount: 0,
       netPay: 0,
       status: "",
+      shgContribution: "",
+      cpfContribution: "",
+      freelanceCount: "",
+      payrollType: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -89,12 +105,38 @@ function EditPayroll() {
         userId: values.userId,
         employeeName: selectedEmployeeName,
         grossPay: values.grossPay,
-        payrollMonth: values.payrollMonth,
-        bonus: values.bonus,
-        deductionAmount: values.deductionAmount,
         netPay: values.netPay,
         status: values.status,
       };
+
+      if (empRole !== "freelancer") {
+        payload = {
+          centerName: selectedCenterName,
+          centerId: values.centerId,
+          userId: values.userId,
+          employeeName: selectedEmployeeName,
+          grossPay: values.grossPay,
+          netPay: values.netPay,
+          status: values.status,
+          payrollMonth: values.payrollMonth,
+          bonus: values.bonus,
+          deductionAmount: values.deductionAmount,
+          shgContribution: values.shgContribution,
+          cpfContributions: values.cpfContribution,
+        };
+      } else if (empRole === "freelancer") {
+        payload = {
+          centerName: selectedCenterName,
+          centerId: values.centerId,
+          userId: values.userId,
+          employeeName: selectedEmployeeName,
+          grossPay: values.grossPay,
+          netPay: values.netPay,
+          status: values.status,
+          payrollType: values.payrollType,
+          freelanceCount: Number(values.freelanceCount),
+        };
+      }
       // console.log(payload);
       try {
         const response = await api.put(`/updateUserPayroll/${id}`, payload, {
@@ -174,7 +216,9 @@ function EditPayroll() {
       );
       setUserSalaryInfo(response.data);
       formik.setFieldValue("deductionAmount", response.data.deductionAmount);
-      formik.setFieldValue("grossPay", response.data.grossPay);
+      formik.setFieldValue("grossPay", response.data.basicPay);
+      formik.setFieldValue("cpfContribution", response.data.cpfContribution);
+      formik.setFieldValue("shgContribution", response.data.shgContribution);
     } catch (error) {
       toast.error(error);
     }
@@ -188,6 +232,7 @@ function EditPayroll() {
   const handleUserChange = async (event) => {
     const userId = event.target.value;
     formik.setFieldValue("userId", userId);
+    formik.setFieldValue("grossPay", "");
     const { payrollMonth } = formik.values;
     await fetchUserSalaryInfo(userId, payrollMonth);
   };
@@ -203,11 +248,19 @@ function EditPayroll() {
 
   useEffect(() => {
     const calculateNetPay = () => {
-      const grossPay = parseFloat(formik.values.grossPay) || 0;
-      const bonus = parseFloat(formik.values.bonus) || 0;
-      const deductionAmount = parseFloat(formik.values.deductionAmount) || 0;
-      const netPay = grossPay + bonus - deductionAmount;
-      formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
+      if (empRole !== "freelancer" && formik.values.grossPay) {
+        const grossPay = parseFloat(formik.values.grossPay) || 0;
+        const bonus = parseFloat(formik.values.bonus) || 0;
+        const deductionAmount = parseFloat(formik.values.deductionAmount) || 0;
+        const cpf = parseFloat(formik.values.cpfContribution) || 0;
+        const shg = parseFloat(formik.values.shgContribution) || 0;
+        const netPay = grossPay + bonus - deductionAmount - cpf - shg;
+        formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
+      } else {
+        const grossPay = parseFloat(formik.values.grossPay) || 0;
+        const netPay = grossPay;
+        formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
+      }
     };
     calculateNetPay();
   }, [
@@ -215,6 +268,16 @@ function EditPayroll() {
     formik.values.bonus,
     formik.values.deductionAmount,
   ]);
+
+  useEffect(() => {
+    userNamesData?.forEach((employee) => {
+      if (parseInt(formik.values.userId) === employee.id) {
+        // const  selectedEmployeeName = employee.userNames || "--";
+        const selectedEmployeeRole = employee.role;
+        setEmpRole(selectedEmployeeRole);
+      }
+    });
+  }, [formik.values.userId]);
 
   useEffect(() => {
     const getData = async () => {
@@ -342,129 +405,198 @@ function EditPayroll() {
                 )}
               </div>
             </div>
-            {formik.values.userId !== "1126" && (
-          <>
-            <div className="col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <label className="form-label">
-                  Payroll Month<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="month"
-                  className={`form-control ${
-                    formik.touched.payrollMonth && formik.errors.payrollMonth
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("payrollMonth")}
-                />
-                {formik.touched.payrollMonth && formik.errors.payrollMonth && (
-                  <div className="invalid-feedback">
-                    {formik.errors.payrollMonth}
+            {empRole !== "freelancer" && (
+              <>
+                <div className="col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <label className="form-label">
+                      Payroll Month<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="month"
+                      className={`form-control ${
+                        formik.touched.payrollMonth &&
+                        formik.errors.payrollMonth
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("payrollMonth")}
+                    />
+                    {formik.touched.payrollMonth &&
+                      formik.errors.payrollMonth && (
+                        <div className="invalid-feedback">
+                          {formik.errors.payrollMonth}
+                        </div>
+                      )}
                   </div>
-                )}
-              </div>
-            </div>
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  Bonus<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.bonus && formik.errors.bonus
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("bonus")}
-                />
-                {formik.touched.bonus && formik.errors.bonus && (
-                  <div className="invalid-feedback">{formik.errors.bonus}</div>
-                )}
-              </div>
-            </div>
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  Deduction<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.deductionAmount &&
-                    formik.errors.deductionAmount
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("deductionAmount")}
-                  readOnly
-                />
-                {formik.touched.deductionAmount &&
-                  formik.errors.deductionAmount && (
-                    <div className="invalid-feedback">
-                      {formik.errors.deductionAmount}
-                    </div>
-                  )}
-              </div>
-            </div>
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  SHG<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.sgh &&
-                    formik.errors.sgh
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("sgh")}
-                  readOnly
-                />
-                {formik.touched.sgh &&
-                  formik.errors.sgh && (
-                    <div className="invalid-feedback">
-                      {formik.errors.sgh}
-                    </div>
-                  )}
-              </div>
-            </div>
-            <div className="  col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  CPF<span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.cpf &&
-                    formik.errors.cpf
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("cpf")}
-                  readOnly
-                />
-                {formik.touched.cpf &&
-                  formik.errors.cpf && (
-                    <div className="invalid-feedback">
-                      {formik.errors.cpf}
-                    </div>
-                  )}
-              </div>
-            </div>
-            </>
+                </div>
+                <div className="  col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <lable className="form-lable">
+                      Bonus<span className="text-danger">*</span>
+                    </lable>
+                    <input
+                      type="text"
+                      className={`form-control  ${
+                        formik.touched.bonus && formik.errors.bonus
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                      {...formik.getFieldProps("bonus")}
+                    />
+                    {formik.touched.bonus && formik.errors.bonus && (
+                      <div className="invalid-feedback">
+                        {formik.errors.bonus}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="  col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <lable className="form-lable">
+                      Deduction<span className="text-danger">*</span>
+                    </lable>
+                    <input
+                      type="text"
+                      className={`form-control  ${
+                        formik.touched.deductionAmount &&
+                        formik.errors.deductionAmount
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                      {...formik.getFieldProps("deductionAmount")}
+                      readOnly
+                    />
+                    {formik.touched.deductionAmount &&
+                      formik.errors.deductionAmount && (
+                        <div className="invalid-feedback">
+                          {formik.errors.deductionAmount}
+                        </div>
+                      )}
+                  </div>
+                </div>
+                <div className="  col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <lable className="form-lable">
+                      SHG<span className="text-danger">*</span>
+                    </lable>
+                    <input
+                      type="text"
+                      className={`form-control  ${
+                        formik.touched.shgContribution &&
+                        formik.errors.shgContribution
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                      {...formik.getFieldProps("shgContribution")}
+                    />
+                    {formik.touched.shgContribution &&
+                      formik.errors.shgContribution && (
+                        <div className="invalid-feedback">
+                          {formik.errors.shgContribution}
+                        </div>
+                      )}
+                  </div>
+                </div>
+                <div className="  col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <lable className="form-lable">
+                      CPF<span className="text-danger">*</span>
+                    </lable>
+                    <input
+                      type="text"
+                      className={`form-control  ${
+                        formik.touched.cpfContribution &&
+                        formik.errors.cpfContribution
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                      {...formik.getFieldProps("cpfContribution")}
+                    />
+                    {formik.touched.cpfContribution &&
+                      formik.errors.cpfContribution && (
+                        <div className="invalid-feedback">
+                          {formik.errors.cpfContribution}
+                        </div>
+                      )}
+                  </div>
+                </div>
+              </>
+            )}
+            {empRole === "freelancer" && (
+              <>
+                <div className="col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <label className="form-label">
+                      Payroll Type<span className="text-danger">*</span>
+                    </label>
+                    <select
+                      type="text"
+                      className={`form-select ${
+                        formik.touched.payrollType && formik.errors.payrollType
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("payrollType")}
+                    >
+                      <option></option>
+                      <option value="HOURLY">HOURLY</option>
+                      <option value="SESSION">SESSION</option>
+                      <option value="PACKAGE">PACKAGE</option>
+                    </select>
+                    {formik.touched.payrollType &&
+                      formik.errors.payrollType && (
+                        <div className="invalid-feedback">
+                          {formik.errors.payrollType}
+                        </div>
+                      )}
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <label className="form-label">
+                      Count<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      onInput={(event) => {
+                        let value = event.target.value
+                          .replace(/[^0-9]/g, "")
+                          .slice(0, 3);
+                        if (value > 150) {
+                          value = "150";
+                          toast.warning("Maximum value is 150");
+                        }
+                        event.target.value = value;
+                        formik.setFieldValue("freelanceCount", value);
+                      }}
+                      className={`form-control ${
+                        formik.touched.freelanceCount &&
+                        formik.errors.freelanceCount
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      aria-label="freelanceCount"
+                      aria-describedby="basic-addon1"
+                      {...formik.getFieldProps("freelanceCount")}
+                    />
+                    {formik.touched.freelanceCount &&
+                      formik.errors.freelanceCount && (
+                        <div className="invalid-feedback">
+                          {formik.errors.freelanceCount}
+                        </div>
+                      )}
+                  </div>
+                </div>
+              </>
             )}
             <div className="  col-md-6 col-12">
               <div className="text-start mt-2 mb-3">
