@@ -238,6 +238,11 @@ function Sidebar() {
             access: storedScreens.assessmentReportIndex,
           },
           {
+            title: "Revenue Report",
+            path: "/report/revenue",
+            access: storedScreens.assessmentReportIndex,
+          },
+          {
             title: "Enrolment Report",
             path: "/report/enrolment",
             access: storedScreens.enrollmentReportIndex,

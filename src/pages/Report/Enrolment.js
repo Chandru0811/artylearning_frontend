@@ -1,146 +1,116 @@
-import React, { useEffect, useRef, useState } from "react";
-import Chart from "chart.js/auto";
-import ChartDataLabels from "chartjs-plugin-datalabels"; // Import the plugin
+import React, { useState, useEffect } from "react";
+import ReactApexChart from "react-apexcharts";
+import fetchAllCentersWithIds from "../List/CenterList";
+import { toast } from "react-toastify";
 
 function Datatable2() {
-  const lineChartRef = useRef(null);
-  const barChartRef = useRef(null);
-  const [dashboardData, setDashboardData] = useState(null);
   const [selectedType, setSelectedType] = useState("WEEK");
+  const [centerData, setCenterData] = useState(null);
+  const [selectedDay, setSelectedDay] = useState("ALL");
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleTypeChange = (e) => {
     setSelectedType(e.target.value);
   };
 
-  useEffect(() => {
-    // Simulating an API fetch with sample data
-    const sampleDashboardData = {
-      Data: [
-        { label: "Dataset 1", data: [70, 30, 40, 80, 60, 10, 20, 90] },
-        { label: "Dataset 2", data: [15, 45, 35, 25, 55, 65, 95, 75] },
-      ],
-      totalLead: 100,
-      totalStudent: 80,
-      totalTeachers: 50,
-    };
-    setDashboardData(sampleDashboardData);
-  }, []);
+  const handleDayChange = (e) => {
+    setSelectedDay(e.target.value);
+  };
 
-  const filteredChartData = dashboardData?.Data || [];
+  const dayData = {
+    Mon: { taken: 250, bookSlot: 200, availableSlot: 50 },
+    Tue: { taken: 25, bookSlot: 22, availableSlot: 3 },
+    Wed: { taken: 25, bookSlot: 10, availableSlot: 20 },
+    Thu: { taken: 25, bookSlot: 13, availableSlot: 12 },
+    Fri: { taken: 25, bookSlot: 5, availableSlot: 20 },
+    Sat: { taken: 35, bookSlot: 21, availableSlot: 14 },
+    Sun: { taken: 35, bookSlot: 14, availableSlot: 21 },
+  };
 
-  useEffect(() => {
-    if (dashboardData) {
-      const lineChartColors = [
-        "rgba(75, 192, 192, 1)",
-        "rgba(255, 99, 132, 1)",
-        "rgba(255, 205, 86, 1)",
-      ];
+  // Calculate total slots
+  const calculateTotals = () => {
+    return Object.values(dayData).reduce(
+      (totals, day) => {
+        totals.taken += day.taken;
+        totals.bookSlot += day.bookSlot;
+        totals.availableSlot += day.availableSlot;
+        return totals;
+      },
+      { taken: 0, bookSlot: 0, availableSlot: 0 }
+    );
+  };
 
-      const barChartColors = [
-        "rgba(54, 162, 235, 0.6)", // Color for Current Total
-        "rgba(255, 159, 64, 0.6)", // Color for Variance
-      ];
+  // Add total values to dayData
+  const totalSlots = calculateTotals();
+  dayData.Total = totalSlots;
 
-      const lineChartData = {
-        labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Total"],
-        datasets: filteredChartData.map((data, index) => ({
-          label: data.label,
-          data: data.data,
-          borderColor: lineChartColors[index % lineChartColors.length],
-          borderWidth: 2,
-          fill: false,
-        })),
-      };
+  const dayMapping = {
+    SUNDAY: "Sun",
+    MONDAY: "Mon",
+    TUESDAY: "Tue",
+    WEDNESDAY: "Wed",
+    THURSDAY: "Thu",
+    FRIDAY: "Fri",
+    SATURDAY: "Sat",
+    ALL: "Total",
+  };
 
-      const barChartData = {
-        labels: ["Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon", "Total",],
-        datasets: [
-          {
-            label: "Dataset 1",
-            data: [21, 35, 41, 28, 67, 56, 48, 44.4],
-            backgroundColor: barChartColors[0],
-            datalabels: {
-              color: "rgba(54, 162, 235, 1)",
-            },
-          },
-          {
-            label: "Dataset 2",
-            data: [31, 17, 11, 24, 13, 24, 20, 46],
-            backgroundColor: barChartColors[1],
-            datalabels: {
-              color: "rgba(255, 159, 64, 1)",
-            },
-          },
-        ],
-      };
+  const selectedDayAbbr = selectedDay === "ALL" ? [...Object.keys(dayData)] : [dayMapping[selectedDay]];
 
-      // Destroy previous charts if they exist
-      if (lineChartRef.current) lineChartRef.current.destroy();
-      if (barChartRef.current) barChartRef.current.destroy();
+  const series = [
+    {
+      name: "Booked Slots",
+      data: selectedDayAbbr.map((day) => dayData[day]?.bookSlot || 0),
+    },
+    {
+      name: "Available Slots",
+      data: selectedDayAbbr.map((day) => dayData[day]?.availableSlot || 0),
+    },
+  ];
 
-      // Create Line Chart
-      const lineChartCtx = document.getElementById("lineChart").getContext("2d");
-      lineChartRef.current = new Chart(lineChartCtx, {
-        type: "line",
-        data: lineChartData,
+  const options = {
+    chart: {
+      type: "bar",
+      height: 350,
+      stacked: true,
+      stackType: "100%",
+    },
+    responsive: [
+      {
+        breakpoint: 480,
         options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-              max: 100,
-              ticks: {
-                callback: (value) => `${value}`,
-              },
-            },
+          legend: {
+            position: "bottom",
+            offsetX: -10,
+            offsetY: 0,
           },
         },
-      });
-
-      // Create Bar Chart
-      const barChartCtx = document.getElementById("barChart").getContext("2d");
-      barChartRef.current = new Chart(barChartCtx, {
-        type: "bar",
-        data: barChartData,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top",
-            },
-            datalabels: {
-              anchor: "end",
-              align: "end",
-              formatter: (value) => value.toString(),
-              font: {
-                weight: "bold",
-              },
-            },
-          },
-          scales: {
-            x: {
-              stacked: true, // Keep bars stacked
-            },
-            y: {
-              beginAtZero: true,
-              stacked: true,
-              max: 100,
-              ticks: {
-                stepSize: 20,
-                callback: (value) => `${value}%`,
-              },
-            },
-          },
-        },
-        plugins: [ChartDataLabels], // Use the plugin here
-      });
-    }
-
-    return () => {
-      if (lineChartRef.current) lineChartRef.current.destroy();
-      if (barChartRef.current) barChartRef.current.destroy();
-    };
-  }, [dashboardData]);
-
+      },
+    ],
+    xaxis: {
+      categories: selectedDayAbbr,
+    },
+    fill: {
+      opacity: 1,
+    },
+    legend: {
+      position: "right",
+      offsetX: 0,
+      offsetY: 50,
+    },
+  };
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
@@ -149,56 +119,41 @@ function Datatable2() {
           <div className="col-md-4 col-12">
             <label className="form-label">Centre</label>
             <select className="form-select" aria-label="Default select example">
-              <option value="1">One</option>
-              <option value="2">Two</option>
+              {centerData &&
+                centerData.map((center) => (
+                  <option key={center.id} value={center.id}>
+                    {center.centerNames}
+                  </option>
+                ))}
             </select>
           </div>
           <div className="col-md-4 col-12">
-            <label className="form-label">Select Type</label>
+            <label className="form-label">Week</label>
+            <input type="week" className="form-control" />
+          </div>
+          <div className="col-md-4 col-12">
+            <label className="form-label">Day</label>
             <select
               className="form-select"
               aria-label="Default select example"
-              onChange={handleTypeChange}
-              value={selectedType}
+              onChange={handleDayChange}
+              value={selectedDay}
             >
-              <option value="WEEK">Week</option>
-              <option value="DAY">Day</option>
+              <option value="ALL">ALL</option>
+              <option value="SUNDAY">SUNDAY</option>
+              <option value="MONDAY">MONDAY</option>
+              <option value="TUESDAY">TUESDAY</option>
+              <option value="WEDNESDAY">WEDNESDAY</option>
+              <option value="THURSDAY">THURSDAY</option>
+              <option value="FRIDAY">FRIDAY</option>
+              <option value="SATURDAY">SATURDAY</option>
             </select>
           </div>
-          {selectedType === "WEEK" && (
-            <div className="col-md-4 col-12">
-              <label className="form-label">Week</label>
-              <input type="week" className="form-control" />
-            </div>
-          )}
-          {selectedType === "DAY" && (
-            <div className="col-md-4 col-12">
-              <label className="form-label">Day</label>
-              <select className="form-select" aria-label="Default select example">
-                <option value="SUNDAY">SUNDAY</option>
-                <option value="MONDAY">MONDAY</option>
-                <option value="TUESDAY">TUESDAY</option>
-                <option value="WEDNESDAY">WEDNESDAY</option>
-                <option value="THURSDAY">THURSDAY</option>
-                <option value="FRIDAY">FRIDAY</option>
-                <option value="SATURDAY">SATURDAY</option>
-              </select>
-            </div>
-          )}
         </div>
-        <div className="card p-4 mb-5">
-          <div className="row mt-5">
-            <div
-              className="col-md-6 d-flex align-items-center justify-content-center"
-              style={{ height: "350px" }}
-            >
-              <canvas id="lineChart"></canvas>
-            </div>
-            <div
-              className="col-md-6 d-flex align-items-center justify-content-center"
-              style={{ height: "350px" }}
-            >
-              <canvas id="barChart"></canvas>
+        <div className="card p-4 mb-4">
+          <div className="row">
+            <div className="col-12">
+              <ReactApexChart options={options} series={series} type="bar" height={350} />
             </div>
           </div>
         </div>
