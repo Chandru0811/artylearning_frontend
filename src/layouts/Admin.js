@@ -216,6 +216,7 @@ import CmsCourses from "../pages/CMS/CMSCourses/CmsCourses";
 import CmsCourseAdd from "../pages/CMS/CMSCourses/CmsCourseAdd";
 import CmsCourseEdit from "../pages/CMS/CMSCourses/CmsCourseEdit";
 import CmsCourseView from "../pages/CMS/CMSCourses/CmsCourseView";
+import RevenueReport from "../pages/Report/RevenueReport";
 // import Blog from "../pages/CMS/Blog";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
@@ -377,6 +378,7 @@ function Admin({ handleLogout }) {
               <Route path="/report/sales" element={<Sales />} />
               <Route path="/report/studentreport" element={<StudentReport />} />
               <Route path="/report/document" element={<DocumentReport />} />
+              <Route path="/report/revenue" element={<RevenueReport />} />
               <Route path="/report/replace_class" element={<ReplaceClass />} />
               <Route
                 path="/report/document/view"
