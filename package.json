@@ -16,6 +16,7 @@
     "bootstrap": "^5.3.3",
     "boxicons": "^2.1.4",
     "chart.js": "^4.4.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "datatables.net-dt": "^1.13.10",
     "datatables.net-responsive-dt": "^2.5.0",
     "date-fns": "^3.6.0",
