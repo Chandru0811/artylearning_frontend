@@ -111,6 +111,7 @@ import ScheduleTeacherView from "../pages/ScheduleTeacher/ScheduleTeacherView";
 import Curriculum from "../pages/Curriculum/Curriculum";
 import EnrollmentEdit from "../pages/Lead/Enrollment/EnrollmentEdit";
 import StudentRegisterCourse from "../pages/Student/StudentRegisterCourse";
+import ReplaceClassLesson from "../pages/Student/ReplaceClassLessonList/ReplaceClassLesson";
 import SendNotification from "../pages/SendNotification/SendNotification";
 import SendNotificationAdd from "../pages/SendNotification/SendNotificationAdd";
 import SendNotificationEdit from "../pages/SendNotification/SendNotificationEdit";
@@ -289,6 +290,7 @@ function Admin({ handleLogout }) {
                 path="/student/register/course/:id"
                 element={<StudentRegisterCourse />}
               />
+              <Route path="/replaceclasslesson" element={<ReplaceClassLesson />} />
 
               {/* Center */}
               <Route path="/center" element={<Center />} />
@@ -533,7 +535,7 @@ function Admin({ handleLogout }) {
               {/* CMS  */}
               <Route path="/cms/footer" element={<CMSFooter />} />
               <Route path="/cms/header" element={<CmsTopbar />} />
-                          
+
               <Route path="/cms/home" element={<CmsHome />} />
               <Route path="/cms/aboutus" element={<CmsAboutUs />} />
 
@@ -578,7 +580,7 @@ function Admin({ handleLogout }) {
                 element={<CMSTestMonialEdit />}
               />
 
-              
+
 
               {/* Setting */}
               {/* Tax */}

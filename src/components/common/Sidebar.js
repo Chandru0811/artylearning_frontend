@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Collapse, Nav ,OverlayTrigger ,Tooltip  } from "react-bootstrap";
+import { Collapse, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Logo from "../../assets/images/Logo-Portal_Access.png";
 import api from "../../config/URL";
 
@@ -159,6 +159,11 @@ function Sidebar() {
             path: "/attendance",
             access: storedScreens.attendanceIndex,
           },
+          {
+            title: "Replace Class Lesson List",
+            path: "/replaceclasslesson",
+            access: storedScreens.attendanceIndex,
+          },
         ],
       },
       {
@@ -287,7 +292,7 @@ function Sidebar() {
           {
             title: "Blog",
             path: "/cms/cmsBlog",
-            access:storedScreens.blogIndex,
+            access: storedScreens.blogIndex,
           },
           {
             title: "Testimonial",
@@ -450,7 +455,7 @@ function Sidebar() {
       <ul className="nav-links">
         <li>
           <NavLink to="/" onClick={() => handleMenuClick(null)}>
-          <OverlayTrigger
+            <OverlayTrigger
               placement="right"
               overlay={<Tooltip id="home-tooltip">Home</Tooltip>}
             >
@@ -490,9 +495,8 @@ function Sidebar() {
                     </span>
                     <span>
                       <i
-                        className={`bx bx-chevron-down arrow ${
-                          item.isOpen ? "open" : ""
-                        }`}
+                        className={`bx bx-chevron-down arrow ${item.isOpen ? "open" : ""
+                          }`}
                         style={{
                           paddingRight: "5px",
                           minWidth: "0px",
