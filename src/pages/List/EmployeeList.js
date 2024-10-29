@@ -7,7 +7,7 @@ const fetchAllEmployeeListByCenter = async (id) => {
     const response = await api.get(`getUserListByCenterId/${id}`);
     return response.data;
   } catch (error) {
-    toast.error("Error fetching Employee data:", error);
+    toast.error(error);
     throw error;
   }
 };
