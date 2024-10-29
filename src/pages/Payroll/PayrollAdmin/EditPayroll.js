@@ -8,54 +8,6 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 
-const validationSchema = Yup.object().shape({
-  centerId: Yup.string().required("*Centre name is required"),
-  userId: Yup.string().required("*Employee name is required"),
-  payrollMonth: Yup.string().when("userId", {
-    is: (empRole) => empRole !== "freelancer",
-    then: (schema) => schema.required("*Select the Payroll Month"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  bonus: Yup.number().when("userId", {
-    is: (empRole) => empRole !== "freelancer",
-    then: (schema) =>
-      schema.required("*Bonus is required").typeError("Bonus must be a number"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  deductionAmount: Yup.number().when("userId", {
-    is: (empRole) => empRole !== "freelancer",
-    then: (schema) =>
-      schema
-        .required("*Deduction is required")
-        .typeError("Deduction must be a number"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  shgContribution: Yup.string().when("userId", {
-    is: (empRole) => empRole !== "freelancer",
-    then: (schema) => schema.required("*shgContribution is required"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  cpfContribution: Yup.string().when("userId", {
-    is: (empRole) => empRole !== "freelancer",
-    then: (schema) => schema.required("*cpfContribution is required"),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  freelanceCount: Yup.string().when("userId", {
-    is: (empRole) => empRole === "freelancer",
-    then: (schema) => schema.required(),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  payrollType: Yup.string().when("userId", {
-    is: (empRole) => empRole === "freelancer",
-    then: (schema) => schema.required(),
-    otherwise: (schema) => schema.notRequired(),
-  }),
-  netPay: Yup.number()
-    .required("*Net pay is required")
-    .typeError("Net pay must be a number"),
-  status: Yup.string().required("*Status is required"),
-});
-
 function EditPayroll() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
@@ -65,6 +17,60 @@ function EditPayroll() {
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const navigate = useNavigate();
+
+  const validationSchema = Yup.object().shape({
+    centerId: Yup.string().required("*Centre name is required"),
+    userId: Yup.string().required("*Employee name is required"),
+    payrollMonth: Yup.string().when("userId", {
+      is: (empRole) => empRole !== "freelancer",
+      then: (schema) => schema.required("*Select the Payroll Month"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    bonus: Yup.number().when("userId", {
+      is: (empRole) => empRole !== "freelancer",
+      then: (schema) =>
+        schema
+          .required("*Bonus is required")
+          .typeError("Bonus must be a number"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    deductionAmount: Yup.number().when("userId", {
+      is: (empRole) => empRole !== "freelancer",
+      then: (schema) =>
+        schema
+          .required("*Deduction is required")
+          .typeError("Deduction must be a number"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    shgContribution: Yup.string().when("userId", {
+      is: (empRole) => empRole !== "freelancer",
+      then: (schema) => schema.required("*shgContribution is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    cpfContribution: Yup.string().when("userId", {
+      is: (empRole) => empRole !== "freelancer",
+      then: (schema) => schema.required("*cpfContribution is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    freelanceCount: Yup.string().test(
+      "freelanceCount-required",
+      "*Freelance count is required",
+      function (value) {
+        return empRole === "freelancer" ? !!value : true;
+      }
+    ),
+    payrollType: Yup.string().test(
+      "payrollType-required",
+      "*Payroll type is required",
+      function (value) {
+        return empRole === "freelancer" ? !!value : true;
+      }
+    ),
+    netPay: Yup.number()
+      .required("*Net pay is required")
+      .typeError("Net pay must be a number"),
+    status: Yup.string().required("*Status is required"),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -248,17 +254,13 @@ function EditPayroll() {
 
   useEffect(() => {
     const calculateNetPay = () => {
-      if (empRole !== "freelancer" && formik.values.grossPay) {
+      if (empRole !== "freelancer") {
         const grossPay = parseFloat(formik.values.grossPay) || 0;
         const bonus = parseFloat(formik.values.bonus) || 0;
         const deductionAmount = parseFloat(formik.values.deductionAmount) || 0;
         const cpf = parseFloat(formik.values.cpfContribution) || 0;
         const shg = parseFloat(formik.values.shgContribution) || 0;
         const netPay = grossPay + bonus - deductionAmount - cpf - shg;
-        formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
-      } else {
-        const grossPay = parseFloat(formik.values.grossPay) || 0;
-        const netPay = grossPay;
         formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
       }
     };
@@ -287,13 +289,43 @@ function EditPayroll() {
         formik.setValues(response.data);
         fetchUserName(response.data.centerId);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error(error);
       }
     };
 
     getData();
     fetchData();
   }, []);
+  const fetchUserPaymentInfo = async (freelanceCount, payrollType) => {
+    const queryParams = new URLSearchParams({
+      payrollType: payrollType,
+      freelanceCount: freelanceCount,
+    });
+
+    try {
+      const response = await api.get(`/freelancerPayment?${queryParams}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      formik.setFieldValue("netPay", response.data);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserPaymentData = async () => {
+      const { freelanceCount, payrollType } = formik.values;
+      await fetchUserPaymentInfo(freelanceCount, payrollType);
+    };
+
+    fetchUserPaymentData();
+  }, [
+    formik.values.freelanceCount,
+    formik.values.payrollType,
+    formik.values.userId,
+  ]);
 
   return (
     <div className="container-fluid">

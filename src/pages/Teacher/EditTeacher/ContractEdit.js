@@ -152,127 +152,149 @@ const ContractEdit = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    useEffect(() => {
-      const getData = async () => {
-        try {
-          const response = await api.get(
-            `/getAllUserById/${formData.staff_id}`
-          );
-          const employerData = response.data.userAccountInfo[0].centers;
-          setEmployerData(employerData);
-          console.log("employerData", employerData);
-          if (
-            response.data.userContractCreationModels &&
-            response.data.userContractCreationModels.length > 0
-          ) {
-            setDatas(response.data.userContractCreationModels[0]);
+    // useEffect(() => {
+    //   const getData = async () => {
+    //     try {
+    //       const response = await api.get(
+    //         `/getAllUserById/${formData.staff_id}`
+    //       );
+    //       const employerData = response.data.userAccountInfo[0].centers;
+    //       setEmployerData(employerData);
+    //       console.log("employerData", employerData);
+    //       if (
+    //         response.data.userContractCreationModels &&
+    //         response.data.userContractCreationModels.length > 0
+    //       ) {
+    //         setDatas(response.data.userContractCreationModels[0]);
 
+    //         const contractData = response.data.userContractCreationModels[0];
+    //         console.log("first", contractData.id);
+    //         setContactId(contractData);
+    //         formik.setValues({
+    //           ...contractData,
+    //           employee: formData.teacherName || contractData.employee || "",
+    //           userContractAddress:
+    //             formData.address ||
+    //             response.data.userContactInfo[0].address ||
+    //             "",
+    //           startDateOfEmployment:
+    //             formData.startDate ||
+    //             response.data.userAccountInfo[0].startDate ||
+    //             "",
+    //           userContractStartDate:
+    //             formData.startDate ||
+    //             response.data.userAccountInfo[0].startDate ||
+    //             "",
+    //           workingDays:
+    //             formData.workingDays ||
+    //             response.data.userAccountInfo[0].workingDays ||
+    //             "",
+    //           userContractSalary:
+    //             formData.salary ||
+    //             response.data.userSalaryCreationModels[0].salary ||
+    //             "",
+    //           contractDate:
+    //             formData.contractDate ||
+    //             response.data.userAccountInfo[0].startDate ||
+    //             "",
+
+    //           contractId: contractData.id,
+
+    //           startDateOfEmployment: contractData.startDateOfEmployment
+    //             ? contractData.startDateOfEmployment.substring(0, 10)
+    //             : "",
+    //           userContractStartDate: contractData.userContractStartDate
+    //             ? contractData.userContractStartDate.substring(0, 10)
+    //             : "",
+    //           userContractEndDate: contractData.userContractEndDate
+    //             ? contractData.userContractEndDate.substring(0, 10)
+    //             : "",
+    //           contractDate: contractData.contractDate
+    //             ? contractData.contractDate.substring(0, 10)
+    //             : "",
+    //           salaryStartDate: contractData.salaryStartDate
+    //             ? contractData.salaryStartDate.substring(0, 10)
+    //             : "",
+    //         });
+    //       } else {
+    //         formik.setValues({
+    //           contractId: null,
+    //           employer: formData.employer || "",
+    //           uen: formData.uen || "",
+    //           employee: formData.teacherName || response.data.teacherName || "",
+    //           addressOfEmployment: formData.addressOfEmployment || "",
+    //           detailsEmployee: formData.detailsEmployee || "",
+    //           nric: formData.nric || "",
+    //           userContractAddress:
+    //             formData.address ||
+    //             response.data.userContactInfo[0].address ||
+    //             "",
+    //           jobTitle: formData.jobTitle || "",
+    //           mainDuties: formData.mainDuties || "",
+    //           startDateOfEmployment:
+    //             formData.startDate ||
+    //             response.data.userAccountInfo[0].startDate ||
+    //             "",
+    //           training: formData.training || "",
+    //           allowance: formData.allowance || "",
+    //           userContractStartDate:
+    //             formData.startDate ||
+    //             response.data.userAccountInfo[0].startDate ||
+    //             "",
+    //           contactPeriod: formData.contactPeriod || "",
+    //           probation: formData.probation || "",
+    //           workingDays:
+    //             formData.workingDays ||
+    //             response.data.userAccountInfo[0].workingDays ||
+    //             "",
+    //           userContractSalary:
+    //             formData.salary ||
+    //             response.data.userSalaryCreationModels[0].salary ||
+    //             "",
+    //           salaryStartDate: formData.effectiveDate || "",
+    //           userContractEndDate: formData.endDate || "",
+    //           payNow: formData.payNow || "",
+    //           internetBanking: formData.internetBanking || "",
+    //           contractDate:
+    //             formData.contractDate ||
+    //             response.data.userAccountInfo[0].startDate ||
+    //             "",
+    //           terminationNotice: formData.terminationNotice || "",
+    //         });
+    //         // console.log("Contract ID:", formik.values.contractId);
+    //       }
+    //     } catch (error) {
+    //       console.error("Error fetching data:", error);
+    //     }
+    //   };
+    //   // console.log(formik.values);
+    //   getData();
+    //   window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
+    useEffect(() => {
+      const fetchEmployerData = async () => {
+        try {
+          const response = await api.get(`/getAllUserById/${formData.staff_id}`);
+          setEmployerData(response.data.userAccountInfo[0].centers || []);
+          if (response.data.userContractCreationModels?.length) {
             const contractData = response.data.userContractCreationModels[0];
-            console.log("first", contractData.id);
             setContactId(contractData);
+            setDatas(contractData);
             formik.setValues({
               ...contractData,
-              employee: formData.teacherName || contractData.employee || "",
-              userContractAddress:
-                formData.address ||
-                response.data.userContactInfo[0].address ||
-                "",
-              startDateOfEmployment:
-                formData.startDate ||
-                response.data.userAccountInfo[0].startDate ||
-                "",
-              userContractStartDate:
-                formData.startDate ||
-                response.data.userAccountInfo[0].startDate ||
-                "",
-              workingDays:
-                formData.workingDays ||
-                response.data.userAccountInfo[0].workingDays ||
-                "",
-              userContractSalary:
-                formData.salary ||
-                response.data.userSalaryCreationModels[0].salary ||
-                "",
-              contractDate:
-                formData.contractDate ||
-                response.data.userAccountInfo[0].startDate ||
-                "",
-
-              contractId: contractData.id,
-
-              startDateOfEmployment: contractData.startDateOfEmployment
-                ? contractData.startDateOfEmployment.substring(0, 10)
-                : "",
-              userContractStartDate: contractData.userContractStartDate
-                ? contractData.userContractStartDate.substring(0, 10)
-                : "",
-              userContractEndDate: contractData.userContractEndDate
-                ? contractData.userContractEndDate.substring(0, 10)
-                : "",
-              contractDate: contractData.contractDate
-                ? contractData.contractDate.substring(0, 10)
-                : "",
-              salaryStartDate: contractData.salaryStartDate
-                ? contractData.salaryStartDate.substring(0, 10)
-                : "",
+              employee: formData.teacherName || contractData.employee,
+              salaryStartDate: contractData.salaryStartDate?.substring(0, 10) || "",
+              updatedBy: userName,
             });
-          } else {
-            formik.setValues({
-              contractId: null,
-              employer: formData.employer || "",
-              uen: formData.uen || "",
-              employee: formData.teacherName || response.data.teacherName || "",
-              addressOfEmployment: formData.addressOfEmployment || "",
-              detailsEmployee: formData.detailsEmployee || "",
-              nric: formData.nric || "",
-              userContractAddress:
-                formData.address ||
-                response.data.userContactInfo[0].address ||
-                "",
-              jobTitle: formData.jobTitle || "",
-              mainDuties: formData.mainDuties || "",
-              startDateOfEmployment:
-                formData.startDate ||
-                response.data.userAccountInfo[0].startDate ||
-                "",
-              training: formData.training || "",
-              allowance: formData.allowance || "",
-              userContractStartDate:
-                formData.startDate ||
-                response.data.userAccountInfo[0].startDate ||
-                "",
-              contactPeriod: formData.contactPeriod || "",
-              probation: formData.probation || "",
-              workingDays:
-                formData.workingDays ||
-                response.data.userAccountInfo[0].workingDays ||
-                "",
-              userContractSalary:
-                formData.salary ||
-                response.data.userSalaryCreationModels[0].salary ||
-                "",
-              salaryStartDate: formData.effectiveDate || "",
-              userContractEndDate: formData.endDate || "",
-              payNow: formData.payNow || "",
-              internetBanking: formData.internetBanking || "",
-              contractDate:
-                formData.contractDate ||
-                response.data.userAccountInfo[0].startDate ||
-                "",
-              terminationNotice: formData.terminationNotice || "",
-            });
-            // console.log("Contract ID:", formik.values.contractId);
           }
         } catch (error) {
-          console.error("Error fetching data:", error);
+          toast.error("Failed to load data.");
         }
       };
-      // console.log(formik.values);
-      getData();
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
+      
+      fetchEmployerData();
+    }, [formData.staff_id]);
     const getData1 = async (id) => {
       try {
         const response = await api.get(`/getAllCenterById/${id}`);
@@ -359,8 +381,8 @@ const ContractEdit = forwardRef(
                     getData1(selectedId);
                   }}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.employer}
-                  value={contactId?.employer}
+                  value={formik.values.employer}
+                  // value={contactId?.employer}
                 >
                   <option selected></option>
                   {employerData?.map((center) => (
@@ -384,8 +406,8 @@ const ContractEdit = forwardRef(
                   name="uen"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.uen}
-                  value={contactId?.uen}
+                  value={formik.values.uen}
+                  // value={contactId?.uen}
                   // readOnly={datas?.uen}
                   readOnly
                 />
@@ -405,8 +427,8 @@ const ContractEdit = forwardRef(
                 name="addressOfEmployment"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                // value={formik.values.addressOfEmployment}
-                value={contactId?.addressOfEmployment}
+                value={formik.values.addressOfEmployment}
+                // value={contactId?.addressOfEmployment}
                 readOnly
               />
               {formik.touched.addressOfEmployment &&
@@ -446,8 +468,8 @@ const ContractEdit = forwardRef(
                   name="nric"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.nric}
-                  value={contactId?.nric}
+                  value={formik.values.nric}
+                  // value={contactId?.nric}
                 />
                 {formik.touched.nric && formik.errors.nric && (
                   <div className="error text-danger ">
@@ -464,7 +486,8 @@ const ContractEdit = forwardRef(
                   name="userContractAddress"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={contactId?.userContractAddress}
+                  value={formik.values.userContractAddress}
+                  // value={contactId?.userContractAddress}
                   readOnly={datas?.userContractAddress}
                 />
                 {formik.touched.userContractAddress &&
@@ -483,8 +506,8 @@ const ContractEdit = forwardRef(
                   name="jobTitle"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.jobTitle}
-                  value={contactId?.jobTitle}
+                  value={formik.values.jobTitle}
+                  // value={contactId?.jobTitle}
                 />
                 {formik.touched.jobTitle && formik.errors.jobTitle && (
                   <div className="error text-danger ">
@@ -501,8 +524,8 @@ const ContractEdit = forwardRef(
                   name="mainDuties"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.mainDuties}
-                  value={contactId?.mainDuties}
+                  value={formik.values.mainDuties}
+                  // value={contactId?.mainDuties}
                 />
                 {formik.touched.mainDuties && formik.errors.mainDuties && (
                   <div className="error text-danger ">
@@ -520,7 +543,7 @@ const ContractEdit = forwardRef(
                   name="startDateOfEmployment"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={contactId?.startDateOfEmployment.slice(0, 10)}
+                  // value={contactId?.startDateOfEmployment.slice(0, 10)}
                   min={new Date().toISOString().split("T")[0]}
                   readOnly={datas?.startDateOfEmployment}
                 />
@@ -540,8 +563,8 @@ const ContractEdit = forwardRef(
                   name="training"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.training}
-                  value={contactId?.training}
+                  value={formik.values.training}
+                  // value={contactId?.training}
                 />
                 {formik.touched.training && formik.errors.training && (
                   <div className="error text-danger ">
@@ -557,8 +580,8 @@ const ContractEdit = forwardRef(
                   name="allowance"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.allowance}
-                  value={contactId?.allowance}
+                  value={formik.values.allowance}
+                  // value={contactId?.allowance}
                 />
                 {formik.touched.allowance && formik.errors.allowance && (
                   <div className="error text-danger ">
@@ -591,7 +614,7 @@ const ContractEdit = forwardRef(
                     }
                   }}
                   onBlur={formik.handleBlur}
-                  value={contactId?.userContractStartDate?.slice(0, 10)}
+                  value={formik.values.userContractStartDate?.slice(0, 10)}
                   min={new Date().toISOString().split("T")[0]}
                 />
                 {formik.touched.userContractStartDate &&
@@ -618,8 +641,8 @@ const ContractEdit = forwardRef(
                     calculateContractPeriod(startDate, endDate);
                   }}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.userContractEndDate}
-                  value={contactId?.userContractEndDate}
+                  value={formik.values.userContractEndDate?.slice(0,10)}
+                  // value={contactId?.userContractEndDate}
                 />
                 {formik.touched.userContractEndDate &&
                   formik.errors.userContractEndDate && (
@@ -637,8 +660,8 @@ const ContractEdit = forwardRef(
                   name="contactPeriod"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  // value={formik.values.contactPeriod}
-                  value={contactId?.contactPeriod}
+                  value={formik.values.contactPeriod}
+                  // value={contactId?.contactPeriod}
                   readOnly
                 />
                 {formik.touched.contactPeriod &&
@@ -656,9 +679,9 @@ const ContractEdit = forwardRef(
                   name="probation"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={contactId?.probation}
+                  // value={contactId?.probation}
 
-                  // value={formik.values.probation}
+                  value={formik.values.probation}
                 />
               </div>
 
@@ -726,8 +749,8 @@ const ContractEdit = forwardRef(
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   readOnly={submitted}
-                  // value={formik.values.userContractSalary}
-                  value={contactId?.userContractSalary}
+                  value={formik.values.userContractSalary}
+                  // value={contactId?.userContractSalary}
                 />
                 {formik.touched.userContractSalary &&
                   formik.errors.userContractSalary && (
@@ -746,9 +769,9 @@ const ContractEdit = forwardRef(
                   name="salaryStartDate"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={contactId?.salaryStartDate}
+                  // value={contactId?.salaryStartDate}
 
-                  // value={formik.values.salaryStartDate}
+                  value={formik.values.salaryStartDate}
                 />
                 {formik.touched.salaryStartDate &&
                   formik.errors.salaryStartDate && (
@@ -768,8 +791,8 @@ const ContractEdit = forwardRef(
                     name="payNow"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    // value={formik.values.payNow}
-                    value={contactId?.payNow}
+                    value={formik.values.payNow}
+                    // value={contactId?.payNow}
                   />
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
@@ -780,8 +803,8 @@ const ContractEdit = forwardRef(
                     name="internetBanking"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    // value={formik.values.internetBanking}
-                    value={contactId?.internetBanking}
+                    value={formik.values.internetBanking}
+                    // value={contactId?.internetBanking}
                   />
                 </div>
                 <div class="col-md-6 col-12 mb-2 mt-3">
@@ -794,7 +817,7 @@ const ContractEdit = forwardRef(
                     name="contractDate"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={contactId?.contractDate?.slice(0, 10)}
+                    value={formik.values.contractDate?.slice(0, 10)}
                     readOnly
                   />
                   {formik.touched.contractDate &&
@@ -813,8 +836,8 @@ const ContractEdit = forwardRef(
                     name="terminationNotice"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    // value={formik.values.terminationNotice}
-                    value={contactId?.terminationNotice}
+                    value={formik.values.terminationNotice}
+                    // value={contactId?.terminationNotice}
                   />
                   {formik.touched.terminationNotice &&
                     formik.errors.terminationNotice && (

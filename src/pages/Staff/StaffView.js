@@ -344,7 +344,7 @@ function StaffView() {
               <p className="text-sm fw-medium">Email</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">: {data.email || "--"}</p>
+              <p className="text-muted text-sm text-break">: {data.email || "--"}</p>
             </div>
           </div>
         </div>
