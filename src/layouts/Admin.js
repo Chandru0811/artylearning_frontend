@@ -218,6 +218,8 @@ import CmsCourseAdd from "../pages/CMS/CMSCourses/CmsCourseAdd";
 import CmsCourseEdit from "../pages/CMS/CMSCourses/CmsCourseEdit";
 import CmsCourseView from "../pages/CMS/CMSCourses/CmsCourseView";
 import RevenueReport from "../pages/Report/RevenueReport";
+import ReplaceClassLessonEdit from "../pages/Student/ReplaceClassLessonList/ReplaceClassLessonEdit";
+import ReplaceClassLessonView from "../pages/Student/ReplaceClassLessonList/ReplaceClassLessonView";
 // import Blog from "../pages/CMS/Blog";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
@@ -263,7 +265,6 @@ function Admin({ handleLogout }) {
               <Route path="/displaymedia" element={<DisplayMedia />} />
               <Route path="lead/contacted" element={<Contacted />} />
 
-
               {/* {/ Student /} */}
               <Route path="/student" element={<Student />} />
               <Route path="/student/add" element={<StudentAdd />} />
@@ -290,7 +291,18 @@ function Admin({ handleLogout }) {
                 path="/student/register/course/:id"
                 element={<StudentRegisterCourse />}
               />
-              <Route path="/replaceclasslesson" element={<ReplaceClassLesson />} />
+              <Route
+                path="/replaceclasslesson"
+                element={<ReplaceClassLesson />}
+              />
+              <Route
+                path="/replaceclasslesson/edit/:id"
+                element={<ReplaceClassLessonEdit />}
+              />
+              <Route
+                path="/replaceclasslesson/view/:id"
+                element={<ReplaceClassLessonView />}
+              />
 
               {/* Center */}
               <Route path="/center" element={<Center />} />
@@ -402,26 +414,70 @@ function Admin({ handleLogout }) {
               <Route path="/course/add" element={<CourseAdd />} />
               <Route path="/course/edit/:id" element={<CourseEdit />} />
               <Route path="/course/view/:id" element={<CourseView />} />
-              <Route path="/course/curriculumoutlet/curriculum/:id" element={<Curriculum />} />
+              <Route
+                path="/course/curriculumoutlet/curriculum/:id"
+                element={<Curriculum />}
+              />
               <Route path="/curriculum" element={<Curriculum />} />
               <Route path="/curriculum" element={<Curriculum />} />
               <Route path="/course/coursefees/:id" element={<CourseFees />} />
-              <Route path="/course/coursefees/add" element={<CourseFeesAdd />} />
-              <Route path="/course/coursefees/edit/:id" element={<CourseFeesEdit />} />
-              <Route path="/course/coursefees/view/:id" element={<CourseFeesView />} />
+              <Route
+                path="/course/coursefees/add"
+                element={<CourseFeesAdd />}
+              />
+              <Route
+                path="/course/coursefees/edit/:id"
+                element={<CourseFeesEdit />}
+              />
+              <Route
+                path="/course/coursefees/view/:id"
+                element={<CourseFeesView />}
+              />
               <Route path="/course/coursefees/:id" element={<CourseFees />} />
-              <Route path="/course/coursefees/add" element={<CourseFeesAdd />} />
-              <Route path="/course/coursefees/edit/:id" element={<CourseFeesEdit />} />
-              <Route path="/course/coursefees/view/:id" element={<CourseFeesView />} />
-              <Route path="/course/coursedeposit/:id" element={<CourseDeposit />} />
-              <Route path="/course/coursedeposit/add" element={<CourseDepositAdd />} />
-              <Route path="/course/coursedeposit/edit/:id" element={<CourseDepositAdd />} />
-              <Route path="/course/coursedeposit/view/:id" element={<CourseDepositAdd />} />
-              <Route path="/course/curriculumoutlet/:id" element={<CurriculumOutlet />} />
-              <Route path="/course/curriculumoutlet/add" element={<CurriculumOutletAdd />} />
-              <Route path="/course/curriculumoutlet/edit/:id" element={<CurriculumOutletEdit />} />
-              <Route path="/course/curriculumoutlet/view/:id" element={<CurriculumOutletView />} />
-
+              <Route
+                path="/course/coursefees/add"
+                element={<CourseFeesAdd />}
+              />
+              <Route
+                path="/course/coursefees/edit/:id"
+                element={<CourseFeesEdit />}
+              />
+              <Route
+                path="/course/coursefees/view/:id"
+                element={<CourseFeesView />}
+              />
+              <Route
+                path="/course/coursedeposit/:id"
+                element={<CourseDeposit />}
+              />
+              <Route
+                path="/course/coursedeposit/add"
+                element={<CourseDepositAdd />}
+              />
+              <Route
+                path="/course/coursedeposit/edit/:id"
+                element={<CourseDepositAdd />}
+              />
+              <Route
+                path="/course/coursedeposit/view/:id"
+                element={<CourseDepositAdd />}
+              />
+              <Route
+                path="/course/curriculumoutlet/:id"
+                element={<CurriculumOutlet />}
+              />
+              <Route
+                path="/course/curriculumoutlet/add"
+                element={<CurriculumOutletAdd />}
+              />
+              <Route
+                path="/course/curriculumoutlet/edit/:id"
+                element={<CurriculumOutletEdit />}
+              />
+              <Route
+                path="/course/curriculumoutlet/view/:id"
+                element={<CurriculumOutletView />}
+              />
 
               {/* Payment  */}
               <Route path="/payment" element={<Payment />} />
@@ -542,7 +598,10 @@ function Admin({ handleLogout }) {
               {/* CMS Courses */}
               <Route path="/cms/CmsCourses" element={<CmsCourses />} />
               <Route path="/cms/CmsCourses/add" element={<CmsCourseAdd />} />
-              <Route path="/cms/CmsCourses/edit/:id" element={<CmsCourseEdit />} />
+              <Route
+                path="/cms/CmsCourses/edit/:id"
+                element={<CmsCourseEdit />}
+              />
               <Route path="/cms/CmsCourses/view" element={<CmsCourseView />} />
 
               <Route path="/cms/englishcourse" element={<CmsEnglish />} />
@@ -579,8 +638,6 @@ function Admin({ handleLogout }) {
                 path="/cms/testmonial/editmonial"
                 element={<CMSTestMonialEdit />}
               />
-
-
 
               {/* Setting */}
               {/* Tax */}
@@ -637,7 +694,10 @@ function Admin({ handleLogout }) {
 
               {/* Other Messaging */}
               <Route path="/othermessaging" element={<OtherMessages />} />
-              <Route path="/othermessaging/view/:id" element={<OtherMessagesView />} />
+              <Route
+                path="/othermessaging/view/:id"
+                element={<OtherMessagesView />}
+              />
             </Routes>
           </div>
           <Footer />

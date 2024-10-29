@@ -16,18 +16,16 @@ const validationSchema = Yup.object({
   weekendFee: Yup.string().required("*Weekend Fee is required"),
   taxType: Yup.string().required("*TaxType Fee is required"),
   status: Yup.string().required("*Status is required"),
-
 });
 
 function CourseFeesEdit({ id, onSuccess }) {
-  console.log("object",id)
+  console.log("object", id);
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-
 
   const fetchPackageData = async () => {
     try {
@@ -49,7 +47,7 @@ function CourseFeesEdit({ id, onSuccess }) {
 
   const handleClose = () => {
     setShow(false);
-    formik.resetForm();
+    // formik.resetForm();
     setPackageData(null);
   };
 
@@ -57,8 +55,7 @@ function CourseFeesEdit({ id, onSuccess }) {
     fetchPackageData();
     fetchTaxData();
     setShow(true);
-    setIsModified(false); 
-
+    setIsModified(false);
   };
 
   const formik = useFormik({
@@ -71,7 +68,6 @@ function CourseFeesEdit({ id, onSuccess }) {
       courseId: id,
       status: "",
       updatedBy: userName,
-
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -102,13 +98,15 @@ function CourseFeesEdit({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
+    },
   });
 
   useEffect(() => {
@@ -141,17 +139,20 @@ function CourseFeesEdit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Course Fees</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -161,7 +162,6 @@ function CourseFeesEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="date"
-   
                     className={`form-control  ${
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate
@@ -289,7 +289,6 @@ function CourseFeesEdit({ id, onSuccess }) {
                     <option value=""></option>
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
-
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">

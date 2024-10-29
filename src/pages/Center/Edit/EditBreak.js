@@ -16,9 +16,9 @@ function EditBreak({ id, onSuccess }) {
     // formik.resetForm();
     setShow(false);
   };
-  const handleShow = () => { 
+  const handleShow = () => {
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
   const validationSchema = yup.object().shape({
     breakName: yup.string().required("*Break Name is required"),
@@ -60,9 +60,9 @@ function EditBreak({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
@@ -74,14 +74,15 @@ function EditBreak({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
-    
+    },
   });
   useEffect(() => {
     const getData = async () => {
@@ -102,9 +103,12 @@ function EditBreak({ id, onSuccess }) {
       }
     };
 
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (id) {
+      formik.resetForm();
+      getData();
+    }
+  }, [id]);
+
   return (
     <>
       <button className="btn" onClick={handleShow}>
@@ -117,14 +121,17 @@ function EditBreak({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Edit Centre Break</p>
@@ -165,7 +172,6 @@ function EditBreak({ id, onSuccess }) {
                       ? "is-invalid"
                       : ""
                   }`}
- 
                   {...formik.getFieldProps("fromDate")}
                 />
                 {formik.touched.fromDate && formik.errors.fromDate && (
@@ -186,7 +192,6 @@ function EditBreak({ id, onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
-   
                     {...formik.getFieldProps("toDate")}
                   />
                   {formik.touched.toDate && formik.errors.toDate && (
