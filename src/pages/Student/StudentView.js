@@ -9,6 +9,7 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import Logo from "../../assets/images/Logo.png";
 import fetchAllPackageList from "../List/PackageList";
+import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 
 function StudentView() {
   const table1Ref = useRef();
@@ -16,14 +17,15 @@ function StudentView() {
 
   const { id } = useParams();
   const [data, setData] = useState({});
-  console.log("Student Datas:", data);
-  const centerId = data.centerId;
+  const centerId = data?.studentRelationModels?.[0]?.studentRelationCenter;
+  const studentRelationId = data?.studentRelationModels?.[0]?.studentRelationStudentName;
+  console.log("datacenterid", centerId)
+  console.log("studentRelationId", studentRelationId)
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
   const [centerData, setCenterData] = useState(null);
   const [packageData, setPackageData] = useState(null);
-
+  const [studentData, setStudentData] = useState(null);
   const [courseData, setCourseData] = useState(null);
 
   const fetchData = async () => {
@@ -38,6 +40,20 @@ function StudentView() {
       toast.error(error);
     }
   };
+
+  const fetchStudent = async (centerId) => {
+    try {
+      const student = await fetchAllStudentListByCenter(centerId);
+      setStudentData(student);
+      console.log("studentname", student);
+    } catch (error) {
+      toast.error("Error fetching student data: " + error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudent();
+  }, []);
 
   useEffect(() => {
     const getData = async () => {
@@ -97,6 +113,7 @@ function StudentView() {
     // Save PDF
     pdf.save("student-details.pdf");
   };
+
 
   return (
     <>
@@ -377,8 +394,8 @@ function StudentView() {
                               ? data.primaryLanguage === "ENGLISH"
                                 ? "English"
                                 : data.primaryLanguage === "CHINESE"
-                                ? "Chinese"
-                                : "--"
+                                  ? "Chinese"
+                                  : "--"
                               : "--"}
                           </p>
                         </div>
@@ -512,11 +529,11 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0]
-                              .emergencyContactName
+                              data.studentEmergencyContacts.length > 0 &&
+                              data.studentEmergencyContacts[0]
+                                .emergencyContactName
                               ? data.studentEmergencyContacts[0]
-                                  .emergencyContactName
+                                .emergencyContactName
                               : "--"}
                           </p>
                         </div>
@@ -531,10 +548,10 @@ function StudentView() {
                           <p className="text-muted text-sm">
                             <b className="mx-2">:</b>
                             {data.studentEmergencyContacts &&
-                            data.studentEmergencyContacts.length > 0 &&
-                            data.studentEmergencyContacts[0].emergencyContactNo
+                              data.studentEmergencyContacts.length > 0 &&
+                              data.studentEmergencyContacts[0].emergencyContactNo
                               ? data.studentEmergencyContacts[0]
-                                  .emergencyContactNo
+                                .emergencyContactNo
                               : "--"}
                           </p>
                         </div>
@@ -858,8 +875,8 @@ function StudentView() {
                             <p className="text-muted text-sm text-break">
                               <b className="mx-2">:</b>
                               {data.studentParentsDetails &&
-                              data.studentParentsDetails.length > 0 &&
-                              data.studentParentsDetails[0].address
+                                data.studentParentsDetails.length > 0 &&
+                                data.studentParentsDetails[0].address
                                 ? data.studentParentsDetails[0].address
                                 : "--"}
                             </p>
@@ -874,17 +891,17 @@ function StudentView() {
               ))}
             {(!data.studentParentsDetails ||
               data.studentParentsDetails.length === 0) && (
-              <div
-                id="panelsStayOpen-collapseThree"
-                class="accordion-collapse collapse"
-              >
-                <div class="accordion-body">
-                  <div className="text-muted">
-                    No parent/guardian information available
+                <div
+                  id="panelsStayOpen-collapseThree"
+                  class="accordion-collapse collapse"
+                >
+                  <div class="accordion-body">
+                    <div className="text-muted">
+                      No parent/guardian information available
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
           {/* Relation */}
           <div class="accordion-item">
@@ -932,7 +949,7 @@ function StudentView() {
                               {centerData &&
                                 centerData.map((center) =>
                                   parseInt(std.studentRelationCenter) ===
-                                  center.id
+                                    center.id
                                     ? center.centerNames || "--"
                                     : ""
                                 )}
@@ -1297,8 +1314,8 @@ function StudentView() {
                     ? data.primaryLanguage === "ENGLISH"
                       ? "English"
                       : data.primaryLanguage === "CHINESE"
-                      ? "Chinese"
-                      : "--"
+                        ? "Chinese"
+                        : "--"
                     : "--"}
                 </div>
               </div>
@@ -1359,8 +1376,8 @@ function StudentView() {
               <div className="fw-medium">Emergency Contact Name:</div>
               <div className="text-muted ms-2">
                 {data.studentEmergencyContacts &&
-                data.studentEmergencyContacts.length > 0 &&
-                data.studentEmergencyContacts[0].emergencyContactName
+                  data.studentEmergencyContacts.length > 0 &&
+                  data.studentEmergencyContacts[0].emergencyContactName
                   ? data.studentEmergencyContacts[0].emergencyContactName
                   : "--"}
               </div>
@@ -1369,8 +1386,8 @@ function StudentView() {
               <div className="fw-medium">Emergency Contact No:</div>
               <div className="text-muted ms-2">
                 {data.studentEmergencyContacts &&
-                data.studentEmergencyContacts.length > 0 &&
-                data.studentEmergencyContacts[0].emergencyContactNo
+                  data.studentEmergencyContacts.length > 0 &&
+                  data.studentEmergencyContacts[0].emergencyContactNo
                   ? data.studentEmergencyContacts[0].emergencyContactNo
                   : "--"}
               </div>
@@ -1432,7 +1449,7 @@ function StudentView() {
           <div className="row">
             <div className="col-md-12">
               {data.studentParentsDetails &&
-              data.studentParentsDetails.length > 0 ? (
+                data.studentParentsDetails.length > 0 ? (
                 <div className="table-responsive">
                   <table className="table">
                     <thead>
@@ -1527,12 +1544,19 @@ function StudentView() {
                             {centerData &&
                               centerData.map((center) =>
                                 parseInt(std.studentRelationCenter) ===
-                                center.id
+                                  center.id
                                   ? center.centerNames || "--"
                                   : ""
                               )}
                           </td>
-                          <td>{std.studentRelationStudentName || "--"}</td>
+                          <td>
+                            {studentData &&
+                              studentData.find(
+                                (student) =>
+                                  student.id === std.studentRelationStudentName &&
+                                  student.centerId === centerId
+                              )?.studentNames || "--"}
+                          </td>
                           <td>{std.studentRelation || "--"}</td>
                         </tr>
                       ))}
