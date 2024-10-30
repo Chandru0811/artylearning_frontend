@@ -382,14 +382,23 @@ function Attendances() {
                                             <td>{student.studentUniqueId}</td>
                                             <td>{student.studentName}</td>
                                             <td>
-                                              {((isReplacement.id === student.studentId) && isReplacement.valid) ? (<>
-                                                <span className="radio-button-text">
-                                                  <Link to="/replaceclasslesson"
-                                                    style={{ textDecoration: "none", color: "black" }}>
-                                                    Replacement Class Required
-                                                  </Link>
-                                                </span>
-                                              </>) :
+                                              {isReplacement.id ===
+                                                student.studentId &&
+                                              isReplacement.valid ? (
+                                                <>
+                                                  <span className="radio-button-text">
+                                                    <Link
+                                                      to="/replaceclasslesson"
+                                                      style={{
+                                                        textDecoration: "none",
+                                                        color: "black",
+                                                      }}
+                                                    >
+                                                      Replacement Class Required
+                                                    </Link>
+                                                  </span>
+                                                </>
+                                              ) : (
                                                 <>
                                                   <div className="radio-buttons">
                                                     <label className="radio-button">
@@ -417,24 +426,42 @@ function Attendances() {
                                                       <input
                                                         type="radio"
                                                         name={`attendance-${attendanceIndex}-${studentIndex}`}
-                                                        checked={student.attendance === "absent"}
+                                                        checked={
+                                                          student.attendance ===
+                                                          "absent"
+                                                        }
                                                         value="absent"
                                                         onChange={() =>
-                                                          handleAttendanceChange(attendanceIndex, studentIndex, "absent")
+                                                          handleAttendanceChange(
+                                                            attendanceIndex,
+                                                            studentIndex,
+                                                            "absent"
+                                                          )
                                                         }
                                                       />
-                                                      <span className="radio-button-text">Absent</span>
+                                                      <span className="radio-button-text">
+                                                        Absent
+                                                      </span>
                                                     </label>
                                                   </div>
                                                   <label className="radio-button">
-                                                    {student.attendance === "absent" && (
+                                                    {student.attendance ===
+                                                      "absent" && (
                                                       <ReplacementAdd
-                                                        studentId={student.studentId}
-                                                        setIsReplacement={setIsReplacement} />
+                                                        studentId={
+                                                          student.studentId
+                                                        }
+                                                        attendanceData={
+                                                          attendanceData
+                                                        }
+                                                        setIsReplacement={
+                                                          setIsReplacement
+                                                        }
+                                                      />
                                                     )}
                                                   </label>
                                                 </>
-                                              }
+                                              )}
                                             </td>
                                             <td>
                                               <input
