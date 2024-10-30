@@ -129,11 +129,9 @@ const Payroll = () => {
             <tr>
               <th scope="col">S No</th>
               <th scope="col">Centre Name</th>
-              <th scope="col">Emplopee Name</th>
-              <th scope="col">Bonus</th>
-              {/* <th scope="col">Gross Pay</th> */}
-              {/* <th scope="col">Deduction</th> */}
+              <th scope="col">Emplopee Name</th>       
               <th scope="col">Net Pay</th>
+              <th scope="col">Role</th>
               <th scope="col">Status</th>
               {extraData && (
                 <th
@@ -207,10 +205,8 @@ const Payroll = () => {
                     )}
                 </td>
                 <td>{data.employeeName}</td>
-                <td>{data.bonus}</td>
-                {/* <td>{data.grossPay}</td> */}
-                {/* <td>{data.deduction}</td> */}
                 <td>{data.netPay}</td>
+                <td>{data.userRole}</td>
                 <td>
                   {data.status === "APPROVED" ? (
                     <span className="badge badges-Green">Approved</span>

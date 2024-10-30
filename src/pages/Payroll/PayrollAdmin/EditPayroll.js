@@ -308,7 +308,7 @@ function EditPayroll() {
           "Content-Type": "application/json",
         },
       });
-      formik.setFieldValue("netPay", response.data);
+      formik.setFieldValue("netPay", response.data.netPay);
     } catch (error) {
       toast.error(error);
     }

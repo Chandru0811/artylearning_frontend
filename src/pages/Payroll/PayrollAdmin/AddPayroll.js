@@ -79,6 +79,7 @@ function AddPayroll() {
     initialValues: {
       centerId: "",
       userId: "",
+      userRole:"",
       grossPay: "",
       payrollMonth: "",
       bonus: 0,
@@ -135,27 +136,26 @@ function AddPayroll() {
         };
       } else if (empRole === "freelancer") {
         payload = {
-          centerName: selectedCenterName,
           centerId: values.centerId,
           userId: values.userId,
-          employeeName: selectedEmployeeName,
-          grossPay: values.grossPay,
+          userRole:values.userRole,
+          payrollMonth:values.payrollMonth,
           netPay: values.netPay,
           status: values.status,
           payrollType: values.payrollType,
-          freelanceCount: Number(values.freelanceCount),
+          freelancerCount: Number(values.freelanceCount),
         };
       }
 
       try {
         if (empRole === "freelancer") {
-          const response = await api.post("/createFreelancePayroll", payload, {
+          const response = await api.post("/createFreelancerPayroll", payload, {
             headers: {
               "Content-Type": "application/json",
             },
           });
 
-          if (response.status === 201) {
+          if (response.status === 201 || response.status === 200 ) {
             toast.success(response.data.message);
             navigate("/payrolladmin");
           } else {
@@ -168,7 +168,7 @@ function AddPayroll() {
             },
           });
 
-          if (response.status === 201) {
+          if (response.status === 201 || response.status === 201) {
             toast.success(response.data.message);
             navigate("/payrolladmin");
           } else {
@@ -312,7 +312,7 @@ function AddPayroll() {
           "Content-Type": "application/json",
         },
       });
-      formik.setFieldValue("netPay", response.data);
+      formik.setFieldValue("netPay", response.data.netPay);
     } catch (error) {
       toast.error(error);
     }
