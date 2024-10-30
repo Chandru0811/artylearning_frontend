@@ -138,7 +138,7 @@ function AddPayroll() {
         payload = {
           centerId: values.centerId,
           userId: values.userId,
-          userRole:values.userRole,
+          userRole:empRole,
           payrollMonth:values.payrollMonth,
           netPay: values.netPay,
           status: values.status,

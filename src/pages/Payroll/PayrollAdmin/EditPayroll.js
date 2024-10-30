@@ -15,19 +15,19 @@ function EditPayroll() {
   const [empRole, setEmpRole] = useState(null)
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-
+console.log("empRole",empRole)
   const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
     centerId: Yup.string().required("*Centre name is required"),
     userId: Yup.string().required("*Employee name is required"),
     payrollMonth: Yup.string().when("userId", {
-      is: (empRole) => empRole !== "freelancer",
+      is: (empRole) => empRole !== "SMS_FREELANCER",
       then: (schema) => schema.required("*Select the Payroll Month"),
       otherwise: (schema) => schema.notRequired(),
     }),
     bonus: Yup.number().when("userId", {
-      is: (empRole) => empRole !== "freelancer",
+      is: (empRole) => empRole !== "SMS_FREELANCER",
       then: (schema) =>
         schema
           .required("*Bonus is required")
@@ -35,7 +35,7 @@ function EditPayroll() {
       otherwise: (schema) => schema.notRequired(),
     }),
     deductionAmount: Yup.number().when("userId", {
-      is: (empRole) => empRole !== "freelancer",
+      is: (empRole) => empRole !== "SMS_FREELANCER",
       then: (schema) =>
         schema
           .required("*Deduction is required")
@@ -43,12 +43,12 @@ function EditPayroll() {
       otherwise: (schema) => schema.notRequired(),
     }),
     shgContribution: Yup.string().when("userId", {
-      is: (empRole) => empRole !== "freelancer",
+      is: (empRole) => empRole !== "SMS_FREELANCER",
       then: (schema) => schema.required("*shgContribution is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
     cpfContribution: Yup.string().when("userId", {
-      is: (empRole) => empRole !== "freelancer",
+      is: (empRole) => empRole !== "SMS_FREELANCER",
       then: (schema) => schema.required("*cpfContribution is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
@@ -56,14 +56,14 @@ function EditPayroll() {
       "freelanceCount-required",
       "*Freelance count is required",
       function (value) {
-        return empRole === "freelancer" ? !!value : true;
+        return empRole === "SMS_FREELANCER" ? !!value : true;
       }
     ),
     payrollType: Yup.string().test(
       "payrollType-required",
       "*Payroll type is required",
       function (value) {
-        return empRole === "freelancer" ? !!value : true;
+        return empRole === "SMS_FREELANCER" ? !!value : true;
       }
     ),
     netPay: Yup.number()
@@ -115,7 +115,7 @@ function EditPayroll() {
         status: values.status,
       };
 
-      if (empRole !== "freelancer") {
+      if (empRole !== "SMS_FREELANCER") {
         payload = {
           centerName: selectedCenterName,
           centerId: values.centerId,
@@ -130,11 +130,12 @@ function EditPayroll() {
           shgContribution: values.shgContribution,
           cpfContributions: values.cpfContribution,
         };
-      } else if (empRole === "freelancer") {
+      } else if (empRole === "SMS_FREELANCER") {
         payload = {
           centerName: selectedCenterName,
           centerId: values.centerId,
           userId: values.userId,
+          userRole:empRole,
           employeeName: selectedEmployeeName,
           grossPay: values.grossPay,
           netPay: values.netPay,
@@ -254,7 +255,7 @@ function EditPayroll() {
 
   useEffect(() => {
     const calculateNetPay = () => {
-      if (empRole !== "freelancer") {
+      if (empRole !== "SMS_FREELANCER") {
         const grossPay = parseFloat(formik.values.grossPay) || 0;
         const bonus = parseFloat(formik.values.bonus) || 0;
         const deductionAmount = parseFloat(formik.values.deductionAmount) || 0;
@@ -287,6 +288,7 @@ function EditPayroll() {
         const response = await api.get(`/getAllUserPayrollById/${id}`);
         // console.log("Formated Data is ", response.data);
         formik.setValues(response.data);
+        setEmpRole(response.data.userRole)
         fetchUserName(response.data.centerId);
       } catch (error) {
         console.error(error);
@@ -437,7 +439,7 @@ function EditPayroll() {
                 )}
               </div>
             </div>
-            {empRole !== "freelancer" && (
+            {empRole !== "SMS_FREELANCER" && (
               <>
                 <div className="col-md-6 col-12">
                   <div className="text-start mt-2 mb-3">
@@ -563,7 +565,7 @@ function EditPayroll() {
                 </div>
               </>
             )}
-            {empRole === "freelancer" && (
+            {empRole === "SMS_FREELANCER" && (
               <>
                 <div className="col-md-6 col-12">
                   <div className="text-start mt-2 mb-3">
