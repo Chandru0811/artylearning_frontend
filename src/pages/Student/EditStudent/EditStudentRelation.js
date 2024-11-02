@@ -15,93 +15,82 @@ const validationSchema = Yup.object().shape({});
 
 const EditStudentRelation = forwardRef(
   ({ formData, setFormData, setLoadIndicators, handleNext }, ref) => {
-    const [centerData, setCenterData] = useState(null);
-    const [studentData, setStudentData] = useState(null);
+    const [centerData, setCenterData] = useState([]);
+    const [studentData, setStudentData] = useState([]);
     const userName = localStorage.getItem("userName");
 
-    console.log("Formdata ID:", formData.id);
-    const fetchData = async () => {
-      try {
-        const centerData = await fetchAllCentersWithIds();
-        setCenterData(centerData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
+    useEffect(() => {
+      // Fetch center data when component mounts
+      const fetchCenterData = async () => {
+        try {
+          const data = await fetchAllCentersWithIds();
+          setCenterData(data);
+        } catch (error) {
+          toast.error(error.message || "Failed to load centers.");
+        }
+      };
+      fetchCenterData();
+    }, []);
 
     const fetchStudent = async (centerId) => {
       try {
-        const student = await fetchAllStudentListByCenter(centerId);
-        setStudentData(student);
+        const students = await fetchAllStudentListByCenter(centerId);
+        setStudentData(students);
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "Failed to load students.");
       }
     };
 
     const handleCenterChange = (event) => {
-      const newStudentRelationCenter = event.target.value;
+      const selectedCenterId = event.target.value;
       setStudentData([]);
-      formik.setFieldValue("studentRelationCenter", newStudentRelationCenter);
-      fetchStudent(newStudentRelationCenter);
+      formik.setFieldValue("studentRelationCenter", selectedCenterId);
+      fetchStudent(selectedCenterId);
     };
 
     const formik = useFormik({
       initialValues: {
-        studentRelationCenter:formData.studentRelationCenter || "",
-        centerId: formData.studentRelationCenter || "",
+        studentRelationCenter: formData.studentRelationCenter || "",
+        centerId: formData.centerId || "",
         studentRelation: formData.studentRelation || "",
         StudentRelationStudentName: formData.StudentRelationStudentName || "",
         studentId: formData.id || "",
         updatedBy: userName,
       },
-      validationSchema: validationSchema,
+      validationSchema,
       onSubmit: async (data) => {
-        console.log("STD Data:",data);
-        
         setLoadIndicators(true);
         try {
-          if (data.stdRealtionId !== null) {
+          if (data.stdRelationId) {
             const response = await api.put(
-              `/updateStudentRelation/${data.stdRealtionId}`,
+              `/updateStudentRelation/${data.stdRelationId}`,
               data,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
+              { headers: { "Content-Type": "application/json" } }
             );
-            if (response.status === 200) {
-              toast.success(response.data.message);
-              handleNext();
-            } else {
-              toast.error(response.data.message);
-            }
+            toast[response.status === 200 ? "success" : "error"](
+              response.data.message
+            );
+            handleNext();
           } else {
             const payload = {
               studentRelationCenter: data.studentRelationCenter,
               studentRelation: data.studentRelation,
               StudentRelationStudentName: data.StudentRelationStudentName,
-              studentId: formData.id || "",
+              studentId: formData.id,
             };
             const response = await api.post(
               `/createStudentRelations`,
               payload,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
+              { headers: { "Content-Type": "application/json" } }
             );
-            if (response.status === 201) {
-              toast.success(response.data.message);
-              setFormData((prv) => ({ ...prv, ...data }));
-              handleNext();
-            } else {
-              toast.error(response.data.message);
-            }
+            toast[response.status === 201 ? "success" : "error"](
+              response.data.message
+            );
+            setFormData((prev) => ({ ...prev, ...data }));
+            handleNext();
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message || "Failed to save data.");
         } finally {
           setLoadIndicators(false);
         }
@@ -109,45 +98,29 @@ const EditStudentRelation = forwardRef(
     });
 
     useEffect(() => {
-      fetchData();
-    }, []);
-
-    useEffect(() => {
-      const getData = async () => {
+      const fetchStudentData = async () => {
         try {
           const response = await api.get(`/getAllStudentById/${formData.id}`);
-          // console.log(response.data.studentRelationModels)
-          if (
-            response.data.studentRelationModels &&
-            response.data.studentRelationModels.length > 0
-          ) {
-            const data = response.data.studentRelationModels[0];
+          if (response.data.studentRelationModels?.length) {
+            const studentInfo = response.data.studentRelationModels[0];
             formik.setValues({
-              // ...data,
-              centerId: data.studentRelationCenter,
-              StudentRelationStudentName: data.studentRelationStudentName,
-              StudentRelation:data.studentRelation,
-              stdRealtionId: data.id,
+              centerId: studentInfo.studentRelationCenter,
+              StudentRelationStudentName:
+                studentInfo.studentRelationStudentName,
+              studentRelation: studentInfo.studentRelation,
+              stdRelationId: studentInfo.id,
             });
-            if (data.studentRelationCenter) {
-              fetchStudent(data.studentRelationCenter);
+            if (studentInfo.studentRelationCenter) {
+              fetchStudent(studentInfo.studentRelationCenter);
             }
           } else {
-            // If there are no emergency contacts, set default values or handle the case as needed
-            formik.setValues({
-              stdRealtionId: null,
-              studentRelationCenter: "",
-              studentRelation: "",
-              StudentRelationStudentName: "",
-            });
+            formik.resetForm();
           }
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error fetching student data:", error);
         }
       };
-      // console.log(formik.values);
-      getData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      fetchStudentData();
     }, [formData.id]);
 
     useImperativeHandle(ref, () => ({
@@ -159,58 +132,51 @@ const EditStudentRelation = forwardRef(
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
+            if (e.key === "Enter" && !formik.isSubmitting) e.preventDefault();
           }}
         >
           <div className="border-0 mb-5">
             <div className="mb-5">
               <div className="border-0 my-2 px-2">
-                <p class="headColor">Student Relation</p>
+                <p className="headColor">Student Relation</p>
                 <div className="container py-3">
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-12">
                       <div className="text-start">
-                        <label htmlFor="" className="mb-1 fw-medium">
+                        <label
+                          htmlFor="studentRelationCenter"
+                          className="mb-1 fw-medium"
+                        >
                           <small>Centre</small>
                         </label>
-                        <br />
                         <select
                           {...formik.getFieldProps("studentRelationCenter")}
-                          name="studentRelationCenter"
                           className={`form-select ${
                             formik.touched.studentRelationCenter &&
                             formik.errors.studentRelationCenter
                               ? "is-invalid"
                               : ""
                           }`}
-                          onBlur={formik.handleBlur}
                           onChange={handleCenterChange}
                         >
-                          <option selected></option>
-                          {centerData &&
-                            centerData.map((studentRelationCenter) => (
-                              <option
-                                key={studentRelationCenter.id}
-                                value={studentRelationCenter.id}
-                              >
-                                {studentRelationCenter.centerNames}
-                              </option>
-                            ))}
+                          <option value=""></option>
+                          {centerData.map((center) => (
+                            <option key={center.id} value={center.id}>
+                              {center.centerNames}
+                            </option>
+                          ))}
                         </select>
                       </div>
                       <div className="text-start mt-2">
-                        <label htmlFor="" className="mb-1 fw-medium">
+                        <label
+                          htmlFor="studentRelation"
+                          className="mb-1 fw-medium"
+                        >
                           <small>Relation</small>
                         </label>
-                        <br />
                         <select
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.studentRelation}
-                          className="form-select "
-                          name="studentRelation"
+                          {...formik.getFieldProps("studentRelation")}
+                          className="form-select"
                         >
                           <option value=""></option>
                           <option value="Mother">Mother</option>
@@ -222,11 +188,12 @@ const EditStudentRelation = forwardRef(
                     </div>
                     <div className="col-lg-6 col-md-6 col-12">
                       <div className="text-start">
-                        <label htmlFor="" className="mb-1 fw-medium">
+                        <label
+                          htmlFor="StudentRelationStudentName"
+                          className="mb-1 fw-medium"
+                        >
                           <small>Student Name</small>
-                          {/* <span className="text-danger">*</span> */}
                         </label>
-                        <br />
                         <select
                           {...formik.getFieldProps(
                             "StudentRelationStudentName"
@@ -238,27 +205,14 @@ const EditStudentRelation = forwardRef(
                               : ""
                           }`}
                         >
-                          <option selected></option>
-                          {/* {studentData &&
-                            studentData.map((student) => (
-                              <option
-                                key={student.id}
-                                value={student.studentNames}
-                              >
+                          <option value="" disabled></option>
+                          {studentData
+                            .filter((student) => student.id !== formData.id)
+                            .map((student) => (
+                              <option key={student.id} value={student.id}>
                                 {student.studentNames}
                               </option>
-                            ))} */}
-                          {studentData &&
-                            studentData
-                              .filter(
-                                (student) => student.id !== formData.student_id
-                              ) // Filter students with matching id
-                              .map((student) => (
-                                <option key={student.id} value={student.id}>
-                                  {student.studentNames}{" "}
-                                  {/* Display the student name */}
-                                </option>
-                              ))}
+                            ))}
                         </select>
                         {formik.touched.StudentRelationStudentName &&
                           formik.errors.StudentRelationStudentName && (
@@ -280,4 +234,5 @@ const EditStudentRelation = forwardRef(
     );
   }
 );
+
 export default EditStudentRelation;
