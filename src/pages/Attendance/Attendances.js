@@ -394,7 +394,7 @@ function Attendances() {
                                                         color: "black",
                                                       }}
                                                     >
-                                                      Replacement Class Required
+                                                      Replacement Class Request
                                                     </Link>
                                                   </span>
                                                 </>

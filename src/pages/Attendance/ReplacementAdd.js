@@ -20,8 +20,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
     course: Yup.string().required("*Course is required"),
     classCode: Yup.string().required("*Class Code is required"),
     absentDate: Yup.string().required("*Absent Date is required"),
-    otherReason: Yup.string().required("*Other Reason is required"),
-    remark: Yup.string().required("*Remark is required"),
+    absentReason: Yup.string().required("*Absent Reason is required"),
   });
 
   const handleClose = () => {
@@ -257,6 +256,8 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                   </label>
                   <input
                     type="date"
+                    min={new Date().toISOString().split("T")[0]}
+                    Value={new Date().toISOString().split("T")[0]}
                     className={`form-control  ${
                       formik.touched.absentDate && formik.errors.absentDate
                         ? "is-invalid"
