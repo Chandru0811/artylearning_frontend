@@ -45,7 +45,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
       studentId: attendanceData[0]?.students[0]?.studentUniqueId,
       course: attendanceData[0]?.course,
       classCode: attendanceData[0]?.classCode,
-      absentDate: "",
+      absentDate: new Date().toISOString().split("T")[0],
       preferredDay: "",
       preferredTiming: "",
       absentReason: "",
@@ -257,8 +257,8 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                   <input
                     type="date"
                     min={new Date().toISOString().split("T")[0]}
-                    Value={new Date().toISOString().split("T")[0]}
-                    className={`form-control  ${
+                    value={formik.values.absentDate}
+                    className={`form-control ${
                       formik.touched.absentDate && formik.errors.absentDate
                         ? "is-invalid"
                         : ""
@@ -271,6 +271,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                     </div>
                   )}
                 </div>
+
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Absent Reason<span className="text-danger">*</span>

@@ -54,6 +54,7 @@
   background-color: #fa994af5;
   border: 1px solid #fa994af5;
 }
+
 .stdViewBtn:hover {
   color: white;
   background-color: #fa994af5;
@@ -77,6 +78,7 @@
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgb(55 253 13 / 25%);
 }
+
 .toggleInput .form-check-input:focus {
   border-color: #db4f68;
   outline: 0;
@@ -115,7 +117,7 @@
   display: none;
 }
 
-.radio-button input[type="radio"] + .radio-button-text {
+.radio-button input[type="radio"]+.radio-button-text {
   display: inline-block;
   width: 100px;
   height: 30px;
@@ -126,14 +128,12 @@
   cursor: pointer;
 }
 
-.radio-button
-  input[type="radio"]:checked[value="present"]
-  + .radio-button-text {
+.radio-button input[type="radio"]:checked[value="present"]+.radio-button-text {
   background-color: green;
   color: white;
 }
 
-.radio-button input[type="radio"]:checked[value="absent"] + .radio-button-text {
+.radio-button input[type="radio"]:checked[value="absent"]+.radio-button-text {
   background-color: red;
   color: white;
 }
@@ -143,6 +143,7 @@
   background-color: #fce6cf;
   border: 1px solid #fce6cf;
 }
+
 .btn-btn:hover {
   color: black;
   background-color: #fce6cf;
@@ -211,6 +212,7 @@
   align-items: center;
   height: 55vh;
 }
+
 .loading {
   --speed-of-animation: 0.9s;
   --gap: 6px;
@@ -255,6 +257,7 @@
 }
 
 @keyframes scale {
+
   0%,
   40%,
   100% {
@@ -282,7 +285,7 @@
 
 /* table */
 
-.paysliptable > * {
+.paysliptable>* {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
@@ -421,11 +424,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(
-    226,
-    226,
-    226
-  ); /* or any other color that fits your design */
+  background-color: rgb(226,
+      226,
+      226);
+  /* or any other color that fits your design */
   border: none;
   padding: 5px;
   width: 30px;
@@ -435,7 +437,8 @@
 }
 
 .custom-edit-button:hover {
-  background-color: #f0f0f0; /* Add a hover effect if desired */
+  background-color: #f0f0f0;
+  /* Add a hover effect if desired */
 }
 
 .custom-img-fluid {
@@ -452,7 +455,8 @@
 }
 
 .custom-button {
-  background-color: rgb(206, 0, 0); /* Customize the button color */
+  background-color: rgb(206, 0, 0);
+  /* Customize the button color */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -467,19 +471,23 @@
 .cms-header {
   background-color: #fff;
 }
+
 .sized-image {
   width: 140px;
   height: 115px;
   margin-top: 1rem;
 }
+
 .sized-image {
   width: 140px;
   height: 115px;
   margin-top: 1rem;
 }
+
 .preserve-whitespace {
   white-space: pre-wrap;
 }
+
 .modal-content {
   box-shadow: 0px 0px 5px 560px #00000066, 0px 20px 5px -15px #00000042,
     0px -10px 5px -10px #0000004d, 0px -10px 6px -15px #00000033;
@@ -543,6 +551,7 @@
 .chat-section .message {
   width: 75%;
 }
+
 .chat-section .message-bubble {
   width: fit-content !important;
   padding: 5px;
@@ -570,7 +579,8 @@
   bottom: 0 !important;
   background-color: #fff;
   padding: 10px 0;
-  z-index: 1000; /* Ensure it stays above other content */
+  z-index: 1000;
+  /* Ensure it stays above other content */
 }
 
 
@@ -611,7 +621,8 @@
     bottom: 0 !important;
     background-color: #fff;
     padding: 10px 0;
-    z-index: 1000; /* Ensure it stays above other content */
+    z-index: 1000;
+    /* Ensure it stays above other content */
   }
 }
 
@@ -625,14 +636,14 @@
 .chat-section .input-group .form-control {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
-  border-right: none; 
+  border-right: none;
   background-color: transparent;
 }
 
 .chat-section .input-group .input-group-text {
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  border-left: none; 
+  border-left: none;
   background-color: transparent;
 }
 
@@ -643,6 +654,7 @@
 .focused-button {
   outline: none;
 }
+
 @media (min-width: 768px) {
   .fixed-form {
     position: relative !important;
@@ -668,4 +680,70 @@
 .step-disabled {
   pointer-events: none;
   opacity: 0.5;
+}
+
+/* YourComponent.css */
+
+.modal-overlay-replacement {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 2rem;
+  z-index: 1050;
+}
+
+.modal-content-replacement {
+  background-color: white;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 400px;
+}
+
+.modal-header-replacement {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title-replacement {
+  margin: 0;
+}
+
+.close-button-replacement {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-body-replacement {
+  padding: 1rem;
+}
+
+.modal-footer-replacement {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid #dee2e6;
+
+}
+
+.btn-replacement {
+  padding: 0.375rem 0.75rem;
+  border: none;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
+
+.btn-secondary-replacement {
+  background-color: #6c757d;
+  color: white;
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/sidebar.css";
+import "../../styles/custom.css";
 import api from "../../config/URL";
 import AddMore from "./AddMore";
 import { toast } from "react-toastify";
@@ -7,6 +8,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import WebSocketService from "../../config/WebSocketService";
 import ReplacementAdd from "./ReplacementAdd";
 import { Link } from "react-router-dom";
+import { Modal } from "bootstrap";
 // import fetchAllCoursesWithIds from "../List/CourseList";
 
 function Attendances() {
@@ -18,6 +20,8 @@ function Attendances() {
   // const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedBatch, setSelectedBatch] = useState("1");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const userName = localStorage.getItem("userName");
+  console.log("first", userName);
   const [count, setCount] = useState(0);
   const [isReplacement, setIsReplacement] = useState({ id: "", valid: false });
   // console.log("count", count);
@@ -31,7 +35,15 @@ function Attendances() {
   };
 
   const [selectedDate, setSelectedDate] = useState(getCurrentDate()); // Now getCurrentDate is defined before usage
+  const [isModalOpen, setModalOpen] = useState(false);
 
+  const handleNoAccessClick = () => {
+    setModalOpen(true); // Open the modal when no access is clicked
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
   const fetchListData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -387,16 +399,71 @@ function Attendances() {
                                               isReplacement.valid ? (
                                                 <>
                                                   <span className="radio-button-text">
-                                                    <Link
-                                                      to="/replaceclasslesson"
-                                                      style={{
-                                                        textDecoration: "none",
-                                                        color: "black",
-                                                      }}
-                                                    >
-                                                      Replacement Class Request
-                                                    </Link>
+                                                    {userName ===
+                                                    "SMS_ADMIN" ? (
+                                                      <Link
+                                                        to="/replaceclasslesson"
+                                                        style={{
+                                                          textDecoration:
+                                                            "none",
+                                                          color: "black",
+                                                        }}
+                                                      >
+                                                        Replacement Class
+                                                        Request
+                                                      </Link>
+                                                    ) : userName ===
+                                                        "SMS_TEACHER" ||
+                                                      userName ===
+                                                        "SMS_STAFF" ? (
+                                                      <span
+                                                        onClick={
+                                                          handleNoAccessClick
+                                                        }
+                                                        style={{
+                                                          textDecoration:
+                                                            "none",
+                                                          color: "black",
+                                                          cursor: "pointer",
+                                                        }}
+                                                      >
+                                                        Replacement Class
+                                                        Request
+                                                      </span>
+                                                    ) : null}
                                                   </span>
+
+                                                  {isModalOpen && (
+                                                    <div className="modal-overlay-replacement">
+                                                      <div className="modal-content-replacement">
+                                                        <div className="modal-header-replacement">
+                                                          <h5 className="modal-title-replacement">
+                                                            Notification
+                                                          </h5>
+                                                          <button
+                                                            className="close-button-replacement"
+                                                            onClick={closeModal}
+                                                          >
+                                                            &times;
+                                                          </button>
+                                                        </div>
+                                                        <div className="modal-body-replacement">
+                                                          <p>
+                                                            You already have a
+                                                            request
+                                                          </p>
+                                                        </div>
+                                                        <div className="modal-footer-replacement">
+                                                          <button
+                                                            className="btn-replacement btn-secondary-replacement"
+                                                            onClick={closeModal}
+                                                          >
+                                                            Close
+                                                          </button>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  )}
                                                 </>
                                               ) : (
                                                 <>
