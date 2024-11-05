@@ -14,7 +14,7 @@ import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
-  teacherId: Yup.string().required("*Teacher Id is required"),
+  // teacherId: Yup.string().required("*Teacher Id is required"),
   teacherType: Yup.string().required("*Teacher Type is required"),
   // shgTypeId: Yup.string().required("*Shg Type is required"),
   // shgAmount: Yup.string().required("*Shg Amount is required"),
@@ -115,7 +115,7 @@ const AccountAdd = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -154,13 +154,12 @@ const AccountAdd = forwardRef(
     };
     useEffect(() => {
       if (formik.values.centerIds) {
-        const initializedCenters = centerOptions.filter(option =>
+        const initializedCenters = centerOptions.filter((option) =>
           formik.values.centerIds.includes(option.value)
         );
         setSelectedCenters(initializedCenters);
       }
     }, [formik.values.centerIds, centerOptions]);
-
 
     return (
       <form
@@ -209,10 +208,11 @@ const AccountAdd = forwardRef(
                   );
                 }}
                 labelledBy="Select Centers"
-                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds
+                className={`form-multi-select ${
+                  formik.touched.centerIds && formik.errors.centerIds
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
               />
               {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
@@ -221,7 +221,7 @@ const AccountAdd = forwardRef(
               )}
             </div>
 
-            <div className="col-md-6 col-12 mb-2 mt-3">
+            {/* <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Teacher Id<span className="text-danger">*</span>
               </label>
@@ -238,7 +238,7 @@ const AccountAdd = forwardRef(
                   <small>{formik.errors.teacherId}</small>
                 </div>
               )}
-            </div>
+            </div> */}
             <div className="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Teacher Type<span className="text-danger">*</span>
@@ -363,7 +363,7 @@ const AccountAdd = forwardRef(
                 </div>
               </div>
               {formik.touched.approvelContentRequired &&
-                formik.errors.approvelContentRequired ? (
+              formik.errors.approvelContentRequired ? (
                 <div className="error text-danger ">
                   <small>{formik.errors.approvelContentRequired}</small>
                 </div>

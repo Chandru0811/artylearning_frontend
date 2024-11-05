@@ -14,7 +14,7 @@ import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required"),
-  teacherId: Yup.string().required("*Teacher Id is required"),
+  // teacherId: Yup.string().required("*Teacher Id is required"),
   teacherType: Yup.string().required("*Teacher Type is require"),
   approvelContentRequired: Yup.string().required(
     "*Approval Required is required"
@@ -122,7 +122,7 @@ const AccountEdit = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -273,10 +273,11 @@ const AccountEdit = forwardRef(
                     );
                   }}
                   labelledBy="Select Centers"
-                  className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds
+                  className={`form-multi-select ${
+                    formik.touched.centerIds && formik.errors.centerIds
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                 />
               )}
               {formik.touched.centerIds && formik.errors.centerIds && (
@@ -285,7 +286,7 @@ const AccountEdit = forwardRef(
                 </div>
               )}
             </div>
-            <div class="col-md-6 col-12 mb-2 mt-3">
+            {/* <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Teacher ID<span class="text-danger">*</span>
               </label>
@@ -302,7 +303,7 @@ const AccountEdit = forwardRef(
                   <small>{formik.errors.teacherId}</small>
                 </div>
               )}
-            </div>
+            </div> */}
             <div class="col-md-6 col-12 mb-2 mt-3">
               <label>
                 Teacher Type<span class="text-danger">*</span>
@@ -431,7 +432,7 @@ const AccountEdit = forwardRef(
                 </div>
               </div>
               {formik.touched.approvelContentRequired &&
-                formik.errors.approvelContentRequired ? (
+              formik.errors.approvelContentRequired ? (
                 <div className="error text-danger ">
                   <small>{formik.errors.approvelContentRequired}</small>
                 </div>

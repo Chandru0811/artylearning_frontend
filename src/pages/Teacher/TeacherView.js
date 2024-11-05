@@ -38,7 +38,6 @@ function TeacherView() {
     getData();
     fetchData();
     fetchSalaryTypeData();
-
   }, [id]);
 
   const fetchData = async () => {
@@ -86,10 +85,10 @@ function TeacherView() {
     ? userRequireInfo.educationCertificate
     : "#";
 
-    const findSalaryType = (id) => {
-      const name = salaryTypeData?.find((datas) => datas.id === id);
-      return name?.salaryType;
-    };
+  const findSalaryType = (id) => {
+    const name = salaryTypeData?.find((datas) => datas.id === id);
+    return name?.salaryType;
+  };
 
   return (
     <div class="container-fluid minHeight mb-5">
@@ -186,7 +185,7 @@ function TeacherView() {
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Citizenship</p>
+              <p className="text-sm fw-medium">Cityzenship</p>
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">: {data.nationality || "--"}</p>
@@ -209,9 +208,7 @@ function TeacherView() {
               <p className="text-sm fw-medium">Email</p>
             </div>
             <div className="col-6">
-              <p className="text-muted text-sm">
-                : {data.email || "--"}
-              </p>
+              <p className="text-muted text-sm">: {data.email || "--"}</p>
             </div>
           </div>
         </div>
@@ -267,7 +264,7 @@ function TeacherView() {
             </div>
           </div>
         </div>
-        <div className="col-md-6 col-12">
+        {/* <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
               <p className="text-sm fw-medium">Teacher ID</p>
@@ -283,7 +280,7 @@ function TeacherView() {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="col-md-6 col-12 ">
           <div className="row mb-3">
             <div className="col-6 d-flex">
@@ -307,18 +304,18 @@ function TeacherView() {
               <p className="text-sm fw-medium">SHG(S) Type</p>
             </div>
             <div className="col-6">
-            <p className="text-muted text-sm">
-            :{" "}
-            {data.userAccountInfo &&
-            data.userAccountInfo.length > 0 &&
-            data.userAccountInfo[0].shgTypeId
-              ? (
-                  shgData.find(
-                    (item) => item.id === data.userAccountInfo[0].shgTypeId
-                  ) || {}
-                ).shgType || "--"
-              : "--"}
-          </p>
+              <p className="text-muted text-sm">
+                :{" "}
+                {data.userAccountInfo &&
+                data.userAccountInfo.length > 0 &&
+                data.userAccountInfo[0].shgTypeId
+                  ? (
+                      shgData.find(
+                        (item) => item.id === data.userAccountInfo[0].shgTypeId
+                      ) || {}
+                    ).shgType || "--"
+                  : "--"}
+              </p>
             </div>
           </div>
         </div>
@@ -602,7 +599,7 @@ function TeacherView() {
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">
-              :{" "}
+                :{" "}
                 {data.userSalaryCreationModels &&
                 data.userSalaryCreationModels.length > 0 &&
                 data.userSalaryCreationModels[0].salaryTypeId

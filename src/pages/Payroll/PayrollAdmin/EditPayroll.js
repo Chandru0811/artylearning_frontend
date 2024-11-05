@@ -12,60 +12,50 @@ function EditPayroll() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const { id } = useParams();
-  const [empRole, setEmpRole] = useState(null)
+  const [empRole, setEmpRole] = useState(null);
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-console.log("empRole",empRole)
+  console.log("empRole", empRole);
   const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
     centerId: Yup.string().required("*Centre name is required"),
     userId: Yup.string().required("*Employee name is required"),
-    payrollMonth: Yup.string().when("userId", {
-      is: (empRole) => empRole !== "SMS_FREELANCER",
-      then: (schema) => schema.required("*Select the Payroll Month"),
-      otherwise: (schema) => schema.notRequired(),
+    payrollMonth: Yup.string().when("empRole", {
+      is: (role) => role !== "freelancer",
+      then: Yup.string().required("*Payroll Month is required"),
+      otherwise: Yup.string().notRequired(),
     }),
-    bonus: Yup.number().when("userId", {
-      is: (empRole) => empRole !== "SMS_FREELANCER",
-      then: (schema) =>
-        schema
-          .required("*Bonus is required")
-          .typeError("Bonus must be a number"),
-      otherwise: (schema) => schema.notRequired(),
+    bonus: Yup.string().when("empRole", {
+      is: (role) => role !== "freelancer",
+      then: Yup.string().required("*Bonus is required"),
+      otherwise: Yup.string().notRequired(),
     }),
-    deductionAmount: Yup.number().when("userId", {
-      is: (empRole) => empRole !== "SMS_FREELANCER",
-      then: (schema) =>
-        schema
-          .required("*Deduction is required")
-          .typeError("Deduction must be a number"),
-      otherwise: (schema) => schema.notRequired(),
+    deductionAmount: Yup.string().when("empRole", {
+      is: (role) => role !== "freelancer",
+      then: Yup.string().required("*Deduction Amount is required"),
+      otherwise: Yup.string().notRequired(),
     }),
-    shgContribution: Yup.string().when("userId", {
-      is: (empRole) => empRole !== "SMS_FREELANCER",
-      then: (schema) => schema.required("*shgContribution is required"),
-      otherwise: (schema) => schema.notRequired(),
+    shgContribution: Yup.string().when("empRole", {
+      is: (role) => role !== "freelancer",
+      then: Yup.string().required("*SHG Contribution is required"),
+      otherwise: Yup.string().notRequired(),
     }),
-    cpfContribution: Yup.string().when("userId", {
-      is: (empRole) => empRole !== "SMS_FREELANCER",
-      then: (schema) => schema.required("*cpfContribution is required"),
-      otherwise: (schema) => schema.notRequired(),
+    cpfContribution: Yup.string().when("empRole", {
+      is: (role) => role !== "freelancer",
+      then: Yup.string().required("*CPF Contribution is required"),
+      otherwise: Yup.string().notRequired(),
     }),
-    freelanceCount: Yup.string().test(
-      "freelanceCount-required",
-      "*Freelance count is required",
-      function (value) {
-        return empRole === "SMS_FREELANCER" ? !!value : true;
-      }
-    ),
-    payrollType: Yup.string().test(
-      "payrollType-required",
-      "*Payroll type is required",
-      function (value) {
-        return empRole === "SMS_FREELANCER" ? !!value : true;
-      }
-    ),
+    freelanceCount: Yup.string().when("empRole", {
+      is: "freelancer",
+      then: Yup.string().required("*Freelance count is required"),
+      otherwise: Yup.string().notRequired(),
+    }),
+    payrollType: Yup.string().when("empRole", {
+      is: "freelancer",
+      then: Yup.string().required("*Payroll type is required"),
+      otherwise: Yup.string().notRequired(),
+    }),
     netPay: Yup.number()
       .required("*Net pay is required")
       .typeError("Net pay must be a number"),
@@ -87,7 +77,7 @@ console.log("empRole",empRole)
       freelanceCount: "",
       payrollType: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       let selectedCenterName = "";
@@ -135,7 +125,7 @@ console.log("empRole",empRole)
           centerName: selectedCenterName,
           centerId: values.centerId,
           userId: values.userId,
-          userRole:empRole,
+          userRole: empRole,
           employeeName: selectedEmployeeName,
           grossPay: values.grossPay,
           netPay: values.netPay,
@@ -158,9 +148,9 @@ console.log("empRole",empRole)
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error?.response?.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error?.response?.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error?.response?.data?.message);
         }
       } finally {
@@ -288,7 +278,7 @@ console.log("empRole",empRole)
         const response = await api.get(`/getAllUserPayrollById/${id}`);
         // console.log("Formated Data is ", response.data);
         formik.setValues(response.data);
-        setEmpRole(response.data.userRole)
+        setEmpRole(response.data.userRole);
         fetchUserName(response.data.centerId);
       } catch (error) {
         console.error(error);
@@ -310,6 +300,7 @@ console.log("empRole",empRole)
           "Content-Type": "application/json",
         },
       });
+
       formik.setFieldValue("netPay", response.data.netPay);
     } catch (error) {
       toast.error(error);
@@ -414,54 +405,52 @@ console.log("empRole",empRole)
                 <div className="invalid-feedback">{formik.errors.userId}</div>
               )}
             </div>
-
-            <div className="  col-md-6 col-12">
+            <div className="col-md-6 col-12">
               <div className="text-start mt-2 mb-3">
-                <lable className="form-lable">
-                  Basic Pay<span className="text-danger">*</span>
-                </lable>
+                <label className="form-label">
+                  Payroll Month<span className="text-danger">*</span>
+                </label>
                 <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.grossPay && formik.errors.grossPay
+                  type="month"
+                  className={`form-control ${
+                    formik.touched.payrollMonth && formik.errors.payrollMonth
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
-                  {...formik.getFieldProps("grossPay")}
-                  readOnly
+                  {...formik.getFieldProps("payrollMonth")}
                 />
-                {formik.touched.grossPay && formik.errors.grossPay && (
+                {formik.touched.payrollMonth && formik.errors.payrollMonth && (
                   <div className="invalid-feedback">
-                    {formik.errors.grossPay}
+                    {formik.errors.payrollMonth}
                   </div>
                 )}
               </div>
             </div>
+
             {empRole !== "SMS_FREELANCER" && (
               <>
-                <div className="col-md-6 col-12">
+                <div className="  col-md-6 col-12">
                   <div className="text-start mt-2 mb-3">
-                    <label className="form-label">
-                      Payroll Month<span className="text-danger">*</span>
-                    </label>
+                    <lable className="form-lable">
+                      Basic Pay<span className="text-danger">*</span>
+                    </lable>
                     <input
-                      type="month"
-                      className={`form-control ${
-                        formik.touched.payrollMonth &&
-                        formik.errors.payrollMonth
+                      type="text"
+                      className={`form-control  ${
+                        formik.touched.grossPay && formik.errors.grossPay
                           ? "is-invalid"
                           : ""
                       }`}
-                      {...formik.getFieldProps("payrollMonth")}
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                      {...formik.getFieldProps("grossPay")}
+                      readOnly
                     />
-                    {formik.touched.payrollMonth &&
-                      formik.errors.payrollMonth && (
-                        <div className="invalid-feedback">
-                          {formik.errors.payrollMonth}
-                        </div>
-                      )}
+                    {formik.touched.grossPay && formik.errors.grossPay && (
+                      <div className="invalid-feedback">
+                        {formik.errors.grossPay}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="  col-md-6 col-12">

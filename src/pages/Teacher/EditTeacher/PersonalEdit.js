@@ -20,6 +20,7 @@ const validationSchema = Yup.object().shape({
   idNo: Yup.string().required("*Id No is required"),
   // email: Yup.string().email("*Invalid Email").required("*Email is required"),
   nationalityId: Yup.string().required("*Nationality is required"),
+  citizenship: Yup.string().required("*Citizenship is required"),
 });
 const PersonalEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -94,6 +95,7 @@ const PersonalEdit = forwardRef(
         idNo: formData.idNo || "",
         nationality: formData.nationality || "",
         nationalityId: formData.nationalityId || "",
+        citizenship: formData.citizenship || "",
         photo: formData.photo || "",
         employeeType: null || null,
         nationality: formData.nationality || "",
@@ -108,15 +110,21 @@ const PersonalEdit = forwardRef(
         setLoadIndicators(true);
         setFormData((prev) => ({ ...prev, ...data }));
         let nationalityName;
-        if (data.nationalityId) nationalityName = nationalityData.find((prv) =>
-          prv.id === parseInt(data.nationalityId))
+        if (data.nationalityId)
+          nationalityName = nationalityData.find(
+            (prv) => prv.id === parseInt(data.nationalityId)
+          );
 
         try {
-          const response = await api.put(`/updateUser/${formData.staff_id}`, data, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const response = await api.put(
+            `/updateUser/${formData.staff_id}`,
+            data,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
 
           if (response.status === 200) {
             toast.success(response.data.message);
@@ -136,7 +144,7 @@ const PersonalEdit = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -168,7 +176,6 @@ const PersonalEdit = forwardRef(
             ...response.data,
             dateOfBirth: dateOfBirth,
             shortIntroduction: formData.shortIntroduction || "",
-
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -342,6 +349,35 @@ const PersonalEdit = forwardRef(
                 </div>
               )}
             </div>
+            <div className="form-group col-sm">
+              <label>Cityzenship</label>
+              <span className="text-danger">*</span>
+              <select
+                className="form-select"
+                name="citizenship"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.citizenship}
+              >
+                <option selected></option>
+                {nationalityData &&
+                  nationalityData.map((citizenship) => (
+                    <option
+                      key={citizenship.id}
+                      value={citizenship.citizenship}
+                    >
+                      {citizenship.citizenship}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.citizenship && formik.errors.citizenship && (
+                <div className="error text-danger">
+                  <small>{formik.errors.citizenship}</small>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="container row d-flex my-4 justify-align-content-around">
             <div className="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">
@@ -390,7 +426,7 @@ const PersonalEdit = forwardRef(
                 name="shortIntroduction"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-              // value={formData.shortIntroduction}
+                // value={formData.shortIntroduction}
               />
               {formik.touched.shortIntroduction &&
                 formik.errors.shortIntroduction && (

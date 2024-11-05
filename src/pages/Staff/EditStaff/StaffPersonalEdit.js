@@ -19,6 +19,7 @@ const validationSchema = Yup.object().shape({
   idTypeId: Yup.string().required("*Id Type is required"),
   idNo: Yup.string().required("*Id No is required"),
   nationalityId: Yup.string().required("*Nationality is required"),
+  citizenship: Yup.string().required("*Citizenship is required"),
   // file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalEdit = forwardRef(
@@ -37,6 +38,7 @@ const StaffPersonalEdit = forwardRef(
         photo: formData.photo || "",
         employeeType: null || null,
         nationality: formData.nationality || "",
+        citizenship: formData.citizenship || "",
         age: 0,
         shortIntroduction: formData.shortIntroduction || "",
         gender: formData.gender || "",
@@ -50,15 +52,21 @@ const StaffPersonalEdit = forwardRef(
         setLoadIndicators(true);
         setFormData((prev) => ({ ...prev, ...data }));
         let nationalityName;
-        if (data.nationalityId) nationalityName = nationalityData.find((prv) =>
-          prv.id === parseInt(data.nationalityId))
+        if (data.nationalityId)
+          nationalityName = nationalityData.find(
+            (prv) => prv.id === parseInt(data.nationalityId)
+          );
 
         try {
-          const response = await api.put(`/updateUser/${formData.staff_id}`, data, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+          const response = await api.put(
+            `/updateUser/${formData.staff_id}`,
+            data,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
 
           if (response.status === 200) {
             toast.success(response.data.message);
@@ -78,7 +86,7 @@ const StaffPersonalEdit = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -262,6 +270,35 @@ const StaffPersonalEdit = forwardRef(
                 </div>
               )}
             </div>
+            <div class="form-group col-sm">
+              <label>Cityzenship</label>
+              <span className="text-danger">*</span>
+              <select
+                className="form-select"
+                name="citizenship"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.citizenship}
+              >
+                <option selected></option>
+                {nationalityData &&
+                  nationalityData.map((citizenship) => (
+                    <option
+                      key={citizenship.id}
+                      value={citizenship.citizenship}
+                    >
+                      {citizenship.citizenship}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.citizenship && formik.errors.citizenship && (
+                <div className="error text-danger">
+                  <small>{formik.errors.citizenship}</small>
+                </div>
+              )}
+            </div>
+          </div>
+          <div class="container row d-flex my-4 justify-align-content-around">
             <div class="form-group  col-sm ">
               <label className="mb-3">Gender</label>
               <div className="d-flex align-items-center justify-content-start">

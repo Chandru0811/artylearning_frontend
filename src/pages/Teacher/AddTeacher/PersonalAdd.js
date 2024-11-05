@@ -49,7 +49,7 @@ const PersonalAdd = forwardRef(
         password: formData.password,
         confirmPassword: formData.confirmPassword,
         idNo: formData.idNo,
-        citizenship:formData.citizenship,
+        citizenship: formData.citizenship,
         nationality: formData.nationality || "",
         nationalityId: formData.nationalityId || "",
         file: null || "",
@@ -64,8 +64,10 @@ const PersonalAdd = forwardRef(
         try {
           const formData = new FormData();
           let nationalityName;
-          if (values.nationalityId) nationalityName = nationalityData.find((prv) =>
-            prv.id === parseInt(values.nationalityId))
+          if (values.nationalityId)
+            nationalityName = nationalityData.find(
+              (prv) => prv.id === parseInt(values.nationalityId)
+            );
           // Add each data field manually to the FormData object
           formData.append("role", values.role);
           formData.append("teacherName", values.teacherName);
@@ -111,7 +113,7 @@ const PersonalAdd = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -263,7 +265,7 @@ const PersonalAdd = forwardRef(
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
-                <label>Citizenship</label>
+                <label>Cityzenship</label>
                 <span className="text-danger">*</span>
                 <select
                   className="form-select"
@@ -275,7 +277,10 @@ const PersonalAdd = forwardRef(
                   <option selected></option>
                   {nationalityData &&
                     nationalityData.map((citizenship) => (
-                      <option key={citizenship.id} value={citizenship.citizenship}>
+                      <option
+                        key={citizenship.id}
+                        value={citizenship.citizenship}
+                      >
                         {citizenship.citizenship}
                       </option>
                     ))}
@@ -304,11 +309,12 @@ const PersonalAdd = forwardRef(
                       </option>
                     ))}
                 </select>
-                {formik.touched.nationalityId && formik.errors.nationalityId && (
-                  <div className="error text-danger">
-                    <small>{formik.errors.nationalityId}</small>
-                  </div>
-                )}
+                {formik.touched.nationalityId &&
+                  formik.errors.nationalityId && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.nationalityId}</small>
+                    </div>
+                  )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Photo</label>
@@ -356,10 +362,11 @@ const PersonalAdd = forwardRef(
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter password"
-                      className={`form-control ${formik.touched.password && formik.errors.password
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control ${
+                        formik.touched.password && formik.errors.password
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       style={{
                         borderRadius: "3px",
                         borderRight: "none",
@@ -394,11 +401,12 @@ const PersonalAdd = forwardRef(
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Enter confirm password"
-                      className={`form-control ${formik.touched.confirmPassword &&
+                      className={`form-control ${
+                        formik.touched.confirmPassword &&
                         formik.errors.confirmPassword
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                      }`}
                       style={{
                         borderRadius: "3px",
                         borderRight: "none",
