@@ -4,10 +4,12 @@ import ReactApexChart from "react-apexcharts";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import { toast } from "react-toastify";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
 
 const RevenueReport = () => {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
+  const [subjectData, setSubjectData] = useState(null);
   const lineChartCanvasRef = useRef(null);
   const lineChartRef = useRef(null);
   const [dashboardData, setDashboardData] = useState(null);
@@ -35,8 +37,10 @@ const RevenueReport = () => {
     try {
       const centers = await fetchAllCentersWithIds();
       const courses = await fetchAllCoursesWithIds();
+      const subject = await fetchAllSubjectsWithIds();
       setCenterData(centers);
       setCourseData(courses);
+      setSubjectData(subject);
     } catch (error) {
       toast.error(error.message || "Failed to fetch data");
     }
@@ -116,7 +120,7 @@ const RevenueReport = () => {
       <div className="container">
         <div className="row my-5">
           {/* Dropdowns */}
-          <div className="col-md-4 col-12">
+          <div className="col-md-5 col-12">
             <label className="form-label">Centre</label>
             <select className="form-select" aria-label="Default select example">
               <option value="">Select</option>
@@ -127,18 +131,8 @@ const RevenueReport = () => {
               ))}
             </select>
           </div>
-          <div className="col-md-4 col-12">
-            <label className="form-label">Course</label>
-            <select className="form-select" aria-label="Default select example">
-              <option value="">Select</option>
-              {courseData?.map((data) => (
-                <option key={data.id} value={data.id}>
-                  {data.courseNames}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="col-md-4 col-12">
+
+          <div className="col-md-5 col-12">
             <label className="form-label">Select Type</label>
             <select
               className="form-select"
@@ -149,11 +143,48 @@ const RevenueReport = () => {
               <option value="MONTHLY">Monthly</option>
             </select>
           </div>
+
+          <div className="col-md-2 col-12">
+            <button className="btn btn-button p-2 mt-4">Clear</button>
+          </div>
         </div>
 
         {/* Charts */}
         <div className="card p-4 mb-5">
           <div className="row mt-5">
+            <div className="col-md-6"></div>
+            <div className="col-md-6">
+              <div className="d-flex">
+                <div className="p-1">
+                  <label className="form-label">Course</label>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="">Select</option>
+                    {courseData?.map((data) => (
+                      <option key={data.id} value={data.id}>
+                        {data.courseNames}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="p-1">
+                  <label className="form-label">Subject</label>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                  >
+                    <option value="">Select</option>
+                    {subjectData?.map((data) => (
+                      <option key={data.id} value={data.id}>
+                        {data.subjects}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
             <div
               className="col-md-6 d-flex align-items-center justify-content-center"
               style={{ height: "350px" }}
