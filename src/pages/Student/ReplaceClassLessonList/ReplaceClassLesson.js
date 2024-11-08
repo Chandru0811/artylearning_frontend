@@ -2,46 +2,47 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import Delete from "../../../components/common/Delete";
 import { SCREENS } from "../../../config/ScreenFilter";
+import api from "../../../config/URL";
+import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../../List/CenterList";
 
 const ReplaceClassLesson = () => {
   const tableRef = useRef(null);
+  const { centerId } = useParams();
 
-  const [datas, setDatas] = useState([
-    {
-      id: 1,
-      centerName: "Center A",
-      studentName: "John Doe",
-      course: "Mathematics",
-      classListing: "Class 1",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      centerName: "Center B",
-      studentName: "Jane Smith",
-      course: "Science",
-      classListing: "Class 2",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      centerName: "Center C",
-      studentName: "Alice Johnson",
-      course: "English",
-      classListing: "Class 3",
-      status: "Pending",
-    },
-  ]);
-
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
+  const [datas, setDatas] = useState([]);
+  const [centerData, setCenterData] = useState(null);
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
 
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllStudentReplacementClass");
+        setDatas(response.data);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Error Fetch Data", error);
+      }
+    };
+    getData();
+    fetchData();
+  }, []);
+  console.log("staff", datas);
   useEffect(() => {
     if (!loading) {
       initializeDataTable();
@@ -53,6 +54,7 @@ const ReplaceClassLesson = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
       return;
     }
     $(tableRef.current).DataTable({
@@ -68,11 +70,17 @@ const ReplaceClassLesson = () => {
     }
   };
 
-  const refreshData = () => {
+  const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
+    try {
+      const response = await api.get("/getAllStudentReplacementClass");
+      setDatas(response.data);
+      initializeDataTable(); // Reinitialize DataTable after successful data update
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
     setLoading(false);
-    initializeDataTable();
   };
 
   const handleStatusChange = (id, newStatus) => {
@@ -118,7 +126,7 @@ const ReplaceClassLesson = () => {
                   <th scope="col">Centre Name</th>
                   <th scope="col">Student Name</th>
                   <th scope="col">Course</th>
-                  <th scope="col">Class Listing</th>
+                  <th scope="col">Class Code</th>
                   <th scope="col">Status</th>
                   <th scope="col" className="text-center">
                     Action
@@ -129,14 +137,22 @@ const ReplaceClassLesson = () => {
                 {datas.map((data, index) => (
                   <tr key={index}>
                     <th scope="row">{index + 1}</th>
-                    <td>{data.centerName}</td>
+                    <td>
+                      {" "}
+                      {centerData &&
+                        centerData.map((center) =>
+                          parseInt(data.centerId) === center.id
+                            ? center.centerNames || "--"
+                            : ""
+                        )}
+                    </td>
                     <td>{data.studentName}</td>
                     <td>{data.course}</td>
-                    <td>{data.classListing}</td>
+                    <td>{data.classCode}</td>
                     <td>{data.status}</td>
                     <td>
                       <div className="d-flex">
-                        <Link to={`/replaceclasslesson/edit/${data.id}`}>
+                        <Link to={`/replaceclasslesson/edit/${data.centerId}`}>
                           <button className="btn btn-sm" title="Replace Class">
                             <i className="bx bx-plus"></i>
                           </button>
