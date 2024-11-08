@@ -115,8 +115,17 @@ function Attendances() {
 
   const handleAttendanceChange = (attendanceIndex, studentIndex, value) => {
     const updatedAttendanceData = [...attendanceData];
-    updatedAttendanceData[attendanceIndex].students[studentIndex].attendance =
-      value;
+    if (
+      updatedAttendanceData[attendanceIndex].students[studentIndex]
+        .attendance === "absent" &&
+      value === "replacement request"
+    ) {
+      updatedAttendanceData[attendanceIndex].students[studentIndex].attendance =
+        "replacement request";
+    } else {
+      updatedAttendanceData[attendanceIndex].students[studentIndex].attendance =
+        value;
+    }
     setAttendanceData(updatedAttendanceData);
   };
 
@@ -140,7 +149,10 @@ function Attendances() {
           attendanceDate: selectedDate,
           biometric: false,
           studentUniqueId: student.studentUniqueId,
-          attendanceStatus: student.attendance,
+          attendanceStatus:
+            student.attendance === "absent"
+              ? "replacement request"
+              : student.attendance,
           remarks: student.remarks,
           userId: attendanceItem.userId,
           studentId: student.studentId,
@@ -149,7 +161,7 @@ function Attendances() {
           courseId: attendanceItem.courseId,
           batchId: parseInt(selectedBatch),
         }));
-      // console.log("Submition Data", flattenedData);
+
       const response = await api.post("markStudentAttendance", flattenedData);
       if (response.status === 201) {
         toast.success(response.data.message);
@@ -465,6 +477,11 @@ function Attendances() {
                                                     </div>
                                                   )}
                                                 </>
+                                              ) : student.attendance ===
+                                                "replacement request" ? (
+                                                <span className="replacement-request-message">
+                                                  Replacement Class Request
+                                                </span>
                                               ) : (
                                                 <>
                                                   <div className="radio-buttons">
@@ -493,11 +510,11 @@ function Attendances() {
                                                       <input
                                                         type="radio"
                                                         name={`attendance-${attendanceIndex}-${studentIndex}`}
+                                                        value="absent"
                                                         checked={
                                                           student.attendance ===
                                                           "absent"
                                                         }
-                                                        value="absent"
                                                         onChange={() =>
                                                           handleAttendanceChange(
                                                             attendanceIndex,

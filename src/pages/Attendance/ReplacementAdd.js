@@ -12,7 +12,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [Data, setData] = useState(null);
-  console.log("attendanceData", attendanceData[0]?.students[0]?.studentName);
+  console.log("attendanceData", attendanceData);
 
   const validationSchema = Yup.object({
     studentName: Yup.string().required("*Student Name is required"),
@@ -42,7 +42,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
   const formik = useFormik({
     initialValues: {
       studentName: attendanceData[0]?.students[0]?.studentName,
-      studentId: attendanceData[0]?.students[0]?.studentUniqueId,
+      studentId: attendanceData[0]?.students[0]?.studentId,
       course: attendanceData[0]?.course,
       classCode: attendanceData[0]?.classCode,
       absentDate: new Date().toISOString().split("T")[0],
@@ -50,6 +50,10 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
       preferredTiming: "",
       absentReason: "",
       otherReason: "",
+      centerId: attendanceData[0]?.centerId,
+      createdBy: "",
+      classId: attendanceData[0]?.classId,
+      courseId: attendanceData[0]?.courseId,
       file: null,
       remark: "",
     },
@@ -58,24 +62,45 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
       setLoadIndicator(true);
       console.log("values", values);
       setIsReplacement((prv) => ({ ...prv, id: studentId, valid: true }));
-      // try {
-      //     const response = await api.post("/createCourseLevels", values, {
-      //         headers: {
-      //             "Content-Type": "application/json",
-      //         },
-      //     });
-      //     if (response.status === 201) {
-      //         onSuccess();
-      handleClose();
-      //         toast.success(response.data.message);
-      //     } else {
-      //         toast.error(response.data.message);
-      //     }
-      // } catch (error) {
-      //     toast.error(error);
-      // } finally {
-      setLoadIndicator(false);
-      // }
+      // const payload = {
+      //   ...values,
+      //   // createdBy: createdBy,
+      //   centerId: values.centerId,
+      //   classId: values.classId,
+      //   courseId: values.courseId,
+      // };
+      const formData = new FormData();
+      formData.append("studentName", values.studentName);
+      formData.append("studentId", values.studentId);
+      formData.append("course", values.course);
+      formData.append("classCode", values.classCode);
+      formData.append("absentDate", values.absentDate);
+      formData.append("preferredDay", values.preferredDay);
+      formData.append("preferredTiming", values.preferredTiming);
+      formData.append("absentReason", values.absentReason);
+      formData.append("otherReason", values.otherReason);
+      formData.append("remark", values.remark);
+      formData.append("file", values.file);
+      formData.append("centerId", values.centerId);
+      formData.append("classId", values.classId);
+      formData.append("courseId", values.courseId);
+      try {
+        const response = await api.post(
+          "/createStudentReplacementClass",
+          formData
+        );
+        if (response.status === 201) {
+          // onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
     },
   });
 
@@ -286,7 +311,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                   >
                     <option selected></option>
                     <option value="HOLIDAY">HOLIDAY</option>
-                    <option value="STUDENT SICK">STUDENT SICK</option>
+                    <option value="STUDENT_SICK">STUDENT_SICK</option>
                   </select>
                   {formik.touched.absentReason &&
                     formik.errors.absentReason && (
@@ -321,12 +346,14 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                   </label>
                   <input
                     type="file"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.file && formik.errors.file
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("file")}
+                    onChange={(event) =>
+                      formik.setFieldValue("file", event.currentTarget.files[0])
+                    }
                   />
                   {formik.touched.file && formik.errors.file && (
                     <div className="invalid-feedback">{formik.errors.file}</div>
