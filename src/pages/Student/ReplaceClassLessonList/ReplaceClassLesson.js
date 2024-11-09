@@ -152,7 +152,9 @@ const ReplaceClassLesson = () => {
                     <td>{data.status}</td>
                     <td>
                       <div className="d-flex">
-                        <Link to={`/replaceclasslesson/edit/${data.centerId}`}>
+                        <Link
+                          to={`/replaceclasslesson/edit/${data.id}?centerId=${data.centerId}&studentId=${data.studentId}`}
+                        >
                           <button className="btn btn-sm" title="Replace Class">
                             <i className="bx bx-plus"></i>
                           </button>
