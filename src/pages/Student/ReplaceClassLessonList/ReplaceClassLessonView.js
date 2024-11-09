@@ -24,19 +24,12 @@ function ReplaceClassLessonView() {
   //       toast.error(error);
   //     }
   //   };
-  const handleStatusToggle = async () => {
-    const nextStatus =
-      status === "pending"
-        ? "APPROVED"
-        : status === "APPROVED"
-        ? "REJECTED"
-        : "PENDING";
-
+  const handleStatusToggle = async (newStatus) => {
     // Update the status locally
-    setStatus(nextStatus);
+    setStatus(newStatus);
     try {
       const response = await api.put(
-        `/updateStatus/${id}?id=${id}&leaveStatus=${nextStatus}`,
+        `/updateStatus/${id}?id=${id}&leaveStatus=${newStatus}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -49,10 +42,10 @@ function ReplaceClassLessonView() {
         toast.error(response.data.message);
       }
     } catch (error) {
-      if (error.response.status === 409) {
+      if (error.response?.status === 409) {
         toast.warning(error?.response?.data?.message);
       } else {
-        toast.error(error.response.data.message);
+        toast.error(error?.response?.data?.message);
       }
     }
   };
@@ -89,18 +82,22 @@ function ReplaceClassLessonView() {
               Back
             </button>
           </Link>
-          <button
-            className={`btn ${
-              status === "Pending"
-                ? "btn-warning"
-                : status === "APPROVED"
-                ? "btn-success"
-                : "btn-danger"
-            } ms-3`}
-            onClick={handleStatusToggle}
+          <select
+            value={status}
+            className={`ms-3 form-select fw-bold 
+              ${
+                status === "PENDING"
+                  ? "text-warning"
+                  : status === "APPROVED"
+                  ? "text-success"
+                  : "text-danger"
+              }`}
+            onChange={(e) => handleStatusToggle(e.target.value)}
           >
-            {status.charAt(0).toUpperCase() + status.slice(1)}
-          </button>
+            <option value="PENDING">Pending</option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
         </div>
       </div>
 

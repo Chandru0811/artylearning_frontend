@@ -43,6 +43,8 @@ function ReplaceClassLessonEdit() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const centerId = searchParams.get("centerId");
+  const studentId = searchParams.get("studentId");
+  console.log("centerId:", centerId);
 
   const formik = useFormik({
     initialValues: {
@@ -193,8 +195,12 @@ function ReplaceClassLessonEdit() {
 
   useEffect(() => {
     const getData = async () => {
+      let params = {};
+
       try {
-        const response = await api.get(`/getAllStudentById/${id}`);
+        const response = await api.get(`/getAllStudentById/${studentId}`, {
+          params,
+        });
         setData(response.data);
 
         const studentCourseDetail = response.data.studentCourseDetailModels[0];

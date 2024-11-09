@@ -221,9 +221,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Preferred Day<span className="text-danger">*</span>
-                  </label>
+                  <label className="form-label">Preferred Day</label>
                   <select
                     {...formik.getFieldProps("preferredDay")}
                     class={`form-select  ${
@@ -250,9 +248,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                     )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Preferred Timing<span className="text-danger">*</span>
-                  </label>
+                  <label className="form-label">Preferred Timing</label>
                   <select
                     {...formik.getFieldProps("preferredTiming")}
                     class={`form-select  ${
@@ -322,9 +318,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                 </div>
 
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Other Reason<span className="text-danger">*</span>
-                  </label>
+                  <label className="form-label">Other Reason</label>
                   <input
                     type="text"
                     className={`form-control  ${
@@ -341,9 +335,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Document<span className="text-danger">*</span>
-                  </label>
+                  <label className="form-label">Document</label>
                   <input
                     type="file"
                     className={`form-control ${
@@ -360,9 +352,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                   )}
                 </div>
                 <div className="col-md-12 col-12 mb-2">
-                  <label className="form-label">
-                    Remark<span className="text-danger">*</span>
-                  </label>
+                  <label className="form-label">Remark</label>
                   <textarea
                     type="file"
                     className={`form-control  ${
