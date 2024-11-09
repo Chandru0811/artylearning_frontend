@@ -62,6 +62,20 @@ function AddPayroll() {
         return empRole === "freelancer" ? !!value : true;
       }
     ),
+    startDate: Yup.string().test(
+      "startDate-required",
+      "*Start Date is required",
+      function (value) {
+        return empRole === "freelancer" ? !!value : true;
+      }
+    ),
+    endDate: Yup.string().test(
+      "endDate-required",
+      "*End Date is required",
+      function (value) {
+        return empRole === "freelancer" ? !!value : true;
+      }
+    ),
     payrollType: Yup.string().test(
       "payrollType-required",
       "*Payroll type is required",
@@ -79,7 +93,7 @@ function AddPayroll() {
     initialValues: {
       centerId: "",
       userId: "",
-      userRole:"",
+      userRole: "",
       grossPay: "",
       payrollMonth: "",
       bonus: 0,
@@ -138,12 +152,14 @@ function AddPayroll() {
         payload = {
           centerId: values.centerId,
           userId: values.userId,
-          userRole:empRole,
-          payrollMonth:values.payrollMonth,
+          userRole: empRole,
+          payrollMonth: values.payrollMonth,
           netPay: values.netPay,
           status: values.status,
           payrollType: values.payrollType,
           freelancerCount: Number(values.freelanceCount),
+          startDate:values.startDate,
+          endDate:values.endDate
         };
       }
 
@@ -155,7 +171,7 @@ function AddPayroll() {
             },
           });
 
-          if (response.status === 201 || response.status === 200 ) {
+          if (response.status === 201 || response.status === 200) {
             toast.success(response.data.message);
             navigate("/payrolladmin");
           } else {
@@ -300,6 +316,26 @@ function AddPayroll() {
     });
   }, [formik.values.userId]);
 
+  const fetchUserPaymenthours = async (startDate, endDate, userId) => {
+    const queryParams = new URLSearchParams({
+      startDate: startDate,
+      endDate: endDate,
+    });
+  
+    try {
+      const response = await api.get(`/getFreelancerPayableHours/${userId}?${queryParams}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      formik.setFieldValue("netPay", response.data.netPay);
+      formik.setFieldValue("freelanceCount", response.data.payable_hours); // Assuming "count" is the field in the response data
+    } catch (error) {
+      toast.error("Failed to fetch payment hours.");
+    }
+  };
+  
   const fetchUserPaymentInfo = async (freelanceCount, payrollType) => {
     const queryParams = new URLSearchParams({
       payrollType: payrollType,
@@ -320,14 +356,18 @@ function AddPayroll() {
 
   useEffect(() => {
     const fetchUserPaymentData = async () => {
-      const { freelanceCount, payrollType } = formik.values;
+      const { freelanceCount, payrollType, startDate, endDate, userId } = formik.values;
+  
       await fetchUserPaymentInfo(freelanceCount, payrollType);
+      await fetchUserPaymenthours(startDate, endDate, userId);
     };
-
+  
     fetchUserPaymentData();
   }, [
     formik.values.freelanceCount,
     formik.values.payrollType,
+    formik.values.startDate,
+    formik.values.endDate,
     formik.values.userId,
   ]);
 
@@ -416,27 +456,6 @@ function AddPayroll() {
                 <div className="invalid-feedback">{formik.errors.userId}</div>
               )}
             </div>
-            <div className="col-md-6 col-12">
-              <div className="text-start mt-2 mb-3">
-                <label className="form-label">
-                  Payroll Month<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="month"
-                  className={`form-control ${
-                    formik.touched.payrollMonth && formik.errors.payrollMonth
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("payrollMonth")}
-                />
-                {formik.touched.payrollMonth && formik.errors.payrollMonth && (
-                  <div className="invalid-feedback">
-                    {formik.errors.payrollMonth}
-                  </div>
-                )}
-              </div>
-            </div>
 
             {empRole !== "freelancer" && (
               <>
@@ -485,6 +504,29 @@ function AddPayroll() {
                         {formik.errors.bonus}
                       </div>
                     )}
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <label className="form-label">
+                      Payroll Month<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="month"
+                      className={`form-control ${
+                        formik.touched.payrollMonth &&
+                        formik.errors.payrollMonth
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("payrollMonth")}
+                    />
+                    {formik.touched.payrollMonth &&
+                      formik.errors.payrollMonth && (
+                        <div className="invalid-feedback">
+                          {formik.errors.payrollMonth}
+                        </div>
+                      )}
                   </div>
                 </div>
                 <div className="  col-md-6 col-12">
@@ -567,6 +609,58 @@ function AddPayroll() {
             )}
             {empRole === "freelancer" && (
               <>
+               <div className="col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <label className="form-label">
+                      Start Date<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      name="startDate"
+                      className={`form-control ${
+                        formik.touched.startDate &&
+                        formik.errors.startDate
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      aria-label="startDate"
+                      aria-describedby="basic-addon1"
+                      {...formik.getFieldProps("startDate")}
+                    />
+                    {formik.touched.startDate &&
+                      formik.errors.startDate && (
+                        <div className="invalid-feedback">
+                          {formik.errors.startDate}
+                        </div>
+                      )}
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="text-start mt-2 mb-3">
+                    <label className="form-label">
+                      End Date<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      name="endDate"
+                      className={`form-control ${
+                        formik.touched.endDate &&
+                        formik.errors.endDate
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      aria-label="endDate"
+                      aria-describedby="basic-addon1"
+                      {...formik.getFieldProps("endDate")}
+                    />
+                    {formik.touched.endDate &&
+                      formik.errors.endDate && (
+                        <div className="invalid-feedback">
+                          {formik.errors.endDate}
+                        </div>
+                      )}
+                  </div>
+                </div>
                 <div className="col-md-6 col-12">
                   <div className="text-start mt-2 mb-3">
                     <label className="form-label">
@@ -601,17 +695,18 @@ function AddPayroll() {
                     </label>
                     <input
                       type="text"
-                      onInput={(event) => {
-                        let value = event.target.value
-                          .replace(/[^0-9]/g, "")
-                          .slice(0, 3);
-                        if (value > 150) {
-                          value = "150";
-                          toast.warning("Maximum value is 150");
-                        }
-                        event.target.value = value;
-                        formik.setFieldValue("freelanceCount", value);
-                      }}
+                      // onInput={(event) => {
+                      //   let value = event.target.value
+                      //     .replace(/[^0-9]/g, "")
+                      //     .slice(0, 3);
+                      //   if (value > 150) {
+                      //     value = "150";
+                      //     toast.warning("Maximum value is 150");
+                      //   }
+                      //   event.target.value = value;
+                      //   formik.setFieldValue("freelanceCount", value);
+                      // }}
+                      {...formik.getFieldProps("freelanceCount")} 
                       className={`form-control ${
                         formik.touched.freelanceCount &&
                         formik.errors.freelanceCount
@@ -630,6 +725,7 @@ function AddPayroll() {
                       )}
                   </div>
                 </div>
+               
               </>
             )}
             <div className="  col-md-6 col-12">
