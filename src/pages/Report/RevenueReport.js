@@ -5,6 +5,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
 const RevenueReport = () => {
   const [centerData, setCenterData] = useState(null);
@@ -14,6 +15,8 @@ const RevenueReport = () => {
   const lineChartRef = useRef(null);
   const [dashboardData, setDashboardData] = useState(null);
   const [selectedType, setSelectedType] = useState("WEEKLY");
+  // New state for selected center
+  const [selectedCenterId, setSelectedCenterId] = useState("");
 
   const [chartData, setChartData] = useState({
     series: [{ name: "Sales Rate", data: [] }],
@@ -29,26 +32,82 @@ const RevenueReport = () => {
     },
   });
 
+  // State for week and month inputs
+  const [selectedWeek, setSelectedWeek] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+
+  // Function to set current week and month as default values
+  const setDefaultWeekAndMonth = () => {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentWeek = `${currentYear}-W${String(
+      Math.ceil((today.getDate() - today.getDay() + 10) / 7)
+    ).padStart(2, "0")}`;
+    const currentMonth = today.toISOString().substring(0, 7);
+
+    setSelectedWeek(currentWeek);
+    setSelectedMonth(currentMonth);
+  };
+
   const handleTypeChange = (e) => {
     setSelectedType(e.target.value);
   };
 
+  const handleCenterChange = (e) => {
+    const centerId = e.target.value;
+    setSelectedCenterId(centerId);
+  };
+
+  // const fetchData = async () => {
+  //   try {
+  //     const centers = await fetchAllCentersWithIds();
+  //     const courses = await fetchAllCoursesWithIdsC(cenerId);
+  //     const subject = await fetchAllSubjectsWithIds();
+  //     setCenterData(centers);
+  //     setCourseData(courses);
+  //     setSubjectData(subject);
+  //   } catch (error) {
+  //     toast.error(error.message || "Failed to fetch data");
+  //   }
+  // };
   const fetchData = async () => {
     try {
       const centers = await fetchAllCentersWithIds();
-      const courses = await fetchAllCoursesWithIds();
-      const subject = await fetchAllSubjectsWithIds();
       setCenterData(centers);
-      setCourseData(courses);
+      const subject = await fetchAllSubjectsWithIds();
       setSubjectData(subject);
     } catch (error) {
       toast.error(error.message || "Failed to fetch data");
     }
   };
+  const fetchCourseData = async () => {
+    if (selectedCenterId) {
+      try {
+        const courses = await fetchAllCoursesWithIdsC(selectedCenterId);
+        setCourseData(courses);
+      } catch (error) {
+        toast.error(
+          error.message || "Failed to fetch courses for selected center"
+        );
+      }
+    } else {
+      setCourseData(null);
+    }
+  };
+
+  // useEffect(() => {
+  //   fetchData();
+  //   setDefaultWeekAndMonth();
+  // }, []);
 
   useEffect(() => {
     fetchData();
+    setDefaultWeekAndMonth();
   }, []);
+
+  useEffect(() => {
+    fetchCourseData();
+  }, [selectedCenterId]);
 
   // Update categories and chart data based on `selectedType`
   useEffect(() => {
@@ -120,10 +179,14 @@ const RevenueReport = () => {
       <div className="container">
         <div className="row my-5">
           {/* Dropdowns */}
-          <div className="col-md-5 col-12">
+          <div className="col-md-4 col-12">
             <label className="form-label">Centre</label>
-            <select className="form-select" aria-label="Default select example">
-              <option value="">Select</option>
+            <select
+              className="form-select"
+              value={selectedCenterId}
+              onChange={handleCenterChange}
+            >
+              <option value="ALL">ALL</option>
               {centerData?.map((data) => (
                 <option key={data.id} value={data.id}>
                   {data.centerNames}
@@ -131,8 +194,7 @@ const RevenueReport = () => {
               ))}
             </select>
           </div>
-
-          <div className="col-md-5 col-12">
+          <div className="col-md-2 col-12">
             <label className="form-label">Select Type</label>
             <select
               className="form-select"
@@ -143,9 +205,33 @@ const RevenueReport = () => {
               <option value="MONTHLY">Monthly</option>
             </select>
           </div>
-
+          <div className="col-md-4 col-12">
+            {selectedType === "WEEKLY" ? (
+              <>
+                <label className="form-label">Select Week</label>
+                <input
+                  type="week"
+                  className="form-control"
+                  value={selectedWeek}
+                  onChange={(e) => setSelectedWeek(e.target.value)}
+                />
+              </>
+            ) : (
+              <>
+                <label className="form-label">Select Month</label>
+                <input
+                  type="month"
+                  className="form-control"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                />
+              </>
+            )}
+          </div>
           <div className="col-md-2 col-12">
-            <button className="btn btn-button p-2 mt-4">Clear</button>
+            <button type="submit" className="btn btn-button p-2 mt-4">
+              Submit
+            </button>
           </div>
         </div>
 
@@ -161,7 +247,7 @@ const RevenueReport = () => {
                     className="form-select"
                     aria-label="Default select example"
                   >
-                    <option value="">Select</option>
+                    <option value="ALL">ALL</option>
                     {courseData?.map((data) => (
                       <option key={data.id} value={data.id}>
                         {data.courseNames}
@@ -175,7 +261,7 @@ const RevenueReport = () => {
                     className="form-select"
                     aria-label="Default select example"
                   >
-                    <option value="">Select</option>
+                    <option value="ALL">ALL</option>
                     {subjectData?.map((data) => (
                       <option key={data.id} value={data.id}>
                         {data.subjects}

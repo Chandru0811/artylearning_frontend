@@ -408,22 +408,6 @@ export default function InvoiceAdd() {
     }
   }, [studentID]);
 
-  // useEffect(() => {
-  //   // Update the lessons dropdown options based on the selected package
-  //   if (selectedPackage && packageData) {
-  //     const selectedPackageDetails = packageData.find(
-  //       (pkg) => pkg.id === parseInt(selectedPackage)
-  //     );
-  //     {lessonsOptions.map((lesson) => (
-  //       {lesson}
-  //     ))}
-  //     if (selectedPackageDetails) {
-  //       setLessonsOptions([selectedPackageDetails.noOfLesson]);
-  //     }
-  //   }
-
-  // }, [selectedPackage, packageData]);
-
   useEffect(() => {
     // Update the lessons dropdown options based on the selected package
     if (selectedPackage && packageData) {
@@ -582,21 +566,21 @@ export default function InvoiceAdd() {
   useEffect(() => {
     // Calculate total Item Amounts
     const totalItemAmount = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item.itemAmount || 0),
+      (total, item) => total + parseFloat(item?.itemAmount || 0),
       0
     );
     formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
 
     // Calculate total Gst
     const totalGst = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item.gstAmount || 0),
+      (total, item) => total + parseFloat(item?.gstAmount || 0),
       0
     );
     formik.setFieldValue("gst", totalGst.toFixed(2));
 
     // Calculate total Amount
     const totalAmount = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item.totalAmount || 0),
+      (total, item) => total + parseFloat(item?.totalAmount || 0),
       0
     );
     formik.setFieldValue("totalAmount", totalAmount.toFixed(2));

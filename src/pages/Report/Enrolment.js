@@ -2,11 +2,27 @@ import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
+import api from "../../config/URL";
 
 function Datatable2() {
-  const [selectedType, setSelectedType] = useState("WEEK");
+
+  const getCurrentWeek = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const week = Math.ceil(((date - new Date(year, 0, 1)) / 86400000 + date.getDay() + 1) / 7);
+    return `${year}-W${String(week).padStart(2, "0")}`;
+  };
+
+  const [selectedType, setSelectedType] = useState(getCurrentWeek());
   const [centerData, setCenterData] = useState(null);
   const [selectedDay, setSelectedDay] = useState("ALL");
+  const [chartData, setChartData] = useState({
+    dayData: [],
+    labels: [],
+  });
+
+  console.log("Chart Data:",chartData);
+  
 
   const fetchData = async () => {
     try {
@@ -29,54 +45,46 @@ function Datatable2() {
     setSelectedDay(e.target.value);
   };
 
-  const dayData = {
-    Mon: { taken: 250, bookSlot: 200, availableSlot: 50 },
-    Tue: { taken: 25, bookSlot: 22, availableSlot: 3 },
-    Wed: { taken: 25, bookSlot: 10, availableSlot: 20 },
-    Thu: { taken: 25, bookSlot: 13, availableSlot: 12 },
-    Fri: { taken: 25, bookSlot: 5, availableSlot: 20 },
-    Sat: { taken: 35, bookSlot: 21, availableSlot: 14 },
-    Sun: { taken: 35, bookSlot: 14, availableSlot: 21 },
+  const fetchEnrollmentData = async (center, week, day) => {
+    const queryParams = new URLSearchParams({
+      center: 539,
+      week: "2024-46",
+      day: day,
+    });
+
+    try {
+      const response = await api.get(
+        `/getEnrollmentReportData?${queryParams}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setChartData({
+        dayData: response.data.dayData,
+        labels: response.data.labels,
+      });
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  // Calculate total slots
-  const calculateTotals = () => {
-    return Object.values(dayData).reduce(
-      (totals, day) => {
-        totals.taken += day.taken;
-        totals.bookSlot += day.bookSlot;
-        totals.availableSlot += day.availableSlot;
-        return totals;
-      },
-      { taken: 0, bookSlot: 0, availableSlot: 0 }
-    );
-  };
-
-  // Add total values to dayData
-  const totalSlots = calculateTotals();
-  dayData.Total = totalSlots;
-
-  const dayMapping = {
-    SUNDAY: "Sun",
-    MONDAY: "Mon",
-    TUESDAY: "Tue",
-    WEDNESDAY: "Wed",
-    THURSDAY: "Thu",
-    FRIDAY: "Fri",
-    SATURDAY: "Sat",
-    ALL: "Total",
-  };
-
-  const selectedDayAbbr = selectedDay === "ALL" ? [...Object.keys(dayData)] : [dayMapping[selectedDay]];
+  // Trigger fetchEnrollmentData when `selectedType` or `selectedDay` changes
+  useEffect(() => {
+    if (centerData && centerData.length > 0) {
+      fetchEnrollmentData(centerData[0].id, selectedType, selectedDay);
+    }
+  }, [selectedType, selectedDay, centerData]);
 
   const series = [
     {
       name: "Booked Slots",
-      data: selectedDayAbbr.map((day) => dayData[day]?.bookSlot || 0),
+      data: chartData.dayData.map((day) => day.Total.bookSlot || 0),
     },
     {
       name: "Available Slots",
-      data: selectedDayAbbr.map((day) => dayData[day]?.availableSlot || 0),
+      data: chartData.dayData.map((day) => day.Total.availableSlot || 0),
     },
   ];
 
@@ -87,20 +95,8 @@ function Datatable2() {
       stacked: true,
       stackType: "100%",
     },
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: "bottom",
-            offsetX: -10,
-            offsetY: 0,
-          },
-        },
-      },
-    ],
     xaxis: {
-      categories: selectedDayAbbr,
+      categories: chartData.labels,
     },
     fill: {
       opacity: 1,
@@ -129,9 +125,14 @@ function Datatable2() {
           </div>
           <div className="col-md-4 col-12">
             <label className="form-label">Week</label>
-            <input type="week" className="form-control" />
+            <input
+              type="week"
+              className="form-control"
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+            />
           </div>
-          <div className="col-md-4 col-12">
+          <div className="col-md-3 col-12">
             <label className="form-label">Day</label>
             <select
               className="form-select"
@@ -148,6 +149,11 @@ function Datatable2() {
               <option value="FRIDAY">FRIDAY</option>
               <option value="SATURDAY">SATURDAY</option>
             </select>
+          </div>
+          <div className="col-md-1 col-12">
+            <button type="button" className="btn btn-border p-2 mt-4">
+              Clear
+            </button>
           </div>
         </div>
         <div className="card p-4 mb-4">

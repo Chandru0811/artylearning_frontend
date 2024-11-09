@@ -83,9 +83,9 @@ function AddPayroll() {
         return empRole === "freelancer" ? !!value : true;
       }
     ),
-    netPay: Yup.number()
-      .required("*Net pay is required")
-      .typeError("Net pay must be a number"),
+    // netPay: Yup.number()
+    //   .required("*Net pay is required")
+    //   .typeError("Net pay must be a number"),
     status: Yup.string().required("*Status is required"),
   });
 
@@ -321,7 +321,6 @@ function AddPayroll() {
       startDate: startDate,
       endDate: endDate,
     });
-  
     try {
       const response = await api.get(`/getFreelancerPayableHours/${userId}?${queryParams}`, {
         headers: {
@@ -359,7 +358,9 @@ function AddPayroll() {
       const { freelanceCount, payrollType, startDate, endDate, userId } = formik.values;
   
       await fetchUserPaymentInfo(freelanceCount, payrollType);
+      if (empRole === "freelancer" && userId && startDate && endDate ) { // Check if empRole is freelancer
       await fetchUserPaymenthours(startDate, endDate, userId);
+    }
     };
   
     fetchUserPaymentData();
@@ -369,6 +370,7 @@ function AddPayroll() {
     formik.values.startDate,
     formik.values.endDate,
     formik.values.userId,
+    empRole
   ]);
 
   return (
