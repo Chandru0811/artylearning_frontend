@@ -14,6 +14,12 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import { MdViewColumn } from "react-icons/md";
+import {
+  Dropdown,
+  DropdownButton,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 
 const Center = () => {
   const tableRef = useRef(null);
@@ -130,7 +136,7 @@ const Center = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
+        <div className="table-responsive">
           <table ref={tableRef} className="display">
             <thead>
               <tr>
@@ -202,85 +208,104 @@ const Center = () => {
               </tr>
             </thead>
             <tbody>
-            {Array.isArray(datas) && datas.map((data, index) => (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{data.centerName}</td>
-                  {/* <td> */}
-                  {/* {centerManagerData &&
+              {Array.isArray(datas) &&
+                datas.map((data, index) => (
+                  <tr key={index}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{data.centerName}</td>
+                    {/* <td> */}
+                    {/* {centerManagerData &&
                       centerManagerData.map((Cmanager) =>
                         parseInt(data.centerManager) === Cmanager.id
                           ? Cmanager.userNames || "--"
                           : ""
                       )} */}
-                  {/* {data.centerManager} */}
-                  {/* </td> */}
-                  <td>{data.code}</td>
-                  <td>{data.uenNumber}</td>
-                  <td>{data.mobile}</td>
-                  {extraData && <td>{data.createdBy}</td>}
+                    {/* {data.centerManager} */}
+                    {/* </td> */}
+                    <td>{data.code}</td>
+                    <td>{data.uenNumber}</td>
+                    <td>{data.mobile}</td>
+                    {extraData && <td>{data.createdBy}</td>}
                     {extraData && <td>{extractDate(data.createdAt)}</td>}
                     {extraData && <td>{data.updatedBy}</td>}
                     {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                  <td>
-                    <div className="d-flex justify-content-center align-items-center ">
-                      {storedScreens?.centerListingCreate && (
-                        <div class="dropdown" style={{ display: "inline-block" }}>
-                          <button
-                            class="btn dropdown-toggle"
-                            type="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
+                    <td>
+                      <div className="d-flex justify-content-center align-items-center">
+                        {storedScreens?.centerListingCreate && (
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip id="tooltip-top">Add Options</Tooltip>
+                            }
                           >
-                            <IoMdAdd />
-                          </button>
-                          <ul class="dropdown-menu">
-                            <li>
-                              <AddRegister id={data.id} onSuccess={refreshData} />
-                            </li>
-                            <li style={{ width: "100%" }}>
-                              <AddBreak id={data.id} onSuccess={refreshData} />
-                            </li>
-                            <li style={{ width: "100%" }}>
-                              <AddClass id={data.id} onSuccess={refreshData} />
-                            </li>
-                            <li style={{ width: "100%" }}>
-                              <AddPackage id={data.id} onSuccess={refreshData} />
-                            </li>
-                          </ul>
-                        </div>
-                      )}
-                      {storedScreens?.centerListingRead && (
-                        <Link
-                          to={`/center/view/${data.id}`}
-                          style={{ display: "inline-block" }}
-                        >
-                          <button className="btn btn-sm">
-                            <FaEye />
-                          </button>
-                        </Link>
-                      )}
-                      {storedScreens?.centerListingUpdate && (
-                        <Link
-                          to={`/center/edit/${data.id}`}
-                          style={{ display: "inline-block" }}
-                        >
-                          <button className="btn btn-sm">
-                            <FaEdit />
-                          </button>
-                        </Link>
-                      )}
-                      {storedScreens?.centerListingDelete && (
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteCenter/${data.id}`}
-                          style={{ display: "inline-block" }}
-                        />
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                            <DropdownButton
+                              title={<IoMdAdd />}
+                              variant="white"
+                              size="sm"
+                              id="dropdown-basic-button"
+                              style={{ boxShadow: "none" }}
+                            >
+                              <Dropdown.Item as="div" style={{ width: "100%" }}>
+                                <AddRegister
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                              </Dropdown.Item>
+                              <Dropdown.Item as="div" style={{ width: "100%" }}>
+                                <AddBreak
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                              </Dropdown.Item>
+                              <Dropdown.Item as="div" style={{ width: "100%" }}>
+                                <AddClass
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                              </Dropdown.Item>
+                              <Dropdown.Item as="div" style={{ width: "100%" }}>
+                                <AddPackage
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                              </Dropdown.Item>
+                            </DropdownButton>
+                          </OverlayTrigger>
+                        )}
+
+                        {storedScreens?.centerListingRead && (
+                          <Link
+                            to={`/center/view/${data.id}`}
+                            style={{ display: "inline-block" }}
+                          >
+                            <button className="btn btn-sm">
+                              <FaEye />
+                            </button>
+                          </Link>
+                        )}
+
+                        {storedScreens?.centerListingUpdate && (
+                          <Link
+                            to={`/center/edit/${data.id}`}
+                            style={{ display: "inline-block" }}
+                          >
+                            <button className="btn btn-sm">
+                              <FaEdit />
+                            </button>
+                          </Link>
+                        )}
+
+                        {storedScreens?.centerListingDelete && (
+                          <Delete
+                            onSuccess={refreshData}
+                            path={`/deleteCenter/${data.id}`}
+                            style={{ display: "inline-block" }}
+                          />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
