@@ -298,7 +298,7 @@ function Admin({ handleLogout }) {
                 element={<ReplaceClassLesson />}
               />
               <Route
-                path="/replaceclasslesson/edit/:id"
+                path="/replaceclasslessonList"
                 element={<ReplaceClassLessonEdit />}
               />
               <Route

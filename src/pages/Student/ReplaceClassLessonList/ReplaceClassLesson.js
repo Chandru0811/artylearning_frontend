@@ -15,16 +15,14 @@ const ReplaceClassLesson = () => {
   const { centerId } = useParams();
 
   const [loading, setLoading] = useState(true);
-  const [extraData, setExtraData] = useState(false);
   const [datas, setDatas] = useState([]);
   const [centerData, setCenterData] = useState(null);
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  
+
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-
       setCenterData(centerData);
     } catch (error) {
       toast.error(error);
@@ -35,7 +33,7 @@ const ReplaceClassLesson = () => {
     const getData = async () => {
       try {
         const response = await api.get("/getAllStudentReplacementClass");
-        setDatas(response.data);
+        setDatas(response.data.map(data => ({ ...data, status: data.status || "Pending" }))); // Default to "Pending" if no status
         setLoading(false);
       } catch (error) {
         toast.error("Error Fetch Data", error);
@@ -44,7 +42,6 @@ const ReplaceClassLesson = () => {
     getData();
     fetchData();
   }, []);
-  console.log("staff", datas);
 
   useEffect(() => {
     if (!loading) {
@@ -56,10 +53,7 @@ const ReplaceClassLesson = () => {
   }, [loading]);
 
   const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
+    if ($.fn.DataTable.isDataTable(tableRef.current)) return;
     $(tableRef.current).DataTable({
       responsive: true,
       columnDefs: [{ orderable: false, targets: -1 }],
@@ -78,28 +72,48 @@ const ReplaceClassLesson = () => {
     setLoading(true);
     try {
       const response = await api.get("/getAllStudentReplacementClass");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      setDatas(response.data.map(data => ({ ...data, status: data.status || "Pending" })));
+      initializeDataTable();
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
     setLoading(false);
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    setDatas((prevDatas) =>
-      prevDatas.map((data) =>
-        data.id === id ? { ...data, status: newStatus } : data
-      )
-    );
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      const response = await api.put(
+        `/updateStatus/${id}?id=${id}&leaveStatus=${newStatus}`,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      if (response.status === 200) {
+        toast.success("Status updated successfully");
+        setDatas(prevDatas =>
+          prevDatas.map(data => data.id === id ? { ...data, status: newStatus } : data)
+        );
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      if (error.response?.status === 409) {
+        toast.warning(error?.response?.data?.message);
+      } else {
+        toast.error(error?.response?.data?.message);
+      }
+    }
   };
 
   const getBadgeColor = (status) => {
-    return status === "Approved"
-      ? "badge-Green"
-      : status === "Rejected"
-      ? "badge-Red"
-      : "badge-Grey";
+    switch (status) {
+      case "APPROVED":
+        return "btn-success";
+      case "REJECTED":
+        return "btn-danger";
+      case "PENDING":
+        return "btn-warning";
+      default:
+        return "btn-secondary";
+    }
   };
 
   return (
@@ -116,24 +130,17 @@ const ReplaceClassLesson = () => {
         </div>
       ) : (
         <div className="container my-4">
-          <div className="mb-3 d-flex justify-content-end">
-            {/* Add button for storedScreens.studentListingCreate */}
-          </div>
           <div className="table-responsive">
             <table ref={tableRef} className="display">
               <thead>
                 <tr>
-                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                    S No
-                  </th>
+                  <th scope="col">S No</th>
                   <th scope="col">Centre Name</th>
                   <th scope="col">Student Name</th>
                   <th scope="col">Course</th>
                   <th scope="col">Class Code</th>
                   <th scope="col">Status</th>
-                  <th scope="col" className="text-center">
-                    Action
-                  </th>
+                  <th scope="col" className="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -141,9 +148,8 @@ const ReplaceClassLesson = () => {
                   <tr key={index}>
                     <th scope="row">{index + 1}</th>
                     <td>
-                      {" "}
                       {centerData &&
-                        centerData.map((center) =>
+                        centerData.map(center =>
                           parseInt(data.centerId) === center.id
                             ? center.centerNames || "--"
                             : ""
@@ -152,25 +158,52 @@ const ReplaceClassLesson = () => {
                     <td>{data.studentName}</td>
                     <td>{data.course}</td>
                     <td>{data.classCode}</td>
-                    {/* <td>{data.status}</td> */}
                     <td>
-                      {data.status === "APPROVED" ? (
-                        <span className="badge badges-Green">Approved</span>
-                      ) : data.status === "PENDING" ? (
-                        <span className="badge badges-Yellow">Pending</span>
-                      ) : (
-                        <span className="badge badges-Red">Rejected</span>
-                      )}
-                    </td>
-                    <td>
-                      <div className="d-flex">
-                        <Link
-                          to={`/replaceclasslesson/edit/${data.id}?centerId=${data.centerId}&studentId=${data.studentId}`}
+                      <div className="dropdown">
+                        <button
+                          className={`btn btn-sm leadStatus ${getBadgeColor(data.status)}`}
+                          type="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
                         >
+                          <span className="text-white fw-bold">
+                            {data.status}
+                          </span>
+                        </button>
+                        <ul className="dropdown-menu">
+                          <li>
+                            <button
+                              className="dropdown-item"
+                              onClick={() => handleStatusChange(data.id, "APPROVED")}
+                            >
+                              Approved
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              className="dropdown-item"
+                              onClick={() => handleStatusChange(data.id, "REJECTED")}
+                            >
+                              Rejected
+                            </button>
+                          </li>
+                          <li>
+                            <button
+                              className="dropdown-item"
+                              onClick={() => handleStatusChange(data.id, "PENDING")}
+                            >
+                              Pending
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
+                    <td className="text-center">
+                        {/* <Link to={`/replaceclasslesson/edit/${data.id}?centerId=${data.centerId}&studentId=${data.studentId}`}>
                           <button className="btn btn-sm" title="Replace Class">
                             <i className="bx bx-plus"></i>
                           </button>
-                        </Link>
+                        </Link> */}
                         {storedScreens?.studentListingUpdate && (
                           <Link to={`/replaceclasslesson/view/${data.id}`}>
                             <button className="btn btn-sm">
@@ -178,13 +211,6 @@ const ReplaceClassLesson = () => {
                             </button>
                           </Link>
                         )}
-                        {/* {storedScreens?.studentListingDelete && (
-                                                    <Delete
-                                                        onSuccess={refreshData}
-                                                        path={`/deleteStudentDetail/${data.id}`}
-                                                    />
-                                                )} */}
-                      </div>
                     </td>
                   </tr>
                 ))}

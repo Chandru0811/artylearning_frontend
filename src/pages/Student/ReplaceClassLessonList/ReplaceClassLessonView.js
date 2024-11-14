@@ -78,11 +78,25 @@ function ReplaceClassLessonView() {
       <div className="d-flex justify-content-end align-items-end mt-4 p-0">
         <div className="d-flex justify-content-end align-items-end">
           <Link to="/replaceclasslesson">
-            <button type="button" className="btn btn-sm btn-border">
+            <button type="button" className="btn btn-sm btn-border mx-1">
               Back
             </button>
           </Link>
-          <select
+          {data.status === "APPROVED" ? (
+            <>
+              <Link
+                to={`/replaceclasslessonList?centerId=${data.centerId}&studentId=${data.studentId}`}
+              >
+                <button type="button" className="btn btn-button2 btn-sm">
+                  Replace Class Lesson
+                </button>
+              </Link>
+            </>
+          ) : (
+            <></>
+          )}
+
+          {/* <select
             value={status}
             className={`ms-3 form-select fw-bold 
               ${
@@ -97,7 +111,7 @@ function ReplaceClassLessonView() {
             <option value="PENDING">Pending</option>
             <option value="APPROVED">Approved</option>
             <option value="REJECTED">Rejected</option>
-          </select>
+          </select> */}
         </div>
       </div>
 
