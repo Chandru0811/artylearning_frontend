@@ -49,18 +49,19 @@ function TeacherView() {
     }
   };
 
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllSHGSetting");
+      setShgData(response.data);
+      console.log("shgdata", shgData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllSHGSetting");
-        setShgData(response.data);
-        console.log("shgdata", shgData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
     getData();
-  }, [shgData]);
+  }, []);
 
   const getFileNameFromUrl = (url) => {
     if (url) {

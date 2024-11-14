@@ -65,9 +65,11 @@ function HolidayAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(
-          error.message || "An error occurred while submitting the form"
-        );
+        if(error.response.status === 409){
+          toast.warning(error?.response?.data?.message);
+        }else{
+          toast.error(error?.response?.data?.message);
+        }
       } finally {
         setLoadIndicator(false);
       }

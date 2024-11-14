@@ -193,7 +193,7 @@ function Attendances() {
           <div className="col-md-6 col-12">
             <label className="form-lable">Batch</label>
             <select
-              className="form-select "
+              className="form-select"
               aria-label="Default select example"
               onChange={(e) => setSelectedBatch(e.target.value)}
             >

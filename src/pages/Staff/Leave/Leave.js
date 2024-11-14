@@ -164,7 +164,7 @@ const Leave = () => {
               </tr>
             </thead>
             <tbody>
-              {datas?.employeeData.map((data, index) => (
+              {Array.isArray(datas)?.employeeData?.map((data, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   {/* <td>{data.centerName} </td> */}

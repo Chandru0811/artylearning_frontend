@@ -20,6 +20,7 @@ const ReplaceClassLesson = () => {
   const [centerData, setCenterData] = useState(null);
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -29,6 +30,7 @@ const ReplaceClassLesson = () => {
       toast.error(error);
     }
   };
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -43,6 +45,7 @@ const ReplaceClassLesson = () => {
     fetchData();
   }, []);
   console.log("staff", datas);
+
   useEffect(() => {
     if (!loading) {
       initializeDataTable();

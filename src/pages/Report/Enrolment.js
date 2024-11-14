@@ -8,11 +8,14 @@ function Datatable2() {
 
   const getCurrentWeek = () => {
     const date = new Date();
-    const year = date.getFullYear();
-    const week = Math.ceil(((date - new Date(year, 0, 1)) / 86400000 + date.getDay() + 1) / 7);
-    return `${year}-W${String(week).padStart(2, "0")}`;
+    // Set to nearest Thursday: current date + 4 - current day number makes Thursday day number 4
+    date.setDate(date.getDate() + 4 - (date.getDay() || 7));
+    // ISO year and week calculation
+    const yearStart = new Date(date.getFullYear(), 0, 1);
+    const weekNumber = Math.ceil(((date - yearStart) / 86400000 + yearStart.getDay() + 1) / 7);
+    const isoYear = date.getFullYear();
+    return `${isoYear}-W${String(weekNumber).padStart(2, "0")}`;
   };
-
   const [selectedType, setSelectedType] = useState(getCurrentWeek());
   const [centerData, setCenterData] = useState(null);
   const [selectedCenterId, setSelectedCenterId] = useState(null);
@@ -48,13 +51,67 @@ function Datatable2() {
     setSelectedCenterId(e.target.value);
   };
 
+  // const fetchEnrollmentData = async (centerId, week, day) => {
+  //   const queryParams = new URLSearchParams({
+  //     center: centerId,
+  //     week: week,
+  //     day: day,
+  //   });
+
+  //   try {
+  //     const response = await api.get(
+  //       `/getEnrollmentReportData?${queryParams}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     const data = response.data;
+  //     if (day === "ALL") {
+  //       // Map for "ALL" days structure
+  //       const dayData = data.dayData || {};
+  //       const labels = data.labels || [];      
+  //       const bookedSlots = labels.map(label => dayData[label]?.bookSlot || 0);
+  //       const availableSlots = labels.map(label => dayData[label]?.availableSlot || 0);
+        
+  //       setChartData({
+  //         dayData: [
+  //           { name: "Booked Slots", data: bookedSlots },
+  //           { name: "Available Slots", data: availableSlots }
+  //         ],
+  //         labels: labels
+  //       });
+
+  //     } else {
+  //       // Map for specific day structure (like "FRIDAY")
+  //       const timeData = data.dayData[0] || {};
+  //       const labels = data.labels[0] || [];
+
+  //       const bookedSlots = labels.map(label => timeData[label]?.bookSlot || 0);
+  //       const availableSlots = labels.map(label => timeData[label]?.availableSlot || 0);
+
+  //       setChartData({
+  //         dayData: [
+  //           { name: "Booked Slots", data: bookedSlots },
+  //           { name: "Available Slots", data: availableSlots }
+  //         ],
+  //         labels: labels
+  //       });
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error fetching data:", error);
+  //   }
+  // };
+
   const fetchEnrollmentData = async (centerId, week, day) => {
     const queryParams = new URLSearchParams({
       center: centerId,
       week: week,
       day: day,
     });
-
+  
     try {
       const response = await api.get(
         `/getEnrollmentReportData?${queryParams}`,
@@ -64,12 +121,12 @@ function Datatable2() {
           },
         }
       );
-
+  
       const data = response.data;
       if (day === "ALL") {
         // Map for "ALL" days structure
         const dayData = data.dayData || {};
-        const labels = data.labels || [];      
+        const labels = data.labels || [];
         const bookedSlots = labels.map(label => dayData[label]?.bookSlot || 0);
         const availableSlots = labels.map(label => dayData[label]?.availableSlot || 0);
         
@@ -80,16 +137,15 @@ function Datatable2() {
           ],
           labels: labels
         });
-
+  
       } else {
         // Map for specific day structure (like "FRIDAY")
         const timeData = data.dayData[0] || {};
-        // const labels = data.labels[0] || [];
-        const labels = ['2:30 pm','3:30 pm','5:00 pm','7:00 pm','8:30 pm','Total'] || [];
-
+        const labels = Object.keys(timeData);  // Extract time labels directly from keys
+  
         const bookedSlots = labels.map(label => timeData[label]?.bookSlot || 0);
         const availableSlots = labels.map(label => timeData[label]?.availableSlot || 0);
-
+  
         setChartData({
           dayData: [
             { name: "Booked Slots", data: bookedSlots },
@@ -103,6 +159,7 @@ function Datatable2() {
     }
   };
 
+  
   useEffect(() => {
     if (selectedCenterId) {
       fetchEnrollmentData(selectedCenterId, selectedType, selectedDay);
