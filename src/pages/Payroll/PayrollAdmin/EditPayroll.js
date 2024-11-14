@@ -114,7 +114,7 @@ function EditPayroll() {
 
       setLoadIndicator(true);
       let payload = {
-        centerName: selectedCenterName,
+        centerName: empData.centerName,
         centerId: values.centerId,
         userId: values.userId,
         employeeName: empData.employeeName,
@@ -402,7 +402,7 @@ function EditPayroll() {
             <div className="col-md-6 col-12 mb-3 ">
               <lable className="">Centre Name</lable>
               <span className="text-danger">*</span>
-              <select
+              {/* <select
                 {...formik.getFieldProps("centerId")}
                 className={`form-select ${
                   formik.touched.centerId && formik.errors.centerId
@@ -419,7 +419,17 @@ function EditPayroll() {
                       {center.centerNames}
                     </option>
                   ))}
-              </select>
+              </select> */}
+               <input
+                type="text"
+                className={`form-control  ${
+                  formik.touched.centerName && formik.errors.centerName
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("centerName")}
+                readOnly
+              />
               {formik.touched.centerId && formik.errors.centerId && (
                 <div className="invalid-feedback">{formik.errors.centerId}</div>
               )}
