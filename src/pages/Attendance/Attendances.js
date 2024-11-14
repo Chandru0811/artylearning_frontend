@@ -5,26 +5,23 @@ import api from "../../config/URL";
 import AddMore from "./AddMore";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
-import WebSocketService from "../../config/WebSocketService";
+// import WebSocketService from "../../config/WebSocketService";
 import ReplacementAdd from "./ReplacementAdd";
 import { Link } from "react-router-dom";
-import { Modal } from "bootstrap";
-// import fetchAllCoursesWithIds from "../List/CourseList";
+
 
 function Attendances() {
   const [attendanceData, setAttendanceData] = useState([]);
   console.log("Attendance Data Reload again", attendanceData);
   const [centerData, setCenterData] = useState(null);
-  // const [courseData, setCourseData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("1");
-  // const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedBatch, setSelectedBatch] = useState("1");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+   const [batchOptions, setBatchOptions] = useState([]);
   const userName = localStorage.getItem("userName");
   console.log("first", userName);
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
   const [isReplacement, setIsReplacement] = useState({ id: "", valid: false });
-  // console.log("count", count);
   const getCurrentDate = () => {
     const today = new Date();
     const formattedDate = `${today.getFullYear()}-${(
@@ -44,6 +41,7 @@ function Attendances() {
   const closeModal = () => {
     setModalOpen(false);
   };
+
   const fetchListData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -57,12 +55,28 @@ function Attendances() {
     }
   };
 
-  useEffect(() => {
-    fetchListData();
-  }, []);
+   // Function to format date as "DD/MM/YYYY"
+   const formatDate = (date) => {
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
+  // Fetch available slots based on the selected date
+  const fetchAvailableSlots = async (date) => {
+    try {
+      const formattedDate = formatDate(date);
+      const response = await api.get(`getActualSlotsByDate?date=${formattedDate}`);
+      setBatchOptions(response.data); // Update batch options with API response
+    } catch (error) {
+      toast.error("Error fetching slots:", error);
+    }
+  };
+
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
 
   const fetchData = async () => {
-    // setLoadIndicator(true);
     try {
       const requestBody = {
         centerId: selectedCenter,
@@ -80,38 +94,20 @@ function Attendances() {
     }
   };
 
-  // const [count, setCount] = useState(0);
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setCount((prevCount) => prevCount + 1); // Increment count every 5 seconds
-  //   }, 5000);
-
-  //   return () => clearInterval(intervalId); // Clean up the interval on unmount
-  // }, []);
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [count]);
-
-  useEffect(() => {
-    const subscription = WebSocketService.subscribeToAttendanceUpdates(
-      (data) => {
-        if (data === true) {
-          setCount((prevCount) => prevCount + 1);
-        }
-      }
-    );
-
-    // return () => {
-    //   subscription.unsubscribe();
-    // };
-  }, []);
-
   const handelSubmitData = () => {
     fetchData();
   };
+
+  useEffect(() => {
+    if (selectedDate) {
+      fetchAvailableSlots(selectedDate);
+      fetchData();
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
+    fetchListData();
+  }, []);
 
   const handleAttendanceChange = (attendanceIndex, studentIndex, value) => {
     const updatedAttendanceData = [...attendanceData];
@@ -177,7 +173,6 @@ function Attendances() {
   return (
     <>
       <div className="container py-3 ">
-        {/* <h2>count = {count}</h2> */}
         <div className="row">
           <div className="col-md-6 col-12 mb-2">
             <label className="form-lable">Centre</label>
@@ -195,22 +190,6 @@ function Attendances() {
                 ))}
             </select>
           </div>
-          {/* <div className="col-md-6 col-12 mb-2">
-            <label className="form-lable">Course</label>
-            <select
-              className="form-select "
-              aria-label="Default select example"
-              onChange={(e) => setSelectedCourse(e.target.value)}
-            >
-              <option></option>
-              {courseData &&
-                courseData.map((courses) => (
-                  <option key={courses.id} value={courses.id}>
-                    {courses.courseNames}
-                  </option>
-                ))}
-            </select>
-          </div> */}
           <div className="col-md-6 col-12">
             <label className="form-lable">Batch</label>
             <select
@@ -218,12 +197,12 @@ function Attendances() {
               aria-label="Default select example"
               onChange={(e) => setSelectedBatch(e.target.value)}
             >
-              <option value="1">2:30 pm</option>
-              <option value="2">3:30 pm</option>
-              <option value="3">5:00 pm</option>
-              <option value="4">7:00 pm</option>
-              <option value="5">12:00 pm</option>
-              <option value="6">1:00 pm</option>
+              <option value=""></option>
+              {batchOptions?.map((batch, index) => (
+                <option key={index} value={batch.batchId}>
+                  {batch.batchTime}
+                </option>
+              ))}
             </select>
           </div>
           <div className="col-md-6 col-12 mb-3">
@@ -231,15 +210,11 @@ function Attendances() {
             <input
               type="date"
               className="form-control"
-              onChange={(e) => setSelectedDate(e.target.value)}
-              onFocus={(e) => e.target.showPicker()}
+               onChange={handleDateChange}
               value={selectedDate}
             />
           </div>
           <div className="col-md-4 col-12 d-flex align-items-end mb-3">
-            {/* <button type="submit" className="btn btn-button btn-sm">
-              Search
-            </button> */}
             <button
               className="btn btn-light btn-button btn-sm mt-3"
               onClick={handelSubmitData}
@@ -247,12 +222,6 @@ function Attendances() {
               Search
             </button>
             &nbsp;&nbsp;
-            {/* <button
-              className="btn btn-light btn-button2 btn-sm mt-3"
-              style={{ backgroundColor: "#fa994af5" }}
-            >
-              Clear
-            </button> */}
           </div>
         </div>
         <div className="container">

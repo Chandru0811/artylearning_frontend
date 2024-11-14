@@ -15,6 +15,9 @@ function AddPayroll() {
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [bonus, setBonus] = useState(0);
+  const [netPay, setNetPay] = useState(0);
+  console.log("NET PAY:",netPay);
+  
   console.log("empRole", empRole);
   const navigate = useNavigate();
   const validationSchema = Yup.object().shape({
@@ -55,8 +58,8 @@ function AddPayroll() {
         return empRole !== "freelancer" ? !!value : true;
       }
     ),
-    freelanceCount: Yup.string().test(
-      "freelanceCount-required",
+    freelancerCount: Yup.string().test(
+      "freelancerCount-required",
       "*Freelance count is required",
       function (value) {
         return empRole === "freelancer" ? !!value : true;
@@ -98,98 +101,80 @@ function AddPayroll() {
       payrollMonth: "",
       bonus: 0,
       deductionAmount: 0,
-      netPay: 0,
+      netPay: "",
       status: "",
       shgContribution: "",
       cpfContribution: "",
-      freelanceCount: "",
+      freelancerCount: "",
       payrollType: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+
+      console.log("VALUES:",values);
+      
       setLoadIndicator(true);
       let selectedCenterName = "";
       let selectedEmployeeName = "";
-
+    
       centerData.forEach((center) => {
         if (parseInt(values.centerId) === center.id) {
           selectedCenterName = center.centerNames || "--";
         }
       });
-
+    
       userNamesData.forEach((employee) => {
         if (parseInt(values.userId) === employee.id) {
           selectedEmployeeName = employee.userNames || "--";
         }
       });
-
+    
       let payload = {
         centerName: selectedCenterName,
         centerId: values.centerId,
         userId: values.userId,
         employeeName: selectedEmployeeName,
-        grossPay: values.grossPay,
         netPay: values.netPay,
         status: values.status,
       };
-
+    
       if (empRole !== "freelancer") {
         payload = {
-          centerName: selectedCenterName,
-          centerId: values.centerId,
-          userId: values.userId,
-          employeeName: selectedEmployeeName,
-          grossPay: values.grossPay,
-          netPay: values.netPay,
-          status: values.status,
+          ...payload,
           payrollMonth: values.payrollMonth,
           bonus: values.bonus,
+          grossPay:values.grossPay,
           deductionAmount: values.deductionAmount,
           shgContribution: values.shgContribution,
           cpfContributions: values.cpfContribution,
         };
       } else if (empRole === "freelancer") {
         payload = {
-          centerId: values.centerId,
-          userId: values.userId,
-          userRole: empRole,
-          payrollMonth: values.payrollMonth,
-          netPay: values.netPay,
-          status: values.status,
+          ...payload,
+          netPay : empRole === "freelancer" ? netPay : values.netPay,
           payrollType: values.payrollType,
-          freelancerCount: Number(values.freelanceCount),
-          startDate:values.startDate,
-          endDate:values.endDate
+          freelancerCount: Number(values.freelancerCount),
+          startDate: values.startDate,
+          endDate: values.endDate,
         };
       }
-
+      console.log("Payload Values:",payload);
       try {
-        if (empRole === "freelancer") {
-          const response = await api.post("/createFreelancerPayroll", payload, {
+        const response = await api.post(
+          empRole === "freelancer" ? "/createFreelancerPayroll" : "/createUserPayroll",
+          payload,
+          {
             headers: {
               "Content-Type": "application/json",
             },
-          });
-
-          if (response.status === 201 || response.status === 200) {
-            toast.success(response.data.message);
-            navigate("/payrolladmin");
-          } else {
-            toast.error(response.data.message);
           }
+        );
+    
+        if (response.status === 201 || response.status === 200) {
+          toast.success(response.data.message);
+          navigate("/payrolladmin");
         } else {
-          const response = await api.post("/createUserPayroll", payload, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (response.status === 201 || response.status === 201) {
-            toast.success(response.data.message);
-            navigate("/payrolladmin");
-          } else {
-            toast.error(response.data.message);
-          }
+          toast.error(response.data.message);
         }
       } catch (error) {
         if (error?.response?.status === 409) {
@@ -200,7 +185,7 @@ function AddPayroll() {
       } finally {
         setLoadIndicator(false);
       }
-    },
+    }
   });
 
   const handleCenterChange = async (event) => {
@@ -215,6 +200,11 @@ function AddPayroll() {
       toast.error(error);
     }
   };
+
+  useEffect(() => {
+    const currentMonth = format(new Date(), "yyyy-MM");
+    formik.setFieldValue("payrollMonth", currentMonth);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -264,16 +254,11 @@ function AddPayroll() {
     }
   };
 
-  useEffect(() => {
-    const currentMonth = format(new Date(), "yyyy-MM");
-    formik.setFieldValue("payrollMonth", currentMonth);
-  }, []);
-
   const handleUserChange = async (event) => {
     const userId = event.target.value;
     formik.setFieldValue("userId", userId);
     formik.setFieldValue("grossPay", "");
-    formik.setFieldValue("netPay", 0);
+    formik.setFieldValue("netPay", "");
     const { payrollMonth } = formik.values;
     await fetchUserSalaryInfo(userId, payrollMonth);
   };
@@ -297,6 +282,8 @@ function AddPayroll() {
         const shg = parseFloat(formik.values.shgContribution) || 0;
         const netPay = grossPay + bonus - deductionAmount - cpf - shg;
         formik.setFieldValue("netPay", isNaN(netPay) ? 0 : netPay.toFixed(2));
+      } else{
+        formik.setFieldValue("netPay","");
       }
     };
     calculateNetPay();
@@ -309,7 +296,6 @@ function AddPayroll() {
   useEffect(() => {
     userNamesData?.forEach((employee) => {
       if (parseInt(formik.values.userId) === employee.id) {
-        // const  selectedEmployeeName = employee.userNames || "--";
         const selectedEmployeeRole = employee.role;
         setEmpRole(selectedEmployeeRole);
       }
@@ -329,16 +315,16 @@ function AddPayroll() {
       });
   
       formik.setFieldValue("netPay", response.data.netPay);
-      formik.setFieldValue("freelanceCount", response.data.payable_hours); // Assuming "count" is the field in the response data
+      formik.setFieldValue("freelancerCount", response.data.payable_hours); // Assuming "count" is the field in the response data
     } catch (error) {
       toast.error("Failed to fetch payment hours.");
     }
   };
   
-  const fetchUserPaymentInfo = async (freelanceCount, payrollType) => {
+  const fetchUserPaymentInfo = async (freelancerCount, payrollType) => {
     const queryParams = new URLSearchParams({
       payrollType: payrollType,
-      freelanceCount: freelanceCount,
+      freelanceCount: freelancerCount,
     });
 
     try {
@@ -347,7 +333,9 @@ function AddPayroll() {
           "Content-Type": "application/json",
         },
       });
+      const netPay = response.data.netPay;
       formik.setFieldValue("netPay", response.data.netPay);
+      setNetPay(netPay);
     } catch (error) {
       toast.error(error);
     }
@@ -355,9 +343,9 @@ function AddPayroll() {
 
   useEffect(() => {
     const fetchUserPaymentData = async () => {
-      const { freelanceCount, payrollType, startDate, endDate, userId } = formik.values;
+      const { freelancerCount, payrollType, startDate, endDate, userId } = formik.values;
   
-      await fetchUserPaymentInfo(freelanceCount, payrollType);
+      await fetchUserPaymentInfo(freelancerCount, payrollType);
       if (empRole === "freelancer" && userId && startDate && endDate ) { // Check if empRole is freelancer
       await fetchUserPaymenthours(startDate, endDate, userId);
     }
@@ -365,7 +353,7 @@ function AddPayroll() {
   
     fetchUserPaymentData();
   }, [
-    formik.values.freelanceCount,
+    formik.values.freelancerCount,
     formik.values.payrollType,
     formik.values.startDate,
     formik.values.endDate,
@@ -473,8 +461,6 @@ function AddPayroll() {
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="Username"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps("grossPay")}
                       readOnly
                     />
@@ -570,9 +556,8 @@ function AddPayroll() {
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="Username"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps("shgContribution")}
+                      readOnly
                     />
                     {formik.touched.shgContribution &&
                       formik.errors.shgContribution && (
@@ -595,9 +580,8 @@ function AddPayroll() {
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="Username"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps("cpfContribution")}
+                      readOnly
                     />
                     {formik.touched.cpfContribution &&
                       formik.errors.cpfContribution && (
@@ -609,6 +593,7 @@ function AddPayroll() {
                 </div>
               </>
             )}
+
             {empRole === "freelancer" && (
               <>
                <div className="col-md-6 col-12">
@@ -697,32 +682,21 @@ function AddPayroll() {
                     </label>
                     <input
                       type="text"
-                      // onInput={(event) => {
-                      //   let value = event.target.value
-                      //     .replace(/[^0-9]/g, "")
-                      //     .slice(0, 3);
-                      //   if (value > 150) {
-                      //     value = "150";
-                      //     toast.warning("Maximum value is 150");
-                      //   }
-                      //   event.target.value = value;
-                      //   formik.setFieldValue("freelanceCount", value);
-                      // }}
-                      {...formik.getFieldProps("freelanceCount")} 
+                      {...formik.getFieldProps("freelancerCount")} 
                       className={`form-control ${
-                        formik.touched.freelanceCount &&
-                        formik.errors.freelanceCount
+                        formik.touched.freelancerCount &&
+                        formik.errors.freelancerCount
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="freelanceCount"
+                      aria-label="freelancerCount"
                       aria-describedby="basic-addon1"
-                      {...formik.getFieldProps("freelanceCount")}
+                      {...formik.getFieldProps("freelancerCount")}
                     />
-                    {formik.touched.freelanceCount &&
-                      formik.errors.freelanceCount && (
+                    {formik.touched.freelancerCount &&
+                      formik.errors.freelancerCount && (
                         <div className="invalid-feedback">
-                          {formik.errors.freelanceCount}
+                          {formik.errors.freelancerCount}
                         </div>
                       )}
                   </div>
@@ -730,21 +704,22 @@ function AddPayroll() {
                
               </>
             )}
+
             <div className="  col-md-6 col-12">
               <div className="text-start mt-2 mb-3">
                 <lable className="form-lable">
                   Net Pay<span className="text-danger">*</span>
                 </lable>
                 <input
-                  type="text"
+                  type="number"
+                  name="netPay"
                   className={`form-control  ${
                     formik.touched.netPay && formik.errors.netPay
                       ? "is-invalid"
                       : ""
                   }`}
-                  aria-label="Username"
-                  aria-describedby="basic-addon1"
                   {...formik.getFieldProps("netPay")}
+                  
                   readOnly
                 />
                 {formik.touched.netPay && formik.errors.netPay && (

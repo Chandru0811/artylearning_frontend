@@ -149,7 +149,16 @@ const ReplaceClassLesson = () => {
                     <td>{data.studentName}</td>
                     <td>{data.course}</td>
                     <td>{data.classCode}</td>
-                    <td>{data.status}</td>
+                    {/* <td>{data.status}</td> */}
+                    <td>
+                      {data.status === "APPROVED" ? (
+                        <span className="badge badges-Green">Approved</span>
+                      ) : data.status === "PENDING" ? (
+                        <span className="badge badges-Yellow">Pending</span>
+                      ) : (
+                        <span className="badge badges-Red">Rejected</span>
+                      )}
+                    </td>
                     <td>
                       <div className="d-flex">
                         <Link

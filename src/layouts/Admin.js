@@ -220,6 +220,8 @@ import CmsCourseView from "../pages/CMS/CMSCourses/CmsCourseView";
 import RevenueReport from "../pages/Report/RevenueReport";
 import ReplaceClassLessonEdit from "../pages/Student/ReplaceClassLessonList/ReplaceClassLessonEdit";
 import ReplaceClassLessonView from "../pages/Student/ReplaceClassLessonList/ReplaceClassLessonView";
+import FreelancerPayslip from "../pages/EmployeePayslip/FreelancerPayslip";
+import FreelancerPayslipView from "../pages/EmployeePayslip/FreelancerPayslipView";
 // import Blog from "../pages/CMS/Blog";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
@@ -383,6 +385,9 @@ function Admin({ handleLogout }) {
               {/* {/ Payslip /} */}
               <Route path="/employeepayslip" element={<Payslip />} />
               <Route path="/employeepayslip/view" element={<ViewPayslip />} />
+
+              <Route path="/freelancerPayslip" element={<FreelancerPayslip />} />
+              <Route path="/freelancerPayslip/view/:id" element={<FreelancerPayslipView />} />
 
               {/* Report */}
               <Route path="/report/attendance" element={<Attendance />} />

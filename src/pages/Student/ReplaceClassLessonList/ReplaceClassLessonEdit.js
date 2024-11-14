@@ -45,6 +45,7 @@ function ReplaceClassLessonEdit() {
   const centerId = searchParams.get("centerId");
   const studentId = searchParams.get("studentId");
   console.log("centerId:", centerId);
+  console.log("Student ID:", studentId);
 
   const formik = useFormik({
     initialValues: {
@@ -60,7 +61,7 @@ function ReplaceClassLessonEdit() {
       setLoadIndicator(true);
       const payload = {
         ...data,
-        studentId: id,
+        studentId: studentId,
         centerId: selectedRowData.centerId,
         centerName: selectedRowData.centerName,
         classId: selectedRowData.classId,
@@ -100,7 +101,7 @@ function ReplaceClassLessonEdit() {
         }
         if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
-          navigate("/student");
+          navigate("/replaceclasslesson");
           formik.resetForm();
         } else {
           toast.error(response.data.message);

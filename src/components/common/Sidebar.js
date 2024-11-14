@@ -138,6 +138,11 @@ function Sidebar() {
             access: storedScreens.payslipIndex,
           },
           {
+            title: "Freelancer Invoice",
+            path: "/freelancerPayslip",
+            access: storedScreens.payrollIndex,
+          },
+          {
             title: "Role & Matrix",
             path: "/role/add",
             access: storedScreens.rolesMatrixIndex,

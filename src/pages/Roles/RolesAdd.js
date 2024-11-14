@@ -421,8 +421,8 @@ function RolesAdd() {
                   <option value="4">Staff</option>
                   <option value="5">Staff Admin</option>
                   <option value="6">Teacher</option>
+                  <option value="8">Freelancer</option>
                   <option value="11">Centre Manager</option>
-                  <option value="12">Freelancer</option>
                 </select>
               </div>
             </div>

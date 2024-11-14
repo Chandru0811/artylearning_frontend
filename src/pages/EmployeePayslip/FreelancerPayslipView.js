@@ -1,56 +1,36 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/custom.css";
 import Logo from "../../assets/images/Logo.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import { format } from "date-fns"; // Import format function from date-fns
 import api from "../../config/URL";
 import { FaDownload } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
 // import { toast } from "react-toastify";
 
-function Payslip() {
+function FreelancerPayslipView() {
+  const { id } = useParams();
   const [selectedMonth, setSelectedMonth] = useState("");
   const [data, setData] = useState({});
+  console.log("Payslip Data", data);
   const userId = localStorage.getItem("userId");
-  // console.log("kishore", userId);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const currentMonth = format(new Date(), "yyyy-MM");
-    setSelectedMonth(currentMonth);
-  }, []);
-
-  const getData = async () => {
-    try {
-      const response = await api.get(
-        `getPaySlipByUserId/${userId}?payrollMonth=${selectedMonth}`
-      );
-      setData(response.data);
-      setLoading(false);
-    } catch (error) {
-      if (error?.response?.status === 404) {
-        setData({});
-        console.log("Error Fetching Data ", error);
-      } else {
-        console.log("Error Fetching Data ", error);
+    const getData = async () => {
+      try {
+        const response = await api.get(`getFreelancerInvoiceById/${id}`);
+        setData(response.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (selectedMonth !== "") {
-      getData();
-    }
-  }, [selectedMonth]);
-
-  const handleMonthChange = (event) => {
-    setSelectedMonth(event.target.value);
-    // console.log("Selected month:", event.target.value);
-  };
+    };
+    getData();
+  }, [id]);
 
   const downloadPdf = () => {
     const doc = new jsPDF();
@@ -85,8 +65,6 @@ function Payslip() {
     const earningData = [
       ["BASIC SALARY", data.basicSalary],
       ["BONUS", data.bonus],
-      ["SHG", data.shgContribution],
-      ["CPF", data.cpfContribution],
       // Add other earning categories as needed
     ];
 
@@ -119,7 +97,7 @@ function Payslip() {
       const rowX = startY + (rowIndex + 1) * cellHeight;
       row.forEach((cell, colIndex) => {
         const colX = startX + colIndex * cellWidth;
-        doc.text(cell?.toString(), colX, rowX);
+        doc.text(cell.toString(), colX, rowX);
       });
     });
 
@@ -127,7 +105,7 @@ function Payslip() {
       const colX = startXX + colIndex * cellWidth;
       col.forEach((cell, rowIndex) => {
         const rowX = startY + (rowIndex + 1) * cellHeight;
-        doc.text(cell?.toString(), colX, rowX);
+        doc.text(cell.toString(), colX, rowX);
       });
     });
 
@@ -173,22 +151,6 @@ function Payslip() {
   return (
     <section>
       <div className="container">
-        <div className="row mt-4">
-          <div className="offset-md-1 col-md-5 col-12">
-            <lable className="form-lable fw-medium">PAYSLIP MONTH</lable>
-            <input
-              type="month"
-              className="form-control"
-              value={selectedMonth}
-              onChange={handleMonthChange}
-            />
-          </div>
-          <div className="col-md-5 col-12 d-flex justify-content-end mt-4">
-            <Link to="/">
-              <button className="btn btn-sm btn-border mx-2">Back</button>
-            </Link>
-          </div>
-        </div>
         {loading ? (
           <div className="loader-container">
             <div class="loading">
@@ -213,7 +175,7 @@ function Payslip() {
                     />
                   </div>
                   <div className="col-md-8 col-12 mt-4">
-                    <h5 className="ms-5">ARTY LEARNING</h5>
+                    <h5 className="ms-5">{data.centerName}</h5>
                   </div>
                 </div>
                 <div className="row mt-2">
@@ -247,8 +209,7 @@ function Payslip() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 :{" "}
-                                {data.dateOfJoining &&
-                                  data.dateOfJoining.substring(0, 10)}
+                                {data.dateOFJoining?.substring(0, 10)}
                               </p>
                             </div>
                           </div>
@@ -262,7 +223,7 @@ function Payslip() {
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data.payslipMonth}
+                                : {data.payrollMonth}
                               </p>
                             </div>
                           </div>
@@ -275,107 +236,112 @@ function Payslip() {
                               </p>
                             </div>
                             <div className="col-6">
+                              <p className="text-muted text-sm">: Teacher</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row">
+                            <div className="col-6">
+                              <p className="fw-medium d-flex justify-content-end">
+                                Start Date
+                              </p>
+                            </div>
+                            <div className="col-6">
                               <p className="text-muted text-sm">
-                                : {data.designation}
+                                : {data.startDate}
                               </p>
                             </div>
                           </div>
                         </div>
-                  
+                        <div className="col-md-6 col-12">
+                          <div className="row">
+                            <div className="col-6">
+                              <p className="fw-medium d-flex justify-content-end">
+                                End Date
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data.endDate}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <div className="row paysliptable ">
                         <div className="col-12">
                           <table class="table ">
                             <thead className="table-bordered">
                               <tr>
-                                <th scope="col">EARNING</th>
                                 <th
                                   scope="col"
-                                  style={{ borderRight: "2px solid black" }}
+                                  style={{
+                                    borderRight: "2px solid black",
+                                    borderLeft: "2px solid black",
+                                  }}
+                                >
+                                  EARNING
+                                </th>
+                                <th
+                                  scope="col"
+                                  style={{
+                                    borderRight: "2px solid black",
+                                    borderLeft: "2px solid black",
+                                  }}
                                 >
                                   AMOUNT
                                 </th>
-                                <th scope="col">DEDUCTION</th>
-                                <th scope="col">AMOUNT</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
-                                <td>
-                                  <div className="mb-2">BASIC SALARY</div>
-                                  <div className="mb-2">BONUS</div>
-                                  <div className="mb-2">SHG</div>
-                                  <div >CPF</div>
+                                <td style={{ borderLeft: "2px solid black" }}>
+                                  <div className="mb-2">Net Pay</div>
                                 </td>
-
                                 <td style={{ borderRight: "2px solid black" }}>
-                                  <div className="mb-2">{data.basicSalary}</div>
-                                  <div className="mb-2">{data.shgContribution}</div>
-                                  <div className="mb-2">{data.shg}</div>
-                                  <div>{data.cpfContribution}</div>
+                                  <div className="mb-2">{data.netPay}</div>
                                 </td>
-                                <td>
-                                  {data.deductions &&
-                                    data.deductions.map((data, index) => (
-                                      <tr key={index + 1}>
-                                        <td>
-                                          <div className="mb-2">
-                                            {data.detectionName}
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    ))}
-                                </td>
-                                <td>
-                                  {data.deductions &&
-                                    data.deductions.map((data, index) => (
-                                      <tr key={index + 1}>
-                                        <td>
-                                          <div className="mb-2">
-                                            {data.amount}
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    ))}
-                                </td>
-                                {/* <td>{data.amount}</td> */}
                               </tr>
 
-                              <tr className="table-bordered">
-                                <td>GROSS PAY</td>
-                                <td style={{ borderRight: "2px solid black" }}>
-                                  {data.grossPay}
-                                </td>
-                                <td>DEDUCTION TOTAL</td>
-                                <td>{data.deductionTotal}</td>
-                              </tr>
+                              <tr className="table-bordered"></tr>
                             </tbody>
                           </table>
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-md-6 col-12">
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-medium">NET PAY</p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data.netPay}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-12">
+                        <div className="col-md-12 col-12">
                           <div className="row">
                             <div className="col-3">
                               <p className="fw-medium">IN WORDS</p>
                             </div>
-                            <div className="col-6">
+                            <div className="col-9">
                               <p className="text-muted text-sm">
                                 : {data.netPayInWords}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row">
+                            <div className="col-6">
+                              <p className="fw-medium">Payroll Type</p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data.payrollType}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row">
+                            <div className="col-6">
+                              <p className="fw-medium">Hourse Count</p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data.freelanceCount}
                               </p>
                             </div>
                           </div>
@@ -413,4 +379,4 @@ function Payslip() {
   );
 }
 
-export default Payslip;
+export default FreelancerPayslipView;

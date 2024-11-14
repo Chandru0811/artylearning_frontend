@@ -36,6 +36,8 @@ const AccountAdd = forwardRef(
     const [selectedCenters, setSelectedCenters] = useState([]);
     const userName = localStorage.getItem("userName");
 
+    const empRole = formData.role;
+
     const centerOptions = centerData.map((center) => ({
       label: center.centerNames,
       value: center.id,
@@ -69,6 +71,7 @@ const AccountAdd = forwardRef(
     const formik = useFormik({
       initialValues: {
         startDate: formData.startDate || "",
+        endDate: formData.endDate || "",
         colorCode: formData.colorCode || "",
         teacherId: formData.teacherId || "",
         teacherType: formData.teacherType || "",
@@ -293,44 +296,20 @@ const AccountAdd = forwardRef(
                 readOnly
               />
             </div>
-
-            {/* <div className="col-md-6 col-12 mb-2 mt-3">
-            <lable>
-              Status<span className="text-danger">*</span>
-            </lable>
-            <select
-              className="form-select "
-              name="status"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.status}
-            >
-              <option value=""></option>
-              <option value="Active">Active</option>
-              <option value="In Acitve">Inacitve</option>
-            </select>
-            {formik.touched.status && formik.errors.status && (
-              <div className="error text-danger ">
-                <small>{formik.errors.status}</small>
+            {empRole === "freelancer" && (
+              <div className="col-md-6 col-12 mb-2 mt-3">
+                <label>End Date</label>
+                <input
+                  type="date"
+                  onFocus={(e) => e.target.showPicker()}
+                  className="form-control"
+                  name="endDate"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.endDate}
+                />
               </div>
             )}
-          </div> */}
-
-            {/* <div className="col-md-6 col-12 mb-2 mt-3">
-            <label>
-              End Date
-            </label>
-            <input
-               type="date"
-    onFocus={(e) => e.target.showPicker()}
-              className="form-control"
-              name="endDate"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.endDate}
-            />
-          </div> */}
-
             <div className="col-lg-6 col-md-6 col-12 mb-2 mt-3">
               <label>
                 Approval Required for photos / videos upload
