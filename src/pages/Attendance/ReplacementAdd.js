@@ -7,12 +7,18 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 
-function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
+function ReplacementAdd({
+  studentId,
+  setIsReplacement,
+  attendanceData,
+  selectedDate,
+}) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [Data, setData] = useState(null);
   console.log("attendanceData", attendanceData);
+  console.log("selectedDate", selectedDate);
 
   const validationSchema = Yup.object({
     studentName: Yup.string().required("*Student Name is required"),
@@ -42,10 +48,10 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
   const formik = useFormik({
     initialValues: {
       studentName: attendanceData[0]?.students[0]?.studentName,
-      studentId: attendanceData[0]?.students[0]?.studentId,
+      studentId: attendanceData[0]?.students[0]?.studentUniqueId,
       course: attendanceData[0]?.course,
       classCode: attendanceData[0]?.classCode,
-      absentDate: new Date().toISOString().split("T")[0],
+      absentDate: selectedDate,
       preferredDay: "",
       preferredTiming: "",
       absentReason: "",
@@ -71,7 +77,7 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
       // };
       const formData = new FormData();
       formData.append("studentName", values.studentName);
-      formData.append("studentId", values.studentId);
+      formData.append("studentId", attendanceData[0]?.students[0]?.studentId);
       formData.append("course", values.course);
       formData.append("classCode", values.classCode);
       formData.append("absentDate", values.absentDate);
@@ -103,6 +109,11 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
       }
     },
   });
+  useEffect(() => {
+    if (selectedDate) {
+      formik.setFieldValue("absentDate", selectedDate);
+    }
+  }, [selectedDate]);
 
   return (
     <>
@@ -277,14 +288,14 @@ function ReplacementAdd({ studentId, setIsReplacement, attendanceData }) {
                   </label>
                   <input
                     type="date"
-                    min={new Date().toISOString().split("T")[0]}
-                    value={formik.values.absentDate}
+                    value={selectedDate}
                     className={`form-control ${
                       formik.touched.absentDate && formik.errors.absentDate
                         ? "is-invalid"
                         : ""
                     }`}
                     {...formik.getFieldProps("absentDate")}
+                    disabled
                   />
                   {formik.touched.absentDate && formik.errors.absentDate && (
                     <div className="invalid-feedback">

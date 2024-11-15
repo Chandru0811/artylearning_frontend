@@ -9,15 +9,15 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import ReplacementAdd from "./ReplacementAdd";
 import { Link } from "react-router-dom";
 
-
 function Attendances() {
   const [attendanceData, setAttendanceData] = useState([]);
-  console.log("Attendance Data Reload again", attendanceData);
+  const [attendance, setAttendance] = useState([]);
+  console.log("Attendance Data Reload again", attendance);
   const [centerData, setCenterData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("1");
   const [selectedBatch, setSelectedBatch] = useState("1");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-   const [batchOptions, setBatchOptions] = useState([]);
+  const [batchOptions, setBatchOptions] = useState([]);
   const userName = localStorage.getItem("userName");
   console.log("first", userName);
   // const [count, setCount] = useState(0);
@@ -55,8 +55,8 @@ function Attendances() {
     }
   };
 
-   // Function to format date as "DD/MM/YYYY"
-   const formatDate = (date) => {
+  // Function to format date as "DD/MM/YYYY"
+  const formatDate = (date) => {
     const [year, month, day] = date.split("-");
     return `${day}/${month}/${year}`;
   };
@@ -65,7 +65,9 @@ function Attendances() {
   const fetchAvailableSlots = async (date) => {
     try {
       const formattedDate = formatDate(date);
-      const response = await api.get(`getActualSlotsByDate?date=${formattedDate}`);
+      const response = await api.get(
+        `getActualSlotsByDate?date=${formattedDate}`
+      );
       setBatchOptions(response.data); // Update batch options with API response
     } catch (error) {
       toast.error("Error fetching slots:", error);
@@ -88,11 +90,32 @@ function Attendances() {
         "getAllTeacherWithStudentAttendance",
         requestBody
       );
-      setAttendanceData(response.data);
+      const attendanceData = response.data;
+      if (
+        attendanceData &&
+        attendanceData.length > 0 &&
+        attendanceData[0].students
+      ) {
+        const studentsAttendance = attendanceData[0].students.map(
+          (student) => ({
+            attendance: student.attendance,
+          })
+        );
+
+        setAttendanceData(attendanceData);
+        setAttendance(studentsAttendance);
+      } else {
+        console.log("No students data found in the response.");
+      }
     } catch (error) {
-      toast.error("Error fetching data:", error);
+      toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    console.log("Updated Attendance Data:", attendanceData);
+    console.log("Updated Students Attendance:", attendance);
+  }, [attendanceData, attendance]);
 
   const handelSubmitData = () => {
     fetchData();
@@ -111,17 +134,17 @@ function Attendances() {
 
   const handleAttendanceChange = (attendanceIndex, studentIndex, value) => {
     const updatedAttendanceData = [...attendanceData];
-    if (
-      updatedAttendanceData[attendanceIndex].students[studentIndex]
-        .attendance === "absent" &&
-      value === "replacement request"
+    const student =
+      updatedAttendanceData[attendanceIndex].students[studentIndex];
+    if (value === "present" || value === "absent") {
+      student.attendance = value;
+    } else if (
+      value === "replacement request" &&
+      student.attendance === "absent"
     ) {
-      updatedAttendanceData[attendanceIndex].students[studentIndex].attendance =
-        "replacement request";
-    } else {
-      updatedAttendanceData[attendanceIndex].students[studentIndex].attendance =
-        value;
+      student.attendance = value;
     }
+
     setAttendanceData(updatedAttendanceData);
   };
 
@@ -145,10 +168,7 @@ function Attendances() {
           attendanceDate: selectedDate,
           biometric: false,
           studentUniqueId: student.studentUniqueId,
-          attendanceStatus:
-            student.attendance === "absent"
-              ? "replacement request"
-              : student.attendance,
+          attendanceStatus: student.attendance,
           remarks: student.remarks,
           userId: attendanceItem.userId,
           studentId: student.studentId,
@@ -210,7 +230,7 @@ function Attendances() {
             <input
               type="date"
               className="form-control"
-               onChange={handleDateChange}
+              onChange={handleDateChange}
               value={selectedDate}
             />
           </div>
@@ -375,131 +395,58 @@ function Attendances() {
                                             <td>{student.studentUniqueId}</td>
                                             <td>{student.studentName}</td>
                                             <td>
-                                              {isReplacement.id ===
-                                                student.studentId &&
-                                              isReplacement.valid ? (
-                                                <>
-                                                  <span className="radio-button-text">
-                                                    {userName ===
-                                                    "SMS_ADMIN" ? (
-                                                      <Link
-                                                        to="/replaceclasslesson"
-                                                        style={{
-                                                          textDecoration:
-                                                            "none",
-                                                          color: "black",
-                                                        }}
-                                                      >
-                                                        Replacement Class
-                                                        Request
-                                                      </Link>
-                                                    ) : userName ===
-                                                        "SMS_TEACHER" ||
-                                                      userName ===
-                                                        "SMS_STAFF" ? (
-                                                      <span
-                                                        onClick={
-                                                          handleNoAccessClick
-                                                        }
-                                                        style={{
-                                                          textDecoration:
-                                                            "none",
-                                                          color: "black",
-                                                          cursor: "pointer",
-                                                        }}
-                                                      >
-                                                        Replacement Class
-                                                        Request
-                                                      </span>
-                                                    ) : null}
-                                                  </span>
-
-                                                  {isModalOpen && (
-                                                    <div className="modal-overlay-replacement">
-                                                      <div className="modal-content-replacement">
-                                                        <div className="modal-header-replacement">
-                                                          <h5 className="modal-title-replacement">
-                                                            Notification
-                                                          </h5>
-                                                          <button
-                                                            className="close-button-replacement"
-                                                            onClick={closeModal}
-                                                          >
-                                                            &times;
-                                                          </button>
-                                                        </div>
-                                                        <div className="modal-body-replacement">
-                                                          <p>
-                                                            You already have a
-                                                            request
-                                                          </p>
-                                                        </div>
-                                                        <div className="modal-footer-replacement">
-                                                          <button
-                                                            className="btn-replacement btn-secondary-replacement"
-                                                            onClick={closeModal}
-                                                          >
-                                                            Close
-                                                          </button>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  )}
-                                                </>
-                                              ) : student.attendance ===
-                                                "replacement request" ? (
-                                                <span className="replacement-request-message">
-                                                  Replacement Class Request
-                                                </span>
-                                              ) : (
-                                                <>
-                                                  <div className="radio-buttons">
-                                                    <label className="radio-button">
-                                                      <input
-                                                        type="radio"
-                                                        name={`attendance-${attendanceIndex}-${studentIndex}`}
-                                                        value="present"
-                                                        checked={
-                                                          student.attendance ===
-                                                          "present"
-                                                        }
-                                                        onChange={() =>
-                                                          handleAttendanceChange(
-                                                            attendanceIndex,
-                                                            studentIndex,
+                                              <>
+                                                <div className="radio-buttons">
+                                                  {student.attendance !==
+                                                    "absent" && (
+                                                    <>
+                                                      <label className="radio-button">
+                                                        <input
+                                                          type="radio"
+                                                          name={`attendance-${attendanceIndex}-${studentIndex}`}
+                                                          value="present"
+                                                          checked={
+                                                            student.attendance ===
                                                             "present"
-                                                          )
-                                                        }
-                                                      />
-                                                      <span className="radio-button-text">
-                                                        Present
-                                                      </span>
-                                                    </label>
-                                                    <label className="radio-button">
-                                                      <input
-                                                        type="radio"
-                                                        name={`attendance-${attendanceIndex}-${studentIndex}`}
-                                                        value="absent"
-                                                        checked={
-                                                          student.attendance ===
-                                                          "absent"
-                                                        }
-                                                        onChange={() =>
-                                                          handleAttendanceChange(
-                                                            attendanceIndex,
-                                                            studentIndex,
+                                                          }
+                                                          onChange={() =>
+                                                            handleAttendanceChange(
+                                                              attendanceIndex,
+                                                              studentIndex,
+                                                              "present"
+                                                            )
+                                                          }
+                                                        />
+                                                        <span className="radio-button-text">
+                                                          Present
+                                                        </span>
+                                                      </label>
+                                                      <label className="radio-button">
+                                                        <input
+                                                          type="radio"
+                                                          name={`attendance-${attendanceIndex}-${studentIndex}`}
+                                                          value="absent"
+                                                          checked={
+                                                            student.attendance ===
                                                             "absent"
-                                                          )
-                                                        }
-                                                      />
-                                                      <span className="radio-button-text">
-                                                        Absent
-                                                      </span>
-                                                    </label>
-                                                  </div>
-                                                  <label className="radio-button">
-                                                    {student.attendance ===
-                                                      "absent" && (
+                                                          }
+                                                          onChange={() =>
+                                                            handleAttendanceChange(
+                                                              attendanceIndex,
+                                                              studentIndex,
+                                                              "absent"
+                                                            )
+                                                          }
+                                                        />
+                                                        <span className="radio-button-text">
+                                                          Absent
+                                                        </span>
+                                                      </label>
+                                                    </>
+                                                  )}
+                                                  {student.attendance ===
+                                                    "absent" && (
+                                                    <label className="radio-button">
                                                       <ReplacementAdd
                                                         studentId={
                                                           student.studentId
@@ -507,15 +454,19 @@ function Attendances() {
                                                         attendanceData={
                                                           attendanceData
                                                         }
+                                                        selectedDate={
+                                                          selectedDate
+                                                        }
                                                         setIsReplacement={
                                                           setIsReplacement
                                                         }
                                                       />
-                                                    )}
-                                                  </label>
-                                                </>
-                                              )}
+                                                    </label>
+                                                  )}
+                                                </div>
+                                              </>
                                             </td>
+
                                             <td>
                                               <input
                                                 type="text"
