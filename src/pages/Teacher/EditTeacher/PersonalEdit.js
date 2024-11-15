@@ -171,12 +171,20 @@ const PersonalEdit = forwardRef(
             `/getAllUserById/${formData.staff_id}`
           );
           const dateOfBirth = response.data.dateOfBirth.substring(0, 10);
+          const role = response.data.role;
+          setFormData((prev) => ({
+            ...prev,
+            ...response.data,
+            role: role, // Include role in formData
+          }));
           // console.log(response)
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
             shortIntroduction: formData.shortIntroduction || "",
           });
+          
+         
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -184,7 +192,7 @@ const PersonalEdit = forwardRef(
       getData();
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formData]);
+    }, []);
 
     const fetchIDTypeData = async () => {
       try {
@@ -350,7 +358,7 @@ const PersonalEdit = forwardRef(
               )}
             </div>
             <div className="form-group col-sm">
-              <label>Cityzenship</label>
+              <label>Citizenship</label>
               <span className="text-danger">*</span>
               <select
                 className="form-select"

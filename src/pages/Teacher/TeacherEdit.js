@@ -36,6 +36,7 @@ export default function TeacherEdit() {
   const roleFromURL = searchParams.get("role");
   const childRef = React.useRef();
   const [formData, setFormData] = useState({ staff_id });
+  console.log("object",formData)
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
@@ -59,16 +60,14 @@ export default function TeacherEdit() {
       newSkipped.delete(activeStep);
     }
 
-    // Get the role from formData and convert it to lowercase
     const role = formData.role?.toLowerCase();
     let nextStep = activeStep + 1;
 
-    // If the role is "freelancer", skip SalaryAdd (step 4) and LeaveAdd (step 5)
     if (role === "freelancer") {
       if (activeStep === 3) {
-        nextStep = 6; // Jump directly to ContractAdd (step 6)
+        nextStep = 6; 
       } else if (activeStep === 4) {
-        nextStep = 6; // If somehow on step 4, skip step 5 as well
+        nextStep = 6;
       }
     }
 
@@ -77,7 +76,18 @@ export default function TeacherEdit() {
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    const role = formData.role?.toLowerCase();
+    let previousStep = activeStep - 1;
+
+    if (role === "freelancer") {
+      if (activeStep === 7) {
+        previousStep = 4; // Go back to step 4 from step 7
+      } else if (activeStep === 6) {
+        previousStep = 3; // Skip step 5 and go back to step 3
+      }
+    }
+  
+    setActiveStep(previousStep);
   };
 
   const handleReset = () => {

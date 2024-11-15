@@ -88,8 +88,7 @@ const ContractAdd = forwardRef(
         startDateOfEmployment: formData.startDate || "",
         training: formData.training || "",
         allowance: formData.allowance || "",
-        userContractStartDate:
-          empRole !== "freelancer" ? formData.startDate || "" : "",
+        userContractStartDate: formData.startDate || "" ,
         contactPeriod:
           empRole !== "freelancer" ? formData.contactPeriod || "" : "",
         probation: formData.probation || "",
@@ -235,15 +234,6 @@ const ContractAdd = forwardRef(
         formik.setFieldValue("contactPeriod", "");
       }
     };
-    useEffect(() => {
-      // Set the contractDate to match the userContractStartDate initially
-      if (formik.values.userContractStartDate) {
-        formik.setFieldValue(
-          "contractDate",
-          formik.values.userContractStartDate
-        );
-      }
-    }, [formik.values.userContractStartDate]);
 
     return (
       <form
@@ -493,7 +483,8 @@ const ContractAdd = forwardRef(
                   }}
                   onBlur={formik.handleBlur}
                   value={formik.values.userContractStartDate}
-                  // readOnly
+                  min={new Date().toISOString().split("T")[0]}
+                  readOnly
                 />
                 {formik.touched.userContractStartDate &&
                   formik.errors.userContractStartDate && (

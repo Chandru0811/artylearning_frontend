@@ -215,6 +215,16 @@ function TeacherView() {
         </div>
         <div className="col-md-6 col-12">
           <div className="row mb-3">
+            <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">Role</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">: {data.role || "--"}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-12">
+          <div className="row mb-3">
             <div className="col-6 ">
               <p className="text-sm fw-medium">Short Introduction</p>
             </div>
@@ -553,154 +563,157 @@ function TeacherView() {
           </div>
         </div>
       </div>
-
-      <p class="headColor mt-5">Salary Information</p>
-      <div className="row mt-4">
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Salary</p>
+      {data.role !== "freelancer" && (
+        <>
+          <p class="headColor mt-5">Salary Information</p>
+          <div className="row mt-4">
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Salary</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userSalaryCreationModels &&
+                    data.userSalaryCreationModels.length > 0 &&
+                    data.userSalaryCreationModels[0].salary
+                      ? data.userSalaryCreationModels[0].salary
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salary
-                  ? data.userSalaryCreationModels[0].salary
-                  : "--"}
-              </p>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Effective Date</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userSalaryCreationModels &&
+                    data.userSalaryCreationModels.length > 0 &&
+                    data.userSalaryCreationModels[0].effectiveDate
+                      ? data.userSalaryCreationModels[0].effectiveDate.substring(
+                          0,
+                          10
+                        )
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Effective Date</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].effectiveDate
-                  ? data.userSalaryCreationModels[0].effectiveDate.substring(
-                      0,
-                      10
-                    )
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Salary Type</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userSalaryCreationModels &&
-                data.userSalaryCreationModels.length > 0 &&
-                data.userSalaryCreationModels[0].salaryTypeId
-                  ? findSalaryType(
-                      data.userSalaryCreationModels[0].salaryTypeId
-                    )
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="headColor mt-5">Leave Information</p>
-      <div className="row mt-4">
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Year</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].year
-                  ? data.userLeaveCreationModels[0].year.substring(0, 10)
-                  : "--"}
-              </p>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Salary Type</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userSalaryCreationModels &&
+                    data.userSalaryCreationModels.length > 0 &&
+                    data.userSalaryCreationModels[0].salaryTypeId
+                      ? findSalaryType(
+                          data.userSalaryCreationModels[0].salaryTypeId
+                        )
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6">
-              <p className="text-sm fw-medium">Annual Leave</p>
+          <p class="headColor mt-5">Leave Information</p>
+          <div className="row mt-4">
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Year</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].year
+                      ? data.userLeaveCreationModels[0].year.substring(0, 10)
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].annualLeave
-                  ? data.userLeaveCreationModels[0].annualLeave
-                  : "--"}
-              </p>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6">
+                  <p className="text-sm fw-medium">Annual Leave</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].annualLeave
+                      ? data.userLeaveCreationModels[0].annualLeave
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Medical Leave</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].medicalLeave
+                      ? data.userLeaveCreationModels[0].medicalLeave
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12 ">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Other Leave</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].otherLeave
+                      ? data.userLeaveCreationModels[0].otherLeave
+                      : "--"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row mb-3">
+                <div className="col-6 d-flex">
+                  <p className="text-sm fw-medium">Carry Forward Leave</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {data.userLeaveCreationModels &&
+                    data.userLeaveCreationModels.length > 0 &&
+                    data.userLeaveCreationModels[0].carryForwardLeave
+                      ? data.userLeaveCreationModels[0].carryForwardLeave
+                      : "--"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Medical Leave</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].medicalLeave
-                  ? data.userLeaveCreationModels[0].medicalLeave
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12 ">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Other Leave</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].otherLeave
-                  ? data.userLeaveCreationModels[0].otherLeave
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Carry Forward Leave</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                :{" "}
-                {data.userLeaveCreationModels &&
-                data.userLeaveCreationModels.length > 0 &&
-                data.userLeaveCreationModels[0].carryForwardLeave
-                  ? data.userLeaveCreationModels[0].carryForwardLeave
-                  : "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
 
       <p class="headColor mt-5">Contract Information</p>
       <div className="row mt-4">

@@ -265,7 +265,7 @@ const PersonalAdd = forwardRef(
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
-                <label>Cityzenship</label>
+                <label>Citizenship</label>
                 <span className="text-danger">*</span>
                 <select
                   className="form-select"
