@@ -265,7 +265,7 @@ function EditPayroll() {
   const fetchUserPaymentInfo = async (freelancerCount, payrollType) => {
     const queryParams = new URLSearchParams({
       payrollType: payrollType,
-      freelancerCount: freelancerCount,
+      freelanceCount: freelancerCount,
     });
 
     try {
