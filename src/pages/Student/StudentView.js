@@ -18,7 +18,7 @@ function StudentView() {
 
   const { id } = useParams();
   const [data, setData] = useState({});
-  const centerId = data?.studentRelationModels?.[0]?.studentRelationCenter;
+  const centerId = data.centerId;
   const studentRelationId =
     data?.studentRelationModels?.[0]?.studentRelationStudentName;
   console.log("datacenterid", centerId);

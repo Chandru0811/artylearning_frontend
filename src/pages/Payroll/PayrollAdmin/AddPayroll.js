@@ -317,7 +317,7 @@ function AddPayroll() {
       formik.setFieldValue("netPay", response.data.netPay);
       formik.setFieldValue("freelancerCount", response.data.payable_hours); // Assuming "count" is the field in the response data
     } catch (error) {
-      toast.error("Failed to fetch payment hours.");
+      toast.warning("Attendance date not available for this Employee");
     }
   };
   

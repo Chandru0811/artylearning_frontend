@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import "../../styles/custom.css";
 import { useFormik } from "formik";
 import api from "../../config/URL";
@@ -21,6 +26,9 @@ function StudentRegisterCourse() {
   const [data, setData] = useState({});
   console.log("Data ....:", data);
   console.log("ID ....:", id);
+
+  // const centerIdNO = data.centerId;
+  // console.log("Center ID:", centerIdNO);
 
   const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
 
@@ -161,7 +169,9 @@ function StudentRegisterCourse() {
     }
 
     try {
-      const response = await api.get(`/getAllScheduleTeachers/${centerId}`, { params });
+      const response = await api.get(`/getAllScheduleTeachers/${centerId}`, {
+        params,
+      });
       setDatas(response.data);
       initializeDataTable();
     } catch (error) {
@@ -189,10 +199,10 @@ function StudentRegisterCourse() {
       try {
         const response = await api.get(`/getAllStudentById/${id}`);
         setData(response.data);
-        
+
         const studentCourseDetail = response.data.studentCourseDetailModels[0];
         setStudentCourseDetailsId(studentCourseDetail.id);
-        console.log("studentCourseDetail:",studentCourseDetail);
+        console.log("studentCourseDetail:", studentCourseDetail);
         formik.setValues({
           // ...studentCourseDetail,
           studentCourseDetailsId: studentCourseDetail.id,
@@ -255,11 +265,14 @@ function StudentRegisterCourse() {
 
   return (
     <div className="container-fluid">
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="border-0 mb-5">
           <div className="mb-5">
             <div className="border-0 my-2 px-2">
@@ -340,7 +353,7 @@ function StudentRegisterCourse() {
                         : ""
                     }`}
                     id="courseId"
-                    name="courseId" 
+                    name="courseId"
                   >
                     <option value="" disabled selected>
                       Select Course
@@ -386,33 +399,46 @@ function StudentRegisterCourse() {
                     <option value="" disabled selected>
                       Select Batch Time
                     </option>
-                    <option value="1">2:30 pm</option>
-                    <option value="2">3:30 pm</option>
-                    <option value="3">5:00 pm</option>
-                    <option value="4">7:00 pm</option>
-                    <option value="5">12:00 pm</option>
-                    <option value="6">1:00 pm</option>
+                    {formik.values.days === "SUNDAY" ||
+                    formik.values.days === "SATURDAY" ? (
+                      <>
+                        <option value="1">9:00 am</option>
+                        <option value="2">10:30 am</option>
+                        <option value="3">12:00 pm</option>
+                        <option value="4">1:30 pm</option>
+                        <option value="5">3:00 pm</option>
+                        <option value="6">4:30 pm</option>
+                        <option value="7">6:00 pm</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="1">2:30 pm</option>
+                        <option value="2">3:30 pm</option>
+                        <option value="3">5:00 pm</option>
+                        <option value="4">7:00 pm</option>
+                        <option value="5">8:30 pm</option>
+                      </>
+                    )}
                   </select>
                   <button
-                  type="button"
-                  className="btn btn-sm border-secondary ms-3 my-1"
-                  style={{ width: "100px" }}
-                  onClick={() =>
-                    formik.resetForm({
-                      values: {
-                        lessonName: "",
-                        packageName: "",
-                        courseId: "",
-                        days: "",
-                        batchId: "",
-                      },
-                    })
-                  }
-                >
-                  Clear
-                </button>
+                    type="button"
+                    className="btn btn-sm border-secondary ms-3 my-1"
+                    style={{ width: "100px" }}
+                    onClick={() =>
+                      formik.resetForm({
+                        values: {
+                          lessonName: "",
+                          packageName: "",
+                          courseId: "",
+                          days: "",
+                          batchId: "",
+                        },
+                      })
+                    }
+                  >
+                    Clear
+                  </button>
                 </div>
-              
               </div>
               {/* ScheduleTeachers Table */}
               <div className="container my-4">
@@ -441,35 +467,36 @@ function StudentRegisterCourse() {
                         </tr>
                       </thead>
                       <tbody>
-                        {Array.isArray(datas) && datas.map((data, index) => (
-                          <tr
-                            key={index}
-                            onClick={() => handleRowSelect(data)}
-                            className={
-                              selectedRow === data.id ? "selected-row" : ""
-                            }
-                            style={{ cursor: "pointer" }}
-                          >
-                            <th scope="row" className="text-center">
-                              <input
-                                type="radio"
-                                className="form-check-input"
-                                checked={selectedRow === data.id}
-                                onChange={() => handleRowSelect(data)}
-                              />
-                            </th>
-                            <td>{data.course}</td>
-                            <td>{data.batch}</td>
-                            <td>{data.startDate}</td>
-                            <td>{data.endDate}</td>
-                            <td>{data.days}</td>
-                            <td className="text-center">
-                              <span className="badge rounded-pill text-bg-success">
-                                {data.availableSlots}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
+                        {Array.isArray(datas) &&
+                          datas.map((data, index) => (
+                            <tr
+                              key={index}
+                              onClick={() => handleRowSelect(data)}
+                              className={
+                                selectedRow === data.id ? "selected-row" : ""
+                              }
+                              style={{ cursor: "pointer" }}
+                            >
+                              <th scope="row" className="text-center">
+                                <input
+                                  type="radio"
+                                  className="form-check-input"
+                                  checked={selectedRow === data.id}
+                                  onChange={() => handleRowSelect(data)}
+                                />
+                              </th>
+                              <td>{data.course}</td>
+                              <td>{data.batch}</td>
+                              <td>{data.startDate}</td>
+                              <td>{data.endDate}</td>
+                              <td>{data.days}</td>
+                              <td className="text-center">
+                                <span className="badge rounded-pill text-bg-success">
+                                  {data.availableSlots}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
                   </div>

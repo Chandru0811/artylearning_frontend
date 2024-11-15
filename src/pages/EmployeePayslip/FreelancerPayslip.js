@@ -30,7 +30,7 @@ const FreelancerPayslip = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`getAllFreelancerApprovedListByUserId/${1126}`);
+        const response = await api.get(`getAllFreelancerApprovedListByUserId/${userId}`);
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
@@ -74,7 +74,7 @@ const FreelancerPayslip = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get(`getAllFreelancerApprovedListByUserId/${1126}`);
+      const response = await api.get(`getAllFreelancerApprovedListByUserId/${userId}`);
       setDatas(response.data);
       // initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {

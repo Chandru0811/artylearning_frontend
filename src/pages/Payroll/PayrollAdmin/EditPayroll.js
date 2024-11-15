@@ -131,25 +131,6 @@ function EditPayroll() {
         startDate: values.startDate,
         endDate: values.endDate,
       };
-      // if (empRole !== "freelancer") {
-      //   payload = {
-      //     ...payload,
-      //     payrollMonth: values.payrollMonth,
-      //     bonus: values.bonus,
-      //     deductionAmount: values.deductionAmount,
-      //     shgContribution: values.shgContribution,
-      //     cpfContributions: values.cpfContribution,
-      //   };
-      // } else if (empRole === "freelancer") {
-      //   payload = {
-      //     ...payload,
-      //     netPay: empRole === "freelancer" ? netPay : values.netPay,
-      //     payrollType: values.payrollType,
-      //     freelancerCount: Number(values.freelancerCount),
-      //     startDate: values.startDate,
-      //     endDate: values.endDate,
-      //   };
-      // }
       console.log("Payload Values:", payload);
       try {
         const response = await api.put(`/updateUserPayroll/${id}`, payload, {

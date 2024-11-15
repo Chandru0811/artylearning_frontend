@@ -140,7 +140,7 @@ function Sidebar() {
           {
             title: "Freelancer Invoice",
             path: "/freelancerPayslip",
-            access: storedScreens.payrollIndex,
+            access: storedScreens.freeLancerIndex,
           },
           {
             title: "Role & Matrix",

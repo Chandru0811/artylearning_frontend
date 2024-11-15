@@ -403,12 +403,26 @@ function ReplaceClassLessonEdit() {
                     <option value="" disabled selected>
                       Select Batch Time
                     </option>
-                    <option value="1">2:30 pm</option>
-                    <option value="2">3:30 pm</option>
-                    <option value="3">5:00 pm</option>
-                    <option value="4">7:00 pm</option>
-                    <option value="5">12:00 pm</option>
-                    <option value="6">1:00 pm</option>
+                    {formik.values.days === "SUNDAY" ||
+                    formik.values.days === "SATURDAY" ? (
+                      <>
+                        <option value="1">9:00 am</option>
+                        <option value="2">10:30 am</option>
+                        <option value="3">12:00 pm</option>
+                        <option value="4">1:30 pm</option>
+                        <option value="5">3:00 pm</option>
+                        <option value="6">4:30 pm</option>
+                        <option value="7">6:00 pm</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="1">2:30 pm</option>
+                        <option value="2">3:30 pm</option>
+                        <option value="3">5:00 pm</option>
+                        <option value="4">7:00 pm</option>
+                        <option value="5">8:30 pm</option>
+                      </>
+                    )}
                   </select>
                   <button
                     type="button"
