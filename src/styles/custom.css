@@ -104,11 +104,6 @@
 }
 
 /* student edit  */
-
-.radio-buttons {
-  display: flex;
-}
-
 .radio-button {
   margin-right: 20px;
 }
@@ -119,7 +114,7 @@
 
 .radio-button input[type="radio"]+.radio-button-text {
   display: inline-block;
-  width: 100px;
+  width: 120px;
   height: 30px;
   line-height: 28px;
   text-align: center;
@@ -135,6 +130,11 @@
 
 .radio-button input[type="radio"]:checked[value="absent"]+.radio-button-text {
   background-color: red;
+  color: white;
+}
+
+.radio-button input[type="radio"]:checked[value="replacement"]+.radio-button-text {
+  background-color: #eaaa09;
   color: white;
 }
 

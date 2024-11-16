@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/sidebar.css";
-import "../../styles/custom.css";
 import api from "../../config/URL";
 import AddMore from "./AddMore";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
-// import WebSocketService from "../../config/WebSocketService";
 import ReplacementAdd from "./ReplacementAdd";
-import { Link } from "react-router-dom";
 
 function Attendances() {
   const [attendanceData, setAttendanceData] = useState([]);
-  const [attendance, setAttendance] = useState([]);
-  console.log("Attendance Data Reload again", attendance);
+  console.log("Attendance Data Reload again", attendanceData);
   const [centerData, setCenterData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("1");
   const [selectedBatch, setSelectedBatch] = useState("1");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [batchOptions, setBatchOptions] = useState([]);
-  const userName = localStorage.getItem("userName");
-  console.log("first", userName);
-  // const [count, setCount] = useState(0);
-  const [isReplacement, setIsReplacement] = useState({ id: "", valid: false });
+  
   const getCurrentDate = () => {
     const today = new Date();
     const formattedDate = `${today.getFullYear()}-${(
@@ -30,53 +23,51 @@ function Attendances() {
     ).slice(-2)}-${("0" + today.getDate()).slice(-2)}`;
     return formattedDate;
   };
+  const [selectedDate, setSelectedDate] = useState(getCurrentDate());
 
-  const [selectedDate, setSelectedDate] = useState(getCurrentDate()); // Now getCurrentDate is defined before usage
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const handleNoAccessClick = () => {
-    setModalOpen(true); // Open the modal when no access is clicked
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+    // Function to format date as "DD/MM/YYYY"
+    const formatDate = (date) => {
+      const [year, month, day] = date.split("-");
+      return `${day}/${month}/${year}`;
+    };
+  
+    // Fetch available slots based on the selected date
+    const fetchAvailableSlots = async (date) => {
+      try {
+        const formattedDate = formatDate(date);
+        const response = await api.get(
+          `getActualSlotsByDate?date=${formattedDate}`
+        );
+        setBatchOptions(response.data); // Update batch options with API response
+      } catch (error) {
+        toast.error("Error fetching slots:", error);
+      }
+    };
+  
+    const handleDateChange = (e) => {
+      setSelectedDate(e.target.value);
+    };
 
   const fetchListData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      // const courseData = await fetchAllCoursesWithIds();
-
       setCenterData(centerData);
-      // setCourseData(courseData);
       setSelectedCenter(centerData[0].id);
     } catch (error) {
       toast.error(error);
     }
   };
 
-  // Function to format date as "DD/MM/YYYY"
-  const formatDate = (date) => {
-    const [year, month, day] = date.split("-");
-    return `${day}/${month}/${year}`;
-  };
+  useEffect(() => {
+    fetchListData();
+  }, []);
 
-  // Fetch available slots based on the selected date
-  const fetchAvailableSlots = async (date) => {
-    try {
-      const formattedDate = formatDate(date);
-      const response = await api.get(
-        `getActualSlotsByDate?date=${formattedDate}`
-      );
-      setBatchOptions(response.data); // Update batch options with API response
-    } catch (error) {
-      toast.error("Error fetching slots:", error);
+  useEffect(() => {
+    if (selectedDate) {
+      fetchAvailableSlots(selectedDate);
+      fetchData();
     }
-  };
-
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
+  }, [selectedDate]);
 
   const fetchData = async () => {
     try {
@@ -90,61 +81,24 @@ function Attendances() {
         "getAllTeacherWithStudentAttendance",
         requestBody
       );
-      const attendanceData = response.data;
-      if (
-        attendanceData &&
-        attendanceData.length > 0 &&
-        attendanceData[0].students
-      ) {
-        const studentsAttendance = attendanceData[0].students.map(
-          (student) => ({
-            attendance: student.attendance,
-          })
-        );
-
-        setAttendanceData(attendanceData);
-        setAttendance(studentsAttendance);
-      } else {
-        console.log("No students data found in the response.");
-      }
+      setAttendanceData(response.data);
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    console.log("Updated Attendance Data:", attendanceData);
-    console.log("Updated Students Attendance:", attendance);
-  }, [attendanceData, attendance]);
+    fetchData();
+  }, []);
 
   const handelSubmitData = () => {
     fetchData();
   };
 
-  useEffect(() => {
-    if (selectedDate) {
-      fetchAvailableSlots(selectedDate);
-      fetchData();
-    }
-  }, [selectedDate]);
-
-  useEffect(() => {
-    fetchListData();
-  }, []);
-
   const handleAttendanceChange = (attendanceIndex, studentIndex, value) => {
     const updatedAttendanceData = [...attendanceData];
-    const student =
-      updatedAttendanceData[attendanceIndex].students[studentIndex];
-    if (value === "present" || value === "absent") {
-      student.attendance = value;
-    } else if (
-      value === "replacement request" &&
-      student.attendance === "absent"
-    ) {
-      student.attendance = value;
-    }
-
+    updatedAttendanceData[attendanceIndex].students[studentIndex].attendance =
+      value; // Update status
     setAttendanceData(updatedAttendanceData);
   };
 
@@ -157,7 +111,6 @@ function Attendances() {
   };
 
   const handleSubmit = async (teacherIndex, attendanceItem) => {
-    // console.log("object",teacherIndex,teacherIndex)
     try {
       const teacherAttendanceData = attendanceData[teacherIndex];
       const flattenedData = teacherAttendanceData.students
@@ -177,7 +130,6 @@ function Attendances() {
           courseId: attendanceItem.courseId,
           batchId: parseInt(selectedBatch),
         }));
-
       const response = await api.post("markStudentAttendance", flattenedData);
       if (response.status === 201) {
         toast.success(response.data.message);
@@ -192,7 +144,7 @@ function Attendances() {
 
   return (
     <>
-      <div className="container py-3 ">
+      <div className="container py-3">
         <div className="row">
           <div className="col-md-6 col-12 mb-2">
             <label className="form-lable">Centre</label>
@@ -250,7 +202,6 @@ function Attendances() {
               className="table d-flex"
               style={{
                 backgroundColor: "white",
-                // boxShadow: "2px 2px 4px #c2c2c2",
               }}
             >
               <div style={{ width: "20%" }} className="py-2">
@@ -395,8 +346,9 @@ function Attendances() {
                                             <td>{student.studentUniqueId}</td>
                                             <td>{student.studentName}</td>
                                             <td>
-                                              <>
-                                                <div className="">
+                                              <div className="">
+                                                {student.attendance !==
+                                                  "replacement" ? (
                                                   <>
                                                     <label className="radio-button">
                                                       <input
@@ -423,11 +375,11 @@ function Attendances() {
                                                       <input
                                                         type="radio"
                                                         name={`attendance-${attendanceIndex}-${studentIndex}`}
-                                                        value="absent"
                                                         checked={
                                                           student.attendance ===
                                                           "absent"
                                                         }
+                                                        value="absent"
                                                         onChange={() =>
                                                           handleAttendanceChange(
                                                             attendanceIndex,
@@ -440,31 +392,39 @@ function Attendances() {
                                                         Absent
                                                       </span>
                                                     </label>
-                                                    {student.attendance ===
-                                                    "absent" && (
-                                                    <label className="radio-button">
+                                                  </>
+                                                ) : <>
+                                                <span className="text-center">Replacement Class Requseted</span>
+                                                </>}
+                                                <br />
+                                                {student.attendance ===
+                                                  "absent" && (
+                                                  <>
+                                                    <label>
                                                       <ReplacementAdd
-                                                        studentId={
-                                                          student.studentId
-                                                        }
+                                                        selectedID={student.id}
                                                         attendanceData={
                                                           attendanceData
                                                         }
-                                                        selectedDate={
+                                                        attendanceDate={
                                                           selectedDate
                                                         }
-                                                        setIsReplacement={
-                                                          setIsReplacement
+                                                        selectedStudent={
+                                                          student
+                                                        }
+                                                        onClickReplacement={() =>
+                                                          handleAttendanceChange(
+                                                            attendanceIndex,
+                                                            studentIndex,
+                                                            "replacement"
+                                                          )
                                                         }
                                                       />
                                                     </label>
-                                                  )}
                                                   </>
-                                                 
-                                                </div>
-                                              </>
+                                                )}
+                                              </div>
                                             </td>
-
                                             <td>
                                               <input
                                                 type="text"

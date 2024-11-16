@@ -403,6 +403,23 @@ nav .profile-details i {
   border-color: #D86300;
 }
 
+.btn-button3 {
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  font-weight: 600;
+  background-color: #D86300;
+  border-color: #D86300;
+  width: 118% !important;
+}
+
+.btn-button3 i {
+  font-weight: 600;
+}
+.btn-button3:hover {
+  color: #fff;
+  background-color: #D86300;
+  border-color: #D86300;
+}
 
 .btn-button {
   color: #fff;

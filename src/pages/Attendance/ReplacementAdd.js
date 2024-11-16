@@ -8,17 +8,14 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 
 function ReplacementAdd({
-  studentId,
-  setIsReplacement,
   attendanceData,
-  selectedDate,
+  onClickReplacement ,
+  attendanceDate,
+  selectedStudent,
 }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
-  const [Data, setData] = useState(null);
-  console.log("attendanceData", attendanceData);
-  console.log("selectedDate", selectedDate);
 
   const validationSchema = Yup.object({
     studentName: Yup.string().required("*Student Name is required"),
@@ -32,26 +29,20 @@ function ReplacementAdd({
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
-    setData(null);
   };
 
   const handleShow = () => {
-    // fetchData();
     setShow(true);
     setIsModified(false);
   };
 
-  useEffect(() => {
-    // fetchData();
-  }, [show]);
-
   const formik = useFormik({
     initialValues: {
-      studentName: attendanceData[0]?.students[0]?.studentName,
-      studentId: attendanceData[0]?.students[0]?.studentUniqueId,
+      studentName: selectedStudent.studentName,
+      studentId: selectedStudent?.studentUniqueId,
       course: attendanceData[0]?.course,
       classCode: attendanceData[0]?.classCode,
-      absentDate: selectedDate,
+      absentDate: attendanceDate,
       preferredDay: "",
       preferredTiming: "",
       absentReason: "",
@@ -66,15 +57,7 @@ function ReplacementAdd({
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      console.log("values", values);
-      setIsReplacement((prv) => ({ ...prv, id: studentId, valid: true }));
-      // const payload = {
-      //   ...values,
-      //   // createdBy: createdBy,
-      //   centerId: values.centerId,
-      //   classId: values.classId,
-      //   courseId: values.courseId,
-      // };
+      // console.log("values", values);
       const formData = new FormData();
       formData.append("studentName", values.studentName);
       formData.append("studentId", attendanceData[0]?.students[0]?.studentId);
@@ -96,8 +79,8 @@ function ReplacementAdd({
           formData
         );
         if (response.status === 201) {
-          // onSuccess();
           handleClose();
+          onClickReplacement();
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -109,19 +92,20 @@ function ReplacementAdd({
       }
     },
   });
+  
   useEffect(() => {
-    if (selectedDate) {
-      formik.setFieldValue("absentDate", selectedDate);
+    if (attendanceDate) {
+      formik.setFieldValue("absentDate", attendanceDate);
     }
-  }, [selectedDate]);
+  }, [attendanceDate]);
 
   return (
     <>
-      <div className="mb-3 d-flex justify-content-end">
+      <div className="mb-3 d-flex justify-content-start">
         <label className="radio-button">
           <button
             type="button"
-            className="btn btn-button2 btn-sm mt-3"
+            className="btn btn-button3 btn-sm mt-3"
             onClick={handleShow}
             style={{ backgroundColor: "#fa994af5" }}
           >
@@ -288,14 +272,15 @@ function ReplacementAdd({
                   </label>
                   <input
                     type="date"
-                    value={selectedDate}
+                    name="absentDate"
+                    value={attendanceDate}
                     className={`form-control ${
                       formik.touched.absentDate && formik.errors.absentDate
                         ? "is-invalid"
                         : ""
                     }`}
                     {...formik.getFieldProps("absentDate")}
-                    disabled
+                    readOnly
                   />
                   {formik.touched.absentDate && formik.errors.absentDate && (
                     <div className="invalid-feedback">
