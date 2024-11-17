@@ -18,7 +18,7 @@ const ContractEdit = forwardRef(
     const [submitted, setSubmitted] = useState(false);
     const [contactId, setContactId] = useState(null);
     const [empRole, setEmpRole] = useState(null);
-    console.log("object",formData)
+    console.log("object", formData);
     const validationSchema = Yup.object().shape({
       employer: Yup.string().required("*Employer is required"),
       employee: Yup.string().required("*Employee is required"),
@@ -125,7 +125,9 @@ const ContractEdit = forwardRef(
         payNow: formData.payNow || "",
         internetBanking: formData.internetBanking || "",
         contractDate:
-          empRole !== "freelancer" ? formData.contractDate || "" : "",
+          empRole !== "freelancer"
+            ? formData.startDate || formData.userContractStartDate
+            : "",
         // contractDate: formData.contractDate || "",
         terminationNotice: formData.terminationNotice || "",
         updatedBy: userName,
@@ -337,8 +339,11 @@ const ContractEdit = forwardRef(
               salaryStartDate:
                 contractData.salaryStartDate?.substring(0, 10) || "",
               updatedBy: userName,
-              userContractStartDate:contractData.contractDate.slice(0,10),
-              startDateOfEmployment:contractData?.startDateOfEmployment?.slice(0,10)
+              userContractStartDate: contractData.contractDate.slice(0, 10),
+              startDateOfEmployment: contractData?.startDateOfEmployment?.slice(
+                0,
+                10
+              ),
             });
           }
         } catch (error) {
@@ -865,7 +870,7 @@ const ContractEdit = forwardRef(
                       name="contractDate"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.contractDate}
+                      value={formik.values.userContractStartDate}
                       readOnly
                     />
                     {formik.touched.contractDate &&
