@@ -179,21 +179,19 @@ const ContractEdit = forwardRef(
           setLoadIndicators(false);
         }
       },
-      validateOnChange: false, // Enable validation on change
-      validateOnBlur: true, // Enable validation on blur
+      validateOnChange: false,
+      validateOnBlur: true,
     });
 
-    // Function to scroll to the first error field
     const scrollToError = (errors) => {
-      const errorField = Object.keys(errors)[0]; // Get the first error field
-      const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
+      const errorField = Object.keys(errors)[0];
+      const errorElement = document.querySelector(`[name="${errorField}"]`);
       if (errorElement) {
         errorElement.scrollIntoView({ behavior: "smooth", block: "center" });
-        errorElement.focus(); // Set focus to the error element
+        errorElement.focus();
       }
     };
 
-    // Watch for form submit and validation errors
     useEffect(() => {
       if (formik.submitCount > 0 && Object.keys(formik.errors).length > 0) {
         scrollToError(formik.errors);
@@ -339,7 +337,9 @@ const ContractEdit = forwardRef(
               salaryStartDate:
                 contractData.salaryStartDate?.substring(0, 10) || "",
               updatedBy: userName,
-              userContractStartDate: contractData.contractDate.slice(0, 10),
+              userContractStartDate:
+                contractData.userContractStartDate.slice(0, 10) ||
+                contractData.contractDate.slice(0, 10),
               startDateOfEmployment: contractData?.startDateOfEmployment?.slice(
                 0,
                 10
