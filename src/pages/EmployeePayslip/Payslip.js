@@ -73,10 +73,10 @@ function Payslip() {
     doc.text("DATE OF JOINING ", 120, 70);
     doc.text("DESIGNATION ", 120, 80);
     doc.setFont("helvetica", "normal");
-    doc.text(`: ${data.employeeName}`, 45, 70);
-    doc.text(`: ${data.payslipMonth}`, 45, 80);
-    doc.text(`: ${data.dateOfJoining.substring(0, 10)}`, 155, 70);
-    doc.text(`: ${data.designation}`, 155, 80);
+    doc.text(`: ${data.employeeName || ''}`, 45, 70);
+    doc.text(`: ${data.payslipMonth || ''}`, 45, 80);
+    doc.text(`: ${data.dateOfJoining?.substring(0, 10) || ''}`, 155, 70);
+    doc.text(`: ${data.designation || ''}`, 155, 80);
 
     doc.line(10, 87, 200, 87); // Line above the table
 
@@ -91,8 +91,8 @@ function Payslip() {
     ];
 
     const deductionData = [
-      data.deductions.map((deduction) => deduction.detectionName),
-      data.deductions.map((deduction) => deduction.amount),
+      data.deductions.map((deduction) => deduction?.detectionName || ''),
+      data.deductions.map((deduction) => deduction?.amount || 0),
     ];
 
     const numRows = Math.max(earningData.length, deductionData[0].length);
@@ -119,7 +119,8 @@ function Payslip() {
       const rowX = startY + (rowIndex + 1) * cellHeight;
       row.forEach((cell, colIndex) => {
         const colX = startX + colIndex * cellWidth;
-        doc.text(cell?.toString(), colX, rowX);
+        const cellText = cell ? cell.toString() : ''; // Convert to string and provide a fallback
+        doc.text(cellText, colX, rowX);
       });
     });
 
@@ -127,9 +128,15 @@ function Payslip() {
       const colX = startXX + colIndex * cellWidth;
       col.forEach((cell, rowIndex) => {
         const rowX = startY + (rowIndex + 1) * cellHeight;
-        doc.text(cell?.toString(), colX, rowX);
+        const cellText = cell ? cell.toString() : ''; // Convert to string and provide a fallback
+        doc.text(cellText, colX, rowX);
       });
     });
+
+    console.log(`Employee Name: ${data.employeeName}`);
+    console.log(`Payslip Month: ${data.payslipMonth}`);
+    console.log(`Deductions:`, deductionData);
+
 
     // Calculate Y position for "GROSS PAY" text and "DEDUCTION TOTAL" text
     const totalY = startY + (numRows + 2) * cellHeight - 5; // numRows + 1 for deduction rows, +1 for space
@@ -281,7 +288,7 @@ function Payslip() {
                             </div>
                           </div>
                         </div>
-                  
+
                       </div>
                       <div className="row paysliptable ">
                         <div className="col-12">
