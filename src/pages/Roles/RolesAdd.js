@@ -1546,7 +1546,15 @@ function RolesAdd() {
                           onChange={handleCheckboxChange(`freeLancerIndex`)}
                         />
                       </td>
-                      <td></td>
+                      <td>
+                      <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="freeLancerRead"
+                          checked={formik.values.freeLancerRead}
+                          onChange={handleCheckboxChange(`freeLancerRead`)}
+                        />
+                      </td>
                       <td></td>
                       <td></td>
                       <td></td>

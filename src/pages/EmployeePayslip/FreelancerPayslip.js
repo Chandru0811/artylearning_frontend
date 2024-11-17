@@ -209,7 +209,7 @@ const FreelancerPayslip = () => {
                   {extraData && <td>{data.updatedBy}</td>}
                   {extraData && <td>{extractDate(data.updatedAt)}</td>}
                 <td className="text-center">
-                  {storedScreens?.payrollRead && (
+                  {storedScreens?.freeLancerRead && (
                     <Link to={`/freelancerPayslip/view/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEye />
