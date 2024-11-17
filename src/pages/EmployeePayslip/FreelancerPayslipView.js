@@ -53,28 +53,30 @@ function FreelancerPayslipView() {
     doc.text("DATE OF JOINING ", 120, 70);
     doc.text("DESIGNATION ", 120, 80);
     doc.setFont("helvetica", "normal");
-    doc.text(`: ${data.employeeName}`, 45, 70);
-    doc.text(`: ${data.payslipMonth}`, 45, 80);
-    doc.text(`: ${data.dateOfJoining.substring(0, 10)}`, 155, 70);
-    doc.text(`: ${data.designation}`, 155, 80);
+    doc.text(`: ${data.employeeName || ''}`, 45, 70);
+    doc.text(`: ${data.payslipMonth || ''}`, 45, 80);
+    doc.text(`: ${data.dateOFJoining.substring(0, 10) || ''}`, 155, 70);
+    doc.text(`: Teacher`, 155, 80);
 
-    doc.line(10, 87, 200, 87); // Line above the table
+    console.log("doj", data.dateOFJoining)
+    // Line above the table with validation
+    const lineStartY = 87;
+    if (!isNaN(lineStartY)) {
+      doc.line(10, lineStartY, 200, lineStartY);
+    }
 
     const headers = ["EARNING", "AMOUNT", "DEDUCTION", "AMOUNT"];
-
     const earningData = [
       ["BASIC SALARY", data.basicSalary],
       ["BONUS", data.bonus],
-      // Add other earning categories as needed
     ];
 
     const deductionData = [
-      data.deductions.map((deduction) => deduction.detectionName),
-      data.deductions.map((deduction) => deduction.amount),
+      data.deductions?.map((deduction) => deduction?.detectionName || ''),
+      data.deductions?.map((deduction) => deduction?.amount || 0),
     ];
 
-    const numRows = Math.max(earningData.length, deductionData[0].length);
-
+    const numRows = Math.max(earningData.length, deductionData[0]?.length || 0);
     const tableBody = [...earningData];
     const tableColumn = [["", ""], ...deductionData];
 
@@ -87,63 +89,64 @@ function FreelancerPayslipView() {
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(fontSize);
-    headers.forEach((header, index) =>
-      doc.text(header, startX + index * cellWidth, startY)
-    );
+    headers.forEach((header, index) => {
+      doc.text(header, startX + index * cellWidth, startY);
+    });
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(fontSize);
     tableBody.forEach((row, rowIndex) => {
-      const rowX = startY + (rowIndex + 1) * cellHeight;
+      const rowY = startY + (rowIndex + 1) * cellHeight;
       row.forEach((cell, colIndex) => {
         const colX = startX + colIndex * cellWidth;
-        doc.text(cell.toString(), colX, rowX);
+        const cellText = cell ? cell.toString() : '';
+        doc.text(cellText, colX, rowY);
       });
     });
 
-    tableColumn.forEach((col, colIndex) => {
-      const colX = startXX + colIndex * cellWidth;
-      col.forEach((cell, rowIndex) => {
-        const rowX = startY + (rowIndex + 1) * cellHeight;
-        doc.text(cell.toString(), colX, rowX);
-      });
+    (tableColumn || []).forEach((col, colIndex) => {
+      if (Array.isArray(col)) {
+        const colX = startXX + colIndex * cellWidth;
+        col.forEach((cell, rowIndex) => {
+          const rowY = startY + (rowIndex + 1) * cellHeight;
+          const cellText = cell != null ? cell.toString() : '';
+          if (cellText) {
+            doc.text(cellText, colX, rowY);
+          }
+        });
+      }
     });
 
-    // Calculate Y position for "GROSS PAY" text and "DEDUCTION TOTAL" text
-    const totalY = startY + (numRows + 2) * cellHeight - 5; // numRows + 1 for deduction rows, +1 for space
-
-    // Draw line above the "GROSS PAY" section
+    const totalY = startY + (numRows + 2) * cellHeight - 5;
     const lineAboveGrossPayY = totalY - 8;
-    doc.line(startX, lineAboveGrossPayY, 200, lineAboveGrossPayY);
 
-    // Draw "GROSS PAY" text along with its value in bold
+    // Draw line above "GROSS PAY" section with validation
+    if (!isNaN(lineAboveGrossPayY)) {
+      doc.line(startX, lineAboveGrossPayY, 200, lineAboveGrossPayY);
+    }
+
     doc.setFont("helvetica", "bold");
     doc.text(`GROSS PAY`, startX, totalY);
-    doc.text(`${data.grossPay}`, startXX, totalY); // Adjust the position for the value
+    doc.text(`${data.grossPay}`, startXX, totalY);
 
-    // Draw line below the "GROSS PAY" section
     const lineBelowGrossPayY = totalY + 5;
-    doc.line(startX, lineBelowGrossPayY, 200, lineBelowGrossPayY);
+    if (!isNaN(lineBelowGrossPayY)) {
+      doc.line(startX, lineBelowGrossPayY, 200, lineBelowGrossPayY);
+    }
 
-    // Draw "DEDUCTION TOTAL" text along with its value in bold
-    const deductionTotalWidth = cellWidth; // Assuming the same width as other deduction columns
-    const deductionTotalX = startXX + deductionTotalWidth; // Align with the "DEDUCTION" column
+    const deductionTotalX = startXX + cellWidth;
     doc.text(`DEDUCTION TOTAL`, deductionTotalX, totalY);
-    doc.text(`${data.deductionTotal}`, deductionTotalX + 50, totalY); // Adjust the position for the value
+    doc.text(`${data.deductionTotal}`, deductionTotalX + 50, totalY);
 
-    //  Draw "NET PAY" text along with its value in bold
-    const netPayY = totalY + cellHeight + 5; // Offset it from the "GROSS PAY" text
-    doc.setFont("helvetica", "bold");
+    const netPayY = totalY + cellHeight + 5;
     doc.text(`NET PAY`, startX, netPayY);
-    doc.setFont("helvetica", "normal"); // Change font to normal
-    doc.text(`: ${data.netPay}`, startX + 20, netPayY); // Adjust the position for the value
+    doc.setFont("helvetica", "normal");
+    doc.text(`: ${data.netPay}`, startX + 20, netPayY);
 
-    // Draw "IN WORDS" text along with its value in bold
-    const inWordsY = netPayY + cellHeight; // Offset it from the "NET PAY" text
+    const inWordsY = netPayY + cellHeight;
     doc.setFont("helvetica", "bold");
     doc.text(`IN WORDS`, startX, inWordsY);
-    doc.setFont("helvetica", "normal"); // Change font to normal
-    doc.text(`: ${data.netPayInWords}`, startX + 20, inWordsY); // Adjust the position for the value
+    doc.setFont("helvetica", "normal");
+    doc.text(`: ${data.netPayInWords}`, startX + 20, inWordsY);
 
     doc.save("Payslip.pdf");
   };
