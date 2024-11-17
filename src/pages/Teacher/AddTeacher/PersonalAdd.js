@@ -265,6 +265,31 @@ const PersonalAdd = forwardRef(
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
+                <label>Nationality</label>
+                <span className="text-danger">*</span>
+                <select
+                  className="form-select"
+                  name="nationalityId"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.nationalityId}
+                >
+                  <option selected></option>
+                  {nationalityData &&
+                    nationalityData.map((nationalityId) => (
+                      <option key={nationalityId.id} value={nationalityId.id}>
+                        {nationalityId.nationality}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.nationalityId &&
+                  formik.errors.nationalityId && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.nationalityId}</small>
+                    </div>
+                  )}
+              </div>
+              <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Citizenship</label>
                 <span className="text-danger">*</span>
                 <select
@@ -293,31 +318,6 @@ const PersonalAdd = forwardRef(
                     <small>{formik.errors.citizenship}</small>
                   </div>
                 )}
-              </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
-                <label>Nationality</label>
-                <span className="text-danger">*</span>
-                <select
-                  className="form-select"
-                  name="nationalityId"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.nationalityId}
-                >
-                  <option selected></option>
-                  {nationalityData &&
-                    nationalityData.map((nationalityId) => (
-                      <option key={nationalityId.id} value={nationalityId.id}>
-                        {nationalityId.nationality}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.nationalityId &&
-                  formik.errors.nationalityId && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.nationalityId}</small>
-                    </div>
-                  )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Photo</label>
@@ -365,11 +365,10 @@ const PersonalAdd = forwardRef(
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter password"
-                      className={`form-control ${
-                        formik.touched.password && formik.errors.password
+                      className={`form-control ${formik.touched.password && formik.errors.password
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       style={{
                         borderRadius: "3px",
                         borderRight: "none",
@@ -404,12 +403,11 @@ const PersonalAdd = forwardRef(
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Enter confirm password"
-                      className={`form-control ${
-                        formik.touched.confirmPassword &&
-                        formik.errors.confirmPassword
+                      className={`form-control ${formik.touched.confirmPassword &&
+                          formik.errors.confirmPassword
                           ? "is-invalid"
                           : ""
-                      }`}
+                        }`}
                       style={{
                         borderRadius: "3px",
                         borderRight: "none",

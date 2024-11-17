@@ -60,7 +60,7 @@ function ReplacementAdd({
       // console.log("values", values);
       const formData = new FormData();
       formData.append("studentName", values.studentName);
-      formData.append("studentId", attendanceData[0]?.students[0]?.studentId);
+      formData.append("studentId", selectedStudent?.studentId);
       formData.append("course", values.course);
       formData.append("classCode", values.classCode);
       formData.append("absentDate", values.absentDate);
