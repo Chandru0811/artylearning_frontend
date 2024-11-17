@@ -164,7 +164,7 @@ const Leave = () => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(datas)?.employeeData?.map((data, index) => (
+              {datas?.employeeData?.map((data, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   {/* <td>{data.centerName} </td> */}
@@ -207,7 +207,7 @@ const Leave = () => {
                       {data.leaveStatus === "PENDING" ? (
                         <Delete
                           onSuccess={refreshData}
-                          path={`/deleteUserHoliday/${data.id}`}
+                          path={`/deleteUserLeaveRequest/${data.id}`}
                           style={{ display: "inline-block" }}
                         />
                       ) : (
