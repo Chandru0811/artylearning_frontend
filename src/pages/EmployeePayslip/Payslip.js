@@ -317,8 +317,8 @@ function Payslip() {
 
                                 <td style={{ borderRight: "2px solid black" }}>
                                   <div className="mb-2">{data.basicSalary}</div>
+                                  <div className="mb-2">{data.bonus}</div>
                                   <div className="mb-2">{data.shgContribution}</div>
-                                  <div className="mb-2">{data.shg}</div>
                                   <div>{data.cpfContribution}</div>
                                 </td>
                                 <td>
