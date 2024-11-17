@@ -853,7 +853,8 @@ export default function InvoiceEdit() {
                           />
                         </td>
                         <td>
-                          <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                          <input 
+                          onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].totalAmount`
                             )}
