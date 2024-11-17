@@ -299,7 +299,10 @@ const StaffPersonalAdd = forwardRef(
                 value={formik.values.citizenship}
               >
                 <option selected></option>
-                {nationalityData &&
+                <option value="1st Year PR">1st Year PR</option>
+                <option value="2nd Year PR">2nd Year PR</option>
+                <option value="3rd Year PR">3rd Year PR</option>
+                {/* {nationalityData &&
                   nationalityData.map((citizenship) => (
                     <option
                       key={citizenship.id}
@@ -307,7 +310,7 @@ const StaffPersonalAdd = forwardRef(
                     >
                       {citizenship.citizenship}
                     </option>
-                  ))}
+                  ))} */}
               </select>
               {formik.touched.citizenship && formik.errors.citizenship && (
                 <div className="error text-danger">
