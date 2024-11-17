@@ -88,7 +88,7 @@ const ContractAdd = forwardRef(
         startDateOfEmployment: formData.startDate || "",
         training: formData.training || "",
         allowance: formData.allowance || "",
-        userContractStartDate: formData.startDate || "" ,
+        userContractStartDate: formData.startDate || "",
         contactPeriod:
           empRole !== "freelancer" ? formData.contactPeriod || "" : "",
         probation: formData.probation || "",
@@ -103,7 +103,9 @@ const ContractAdd = forwardRef(
         payNow: formData.payNow || "",
         internetBanking: formData.internetBanking || "",
         contractDate:
-          empRole !== "freelancer" ? formData.contractDate || "" : "",
+          empRole !== "freelancer"
+            ? formData.startDate || formData.userContractStartDate
+            : "",
         terminationNotice: formData.terminationNotice || "",
         createdBy: userName,
       },
@@ -798,7 +800,7 @@ const ContractAdd = forwardRef(
                       name="contractDate"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.contractDate}
+                      value={formik.values.userContractStartDate}
                       readOnly
                     />
                     {formik.touched.contractDate &&
