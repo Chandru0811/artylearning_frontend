@@ -124,7 +124,7 @@ function EditPayroll() {
         bonus: values.bonus,
         deductionAmount: values.deductionAmount,
         shgContribution: values.shgContribution,
-        cpfContributions: values.cpfContribution,
+        cpfContribution: values.cpfContribution,
         // netPay: empRole === "freelancer" ? netPay : values.netPay,
         payrollType: values.payrollType,
         freelancerCount: Number(values.freelancerCount),

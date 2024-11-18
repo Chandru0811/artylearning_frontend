@@ -60,7 +60,7 @@ function Payslip() {
     doc.addImage(Logo, "Logo", 13, 25, 40, 25);
     doc.setFontSize(15);
     doc.setFont("helvetica", "bold");
-    doc.text("Arty Learning @HG", 60, 25);
+    doc.text(data.centerName || "Arty Learning @HG", 60, 25);
 
     doc.setFont("helvetica", "normal");
     doc.text("Tel No : 87270752", 60, 35);
@@ -73,10 +73,10 @@ function Payslip() {
     doc.text("DATE OF JOINING ", 120, 70);
     doc.text("DESIGNATION ", 120, 80);
     doc.setFont("helvetica", "normal");
-    doc.text(`: ${data.employeeName || ''}`, 45, 70);
-    doc.text(`: ${data.payslipMonth || ''}`, 45, 80);
-    doc.text(`: ${data.dateOfJoining?.substring(0, 10) || ''}`, 155, 70);
-    doc.text(`: ${data.designation || ''}`, 155, 80);
+    doc.text(`: ${data.employeeName || ""}`, 45, 70);
+    doc.text(`: ${data.payslipMonth || ""}`, 45, 80);
+    doc.text(`: ${data.dateOfJoining?.substring(0, 10) || ""}`, 155, 70);
+    doc.text(`: ${data.designation || ""}`, 155, 80);
 
     doc.line(10, 87, 200, 87); // Line above the table
 
@@ -91,7 +91,7 @@ function Payslip() {
     ];
 
     const deductionData = [
-      data.deductions.map((deduction) => deduction?.detectionName || ''),
+      data.deductions.map((deduction) => deduction?.detectionName || ""),
       data.deductions.map((deduction) => deduction?.amount || 0),
     ];
 
@@ -119,7 +119,7 @@ function Payslip() {
       const rowX = startY + (rowIndex + 1) * cellHeight;
       row.forEach((cell, colIndex) => {
         const colX = startX + colIndex * cellWidth;
-        const cellText = cell ? cell.toString() : ''; // Convert to string and provide a fallback
+        const cellText = cell ? cell.toString() : ""; // Convert to string and provide a fallback
         doc.text(cellText, colX, rowX);
       });
     });
@@ -128,7 +128,7 @@ function Payslip() {
       const colX = startXX + colIndex * cellWidth;
       col.forEach((cell, rowIndex) => {
         const rowX = startY + (rowIndex + 1) * cellHeight;
-        const cellText = cell ? cell.toString() : ''; // Convert to string and provide a fallback
+        const cellText = cell ? cell.toString() : ""; // Convert to string and provide a fallback
         doc.text(cellText, colX, rowX);
       });
     });
@@ -136,7 +136,6 @@ function Payslip() {
     console.log(`Employee Name: ${data.employeeName}`);
     console.log(`Payslip Month: ${data.payslipMonth}`);
     console.log(`Deductions:`, deductionData);
-
 
     // Calculate Y position for "GROSS PAY" text and "DEDUCTION TOTAL" text
     const totalY = startY + (numRows + 2) * cellHeight - 5; // numRows + 1 for deduction rows, +1 for space
@@ -220,7 +219,9 @@ function Payslip() {
                     />
                   </div>
                   <div className="col-md-8 col-12 mt-4">
-                    <h5 className="ms-5">ARTY LEARNING</h5>
+                    <h5 className="ms-5">
+                      {data.centerName || "ARTY LEARNING"}
+                    </h5>
                   </div>
                 </div>
                 <div className="row mt-2">
@@ -288,7 +289,6 @@ function Payslip() {
                             </div>
                           </div>
                         </div>
-
                       </div>
                       <div className="row paysliptable ">
                         <div className="col-12">
@@ -312,13 +312,15 @@ function Payslip() {
                                   <div className="mb-2">BASIC SALARY</div>
                                   <div className="mb-2">BONUS</div>
                                   <div className="mb-2">SHG</div>
-                                  <div >CPF</div>
+                                  <div>CPF</div>
                                 </td>
 
                                 <td style={{ borderRight: "2px solid black" }}>
                                   <div className="mb-2">{data.basicSalary}</div>
                                   <div className="mb-2">{data.bonus}</div>
-                                  <div className="mb-2">{data.shgContribution}</div>
+                                  <div className="mb-2">
+                                    {data.shgContribution}
+                                  </div>
                                   <div>{data.cpfContribution}</div>
                                 </td>
                                 <td>

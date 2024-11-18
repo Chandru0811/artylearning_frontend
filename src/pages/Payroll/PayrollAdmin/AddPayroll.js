@@ -146,7 +146,7 @@ function AddPayroll() {
           grossPay:values.grossPay,
           deductionAmount: values.deductionAmount,
           shgContribution: values.shgContribution,
-          cpfContributions: values.cpfContribution,
+          cpfContribution: values.cpfContribution,
         };
       } else if (empRole === "freelancer") {
         payload = {
@@ -438,7 +438,7 @@ function AddPayroll() {
                 {userNamesData &&
                   userNamesData.map((userName) => (
                     <option key={userName.id} value={userName.id}>
-                      {userName.userNames}
+                      {userName.userNames} &nbsp;({userName.role})
                     </option>
                   ))}
               </select>

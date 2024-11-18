@@ -33,123 +33,91 @@ function FreelancerPayslipView() {
   }, [id]);
 
   const downloadPdf = () => {
-    const doc = new jsPDF();
-
-    doc.setFontSize(12);
-    doc.text(`PAYSLIP MONTH : ${selectedMonth}`, 10, 10);
-    doc.addImage(Logo, "Logo", 13, 25, 40, 25);
-    doc.setFontSize(15);
-    doc.setFont("helvetica", "bold");
-    doc.text("Arty Learning @HG", 60, 25);
-
-    doc.setFont("helvetica", "normal");
-    doc.text("Tel No : 87270752", 60, 35);
-    doc.text("Email : Artylearning@gmail.com", 60, 45);
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("EMPLOYEE NAME ", 10, 70);
-    doc.text("PAYSLIP ", 10, 80);
-    doc.text("DATE OF JOINING ", 120, 70);
-    doc.text("DESIGNATION ", 120, 80);
-    doc.setFont("helvetica", "normal");
-    doc.text(`: ${data.employeeName || ''}`, 45, 70);
-    doc.text(`: ${data.payslipMonth || ''}`, 45, 80);
-    doc.text(`: ${data.dateOFJoining.substring(0, 10) || ''}`, 155, 70);
-    doc.text(`: Teacher`, 155, 80);
-
-    console.log("doj", data.dateOFJoining)
-    // Line above the table with validation
-    const lineStartY = 87;
-    if (!isNaN(lineStartY)) {
-      doc.line(10, lineStartY, 200, lineStartY);
-    }
-
-    const headers = ["EARNING", "AMOUNT", "DEDUCTION", "AMOUNT"];
-    const earningData = [
-      ["BASIC SALARY", data.basicSalary],
-      ["BONUS", data.bonus],
-    ];
-
-    const deductionData = [
-      data.deductions?.map((deduction) => deduction?.detectionName || ''),
-      data.deductions?.map((deduction) => deduction?.amount || 0),
-    ];
-
-    const numRows = Math.max(earningData.length, deductionData[0]?.length || 0);
-    const tableBody = [...earningData];
-    const tableColumn = [["", ""], ...deductionData];
-
-    const startX = 10;
-    const startXX = 60;
-    const startY = 95;
-    const cellWidth = 50;
-    const cellHeight = 10;
-    const fontSize = 10;
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(fontSize);
-    headers.forEach((header, index) => {
-      doc.text(header, startX + index * cellWidth, startY);
+    const pdf = new jsPDF("p", "mm", "a4"); // Portrait, millimeters, A4 size
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight(); // Get page height
+    const margin = 10; // Margin for the document
+    const logoHeight = 30; // Height of the logo
+    const borderTopY = margin + logoHeight + 10; // Start border below logo (adjusted margin)
+  
+    // **Outer Border**
+    pdf.setLineWidth(0.5);
+    const contentHeight = pageHeight - borderTopY - margin;
+    pdf.rect(
+      margin,
+      borderTopY,
+      pageWidth - margin * 2,
+      contentHeight - margin // Adjusted height dynamically
+    ); // Adjusted height dynamically
+  
+    // **Header Section**
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(20);
+    pdf.setTextColor("#000000");
+    pdf.text(data.centerName, pageWidth / 2, margin + 15, {
+      align: "center",
     });
-
-    doc.setFont("helvetica", "normal");
-    tableBody.forEach((row, rowIndex) => {
-      const rowY = startY + (rowIndex + 1) * cellHeight;
-      row.forEach((cell, colIndex) => {
-        const colX = startX + colIndex * cellWidth;
-        const cellText = cell ? cell.toString() : '';
-        doc.text(cellText, colX, rowY);
-      });
-    });
-
-    (tableColumn || []).forEach((col, colIndex) => {
-      if (Array.isArray(col)) {
-        const colX = startXX + colIndex * cellWidth;
-        col.forEach((cell, rowIndex) => {
-          const rowY = startY + (rowIndex + 1) * cellHeight;
-          const cellText = cell != null ? cell.toString() : '';
-          if (cellText) {
-            doc.text(cellText, colX, rowY);
-          }
-        });
-      }
-    });
-
-    const totalY = startY + (numRows + 2) * cellHeight - 5;
-    const lineAboveGrossPayY = totalY - 8;
-
-    // Draw line above "GROSS PAY" section with validation
-    if (!isNaN(lineAboveGrossPayY)) {
-      doc.line(startX, lineAboveGrossPayY, 200, lineAboveGrossPayY);
-    }
-
-    doc.setFont("helvetica", "bold");
-    doc.text(`GROSS PAY`, startX, totalY);
-    doc.text(`${data.grossPay}`, startXX, totalY);
-
-    const lineBelowGrossPayY = totalY + 5;
-    if (!isNaN(lineBelowGrossPayY)) {
-      doc.line(startX, lineBelowGrossPayY, 200, lineBelowGrossPayY);
-    }
-
-    const deductionTotalX = startXX + cellWidth;
-    doc.text(`DEDUCTION TOTAL`, deductionTotalX, totalY);
-    doc.text(`${data.deductionTotal}`, deductionTotalX + 50, totalY);
-
-    const netPayY = totalY + cellHeight + 5;
-    doc.text(`NET PAY`, startX, netPayY);
-    doc.setFont("helvetica", "normal");
-    doc.text(`: ${data.netPay}`, startX + 20, netPayY);
-
-    const inWordsY = netPayY + cellHeight;
-    doc.setFont("helvetica", "bold");
-    doc.text(`IN WORDS`, startX, inWordsY);
-    doc.setFont("helvetica", "normal");
-    doc.text(`: ${data.netPayInWords}`, startX + 20, inWordsY);
-
-    doc.save("Payslip.pdf");
+  
+    // **Add Logo**
+    pdf.addImage(Logo, "PNG", margin + 5, margin + 5, 30, 30); // Logo in top left
+  
+    // **Company Details**
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+    const companyDetailsY = margin + 35;
+    
+    // **Employee Details**
+    const employeeDetailsStartY = companyDetailsY + 20;
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+    pdf.text("EMPLOYEE NAME", margin + 5, employeeDetailsStartY);
+    pdf.text(`: ${data.employeeName || ""}`, margin + 50, employeeDetailsStartY);
+  
+    pdf.text("DESIGNATION", pageWidth / 2 + 5, employeeDetailsStartY);
+    pdf.text(": Teacher (FL)", pageWidth / 2 + 50, employeeDetailsStartY);
+  
+    pdf.text("Start Date", margin + 5, employeeDetailsStartY + 8);
+    pdf.text(`:${data.startDate}`, margin + 50, employeeDetailsStartY + 8);
+  
+    pdf.text("End Date", pageWidth / 2 + 5, employeeDetailsStartY + 8);
+    pdf.text(`:${data.endDate}`, pageWidth / 2 + 50, employeeDetailsStartY + 8);
+  
+    pdf.text("DATE OF JOINING", margin + 5, employeeDetailsStartY + 16);
+    pdf.text(`:${data?.dateOFJoining.slice(0, 10)}`, margin + 50, employeeDetailsStartY + 16);
+  
+    // **Earnings Table**
+    const tableStartY = employeeDetailsStartY + 40;
+  
+    // Add Top Border for Earnings Section
+    pdf.setLineWidth(0.5);
+    pdf.line(margin, tableStartY - 10, pageWidth - margin, tableStartY - 10); // Top border for earnings table
+  
+    pdf.line(margin, tableStartY, pageWidth - margin, tableStartY); // Horizontal border below headings
+    pdf.line(margin, tableStartY + 10, pageWidth - margin, tableStartY + 10); // Middle border
+  
+    pdf.setFont("helvetica", "bold");
+    pdf.text("EARNING", margin + 5, tableStartY - 3); // Table header
+    pdf.text("AMOUNT", pageWidth / 2 + 20, tableStartY - 3); // Table header
+  
+    pdf.setFont("helvetica", "normal");
+    pdf.text("Net Pay", margin + 5, tableStartY + 7); // Table row
+    pdf.text(String(data.netPay), pageWidth / 2 + 20, tableStartY + 7); // Table row
+  
+    // **Details Section**
+    const detailsStartY = tableStartY + 30;
+    pdf.text("IN WORDS", margin + 5, detailsStartY);
+    pdf.text(`:${data.netPayInWords}`, margin + 50, detailsStartY);
+  
+    pdf.text("Payroll Type", margin + 5, detailsStartY + 10);
+    pdf.text(`: ${data.payrollType}`, margin + 50, detailsStartY + 10);
+  
+    pdf.text(`${data.payrollType}Count`, pageWidth / 2 + 5, detailsStartY + 10);
+    pdf.text(String(data.freelanceCount), pageWidth / 2 + 50, detailsStartY + 10);
+  
+    // **Save PDF**
+    pdf.save("Payslip.pdf");
   };
+  
 
   return (
     <section>
@@ -211,13 +179,12 @@ function FreelancerPayslipView() {
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
-                                :{" "}
-                                {data.dateOFJoining?.substring(0, 10)}
+                                : {data.dateOFJoining?.substring(0, 10)}
                               </p>
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-6 col-12">
+                        {/* <div className="col-md-6 col-12">
                           <div className="row">
                             <div className="col-6">
                               <p className="fw-medium d-flex justify-content-end">
@@ -230,7 +197,7 @@ function FreelancerPayslipView() {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                         <div className="col-md-6 col-12">
                           <div className="row">
                             <div className="col-6">
