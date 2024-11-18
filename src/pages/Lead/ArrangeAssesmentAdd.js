@@ -116,14 +116,14 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
     <>
       <li>
         <button className="dropdown-item" onClick={handleShow}>
-          Assesment Arranged
+          Assessment Arranged
         </button>
       </li>
 
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title className="headColor">
-            Leads Assesment Booking
+            Leads Assessment Booking
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
