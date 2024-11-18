@@ -18,9 +18,9 @@ const validationSchema = Yup.object().shape({
       "*Date of Birth must be at least 1 year ago"
     ),
   pencilGrip: Yup.string().required("*Pencil Grip is required"),
-  subject: Yup.string().required("*Subject is required"),
+  subjectId: Yup.string().required("*Subject is required"),
   marketingSource: Yup.string().required("*Marketing Source is required"),
-  referBy: Yup.string().required("*Referred is required"),
+  // referBy: Yup.string().required("*Referred is required"),
   writeUpperAToZ: Yup.string().required("*UpperCase is required"),
   writeLowerAToZ: Yup.string().required("*LowerCase is required"),
   soundOfAToZ: Yup.string().required("*Sounds is required"),
@@ -70,7 +70,7 @@ function LeadForm() {
       gender: "",
       dateOfBirth: "",
       pencilGrip: "",
-      subject: "",
+      subjectId: "",
       marketingSource: "",
       referBy: "",
       writeUpperAToZ: "",
@@ -318,9 +318,9 @@ function LeadForm() {
                 Subject / 课程 <span className="text-danger">*</span>
               </label>
               <select
-                {...formik.getFieldProps("subject")}
+                {...formik.getFieldProps("subjectId")}
                 className={`form-select    ${
-                  formik.touched.subject && formik.errors.subject
+                  formik.touched.subjectId && formik.errors.subjectId
                     ? "is-invalid"
                     : ""
                 }`}
@@ -331,14 +331,14 @@ function LeadForm() {
                 <option value="CHINESE">Chinese / 中文</option> */}
                 <option value="" selected>--Select--</option>
                 {subjectData &&
-                  subjectData.map((subject) => (
-                    <option key={subject.id} value={subject.id}>
-                      {subject.subjects}
+                  subjectData.map((subjectId) => (
+                    <option key={subjectId.id} value={subjectId.id}>
+                      {subjectId.subjects}
                     </option>
                   ))}
               </select>
-              {formik.touched.subject && formik.errors.subject && (
-                <div className="invalid-feedback">{formik.errors.subject}</div>
+              {formik.touched.subjectId && formik.errors.subjectId && (
+                <div className="invalid-feedback">{formik.errors.subjectId}</div>
               )}
             </div>
           </div>
