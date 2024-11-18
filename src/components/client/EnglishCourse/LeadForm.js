@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
   pencilGrip: Yup.string().required("*Pencil Grip is required"),
   subjectId: Yup.string().required("*Subject is required"),
   marketingSource: Yup.string().required("*Marketing Source is required"),
-  referBy: Yup.string().required("*Referred is required"),
+  // referBy: Yup.string().required("*Referred is required"),
   writeUpperAToZ: Yup.string().required("*UpperCase is required"),
   writeLowerAToZ: Yup.string().required("*LowerCase is required"),
   soundOfAToZ: Yup.string().required("*Sounds is required"),
