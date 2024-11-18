@@ -411,7 +411,7 @@ function Leadview() {
                               {/* : {data.subject || "--"} */}:{" "}
                               {subjectData &&
                                 subjectData.map((subject) =>
-                                  parseInt(data.subject) === subject.id
+                                  parseInt(data.subjectId) === subject.id
                                     ? subject.subjects || "--"
                                     : ""
                                 )}
