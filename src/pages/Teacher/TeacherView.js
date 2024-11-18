@@ -186,7 +186,17 @@ function TeacherView() {
         <div className="col-md-6 col-12">
           <div className="row mb-3">
             <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Cityzenship</p>
+              <p className="text-sm fw-medium">Citizenship</p>
+            </div>
+            <div className="col-6">
+              <p className="text-muted text-sm">: {data.citizenship || "--"}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6 col-12">
+          <div className="row mb-3">
+            <div className="col-6 d-flex">
+              <p className="text-sm fw-medium">Nationality</p>
             </div>
             <div className="col-6">
               <p className="text-muted text-sm">: {data.nationality || "--"}</p>
