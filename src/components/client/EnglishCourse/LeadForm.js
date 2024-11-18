@@ -377,7 +377,7 @@ function LeadForm() {
           <div className="col-md-6 col-12 mb-3">
             <div>
               <label for="exampleFormControlInput1" className="form-label">
-                Referred by / 介绍人 <span className="text-danger">*</span>
+                Referred by / 介绍人 
               </label>
               {/* <input
                 className={`form-control  ${

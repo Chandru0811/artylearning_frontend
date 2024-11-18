@@ -42,7 +42,7 @@ const ContactAdd = forwardRef(({ formData,setLoadIndicators, setFormData, handle
             },
           }
         );
-        if (response.status === 201) {
+        if (response.status === 201 || response.status === 200) {
           toast.success(response.data.message);
           setFormData((prv) => ({ ...prv, ...values }));
           handleNext();

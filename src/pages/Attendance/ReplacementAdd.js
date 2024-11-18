@@ -253,11 +253,28 @@ function ReplacementAdd({
                         : ""
                     }`}
                   >
-                    <option selected></option>
-                    <option value="1.00">1.00 hr</option>
-                    <option value="2.30">2.30 hr</option>
-                    <option value="3.30">3.30 hr</option>
-                    <option value="4.30">4.30 hr</option>
+                    <option value="" disabled selected>
+                    </option>
+                    {formik.values.preferredDay === "SUNDAY" ||
+                    formik.values.preferredDay === "SATURDAY" ? (
+                      <>
+                        <option value="9:00 am">9:00 am</option>
+                        <option value="10:30 am">10:30 am</option>
+                        <option value="12:00 pm">12:00 pm</option>
+                        <option value="1:30 pm">1:30 pm</option>
+                        <option value="3:00 pm">3:00 pm</option>
+                        <option value="4:30 pm">4:30 pm</option>
+                        <option value="6:00 pm">6:00 pm</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="2:30 pm">2:30 pm</option>
+                        <option value="3:30 pm">3:30 pm</option>
+                        <option value="5:00 pm">5:00 pm</option>
+                        <option value="7:00 pm">7:00 pm</option>
+                        <option value="8:30 pm">8:30 pm</option>
+                      </>
+                    )}
                   </select>
                   {formik.touched.preferredTiming &&
                     formik.errors.preferredTiming && (

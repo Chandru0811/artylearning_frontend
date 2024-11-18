@@ -94,7 +94,7 @@ const PersonalAdd = forwardRef(
             }
           );
 
-          if (response.status === 201) {
+          if (response.status === 201 || response.status === 200) {
             const user_id = response.data.user_id;
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...values, user_id }));

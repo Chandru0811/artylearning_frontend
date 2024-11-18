@@ -574,7 +574,7 @@ const Lead = () => {
                                   className="text-white fw-bold"
                                   style={{ textWrap: "nowrap" }}
                                 >
-                                  Assesment Arranged
+                                  Assessment Arranged
                                 </span>
                               </button>
                               <ul className="dropdown-menu text-capitalize leadStatuslist">

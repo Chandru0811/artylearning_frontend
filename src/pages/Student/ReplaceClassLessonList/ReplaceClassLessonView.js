@@ -198,14 +198,15 @@ function ReplaceClassLessonView() {
                 </div>
               </div>
             </div>
+           
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
-                  <p className="fw-medium">Absent Reason</p>
+                  <p className="fw-medium">Prefer Day</p>
                 </div>
                 <div className="col-9">
                   <p className="text-muted text-sm d-flex text-break">
-                    : {data.absentReason || ""}
+                    : {data.preferredDay || ""}
                   </p>
                 </div>
               </div>
@@ -222,19 +223,8 @@ function ReplaceClassLessonView() {
                 </div>
               </div>
             </div>
-            <div className="col-md-6 col-12">
-              <div className="row  mb-2">
-                <div className="col-3  ">
-                  <p className="fw-medium">Prefer Day</p>
-                </div>
-                <div className="col-9">
-                  <p className="text-muted text-sm d-flex text-break">
-                    : {data.preferredDay || ""}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
+           
+            {/* <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
                   <p className="fw-medium">Approve Status</p>
@@ -245,8 +235,19 @@ function ReplaceClassLessonView() {
                   </p>
                 </div>
               </div>
+            </div> */}
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-3  ">
+                  <p className="fw-medium">Absent Reason</p>
+                </div>
+                <div className="col-9">
+                  <p className="text-muted text-sm d-flex text-break">
+                    : {data.absentReason || ""}
+                  </p>
+                </div>
+              </div>
             </div>
-
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">

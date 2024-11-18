@@ -232,12 +232,12 @@ const Center = () => {
                     <td>
                       <div className="d-flex justify-content-center align-items-center">
                         {storedScreens?.centerListingCreate && (
-                          <OverlayTrigger
-                            placement="top"
-                            overlay={
-                              <Tooltip id="tooltip-top">Add Options</Tooltip>
-                            }
-                          >
+                          // <OverlayTrigger
+                          //   placement="top"
+                          //   overlay={
+                          //     <Tooltip id="tooltip-top">Add Options</Tooltip>
+                          //   }
+                          // >
                             <DropdownButton
                               title={<IoMdAdd />}
                               variant="white"
@@ -270,7 +270,7 @@ const Center = () => {
                                 />
                               </Dropdown.Item>
                             </DropdownButton>
-                          </OverlayTrigger>
+                          // </OverlayTrigger>
                         )}
 
                         {storedScreens?.centerListingRead && (

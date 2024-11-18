@@ -6742,7 +6742,7 @@ function Leadview() {
                                         .leadDoAssessmentAlphabet[0] &&
                                       doassesmentData
                                         .leadDoAssessmentAlphabet[0]
-                                        .beginningSoundsTotalWeightedScore) ||
+                                        .recognitionOfLettersTotalWeightedScore) ||
                                       "--"}
                                   </p>
                                 </div>
