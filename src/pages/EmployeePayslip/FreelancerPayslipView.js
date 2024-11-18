@@ -39,7 +39,7 @@ function FreelancerPayslipView() {
     const margin = 10; // Margin for the document
     const logoHeight = 30; // Height of the logo
     const borderTopY = margin + logoHeight + 10; // Start border below logo (adjusted margin)
-
+  
     // **Outer Border**
     pdf.setLineWidth(0.5);
     const contentHeight = pageHeight - borderTopY - margin;
@@ -49,23 +49,23 @@ function FreelancerPayslipView() {
       pageWidth - margin * 2,
       contentHeight - margin // Adjusted height dynamically
     ); // Adjusted height dynamically
-
+  
     // **Header Section**
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(20);
     pdf.setTextColor("#000000");
-    pdf.text(data.centerName, pageWidth / 2, margin + 15, {
+    pdf.text(data.centerName || "", pageWidth / 2, margin + 15, {
       align: "center",
     });
-
+  
     // **Add Logo**
     pdf.addImage(Logo, "PNG", margin + 5, margin + 5, 30, 30); // Logo in top left
-
+  
     // **Company Details**
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
     const companyDetailsY = margin + 35;
-
+  
     // **Employee Details**
     const employeeDetailsStartY = companyDetailsY + 20;
     pdf.setFont("helvetica", "normal");
@@ -76,68 +76,68 @@ function FreelancerPayslipView() {
       margin + 50,
       employeeDetailsStartY
     );
-
+  
     pdf.text("DESIGNATION", pageWidth / 2 + 5, employeeDetailsStartY);
     pdf.text(": Teacher (FL)", pageWidth / 2 + 50, employeeDetailsStartY);
-
+  
     pdf.text("Start Date", margin + 5, employeeDetailsStartY + 8);
-    pdf.text(`:${data.startDate}`, margin + 50, employeeDetailsStartY + 8);
-
+    pdf.text(`:${data.startDate || ""}`, margin + 50, employeeDetailsStartY + 8);
+  
     pdf.text("End Date", pageWidth / 2 + 5, employeeDetailsStartY + 8);
-    pdf.text(`:${data.endDate}`, pageWidth / 2 + 50, employeeDetailsStartY + 8);
-
+    pdf.text(`:${data.endDate || ""}`, pageWidth / 2 + 50, employeeDetailsStartY + 8);
+  
     pdf.text("DATE OF JOINING", margin + 5, employeeDetailsStartY + 16);
     pdf.text(
-      `:${data?.dateOFJoining.slice(0, 10)}`,
+      `:${data?.dateOFJoining?.slice(0, 10) || ""}`,
       margin + 50,
       employeeDetailsStartY + 16
     );
-
+  
     // **Earnings Table**
     const tableStartY = employeeDetailsStartY + 40;
-
+  
     // Add Top Border for Earnings Section
     pdf.setLineWidth(0.5);
     pdf.line(margin, tableStartY - 10, pageWidth - margin, tableStartY - 10); // Top border for earnings table
-
+  
     pdf.line(margin, tableStartY, pageWidth - margin, tableStartY); // Horizontal border below headings
     pdf.line(margin, tableStartY + 10, pageWidth - margin, tableStartY + 10); // Middle border
-
+  
     pdf.setFont("helvetica", "bold");
     pdf.text("EARNING", margin + 5, tableStartY - 3); // Table header
     pdf.text("AMOUNT", pageWidth / 2 + 20, tableStartY - 3); // Table header
-
+  
     pdf.setFont("helvetica", "normal");
     pdf.text("Net Pay", margin + 5, tableStartY + 7); // Table row
-    pdf.text(String(data.netPay), pageWidth / 2 + 20, tableStartY + 7); // Table row
-
+    pdf.text(String(data.netPay || ""), pageWidth / 2 + 20, tableStartY + 7); // Table row
+  
     // **Details Section**
     const detailsStartY = tableStartY + 30;
     pdf.text("IN WORDS", margin + 5, detailsStartY);
-    pdf.text(`:${data.netPayInWords}`, margin + 50, detailsStartY);
-
+    pdf.text(`:${data.netPayInWords || ""}`, margin + 50, detailsStartY);
+  
     pdf.text("Payroll Type", margin + 5, detailsStartY + 10);
-    pdf.text(`: ${data.payrollType}`, margin + 50, detailsStartY + 10);
+    pdf.text(`: ${data.payrollType || ""}`, margin + 50, detailsStartY + 10);
     // Format the first letter as uppercase and the rest as lowercase
     const formattedPayrollType =
-      data.payrollType.charAt(0).toUpperCase() +
-      data.payrollType.slice(1).toLowerCase();
-
+      (data.payrollType ? data.payrollType.charAt(0).toUpperCase() + data.payrollType.slice(1).toLowerCase() : "");
+  
     // Add space between value and "Count"
     const textToDisplay = `${formattedPayrollType} Count`;
-
+  
     // Use the formatted text in the PDF
     pdf.text(textToDisplay, pageWidth / 2 + 5, detailsStartY + 10);
-
+  
     pdf.text(
-      `:${String(data.freelanceCount)}`,
+      `:${String(data.freelanceCount || "")}`,
       pageWidth / 2 + 50,
       detailsStartY + 10
     );
-
+  
     // **Save PDF**
     pdf.save("Payslip.pdf");
   };
+  
 
   return (
     <section>
