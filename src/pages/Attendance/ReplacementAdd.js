@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 function ReplacementAdd({
   attendanceData,
-  onClickReplacement ,
+  onClickReplacement,
   attendanceDate,
   selectedStudent,
 }) {
@@ -92,7 +92,7 @@ function ReplacementAdd({
       }
     },
   });
-  
+
   useEffect(() => {
     if (attendanceDate) {
       formik.setFieldValue("absentDate", attendanceDate);
@@ -333,6 +333,7 @@ function ReplacementAdd({
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">Document</label>
                   <input
+                    accept=".pdf, .doc, .docx, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     type="file"
                     className={`form-control ${
                       formik.touched.file && formik.errors.file

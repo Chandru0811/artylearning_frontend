@@ -34,9 +34,9 @@ const validationSchema = Yup.object().shape({
     .required("*Email is required"),
   openingDate: Yup.date().required("*Date is required"),
   uenNumber: Yup.string().required("*UEN number is required"),
-  taxRegistrationNumber: Yup.string().required(
-    "*Tax Registration Number is required"
-  ),
+  // taxRegistrationNumber: Yup.string().required(
+  //   "*Tax Registration Number is required"
+  // ),
   bankName: Yup.string().required("*Bank Name is required"),
   bankBranch: Yup.string().required("*Bank Branch is required"),
   bankAccountNumber: Yup.number()
@@ -456,7 +456,7 @@ function CenterEdit() {
                 <input
                   {...formik.getFieldProps("uenNumber")}
                   type="text"
-                  className={`form-control  ${
+                  className={`form-controls ${
                     formik.touched.uenNumber && formik.errors.uenNumber
                       ? "is-invalid"
                       : ""
@@ -472,7 +472,7 @@ function CenterEdit() {
             <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  TAX Registration Number<span className="text-danger">*</span>
+                  TAX Registration Number
                 </label>
                 <input
                   {...formik.getFieldProps("taxRegistrationNumber")}
