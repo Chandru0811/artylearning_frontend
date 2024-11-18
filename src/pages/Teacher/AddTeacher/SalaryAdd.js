@@ -12,7 +12,11 @@ import * as Yup from "yup";
 import fetchAllSalaryTypeWithIds from "../../List/SalaryTypeList";
 
 const validationSchema = Yup.object().shape({
-  salary: Yup.number().typeError("*Salary Must be numbers").notRequired(),
+  salary: Yup.number()
+  .typeError("*Salary must be a number")
+  .positive("*Salary must be a positive number")
+  .notRequired(),
+
 });
 
 const SalaryAdd = forwardRef(

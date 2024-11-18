@@ -11,15 +11,17 @@ import * as Yup from "yup";
 import fetchAllSalaryTypeWithIds from "../../List/SalaryTypeList";
 
 const validationSchema = Yup.object().shape({
-  salary: Yup.number().typeError("*Salary Must be numbers").notRequired(),
+  salary: Yup.number()
+    .typeError("*Salary must be a number")
+    .positive("*Salary must be a positive number")
+    .notRequired(),
 });
 
 const StaffSalaryEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
-    const userName = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
     const [id, setId] = useState();
-
 
     const fetchData = async () => {
       try {
@@ -33,7 +35,7 @@ const StaffSalaryEdit = forwardRef(
     useEffect(() => {
       fetchData();
     }, []);
-    console.log("first", id)
+    console.log("first", id);
     const formik = useFormik({
       initialValues: {
         salary: "",
@@ -98,12 +100,13 @@ const StaffSalaryEdit = forwardRef(
             response.data.userSalaryCreationModels &&
             response.data.userSalaryCreationModels.length > 0
           ) {
-            setId(response.data.userSalaryCreationModels[0].id)
+            setId(response.data.userSalaryCreationModels[0].id);
 
             formik.setValues({
               ...response.data.userSalaryCreationModels[0],
               salaryId: response.data.userSalaryCreationModels[0].id,
-              salaryTypeId: response.data.userSalaryCreationModels[0].salaryTypeId || "",
+              salaryTypeId:
+                response.data.userSalaryCreationModels[0].salaryTypeId || "",
 
               effectiveDate:
                 response.data.userSalaryCreationModels[0].effectiveDate.substring(
@@ -131,11 +134,14 @@ const StaffSalaryEdit = forwardRef(
       staffSalaryEdit: formik.handleSubmit,
     }));
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <section>
           <div className="container" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>

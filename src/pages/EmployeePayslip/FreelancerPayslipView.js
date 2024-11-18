@@ -81,14 +81,14 @@ function FreelancerPayslipView() {
     pdf.text(": Teacher (FL)", pageWidth / 2 + 50, employeeDetailsStartY);
   
     pdf.text("Start Date", margin + 5, employeeDetailsStartY + 8);
-    pdf.text(`:${data.startDate || ""}`, margin + 50, employeeDetailsStartY + 8);
+    pdf.text(`: ${data.startDate || ""}`, margin + 50, employeeDetailsStartY + 8);
   
     pdf.text("End Date", pageWidth / 2 + 5, employeeDetailsStartY + 8);
-    pdf.text(`:${data.endDate || ""}`, pageWidth / 2 + 50, employeeDetailsStartY + 8);
+    pdf.text(`: ${data.endDate || ""}`, pageWidth / 2 + 50, employeeDetailsStartY + 8);
   
     pdf.text("DATE OF JOINING", margin + 5, employeeDetailsStartY + 16);
     pdf.text(
-      `:${data?.dateOFJoining?.slice(0, 10) || ""}`,
+      `: ${data?.dateOFJoining?.slice(0, 10) || ""}`,
       margin + 50,
       employeeDetailsStartY + 16
     );
@@ -114,7 +114,7 @@ function FreelancerPayslipView() {
     // **Details Section**
     const detailsStartY = tableStartY + 30;
     pdf.text("IN WORDS", margin + 5, detailsStartY);
-    pdf.text(`:${data.netPayInWords || ""}`, margin + 50, detailsStartY);
+    pdf.text(`: ${data.netPayInWords || ""}`, margin + 50, detailsStartY);
   
     pdf.text("Payroll Type", margin + 5, detailsStartY + 10);
     pdf.text(`: ${data.payrollType || ""}`, margin + 50, detailsStartY + 10);
@@ -129,7 +129,7 @@ function FreelancerPayslipView() {
     pdf.text(textToDisplay, pageWidth / 2 + 5, detailsStartY + 10);
   
     pdf.text(
-      `:${String(data.freelanceCount || "")}`,
+      `: ${String(data.freelanceCount || "")}`,
       pageWidth / 2 + 50,
       detailsStartY + 10
     );
@@ -190,20 +190,7 @@ function FreelancerPayslipView() {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-6 col-12">
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-medium d-flex justify-content-end">
-                                DATE OF JOINING
-                              </p>
-                            </div>
-                            <div className="col-6">
-                              <p className="text-muted text-sm">
-                                : {data.dateOFJoining?.substring(0, 10)}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                    
                         {/* <div className="col-md-6 col-12">
                           <div className="row">
                             <div className="col-6">
@@ -256,6 +243,20 @@ function FreelancerPayslipView() {
                             <div className="col-6">
                               <p className="text-muted text-sm">
                                 : {data.endDate}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12">
+                          <div className="row">
+                            <div className="col-6">
+                              <p className="fw-medium d-flex justify-content-end">
+                                DATE OF JOINING
+                              </p>
+                            </div>
+                            <div className="col-6">
+                              <p className="text-muted text-sm">
+                                : {data.dateOFJoining?.substring(0, 10)}
                               </p>
                             </div>
                           </div>
@@ -329,7 +330,7 @@ function FreelancerPayslipView() {
                         <div className="col-md-6 col-12">
                           <div className="row">
                             <div className="col-6">
-                              <p className="fw-medium">Hourse Count</p>
+                              <p className="fw-medium">{data.payrollType} Count</p>
                             </div>
                             <div className="col-6">
                               <p className="text-muted text-sm">
