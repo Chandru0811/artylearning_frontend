@@ -56,6 +56,7 @@ const StaffPersonalEdit = forwardRef(
           nationalityName = nationalityData.find(
             (prv) => prv.id === parseInt(data.nationalityId)
           );
+          data.nationality = nationalityName.citizenship
 
         try {
           const response = await api.put(
