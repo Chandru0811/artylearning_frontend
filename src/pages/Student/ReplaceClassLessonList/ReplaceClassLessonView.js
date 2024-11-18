@@ -5,6 +5,8 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
 // import fetchAllCoursesWithIds from "../List/CourseList";
+import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
+import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 function ReplaceClassLessonView() {
   const { id } = useParams();
@@ -155,7 +157,7 @@ function ReplaceClassLessonView() {
                 </div>
                 <div className="col-9">
                   <p className="text-muted text-sm d-flex text-break">
-                    : {data.studentUniqueId || ""}
+                    : S0005{data.studentId || ""}
                   </p>
                 </div>
               </div>
@@ -269,18 +271,48 @@ function ReplaceClassLessonView() {
                 </div>
               </div>
             </div>
-            {/* <div className="col-md-12 col-12">
+            <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
-                  <p className="fw-medium">File</p>
+                  <p className="fw-medium">Document</p>
                 </div>
                 <div className="col-9">
-                  <p className="text-muted text-sm d-flex text-break">
+                  {/* <p className="text-muted text-sm d-flex text-break">
                     : {data.document || ""}
-                  </p>
+                  </p> */}
+                  {data?.document && (
+                    <div
+                      class="card border-0 shadow"
+                      style={{ width: "18rem" }}
+                    >
+                      <a
+                        href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                          data?.document
+                        )}&embedded=true`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          class="card-img-top img-fluid"
+                          style={{ height: "10rem" }}
+                          src={pdfLogo}
+                          alt="Card image cap"
+                        />
+                      </a>
+                      <div class="card-body d-flex justify-content-between flex-wrap">
+                        <p class="card-title fw-semibold text-wrap">
+                          {data?.document?.split("/").pop()}
+                        </p>
+
+                        <a href={data?.document} class="btn text-dark">
+                          <MdOutlineDownloadForOffline size={25} />
+                        </a>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

@@ -58,7 +58,7 @@ const StaffPersonalAdd = forwardRef(
         citizenship: formData.citizenship || "",
         nationalityId: formData.nationalityId || "",
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         try {
@@ -289,7 +289,7 @@ const StaffPersonalAdd = forwardRef(
               )}
             </div>
             <div class="form-group col-sm">
-              <label>Cityzenship</label>
+              <label>Citizenship</label>
               <span className="text-danger">*</span>
               <select
                 className="form-select"
