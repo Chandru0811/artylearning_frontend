@@ -56,11 +56,11 @@ function Payslip() {
     const doc = new jsPDF();
 
     doc.setFontSize(12);
-    doc.text(`PAYSLIP MONTH : ${selectedMonth}`, 10, 10);
+    doc.text(`PAYSLIP MONTH : ${selectedMonth || ""}`, 10, 10); // Using || for null or empty
     doc.addImage(Logo, "Logo", 13, 25, 40, 25);
     doc.setFontSize(15);
     doc.setFont("helvetica", "bold");
-    doc.text(data.centerName || "Arty Learning @HG", 60, 25);
+    doc.text(data.centerName || "Arty Learning @HG", 60, 25); // Using || for null or empty
 
     doc.setFont("helvetica", "normal");
     doc.text("Tel No : 87270752", 60, 35);
@@ -72,6 +72,8 @@ function Payslip() {
     doc.text("PAYSLIP ", 10, 80);
     doc.text("DATE OF JOINING ", 120, 70);
     doc.text("DESIGNATION ", 120, 80);
+
+    // Using || for each value to handle null or empty
     doc.setFont("helvetica", "normal");
     doc.text(`: ${data.employeeName || ""}`, 45, 70);
     doc.text(`: ${data.payslipMonth || ""}`, 45, 80);
@@ -83,16 +85,20 @@ function Payslip() {
     const headers = ["EARNING", "AMOUNT", "DEDUCTION", "AMOUNT"];
 
     const earningData = [
-      ["BASIC SALARY", data.basicSalary],
-      ["BONUS", data.bonus],
-      ["SHG", data.shgContribution],
-      ["CPF", data.cpfContribution],
+      ["BASIC SALARY", data.basicSalary || ""], // Handling null or empty
+      ["BONUS", data.bonus || ""],
+      ["SHG", data.shgContribution || ""],
+      ["CPF", data.cpfContribution || ""],
       // Add other earning categories as needed
     ];
 
     const deductionData = [
-      data.deductions.map((deduction) => deduction?.detectionName || ""),
-      data.deductions.map((deduction) => deduction?.amount || 0),
+      data.deductions
+        ? data.deductions.map((deduction) => deduction?.detectionName || "")
+        : [""],
+      data.deductions
+        ? data.deductions.map((deduction) => deduction?.amount || "")
+        : [""],
     ];
 
     const numRows = Math.max(earningData.length, deductionData[0].length);
@@ -133,8 +139,8 @@ function Payslip() {
       });
     });
 
-    console.log(`Employee Name: ${data.employeeName}`);
-    console.log(`Payslip Month: ${data.payslipMonth}`);
+    console.log(`Employee Name: ${data.employeeName || ""}`);
+    console.log(`Payslip Month: ${data.payslipMonth || ""}`);
     console.log(`Deductions:`, deductionData);
 
     // Calculate Y position for "GROSS PAY" text and "DEDUCTION TOTAL" text
@@ -147,7 +153,7 @@ function Payslip() {
     // Draw "GROSS PAY" text along with its value in bold
     doc.setFont("helvetica", "bold");
     doc.text(`GROSS PAY`, startX, totalY);
-    doc.text(`${data.grossPay}`, startXX, totalY); // Adjust the position for the value
+    doc.text(`${data.grossPay || ""}`, startXX, totalY); // Adjust the position for the value
 
     // Draw line below the "GROSS PAY" section
     const lineBelowGrossPayY = totalY + 5;
@@ -157,21 +163,21 @@ function Payslip() {
     const deductionTotalWidth = cellWidth; // Assuming the same width as other deduction columns
     const deductionTotalX = startXX + deductionTotalWidth; // Align with the "DEDUCTION" column
     doc.text(`DEDUCTION TOTAL`, deductionTotalX, totalY);
-    doc.text(`${data.deductionTotal}`, deductionTotalX + 50, totalY); // Adjust the position for the value
+    doc.text(`${data.deductionTotal || ""}`, deductionTotalX + 50, totalY); // Adjust the position for the value
 
     //  Draw "NET PAY" text along with its value in bold
     const netPayY = totalY + cellHeight + 5; // Offset it from the "GROSS PAY" text
     doc.setFont("helvetica", "bold");
     doc.text(`NET PAY`, startX, netPayY);
     doc.setFont("helvetica", "normal"); // Change font to normal
-    doc.text(`: ${data.netPay}`, startX + 20, netPayY); // Adjust the position for the value
+    doc.text(`: ${data.netPay || ""}`, startX + 20, netPayY); // Adjust the position for the value
 
     // Draw "IN WORDS" text along with its value in bold
     const inWordsY = netPayY + cellHeight; // Offset it from the "NET PAY" text
     doc.setFont("helvetica", "bold");
     doc.text(`IN WORDS`, startX, inWordsY);
     doc.setFont("helvetica", "normal"); // Change font to normal
-    doc.text(`: ${data.netPayInWords}`, startX + 20, inWordsY); // Adjust the position for the value
+    doc.text(`: ${data.netPayInWords || ""}`, startX + 20, inWordsY); // Adjust the position for the value
 
     doc.save("Payslip.pdf");
   };
