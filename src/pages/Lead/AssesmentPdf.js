@@ -7,13 +7,13 @@ import Logo from "../../assets/images/Logo.png";
 import html2canvas from "html2canvas";
 
 const AssesmentPdf = ({ doassesmentData }) => {
-  console.log("doassesmentData",doassesmentData)
+  console.log("doassesmentData", doassesmentData);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const table1Ref = useRef();
   const table2Ref = useRef();
 
   const handleGeneratePDF = async () => {
-    setLoadIndicator(true)
+    setLoadIndicator(true);
     const pdf = new jsPDF({
       orientation: "p", // 'p' for portrait, 'l' for landscape
       unit: "px",
@@ -54,15 +54,16 @@ const AssesmentPdf = ({ doassesmentData }) => {
     await addTableToPDF(table2Ref, 2); // Add second table
 
     // Save PDF
-    const fileName = doassesmentData &&
-    doassesmentData.leadDoAssessmentModel &&
-    doassesmentData.leadDoAssessmentModel.length > 0 &&
-    doassesmentData.leadDoAssessmentModel[0]
-    ? doassesmentData.leadDoAssessmentModel[0].name
-    : "Assessment";
+    const fileName =
+      doassesmentData &&
+      doassesmentData.leadDoAssessmentModel &&
+      doassesmentData.leadDoAssessmentModel.length > 0 &&
+      doassesmentData.leadDoAssessmentModel[0]
+        ? doassesmentData.leadDoAssessmentModel[0].name
+        : "Assessment";
 
-  pdf.save(`${fileName}.pdf`);
-    setLoadIndicator(false)
+    pdf.save(`${fileName}.pdf`);
+    setLoadIndicator(false);
   };
   return (
     <>
@@ -494,8 +495,8 @@ const AssesmentPdf = ({ doassesmentData }) => {
         {doassesmentData.leadDoAssessmentAlphabet &&
         doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (
           <div className="container-fluid">
-            <div className="row  mx-3 my-1">
-              <h5 className="headColor mt-2 mb-4">Alphabet</h5>
+            <div className="row  m-3">
+              <h5 className="headColor mt-5 mb-4">Alphabet</h5>
               <div className="table-responsive">
                 <table class="table">
                   <thead className="table-warning">
@@ -518,7 +519,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                   </thead>
                   <tbody>
                     <tr>
-                      <th scope="row">Uppercase</th>
+                      <th scope="row">Recognition of sounds</th>
                       <td>
                         {doassesmentData &&
                         doassesmentData.leadDoAssessmentModel &&
@@ -529,7 +530,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseA ? (
+                          .recognitionOfSoundA ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -548,7 +549,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseB ? (
+                          .recognitionOfSoundB ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -567,7 +568,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseC ? (
+                          .recognitionOfSoundC ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -586,7 +587,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseD ? (
+                          .recognitionOfSoundD ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -605,7 +606,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseE ? (
+                          .recognitionOfSoundE ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -624,7 +625,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseF ? (
+                          .recognitionOfSoundF ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -643,7 +644,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseG ? (
+                          .recognitionOfSoundG ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -662,7 +663,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseH ? (
+                          .recognitionOfSoundH ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -681,7 +682,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseI ? (
+                          .recognitionOfSoundI ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -700,7 +701,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseJ ? (
+                          .recognitionOfSoundJ ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -719,7 +720,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseK ? (
+                          .recognitionOfSoundK ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -738,7 +739,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseL ? (
+                          .recognitionOfSoundL ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -757,257 +758,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseM ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Written Strokes</th>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperA ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperB ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperC ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperD ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperE ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperF ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperG ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperH ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperI ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperJ ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperK ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperL ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperM ? (
+                          .recognitionOfSoundM ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1020,7 +771,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                       </td>
                     </tr>
                     <tr>
-                      <th scope="row">Lowercase</th>
+                      <th scope="row">Recognition of letters</th>
                       <td>
                         {doassesmentData &&
                         doassesmentData.leadDoAssessmentModel &&
@@ -1029,7 +780,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseA ? (
+                          .recognitionOfLetterA ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1048,7 +799,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseB ? (
+                          .recognitionOfLetterB ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1067,7 +818,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseC ? (
+                          .recognitionOfLetterC ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1086,7 +837,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseD ? (
+                          .recognitionOfLetterD ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1105,7 +856,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseE ? (
+                          .recognitionOfLetterE ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1124,7 +875,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseF ? (
+                          .recognitionOfLetterF ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1143,7 +894,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseG ? (
+                          .recognitionOfLetterG ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1162,7 +913,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseH ? (
+                          .recognitionOfLetterH ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1181,7 +932,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseI ? (
+                          .recognitionOfLetterI ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1200,7 +951,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseJ ? (
+                          .recognitionOfLetterJ ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1219,7 +970,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseK ? (
+                          .recognitionOfLetterK ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1238,7 +989,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseL ? (
+                          .recognitionOfLetterL ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1257,7 +1008,257 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseM ? (
+                          .recognitionOfLetterM ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Writing</th>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterA ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterB ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterC ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterD ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterE ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterF ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterG ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterH ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterI ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterJ ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterK ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterL ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterM ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1519,256 +1520,308 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         )}
                       </td>
                     </tr>
-                    <tr>
-                      <th scope="row">Written Strokes</th>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerA ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerB ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerC ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerD ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerE ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerF ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerG ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerH ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerI ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerJ ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerK ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerL ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerM ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                    </tr>
+                    {/* <tr>
+                                    <th scope="row">Written Strokes</th>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterA ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterB ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterC ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterD ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterE ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterF ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterG ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterH ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterI ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterJ ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterK ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterL ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterM ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                  </tr> */}
                   </tbody>
                 </table>
               </div>
@@ -1794,7 +1847,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                   </thead>
                   <tbody>
                     <tr>
-                      <th scope="row">Uppercase</th>
+                      <th scope="row">Recognition of sounds</th>
                       <td>
                         {doassesmentData &&
                         doassesmentData.leadDoAssessmentModel &&
@@ -1803,7 +1856,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseN ? (
+                          .recognitionOfSoundN ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1822,7 +1875,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseO ? (
+                          .recognitionOfSoundO ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1841,7 +1894,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseP ? (
+                          .recognitionOfSoundP ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1860,7 +1913,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseQ ? (
+                          .recognitionOfSoundQ ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1879,7 +1932,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseR ? (
+                          .recognitionOfSoundR ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1898,7 +1951,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseS ? (
+                          .recognitionOfSoundS ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1917,7 +1970,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseT ? (
+                          .recognitionOfSoundT ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1936,7 +1989,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseU ? (
+                          .recognitionOfSoundU ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1955,7 +2008,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseV ? (
+                          .recognitionOfSoundV ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1974,7 +2027,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseW ? (
+                          .recognitionOfSoundW ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -1993,7 +2046,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseX ? (
+                          .recognitionOfSoundX ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2012,7 +2065,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseY ? (
+                          .recognitionOfSoundY ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2031,257 +2084,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .uppercaseZ ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Written Strokes</th>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperN ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperO ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperP ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperQ ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperR ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperS ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperT ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperU ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperV ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperW ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperX ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperY ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesUpperZ ? (
+                          .recognitionOfSoundZ ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2294,7 +2097,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                       </td>
                     </tr>
                     <tr>
-                      <th scope="row">Lowercase</th>
+                      <th scope="row">Recognition of letters</th>
                       <td>
                         {doassesmentData &&
                         doassesmentData.leadDoAssessmentModel &&
@@ -2303,7 +2106,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseN ? (
+                          .recognitionOfLetterN ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2322,7 +2125,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseO ? (
+                          .recognitionOfLetterO ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2341,7 +2144,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseP ? (
+                          .recognitionOfLetterP ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2360,7 +2163,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseQ ? (
+                          .recognitionOfLetterQ ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2379,7 +2182,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseR ? (
+                          .recognitionOfLetterR ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2398,7 +2201,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseS ? (
+                          .recognitionOfLetterS ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2417,7 +2220,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseT ? (
+                          .recognitionOfLetterT ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2436,7 +2239,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseU ? (
+                          .recognitionOfLetterU ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2455,7 +2258,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseV ? (
+                          .recognitionOfLetterV ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2474,7 +2277,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseW ? (
+                          .recognitionOfLetterW ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2493,7 +2296,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseX ? (
+                          .recognitionOfLetterX ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2512,7 +2315,7 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseY ? (
+                          .recognitionOfLetterY ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2531,7 +2334,257 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         doassesmentData.leadDoAssessmentAlphabet &&
                         doassesmentData.leadDoAssessmentAlphabet[0] &&
                         doassesmentData.leadDoAssessmentAlphabet[0]
-                          .lowercaseZ ? (
+                          .recognitionOfLetterZ ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Writing</th>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterN ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterO ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterP ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterQ ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterR ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterS ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterT ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterU ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterV ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterW ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterX ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterY ? (
+                          <TiTick
+                            style={{
+                              color: "green",
+                              fontSize: "25px",
+                            }}
+                          />
+                        ) : (
+                          <ImCross style={{ color: "red" }} />
+                        )}
+                      </td>
+                      <td>
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .writingLetterZ ? (
                           <TiTick
                             style={{
                               color: "green",
@@ -2793,256 +2846,308 @@ const AssesmentPdf = ({ doassesmentData }) => {
                         )}
                       </td>
                     </tr>
-                    <tr>
-                      <th scope="row">Written Strokes</th>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerN ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerO ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerP ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerQ ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerR ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerS ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerT ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerU ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerV ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerW ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerX ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerY ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                      <td>
-                        {doassesmentData &&
-                        doassesmentData.leadDoAssessmentModel &&
-                        doassesmentData.leadDoAssessmentModel.length > 0 &&
-                        doassesmentData.leadDoAssessmentModel[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet &&
-                        doassesmentData.leadDoAssessmentAlphabet[0] &&
-                        doassesmentData.leadDoAssessmentAlphabet[0]
-                          .writtenStrokesLowerZ ? (
-                          <TiTick
-                            style={{
-                              color: "green",
-                              fontSize: "25px",
-                            }}
-                          />
-                        ) : (
-                          <ImCross style={{ color: "red" }} />
-                        )}
-                      </td>
-                    </tr>
+                    {/* <tr>
+                                    <th scope="row">Written Strokes</th>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterN ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterO ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterP ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterQ ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterR ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterS ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterT ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterU ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterV ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterW ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterX ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterY ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                    <td>
+                                      {doassesmentData &&
+                                      doassesmentData.leadDoAssessmentModel &&
+                                      doassesmentData.leadDoAssessmentModel
+                                        .length > 0 &&
+                                      doassesmentData
+                                        .leadDoAssessmentModel[0] &&
+                                      doassesmentData.leadDoAssessmentAlphabet &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0] &&
+                                      doassesmentData
+                                        .leadDoAssessmentAlphabet[0]
+                                        .writingLetterZ ? (
+                                        <TiTick
+                                          style={{
+                                            color: "green",
+                                            fontSize: "25px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <ImCross style={{ color: "red" }} />
+                                      )}
+                                    </td>
+                                  </tr> */}
                   </tbody>
                 </table>
               </div>

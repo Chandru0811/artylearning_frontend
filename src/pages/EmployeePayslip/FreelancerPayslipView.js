@@ -40,6 +40,8 @@ function FreelancerPayslipView() {
     const logoHeight = 30; // Height of the logo
     const borderTopY = margin + logoHeight + 10; // Start border below logo (adjusted margin)
   
+    const tableMarginX = 15; // Horizontal margin for the table
+  
     // **Outer Border**
     pdf.setLineWidth(0.5);
     const contentHeight = pageHeight - borderTopY - margin;
@@ -48,7 +50,7 @@ function FreelancerPayslipView() {
       borderTopY,
       pageWidth - margin * 2,
       contentHeight - margin // Adjusted height dynamically
-    ); // Adjusted height dynamically
+    );
   
     // **Header Section**
     pdf.setFont("helvetica", "bold");
@@ -61,13 +63,8 @@ function FreelancerPayslipView() {
     // **Add Logo**
     pdf.addImage(Logo, "PNG", margin + 5, margin + 5, 30, 30); // Logo in top left
   
-    // **Company Details**
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(12);
-    const companyDetailsY = margin + 35;
-  
     // **Employee Details**
-    const employeeDetailsStartY = companyDetailsY + 20;
+    const employeeDetailsStartY = margin + 50;
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(12);
     pdf.text("EMPLOYEE NAME", margin + 5, employeeDetailsStartY);
@@ -93,39 +90,52 @@ function FreelancerPayslipView() {
       employeeDetailsStartY + 16
     );
   
-    // **Earnings Table**
-    const tableStartY = employeeDetailsStartY + 40;
-  
-    // Add Top Border for Earnings Section
-    pdf.setLineWidth(0.5);
-    pdf.line(margin, tableStartY - 10, pageWidth - margin, tableStartY - 10); // Top border for earnings table
-  
-    pdf.line(margin, tableStartY, pageWidth - margin, tableStartY); // Horizontal border below headings
-    pdf.line(margin, tableStartY + 10, pageWidth - margin, tableStartY + 10); // Middle border
-  
-    pdf.setFont("helvetica", "bold");
-    pdf.text("EARNING", margin + 5, tableStartY - 3); // Table header
-    pdf.text("AMOUNT", pageWidth / 2 + 20, tableStartY - 3); // Table header
-  
-    pdf.setFont("helvetica", "normal");
-    pdf.text("Net Pay", margin + 5, tableStartY + 7); // Table row
-    pdf.text(String(data.netPay || ""), pageWidth / 2 + 20, tableStartY + 7); // Table row
+// **Earnings Table**
+const tableStartY = employeeDetailsStartY + 40;
+const tableHeight = 15; // Height for vertical borders
+const amountColumnX = pageWidth / 2 + 10; // X-coordinate for the Amount column
+
+// Add Top Border for Earnings Section
+pdf.setLineWidth(0.5);
+pdf.line(tableMarginX, tableStartY - 10, pageWidth - tableMarginX, tableStartY - 10); // Top border
+pdf.line(tableMarginX, tableStartY, pageWidth - tableMarginX, tableStartY); // Header bottom border
+
+// Add Left and Right Borders
+pdf.line(tableMarginX, tableStartY - 10, tableMarginX, tableStartY + tableHeight - 5); // Left border
+pdf.line(pageWidth - tableMarginX, tableStartY - 10, pageWidth - tableMarginX, tableStartY + tableHeight - 5); // Right border
+
+// Add Vertical Border for Amount Column
+pdf.line(amountColumnX, tableStartY - 10, amountColumnX, tableStartY + tableHeight - 15); // Vertical line separating columns
+
+// Add Row Bottom Border
+pdf.line(tableMarginX, tableStartY + 10, pageWidth - tableMarginX, tableStartY + 10); // Row bottom border
+
+// Table Header and Row
+pdf.setFont("helvetica", "bold");
+pdf.text("EARNING", tableMarginX + 5, tableStartY - 3); // Table header
+pdf.text("AMOUNT", amountColumnX + 5, tableStartY - 3); // Table header
+
+pdf.setFont("helvetica", "normal");
+pdf.text("Net Pay", tableMarginX + 5, tableStartY + 7); // Table row
+pdf.text(String(data.netPay || ""), amountColumnX + 5, tableStartY + 7); // Table row
+
+
   
     // **Details Section**
-    const detailsStartY = tableStartY + 30;
+    const detailsStartY = tableStartY + 40;
     pdf.text("IN WORDS", margin + 5, detailsStartY);
     pdf.text(`: ${data.netPayInWords || ""}`, margin + 50, detailsStartY);
   
     pdf.text("Payroll Type", margin + 5, detailsStartY + 10);
     pdf.text(`: ${data.payrollType || ""}`, margin + 50, detailsStartY + 10);
+  
     // Format the first letter as uppercase and the rest as lowercase
     const formattedPayrollType =
-      (data.payrollType ? data.payrollType.charAt(0).toUpperCase() + data.payrollType.slice(1).toLowerCase() : "");
+      data.payrollType
+        ? data.payrollType.charAt(0).toUpperCase() + data.payrollType.slice(1).toLowerCase()
+        : "";
   
-    // Add space between value and "Count"
     const textToDisplay = `${formattedPayrollType} Count`;
-  
-    // Use the formatted text in the PDF
     pdf.text(textToDisplay, pageWidth / 2 + 5, detailsStartY + 10);
   
     pdf.text(
@@ -137,6 +147,8 @@ function FreelancerPayslipView() {
     // **Save PDF**
     pdf.save("Payslip.pdf");
   };
+  
+  
   
 
   return (
