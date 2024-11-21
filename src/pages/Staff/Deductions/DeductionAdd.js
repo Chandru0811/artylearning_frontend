@@ -5,8 +5,8 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import fetchAllEmployeeListByCenter from "../../List/EmployeeList";
 import { format } from "date-fns";
+import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
 
 const validationSchema = Yup.object({
   centerId: Yup.number().required("*Center Name is required"),
@@ -108,7 +108,7 @@ function DeductionAdd() {
 
   const fetchUserName = async (centerId) => {
     try {
-      const userNames = await fetchAllEmployeeListByCenter(centerId);
+      const userNames = await fetchUserListWithoutFreelancerByCenterId(centerId);
       setUserNameData(userNames);
     } catch (error) {
       toast.error(error);
