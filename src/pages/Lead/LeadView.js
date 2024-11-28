@@ -1393,6 +1393,48 @@ function Leadview() {
                     data-bs-parent="#accordionExample"
                   >
                     <div class="accordion-body">
+                    <div className="bg-light rounded-3 text-center text-muted text-sm p-2">
+                                <span className="headColor">"</span> Hi parent your childern secured Grade {" "}
+                                <span className="text-success fw-bold">
+                                  {(doassesmentData &&
+                                    doassesmentData.leadDoAssessmentModel &&
+                                    doassesmentData.leadDoAssessmentModel
+                                      .length > 0 &&
+                                    doassesmentData.leadDoAssessmentModel[0] &&
+                                    doassesmentData.leadDoAssessmentAlphabet &&
+                                    doassesmentData
+                                      .leadDoAssessmentAlphabet[0] &&
+                                    doassesmentData.leadDoAssessmentAlphabet[0]
+                                      .gradeCategory) ||
+                                    "--"}{" "}
+                                    
+                                </span> 
+                                <span className="headColor">"</span>
+                                {/* Grade & Level is{" "}
+                                <span className="text-danger fw-bold">
+                                {(doassesmentData &&
+                                  doassesmentData.leadDoAssessmentModel &&
+                                  doassesmentData.leadDoAssessmentModel.length >
+                                    0 &&
+                                  doassesmentData.leadDoAssessmentModel[0] &&
+                                  doassesmentData.leadDoAssessmentAlphabet &&
+                                  doassesmentData.leadDoAssessmentAlphabet[0] &&
+                                  doassesmentData.leadDoAssessmentAlphabet[0]
+                                    .gradeLevel) ||
+                                  "--"}
+
+                                </span>
+                                
+                                {" "}
+                                {doassesmentData &&
+                                doassesmentData.leadDoAssessmentModel?.length >
+                                  0 &&
+                                doassesmentData.leadDoAssessmentAlphabet?.[0]
+                                  ?.gradeLevel === "Worst Case" ? (
+                                  <> Please improve your child's skills</>
+                                ) : null}
+                                " */}
+                              </div>
                       {/* Child Particulars */}
                       <div className="container-fluid">
                         <div className="row  m-3">
@@ -6545,14 +6587,14 @@ function Leadview() {
             )}
 
             {/* Arrange Assessment */}
-            {doassesmentData.leadDoAssessmentAlphabet &&
+            {/* {doassesmentData.leadDoAssessmentAlphabet &&
             doassesmentData.leadDoAssessmentAlphabet.length > 0 &&
             doassesmentData.leadDoAssessmentArtyPursuers &&
             doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
             doassesmentData.leadDoAssessmentModel &&
             doassesmentData.leadDoAssessmentModel.length > 0 ? (
               <>
-                {/* Assessment Information */}
+              
                 <div class="accordion-item">
                   <h2 class="accordion-header">
                     <button
@@ -6572,7 +6614,7 @@ function Leadview() {
                     data-bs-parent="#accordionExample"
                   >
                     <div class="accordion-body">
-                      {/* Assessment Scoring */}
+
                       {doassesmentData.leadDoAssessmentAlphabet &&
                       doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (
                         <div className="container-fluid">
@@ -7021,7 +7063,7 @@ function Leadview() {
               </>
             ) : (
               <></>
-            )}
+            )} */}
           </div>
         </div>
       </div>

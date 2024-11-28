@@ -22,6 +22,8 @@ const ScheduleTeacher = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
+  const roles = localStorage.getItem("userName");
+  const rolesUserId = localStorage.getItem("userId");
 
 
   console.log("courseId pass ScheduleTeacher:", datas.courseId);
@@ -72,8 +74,23 @@ const ScheduleTeacher = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllScheduleTeacher");
-        setDatas(response.data);
+        // const response = await api.get("/getAllScheduleTeacher");
+        // setDatas(response.data);
+
+        let response;
+        // Check role and call the appropriate API
+        if (roles === "SMS_ADMIN") {
+          response = await api.get("/getAllScheduleTeacher");
+        } else if (roles === "SMS_TEACHER") {
+          response = await api.get(`/getAllScheduleTeacher/${rolesUserId}`);
+        } else if (roles === "SMS_FREELANCER") {
+          response = await api.get(`/getAllScheduleTeacher/${rolesUserId}`);
+        }
+  
+        // If a response was received, set the data
+        if (response) {
+          setDatas(response.data);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -122,11 +139,13 @@ const ScheduleTeacher = () => {
     }
     setLoading(false);
   };
+
   useEffect(() => {
     if (show) {
       deleteButtonRef.current?.focus(); // Focus on the Delete button when the modal is shown
     }
   }, [show]);
+
   const handleDataShow = () => {
     if (!loading) {
       setExtraData(!extraData);
@@ -136,10 +155,12 @@ const ScheduleTeacher = () => {
       destroyDataTable();
     };
   };
+
   const extractDate = (dateString) => {
     if (!dateString) return ""; // Handle null or undefined date strings
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
+
   return (
     <div className="container my-4">
       {loading ? (
