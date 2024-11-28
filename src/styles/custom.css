@@ -747,3 +747,16 @@
   background-color: #6c757d;
   color: white;
 }
+
+.payslip-container {
+  font-family: Arial, sans-serif;
+  width: 100%;
+  padding: 20px;
+}
+
+.content-section {
+  border-top: 1.8px solid #000;
+  border-bottom: 1.8px solid #000;
+}
+
+
