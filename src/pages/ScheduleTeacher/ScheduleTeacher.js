@@ -82,9 +82,9 @@ const ScheduleTeacher = () => {
         if (roles === "SMS_ADMIN") {
           response = await api.get("/getAllScheduleTeacher");
         } else if (roles === "SMS_TEACHER") {
-          response = await api.get(`/getAllScheduleTeacher/${rolesUserId}`);
+          response = await api.get(`/getAllScheduleTeacherByUserId/${rolesUserId}`);
         } else if (roles === "SMS_FREELANCER") {
-          response = await api.get(`/getAllScheduleTeacher/${rolesUserId}`);
+          response = await api.get(`/getAllScheduleTeacherByUserId/${rolesUserId}`);
         }
   
         // If a response was received, set the data
@@ -131,9 +131,21 @@ const ScheduleTeacher = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllScheduleTeacher");
-      setDatas(response.data);
-      initializeDataTable();
+      let response;
+  
+      // Check role and call the appropriate API
+      if (roles === "SMS_ADMIN") {
+        response = await api.get("/getAllScheduleTeacher");
+      } else if (roles === "SMS_TEACHER") {
+        response = await api.get(`/getAllScheduleTeacherByUserId/${rolesUserId}`);
+      } else if (roles === "SMS_FREELANCER") {
+        response = await api.get(`/getAllScheduleTeacherByUserId/${rolesUserId}`);
+      }
+      // If a response was received, set the data and initialize the DataTable
+      if (response) {
+        setDatas(response.data);
+        initializeDataTable(); // Reinitialize DataTable after successful data update
+      }
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
