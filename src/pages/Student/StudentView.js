@@ -184,7 +184,12 @@ function StudentView() {
               </Link>
             )} */}
             <StudentSummary className="ms-2" data={data} />
-
+            <button
+              className="btn btn-border btn-sm ms-3"
+              style={{ padding: "7px" }}
+            >
+              Send Welcome Mail
+            </button>
             <button
               onClick={handleGeneratePDF}
               className="btn btn-border btn-sm mx-3"
@@ -194,7 +199,7 @@ function StudentView() {
             </button>
             <Link to={"/student"}>
               <button
-                className="btn btn-border btn-sm "
+                className="btn btn-border btn-sm"
                 style={{ padding: "7px" }}
               >
                 Back

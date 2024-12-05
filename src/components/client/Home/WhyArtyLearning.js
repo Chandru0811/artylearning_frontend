@@ -23,7 +23,7 @@ function WhyArtyLearning() {
       <div className="container-fluid">
         <div className="container pt-4" style={{ minHeight: "80vh" }}>
           <div className="row pt-5">
-            <div className="col-md-5 col-12 d-flex align-items-center justify-content-end paint">
+            <div className="col-md-5 col-12 d-flex align-items-center justify-content-center paint">
               <img
                 src={data.childImage || Glass}
                 style={{

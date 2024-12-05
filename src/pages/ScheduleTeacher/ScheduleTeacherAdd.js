@@ -12,8 +12,6 @@ import api from "../../config/URL";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 import fetchAvailableTeacherDays from "../List/AvailableTeacherDays";
-import fetchAvailableCentersWithIds from "../List/AvailableCenterList";
-import { event } from "jquery";
 
 const validationSchema = Yup.object({
   centerId: Yup.string().required("*Centre is required"),

@@ -391,6 +391,11 @@ function Sidebar() {
             path: "/salarytype",
             access: storedScreens.salarySettingIndex,
           },
+          {
+            title: "Absent Reason",
+            path: "/absentreason",
+            access: storedScreens.salarySettingIndex,
+          },
         ],
       },
       {

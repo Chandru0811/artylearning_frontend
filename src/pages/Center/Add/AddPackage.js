@@ -138,7 +138,7 @@ function AddPackage({ id, onSuccess }) {
                   style={{ width: "100%" }}
                 >
                   <option value=""></option>
-                  {Array.from({ length: 50 }, (_, i) => i + 1).map((number) => (
+                  {Array.from({ length: 100 }, (_, i) => i + 1).map((number) => (
                     <option key={number} value={number}>
                       {number}
                     </option>

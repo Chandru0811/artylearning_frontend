@@ -225,6 +225,7 @@ import FreelancerPayslipView from "../pages/EmployeePayslip/FreelancerPayslipVie
 // import Blog from "../pages/CMS/Blog";
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
+import AbsentReason from "../pages/Settings/AbsentReason/AbsentReason";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -691,6 +692,11 @@ function Admin({ handleLogout }) {
               <Route path="/salarytype/add" element={<SalaryTypeAdd />} />
               <Route path="/salarytype/edit/:id" element={<SalaryTypeEdit />} />
               <Route path="/salarytype/view/:id" element={<SalaryTypeView />} />
+
+
+              {/* Absent Reason */}
+              <Route path="/absentreason" element={<AbsentReason />} />
+
 
               {/* Messaging */}
               <Route path="/messaging" element={<MyMessages />} />

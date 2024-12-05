@@ -14,9 +14,9 @@ function EditPackage({ id, onSuccess }) {
 
 
   const handleClose = () => setShow(false);
-  const handleShow = () => { 
+  const handleShow = () => {
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
 
   const validationSchema = yup.object().shape({
@@ -49,9 +49,9 @@ function EditPackage({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
+        if (error.response.status === 409) {
           toast.warning(error?.response?.data?.message)
-        }else{
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
@@ -70,7 +70,7 @@ function EditPackage({ id, onSuccess }) {
         setIsModified(false);
       }
     }
-    
+
   });
   useEffect(() => {
     const getData = async () => {
@@ -97,8 +97,8 @@ function EditPackage({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
@@ -120,8 +120,8 @@ function EditPackage({ id, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control   ${formik.touched.packageName && formik.errors.packageName
-                        ? "is-invalid"
-                        : ""
+                      ? "is-invalid"
+                      : ""
                       }`}
                     {...formik.getFieldProps("packageName")}
                   />
@@ -136,15 +136,21 @@ function EditPackage({ id, onSuccess }) {
                 <label>
                   Number of Lesson<span className="text-danger">*</span>
                 </label>
-                <input
-                  type="text"
-                  pattern="^\d+$"
-                  className={`form-control ${formik.touched.noOfLesson && formik.errors.noOfLesson
+                <select
+                  className={`form-select ${formik.touched.quantity && formik.errors.quantity
                       ? "is-invalid"
                       : ""
                     }`}
                   {...formik.getFieldProps("noOfLesson")}
-                />
+                  style={{ width: "100%" }}
+                >
+                  <option value=""></option>
+                  {Array.from({ length: 100 }, (_, i) => i + 1).map((number) => (
+                    <option key={number} value={number}>
+                      {number}
+                    </option>
+                  ))}
+                </select>
                 {formik.touched.noOfLesson && formik.errors.noOfLesson && (
                   <div className="invalid-feedback">{formik.errors.noOfLesson}</div>
                 )}
