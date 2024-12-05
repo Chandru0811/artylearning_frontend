@@ -27,8 +27,20 @@ const Center = () => {
 
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [centerManagerData, setCenterManagerData] = useState(null);
-  const [extraData, setExtraData] = useState(false);
+  const [centerManagerData, setCenterManagerData] = useState([]);
+  const [selectedManager, setSelectedManager] = useState(""); // State for selected center manager
+  const [centerName, setCenterName] = useState("");
+  const [code, setCode] = useState("");
+  const [email, setEmail] = useState("");
+
+  const clearFilters = () => {
+    setCenterName("");
+    setCode("");
+    setEmail("");
+    setSelectedManager("");
+
+    $(tableRef.current).DataTable().search("").draw();
+  };
 
   const fetchData = async () => {
     try {
@@ -48,9 +60,22 @@ const Center = () => {
     };
   }, [loading]);
 
+  useEffect(() => {
+    const getCenterData = async () => {
+      try {
+        const response = await api.get("/getAllCenter");
+        setDatas(response.data);
+        setLoading(false);
+      } catch (error) {
+        toast.error("Error Fetching Data : ", error);
+      }
+    };
+    getCenterData();
+    fetchData(); // Fetch the center manager data as well
+  }, []);
+
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
     $(tableRef.current).DataTable({
@@ -72,43 +97,97 @@ const Center = () => {
     try {
       const response = await api.get("/getAllCenter");
       setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      initializeDataTable();
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
     setLoading(false);
   };
 
-  useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllCenter");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
-    getCenterData();
-    // fetchData();
-  }, []);
+  const handleManagerChange = (e) => {
+    setSelectedManager(e.target.value); // Set selected manager
+    const searchValue = e.target.value.toLowerCase();
+    $(tableRef.current).DataTable().search(searchValue).draw();
+  };
 
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
   const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+    if (!dateString) return "";
+    return dateString.substring(0, 10); // Extracts date part "YYYY-MM-DD"
   };
+
   return (
     <div className="container my-4 center">
-      <div className="mb-3 d-flex justify-content-end">
+      <div className="mb-3 d-flex justify-content-between">
+        <div className="individual_fliters d-lg-flex">
+          <div className="form-group mb-0 ms-2 mb-1">
+            <input
+              type="text"
+              className="form-control center_list"
+              style={{ width: "160px" }}
+              placeholder="Center Name"
+              value={centerName}
+              onChange={(e) => {
+                const searchValue = e.target.value.toLowerCase();
+                setCenterName(e.target.value);
+                $(tableRef.current).DataTable().search(searchValue).draw();
+              }}
+            />
+          </div>
+          <div className="form-group mb-0 ms-2 mb-1">
+            <input
+              type="text"
+              className="form-control center_list"
+              style={{ width: "160px" }}
+              placeholder="Code"
+              value={code}
+              onChange={(e) => {
+                const searchValue = e.target.value.toLowerCase();
+                setCode(e.target.value);
+                $(tableRef.current).DataTable().search(searchValue).draw();
+              }}
+            />
+          </div>
+          <div className="form-group mb-0 ms-2 mb-1">
+            <input
+              type="text"
+              className="form-control center_list"
+              style={{ width: "160px" }}
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                const searchValue = e.target.value.toLowerCase();
+                setEmail(e.target.value);
+                $(tableRef.current).DataTable().search(searchValue).draw();
+              }}
+            />
+          </div>
+          <div className="form-group mb-0 ms-2 mb-1">
+            <select
+              className="form-control center_list"
+              style={{ width: "100%" }}
+              value={selectedManager}
+              onChange={handleManagerChange}
+            >
+              <option value="">Select Center Manager</option>
+              {centerManagerData.map((manager) => (
+                <option key={manager.id} value={manager.userNames}>
+                  {manager.userNames}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-group mb-0 ms-2 mb-1 ">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={clearFilters}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+
         {storedScreens?.centerListingCreate && (
           <Link to="/center/add">
             <button
@@ -120,14 +199,10 @@ const Center = () => {
             </button>
           </Link>
         )}
-        {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
-          <MdViewColumn className="fs-4 text-secondary"/>
-        </button> */}
       </div>
       {loading ? (
         <div className="loader-container">
-          <div class="loading">
+          <div className="loading">
             <span></span>
             <span></span>
             <span></span>
@@ -137,73 +212,21 @@ const Center = () => {
         </div>
       ) : (
         <div className="table-responsive">
+          <div
+            className="d-flex justify-content-end align-items-center"
+            style={{ position: "relative", top: "2rem" }}
+          >
+            <button className="btn btn-primary">custom</button>
+          </div>
           <table ref={tableRef} className="display">
             <thead>
               <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
+                <th scope="col">S No</th>
                 <th scope="col">Centre Name</th>
-                {/* <th scope="col">Centre Manager</th> */}
+                <th scope="col">Centre Manager</th>
                 <th scope="col">Code</th>
                 <th scope="col">UEN Number</th>
                 <th scope="col">Mobile</th>
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    CreatedBy
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    CreatedAt
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    UpdatedBy
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    UpdatedAt
-                  </th>
-                )}
                 <th className="text-center">Action</th>
               </tr>
             </thead>
@@ -213,93 +236,58 @@ const Center = () => {
                   <tr key={index}>
                     <th scope="row">{index + 1}</th>
                     <td>{data.centerName}</td>
-                    {/* <td> */}
-                    {/* {centerManagerData &&
-                      centerManagerData.map((Cmanager) =>
-                        parseInt(data.centerManager) === Cmanager.id
-                          ? Cmanager.userNames || "--"
-                          : ""
-                      )} */}
-                    {/* {data.centerManager} */}
-                    {/* </td> */}
+                    <td>{data.centerManager}</td>
                     <td>{data.code}</td>
                     <td>{data.uenNumber}</td>
                     <td>{data.mobile}</td>
-                    {extraData && <td>{data.createdBy}</td>}
-                    {extraData && <td>{extractDate(data.createdAt)}</td>}
-                    {extraData && <td>{data.updatedBy}</td>}
-                    {extraData && <td>{extractDate(data.updatedAt)}</td>}
                     <td>
                       <div className="d-flex justify-content-center align-items-center">
                         {storedScreens?.centerListingCreate && (
-                          // <OverlayTrigger
-                          //   placement="top"
-                          //   overlay={
-                          //     <Tooltip id="tooltip-top">Add Options</Tooltip>
-                          //   }
-                          // >
-                            <DropdownButton
-                              title={<IoMdAdd />}
-                              variant="white"
-                              size="sm"
-                              id="dropdown-basic-button"
-                              style={{ boxShadow: "none" }}
-                            >
-                              <Dropdown.Item as="div" style={{ width: "100%" }}>
-                                <AddRegister
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
-                              </Dropdown.Item>
-                              <Dropdown.Item as="div" style={{ width: "100%" }}>
-                                <AddBreak
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
-                              </Dropdown.Item>
-                              <Dropdown.Item as="div" style={{ width: "100%" }}>
-                                <AddClass
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
-                              </Dropdown.Item>
-                              <Dropdown.Item as="div" style={{ width: "100%" }}>
-                                <AddPackage
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
-                              </Dropdown.Item>
-                            </DropdownButton>
-                          // </OverlayTrigger>
-                        )}
-
-                        {storedScreens?.centerListingRead && (
-                          <Link
-                            to={`/center/view/${data.id}`}
-                            style={{ display: "inline-block" }}
+                          <DropdownButton
+                            title={<IoMdAdd />}
+                            variant="white"
+                            size="sm"
+                            id="dropdown-basic-button"
+                            style={{ boxShadow: "none" }}
                           >
+                            <Dropdown.Item as="div" style={{ width: "100%" }}>
+                              <AddRegister
+                                id={data.id}
+                                onSuccess={refreshData}
+                              />
+                            </Dropdown.Item>
+                            <Dropdown.Item as="div" style={{ width: "100%" }}>
+                              <AddBreak id={data.id} onSuccess={refreshData} />
+                            </Dropdown.Item>
+                            <Dropdown.Item as="div" style={{ width: "100%" }}>
+                              <AddClass id={data.id} onSuccess={refreshData} />
+                            </Dropdown.Item>
+                            <Dropdown.Item as="div" style={{ width: "100%" }}>
+                              <AddPackage
+                                id={data.id}
+                                onSuccess={refreshData}
+                              />
+                            </Dropdown.Item>
+                          </DropdownButton>
+                        )}
+                        {storedScreens?.centerListingRead && (
+                          <Link to={`/center/view/${data.id}`}>
                             <button className="btn btn-sm">
                               <FaEye />
                             </button>
                           </Link>
                         )}
-
                         {storedScreens?.centerListingUpdate && (
-                          <Link
-                            to={`/center/edit/${data.id}`}
-                            style={{ display: "inline-block" }}
-                          >
+                          <Link to={`/center/edit/${data.id}`}>
                             <button className="btn btn-sm">
                               <FaEdit />
                             </button>
                           </Link>
                         )}
-
                         {storedScreens?.centerListingDelete && (
                           <Delete
                             onSuccess={refreshData}
                             path={`/deleteCenter/${data.id}`}
-                            style={{ display: "inline-block" }}
                           />
                         )}
                       </div>

@@ -1,138 +1,142 @@
-  import React, { useEffect, useRef, useState } from "react";
-  import "datatables.net-dt";
-  import "datatables.net-responsive-dt";
-  import $ from "jquery";
-  import { Link } from "react-router-dom";
-  import { FaEye, FaEdit } from "react-icons/fa";
-  import Delete from "../../components/common/Delete";
-  import api from "../../config/URL";
-  import { FaFileInvoice } from "react-icons/fa";
-  import { OverlayTrigger, Tooltip, Dropdown, DropdownButton } from "react-bootstrap";
-  import { SCREENS } from "../../config/ScreenFilter";
-  import fetchAllSubjectsWithIds from "../List/SubjectList";
-  import { toast } from "react-toastify";
-  import { MdViewColumn } from "react-icons/md";
+import React, { useEffect, useRef, useState } from "react";
+import "datatables.net-dt";
+import "datatables.net-responsive-dt";
+import $ from "jquery";
+import { Link } from "react-router-dom";
+import { FaEye, FaEdit } from "react-icons/fa";
+import Delete from "../../components/common/Delete";
+import api from "../../config/URL";
+import { FaFileInvoice } from "react-icons/fa";
+import {
+  OverlayTrigger,
+  Tooltip,
+  Dropdown,
+  DropdownButton,
+} from "react-bootstrap";
+import { SCREENS } from "../../config/ScreenFilter";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
+import { toast } from "react-toastify";
+import { MdViewColumn } from "react-icons/md";
 
-  const Course = () => {
-    // const { id } = useParams();
-    const tableRef = useRef(null);
-    const [datas, setDatas] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [subjectData, setSubjectData] = useState(null);
-    const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-    const [extraData, setExtraData] = useState(false);
-    useEffect(() => {
-      const getData = async () => {
-        try {
-          const response = await api.get("/getAllCourses");
-          setDatas(response.data);
-          setLoading(false);
-        } catch (error) {
-          console.error("Error fetching data ", error);
-        }
-      };
-      getData();
-    }, []);
-
-    useEffect(() => {
-      if (!loading) {
-        initializeDataTable();
-      }
-      return () => {
-        destroyDataTable();
-      };
-    }, [loading]);
-
-    const initializeDataTable = () => {
-      if ($.fn.DataTable.isDataTable(tableRef.current)) {
-        // DataTable already initialized, no need to initialize again
-        return;
-      }
-      $(tableRef.current).DataTable({
-        responsive: true,
-        columnDefs: [
-          { orderable: false, targets: -1 }
-        ],
-      });
-    };
-
-    const destroyDataTable = () => {
-      const table = $(tableRef.current).DataTable();
-      if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-        table.destroy();
-      }
-    };
-
-    const fetchSubData = async () => {
-      try {
-        const subjectData = await fetchAllSubjectsWithIds();
-        setSubjectData(subjectData);
-      } catch (error) {
-        toast.error(error);
-      }
-    };
-
-    const refreshData = async () => {
-      destroyDataTable();
-      setLoading(true);
+const Course = () => {
+  // const { id } = useParams();
+  const tableRef = useRef(null);
+  const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [subjectData, setSubjectData] = useState(null);
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [extraData, setExtraData] = useState(false);
+  useEffect(() => {
+    const getData = async () => {
       try {
         const response = await api.get("/getAllCourses");
         setDatas(response.data);
-        initializeDataTable(); // Reinitialize DataTable after successful data update
+        setLoading(false);
       } catch (error) {
-        console.error("Error refreshing data:", error);
+        console.error("Error fetching data ", error);
       }
-      setLoading(false);
     };
-    useEffect(() => {
-      fetchSubData();
-    }, [loading]);
+    getData();
+  }, []);
 
-    const handleDataShow = () => {
-      if (!loading) {
-        setExtraData(!extraData);
-        initializeDataTable();
-      }
-      return () => {
-        destroyDataTable();
-      };
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
     };
-    const extractDate = (dateString) => {
-      if (!dateString) return ""; // Handle null or undefined date strings
-      return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  }, [loading]);
+
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
+      return;
+    }
+    $(tableRef.current).DataTable({
+      responsive: true,
+      columnDefs: [{ orderable: false, targets: -1 }],
+    });
+  };
+
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
+
+  const fetchSubData = async () => {
+    try {
+      const subjectData = await fetchAllSubjectsWithIds();
+      setSubjectData(subjectData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const refreshData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await api.get("/getAllCourses");
+      setDatas(response.data);
+      initializeDataTable(); // Reinitialize DataTable after successful data update
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    fetchSubData();
+  }, [loading]);
+
+  const handleDataShow = () => {
+    if (!loading) {
+      setExtraData(!extraData);
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
     };
-    return (
-      <div className="container my-4">
-        <div className="mb-3 d-flex justify-content-end">
-          {storedScreens?.courseCreate && (
-            <Link to={{
+  };
+  const extractDate = (dateString) => {
+    if (!dateString) return ""; // Handle null or undefined date strings
+    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  };
+  return (
+    <div className="container my-4">
+      <div className="mb-3 d-flex justify-content-end">
+        {storedScreens?.courseCreate && (
+          <Link
+            to={{
               pathname: "/course/add",
-              state: { subjectData }
-            }}>
-              <button type="button" className="btn btn-button btn-sm">
-                Add <i class="bx bx-plus"></i>
-              </button>
-            </Link>
-          )}
+              state: { subjectData },
+            }}
+          >
+            <button type="button" className="btn btn-button btn-sm">
+              Add <i class="bx bx-plus"></i>
+            </button>
+          </Link>
+        )}
         {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
         {extraData?"Hide":'Show'}
         <MdViewColumn className="fs-4 text-secondary"/>
 
         </button> */}
-        </div>
-        {loading ? (
-          <div className="loader-container">
-            <div class="loading">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+      </div>
+      {loading ? (
+        <div className="loader-container">
+          <div class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
-        ) : (
-          <div className="table-responsive" >
-
+        </div>
+      ) : (
+        <div className="table-responsive">
           <table ref={tableRef} className="display">
             <thead>
               <tr>
@@ -142,63 +146,65 @@
                 <th scope="col">Course Code</th>
                 <th scope="col">Course Type</th>
                 {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
                 <th scope="col">Status</th>
-                <th scope="col" className="text-center">Action</th>
+                <th scope="col" className="text-center">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -247,13 +253,22 @@
                           size="sm"
                           id="dropdown-basic-button"
                         >
-                          <Dropdown.Item as={Link} to={`/course/coursefees/${data.id}`}>
+                          <Dropdown.Item
+                            as={Link}
+                            to={`/course/coursefees/${data.id}`}
+                          >
                             Course Fees
                           </Dropdown.Item>
-                          <Dropdown.Item as={Link} to={`/course/coursedeposit/${data.id}`}>
+                          <Dropdown.Item
+                            as={Link}
+                            to={`/course/coursedeposit/${data.id}`}
+                          >
                             Course Deposit Fees
                           </Dropdown.Item>
-                          <Dropdown.Item as={Link} to={`/course/curriculumoutlet/${data.id}`}>
+                          <Dropdown.Item
+                            as={Link}
+                            to={`/course/curriculumoutlet/${data.id}`}
+                          >
                             Curriculum Outlet
                           </Dropdown.Item>
                         </DropdownButton>
@@ -266,17 +281,15 @@
                         path={`/deleteCourse/${data.id}`}
                       />
                     )}
-
-
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          </div>
-        )}
-      </div>
-    );
-  };
+        </div>
+      )}
+    </div>
+  );
+};
 
-  export default Course;
+export default Course;

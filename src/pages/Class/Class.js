@@ -8,17 +8,17 @@ import Delete from "../../components/common/Delete"; // Ensure correct import
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import { MdViewColumn } from "react-icons/md";
-import Dropdown from 'react-bootstrap/Dropdown';
-import Form from 'react-bootstrap/Form';
+import Dropdown from "react-bootstrap/Dropdown";
+import Form from "react-bootstrap/Form";
 
 const ColumnToggleDropdown = ({ showColumns, onToggle }) => {
   const columns = [
-    { key: 'createdBy', label: 'Created By' },
-    { key: 'createdAt', label: 'Created At' },
-    { key: 'updatedBy', label: 'Updated By' },
-    { key: 'updatedAt', label: 'Updated At' },
-    { key: 'className', label: 'Class Name' },
-    { key: 'classType', label: 'Class Type' }
+    { key: "createdBy", label: "Created By" },
+    { key: "createdAt", label: "Created At" },
+    { key: "updatedBy", label: "Updated By" },
+    { key: "updatedAt", label: "Updated At" },
+    { key: "className", label: "Class Name" },
+    { key: "classType", label: "Class Type" },
   ];
 
   return (
@@ -86,7 +86,7 @@ const Class = () => {
       table.columns().every((index) => {
         const column = table.column(index);
         const header = $(column.header());
-        const columnKey = header.text().replace(/\s+/g, '').toLowerCase();
+        const columnKey = header.text().replace(/\s+/g, "").toLowerCase();
         column.visible(showColumns[columnKey]);
       });
       table.draw();
@@ -129,9 +129,59 @@ const Class = () => {
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
 
+  const [classNameData, setClassNameData] = useState("");
+  const [classType, setClassType] = useState("");
+
+  const clearFilters = () => {
+    setClassNameData("");
+    setClassType("");
+
+    $(tableRef.current).DataTable().search("").draw();
+  };
+
   return (
     <div className="container my-4">
-      <div className="d-flex justify-content-end mb-3">
+      <div className="d-flex justify-content-between mb-3">
+        <div className="individual_fliters d-flex">
+          <div className="form-group mb-0 ms-2">
+            <input
+              type="text"
+              className="form-control center_list"
+              style={{ width: "160px" }}
+              placeholder="Class Name"
+              value={classNameData}
+              onChange={(e) => {
+                const searchValue = e.target.value.toLowerCase();
+                setClassNameData(e.target.value);
+                $(tableRef.current).DataTable().search(searchValue).draw();
+              }}
+            />
+          </div>
+          <div className="form-group mb-0 ms-2">
+            <input
+              type="text"
+              className="form-control center_list"
+              style={{ width: "160px" }}
+              placeholder="Class type"
+              value={classType}
+              onChange={(e) => {
+                const searchValue = e.target.value.toLowerCase();
+                setClassType(e.target.value);
+                $(tableRef.current).DataTable().search(searchValue).draw();
+              }}
+            />
+          </div>
+
+          <div className="form-group mb-0 ms-2 ">
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={clearFilters}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
         {storedScreens?.classCreate && (
           <Link to={`/class/add`}>
             <button type="button" className="btn btn-button btn-sm">
@@ -168,7 +218,9 @@ const Class = () => {
                 {showColumns.createdAt && <th scope="col">Created At</th>}
                 {showColumns.updatedBy && <th scope="col">Updated By</th>}
                 {showColumns.updatedAt && <th scope="col">Updated At</th>}
-                <th scope="col" className="text-center">Action</th>
+                <th scope="col" className="text-center">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -178,9 +230,13 @@ const Class = () => {
                   {showColumns.className && <td>{data.className}</td>}
                   {showColumns.classType && <td>{data.classType}</td>}
                   {showColumns.createdBy && <td>{data.createdBy}</td>}
-                  {showColumns.createdAt && <td>{extractDate(data.createdAt)}</td>}
+                  {showColumns.createdAt && (
+                    <td>{extractDate(data.createdAt)}</td>
+                  )}
                   {showColumns.updatedBy && <td>{data.updatedBy}</td>}
-                  {showColumns.updatedAt && <td>{extractDate(data.updatedAt)}</td>}
+                  {showColumns.updatedAt && (
+                    <td>{extractDate(data.updatedAt)}</td>
+                  )}
                   <td className="text-center">
                     {storedScreens?.classRead && (
                       <Link to={`/class/view/${data.id}`}>
