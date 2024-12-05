@@ -226,6 +226,8 @@ import FreelancerPayslipView from "../pages/EmployeePayslip/FreelancerPayslipVie
 // import MyMessagesAdd from "../pages/Settings/Salary/SalaryTypeEdit";
 // import MyMessagesView from "../pages/Settings/Salary/SalaryTypeView";
 import AbsentReason from "../pages/Settings/AbsentReason/AbsentReason";
+import CheckIndex from "../pages/Staff/CheckIndex";
+import ChangePassword from "../components/common/ChangePassword";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -253,6 +255,11 @@ function Admin({ handleLogout }) {
               <Route path="/datatable" element={<DataTable />} />
               <Route path="/datatable2" element={<Datatable2 />} />
               <Route path="/batchtable" element={<Test />} />
+
+              <Route
+                path="/changepassword"
+                element={<ChangePassword onLogout={handleLogout} />}
+              />
 
               {/* Lead */}
               <Route path="/lead/lead" element={<Lead />} />
@@ -336,6 +343,8 @@ function Admin({ handleLogout }) {
               />
               <Route path="/teacher/payslip" element={<TeacherPayslip />} />
 
+              {/* StaffingCheck */}
+              <Route path="/staffing/check" element={<CheckIndex />} />
               {/* StaffingAttendance */}
               <Route
                 path="/staffing/attendance"
@@ -387,8 +396,14 @@ function Admin({ handleLogout }) {
               <Route path="/employeepayslip" element={<Payslip />} />
               <Route path="/employeepayslip/view" element={<ViewPayslip />} />
 
-              <Route path="/freelancerPayslip" element={<FreelancerPayslip />} />
-              <Route path="/freelancerPayslip/view/:id" element={<FreelancerPayslipView />} />
+              <Route
+                path="/freelancerPayslip"
+                element={<FreelancerPayslip />}
+              />
+              <Route
+                path="/freelancerPayslip/view/:id"
+                element={<FreelancerPayslipView />}
+              />
 
               {/* Report */}
               <Route path="/report/attendance" element={<Attendance />} />
@@ -693,10 +708,8 @@ function Admin({ handleLogout }) {
               <Route path="/salarytype/edit/:id" element={<SalaryTypeEdit />} />
               <Route path="/salarytype/view/:id" element={<SalaryTypeView />} />
 
-
               {/* Absent Reason */}
               <Route path="/absentreason" element={<AbsentReason />} />
-
 
               {/* Messaging */}
               <Route path="/messaging" element={<MyMessages />} />

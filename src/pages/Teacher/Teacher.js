@@ -20,11 +20,21 @@ const Teacher = () => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   console.log("Screens : ", SCREENS);
 
+  const [teacherName, setTeacherName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const clearFilters = () => {
+    setTeacherName("");
+    setEmail("");
+
+    $(tableRef.current).DataTable().search("").draw();
+  };
+
   useEffect(() => {
     const getData = async () => {
       try {
         let response;
-  
+
         // Check role and call the appropriate API
         if (roles === "SMS_ADMIN") {
           response = await api.get("/getAllTeachersAndFreelancers");
@@ -33,7 +43,7 @@ const Teacher = () => {
         } else if (roles === "SMS_FREELANCER") {
           response = await api.get("/getAllFreelance");
         }
-  
+
         // If a response was received, set the data
         if (response) {
           setDatas(response.data);
@@ -44,10 +54,9 @@ const Teacher = () => {
         setLoading(false);
       }
     };
-  
+
     getData();
   }, [roles]); // Add "role" as a dependency
-  
 
   useEffect(() => {
     if (!loading) {
@@ -94,7 +103,7 @@ const Teacher = () => {
     setLoading(true);
     try {
       let response;
-  
+
       // Check role and call the appropriate API
       if (roles === "SMS_ADMIN") {
         response = await api.get("/getAllTeachersAndFreelancers");
@@ -103,7 +112,7 @@ const Teacher = () => {
       } else if (roles === "SMS_FREELANCER") {
         response = await api.get("/getAllFreelance");
       }
-  
+
       // If a response was received, set the data and initialize the DataTable
       if (response) {
         setDatas(response.data);
@@ -115,7 +124,6 @@ const Teacher = () => {
       setLoading(false);
     }
   };
-  
 
   const handleDataShow = () => {
     if (!loading) {
@@ -144,7 +152,47 @@ const Teacher = () => {
         </div>
       ) : (
         <div className="container my-4">
-          <div className="d-flex justify-content-end mb-3">
+          <div className="d-flex justify-content-between mb-3">
+            <div className="individual_fliters d-flex">
+              <div className="form-group mb-0 ms-2">
+                <input
+                  type="text"
+                  className="form-control center_list"
+                  style={{ width: "160px" }}
+                  placeholder="Teacher Name"
+                  value={teacherName}
+                  onChange={(e) => {
+                    const searchValue = e.target.value.toLowerCase();
+                    setTeacherName(e.target.value);
+                    $(tableRef.current).DataTable().search(searchValue).draw();
+                  }}
+                />
+              </div>
+              <div className="form-group mb-0 ms-2">
+                <input
+                  type="text"
+                  className="form-control center_list"
+                  style={{ width: "160px" }}
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => {
+                    const searchValue = e.target.value.toLowerCase();
+                    setEmail(e.target.value);
+                    $(tableRef.current).DataTable().search(searchValue).draw();
+                  }}
+                />
+              </div>
+
+              <div className="form-group mb-0 ms-2 ">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={clearFilters}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
             {storedScreens?.teacherCreate && (
               <Link to="/teacher/add">
                 <button type="button" className="btn btn-button btn-sm">
@@ -262,7 +310,9 @@ const Teacher = () => {
                           </Link>
                         )}
                         {storedScreens?.teacherUpdate && (
-                          <Link to={`/teacher/edit/${data.id}?role=${data.role}`}>
+                          <Link
+                            to={`/teacher/edit/${data.id}?role=${data.role}`}
+                          >
                             <button className="btn btn-sm">
                               <FaEdit />
                             </button>

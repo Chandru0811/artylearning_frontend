@@ -1,41 +1,149 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TeacherView from "../../pages/Teacher/TeacherView";
+import fetchAllCentersWithIds from "../../pages/List/CenterList";
+import { toast } from "react-toastify";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
-  const handelLogOutClick = () => {
+  const userEmail = localStorage.getItem("email");
+  const [centerData, setCenterData] = useState(null);
+  const [selectedCenter, setSelectedCenter] = useState("");
+
+  const handleLogOutClick = () => {
     onLogout();
     navigate("/login");
   };
-  const handleSwitchAccount = () => {
-    navigate("/teacher/view/:id");
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleCenterChange = (e) => {
+    setSelectedCenter(e.target.value);
+    console.log("Selected Center:", e.target.value);
+  };
+
   return (
     <nav>
       <div className="d-flex align-items-center justify-content-between pt-2 pb-2 px-2">
         <div className="sidebar-button">
           <i className="bx bx-menu sidebarBtn"></i>
         </div>
-        <div className="">
-          <div class="dropdown">
+
+        <div className="d-flex align-items-center justify-content-end">
+          <div style={{ width: "40%" }}>
+            <div className="position-relative">
+              <select
+                value={selectedCenter}
+                name="studentRelationCenter"
+                className="form-select center_list"
+                onChange={handleCenterChange}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  outline: "none",
+                  paddingRight: "20px",
+                }}
+              >
+                <option value="" disabled>
+                  All Center
+                </option>
+                {centerData &&
+                  centerData.map((studentRelationCenter) => (
+                    <option
+                      key={studentRelationCenter.id}
+                      value={studentRelationCenter.id}
+                    >
+                      {studentRelationCenter.centerNames}
+                    </option>
+                  ))}
+              </select>
+              <i
+                className="fa fa-chevron-down position-absolute"
+                style={{
+                  right: "15px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  fontSize: "14px",
+                  color: "#333",
+                }}
+              ></i>
+            </div>
+          </div>
+          <button
+            className="btn border-0"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight"
+          >
+            <i className="fa fa-user text-danger"></i>
+          </button>
+        </div>
+      </div>
+
+      <div
+        className="offcanvas offcanvas-end"
+        id="offcanvasRight"
+        tabIndex="-1"
+        aria-labelledby="offcanvasRightLabel"
+      >
+        <div className="offcanvas-header d-flex justify-content-end">
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div className="offcanvas-body d-flex flex-column">
+          <div className="flex-grow-1">
+            <div className="text-center">
+              <h3 className="cname_canvas">Atry Learning</h3>
+            </div>
+            <div className="text-center mt-3">
+              <i
+                className="fa-duotone fa-solid fa-user"
+                style={{
+                  color: "#e99e5e",
+                  background: "#fce6cf",
+                  borderRadius: "100%",
+                  padding: "20px",
+                  cursor: "pointer",
+                  fontSize: "4rem",
+                }}
+              ></i>
+            </div>
+
+            <div className="list-group list-group-flush pt-4 text-center">
+              <p>{userName.replace(/_/g, " ")}</p>
+              <p>{userEmail}</p>
+            </div>
+          </div>
+
+          <div className="mt-auto d-flex justify-content-between gap-2">
             <button
-              class="btn dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              className="btn btn-danger mt-3 w-100"
+              onClick={handleLogOutClick}
             >
-              {userName}
+              Logout
             </button>
-            <ul class="dropdown-menu px-2">
-              {/* <li style={{ cursor: "pointer" }} onClick={handleSwitchAccount}>
-                Account
-              </li> */}
-              <li style={{ cursor: "pointer" }} onClick={handelLogOutClick}>
-                Log out
-              </li>
-            </ul>
+            <button
+              className="btn btn-danger mt-3 w-100"
+              onClick={handleLogOutClick}
+            >
+              Change password
+            </button>
           </div>
         </div>
       </div>
