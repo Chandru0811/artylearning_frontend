@@ -108,6 +108,28 @@ const userName  = localStorage.getItem('userName');
 
   return (
     <div className="container">
+         <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/class" style={{ textDecoration: "none" }}>Class</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Class Edit
+        </li>
+      </ol>
        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
             e.preventDefault();  // Prevent default form submission

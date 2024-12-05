@@ -95,7 +95,30 @@ function CurriculumOutlet() {
   };
   return (
     <div className="container my-4">
-  
+       <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/course" style={{ textDecoration: "none" }}>
+            Course
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Curriculum Outlet
+        </li>
+      </ol>
       {storedScreens?.levelCreate && (
 
        <div className="d-flex justify-content-end align-items-center">

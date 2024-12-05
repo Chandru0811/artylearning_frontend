@@ -106,6 +106,24 @@ const Course = () => {
   };
   return (
     <div className="container my-4">
+      <ol
+        className="breadcrumb"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Course
+        </li>
+      </ol>
       <div className="mb-3 d-flex justify-content-end">
         {storedScreens?.courseCreate && (
           <Link

@@ -211,6 +211,24 @@ function StaffView() {
 
   return (
     <div class="container-fluid minHeight mb-5">
+          <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/staff" style={{ textDecoration: "none" }}>Staff</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Staff View
+        </li>
+      </ol>
       <div class="container-fluid py-4">
         <div class="row align-items-center">
           <div class="col">

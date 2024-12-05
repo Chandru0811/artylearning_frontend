@@ -39,6 +39,28 @@ function ClassView() {
 
   return (
     <div className="container ">
+         <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/class" style={{ textDecoration: "none" }}>Class</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Class View
+        </li>
+      </ol>
       <div className="d-flex justify-content-end align-item-end mt-4">
         <Link to="/class">
           <button type="button" className="btn btn-sm btn-border">

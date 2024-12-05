@@ -292,6 +292,30 @@ function Leadview() {
         {/* </Modal.Footer> */}
       </Modal>
       <div className="mb-5">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link style={{ textDecoration: "none" }}>Lead Management</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/lead/lead" style={{ textDecoration: "none" }}>
+            Lead Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Lead View
+        </li>
+      </ol>
         <div className="container-fluid minHeight">
           <div className=" products">
             <div class="container-fluid py-4">

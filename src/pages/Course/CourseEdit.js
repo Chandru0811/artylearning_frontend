@@ -193,6 +193,30 @@ function CourseEdit() {
   return (
     <section className="courseAdd">
       <div className="container">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/course" style={{ textDecoration: "none" }}>
+            Course{" "}
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Course Edit
+        </li>
+      </ol>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {

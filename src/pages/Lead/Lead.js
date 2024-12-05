@@ -248,6 +248,24 @@ const Lead = () => {
         </div>
       ) : (
         <div className="container my-4">
+               <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link style={{ textDecoration: "none" }}>Lead Management</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Lead Listing
+        </li>
+      </ol>
           <form
             onSubmit={formik.handleSubmit}
             onKeyDown={(e) => {

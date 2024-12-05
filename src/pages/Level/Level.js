@@ -50,9 +50,7 @@ const Level = () => {
       return;
     }
     $(tableRef.current).DataTable({
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -101,18 +99,39 @@ const Level = () => {
   };
   return (
     <div className="container my-4">
-    
+      <ol
+        className="breadcrumb"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link  style={{ textDecoration: "none" }}>
+            Course Management
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Level
+        </li>
+      </ol>
+
       <div className="d-flex justify-content-end align-items-center">
-            <span>
-            <LevelAdd onSuccess={refreshData} /></span>
-            {/* } */}
-           {/* <p className="mb-4">        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+        <span>
+          <LevelAdd onSuccess={refreshData} />
+        </span>
+        {/* } */}
+        {/* <p className="mb-4">        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
         </button> </p> */}
-        </div>
+      </div>
       {loading ? (
         <div className="loader-container">
           <div className="loading">
@@ -125,122 +144,121 @@ const Level = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
-
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col">S No</th>
-              <th scope="col">Level</th>
-              <th scope="col">Subject</th>
-              <th scope="col">Code</th>
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td className="text-break">{data.level}</td>
-                <td>
-                  {subjectData &&
-                    subjectData.map((subjectId) =>
-                      parseInt(data.subjectId) === subjectId.id
-                        ? subjectId.subjects || ""
-                        : ""
-                    )}
-                </td>
-                <td className="text-break">{data.levelCode}</td>
-                {extraData && <td>{data.createdBy}</td>}
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col">S No</th>
+                <th scope="col">Level</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Code</th>
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td className="text-break">{data.level}</td>
+                  <td>
+                    {subjectData &&
+                      subjectData.map((subjectId) =>
+                        parseInt(data.subjectId) === subjectId.id
+                          ? subjectId.subjects || ""
+                          : ""
+                      )}
+                  </td>
+                  <td className="text-break">{data.levelCode}</td>
+                  {extraData && <td>{data.createdBy}</td>}
                   {extraData && <td>{extractDate(data.createdAt)}</td>}
                   {extraData && <td>{data.updatedBy}</td>}
                   {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                <td>
-                  {data.status === "Active" ? (
-                    <span className="badge badges-Green">Active</span>
-                  ) : (
-                    <span className="badge badges-Red">Inactive</span>
-                  )}
-                </td>
-                <td className="d-flex">
-                  {/* {storedScreens?.levelRead && (
+                  <td>
+                    {data.status === "Active" ? (
+                      <span className="badge badges-Green">Active</span>
+                    ) : (
+                      <span className="badge badges-Red">Inactive</span>
+                    )}
+                  </td>
+                  <td className="d-flex">
+                    {/* {storedScreens?.levelRead && (
                     <Link to={`/level/view/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEye />
                       </button>
                     </Link>
                   )} */}
-                  {storedScreens?.levelUpdate && (
-                    <LevelEdit id={data.id} onSuccess={refreshData} />
-                  )}
-                  {storedScreens?.levelDelete && (
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteCourseLevel/${data.id}`}
-                    />
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    {storedScreens?.levelUpdate && (
+                      <LevelEdit id={data.id} onSuccess={refreshData} />
+                    )}
+                    {storedScreens?.levelDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteCourseLevel/${data.id}`}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

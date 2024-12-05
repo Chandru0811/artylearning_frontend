@@ -5,6 +5,7 @@ import $ from "jquery";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import Delete from "../../../components/common/Delete";
+import { Link } from "react-router-dom";
 
 const Level = () => {
   const tableRef = useRef(null);
@@ -98,7 +99,24 @@ const Level = () => {
         </div>
       ) : (
         <div className="table-responsive" >
-
+    <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link style={{ textDecoration: "none" }}>Lead Management</Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Contact
+        </li>
+      </ol>
         <table ref={tableRef} className="display">
           <thead>
             <tr>
