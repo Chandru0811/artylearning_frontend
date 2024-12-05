@@ -108,6 +108,11 @@ function Sidebar() {
             access: storedScreens.staffAttendanceIndex,
           },
           {
+            title: "Check Attendance",
+            path: "/staffing/check",
+            access: storedScreens.staffAttendanceIndex,
+          },
+          {
             title: "Leave",
             path: "/leaveadmin",
             access: storedScreens.leaveAdminIndex,
@@ -505,8 +510,9 @@ function Sidebar() {
                     </span>
                     <span>
                       <i
-                        className={`bx bx-chevron-down arrow ${item.isOpen ? "open" : ""
-                          }`}
+                        className={`bx bx-chevron-down arrow ${
+                          item.isOpen ? "open" : ""
+                        }`}
                         style={{
                           paddingRight: "5px",
                           minWidth: "0px",

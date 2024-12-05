@@ -20,6 +20,16 @@ const Staff = () => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
 
+  const [staffId, setStaffId] = useState("");
+  const [staffName, setSTaffName] = useState("");
+
+  const clearFilters = () => {
+    setStaffId("");
+    setSTaffName("");
+
+    $(tableRef.current).DataTable().search("").draw();
+  };
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -49,9 +59,7 @@ const Staff = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -103,7 +111,65 @@ const Staff = () => {
         </div>
       ) : (
         <div className="container my-4">
-          <div className="d-flex justify-content-end mb-3">
+          <ol
+            className="breadcrumb my-3"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" style={{ textDecoration: "none" }}>
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              <Link style={{ textDecoration: "none" }}>Staffing</Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Staff
+            </li>
+          </ol>
+          <div className="d-flex justify-content-between mb-3">
+            <div className="individual_fliters d-flex">
+              <div className="form-group mb-0 ms-2">
+                <input
+                  type="text"
+                  className="form-control center_list"
+                  style={{ width: "160px" }}
+                  placeholder="Staff Id"
+                  value={staffId}
+                  onChange={(e) => {
+                    const searchValue = e.target.value.toLowerCase();
+                    setStaffId(e.target.value);
+                    $(tableRef.current).DataTable().search(searchValue).draw();
+                  }}
+                />
+              </div>
+              <div className="form-group mb-0 ms-2">
+                <input
+                  type="text"
+                  className="form-control center_list"
+                  style={{ width: "160px" }}
+                  placeholder="Staff Name"
+                  value={staffName}
+                  onChange={(e) => {
+                    const searchValue = e.target.value.toLowerCase();
+                    setSTaffName(e.target.value);
+                    $(tableRef.current).DataTable().search(searchValue).draw();
+                  }}
+                />
+              </div>
+
+              <div className="form-group mb-0 ms-2 ">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={clearFilters}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
             {storedScreens?.staffCreate && (
               <Link to="/staff/add">
                 <button type="button" className="btn btn-button btn-sm">
@@ -124,66 +190,68 @@ const Staff = () => {
                 </th>
                 <th scope="col">Staff ID</th>
                 <th scope="col">Staff Type</th>
-                <th scope="col">Staff Name</th>               
+                <th scope="col">Staff Name</th>
                 <th scope="col">Role</th>
                 <th scope="col">Mobile</th>
                 {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th scope="col" className="text-center">
+                  Action
                 </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-                <th scope="col" className="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -191,25 +259,23 @@ const Staff = () => {
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
                   <td>{data.teacherId}</td>
-                  <td>
-                    {data.teacherType }
-                  </td>
-                  <td>{data.teacherName}</td>
+                  <td>{data.teacherType}</td>
+                  <td>{data.staffId}</td>
                   <td>
                     {data.role === "branch_admin" ? (
                       <span className="badge badges-Red">Branch Admin</span>
                     ) : data.role === "staff_admin" ? (
                       <span className="badge badges-Blue">Staff Admin</span>
                     ) : data.role === "center_manager" ? (
-                      <span className="badge badges-Yellow">Centre Manager</span>
-                    ):(
+                      <span className="badge badges-Yellow">
+                        Centre Manager
+                      </span>
+                    ) : (
                       <span className="badge badges-Green">Staff</span>
                     )}
                   </td>
-                  
-                  <td>
-                    {data.contactNumber}
-                  </td>
+
+                  <td>{data.contactNumber}</td>
                   {extraData && <td>{data.createdBy}</td>}
                   {extraData && <td>{extractDate(data.createdAt)}</td>}
                   {extraData && <td>{data.updatedBy}</td>}
@@ -234,7 +300,7 @@ const Staff = () => {
                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteUser/${data.id}`}
-                          staffmsg = "Staff deleted successfully"
+                          staffmsg="Staff deleted successfully"
                         />
                       )}
                     </div>
