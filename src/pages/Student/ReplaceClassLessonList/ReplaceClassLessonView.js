@@ -77,6 +77,30 @@ function ReplaceClassLessonView() {
 
   return (
     <div className="container ">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Student Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/replaceclasslesson" className="custom-breadcrumb">
+            Replace Class Lesson List
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Replace Class Lesson List View
+        </li>
+      </ol>
       <div className="d-flex justify-content-end align-items-end mt-4 p-0">
         <div className="d-flex justify-content-end align-items-end">
           <Link to="/replaceclasslesson">
@@ -198,7 +222,7 @@ function ReplaceClassLessonView() {
                 </div>
               </div>
             </div>
-           
+
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
@@ -223,7 +247,7 @@ function ReplaceClassLessonView() {
                 </div>
               </div>
             </div>
-           
+
             {/* <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">

@@ -5,7 +5,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 // import EditRegistration from "./EditStudent/EditRegistration";
 // import EditDetails from "./EditStudent/EditDetails";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 import EditStudentDetails from "./EditStudent/EditStudentDetails";
@@ -98,6 +98,31 @@ export default function StudentAdd() {
         ))}
       </Stepper> */}
 
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Student Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/student" className="custom-breadcrumb">
+            Student Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Student Listing Edit
+        </li>
+      </ol>
+
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index} onClick={() => setActiveStep(index)}>
@@ -171,16 +196,16 @@ export default function StudentAdd() {
           )}
 
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-          {activeStep > 0 && (
-            <button
-              className="btn btn-border btn-sm mt-5 mb-3"
-              style={{ padding: "7px" }}
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
-              Back
-            </button>
-          )}
+            {activeStep > 0 && (
+              <button
+                className="btn btn-border btn-sm mt-5 mb-3"
+                style={{ padding: "7px" }}
+                disabled={activeStep === 0}
+                onClick={handleBack}
+              >
+                Back
+              </button>
+            )}
 
             <div style={{ flex: "1 1 auto" }}></div>
 

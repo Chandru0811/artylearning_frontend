@@ -47,6 +47,30 @@ function CenterView() {
 
   return (
     <div className="container ">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Centre Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/center" className="custom-breadcrumb">
+            Centre Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Centre Listing view
+        </li>
+      </ol>
       <div className="d-flex justify-content-end align-item-end mt-4">
         <Link to="/center">
           <button type="button" className="btn btn-sm btn-border">
@@ -87,8 +111,7 @@ function CenterView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                  : {formatValue(data.centerManager) || "--"}
-                     
+                    : {formatValue(data.centerManager) || "--"}
                   </p>
                 </div>
               </div>
@@ -244,7 +267,6 @@ function CenterView() {
                   <p className="text-muted text-sm d-flex text-truncate">
                     : {data.invoiceNotes || "--"}
                     {/* : {formatValue(data.invoiceNotes) || "--"} */}
-
                   </p>
                 </div>
               </div>
@@ -399,7 +421,9 @@ function CenterView() {
                         <td>{centerClassRoom.classRoomCode}</td>
                         <td>{centerClassRoom.classRoomType}</td>
                         <td>{centerClassRoom.capacity}</td>
-                        <td className="text-break">{centerClassRoom.description}</td>
+                        <td className="text-break">
+                          {centerClassRoom.description}
+                        </td>
                       </tr>
                     ))}
                 </tbody>

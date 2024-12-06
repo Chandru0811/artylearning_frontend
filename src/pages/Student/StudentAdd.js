@@ -11,7 +11,7 @@ import AddStudentRelation from "./AddStudent/AddStudentRelation";
 import AddTermsAndCondition from "./AddStudent/AddTermsAndCondition";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const steps = [
   { tooltip: "Student Details" },
@@ -82,6 +82,30 @@ export default function StudentAdd() {
 
   return (
     <div class="container-fluid minHeight">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Student Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/student" className="custom-breadcrumb">
+            Student Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Student Listing Add
+        </li>
+      </ol>
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index}>

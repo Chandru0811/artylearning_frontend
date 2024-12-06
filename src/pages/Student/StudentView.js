@@ -119,6 +119,30 @@ function StudentView() {
   return (
     <>
       <section className="p-3 mt-2">
+        <ol
+          className="breadcrumb my-3 px-2"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Student Management
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/student" className="custom-breadcrumb">
+              Student Listing
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Student Listing View
+          </li>
+        </ol>
         <div className="accordion" id="accordionPanelsStayOpenExample">
           <div className="d-flex align-items-center justify-content-end mb-5">
             {/* {storedScreens?.changeClassCreate && (
