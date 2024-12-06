@@ -57,7 +57,7 @@ export default function LeadAdd() {
 
   return (
     <div className="container-fluid minHeight">
-  
+
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         
         {steps.map((label) => (

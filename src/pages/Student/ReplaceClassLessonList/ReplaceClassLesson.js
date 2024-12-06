@@ -33,7 +33,12 @@ const ReplaceClassLesson = () => {
     const getData = async () => {
       try {
         const response = await api.get("/getAllStudentReplacementClass");
-        setDatas(response.data.map(data => ({ ...data, status: data.status || "Pending" }))); // Default to "Pending" if no status
+        setDatas(
+          response.data.map((data) => ({
+            ...data,
+            status: data.status || "Pending",
+          }))
+        ); // Default to "Pending" if no status
         setLoading(false);
       } catch (error) {
         toast.error("Error Fetch Data", error);
@@ -72,7 +77,12 @@ const ReplaceClassLesson = () => {
     setLoading(true);
     try {
       const response = await api.get("/getAllStudentReplacementClass");
-      setDatas(response.data.map(data => ({ ...data, status: data.status || "Pending" })));
+      setDatas(
+        response.data.map((data) => ({
+          ...data,
+          status: data.status || "Pending",
+        }))
+      );
       initializeDataTable();
     } catch (error) {
       console.error("Error refreshing data:", error);
@@ -88,8 +98,10 @@ const ReplaceClassLesson = () => {
       );
       if (response.status === 200) {
         toast.success("Status updated successfully");
-        setDatas(prevDatas =>
-          prevDatas.map(data => data.id === id ? { ...data, status: newStatus } : data)
+        setDatas((prevDatas) =>
+          prevDatas.map((data) =>
+            data.id === id ? { ...data, status: newStatus } : data
+          )
         );
       } else {
         toast.error(response.data.message);
@@ -130,6 +142,24 @@ const ReplaceClassLesson = () => {
         </div>
       ) : (
         <div className="container my-4">
+          <ol
+            className="breadcrumb my-3 px-1"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" className="custom-breadcrumb">
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              Student Management
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Replace Class Lesson List
+            </li>
+          </ol>
           <div className="table-responsive">
             <table ref={tableRef} className="display">
               <thead>
@@ -140,7 +170,9 @@ const ReplaceClassLesson = () => {
                   <th scope="col">Course</th>
                   <th scope="col">Class Code</th>
                   <th scope="col">Status</th>
-                  <th scope="col" className="text-center">Action</th>
+                  <th scope="col" className="text-center">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -149,7 +181,7 @@ const ReplaceClassLesson = () => {
                     <th scope="row">{index + 1}</th>
                     <td>
                       {centerData &&
-                        centerData.map(center =>
+                        centerData.map((center) =>
                           parseInt(data.centerId) === center.id
                             ? center.centerNames || "--"
                             : ""
@@ -161,7 +193,9 @@ const ReplaceClassLesson = () => {
                     <td>
                       <div className="dropdown">
                         <button
-                          className={`btn btn-sm leadStatus ${getBadgeColor(data.status)}`}
+                          className={`btn btn-sm leadStatus ${getBadgeColor(
+                            data.status
+                          )}`}
                           type="button"
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
@@ -174,7 +208,9 @@ const ReplaceClassLesson = () => {
                           <li>
                             <button
                               className="dropdown-item"
-                              onClick={() => handleStatusChange(data.id, "APPROVED")}
+                              onClick={() =>
+                                handleStatusChange(data.id, "APPROVED")
+                              }
                             >
                               Approved
                             </button>
@@ -182,7 +218,9 @@ const ReplaceClassLesson = () => {
                           <li>
                             <button
                               className="dropdown-item"
-                              onClick={() => handleStatusChange(data.id, "REJECTED")}
+                              onClick={() =>
+                                handleStatusChange(data.id, "REJECTED")
+                              }
                             >
                               Rejected
                             </button>
@@ -190,7 +228,9 @@ const ReplaceClassLesson = () => {
                           <li>
                             <button
                               className="dropdown-item"
-                              onClick={() => handleStatusChange(data.id, "PENDING")}
+                              onClick={() =>
+                                handleStatusChange(data.id, "PENDING")
+                              }
                             >
                               Pending
                             </button>
@@ -199,18 +239,18 @@ const ReplaceClassLesson = () => {
                       </div>
                     </td>
                     <td className="text-center">
-                        {/* <Link to={`/replaceclasslesson/edit/${data.id}?centerId=${data.centerId}&studentId=${data.studentId}`}>
+                      {/* <Link to={`/replaceclasslesson/edit/${data.id}?centerId=${data.centerId}&studentId=${data.studentId}`}>
                           <button className="btn btn-sm" title="Replace Class">
                             <i className="bx bx-plus"></i>
                           </button>
                         </Link> */}
-                        {storedScreens?.studentListingUpdate && (
-                          <Link to={`/replaceclasslesson/view/${data.id}`}>
-                            <button className="btn btn-sm">
-                              <FaEye />
-                            </button>
-                          </Link>
-                        )}
+                      {storedScreens?.studentListingUpdate && (
+                        <Link to={`/replaceclasslesson/view/${data.id}`}>
+                          <button className="btn btn-sm">
+                            <FaEye />
+                          </button>
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 ))}

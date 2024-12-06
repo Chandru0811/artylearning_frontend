@@ -54,7 +54,7 @@ function CenterAdd() {
   useEffect(() => {
     fetchTeacher();
   }, []);
-  
+
   const fetchTeacher = async () => {
     try {
       const manager = await fetchAllCentreManager();
@@ -137,7 +137,7 @@ function CenterAdd() {
       }
     },
     validateOnChange: false, // Enable validation on change
-    validateOnBlur: true,   // Enable validation on blur
+    validateOnBlur: true, // Enable validation on blur
   });
 
   // Function to scroll to the first error field
@@ -158,11 +158,38 @@ function CenterAdd() {
   }, [formik.submitCount, formik.errors]);
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Centre Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/center" className="custom-breadcrumb">
+            Centre Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Centre Listing Add
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/center">
             <button type="button " className="btn btn-sm btn-border">
@@ -194,10 +221,11 @@ function CenterAdd() {
                 <input
                   type="text"
                   name="centerName"
-                  className={`form-control  ${formik.touched.centerName && formik.errors.centerName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.centerName && formik.errors.centerName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                   {...formik.getFieldProps("centerName")}
@@ -217,10 +245,11 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("code")}
                   type="text"
-                  className={`form-control  ${formik.touched.code && formik.errors.code
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.code && formik.errors.code
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   placeholder=""
                 />
                 {formik.touched.code && formik.errors.code && (
@@ -229,16 +258,15 @@ function CenterAdd() {
               </div>
             </div>
             <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Centre Manager
-              </label>
+              <label className="form-label">Centre Manager</label>
               <select
                 {...formik.getFieldProps("centerManager")}
                 name="centerManager"
-                className={`form-select  ${formik.touched.centerManager && formik.errors.centerManager
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select  ${
+                  formik.touched.centerManager && formik.errors.centerManager
+                    ? "is-invalid"
+                    : ""
+                }`}
               >
                 <option selected></option>
                 {managerData &&
@@ -260,10 +288,11 @@ function CenterAdd() {
                   Address<span className="text-danger">*</span>
                 </label>
                 <textarea
-                  className={`form-control  ${formik.touched.address && formik.errors.address
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.address && formik.errors.address
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("address")}
                   id="exampleFormControlTextarea1"
                   rows="3"
@@ -283,10 +312,11 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("zipCode")}
                   type="text"
-                  className={`form-control    ${formik.touched.zipCode && formik.errors.zipCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control    ${
+                    formik.touched.zipCode && formik.errors.zipCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.zipCode && formik.errors.zipCode && (
                   <div className="invalid-feedback">
@@ -303,10 +333,11 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("mobile")}
                   type="text"
-                  className={`form-control   ${formik.touched.mobile && formik.errors.mobile
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control   ${
+                    formik.touched.mobile && formik.errors.mobile
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.mobile && formik.errors.mobile && (
                   <div className="invalid-feedback">{formik.errors.mobile}</div>
@@ -321,10 +352,11 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("email")}
                   type="text"
-                  className={`form-control   ${formik.touched.email && formik.errors.email
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control   ${
+                    formik.touched.email && formik.errors.email
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                 />
@@ -342,10 +374,11 @@ function CenterAdd() {
                   {...formik.getFieldProps("openingDate")}
                   type="date"
                   // onFocus={(e) => e.target.showPicker()}
-                  className={`form-control   ${formik.touched.openingDate && formik.errors.openingDate
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control   ${
+                    formik.touched.openingDate && formik.errors.openingDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   aria-label="Username"
                   aria-describedby="basic-addon1"
                 />
@@ -406,10 +439,11 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("uenNumber")}
                   type="text"
-                  className={`form-control  ${formik.touched.uenNumber && formik.errors.uenNumber
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control  ${
+                    formik.touched.uenNumber && formik.errors.uenNumber
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.uenNumber && formik.errors.uenNumber && (
                   <div className="invalid-feedback">
@@ -426,11 +460,12 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("taxRegistrationNumber")}
                   type="text"
-                  className={`form-control   ${formik.touched.taxRegistrationNumber &&
+                  className={`form-control   ${
+                    formik.touched.taxRegistrationNumber &&
                     formik.errors.taxRegistrationNumber
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.taxRegistrationNumber &&
                   formik.errors.taxRegistrationNumber && (
@@ -448,10 +483,11 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("bankName")}
                   type="text"
-                  className={`form-control    ${formik.touched.bankName && formik.errors.bankName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control    ${
+                    formik.touched.bankName && formik.errors.bankName
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.bankName && formik.errors.bankName && (
                   <div className="invalid-feedback">
@@ -468,10 +504,11 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("bankBranch")}
                   type="text"
-                  className={`form-control   ${formik.touched.bankBranch && formik.errors.bankBranch
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control   ${
+                    formik.touched.bankBranch && formik.errors.bankBranch
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.bankBranch && formik.errors.bankBranch && (
                   <div className="invalid-feedback">
@@ -488,11 +525,12 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("bankAccountName")}
                   type="text"
-                  className={`form-control    ${formik.touched.bankAccountName &&
+                  className={`form-control    ${
+                    formik.touched.bankAccountName &&
                     formik.errors.bankAccountName
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.bankAccountName &&
                   formik.errors.bankAccountName && (
@@ -510,11 +548,12 @@ function CenterAdd() {
                 <input
                   {...formik.getFieldProps("bankAccountNumber")}
                   type="text"
-                  className={`form-control    ${formik.touched.bankAccountNumber &&
+                  className={`form-control    ${
+                    formik.touched.bankAccountNumber &&
                     formik.errors.bankAccountNumber
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                      ? "is-invalid"
+                      : ""
+                  }`}
                 />
                 {formik.touched.bankAccountNumber &&
                   formik.errors.bankAccountNumber && (
@@ -527,7 +566,8 @@ function CenterAdd() {
             <div className="col-md-6 col-12">
               <div className="text-start mt-2">
                 <label htmlFor="" className="mb-1 fw-medium">
-                  <small>QR Code</small><span className="text-danger">*</span>
+                  <small>QR Code</small>
+                  <span className="text-danger">*</span>
                 </label>
                 <br />
                 <input

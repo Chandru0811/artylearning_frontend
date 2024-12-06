@@ -5,6 +5,7 @@ import AddMore from "./AddMore";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import ReplacementAdd from "./ReplacementAdd";
+import { Link } from "react-router-dom";
 
 function Attendances() {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -14,7 +15,7 @@ function Attendances() {
   const [selectedBatch, setSelectedBatch] = useState("1");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [batchOptions, setBatchOptions] = useState([]);
-  
+
   const getCurrentDate = () => {
     const today = new Date();
     const formattedDate = `${today.getFullYear()}-${(
@@ -25,28 +26,28 @@ function Attendances() {
   };
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
 
-    // Function to format date as "DD/MM/YYYY"
-    const formatDate = (date) => {
-      const [year, month, day] = date.split("-");
-      return `${day}/${month}/${year}`;
-    };
-  
-    // Fetch available slots based on the selected date
-    const fetchAvailableSlots = async (date) => {
-      try {
-        const formattedDate = formatDate(date);
-        const response = await api.get(
-          `getActualSlotsByDate?date=${formattedDate}`
-        );
-        setBatchOptions(response.data); // Update batch options with API response
-      } catch (error) {
-        toast.error("Error fetching slots:", error);
-      }
-    };
-  
-    const handleDateChange = (e) => {
-      setSelectedDate(e.target.value);
-    };
+  // Function to format date as "DD/MM/YYYY"
+  const formatDate = (date) => {
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
+  };
+
+  // Fetch available slots based on the selected date
+  const fetchAvailableSlots = async (date) => {
+    try {
+      const formattedDate = formatDate(date);
+      const response = await api.get(
+        `getActualSlotsByDate?date=${formattedDate}`
+      );
+      setBatchOptions(response.data); // Update batch options with API response
+    } catch (error) {
+      toast.error("Error fetching slots:", error);
+    }
+  };
+
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
 
   const fetchListData = async () => {
     try {
@@ -145,6 +146,24 @@ function Attendances() {
   return (
     <>
       <div className="container py-3">
+        <ol
+          className="breadcrumb my-3 px-1"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Student Management
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Attendance
+          </li>
+        </ol>
         <div className="row">
           <div className="col-md-6 col-12 mb-2">
             <label className="form-lable">Centre</label>
@@ -348,7 +367,7 @@ function Attendances() {
                                             <td>
                                               <div className="">
                                                 {student.attendance !==
-                                                  "replacement" ? (
+                                                "replacement" ? (
                                                   <>
                                                     <label className="radio-button">
                                                       <input
@@ -393,9 +412,14 @@ function Attendances() {
                                                       </span>
                                                     </label>
                                                   </>
-                                                ) : <>
-                                                <span className="text-center">Replacement Class Requseted</span>
-                                                </>}
+                                                ) : (
+                                                  <>
+                                                    <span className="text-center">
+                                                      Replacement Class
+                                                      Requseted
+                                                    </span>
+                                                  </>
+                                                )}
                                                 <br />
                                                 {student.attendance ===
                                                   "absent" && (
