@@ -3,94 +3,157 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import the styling for React-Quill
+import { toast } from "react-toastify";
+import api from "../../../config/URL";
 import { FaEdit } from "react-icons/fa";
 
-function EmailTemplateEdit() {
-    const [show, setShow] = useState(false);
+// Define custom toolbar modules
+const modules = {
+  toolbar: [
+    [{ header: "1" }, { header: "2" }, { font: [] }],
+    [{ size: [] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [{ color: [] }, { background: [] }], // Text color and background color
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ align: [] }],
+    ["link", "image", "video"], // Link, image, and video options
+    ["clean"], // Remove formatting button
+  ],
+  clipboard: {
+    matchVisual: false,
+  },
+};
 
-    const handleClose = () => {
-        formik.resetForm();
-        setShow(false);
-    };
+// Define formats to enable the editor to accept these types
+const formats = [
+  "header",
+  "font",
+  "size",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "color",
+  "background",
+  "list",
+  "bullet",
+  "align",
+  "link",
+  "image",
+  "video",
+];
 
-    const handleShow = () => {
-        setShow(true);
-    };
+function EmailTemplateEdit({id}) {
+  const [show, setShow] = useState(false);
 
-    const validationSchema = yup.object().shape({
-        reason: yup.string().required("*Absent Reason is required"),
-    });
+  const handleClose = () => {
+    formik.resetForm();
+    setShow(false);
+  };
 
-    const formik = useFormik({
-        initialValues: {
-            reason: "",
-            remarks: "",
-        },
-        validationSchema: validationSchema,
-        onSubmit: async (values) => {
-            console.log("Absent Reason Datas:", values);
-        },
-    });
+  const handleShow = () => {
+    setShow(true);
+  };
 
-    return (
-        <>
-            <button type="button" className="btn btn-sm" onClick={handleShow}>
-                <FaEdit />
-            </button>
-            <Modal
-                show={show}
-                centered
-                onHide={handleClose}
-            >
-                <form onSubmit={formik.handleSubmit} >
-                    <Modal.Header closeButton>
-                        <Modal.Title>
-                            <p className="headColor">Edit Absent Reason</p>
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div className="row">
-                            <div className="col-12 mb-3">
-                                <label>
-                                    Absent Reason<span className="text-danger">*</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    className={`form-control ${formik.touched.reason && formik.errors.reason ? "is-invalid" : ""}`}
-                                    {...formik.getFieldProps("reason")}
-                                />
-                                {formik.touched.reason && formik.errors.reason && (
-                                    <div className="invalid-feedback">
-                                        {formik.errors.reason}
-                                    </div>
-                                )}
-                            </div>
-                            <div className="col-12 mb-3">
-                                <label>
-                                    Remarks
-                                </label>
-                                <textarea rows={5}
-                                    className={`form-control`}
-                                    {...formik.getFieldProps("remarks")}
-                                ></textarea>
-                            </div>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer className="mt-3">
-                        <Button variant="secondary" onClick={handleClose}>
-                            Cancel
-                        </Button>
-                        <Button
-                            type="submit"
-                            className="btn btn-button btn-sm"
-                        >
-                            Update
-                        </Button>
-                    </Modal.Footer>
-                </form>
-            </Modal>
-        </>
-    );
+  const validationSchema = yup.object().shape({
+    subject: yup.string().required("*Subject is required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      subject: "",
+      descriptions: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      console.log("Email:", values);
+      try {
+        const formData = new FormData();
+        formData.append("subject", values.subject);
+        formData.append("descriptions", values.descriptions);
+        const response = await api.put(`/emailTemp/${id}`, formData);
+        if (response.status === 201) {
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (e) {
+        toast.error(e);
+      }
+    },
+  });
+
+  // Handle `ReactQuill` value change
+  const handleDescriptionChange = (value) => {
+    formik.setFieldValue("descriptions", value);
+  };
+
+  return (
+    <>
+      <button className="btn btn-sm" onClick={handleShow} >
+        <FaEdit />
+      </button>
+      <Modal show={show} centered onHide={handleClose} size="lg">
+        <form onSubmit={formik.handleSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <p className="headColor">Edit Email Template</p>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row">
+              {/* Subject Input */}
+              <div className="col-12 mb-3">
+                <label>
+                  Subject<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.subject && formik.errors.subject
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("subject")}
+                />
+                {formik.touched.subject && formik.errors.subject && (
+                  <div className="invalid-feedback">
+                    {formik.errors.subject}
+                  </div>
+                )}
+              </div>
+              {/* Rich Text Editor for Description */}
+              <div className="col-12 mb-3">
+                <label>Description</label>
+                <ReactQuill
+                  value={formik.values.descriptions}
+                  onChange={handleDescriptionChange}
+                  modules={modules} // Add custom toolbar modules
+                  formats={formats} // Define formats allowed
+                  className={`${
+                    formik.touched.descriptions && formik.errors.descriptions
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer className="mt-3">
+            <Button variant="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button type="submit" className="btn btn-button btn-sm">
+              Submit
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+    </>
+  );
 }
 
 export default EmailTemplateEdit;

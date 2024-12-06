@@ -37,11 +37,11 @@ function Sidebar() {
             path: "/center",
             access: storedScreens.centerListingIndex,
           },
-          {
-            title: "New Table",
-            path: "/newTable1",
-            access: storedScreens.centerListingIndex,
-          },
+          // {
+          //   title: "New Table",
+          //   path: "/newTable1",
+          //   access: storedScreens.centerListingIndex,
+          // },
           // {
           //   title: "Centre Manager",
           //   path: "/centermanager",
@@ -404,6 +404,13 @@ function Sidebar() {
           {
             title: "Absent Reason",
             path: "/absentreason",
+            // access: storedScreens.absentSettingIndex,
+            access: storedScreens.salarySettingIndex,
+          },
+          {
+            title: "Email Temlplate",
+            path: "/emailTemplate",
+            // access: storedScreens.emailTemplateSettingIndex,
             access: storedScreens.salarySettingIndex,
           },
         ],

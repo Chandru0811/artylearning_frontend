@@ -3,8 +3,8 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import Delete from "../../../components/common/Delete";
-import AbsentReasonAdd from "./AbsentReasonAdd";
-import AbsentReasonEdit from "./AbsentReasonEdit";
+import EmailTemplateEdit from "./EmailTemplateEdit";
+import EmailTemplateAdd from "./EmailTemplateAdd";
 
 const EmailTemplate = () => {
   const tableRef = useRef(null);
@@ -40,14 +40,14 @@ const EmailTemplate = () => {
   return (
     <div className="container my-4">
       <div className="my-3 d-flex justify-content-end mb-5">
-        <AbsentReasonAdd />
+        <EmailTemplateAdd />
       </div>
       <table ref={tableRef} className="display">
         <thead>
           <tr>
             <th scope="col">S No</th>
-            <th scope="col">Absent Reason</th>
-            <th scope="col">Remark</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Description</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -58,8 +58,8 @@ const EmailTemplate = () => {
               <td>{data.reason}</td>
               <td>{data.remarks}</td>
               <td> 
-                <AbsentReasonEdit />
-                <Delete />
+                <EmailTemplateEdit id={data.id}/>
+                <Delete path={`deleteEmailTemp/${data.id}`}/>
               </td>
             </tr>
           ))}

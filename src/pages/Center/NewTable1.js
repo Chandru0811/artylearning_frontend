@@ -165,7 +165,7 @@ const NewTable1 = () => {
   return (
     <div>
       <div className="container-fluid px-2 minHeight">
-        <div className="card shadow border-0 mb-2 top-header">
+        {/* <div className="card shadow border-0 mb-2 top-header">
           <div className="container-fluid py-4">
             <div className="row align-items-center justify-content-between">
               <div className="col">
@@ -178,7 +178,7 @@ const NewTable1 = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="d-flex justify-content-between align-items-center p-2">
           <select
@@ -202,33 +202,42 @@ const NewTable1 = () => {
             className="form-control w-25"
           />
 
-          {/* Column Visibility Toggle */}
-          <div className="dropdown">
-            <button
-              className="btn border-2 dropdown-toggle"
-              type="button"
-              id="columnDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <TbFilter className="fs-5" />
-            </button>
-            <ul className="dropdown-menu p-1" aria-labelledby="columnDropdown">
-              <li>
-                {table.getAllColumns().map((column) => (
-                  <label key={column.id} className="me-2">
-                    <input
-                      type="checkbox"
-                      checked={column.getIsVisible()}
-                      onChange={() =>
-                        column.toggleVisibility(!column.getIsVisible())
-                      }
-                    />
-                    {column.id}
-                  </label>
-                ))}
-              </li>
-            </ul>
+          <div className="d-flex justify-content-between align-items-center p-2">
+            <div className="dropdown me-2">
+              <button
+                className="btn border-2 dropdown-toggle"
+                type="button"
+                id="columnDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <TbFilter className="fs-5" />
+              </button>
+              <ul
+                className="dropdown-menu p-1"
+                aria-labelledby="columnDropdown"
+              >
+                <li>
+                  {table.getAllColumns().map((column) => (
+                    <label key={column.id} className="me-2">
+                      <input
+                        type="checkbox"
+                        checked={column.getIsVisible()}
+                        onChange={() =>
+                          column.toggleVisibility(!column.getIsVisible())
+                        }
+                      />
+                      {column.id}
+                    </label>
+                  ))}
+                </li>
+              </ul>
+            </div>
+            <Link to={"/center/add"} className="m-0">
+              <button className="btn btn-sm btn-primary">
+                Add <FaPlus className="pb-1" />
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -236,7 +245,7 @@ const NewTable1 = () => {
         <div className="card shadow border-0 my-2">
           <div className="table-responsive p-2 minHeight">
             <table className="display table table-bordered">
-              <thead className="text-center" style={{fontSize:"14px"}}>
+              <thead className="text-center" style={{ fontSize: "14px" }}>
                 {getHeaderGroups().map((headerGroup) => (
                   <tr key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
