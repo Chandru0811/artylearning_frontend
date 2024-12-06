@@ -55,10 +55,11 @@
   border: 1px solid #fa994af5;
 }
 
-.stdViewBtn:hover {
-  color: white;
-  background-color: #fa994af5;
-  border: 1px solid #fa994af5;
+.stdViewBtn:hover,
+.stdViewBtn.active {
+  color: white !important;
+  background-color: #fa994af5 !important;
+  border: 1px solid #fa994af5 !important;
 }
 
 /* / / checkbox role / / */
@@ -759,4 +760,72 @@
   border-bottom: 1.8px solid #000;
 }
 
+.center_list:focus {
+  box-shadow: none;
+}
 
+.dataTables_filter {
+  display: none;
+}
+
+.studentView .card{
+  border-radius: 3px;
+  border-top: 2px solid #fa994af5;
+}
+
+.stdImg{
+  border-radius: 50%;
+  width: 100px;
+  padding: 3px;
+  border: 3px solid #d2d6de;
+}
+
+.stdSettings{
+  color: #fa994af5;
+  font-size: 12px;
+  text-align: end;
+}
+
+.stdList{
+  border-bottom: 1px solid #ddd;
+  font-size: 13px;
+  padding: 10px 5px;
+  overflow: hidden;
+}
+
+.stdList span{
+  float: right;
+}
+
+.withBorder{
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.stdList1{
+  border-bottom: 1px solid #ddd;
+  font-size: 13px;
+  padding: 10px 5px;
+}
+
+.stdList1 .btn-primary,
+.stdList1 .btn-primary:hover,
+.stdList1 .btn-primary.active {
+  background-color: #fa994af5 !important;
+  border-color: #fa994af5 !important;
+}
+
+.stdList1 .dropdown-item{
+  padding: 0px 3px !important;
+}
+
+.studentView .card .btn-danger,
+.studentView .card .btn-danger:hover,
+.studentView .card .btn-danger.active {
+  background-color: #e60504 !important;
+  border-color: #e60504 !important;
+}
+
+.stdNavTabs .nav-link{
+  color: #000 !important;
+  font-size: 12px;
+}
