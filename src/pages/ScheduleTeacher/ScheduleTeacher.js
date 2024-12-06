@@ -11,7 +11,13 @@ import ScheduleTeacherAdd from "../ScheduleTeacher/ScheduleTeacherAdd";
 import ScheduleTeacherView from "../ScheduleTeacher/ScheduleTeacherView";
 import { Link } from "react-router-dom";
 import { BsTable } from "react-icons/bs";
-import { Button, DropdownButton, Dropdown, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  Button,
+  DropdownButton,
+  Dropdown,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import TeacherReplacement from "./TeacherReplacement";
 import { MdViewColumn } from "react-icons/md";
 
@@ -25,7 +31,6 @@ const ScheduleTeacher = () => {
   const roles = localStorage.getItem("userName");
   const rolesUserId = localStorage.getItem("userId");
 
-
   console.log("courseId pass ScheduleTeacher:", datas.courseId);
 
   const [show, setShow] = useState(false);
@@ -38,7 +43,6 @@ const ScheduleTeacher = () => {
   };
 
   const handelDelete = async (rowData) => {
-
     try {
       const { centerId, userId, courseId, classId, days } = selectedRowData;
       const formData = new FormData();
@@ -82,11 +86,15 @@ const ScheduleTeacher = () => {
         if (roles === "SMS_ADMIN") {
           response = await api.get("/getAllScheduleTeacher");
         } else if (roles === "SMS_TEACHER") {
-          response = await api.get(`/getAllScheduleTeacherByUserId/${rolesUserId}`);
+          response = await api.get(
+            `/getAllScheduleTeacherByUserId/${rolesUserId}`
+          );
         } else if (roles === "SMS_FREELANCER") {
-          response = await api.get(`/getAllScheduleTeacherByUserId/${rolesUserId}`);
+          response = await api.get(
+            `/getAllScheduleTeacherByUserId/${rolesUserId}`
+          );
         }
-  
+
         // If a response was received, set the data
         if (response) {
           setDatas(response.data);
@@ -132,14 +140,18 @@ const ScheduleTeacher = () => {
     setLoading(true);
     try {
       let response;
-  
+
       // Check role and call the appropriate API
       if (roles === "SMS_ADMIN") {
         response = await api.get("/getAllScheduleTeacher");
       } else if (roles === "SMS_TEACHER") {
-        response = await api.get(`/getAllScheduleTeacherByUserId/${rolesUserId}`);
+        response = await api.get(
+          `/getAllScheduleTeacherByUserId/${rolesUserId}`
+        );
       } else if (roles === "SMS_FREELANCER") {
-        response = await api.get(`/getAllScheduleTeacherByUserId/${rolesUserId}`);
+        response = await api.get(
+          `/getAllScheduleTeacherByUserId/${rolesUserId}`
+        );
       }
       // If a response was received, set the data and initialize the DataTable
       if (response) {
@@ -187,6 +199,24 @@ const ScheduleTeacher = () => {
         </div>
       ) : (
         <>
+          <ol
+            className="breadcrumb my-3"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" className="custom-breadcrumb">
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="custom-breadcrumb">
+              Schedule
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Scheduleteacher
+            </li>
+          </ol>
           <div className="d-flex justify-content-end align-items-center">
             <span>
               <ScheduleTeacherAdd onSuccess={refreshData} />
@@ -307,7 +337,10 @@ const ScheduleTeacher = () => {
                           id="dropdown-basic-button"
                         >
                           <Dropdown.Item>
-                            <TeacherReplacement id={data.id} onSuccess={refreshData} />
+                            <TeacherReplacement
+                              id={data.id}
+                              onSuccess={refreshData}
+                            />
                           </Dropdown.Item>
                         </DropdownButton>
                         {/* </OverlayTrigger> */}
@@ -318,7 +351,10 @@ const ScheduleTeacher = () => {
                           //   overlay={<Tooltip id="tooltip-delete">Delete Schedule</Tooltip>}
                           // >
                           <div>
-                            <button className="btn btn-sm" onClick={() => handleShow(data)}>
+                            <button
+                              className="btn btn-sm"
+                              onClick={() => handleShow(data)}
+                            >
                               <FaTrash />
                             </button>
                           </div>
@@ -328,7 +364,11 @@ const ScheduleTeacher = () => {
                         {storedScreens?.timeScheduleIndex && (
                           <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip id="tooltip-time-schedule">Time Schedule</Tooltip>}
+                            overlay={
+                              <Tooltip id="tooltip-time-schedule">
+                                Time Schedule
+                              </Tooltip>
+                            }
                           >
                             <Link
                               to={`/scheduleteacher/scheduletime/${data.userId}?centerId=${data.centerId}&courseId=${data.courseId}`}
@@ -341,7 +381,6 @@ const ScheduleTeacher = () => {
                         )}
                       </div>
                     </td>
-
                   </tr>
                 ))}
               </tbody>

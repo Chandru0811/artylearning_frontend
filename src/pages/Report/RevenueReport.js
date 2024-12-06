@@ -6,6 +6,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import api from "../../config/URL";
+import { Link } from "react-router-dom";
 
 const RevenueReport = () => {
   const [centerData, setCenterData] = useState(null);
@@ -158,6 +159,24 @@ const RevenueReport = () => {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
       <div className="container">
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Report Management
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Revenue Report
+          </li>
+        </ol>
         <div className="row my-5">
           <div className="col-md-4 col-12">
             <label className="form-label">Centre</label>

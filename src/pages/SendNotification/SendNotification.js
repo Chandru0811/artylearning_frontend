@@ -46,9 +46,7 @@ const SendNotification = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -74,6 +72,24 @@ const SendNotification = () => {
 
   return (
     <div className="container my-4">
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Messaging
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          School Announcement
+        </li>
+      </ol>
       <div className="d-flex justify-content-end mb-3">
         {storedScreens?.sendNotificationCreate && (
           <Link to="/sendNotification/add">
@@ -94,57 +110,57 @@ const SendNotification = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
-
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col">S No</th>
-              <th scope="col">Event Name</th>
-              <th scope="col">Message</th>
-              <th scope="col">Created At</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(datas) && datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.messageTitle}</td>
-                <td>{data.messageDescription}</td>
-                <td>{data.datePosted}</td>
-                <td>
-                  <div style={{ width: "100px" }}>
-                    {storedScreens?.courseRead && (
-                      <Link to={`/sendnotification/view/${data.id}`}>
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                    )}
-                    {storedScreens?.sendNotificationUpdate && (
-                      <Link to={`/sendNotification/edit/${data.id}`}>
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                    )}
-                    {/* {storedScreens?.subjectDelete && (
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col">S No</th>
+                <th scope="col">Event Name</th>
+                <th scope="col">Message</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(datas) &&
+                datas.map((data, index) => (
+                  <tr key={index}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{data.messageTitle}</td>
+                    <td>{data.messageDescription}</td>
+                    <td>{data.datePosted}</td>
+                    <td>
+                      <div style={{ width: "100px" }}>
+                        {storedScreens?.courseRead && (
+                          <Link to={`/sendnotification/view/${data.id}`}>
+                            <button className="btn btn-sm">
+                              <FaEye />
+                            </button>
+                          </Link>
+                        )}
+                        {storedScreens?.sendNotificationUpdate && (
+                          <Link to={`/sendNotification/edit/${data.id}`}>
+                            <button className="btn btn-sm">
+                              <FaEdit />
+                            </button>
+                          </Link>
+                        )}
+                        {/* {storedScreens?.subjectDelete && (
                       <Delete
                         onSuccess={refreshData}
                         path={`/deleteCourseSubject/${data.id}`}
                       />
                     )} */}
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteSmsPushNotifications/${data.id}`}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteSmsPushNotifications/${data.id}`}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

@@ -86,6 +86,24 @@ const Race = () => {
 
   return (
     <div className="container my-4">
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Settings
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Race
+        </li>
+      </ol>
       {/* {storedScreens?.levelCreate &&  */}
 
       <div className="d-flex justify-content-end align-items-center">

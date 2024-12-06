@@ -31,7 +31,7 @@ function DocumentAdd() {
   const [studentData, setStudentData] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const formik = useFormik({
     initialValues: {
@@ -47,13 +47,12 @@ function DocumentAdd() {
       groupSelect: "",
       studentSelect: "",
       createdBy: userName,
-
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const selectedValue = formik.values.center;// Assuming formik is in scope
+        const selectedValue = formik.values.center; // Assuming formik is in scope
         let selectedOptionName = "";
         let selectedClassName = "";
         let selectedCourseName = "";
@@ -93,18 +92,18 @@ function DocumentAdd() {
             values.batchId === "5"
               ? "12:00 pm"
               : values.batchId === "6"
-                ? "1:00 pm"
-                : values.batchId === "1"
-                  ? "2:30 pm"
-                  : values.batchId === "2"
-                    ? "3:30 pm"
-                    : values.batchId === "3"
-                      ? "5:00 pm"
-                      : values.batchId === "4"
-                        ? "7:00 pm"
-                        : "",
+              ? "1:00 pm"
+              : values.batchId === "1"
+              ? "2:30 pm"
+              : values.batchId === "2"
+              ? "3:30 pm"
+              : values.batchId === "3"
+              ? "5:00 pm"
+              : values.batchId === "4"
+              ? "7:00 pm"
+              : "",
           date: values.date,
-          expiredDate: values.expiredDate // Calculating expiry date
+          expiredDate: values.expiredDate, // Calculating expiry date
         };
 
         if (folderCategory === "group") {
@@ -133,7 +132,7 @@ function DocumentAdd() {
       }
     },
     validateOnChange: false, // Enable validation on change
-    validateOnBlur: true,   // Enable validation on blur
+    validateOnBlur: true, // Enable validation on blur
   });
 
   // Function to scroll to the first error field
@@ -203,7 +202,6 @@ function DocumentAdd() {
     }
   };
 
-
   useEffect(() => {
     if (formik.values.date) {
       const calculatedExpiredDate = calculateExpiryDate(formik.values.date);
@@ -248,11 +246,38 @@ function DocumentAdd() {
 
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Document Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/document" className="custom-breadcrumb">
+            Document
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Document Add
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/document">
             <button type="button " className="btn btn-sm btn-border   ">
@@ -260,7 +285,11 @@ function DocumentAdd() {
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
             {loadIndicator && (
               <span
                 className="spinner-border spinner-border-sm me-2"
@@ -279,10 +308,11 @@ function DocumentAdd() {
               <select
                 {...formik.getFieldProps("center")}
                 name="center"
-                className={`form-select  ${formik.touched.center && formik.errors.center
+                className={`form-select  ${
+                  formik.touched.center && formik.errors.center
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 aria-label="Default select example"
                 onChange={handleCenterChange}
               >
@@ -305,10 +335,11 @@ function DocumentAdd() {
               <select
                 {...formik.getFieldProps("course")}
                 name="course"
-                className={`form-select    ${formik.touched.course && formik.errors.course
+                className={`form-select    ${
+                  formik.touched.course && formik.errors.course
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 aria-label="Default select example"
                 onChange={handleCourseChange}
               >
@@ -332,10 +363,11 @@ function DocumentAdd() {
               <select
                 {...formik.getFieldProps("classListing")}
                 name="classListing"
-                className={`form-select    ${formik.touched.classListing && formik.errors.classListing
+                className={`form-select    ${
+                  formik.touched.classListing && formik.errors.classListing
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 aria-label="Default select example"
               >
                 <option disabled></option>
@@ -360,10 +392,11 @@ function DocumentAdd() {
               <select
                 {...formik.getFieldProps("userId")}
                 name="userId"
-                className={`form-select  ${formik.touched.userId && formik.errors.userId
+                className={`form-select  ${
+                  formik.touched.userId && formik.errors.userId
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 aria-label="Default select example"
               >
                 <option disabled></option>
@@ -385,8 +418,9 @@ function DocumentAdd() {
               </label>
               <select
                 {...formik.getFieldProps("days")}
-                className={`form-select ${formik.touched.days && formik.errors.days ? "is-invalid" : ""
-                  }`}
+                className={`form-select ${
+                  formik.touched.days && formik.errors.days ? "is-invalid" : ""
+                }`}
               >
                 <option value=""></option>
                 <option value="SUNDAY">Sunday</option>
@@ -408,10 +442,11 @@ function DocumentAdd() {
               </label>
               <select
                 {...formik.getFieldProps("batchId")}
-                className={`form-select ${formik.touched.batchId && formik.errors.batchId
+                className={`form-select ${
+                  formik.touched.batchId && formik.errors.batchId
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
               >
                 <option value=""></option>
                 <option value="5">12:00 pm</option>
@@ -476,11 +511,12 @@ function DocumentAdd() {
                   <label className="form-label">Student Name</label>
                   <select
                     {...formik.getFieldProps("studentSelect")}
-                    className={`form-select   ${formik.touched.studentSelect &&
-                        formik.errors.studentSelect
+                    className={`form-select   ${
+                      formik.touched.studentSelect &&
+                      formik.errors.studentSelect
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                   >
                     <option disabled></option>
                     {studentData &&
@@ -508,11 +544,11 @@ function DocumentAdd() {
                 <input
                   name="date"
                   type="date"
-
-                  className={`form-control  ${formik.touched.date && formik.errors.date
+                  className={`form-control  ${
+                    formik.touched.date && formik.errors.date
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("date")}
                 />
                 {formik.touched.date && formik.errors.date && (
@@ -528,15 +564,18 @@ function DocumentAdd() {
               <input
                 name="expiredDate"
                 type="text"
-                className={`form-control  ${formik.touched.expiredDate && formik.errors.expiredDate
+                className={`form-control  ${
+                  formik.touched.expiredDate && formik.errors.expiredDate
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 {...formik.getFieldProps("expiredDate")}
                 value={calculateExpiryDate(formik.values.date)}
               />
               {formik.touched.expiredDate && formik.errors.expiredDate && (
-                <div className="invalid-feedback">{formik.errors.expiredDate}</div>
+                <div className="invalid-feedback">
+                  {formik.errors.expiredDate}
+                </div>
               )}
             </div>
           </div>

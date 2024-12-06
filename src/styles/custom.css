@@ -113,7 +113,7 @@
   display: none;
 }
 
-.radio-button input[type="radio"]+.radio-button-text {
+.radio-button input[type="radio"] + .radio-button-text {
   display: inline-block;
   width: 120px;
   height: 30px;
@@ -124,17 +124,21 @@
   cursor: pointer;
 }
 
-.radio-button input[type="radio"]:checked[value="present"]+.radio-button-text {
+.radio-button
+  input[type="radio"]:checked[value="present"]
+  + .radio-button-text {
   background-color: green;
   color: white;
 }
 
-.radio-button input[type="radio"]:checked[value="absent"]+.radio-button-text {
+.radio-button input[type="radio"]:checked[value="absent"] + .radio-button-text {
   background-color: red;
   color: white;
 }
 
-.radio-button input[type="radio"]:checked[value="replacement"]+.radio-button-text {
+.radio-button
+  input[type="radio"]:checked[value="replacement"]
+  + .radio-button-text {
   background-color: #eaaa09;
   color: white;
 }
@@ -258,7 +262,6 @@
 }
 
 @keyframes scale {
-
   0%,
   40%,
   100% {
@@ -286,7 +289,7 @@
 
 /* table */
 
-.paysliptable>* {
+.paysliptable > * {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
@@ -425,9 +428,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(226,
-      226,
-      226);
+  background-color: rgb(226, 226, 226);
   /* or any other color that fits your design */
   border: none;
   padding: 5px;
@@ -584,7 +585,6 @@
   /* Ensure it stays above other content */
 }
 
-
 /* .chat-section .send-icon {
   background-color: #e60504;
   color: white;
@@ -626,7 +626,6 @@
     /* Ensure it stays above other content */
   }
 }
-
 
 .chat-section .input-group {
   border-radius: 5px;
@@ -734,7 +733,6 @@
   justify-content: flex-end;
   padding: 0.5rem 1rem;
   border-top: 1px solid #dee2e6;
-
 }
 
 .btn-replacement {
@@ -768,40 +766,40 @@
   display: none;
 }
 
-.studentView .card{
+.studentView .card {
   border-radius: 3px;
   border-top: 2px solid #fa994af5;
 }
 
-.stdImg{
+.stdImg {
   border-radius: 50%;
   width: 100px;
   padding: 3px;
   border: 3px solid #d2d6de;
 }
 
-.stdSettings{
+.stdSettings {
   color: #fa994af5;
   font-size: 12px;
   text-align: end;
 }
 
-.stdList{
+.stdList {
   border-bottom: 1px solid #ddd;
   font-size: 13px;
   padding: 10px 5px;
   overflow: hidden;
 }
 
-.stdList span{
+.stdList span {
   float: right;
 }
 
-.withBorder{
+.withBorder {
   border-bottom: 1px solid #f4f4f4;
 }
 
-.stdList1{
+.stdList1 {
   border-bottom: 1px solid #ddd;
   font-size: 13px;
   padding: 10px 5px;
@@ -814,7 +812,7 @@
   border-color: #fa994af5 !important;
 }
 
-.stdList1 .dropdown-item{
+.stdList1 .dropdown-item {
   padding: 0px 3px !important;
 }
 
@@ -825,7 +823,17 @@
   border-color: #e60504 !important;
 }
 
-.stdNavTabs .nav-link{
+.stdNavTabs .nav-link {
   color: #000 !important;
   font-size: 12px;
+}
+
+.custom-breadcrumb {
+  text-decoration: none;
+  color: #000;
+}
+.custom-breadcrumb:hover {
+  text-decoration: none;
+  color: #0084ff;
+  cursor: pointer;
 }

@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { FaYoutube, FaInstagram, FaEdit, FaSave, FaTimes } from "react-icons/fa";
+import {
+  FaYoutube,
+  FaInstagram,
+  FaEdit,
+  FaSave,
+  FaTimes,
+} from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
+import { Link } from "react-router-dom";
 
 const ContactSection = () => {
-
   const [editingField, setEditingField] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [data, setData] = useState({
@@ -143,11 +149,32 @@ const ContactSection = () => {
 
   return (
     <section>
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Content Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Header & Footer
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="container cms-header shadow-sm py-2">
           <div className="row p-1">
             <div className="col-md-6 col-12">
@@ -179,10 +206,12 @@ const ContactSection = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       name="facebookLink"
-                      className={`form-control ${formik.touched.facebookLink && formik.errors.facebookLink
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control ${
+                        formik.touched.facebookLink &&
+                        formik.errors.facebookLink
+                          ? "is-invalid"
+                          : ""
+                      }`}
                     />
                     <button
                       className="btn btn-sm btn-outline-primary border ms-2"
@@ -230,11 +259,12 @@ const ContactSection = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       name="instagramLink"
-                      className={`form-control ${formik.touched.instagramLink &&
+                      className={`form-control ${
+                        formik.touched.instagramLink &&
                         formik.errors.instagramLink
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                          ? "is-invalid"
+                          : ""
+                      }`}
                     />
                     <button
                       className="btn btn-sm btn-outline-primary border ms-2"
@@ -285,10 +315,11 @@ const ContactSection = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         name="dateTime"
-                        className={`form-control ${formik.touched.dateTime && formik.errors.dateTime
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-control ${
+                          formik.touched.dateTime && formik.errors.dateTime
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                       <button
                         className="btn btn-sm btn-outline-primary border ms-2"
@@ -331,10 +362,11 @@ const ContactSection = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         name="phone"
-                        className={`form-control ${formik.touched.phone && formik.errors.phone
-                          ? "is-invalid"
-                          : ""
-                          }`}
+                        className={`form-control ${
+                          formik.touched.phone && formik.errors.phone
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       />
                       <button
                         className="btn btn-sm btn-outline-primary border ms-2"
@@ -389,10 +421,11 @@ const ContactSection = () => {
                     onChange={(e) => {
                       formik.setFieldValue("file", e.currentTarget.files[0]);
                     }}
-                    className={`form-control w-50 ${formik.touched.file && formik.errors.file
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control w-50 ${
+                      formik.touched.file && formik.errors.file
+                        ? "is-invalid"
+                        : ""
+                    }`}
                   />
                   <button
                     className="btn btn-sm btn-outline-primary border ms-2"
@@ -435,10 +468,11 @@ const ContactSection = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       name="copyRight"
-                      className={`form-control ${formik.touched.copyRight && formik.errors.copyRight
-                        ? "is-invalid"
-                        : ""
-                        }`}
+                      className={`form-control ${
+                        formik.touched.copyRight && formik.errors.copyRight
+                          ? "is-invalid"
+                          : ""
+                      }`}
                     />
                     <button
                       className="btn btn-sm btn-outline-primary border ms-2"

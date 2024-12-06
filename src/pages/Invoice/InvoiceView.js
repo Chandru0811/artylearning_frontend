@@ -65,7 +65,7 @@ function InvoiceView() {
     ? centerData.find((center) => parseInt(data.centerId) === center.id)
         ?.uenNumber || "--"
     : "";
-    const invoiceNotes = centerData
+  const invoiceNotes = centerData
     ? centerData.find((center) => parseInt(data.centerId) === center.id)
         ?.invoiceNotes || "--"
     : "";
@@ -91,7 +91,9 @@ function InvoiceView() {
       doc.text(`Student Id : ${data.studentUniqueId || " "}`, 14, 100);
       doc.text(`Course Name : ${data.courseName || " "}`, 120, 80);
       doc.text(
-        `Invoice Date : ${data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"}`,
+        `Invoice Date : ${
+          data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"
+        }`,
         120,
         90
       );
@@ -206,7 +208,7 @@ function InvoiceView() {
         invoiceNotes || "--",
         170 // Width of the text area where you want to wrap the text
       );
-      
+
       // Display the invoiceNotes text starting on the next line
       doc.text(invoiceNote, 14, invoiceNotesY);
 
@@ -278,6 +280,30 @@ function InvoiceView() {
 
   return (
     <div className="container-fluid mb-2 minHeight">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Invoice and Payment
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/invoice" className="custom-breadcrumb">
+            Invoice
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Invoice View
+        </li>
+      </ol>
       <div className=" row">
         <div className="col-12 d-flex justify-content-end my-3 ">
           <Link to="/invoice">
@@ -410,7 +436,7 @@ function InvoiceView() {
                       {taxData &&
                         taxData.map((tax) =>
                           parseInt(InvoiceItemRow.taxType) === tax.id
-                            ? `${tax.taxType +" "+ tax.rate} %` || "--"
+                            ? `${tax.taxType + " " + tax.rate} %` || "--"
                             : ""
                         )}
                     </td>

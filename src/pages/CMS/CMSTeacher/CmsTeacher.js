@@ -20,6 +20,7 @@ import { FaYoutube, FaInstagram, FaEdit, FaSave } from "react-icons/fa";
 import CmsTeacherAdd from "./CmsTeacherAdd";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export const CmsTeacher = () => {
   const [editingField, setEditingField] = useState(null);
@@ -75,6 +76,24 @@ export const CmsTeacher = () => {
   return (
     <section style={{ backgroundColor: "#f9fafb" }}>
       <div className="container cms-header shadow-sm py-2 mb-4">
+        <ol
+          className="breadcrumb my-3 px-1"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Content Management
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Teachers
+          </li>
+        </ol>
         <div className="row p-1">
           <div className="col-md-6 col-12">
             <h4>Teacher</h4>

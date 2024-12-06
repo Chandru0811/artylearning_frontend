@@ -20,7 +20,6 @@ const Salary = () => {
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
 
-
   useEffect(() => {
     const getData = async () => {
       try {
@@ -51,9 +50,7 @@ const Salary = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -91,19 +88,38 @@ const Salary = () => {
   };
   return (
     <div className="container my-4">
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Settings
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Salary Type
+        </li>
+      </ol>
       {/* {storedScreens?.levelCreate &&  */}
-      
+
       <div className="d-flex justify-content-end align-items-center">
-            <span>
-            <SalaryTypeAdd onSuccess={refreshData} />            </span>
-            {/* } */}
-           {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+        <span>
+          <SalaryTypeAdd onSuccess={refreshData} />{" "}
+        </span>
+        {/* } */}
+        {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
         </button> </p> */}
-        </div>
+      </div>
       {/* } */}
 
       {loading ? (
@@ -117,110 +133,109 @@ const Salary = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
-
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col" className="text-center">
-                Salary Type
-              </th>
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                  S No
                 </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
+                <th scope="col" className="text-center">
+                  Salary Type
                 </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th scope="col" className="text-center">
+                  Action
                 </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-              <th scope="col" className="text-center">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td className="text-center">{data.salaryType}</td>
-                {extraData && <td>{data.createdBy}</td>}
+              </tr>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td className="text-center">{data.salaryType}</td>
+                  {extraData && <td>{data.createdBy}</td>}
                   {extraData && <td>{extractDate(data.createdAt)}</td>}
                   {extraData && <td>{data.updatedBy}</td>}
                   {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                <td className="text-center">
-                  {/* {storedScreens?.levelRead && ( */}
-                  {/* <Link to={`/salarytype/view/${data.id}`}>
+                  <td className="text-center">
+                    {/* {storedScreens?.levelRead && ( */}
+                    {/* <Link to={`/salarytype/view/${data.id}`}>
                     <button className="btn btn-sm">
                       <FaEye />
                     </button>
                   </Link> */}
-                  {/* )} */}
-                  {/* {storedScreens?.levelUpdate && ( */}
-                  {/* <LeaveEdit id={data.id} onSuccess={refreshData} /> */}
-                  <SalaryTypeEdit id={data.id} onSuccess={refreshData} />
-                  {/* )} */}
-                  {/* {storedScreens?.levelDelete && ( */}
-                  <Delete
-                    onSuccess={refreshData}
-                    path={`/deleteSalarySetting/${data.id}`}
-                  />
-                  {/* )} */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    {/* )} */}
+                    {/* {storedScreens?.levelUpdate && ( */}
+                    {/* <LeaveEdit id={data.id} onSuccess={refreshData} /> */}
+                    <SalaryTypeEdit id={data.id} onSuccess={refreshData} />
+                    {/* )} */}
+                    {/* {storedScreens?.levelDelete && ( */}
+                    <Delete
+                      onSuccess={refreshData}
+                      path={`/deleteSalarySetting/${data.id}`}
+                    />
+                    {/* )} */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

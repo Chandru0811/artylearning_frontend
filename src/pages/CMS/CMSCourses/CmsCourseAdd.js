@@ -102,6 +102,30 @@ function CmsCourseAdd() {
         }}
       >
         <div className="container cms-header shadow-sm py-2">
+          <ol
+            className="breadcrumb my-3"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" className="custom-breadcrumb">
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              Content Management
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              <Link to="/cms/CmsCourses" className="custom-breadcrumb">
+                Courses
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Courses Add
+            </li>
+          </ol>
           <div className="row p-1">
             <div className="col-md-6 col-12">
               <h4>Course</h4>
@@ -153,7 +177,7 @@ function CmsCourseAdd() {
                   }`}
                   // {...formik.getFieldProps("menuLogo")}
                   accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
-                   onChange={(e) =>
+                  onChange={(e) =>
                     formik.setFieldValue("menuLogo", e.target.files[0])
                   }
                 />
@@ -172,13 +196,14 @@ function CmsCourseAdd() {
                   type="file"
                   name="backgroundImage"
                   className={`form-control ${
-                    formik.touched.backgroundImage && formik.errors.backgroundImage
+                    formik.touched.backgroundImage &&
+                    formik.errors.backgroundImage
                       ? "is-invalid"
                       : ""
                   }`}
                   // {...formik.getFieldProps("backgroundImage")}
                   accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
-                   onChange={(e) =>
+                  onChange={(e) =>
                     formik.setFieldValue("backgroundImage", e.target.files[0])
                   }
                 />
@@ -323,7 +348,7 @@ function CmsCourseAdd() {
                   }`}
                   // {...formik.getFieldProps("cardOneImage")}
                   accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
-                   onChange={(e) =>
+                  onChange={(e) =>
                     formik.setFieldValue("cardOneImage", e.target.files[0])
                   }
                 />
@@ -403,7 +428,7 @@ function CmsCourseAdd() {
                   }`}
                   // {...formik.getFieldProps("cardTwoImage")}
                   accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
-                   onChange={(e) =>
+                  onChange={(e) =>
                     formik.setFieldValue("cardTwoImage", e.target.files[0])
                   }
                 />
@@ -477,13 +502,14 @@ function CmsCourseAdd() {
                   type="file"
                   name="cardThreeImage"
                   className={`form-control ${
-                    formik.touched.cardThreeImage && formik.errors.cardThreeImage
+                    formik.touched.cardThreeImage &&
+                    formik.errors.cardThreeImage
                       ? "is-invalid"
                       : ""
                   }`}
                   // {...formik.getFieldProps("cardThreeImage")}
                   accept=".jpeg,.jpg,.png,.gif,.bmp,.webp"
-                   onChange={(e) =>
+                  onChange={(e) =>
                     formik.setFieldValue("cardThreeImage", e.target.files[0])
                   }
                 />

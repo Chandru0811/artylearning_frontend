@@ -66,20 +66,27 @@ function DocumentFile() {
   };
   const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB in bytes
 
-  const fileSchema = Yup.mixed()
-    .test("fileSize", "*Each file must be less than or equal to 1GB in size", value => {
+  const fileSchema = Yup.mixed().test(
+    "fileSize",
+    "*Each file must be less than or equal to 1GB in size",
+    (value) => {
       return value && value.size <= MAX_FILE_SIZE;
-    });
-  
+    }
+  );
+
   const filesSchema = Yup.array()
     .of(fileSchema)
-    .test("totalSize", "*Total size of all files must be less than or equal to 1GB", values => {
-      if (values && values.length) {
-        const totalSize = values.reduce((acc, file) => acc + file.size, 0);
-        return totalSize <= MAX_FILE_SIZE;
+    .test(
+      "totalSize",
+      "*Total size of all files must be less than or equal to 1GB",
+      (values) => {
+        if (values && values.length) {
+          const totalSize = values.reduce((acc, file) => acc + file.size, 0);
+          return totalSize <= MAX_FILE_SIZE;
+        }
+        return true;
       }
-      return true;
-    })
+    )
     .min(1, "*At least one file is required")
     .required("*Files are required");
   const validationSchema = Yup.object().shape({
@@ -126,7 +133,7 @@ function DocumentFile() {
         }
       } catch (error) {
         toast.error("Error uploading files: " + error.message);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -158,19 +165,42 @@ function DocumentFile() {
 
   return (
     <section>
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="container">
+          <ol
+            className="breadcrumb my-3"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" className="custom-breadcrumb">
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              Document Management
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Document File
+            </li>
+          </ol>
           <div className="row px-1">
             <div className="py-3">
               <p className="headColor">Centre Files</p>
             </div>
 
             <div className="col-md-6 col-12 mb-2">
-              <label>Centre<span class="text-danger">*</span></label>
+              <label>
+                Centre<span class="text-danger">*</span>
+              </label>
               <div className="input-group">
                 <select
                   className="form-select"
@@ -188,12 +218,16 @@ function DocumentFile() {
                 </select>
               </div>
               {formik.touched.centerName && formik.errors.centerName && (
-                <small className="text-danger">{formik.errors.centerName}</small>
+                <small className="text-danger">
+                  {formik.errors.centerName}
+                </small>
               )}
             </div>
 
             <div className="col-md-6 col-12 mb-2 ">
-              <label>Course<span class="text-danger">*</span></label>
+              <label>
+                Course<span class="text-danger">*</span>
+              </label>
               <div className="input-group">
                 <select
                   className="form-select"
@@ -217,7 +251,9 @@ function DocumentFile() {
 
             <div className="col-md-6 col-12 mb-2 ">
               <div className="row">
-                <label>Class<span class="text-danger">*</span></label>
+                <label>
+                  Class<span class="text-danger">*</span>
+                </label>
                 <div className="input-group">
                   <select
                     className="form-select"
@@ -236,13 +272,17 @@ function DocumentFile() {
                 </div>
               </div>
               {formik.touched.classListing && formik.errors.classListing && (
-                <small className="text-danger">{formik.errors.classListing}</small>
+                <small className="text-danger">
+                  {formik.errors.classListing}
+                </small>
               )}
             </div>
 
             <div className="col-md-6 col-12 mb-2 ">
               <div>
-                <label>Folder Name<span class="text-danger">*</span></label>
+                <label>
+                  Folder Name<span class="text-danger">*</span>
+                </label>
                 <div className="input-group">
                   <select
                     className="form-select"
@@ -266,7 +306,9 @@ function DocumentFile() {
 
             <div className="col-md-6 col-12 mb-2 ">
               <div className="row">
-                <label>Files<span class="text-danger">*</span></label>
+                <label>
+                  Files<span class="text-danger">*</span>
+                </label>
                 <div className="input-group">
                   <input
                     className="form-control"
@@ -300,13 +342,17 @@ function DocumentFile() {
                   Back
                 </button>
               </Link>
-              <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
                 {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
                 Save
               </button>
             </div>

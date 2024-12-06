@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
 
 function CmsAboutUs() {
   const [editingField, setEditingField] = useState(null);
@@ -96,6 +97,24 @@ function CmsAboutUs() {
       {/* Header */}
       <div>
         <div className="container cms-header shadow-sm py-2">
+          <ol
+            className="breadcrumb my-3 px-1"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" className="custom-breadcrumb">
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              Content Management
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              About Us
+            </li>
+          </ol>
           <div className="row p-1">
             <div className="col-md-6 col-12">
               <h4>About Us</h4>

@@ -398,7 +398,7 @@ export default function InvoiceAdd() {
     };
 
     if (courseData && taxData && formik.values.student) {
-      fetchStudentData(); 
+      fetchStudentData();
     }
   }, [courseData, taxData, formik.values.student, packageData]);
 
@@ -597,6 +597,30 @@ export default function InvoiceAdd() {
 
   return (
     <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Invoice and Payment
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/invoice" className="custom-breadcrumb">
+            Invoice
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Invoice Add
+        </li>
+      </ol>
       <form
         onSubmit={formik.handleSubmit}
         onKeyDown={(e) => {
@@ -1060,7 +1084,13 @@ export default function InvoiceAdd() {
                           />
                         </td>
                         <td>
-                          <input onInput={(event)=>{ event.target.value = event.target.value.replace(/[^0-9]/g, '');}}
+                          <input
+                            onInput={(event) => {
+                              event.target.value = event.target.value.replace(
+                                /[^0-9]/g,
+                                ""
+                              );
+                            }}
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].totalAmount`
                             )}
