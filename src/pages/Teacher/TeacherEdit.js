@@ -11,7 +11,7 @@ import RequiredEdit from "./EditTeacher/RequiredEdit";
 import SalaryEdit from "./EditTeacher/SalaryEdit";
 import LeaveEdit from "./EditTeacher/LeaveEdit";
 import ContractEdit from "./EditTeacher/ContractEdit";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
@@ -194,6 +194,30 @@ export default function TeacherEdit() {
   return (
     <>
       <div className="container-fluid minHeight my-5">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/teacher" className="custom-breadcrumb">
+            Teacher
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Teacher Edit
+        </li>
+      </ol>
         {/* <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index} onClick={() => setActiveStep(index)}>

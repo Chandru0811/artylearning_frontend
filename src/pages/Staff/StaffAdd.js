@@ -11,9 +11,17 @@ import StaffLeaveAdd from "./AddStaff/StaffLeaveAdd";
 import StaffContractAdd from "./AddStaff/StaffContractAdd";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-const steps = [{ tooltip: "Personal Information" }, { tooltip: "Account Information" }, { tooltip: "Contact Information" },
-{ tooltip: "Required Information" }, { tooltip: "Salary Information" }, { tooltip: "Leave Information" }, { tooltip: "Contract Informationn" }];
+const steps = [
+  { tooltip: "Personal Information" },
+  { tooltip: "Account Information" },
+  { tooltip: "Contact Information" },
+  { tooltip: "Required Information" },
+  { tooltip: "Salary Information" },
+  { tooltip: "Leave Information" },
+  { tooltip: "Contract Informationn" },
+];
 
 function StaffAdd() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -94,6 +102,30 @@ function StaffAdd() {
   };
   return (
     <div class="container-fluid minHeight my-5">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/staff" className="custom-breadcrumb">
+            Staff
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Staff Add
+        </li>
+      </ol>
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index}>

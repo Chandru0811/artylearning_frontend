@@ -12,8 +12,7 @@ function ClassAdd() {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const fetchData = async () => {
     try {
@@ -49,7 +48,8 @@ function ClassAdd() {
     classType: Yup.string().required("*Class Type is required"),
     durationInHrs: Yup.number().required("*Duration is required"),
     remark: Yup.string()
-      .max(200, "*The maximum length is 200 characters").notRequired(),
+      .max(200, "*The maximum length is 200 characters")
+      .notRequired(),
   });
   const formik = useFormik({
     initialValues: {
@@ -60,7 +60,6 @@ function ClassAdd() {
       durationInHrs: "",
       remark: "",
       // createdBy: userName,
-
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -106,33 +105,38 @@ function ClassAdd() {
 
   return (
     <div className="container">
-         <ol
+      <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/" className="custom-breadcrumb">
             Home
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+          Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/class" style={{ textDecoration: "none" }}>Class</Link>
+          <Link to="/class" className="custom-breadcrumb">
+            Class
+          </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
           Class Add
         </li>
       </ol>
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/class">
             <button type="button " className="btn btn-sm btn-border   ">

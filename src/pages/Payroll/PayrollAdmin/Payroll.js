@@ -98,6 +98,24 @@ const Payroll = () => {
   };
   return (
     <div className="container">
+            <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Payroll
+        </li>
+      </ol>
       <div className="col-12 text-end my-3">
         {storedScreens?.payrollCreate && (
           <Link to={`/payrolladmin/add`}>

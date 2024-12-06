@@ -152,6 +152,24 @@ const Teacher = () => {
         </div>
       ) : (
         <div className="container my-4">
+               <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Teacher
+        </li>
+      </ol>
           <div className="d-flex justify-content-between mb-3">
             <div className="individual_fliters d-flex">
               <div className="form-group mb-0 ms-2">

@@ -35,8 +35,8 @@ const Lead = () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       const subjectData = await fetchAllSubjectsWithIds();
-      console.log("subjectData",subjectData);
-      
+      console.log("subjectData", subjectData);
+
       setCenterData(centerData);
       setSubjectData(subjectData);
     } catch (error) {
@@ -248,24 +248,24 @@ const Lead = () => {
         </div>
       ) : (
         <div className="container my-4">
-               <ol
-        className="breadcrumb my-3"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" style={{ textDecoration: "none" }}>
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link style={{ textDecoration: "none" }}>Lead Management</Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Lead Listing
-        </li>
-      </ol>
+          <ol
+            className="breadcrumb my-3"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" className="custom-breadcrumb">
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              Lead Management
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Lead Listing
+            </li>
+          </ol>
           <form
             onSubmit={formik.handleSubmit}
             onKeyDown={(e) => {
@@ -419,8 +419,8 @@ const Lead = () => {
                             : data.subject === "CHINESE"
                             ? "Chinese"
                             : ""} */}
-                            {/* {data.subject} */}
-                            {subjectData &&
+                          {/* {data.subject} */}
+                          {subjectData &&
                             subjectData.map((subject) =>
                               parseInt(data.subjectId) === subject.id
                                 ? subject.subjects || "--"

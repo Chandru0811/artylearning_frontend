@@ -43,9 +43,7 @@ const Level = () => {
       return;
     }
     $(tableRef.current).DataTable({
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -85,7 +83,6 @@ const Level = () => {
 
   return (
     <div className="container my-4">
-    
       {loading ? (
         <div className="loader-container">
           <div className="loading">
@@ -98,115 +95,134 @@ const Level = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
-    <ol
-        className="breadcrumb my-3"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" style={{ textDecoration: "none" }}>
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link style={{ textDecoration: "none" }}>Lead Management</Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Contact
-        </li>
-      </ol>
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" className="text-center">S No</th>
-              <th scope="col" className="text-center">Name</th>
-              <th scope="col" className="text-center">Email</th>
-              <th scope="col" className="text-center">Message</th>
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
+        <div className="table-responsive">
+          <ol
+            className="breadcrumb my-3"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" className="custom-breadcrumb">
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              Lead Management
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Contact
+            </li>
+          </ol>
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col" className="text-center">
+                  S No
                 </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
+                <th scope="col" className="text-center">
+                  Name
                 </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
+                <th scope="col" className="text-center">
+                  Email
                 </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
+                <th scope="col" className="text-center">
+                  Message
                 </th>
-              )}
-              <th scope="col" className="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row" className="text-break text-center">{index + 1}</th>
-                <td className="text-break text-center">{data.name || "--"}</td>
-                <td className="text-break text-center"> {data.email || "--"}</td>
-                <td className="text-break text-center">{data.message || "--"}</td>
-                {extraData && <td>{data.createdBy}</td>}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th scope="col" className="text-center">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row" className="text-break text-center">
+                    {index + 1}
+                  </th>
+                  <td className="text-break text-center">
+                    {data.name || "--"}
+                  </td>
+                  <td className="text-break text-center">
+                    {" "}
+                    {data.email || "--"}
+                  </td>
+                  <td className="text-break text-center">
+                    {data.message || "--"}
+                  </td>
+                  {extraData && <td>{data.createdBy}</td>}
                   {extraData && <td>{extractDate(data.createdAt)}</td>}
                   {extraData && <td>{data.updatedBy}</td>}
                   {extraData && <td>{extractDate(data.updatedAt)}</td>}
-          
-                <td className="text-center">
-                  {storedScreens?.levelDelete && (
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteContactUs/${data.id}`}
-                    />
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+                  <td className="text-center">
+                    {storedScreens?.levelDelete && (
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteContactUs/${data.id}`}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

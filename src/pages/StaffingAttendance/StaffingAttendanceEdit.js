@@ -238,6 +238,30 @@ function StaffingAttendanceEdit() {
 
   return (
     <section className="AttendanceAdd p-3">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/staffing/attendance" className="custom-breadcrumb">
+            Attendance
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Attendance Edit
+        </li>
+      </ol>
       <div className="container-fluid">
         <div className="container">
           <form

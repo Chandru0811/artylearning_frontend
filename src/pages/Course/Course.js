@@ -111,13 +111,12 @@ const Course = () => {
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/" className="custom-breadcrumb">
             Home
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li>
-          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+        <li>Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">

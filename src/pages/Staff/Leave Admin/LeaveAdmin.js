@@ -89,6 +89,24 @@ const LeaveAdmin = () => {
 
   return (
     <div className="container my-4">
+                 <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+         Leave
+        </li>
+      </ol>
       {loading ? (
         <div className="loader-container">
           <div class="loading">

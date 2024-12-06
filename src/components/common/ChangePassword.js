@@ -1,73 +1,55 @@
 import React, { useState } from "react";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Form from "react-bootstrap/Form";
+import { Modal, Button, Form } from "react-bootstrap";
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import api from "../../config/URL";
 
 function ChangePassword({ onLogout }) {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
-  const [oldPassword, setConfirmOldPassword] = useState(false);
-  const navigate = useNavigate();
+  const [oldPassword, setOldPassword] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const PasswordVisibility = (e) => {
-    e.preventDefault();
-    setShowPassword(!showPassword);
-  };
-
-  const ConfirmPasswordVisibility = (e) => {
-    e.preventDefault();
-    setConfirmPassword(!confirmPassword);
-  };
-
-  const ConfirmOldPasswordVisibility = (e) => {
-    e.preventDefault();
-    setConfirmOldPassword(!oldPassword);
+  const togglePasswordVisibility = (type) => {
+    if (type === "new") setShowPassword(!showPassword);
+    if (type === "confirm") setConfirmPassword(!confirmPassword);
+    if (type === "old") setOldPassword(!oldPassword);
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .matches(
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        "*Enter a valid email address"
-      )
-      .required("*Email is required"),
+    // email: Yup.string()
+    //   .email("*Enter a valid email address")
+    //   .required("*Email is required"),
     newPassword: Yup.string()
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
+        "Must contain 8 characters, one uppercase, one lowercase, one number, and one special character"
       )
-      .required("*Please Enter your new password"),
+      .required("*New password is required"),
     confirmPassword: Yup.string()
       .required("*Confirm Password is required")
       .oneOf([Yup.ref("newPassword")], "Passwords must match"),
-    // oldPassword: Yup.string()
-    //   .matches(
-    //     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-    //     "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one Special Case Character"
-    //   )
-    //   .required("*Please Enter your current password"),
+    oldPassword: Yup.string().required("*Old password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       email: "",
+      oldPassword: "",
       newPassword: "",
       confirmPassword: "",
-      oldPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("values", values);
+      console.log("Submitting values:", values);
       const formData = new FormData();
       formData.append("email", values.email);
       formData.append("oldPassword", values.oldPassword);
       formData.append("newPassword", values.newPassword);
       formData.append("confirmPassword", values.confirmPassword);
+
       try {
         const response = await api.post(`/changePassword`, formData, {
           headers: {
@@ -78,238 +60,126 @@ function ChangePassword({ onLogout }) {
         if (response.status === 200) {
           onLogout();
           toast.success(response.data.message);
+          setShowModal(false);
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.warning(error);
+        toast.warning("Error changing password");
       }
     },
   });
 
   return (
-    <div className="container-fluid">
-      <div className="row align-items-center">
-        <div
-          className=" col-12 p-5"
-          //   style={{
-          //     backgroundColor: "#fce6cf",
-          //   }}
-        >
-          <div className="row">
-            <div className="text-center"></div>
-            <h5 className="pb-4 text-center">Change Password</h5>
-            <h6 className="text-center">
-              Your new password must be different from previously used Password
-            </h6>
+    <>
+      <Button
+        variant="primary"
+        onClick={() => {
+          setShowModal(true);
+          formik.resetForm();
+        }}
+        className="my-3 btn btn-danger"
+      >
+        Change Password
+      </Button>
 
-            <hr></hr>
-            <div className="text-center my-5">
-              <form onSubmit={formik.handleSubmit}>
-                <div className="form mb-3 ">
-                  <div className="row">
-                    <div className="col-md-6 col-12">
-                      <div className="form d-flex justify-content-center">
-                        <FloatingLabel
-                          controlId="floatingInput"
-                          label="Email"
-                          style={{ color: "rgb(0,0,0,0.9)", width: "100%" }}
-                          className="mb-3"
-                        >
-                          <Form.Control
-                            type="text"
-                            style={{
-                              backgroundColor: "#f8f9fa",
-                              border: "1px solid #ced4da",
-                            }}
-                            className={`form-control ${
-                              formik.touched.email && formik.errors.email
-                                ? ""
-                                : ""
-                            }`}
-                            {...formik.getFieldProps("email")}
-                          />
-                          {formik.touched.email && formik.errors.email && (
-                            <div className="text-danger">
-                              {formik.errors.email}
-                            </div>
-                          )}
-                        </FloatingLabel>
-                      </div>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
-                        controlId="floatingOldPassword"
-                        label="Old Password"
-                        style={{ color: "rgb(0,0,0,0.9)", width: "100%" }}
-                        className="mb-3"
-                      >
-                        <Form.Control
-                          type={oldPassword ? "text" : "password"}
-                          placeholder="Enter your current password"
-                          style={{
-                            backgroundColor: "#f8f9fa",
-                            border: "1px solid #ced4da",
-                          }}
-                          className={`form-control ${
-                            formik.touched.oldPassword &&
-                            formik.errors.oldPassword
-                              ? ""
-                              : ""
-                          }`}
-                          {...formik.getFieldProps("oldPassword")}
-                        />
-                        {oldPassword ? (
-                          <RiEyeOffLine
-                            onClick={ConfirmOldPasswordVisibility}
-                            style={{
-                              position: "absolute",
-                              right: "15px",
-                              top: "calc(35% - 8px)",
-                              cursor: "pointer",
-                            }}
-                          />
-                        ) : (
-                          <RiEyeLine
-                            onClick={ConfirmOldPasswordVisibility}
-                            style={{
-                              position: "absolute",
-                              right: "15px",
-                              top: "calc(35% - 8px)",
-                              cursor: "pointer",
-                            }}
-                          />
-                        )}
-                        {formik.touched.oldPassword &&
-                          formik.errors.oldPassword && (
-                            <div className="text-danger">
-                              {formik.errors.oldPassword}
-                            </div>
-                          )}
-                      </FloatingLabel>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
-                        controlId="floatingPassword"
-                        label="New Password"
-                        style={{ color: "rgb(0,0,0,0.9)", width: "100%" }}
-                        className="mb-3"
-                      >
-                        <Form.Control
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Enter your new password"
-                          style={{
-                            backgroundColor: "#f8f9fa",
-                            border: "1px solid #ced4da",
-                          }}
-                          className={`form-control ${
-                            formik.touched.newPassword &&
-                            formik.errors.newPassword
-                              ? ""
-                              : ""
-                          }`}
-                          {...formik.getFieldProps("newPassword")}
-                        />
-                        {showPassword ? (
-                          <RiEyeOffLine
-                            onClick={PasswordVisibility}
-                            style={{
-                              position: "absolute",
-                              right: "15px",
-                              top: "calc(35% - 8px)",
-                              cursor: "pointer",
-                            }}
-                          />
-                        ) : (
-                          <RiEyeLine
-                            onClick={PasswordVisibility}
-                            style={{
-                              position: "absolute",
-                              right: "15px",
-                              top: "calc(35% - 8px)",
-                              cursor: "pointer",
-                            }}
-                          />
-                        )}
-                        {formik.touched.newPassword &&
-                          formik.errors.newPassword && (
-                            <div className="text-danger">
-                              {formik.errors.newPassword}
-                            </div>
-                          )}
-                      </FloatingLabel>
-                    </div>
-                    <div className="col-md-6 col-12">
-                      <FloatingLabel
-                        controlId="floatingConfirmPassword"
-                        label="Confirm Password"
-                        style={{ color: "rgb(0,0,0,0.9)", width: "100%" }}
-                        className="mb-3"
-                      >
-                        <Form.Control
-                          type={confirmPassword ? "text" : "password"}
-                          placeholder="Confirm your password"
-                          style={{
-                            backgroundColor: "#f8f9fa",
-                            border: "1px solid #ced4da",
-                          }}
-                          className={`form-control ${
-                            formik.touched.confirmPassword &&
-                            formik.errors.confirmPassword
-                              ? ""
-                              : ""
-                          }`}
-                          {...formik.getFieldProps("confirmPassword")}
-                        />
-                        {confirmPassword ? (
-                          <RiEyeOffLine
-                            onClick={ConfirmPasswordVisibility}
-                            style={{
-                              position: "absolute",
-                              right: "15px",
-                              top: "calc(35% - 8px)",
-                              cursor: "pointer",
-                            }}
-                          />
-                        ) : (
-                          <RiEyeLine
-                            onClick={ConfirmPasswordVisibility}
-                            style={{
-                              position: "absolute",
-                              right: "15px",
-                              top: "calc(35% - 8px)",
-                              cursor: "pointer",
-                            }}
-                          />
-                        )}
-                        {formik.touched.confirmPassword &&
-                          formik.errors.confirmPassword && (
-                            <div className="text-danger">
-                              {formik.errors.confirmPassword}
-                            </div>
-                          )}
-                      </FloatingLabel>
-                    </div>
-                  </div>
-                </div>
-                <div className="text-end">
-                  <button
-                    className="btn btn-button btn-sm"
-                    style={{ width: "10%" }}
-                    id="registerButton"
-                    type="submit"
-                  >
-                    Save
-                  </button>
-                </div>
-              </form>
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Change Password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={formik.handleSubmit}>
+            {/* <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                {...formik.getFieldProps("email")}
+                isInvalid={formik.touched.email && formik.errors.email}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formik.errors.email}
+              </Form.Control.Feedback>
+            </Form.Group> */}
+
+            <Form.Group className="mb-3">
+              <Form.Label>Old Password</Form.Label>
+              <div className="input-group">
+                <Form.Control
+                  type={oldPassword ? "text" : "password"}
+                  {...formik.getFieldProps("oldPassword")}
+                  isInvalid={
+                    formik.touched.oldPassword && formik.errors.oldPassword
+                  }
+                />
+                <button
+                  type="button"
+                  className="btn border"
+                  onClick={() => togglePasswordVisibility("old")}
+                >
+                  {oldPassword ? <RiEyeOffLine /> : <RiEyeLine />}
+                </button>
+                <Form.Control.Feedback type="invalid">
+                  {formik.errors.oldPassword}
+                </Form.Control.Feedback>
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>New Password</Form.Label>
+              <div className="input-group">
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  {...formik.getFieldProps("newPassword")}
+                  isInvalid={
+                    formik.touched.newPassword && formik.errors.newPassword
+                  }
+                />
+                <button
+                  type="button"
+                  className="btn border"
+                  onClick={() => togglePasswordVisibility("new")}
+                >
+                  {showPassword ? <RiEyeOffLine /> : <RiEyeLine />}
+                </button>
+                <Form.Control.Feedback type="invalid">
+                  {formik.errors.newPassword}
+                </Form.Control.Feedback>
+              </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Confirm Password</Form.Label>
+              <div className="input-group">
+                <Form.Control
+                  type={confirmPassword ? "text" : "password"}
+                  {...formik.getFieldProps("confirmPassword")}
+                  isInvalid={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                  }
+                />
+                <button
+                  type="button"
+                  className="btn border"
+                  onClick={() => togglePasswordVisibility("confirm")}
+                >
+                  {confirmPassword ? <RiEyeOffLine /> : <RiEyeLine />}
+                </button>
+                <Form.Control.Feedback type="invalid">
+                  {formik.errors.confirmPassword}
+                </Form.Control.Feedback>
+              </div>
+            </Form.Group>
+            <div className="d-flex justify-content-end">
+              <Button type="submit" className="btn btn-danger">
+                Save
+              </Button>
             </div>
-
-            <div className="col-lg-3 col-md-2 col-12"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
+
 export default ChangePassword;

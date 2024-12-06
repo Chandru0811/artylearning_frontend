@@ -93,6 +93,31 @@ function TeacherView() {
 
   return (
     <div class="container-fluid minHeight mb-5">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/teacher" className="custom-breadcrumb">
+            Teacher
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Teacher View
+        </li>
+      </ol>
+      
       <div class="container-fluid py-4">
         <div class="row align-items-center">
           <div class="col">

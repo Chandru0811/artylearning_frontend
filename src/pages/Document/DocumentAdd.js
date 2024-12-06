@@ -224,7 +224,7 @@ function DocumentAdd() {
     const year = expiryDate.getFullYear();
     const month = String(expiryDate.getMonth() + 1).padStart(2, "0");
     const day = String(expiryDate.getDate()).padStart(2, "0");
-    return `${day}-${month}-${year}`;
+    return `${year}-${month}-${day}`;
   };
 
   const handleCenterChange = (event) => {
@@ -527,7 +527,7 @@ function DocumentAdd() {
               </label>
               <input
                 name="expiredDate"
-                type="text"
+                type="date"
                 className={`form-control  ${formik.touched.expiredDate && formik.errors.expiredDate
                     ? "is-invalid"
                     : ""

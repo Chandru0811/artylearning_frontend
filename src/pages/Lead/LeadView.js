@@ -292,30 +292,30 @@ function Leadview() {
         {/* </Modal.Footer> */}
       </Modal>
       <div className="mb-5">
-      <ol
-        className="breadcrumb my-3"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" style={{ textDecoration: "none" }}>
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link style={{ textDecoration: "none" }}>Lead Management</Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link to="/lead/lead" style={{ textDecoration: "none" }}>
-            Lead Listing
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Lead View
-        </li>
-      </ol>
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Lead Management
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/lead/lead" className="custom-breadcrumb">
+              Lead Listing
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Lead View
+          </li>
+        </ol>
         <div className="container-fluid minHeight">
           <div className=" products">
             <div class="container-fluid py-4">
@@ -1417,24 +1417,22 @@ function Leadview() {
                     data-bs-parent="#accordionExample"
                   >
                     <div class="accordion-body">
-                    <div className="bg-light rounded-3 text-center text-muted text-sm p-2">
-                                <span className="headColor">"</span> Hi parent your childern secured Grade {" "}
-                                <span className="text-success fw-bold">
-                                  {(doassesmentData &&
-                                    doassesmentData.leadDoAssessmentModel &&
-                                    doassesmentData.leadDoAssessmentModel
-                                      .length > 0 &&
-                                    doassesmentData.leadDoAssessmentModel[0] &&
-                                    doassesmentData.leadDoAssessmentAlphabet &&
-                                    doassesmentData
-                                      .leadDoAssessmentAlphabet[0] &&
-                                    doassesmentData.leadDoAssessmentAlphabet[0]
-                                      .gradeCategory) ||
-                                    "--"}{" "}
-                                    
-                                </span> 
-                                <span className="headColor">"</span>
-                                {/* Grade & Level is{" "}
+                      <div className="bg-light rounded-3 text-center text-muted text-sm p-2">
+                        <span className="headColor">"</span> Hi parent your
+                        childern secured Grade{" "}
+                        <span className="text-success fw-bold">
+                          {(doassesmentData &&
+                            doassesmentData.leadDoAssessmentModel &&
+                            doassesmentData.leadDoAssessmentModel.length > 0 &&
+                            doassesmentData.leadDoAssessmentModel[0] &&
+                            doassesmentData.leadDoAssessmentAlphabet &&
+                            doassesmentData.leadDoAssessmentAlphabet[0] &&
+                            doassesmentData.leadDoAssessmentAlphabet[0]
+                              .gradeCategory) ||
+                            "--"}{" "}
+                        </span>
+                        <span className="headColor">"</span>
+                        {/* Grade & Level is{" "}
                                 <span className="text-danger fw-bold">
                                 {(doassesmentData &&
                                   doassesmentData.leadDoAssessmentModel &&
@@ -1458,7 +1456,7 @@ function Leadview() {
                                   <> Please improve your child's skills</>
                                 ) : null}
                                 " */}
-                              </div>
+                      </div>
                       {/* Child Particulars */}
                       <div className="container-fluid">
                         <div className="row  m-3">

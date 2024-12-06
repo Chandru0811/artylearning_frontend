@@ -22,7 +22,6 @@ const CourseDeposit = () => {
   const [taxData, setTaxData] = useState([]);
   const [extraData, setExtraData] = useState(false);
 
-
   const fetchTaxData = async () => {
     try {
       const response = await api.get("getAllTaxSetting");
@@ -65,9 +64,7 @@ const CourseDeposit = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -106,22 +103,22 @@ const CourseDeposit = () => {
 
   return (
     <div className="container my-4">
-          <ol
+      <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/" className="custom-breadcrumb">
             Home
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+          Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/course" style={{ textDecoration: "none" }}>
+          <Link to="/course" className="custom-breadcrumb">
             Course
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
@@ -130,18 +127,18 @@ const CourseDeposit = () => {
           Deposit
         </li>
       </ol>
-       <div className="d-flex justify-content-end align-items-center">
-            <span>
-            <CourseDepositAdd onSuccess={refreshData} />
-            </span>
-            {/* } */}
-           {/* <p className="mb-4">        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+      <div className="d-flex justify-content-end align-items-center">
+        <span>
+          <CourseDepositAdd onSuccess={refreshData} />
+        </span>
+        {/* } */}
+        {/* <p className="mb-4">        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
         </button> </p> */}
-        </div>
+      </div>
       {loading ? (
         <div className="loader-container">
           <div class="loading">
@@ -154,121 +151,125 @@ const CourseDeposit = () => {
         </div>
       ) : (
         <div className="table-responsive">
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col">S No</th>
-              {/* <th scope="col">Centre Name</th> */}
-              <th scope="col">Effective Date</th>
-              <th scope="col">Tax Type</th>
-              <th scope="col">Course deposit Fee</th>
-              {/* <th scope="col">WeekEnd Fee</th>
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col">S No</th>
+                {/* <th scope="col">Centre Name</th> */}
+                <th scope="col">Effective Date</th>
+                <th scope="col">Tax Type</th>
+                <th scope="col">Course deposit Fee</th>
+                {/* <th scope="col">WeekEnd Fee</th>
                             <th scope="col">Tax Type</th> */}
-              <th scope="col">Status</th>
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(datas) && datas?.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                {/* <td>{data.centerName}</td> */}
-                <td>{data.effectiveDate}</td>
-                <td>
-                  {taxData &&
-                    taxData.map((tax) =>
-                      parseInt(data.taxType) === tax.id
-                        ? tax.taxType || "--"
-                        : ""
-                    )}
-                </td>
-                <td>{data.depositFees}</td>
-                <td>
-                  {data.status === "ACTIVE" ? (
-                    <span className="badge badges-Green">Active</span>
-                  ) : (
-                    <span className="badge badges-Red">Inactive</span>
-                  )}
-                </td>
-                {extraData && <td>{data.createdBy}</td>}
-                  {extraData && <td>{extractDate(data.createdAt)}</td>}
-                  {extraData && <td>{data.updatedBy}</td>}
-                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                <td className="d-flex">
-                  {/* {storedScreens?.courseRead && (
+                <th scope="col">Status</th>
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(datas) &&
+                datas?.map((data, index) => (
+                  <tr key={index}>
+                    <th scope="row">{index + 1}</th>
+                    {/* <td>{data.centerName}</td> */}
+                    <td>{data.effectiveDate}</td>
+                    <td>
+                      {taxData &&
+                        taxData.map((tax) =>
+                          parseInt(data.taxType) === tax.id
+                            ? tax.taxType || "--"
+                            : ""
+                        )}
+                    </td>
+                    <td>{data.depositFees}</td>
+                    <td>
+                      {data.status === "ACTIVE" ? (
+                        <span className="badge badges-Green">Active</span>
+                      ) : (
+                        <span className="badge badges-Red">Inactive</span>
+                      )}
+                    </td>
+                    {extraData && <td>{data.createdBy}</td>}
+                    {extraData && <td>{extractDate(data.createdAt)}</td>}
+                    {extraData && <td>{data.updatedBy}</td>}
+                    {extraData && <td>{extractDate(data.updatedAt)}</td>}
+                    <td className="d-flex">
+                      {/* {storedScreens?.courseRead && (
                     <CourseDepositView id={data.id} onSuccess={refreshData} />
                   )} */}
-                  {storedScreens?.courseUpdate && (
-                    <CourseDepositEdit id={data.id} onSuccess={refreshData} />
-                  )}
+                      {storedScreens?.courseUpdate && (
+                        <CourseDepositEdit
+                          id={data.id}
+                          onSuccess={refreshData}
+                        />
+                      )}
 
-                  {storedScreens?.courseDelete && (
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteCourseDepositFees/${data.id}`}
-                    />
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                      {storedScreens?.courseDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCourseDepositFees/${data.id}`}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

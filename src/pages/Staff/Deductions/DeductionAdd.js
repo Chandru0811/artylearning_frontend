@@ -108,7 +108,9 @@ function DeductionAdd() {
 
   const fetchUserName = async (centerId) => {
     try {
-      const userNames = await fetchUserListWithoutFreelancerByCenterId(centerId);
+      const userNames = await fetchUserListWithoutFreelancerByCenterId(
+        centerId
+      );
       setUserNameData(userNames);
     } catch (error) {
       toast.error(error);
@@ -123,12 +125,39 @@ function DeductionAdd() {
   return (
     <section className="HolidayAdd p-3">
       <div className="container-fluid">
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/deduction" className="custom-breadcrumb">
+              Deduction
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Deduction Add
+          </li>
+        </ol>
         <div className="container">
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
             <div className="row">
               <div className="col-12 text-end">
                 <Link to="/deduction">

@@ -22,7 +22,8 @@ const validationSchema = Yup.object({
     ),
   attendanceStatus: Yup.string().required("*Attendance status is required"),
   attendanceRemark: Yup.string()
-  .max(200, "*The maximum length is 200 characters").required("*Only 200 Letters"),
+    .max(200, "*The maximum length is 200 characters")
+    .required("*Only 200 Letters"),
   modeOfWorking: Yup.string().test(
     "check-mode-of-working",
     "*Mode of working is required",
@@ -169,9 +170,9 @@ function StaffingAttendanceAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
+        if (error.response.status === 409) {
           toast.error(error?.response?.data?.message);
-        }else{
+        } else {
           toast.error(error?.response?.data?.message);
         }
       } finally {
@@ -215,6 +216,30 @@ function StaffingAttendanceAdd() {
 
   return (
     <section className="AttendanceAdd p-3">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/staffing/attendance" className="custom-breadcrumb">
+            Attendance
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Attendance
+        </li>
+      </ol>
       <div className="container-fluid">
         <div className="container">
           <form
@@ -276,7 +301,8 @@ function StaffingAttendanceAdd() {
               </div>
 
               <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Employee Name</lable><span className="text-danger">*</span>
+                <lable className="">Employee Name</lable>
+                <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
                   class={`form-select  ${
@@ -438,7 +464,10 @@ function StaffingAttendanceAdd() {
                     >
                       <option value="" label="Select Mode" />
                       <option value="WORK_FROM_HOME" label="Work From Home" />
-                      <option value="WORK_FROM_OFFICE" label="Work From Office"/>
+                      <option
+                        value="WORK_FROM_OFFICE"
+                        label="Work From Office"
+                      />
                     </select>
                     {formik.touched.modeOfWorking &&
                       formik.errors.modeOfWorking && (
@@ -511,7 +540,6 @@ function StaffingAttendanceAdd() {
                     }`}
                     {...formik.getFieldProps("attendanceRemark")}
                     maxLength={200}
-
                   />
                   {formik.touched.attendanceRemark &&
                     formik.errors.attendanceRemark && (

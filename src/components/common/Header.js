@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import fetchAllCentersWithIds from "../../pages/List/CenterList";
 import { toast } from "react-toastify";
+import ChangePassword from "./ChangePassword";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ function Header({ onLogout }) {
   const userEmail = localStorage.getItem("email");
   const [centerData, setCenterData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("");
+  
 
   const handleLogOutClick = () => {
     onLogout();
@@ -131,19 +133,25 @@ function Header({ onLogout }) {
             </div>
           </div>
 
-          <div className="mt-auto d-flex justify-content-between gap-2">
-            <button
-              className="btn btn-danger mt-3 w-100"
-              onClick={handleLogOutClick}
-            >
-              Logout
-            </button>
-            <button
-              className="btn btn-danger mt-3 w-100"
-              onClick={handleLogOutClick}
-            >
-              Change password
-            </button>
+          <div className="mt-auto gap-2">
+            <div className="row">
+              <div className="col-md-6 col-12">
+                <button
+                  className="btn btn-danger mt-3 w-100"
+                  onClick={handleLogOutClick}
+                >
+                  Logout
+                </button>
+              </div>
+              <div className="col-md-6 col-12" data-bs-dismiss="offcanvas">
+                {/* <Link to="/changepassword" >
+                  <button className="btn btn-danger mt-3 w-100"  data-bs-dismiss="offcanvas">
+                    Change password
+                  </button>
+                </Link> */}
+                <ChangePassword />
+              </div>
+            </div>
           </div>
         </div>
       </div>

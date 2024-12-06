@@ -12,9 +12,8 @@ function ClassEdit() {
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-const [loadIndicator, setLoadIndicator] = useState(false);
-const userName  = localStorage.getItem('userName');
-
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
 
   const fetchData = async () => {
     try {
@@ -47,7 +46,8 @@ const userName  = localStorage.getItem('userName');
     classType: Yup.string().required("*Class Type is required"),
     durationInHrs: Yup.number().required("*Duration is required"),
     remark: Yup.string()
-    .max(200, "*The maximum length is 200 characters").notRequired(),
+      .max(200, "*The maximum length is 200 characters")
+      .notRequired(),
   });
 
   const formik = useFormik({
@@ -58,7 +58,7 @@ const userName  = localStorage.getItem('userName');
       classType: "",
       durationInHrs: "",
       remark: "",
-      updatedBy:userName,
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -83,7 +83,7 @@ const userName  = localStorage.getItem('userName');
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -102,39 +102,44 @@ const userName  = localStorage.getItem('userName');
 
     getData();
     fetchData();
-   
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="container">
-         <ol
+      <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/" className="custom-breadcrumb">
             Home
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link style={{ textDecoration: "none" }}>Course Management</Link>
+          Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/class" style={{ textDecoration: "none" }}>Class</Link>
+          <Link to="/class" className="custom-breadcrumb">
+            Class
+          </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
           Class Edit
         </li>
       </ol>
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/class">
             <button type="button " className="btn btn-sm btn-border   ">
@@ -142,15 +147,19 @@ const userName  = localStorage.getItem('userName');
             </button>
           </Link>
           &nbsp;&nbsp;
-          <button type="submit" className="btn btn-button btn-sm" disabled={loadIndicator}>
-                {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                Update
-              </button>
+          <button
+            type="submit"
+            className="btn btn-button btn-sm"
+            disabled={loadIndicator}
+          >
+            {loadIndicator && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Update
+          </button>
         </div>
         <div className="container">
           <div className="row py-4">
@@ -161,10 +170,11 @@ const userName  = localStorage.getItem('userName');
               <select
                 {...formik.getFieldProps("centerId")}
                 name="centerId"
-                className={`form-select   ${formik.touched.centerId && formik.errors.centerId
+                className={`form-select   ${
+                  formik.touched.centerId && formik.errors.centerId
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 aria-label="Default select example"
                 class="form-select "
                 onChange={handleCenterChange}
@@ -216,10 +226,11 @@ const userName  = localStorage.getItem('userName');
                 name="className"
                 class="form-control "
                 type="text"
-                className={`form-control  ${formik.touched.className && formik.errors.className
+                className={`form-control  ${
+                  formik.touched.className && formik.errors.className
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 {...formik.getFieldProps("className")}
               />
               {formik.touched.className && formik.errors.className && (
@@ -272,11 +283,12 @@ const userName  = localStorage.getItem('userName');
                 Duration(Hrs)<span class="text-danger">*</span>
               </label>
               <select
-               {...formik.getFieldProps("durationInHrs")}
-                className={`form-select  ${formik.touched.durationInHrs && formik.errors.durationInHrs
+                {...formik.getFieldProps("durationInHrs")}
+                className={`form-select  ${
+                  formik.touched.durationInHrs && formik.errors.durationInHrs
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 name="durationInHrs"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -298,13 +310,13 @@ const userName  = localStorage.getItem('userName');
                 name="remark"
                 class="form-control "
                 type="text"
-                className={`form-control  ${formik.touched.remark && formik.errors.remark
+                className={`form-control  ${
+                  formik.touched.remark && formik.errors.remark
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
                 {...formik.getFieldProps("remark")}
                 maxLength={200}
-
               />
               {formik.touched.remark && formik.errors.remark && (
                 <div className="invalid-feedback">{formik.errors.remark}</div>

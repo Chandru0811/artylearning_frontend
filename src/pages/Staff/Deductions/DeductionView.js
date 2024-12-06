@@ -35,6 +35,30 @@ function DeductionView() {
   return (
     <section>
       <div className="container">
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/deduction" className="custom-breadcrumb">
+              Deduction
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Deduction View
+          </li>
+        </ol>
         <div className="row mt-3">
           <div className="col-12 text-end">
             <Link to="/deduction">
@@ -53,7 +77,8 @@ function DeductionView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {centerData &&
+                    :{" "}
+                    {centerData &&
                       centerData.map((centerId) =>
                         parseInt(data.centerId) === centerId.id
                           ? centerId.centerNames || "--"

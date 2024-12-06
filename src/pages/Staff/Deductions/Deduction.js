@@ -85,6 +85,24 @@ const Deduction = () => {
 
   return (
     <div className="container my-4">
+            <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Deduction
+        </li>
+      </ol>
       <div className="d-flex justify-content-end mb-3">
         {storedScreens?.deductionCreate && (
           <Link to="/deduction/add">

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const CheckIndex = () => {
   const [workingMode, setWorkingMode] = useState("");
@@ -41,7 +42,25 @@ const CheckIndex = () => {
 
   return (
     <div className="pt-5">
-      <div className="container mt-5 text-center">
+      <div className="container  text-center">
+        <ol
+          className="breadcrumb "
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Check Attendance
+          </li>
+        </ol>
         <h2 className="mb-4">Attendance</h2>
 
         <div className="d-flex justify-content-center mb-4 gap-3">
