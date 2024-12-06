@@ -59,7 +59,7 @@ import StaffEdit from "../pages/Staff/StaffEdit";
 import StaffLeave from "../pages/Staff/StaffLeave";
 import StaffPayslip from "../pages/Staff/StaffPayslip";
 import StaffView from "../pages/Staff/StaffView";
-import StudentView from "../pages/Student/StudentView";
+// import StudentView from "../pages/Student/StudentView";
 import StudentNewView from "../pages/Student/StudentNewView";
 import InvoiceAdd from "../pages/Invoice/InvoiceAdd";
 import InvoiceEdit from "../pages/Invoice/InvoiceEdit";
@@ -282,8 +282,8 @@ function Admin({ handleLogout }) {
               <Route path="/student" element={<Student />} />
               <Route path="/student/add" element={<StudentAdd />} />
               <Route path="/student/edit/:id" element={<StudentEdit />} />
-              <Route path="/student/view/:id" element={<StudentView />} />
-              <Route path="/student/new/view" element={<StudentNewView />} />
+              {/* <Route path="/student/view/:id" element={<StudentView />} /> */}
+              <Route path="/student/view/:id" element={<StudentNewView />} />
               <Route
                 path="/student/view/transferOut/:id"
                 element={<StudentTransferOut />}

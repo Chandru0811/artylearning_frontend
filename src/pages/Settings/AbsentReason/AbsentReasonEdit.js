@@ -51,7 +51,7 @@ function AbsentReasonEdit() {
                     <Modal.Body>
                         <div className="row">
                             <div className="col-12 mb-3">
-                                <label>
+                                <label className="form-label">
                                     Absent Reason<span className="text-danger">*</span>
                                 </label>
                                 <input
@@ -66,7 +66,7 @@ function AbsentReasonEdit() {
                                 )}
                             </div>
                             <div className="col-12 mb-3">
-                                <label>
+                                <label className="form-label">
                                     Remarks
                                 </label>
                                 <textarea rows={5}

@@ -774,6 +774,7 @@
 .stdImg {
   border-radius: 50%;
   width: 100px;
+  height: 100px;
   padding: 3px;
   border: 3px solid #d2d6de;
 }
@@ -782,6 +783,7 @@
   color: #fa994af5;
   font-size: 12px;
   text-align: end;
+  cursor: pointer;
 }
 
 .stdList {
@@ -836,4 +838,14 @@
   text-decoration: none;
   color: #0084ff;
   cursor: pointer;
+}
+
+.psd .btn-light,
+.psd .btn-light:hover,
+.psd .btn-light.active{
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: none;
 }
