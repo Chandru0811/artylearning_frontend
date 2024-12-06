@@ -116,14 +116,14 @@ function StudentNewView() {
             <div className="d-flex align-items-center justify-content-end mb-4">
                 <button
                     className="btn btn-border btn-sm me-2 stdViewBtn"
-                    style={{ padding: "7px" }}
+                    style={{ padding: "3px 5px", fontSize: "12px" }}
                 >
-                    <IoIosMail size={20} />&nbsp;Resend Welcome Mail
+                    <IoIosMail size={18} />&nbsp;Resend Welcome Mail
                 </button>
                 <Link to={"/student"}>
                     <button
                         className="btn btn-border btn-sm"
-                        style={{ padding: "7px" }}
+                        style={{ padding: "3px 5px", fontSize: "12px" }}
                     >
                         Back
                     </button>
