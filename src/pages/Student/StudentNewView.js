@@ -431,7 +431,7 @@ function StudentNewView() {
                                     <StudentViewCreditNotes />
                                 )}
                                 {/* Table for TabE */}
-                                {subActiveTab === "tabD" && (
+                                {subActiveTab === "tabE" && (
                                     <StudentViewAbsentRecord />
                                 )}
                             </>

@@ -17,36 +17,24 @@ const StudentViewAbsentRecord = () => {
     }, []);
 
     return (
-        <div className="container my-4">
-            <div className="my-3 d-flex justify-content-end mb-5">
-                
-            </div>
+        <div className="container my-3">
+            <p className="text-danger" style={{ fontSize: "20px" }}>Total Deposit Balance : SGD 0.00</p>
             <table ref={tableRef} className="display">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Status</th>
                         <th scope="col">Center</th>
-                        <th scope="col">Course</th>
-                        <th scope="col">Class Code</th>
-                        <th scope="col">Class Listing</th>
-                        <th scope="col">Teacher</th>
-                        <th scope="col">Start Time</th>
-                        <th scope="col">End Time</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
-                        <th scope="col">Duration in Class</th>
-                        <th scope="col">Attendance</th>
+                        <th scope="col">Top-Up Date</th>
+                        <th scope="col">Deduction Date</th>
+                        <th scope="col">Date of Absent</th>
+                        <th scope="col">Absent Reason</th>
+                        <th scope="col">Deposit Balance</th>
+                        <th scope="col">Deduction</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

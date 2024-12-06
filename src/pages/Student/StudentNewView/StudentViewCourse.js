@@ -17,10 +17,7 @@ const StudentViewCourse = () => {
     }, []);
 
     return (
-        <div className="container my-4">
-            <div className="my-3 d-flex justify-content-end mb-5">
-                
-            </div>
+        <div className="container my-3">
             <table ref={tableRef} className="display">
                 <thead>
                     <tr>

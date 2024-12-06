@@ -17,33 +17,27 @@ const StudentViewCreditNotes = () => {
     }, []);
 
     return (
-        <div className="container my-4">
-            <div className="my-3 d-flex justify-content-end mb-5">
-                
-            </div>
+        <div className="container my-3">
+            <p className="text-danger" style={{ fontSize: "20px" }}>Outstanding Credit : SGD 0</p>
             <table ref={tableRef} className="display">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Center</th>
-                        <th scope="col">Course</th>
-                        <th scope="col">Class Code</th>
-                        <th scope="col">Class Listing</th>
-                        <th scope="col">Teacher</th>
-                        <th scope="col">Start Time</th>
-                        <th scope="col">End Time</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
-                        <th scope="col">Duration in Class</th>
-                        <th scope="col">Attendance</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Credit Notes Date</th>
+                        <th scope="col">Credit Notes Reference No</th>
+                        <th scope="col">Remark</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Credit Amount</th>
+                        <th scope="col">Used Amount</th>
+                        <th scope="col">Outstanding Amount</th>
+                        <th scope="col">Receipt No.</th>
+                        <th scope="col">Created By</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

@@ -37,6 +37,11 @@ function Sidebar() {
             path: "/center",
             access: storedScreens.centerListingIndex,
           },
+          {
+            title: "New Table",
+            path: "/newTable1",
+            access: storedScreens.centerListingIndex,
+          },
           // {
           //   title: "Centre Manager",
           //   path: "/centermanager",

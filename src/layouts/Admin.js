@@ -229,6 +229,7 @@ import FreelancerPayslipView from "../pages/EmployeePayslip/FreelancerPayslipVie
 import AbsentReason from "../pages/Settings/AbsentReason/AbsentReason";
 import CheckIndex from "../pages/Staff/CheckIndex";
 import ChangePassword from "../components/common/ChangePassword";
+import NewTable1 from "../pages/Center/NewTable1";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -256,6 +257,7 @@ function Admin({ handleLogout }) {
               <Route path="/datatable" element={<DataTable />} />
               <Route path="/datatable2" element={<Datatable2 />} />
               <Route path="/batchtable" element={<Test />} />
+              <Route path="/newTable1" element={<NewTable1 />} />
 
               <Route
                 path="/changepassword"
