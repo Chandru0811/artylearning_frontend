@@ -92,6 +92,24 @@ const CMSProductsItem = () => {
 
   return (
     <div className="container center p-0">
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Content Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Product Item
+        </li>
+      </ol>
       <div className="container cms-header shadow-sm py-2 mb-5">
         <div className="row p-1">
           <div className="col-md-6 col-12">

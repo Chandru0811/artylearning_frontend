@@ -19,7 +19,6 @@ const Document = () => {
   const [studentData, setStudentData] = useState(null);
   const [extraData, setExtraData] = useState(false);
 
-
   const fetchData = async () => {
     try {
       const studentData = await fetchAllStudentsWithIds();
@@ -55,9 +54,7 @@ const Document = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -95,6 +92,24 @@ const Document = () => {
   };
   return (
     <div className="container my-4">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Document Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Document
+        </li>
+      </ol>
       <div className="mb-3 d-flex justify-content-end">
         {storedScreens?.documentListingCreate && (
           <Link to="/document/add">
@@ -103,7 +118,7 @@ const Document = () => {
             </button>
           </Link>
         )}
-         {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+        {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
         </button> */}
@@ -119,124 +134,125 @@ const Document = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
-
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col">S No</th>
-              <th scope="col">Folder Name</th>
-              <th scope="col">Student Name</th>
-              <th scope="col">Course</th>
-              <th scope="col">Class</th>
-              <th scope="col">Batch</th>
-              <th scope="col">Status</th>
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.folderName}</td>
-                <td>
-                  {studentData &&
-                    studentData.map((student) =>
-                      parseInt(data.studentId) === student.id
-                        ? student.studentNames || "--"
-                        : ""
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col">S No</th>
+                <th scope="col">Folder Name</th>
+                <th scope="col">Student Name</th>
+                <th scope="col">Course</th>
+                <th scope="col">Class</th>
+                <th scope="col">Batch</th>
+                <th scope="col">Status</th>
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{data.folderName}</td>
+                  <td>
+                    {studentData &&
+                      studentData.map((student) =>
+                        parseInt(data.studentId) === student.id
+                          ? student.studentNames || "--"
+                          : ""
+                      )}
+                  </td>
+                  <td>{data.course}</td>
+                  <td>{data.classListing}</td>
+                  <td>{data.batchTime}</td>
+                  <td>
+                    {data.approveStatus === true ? (
+                      <span className="badge badges-Yellow">Pending</span>
+                    ) : (
+                      <span className="badge badges-Green">Approval</span>
                     )}
-                </td>
-                <td>{data.course}</td>
-                <td>{data.classListing}</td>
-                <td>{data.batchTime}</td>
-                <td>
-                  {data.approveStatus === true ? (
-                    <span className="badge badges-Yellow">Pending</span>
-                  ) : (
-                    <span className="badge badges-Green">Approval</span>
-                  )}
-                </td>
-                {extraData && <td>{data.createdBy}</td>}
+                  </td>
+                  {extraData && <td>{data.createdBy}</td>}
                   {extraData && <td>{extractDate(data.createdAt)}</td>}
                   {extraData && <td>{data.updatedBy}</td>}
                   {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                <td>
-                  <div className="d-flex">
-                    {storedScreens?.documentListingRead && (
-                      <Link to={`/document/view/${data.id}?approveStatus=${data.approveStatus}`}>
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                    )}
-                    <DocumentEdit onSuccess={refreshData} id={data.id} />
-                    {/* <Delete
+                  <td>
+                    <div className="d-flex">
+                      {storedScreens?.documentListingRead && (
+                        <Link
+                          to={`/document/view/${data.id}?approveStatus=${data.approveStatus}`}
+                        >
+                          <button className="btn btn-sm">
+                            <FaEye />
+                          </button>
+                        </Link>
+                      )}
+                      <DocumentEdit onSuccess={refreshData} id={data.id} />
+                      {/* <Delete
                       onSuccess={refreshData}
                       path={`/deleteCourseClassListing/${data.id}`}
                     /> */}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

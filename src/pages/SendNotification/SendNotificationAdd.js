@@ -30,7 +30,7 @@ function SendNotificationAdd() {
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
-  const userName = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const centerOptions = centerData.map((center) => ({
     label: center.centerNames,
@@ -127,14 +127,40 @@ function SendNotificationAdd() {
     },
   });
 
-
   return (
     <div className="container">
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Messaging
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/sendNotification" className="custom-breadcrumb">
+            School Announcement
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          School Announcement Add
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
           <Link to="/sendNotification">
             <button type="button " className="btn btn-sm btn-border   ">
@@ -164,19 +190,18 @@ function SendNotificationAdd() {
               </label>
               <select
                 {...formik.getFieldProps("recipient")}
-                className={`form-select  ${formik.touched.recipient && formik.errors.recipient
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-select  ${
+                  formik.touched.recipient && formik.errors.recipient
+                    ? "is-invalid"
+                    : ""
+                }`}
                 name="recipient"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.recipient}
               >
                 <option></option>
-                <option value="ALL">
-                  All
-                </option>
+                <option value="ALL">All</option>
                 <option value="PARENTS">Parents</option>
                 <option value="TEACHERS">Teachers</option>
               </select>
@@ -193,10 +218,11 @@ function SendNotificationAdd() {
               </label>
               <input
                 {...formik.getFieldProps("messageTitle")}
-                className={`form-control  ${formik.touched.messageTitle && formik.errors.messageTitle
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control  ${
+                  formik.touched.messageTitle && formik.errors.messageTitle
+                    ? "is-invalid"
+                    : ""
+                }`}
                 name="messageTitle"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -224,10 +250,11 @@ function SendNotificationAdd() {
                   );
                 }}
                 labelledBy="Select Centers"
-                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-multi-select ${
+                  formik.touched.centerIds && formik.errors.centerIds
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
               {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
@@ -251,10 +278,11 @@ function SendNotificationAdd() {
                   );
                 }}
                 labelledBy="Select Courses"
-                className={`form-multi-select ${formik.touched.courseIds && formik.errors.courseIds
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-multi-select ${
+                  formik.touched.courseIds && formik.errors.courseIds
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
               {formik.touched.courseIds && formik.errors.courseIds && (
                 <div className="invalid-feedback">
@@ -278,10 +306,11 @@ function SendNotificationAdd() {
                   );
                 }}
                 labelledBy="Select Classes"
-                className={`form-multi-select ${formik.touched.classIds && formik.errors.classIds
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-multi-select ${
+                  formik.touched.classIds && formik.errors.classIds
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
               {formik.touched.classIds && formik.errors.classIds && (
                 <div className="invalid-feedback">{formik.errors.classIds}</div>
@@ -295,8 +324,9 @@ function SendNotificationAdd() {
               <select
                 {...formik.getFieldProps("days")}
                 name="days"
-                className={`form-select   ${formik.touched.days && formik.errors.days ? "is-invalid" : ""
-                  }`}
+                className={`form-select   ${
+                  formik.touched.days && formik.errors.days ? "is-invalid" : ""
+                }`}
                 aria-label="Default select example"
                 class="form-select "
               >
@@ -339,10 +369,11 @@ function SendNotificationAdd() {
               <label className="form-label">Attachments</label>
               <input
                 type="file"
-                className={`form-control ${formik.touched.attachments && formik.errors.attachments
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                className={`form-control ${
+                  formik.touched.attachments && formik.errors.attachments
+                    ? "is-invalid"
+                    : ""
+                }`}
                 multiple
                 onChange={(event) => {
                   const files = Array.from(event.currentTarget.files);
@@ -364,11 +395,12 @@ function SendNotificationAdd() {
                 class="form-control "
                 row="5"
                 type="text"
-                className={`form-control  ${formik.touched.messageDescription &&
+                className={`form-control  ${
+                  formik.touched.messageDescription &&
                   formik.errors.messageDescription
-                  ? "is-invalid"
-                  : ""
-                  }`}
+                    ? "is-invalid"
+                    : ""
+                }`}
                 style={{
                   height: "7rem",
                 }}

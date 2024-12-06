@@ -15,7 +15,6 @@ const OtherMessages = () => {
   // const loginAdminId = localStorage.getItem("loginUserId");
   const userId = localStorage.getItem("userId");
 
-
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -74,6 +73,24 @@ const OtherMessages = () => {
   return (
     <div>
       <div className="container my-3">
+        <ol
+          className="breadcrumb my-3 px-1"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Messaging
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Other Messages
+          </li>
+        </ol>
         {loading ? (
           <div className="loader-container">
             <div class="loading">
@@ -99,35 +116,39 @@ const OtherMessages = () => {
               </tr>
             </thead>
             <tbody>
-            {(datas && Array.isArray(datas) ? datas : []).map((data, index) => (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{data.senderName}</td>
-                  <td>{data.receiverName}</td>
-                  <td>{data.message}</td>
-                  <td>{data.createdAt.substring(0, 10)}</td>
-                  <td>
-                    <div className="d-flex">
-                      {/* {storedScreens?.messagingRead && ( */}
-                        <Link to={`/othermessaging/view/${data.receiverId}?senderId=${data.senderId}`}>
+              {(datas && Array.isArray(datas) ? datas : []).map(
+                (data, index) => (
+                  <tr key={index}>
+                    <th scope="row">{index + 1}</th>
+                    <td>{data.senderName}</td>
+                    <td>{data.receiverName}</td>
+                    <td>{data.message}</td>
+                    <td>{data.createdAt.substring(0, 10)}</td>
+                    <td>
+                      <div className="d-flex">
+                        {/* {storedScreens?.messagingRead && ( */}
+                        <Link
+                          to={`/othermessaging/view/${data.receiverId}?senderId=${data.senderId}`}
+                        >
                           <button className="btn btn-sm">
                             <FaEye />
                           </button>
                         </Link>
-                      {/* )} */}
-                      {/* {storedScreens?.messagingUpdate && (
+                        {/* )} */}
+                        {/* {storedScreens?.messagingUpdate && (
                         <LevelEdit id={data.id} onSuccess={refreshData} />
                       )} */}
-                      {/* {storedScreens?.messagingDelete && ( */}
+                        {/* {storedScreens?.messagingDelete && ( */}
                         <Delete
                           onSuccess={refreshData}
                           path={`/deleteMessage/${data.id}`}
                         />
-                      {/* )} */}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        {/* )} */}
+                      </div>
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         )}

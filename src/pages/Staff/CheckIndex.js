@@ -37,11 +37,10 @@ const CheckIndex = () => {
 
   const handleWorkingModeChange = (e) => {
     setWorkingMode(e.target.value);
-    setAttendanceAction("");
   };
 
   return (
-    <div className="pt-5">
+    <div className="pt-3">
       <div className="container  text-center">
         <ol
           className="breadcrumb "
@@ -61,7 +60,7 @@ const CheckIndex = () => {
             Check Attendance
           </li>
         </ol>
-        <h2 className="mb-4">Attendance</h2>
+        <h2 className="mb-4">Marked Attendance</h2>
 
         <div className="d-flex justify-content-center mb-4 gap-3">
           <button

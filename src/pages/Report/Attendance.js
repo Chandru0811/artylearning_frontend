@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import api from "../../config/URL";
+import { Link } from "react-router-dom";
 
 const Attendance = () => {
   const tableRef = useRef(null);
@@ -126,20 +127,42 @@ const Attendance = () => {
 
   return (
     <div className="container my-3">
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Report Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Attendance Report
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="row my-4">
           <div className="col-md-4 col-12 mb-2">
             <label className="form-label">Centre</label>
             <select
               {...formik.getFieldProps("centerId")}
-              className={`form-select ${formik.touched.centerId && formik.errors.centerId
+              className={`form-select ${
+                formik.touched.centerId && formik.errors.centerId
                   ? "is-invalid"
                   : ""
-                }`}
+              }`}
               aria-label="Default select example"
               onChange={handleCenterChange}
             >
@@ -159,10 +182,11 @@ const Attendance = () => {
             <label className="form-label">Course</label>
             <select
               {...formik.getFieldProps("courseId")}
-              className={`form-select ${formik.touched.courseId && formik.errors.courseId
+              className={`form-select ${
+                formik.touched.courseId && formik.errors.courseId
                   ? "is-invalid"
                   : ""
-                }`}
+              }`}
             >
               <option></option>
               {courseData &&
@@ -182,10 +206,11 @@ const Attendance = () => {
               {...formik.getFieldProps("attendanceDate")}
               type="date"
               onFocus={(e) => e.target.showPicker()}
-              className={`form-control ${formik.touched.attendanceDate && formik.errors.attendanceDate
+              className={`form-control ${
+                formik.touched.attendanceDate && formik.errors.attendanceDate
                   ? "is-invalid"
                   : ""
-                }`}
+              }`}
               onChange={(e) => setSelectedDate(e.target.value)}
               value={selectedDate}
             />
@@ -199,11 +224,12 @@ const Attendance = () => {
             <label className="form-label">Status</label>
             <select
               {...formik.getFieldProps("attendanceStatus")}
-              className={`form-select ${formik.touched.attendanceStatus &&
-                  formik.errors.attendanceStatus
+              className={`form-select ${
+                formik.touched.attendanceStatus &&
+                formik.errors.attendanceStatus
                   ? "is-invalid"
                   : ""
-                }`}
+              }`}
             >
               <option disabled></option>
               <option value="present">Present</option>

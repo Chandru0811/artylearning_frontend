@@ -15,6 +15,30 @@ import DocImg_10 from "../../assets/images/Documentimg_10.png";
 function DocumentReportView() {
   return (
     <div className="container mb-5">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Report Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/report/document" className="custom-breadcrumb">
+            Document Report
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Document Report View
+        </li>
+      </ol>
       <div className="d-flex justify-content-end align-item-end mt-4">
         <Link to="/report/document">
           <button type="button" className="btn btn-sm btn-border">
@@ -145,7 +169,7 @@ function DocumentReportView() {
             </div>
             <div className=" col-md-4 col-12 mb-2">
               <img className="img-fluid" src={DocImg_6} alt="pic_7" />
-            </div>        
+            </div>
           </div>
         </div>
       </div>

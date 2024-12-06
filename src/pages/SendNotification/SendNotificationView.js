@@ -123,6 +123,30 @@ function SendNotificationView() {
 
   return (
     <div className="container ">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Messaging
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/sendNotification" className="custom-breadcrumb">
+            School Announcement
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          School Announcement View
+        </li>
+      </ol>
       <div className="d-flex justify-content-end align-item-end mt-4">
         <Link to="/sendNotification">
           <button type="button" className="btn btn-sm btn-border">

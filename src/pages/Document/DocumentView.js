@@ -12,8 +12,8 @@ function DocumentView() {
   const { id } = useParams();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const initialApproveStatus = queryParams.get('approveStatus') === 'true';
-  
+  const initialApproveStatus = queryParams.get("approveStatus") === "true";
+
   const [data, setData] = useState([]);
   const [folderName, setFolderName] = useState("");
   const [images] = useState([AddContact]);
@@ -93,6 +93,30 @@ function DocumentView() {
 
   return (
     <div className="container">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Document Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/document" className="custom-breadcrumb">
+            Document
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Document View
+        </li>
+      </ol>
       <div className="d-flex justify-content-end align-item-end mt-4">
         {approveStatus && (
           <button

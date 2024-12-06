@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
+import { Link } from "react-router-dom";
 
 const AssessmentReport = () => {
   const tableRef = useRef(null);
@@ -93,6 +94,24 @@ const AssessmentReport = () => {
 
   return (
     <div className="container my-4">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Report Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Asssessment Report
+        </li>
+      </ol>
       <table ref={tableRef} className="display">
         <thead>
           <tr>
@@ -132,7 +151,9 @@ const AssessmentReport = () => {
                 ) : data.status === "drop" ? (
                   <span className="badge badges-Brown">Drop</span>
                 ) : (
-                  <span className="badge badges-LightGreen">Assessment Done</span>
+                  <span className="badge badges-LightGreen">
+                    Assessment Done
+                  </span>
                 )}
               </td>
             </tr>

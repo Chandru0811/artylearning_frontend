@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
+import { Link } from "react-router-dom";
 
 const StudentReport = () => {
   const tableRef = useRef(null);
@@ -54,13 +55,28 @@ const StudentReport = () => {
 
   return (
     <div className="container my-2">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Report Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Student Report
+        </li>
+      </ol>
       <div className="row my-5">
         <div className="col-md-4 col-12">
           <label className="form-lable">Status</label>
-          <select
-            className="form-select "
-            aria-label="Default select example"
-          >
+          <select className="form-select " aria-label="Default select example">
             <option selected>Select a Centre name</option>
             <option value="1">Class Assigned</option>
             <option value="2">Class Cancelled</option>

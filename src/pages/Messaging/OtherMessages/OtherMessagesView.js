@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { LuDownload } from "react-icons/lu";
 import document from "../../../assets/images/Blue and Peach Gradient Facebook Profile Picture.png";
 
@@ -11,10 +11,10 @@ function OtherMessagesView() {
   const [data, setData] = useState(null);
   const userId = localStorage.getItem("userId");
   const location = useLocation();
-  
+
   // Extracting query parameters
   const queryParams = new URLSearchParams(location.search);
-  const senderId = queryParams.get('senderId');
+  const senderId = queryParams.get("senderId");
   const { id } = useParams();
   console.log("data", data);
 
@@ -121,6 +121,30 @@ function OtherMessagesView() {
 
   return (
     <section className="chat-section">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Messaging
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/othermessaging" className="custom-breadcrumb">
+            Other Messages
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Other Messages View
+        </li>
+      </ol>
       <div className="container-fluid">
         <div className="row message-list">
           <div className="col-12">

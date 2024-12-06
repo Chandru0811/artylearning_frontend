@@ -85,6 +85,24 @@ const MyMessages = () => {
   return (
     <div>
       <div className="container my-3">
+        <ol
+          className="breadcrumb my-3 px-1"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Messaging
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            My Messages
+          </li>
+        </ol>
         <div className="my-3 d-flex justify-content-end">
           {storedScreens?.messagingCreate && (
             <MyMessagesAdd onSuccess={refreshData} />

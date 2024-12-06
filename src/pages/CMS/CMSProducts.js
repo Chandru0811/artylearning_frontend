@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import api from "../../config/URL";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { Link } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   boxA: Yup.string(),
@@ -89,6 +90,24 @@ function CMSProducts() {
     <>
       <div className="">
         <div className="container cms-header shadow-sm py-2">
+          <ol
+            className="breadcrumb my-3 px-1"
+            style={{ listStyle: "none", padding: 0, margin: 0 }}
+          >
+            <li>
+              <Link to="/" className="custom-breadcrumb">
+                Home
+              </Link>
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li>
+              Content Management
+              <span className="breadcrumb-separator"> &gt; </span>
+            </li>
+            <li className="breadcrumb-item active" aria-current="page">
+              Products
+            </li>
+          </ol>
           <div className="row p-1">
             <div className="col-md-6 col-12">
               <h4>Products</h4>

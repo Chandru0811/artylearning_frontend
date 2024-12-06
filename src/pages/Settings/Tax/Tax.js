@@ -22,7 +22,6 @@ const Tax = () => {
   // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
 
-
   useEffect(() => {
     const getData = async () => {
       try {
@@ -53,9 +52,7 @@ const Tax = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -94,20 +91,38 @@ const Tax = () => {
 
   return (
     <div className="container my-4">
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Settings
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Tax
+        </li>
+      </ol>
       {/* {storedScreens?.levelCreate &&  */}
-     
-        <div className="d-flex justify-content-end align-items-center">
-            <span>
-            <TaxAdd onSuccess={refreshData} />
-            </span>
-            {/* } */}
-           {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+
+      <div className="d-flex justify-content-end align-items-center">
+        <span>
+          <TaxAdd onSuccess={refreshData} />
+        </span>
+        {/* } */}
+        {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
 
         </button> </p> */}
-        </div>
+      </div>
       {/* } */}
       {loading ? (
         <div className="loader-container">
@@ -120,120 +135,120 @@ const Tax = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                  S No
+                </th>
+                <th scope="col">Tax Type</th>
+                <th scope="col">Rate</th>
+                <th scope="col">Effective Date</th>
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th scope="col">Status</th>
 
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col">Tax Type</th>
-              <th scope="col">Rate</th>
-              <th scope="col">Effective Date</th>
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-              <th scope="col">Status</th>
-             
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.taxType}</td>
-                <td>{data.rate} %</td>
-                <td>{data.effectiveDate}</td>
-                {extraData && <td>{data.createdBy}</td>}
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{data.taxType}</td>
+                  <td>{data.rate} %</td>
+                  <td>{data.effectiveDate}</td>
+                  {extraData && <td>{data.createdBy}</td>}
                   {extraData && <td>{extractDate(data.createdAt)}</td>}
                   {extraData && <td>{data.updatedBy}</td>}
                   {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                <td>{data.status === "ACTIVE" ? (
-                  <span className="badge badges-Green">Active</span>
-                ) : (
-                  <span className="badge badges-Red">Inactive</span>
-                )}</td>
-                <td>
-               
-                {extraData && <td>{data.updatedAt}</td>}
-                  <div className="d-flex">
-                    {/* {storedScreens?.invoiceRead && ( */}
-                    {/* <Link to={`/tax/view/${data.id}`}>
+                  <td>
+                    {data.status === "ACTIVE" ? (
+                      <span className="badge badges-Green">Active</span>
+                    ) : (
+                      <span className="badge badges-Red">Inactive</span>
+                    )}
+                  </td>
+                  <td>
+                    {extraData && <td>{data.updatedAt}</td>}
+                    <div className="d-flex">
+                      {/* {storedScreens?.invoiceRead && ( */}
+                      {/* <Link to={`/tax/view/${data.id}`}>
                       <button className="btn btn-sm">
                         <FaEye />
                       </button>
                     </Link> */}
-                    {/* )}
+                      {/* )}
                     {storedScreens?.invoiceUpdate && ( */}
-                    <TaxEdit id={data.id} onSuccess={refreshData} />
-                    {/* )}
+                      <TaxEdit id={data.id} onSuccess={refreshData} />
+                      {/* )}
                     {storedScreens?.invoiceDelete && ( */}
-                    <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteTaxSetting/${data.id}`}
-                    />
-                    {/* )} */}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteTaxSetting/${data.id}`}
+                      />
+                      {/* )} */}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

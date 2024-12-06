@@ -3,16 +3,18 @@ import ReactApexChart from "react-apexcharts";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
+import { Link } from "react-router-dom";
 
 function Datatable2() {
-
   const getCurrentWeek = () => {
     const date = new Date();
     // Set to nearest Thursday: current date + 4 - current day number makes Thursday day number 4
     date.setDate(date.getDate() + 4 - (date.getDay() || 7));
     // ISO year and week calculation
     const yearStart = new Date(date.getFullYear(), 0, 1);
-    const weekNumber = Math.ceil(((date - yearStart) / 86400000 + yearStart.getDay() + 1) / 7);
+    const weekNumber = Math.ceil(
+      ((date - yearStart) / 86400000 + yearStart.getDay() + 1) / 7
+    );
     const isoYear = date.getFullYear();
     return `${isoYear}-W${String(weekNumber).padStart(2, "0")}`;
   };
@@ -72,10 +74,10 @@ function Datatable2() {
   //     if (day === "ALL") {
   //       // Map for "ALL" days structure
   //       const dayData = data.dayData || {};
-  //       const labels = data.labels || [];      
+  //       const labels = data.labels || [];
   //       const bookedSlots = labels.map(label => dayData[label]?.bookSlot || 0);
   //       const availableSlots = labels.map(label => dayData[label]?.availableSlot || 0);
-        
+
   //       setChartData({
   //         dayData: [
   //           { name: "Booked Slots", data: bookedSlots },
@@ -111,7 +113,7 @@ function Datatable2() {
       week: week,
       day: day,
     });
-  
+
     try {
       const response = await api.get(
         `/getEnrollmentReportData?${queryParams}`,
@@ -121,37 +123,44 @@ function Datatable2() {
           },
         }
       );
-  
+
       const data = response.data;
       if (day === "ALL") {
         // Map for "ALL" days structure
         const dayData = data.dayData || {};
         const labels = data.labels || [];
-        const bookedSlots = labels.map(label => dayData[label]?.bookSlot || 0);
-        const availableSlots = labels.map(label => dayData[label]?.availableSlot || 0);
-        
+        const bookedSlots = labels.map(
+          (label) => dayData[label]?.bookSlot || 0
+        );
+        const availableSlots = labels.map(
+          (label) => dayData[label]?.availableSlot || 0
+        );
+
         setChartData({
           dayData: [
             { name: "Booked Slots", data: bookedSlots },
-            { name: "Available Slots", data: availableSlots }
+            { name: "Available Slots", data: availableSlots },
           ],
-          labels: labels
+          labels: labels,
         });
-  
       } else {
         // Map for specific day structure (like "FRIDAY")
         const timeData = data.dayData[0] || {};
-        const labels = Object.keys(timeData);  // Extract time labels directly from keys
-  
-        const bookedSlots = labels.map(label => timeData[label]?.bookSlot || 0);
-        const availableSlots = labels.map(label => timeData[label]?.availableSlot || 0);
-  
+        const labels = Object.keys(timeData); // Extract time labels directly from keys
+
+        const bookedSlots = labels.map(
+          (label) => timeData[label]?.bookSlot || 0
+        );
+        const availableSlots = labels.map(
+          (label) => timeData[label]?.availableSlot || 0
+        );
+
         setChartData({
           dayData: [
             { name: "Booked Slots", data: bookedSlots },
-            { name: "Available Slots", data: availableSlots }
+            { name: "Available Slots", data: availableSlots },
           ],
-          labels: labels
+          labels: labels,
         });
       }
     } catch (error) {
@@ -159,7 +168,6 @@ function Datatable2() {
     }
   };
 
-  
   useEffect(() => {
     if (selectedCenterId) {
       fetchEnrollmentData(selectedCenterId, selectedType, selectedDay);
@@ -189,6 +197,24 @@ function Datatable2() {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
       <div className="container">
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Report Management
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Enrollment Report
+          </li>
+        </ol>
         <div className="row my-5">
           <div className="col-md-4 col-12">
             <label className="form-label">Centre</label>
@@ -236,14 +262,19 @@ function Datatable2() {
         </div>
         <div className="card p-4 mb-4">
           <div className="row">
-          <div className="col-12">
-            {/* Render chart only if labels have loaded */}
-            {chartData.labels.length > 0 ? (
-              <ReactApexChart options={options} series={chartData?.dayData} type="bar" height={350} />
-            ) : (
-              <></>
-            )}
-          </div>
+            <div className="col-12">
+              {/* Render chart only if labels have loaded */}
+              {chartData.labels.length > 0 ? (
+                <ReactApexChart
+                  options={options}
+                  series={chartData?.dayData}
+                  type="bar"
+                  height={350}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </div>
       </div>

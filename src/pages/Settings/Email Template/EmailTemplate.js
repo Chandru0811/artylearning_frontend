@@ -5,9 +5,8 @@ import $ from "jquery";
 import Delete from "../../../components/common/Delete";
 import AbsentReasonAdd from "./AbsentReasonAdd";
 import AbsentReasonEdit from "./AbsentReasonEdit";
-import { Link } from "react-router-dom";
 
-const AbsentReason = () => {
+const EmailTemplate = () => {
   const tableRef = useRef(null);
 
   const datas = [
@@ -25,8 +24,8 @@ const AbsentReason = () => {
       id: 3,
       reason: "Travel for Competition",
       remarks: "Participating in inter-school sports event.",
-    },
-  ];
+    }
+  ];  
 
   useEffect(() => {
     const table = $(tableRef.current).DataTable({
@@ -40,24 +39,6 @@ const AbsentReason = () => {
 
   return (
     <div className="container my-4">
-      <ol
-        className="breadcrumb my-3 px-1"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" className="custom-breadcrumb">
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          Settings
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Absent Reason
-        </li>
-      </ol>
       <div className="my-3 d-flex justify-content-end mb-5">
         <AbsentReasonAdd />
       </div>
@@ -76,7 +57,7 @@ const AbsentReason = () => {
               <th scope="row">{index + 1}</th>
               <td>{data.reason}</td>
               <td>{data.remarks}</td>
-              <td>
+              <td> 
                 <AbsentReasonEdit />
                 <Delete />
               </td>
@@ -88,4 +69,4 @@ const AbsentReason = () => {
   );
 };
 
-export default AbsentReason;
+export default EmailTemplate;

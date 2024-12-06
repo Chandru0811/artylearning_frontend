@@ -39,6 +39,30 @@ export default function CmsCourseEdit() {
   return (
     <section className="start" style={{ backgroundColor: "#f9fafb" }}>
       <div className="container cms-header shadow-sm py-2">
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Content Management
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/cms/CmsCourses" className="custom-breadcrumb">
+              Courses
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Courses Edit
+          </li>
+        </ol>
         <div className="row p-1">
           <div className="col-md-6 col-12">
             <h4>Course</h4>
@@ -52,10 +76,8 @@ export default function CmsCourseEdit() {
                 Publish
               </button>
             )} */}
-            <Link to={'/cms/CmsCourses'}>
-              <button
-                className="btn btn-sm btn-outline-danger border ms-2"
-              >
+            <Link to={"/cms/CmsCourses"}>
+              <button className="btn btn-sm btn-outline-danger border ms-2">
                 Back
               </button>
             </Link>
