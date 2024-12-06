@@ -117,6 +117,24 @@ const Center = () => {
 
   return (
     <div className="container my-4 center">
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Centre Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Centre Listing
+        </li>
+      </ol>
       <div className="mb-3 d-flex justify-content-between">
         <div className="individual_fliters d-lg-flex">
           <div className="form-group mb-0 ms-2 mb-1">
@@ -212,12 +230,6 @@ const Center = () => {
         </div>
       ) : (
         <div className="table-responsive">
-          <div
-            className="d-flex justify-content-end align-items-center"
-            style={{ position: "relative", top: "2rem" }}
-          >
-            <button className="btn btn-primary">custom</button>
-          </div>
           <table ref={tableRef} className="display">
             <thead>
               <tr>

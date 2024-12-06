@@ -210,6 +210,30 @@ function CenterEdit() {
 
   return (
     <div className="container">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Centre Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/center" className="custom-breadcrumb">
+            Centre Listing
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Centre Listing Edit
+        </li>
+      </ol>
       <form
         onSubmit={formik.handleSubmit}
         onKeyDown={(e) => {
@@ -675,7 +699,7 @@ function CenterEdit() {
                           id={registration.id}
                           onSuccess={refreshData}
                         />
-                         <Delete
+                        <Delete
                           onSuccess={refreshData}
                           path={`/deleteCenterRegistrations/${registration.id}`}
                         />
@@ -721,7 +745,7 @@ function CenterEdit() {
                           id={centerBreak.id}
                           onSuccess={refreshData}
                         />
-                         <Delete
+                        <Delete
                           onSuccess={refreshData}
                           path={`/deleteCenterBreaks/${centerBreak.id}`}
                         />
@@ -841,7 +865,7 @@ function CenterEdit() {
                           id={centerPackage.id}
                           onSuccess={refreshData}
                         />
-                         <Delete
+                        <Delete
                           onSuccess={refreshData}
                           path={`/deleteCenterPackages/${centerPackage.id}`}
                         />
