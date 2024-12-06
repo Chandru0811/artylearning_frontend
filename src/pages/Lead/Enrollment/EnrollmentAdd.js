@@ -10,6 +10,7 @@ import Form5 from "./AddEnrollment/Form5";
 import Form6 from "./AddEnrollment/Form6";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const steps = [
   { tooltip: "Student Information" },
@@ -86,6 +87,30 @@ export default function EnrollmentAdd() {
 
   return (
     <div className="container-fluid minHeight">
+              <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Lead Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/lead/lead" className="custom-breadcrumb">
+            Lead
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Lead Add
+        </li>
+      </ol>
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index}>
