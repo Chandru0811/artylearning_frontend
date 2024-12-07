@@ -231,6 +231,10 @@ import CheckIndex from "../pages/Staff/CheckIndex";
 import ChangePassword from "../components/common/ChangePassword";
 import NewTable1 from "../pages/Center/NewTable1";
 import EmailTemplate from "../pages/Settings/Email Template/EmailTemplate";
+import ReferalFees from "../pages/ReferalFees/ReferalFees";
+import ReferalHistory from "../pages/ReferalHistory/ReferalHistory";
+import ReferalFeesAdd from "../pages/ReferalFees/ReferalFeesAdd";
+import NewDashboard from "../pages/NewDashboard";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -254,7 +258,8 @@ function Admin({ handleLogout }) {
           <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              {/* <Route path="/" element={<Dashboard />} /> */}
+              <Route path="/" element={<NewDashboard />} />
               <Route path="/datatable" element={<DataTable />} />
               <Route path="/datatable2" element={<Datatable2 />} />
               <Route path="/batchtable" element={<Test />} />
@@ -664,6 +669,12 @@ function Admin({ handleLogout }) {
                 path="/cms/testmonial/editmonial"
                 element={<CMSTestMonialEdit />}
               />
+
+              {/* Referal Management  */}
+              <Route path="/referalFees" element={<ReferalFees />} />
+              <Route path="/referalFees/Add" element={<ReferalFeesAdd />} />
+
+              <Route path="/referalHistory" element={<ReferalHistory />} />
 
               {/* Setting */}
               {/* Tax */}

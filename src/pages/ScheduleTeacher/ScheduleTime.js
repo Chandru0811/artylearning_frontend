@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import DayTableAdd from "./DayTableAdd";
 import api from "../../config/URL";
 import { Link, useParams, useLocation } from "react-router-dom";
@@ -18,7 +18,7 @@ export default function ScheduleTime() {
   const centerId = searchParams.get("centerId");
   const courseId = searchParams.get("courseId");
 
-  console.log("courseId pass ScheduleTime:",courseId);
+  console.log("courseId pass ScheduleTime:", courseId);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   useEffect(() => {
@@ -47,6 +47,30 @@ export default function ScheduleTime() {
 
   return (
     <div className="container">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Schedule
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/scheduleteacher" className="custom-breadcrumb">
+            Scheduleteacher
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Time Schedule
+        </li>
+      </ol>
       {loading ? (
         <div className="loader-container">
           <div className="loading">
@@ -74,9 +98,9 @@ export default function ScheduleTime() {
                   const maxStudents = 5;
 
                   // Extracting times dynamically from the timetable
-                  const batchTimes = data.timetable.map(batch => batch.time);
+                  const batchTimes = data.timetable.map((batch) => batch.time);
                   // console.log("Batch Time:",batchTimes);
-                  
+
                   return (
                     <div key={index} className="text-center">
                       <p className="fw-bold fs-5">{data.className}</p>
@@ -165,41 +189,42 @@ export default function ScheduleTime() {
                                       </>
                                     );
                                   } else {
-                                    content = student && student.id ? (
-                                      <>
-                                        {storedScreens?.timeScheduleAdd && (
-                                          <DayTableAdd
-                                            id={student.id}
-                                            onSuccess={refreshData}
-                                            centerId={centerId}
-                                            courseId={courseId}
-                                            day={data.day}
-                                          />
-                                        )}
-                                        {storedScreens?.timeScheduleBlock && (
-                                          <BlockTimeSlot
-                                            id={student.id}
-                                            onSuccess={refreshData}
-                                          />
-                                        )}
-                                      </>
-                                    ) : (
-                                      <>
-                                        {storedScreens?.timeScheduleAdd && (
-                                          <DayTableAdd
-                                            onSuccess={refreshData}
-                                            centerId={centerId}
-                                            courseId={courseId}
-                                            day={data.day}
-                                          />
-                                        )}
-                                        {storedScreens?.timeScheduleBlock && (
-                                          <BlockTimeSlot
-                                            onSuccess={refreshData}
-                                          />
-                                        )}
-                                      </>
-                                    );
+                                    content =
+                                      student && student.id ? (
+                                        <>
+                                          {storedScreens?.timeScheduleAdd && (
+                                            <DayTableAdd
+                                              id={student.id}
+                                              onSuccess={refreshData}
+                                              centerId={centerId}
+                                              courseId={courseId}
+                                              day={data.day}
+                                            />
+                                          )}
+                                          {storedScreens?.timeScheduleBlock && (
+                                            <BlockTimeSlot
+                                              id={student.id}
+                                              onSuccess={refreshData}
+                                            />
+                                          )}
+                                        </>
+                                      ) : (
+                                        <>
+                                          {storedScreens?.timeScheduleAdd && (
+                                            <DayTableAdd
+                                              onSuccess={refreshData}
+                                              centerId={centerId}
+                                              courseId={courseId}
+                                              day={data.day}
+                                            />
+                                          )}
+                                          {storedScreens?.timeScheduleBlock && (
+                                            <BlockTimeSlot
+                                              onSuccess={refreshData}
+                                            />
+                                          )}
+                                        </>
+                                      );
                                   }
 
                                   return (

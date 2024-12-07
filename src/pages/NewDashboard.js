@@ -10,7 +10,7 @@ import api from "../config/URL";
 
 function NewDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
-//   Line Chart (Revenue Over Time)
+  //   Line Chart (Revenue Over Time)
   const lineChartOptions = {
     chart: { id: "revenue-over-time" },
     xaxis: {
@@ -248,7 +248,7 @@ function NewDashboard() {
       <div className="row">
         {/* Revenue Over Time (Line Chart) */}
         <div className="col-md-7 mb-4">
-          <div className="card shadow-sm p-3">
+          <div className="card shadow-sm p-3 h-100">
             <div className="d-flex justify-content-between">
               <h5 className="card-title">Revenue Over Time</h5>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
@@ -264,14 +264,14 @@ function NewDashboard() {
 
         {/* Product Sales Comparison (Horizontal Bar Chart) */}
         <div className="col-md-5 mb-4">
-          <div className="card shadow-sm p-3">
+          <div className="card shadow-sm p-3 h-100">
             <div className="d-flex justify-content-between">
               <h5 className="card-title">Product Sales Comparison</h5>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
             <Chart
               options={{
-                  chart: { type: "bar" },
+                chart: { type: "bar" },
                 xaxis: {
                   categories: [
                     "Product A",
@@ -280,14 +280,14 @@ function NewDashboard() {
                     "Product D",
                   ],
                 },
-                  colors: ["#3498db", "#e74c3c", "#2ecc71"],
-                  dataLabels: { enabled: true, style: { colors: ["#fff"] } },
+                colors: ["#3498db", "#e74c3c", "#2ecc71"],
+                dataLabels: { enabled: true, style: { colors: ["#fff"] } },
                 plotOptions: {
                   bar: {
                     horizontal: true,
                     distributed: true,
                     barHeight: "40%",
-                    borderRadius:5
+                    borderRadius: 5,
                   },
                 },
                 //   fill: { type: "solid" },
@@ -317,9 +317,9 @@ function NewDashboard() {
 
         {/* Sales by E-commerce Platform (Donut Chart) */}
         <div className="col-md-4 mb-4">
-          <div className="card shadow-sm p-3">
+          <div className="card shadow-sm p-3 h-100">
             <div className="d-flex justify-content-between">
-              <h5 className="card-title">Sales by E-commerce Platform</h5>
+              <h5 className="card-title pb-5">Sales by E-commerce Platform</h5>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
             <Chart
@@ -327,14 +327,13 @@ function NewDashboard() {
               series={donutChartSeries}
               type="donut"
               height={300}
-              className="py-5"
             />
           </div>
         </div>
 
         {/* Registered Users (Gauge Chart) */}
         <div className="col-md-4 mb-4">
-          <div className="card shadow-sm p-3">
+          <div className="card shadow-sm p-3 h-100">
             <div className="d-flex justify-content-between">
               <h5 className="card-title">Registered Users</h5>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}

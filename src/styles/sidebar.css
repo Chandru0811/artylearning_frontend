@@ -13,7 +13,7 @@
   overflow: auto;
   height: 100%;
   width: 280px;
-  background: #fce6cf;
+  background: #fff;
   transition: all 0.5s ease;
 }
 
@@ -133,7 +133,7 @@
 
 .home-section nav {
   height: 60px;
-  background-image: linear-gradient(to right, #fce6cf, #e99e5e);
+  background: #fff !important;
   align-items: center;
   position: fixed;
   width: calc(100% - 280px);
@@ -355,7 +355,7 @@ nav .profile-details i {
 
 /* Horizontal Scrollbar */
 .sidebar::-webkit-scrollbar {
-  width: 5px;
+  width: 1px;
   height: 0px;
 }
 
@@ -390,8 +390,8 @@ nav .profile-details i {
   color: #fff;
   padding: 0.5rem 0.9rem;
   font-weight: 600;
-  background-color: #D86300;
-  border-color: #D86300;
+  background-color: #d86300;
+  border-color: #d86300;
 }
 
 .btn-button2 i {
@@ -399,16 +399,16 @@ nav .profile-details i {
 }
 .btn-button2:hover {
   color: #fff;
-  background-color: #D86300;
-  border-color: #D86300;
+  background-color: #d86300;
+  border-color: #d86300;
 }
 
 .btn-button3 {
   color: #fff;
   padding: 0.5rem 0.9rem;
   font-weight: 600;
-  background-color: #D86300;
-  border-color: #D86300;
+  background-color: #d86300;
+  border-color: #d86300;
   width: 118% !important;
 }
 
@@ -417,8 +417,8 @@ nav .profile-details i {
 }
 .btn-button3:hover {
   color: #fff;
-  background-color: #D86300;
-  border-color: #D86300;
+  background-color: #d86300;
+  border-color: #d86300;
 }
 
 .btn-button {

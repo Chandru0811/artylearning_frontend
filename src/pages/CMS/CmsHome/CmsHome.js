@@ -202,7 +202,7 @@ function CmsHome() {
                 <span className="breadcrumb-separator"> &gt; </span>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Edit Home
+                Home
               </li>
             </ol>
             <div className="row p-1">

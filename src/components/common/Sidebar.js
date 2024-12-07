@@ -231,6 +231,23 @@ function Sidebar() {
           // Add more submenus as needed
         ],
       },
+      {
+        title: "Referal Management",
+        icon: "bx bx-share",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "Set Referal Fees",
+            path: "/referalFees",
+            access: storedScreens.invoiceIndex,
+          },
+          {
+            title: "Referal History",
+            path: "/referalHistory",
+            access: storedScreens.paymentIndex,
+          },
+        ],
+      },
 
       {
         title: "Report Management",
@@ -408,7 +425,7 @@ function Sidebar() {
             access: storedScreens.salarySettingIndex,
           },
           {
-            title: "Email Temlplate",
+            title: "Email Template",
             path: "/emailTemplate",
             // access: storedScreens.emailTemplateSettingIndex,
             access: storedScreens.salarySettingIndex,

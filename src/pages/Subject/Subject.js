@@ -12,7 +12,6 @@ import { SCREENS } from "../../config/ScreenFilter";
 import { toast } from "react-toastify";
 import { MdViewColumn } from "react-icons/md";
 
-
 const Subject = () => {
   const tableRef = useRef(null);
 
@@ -51,9 +50,7 @@ const Subject = () => {
       return;
     }
     $(tableRef.current).DataTable({
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -92,14 +89,31 @@ const Subject = () => {
   };
   return (
     <div className="container my-4">
+      <ol
+        className="breadcrumb my-3 px-1"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Course Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Subject
+        </li>
+      </ol>
       {storedScreens?.subjectCreate && (
-        
-          <div className="d-flex justify-content-end align-items-center">
-            <span>
+        <div className="d-flex justify-content-end align-items-center">
+          <span>
             <SubjectAdd onSuccess={refreshData} />
-            </span>
-            {/* } */}
-           {/* <p className="mb-4">         <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
+          </span>
+          {/* } */}
+          {/* <p className="mb-4">         <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
           {extraData?"Hide":'Show'}
           <MdViewColumn className="fs-4 text-secondary"/>
@@ -119,98 +133,97 @@ const Subject = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive" >
+        <div className="table-responsive">
+          <table ref={tableRef} className="display">
+            <thead>
+              <tr>
+                <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                  S No
+                </th>
+                <th scope="col">Subject</th>
+                <th scope="col">Subject Code</th>
 
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col">Subject</th>
-              <th scope="col">Subject Code</th>
-              
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.subject}</td>
-                <td className="text-break">{data.code}</td>
-                {extraData && <td>{data.createdBy}</td>}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    CreatedAt
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedBy
+                  </th>
+                )}
+                {extraData && (
+                  <th
+                    scope="col"
+                    class="sorting"
+                    tabindex="0"
+                    aria-controls="DataTables_Table_0"
+                    rowspan="1"
+                    colspan="1"
+                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                    style={{ width: "92px" }}
+                  >
+                    UpdatedAt
+                  </th>
+                )}
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{data.subject}</td>
+                  <td className="text-break">{data.code}</td>
+                  {extraData && <td>{data.createdBy}</td>}
                   {extraData && <td>{extractDate(data.createdAt)}</td>}
                   {extraData && <td>{data.updatedBy}</td>}
                   {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                <td>
-                  {" "}
-                  {data.status === "Active" ? (
-                    <span className="badge badges-Green">Active</span>
-                  ) : (
-                    <span className="badge badges-Red">Inactive</span>
-                  )}
-                </td>
-                <td>
-                  <div className="d-flex">
-                    {/* {storedScreens?.subjectRead && (
+                  <td>
+                    {" "}
+                    {data.status === "Active" ? (
+                      <span className="badge badges-Green">Active</span>
+                    ) : (
+                      <span className="badge badges-Red">Inactive</span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="d-flex">
+                      {/* {storedScreens?.subjectRead && (
                       <Link to={`/subject/view/${data.id}`}>
                         <button className="btn btn-sm">
                           <FaEye />
@@ -218,22 +231,22 @@ const Subject = () => {
                       </Link>
                     )} */}
 
-                    {storedScreens?.subjectUpdate && (
-                      <SubjectEdit id={data.id} onSuccess={refreshData} />
-                    )}
+                      {storedScreens?.subjectUpdate && (
+                        <SubjectEdit id={data.id} onSuccess={refreshData} />
+                      )}
 
-                    {storedScreens?.subjectDelete && (
-                      <Delete
-                        onSuccess={refreshData}
-                        path={`/deleteCourseSubject/${data.id}`}
-                      />
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                      {storedScreens?.subjectDelete && (
+                        <Delete
+                          onSuccess={refreshData}
+                          path={`/deleteCourseSubject/${data.id}`}
+                        />
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
