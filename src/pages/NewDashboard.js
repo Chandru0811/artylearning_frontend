@@ -111,31 +111,20 @@ function NewDashboard() {
   return (
     <div className="container mt-4">
       <div className="row mt-3">
-        <div className="col-md-3 mb-3">
+        {/* <div className="col-md-3 mb-3">
           <Link to={"/lead/lead"} style={{ textDecoration: "none" }}>
             <div className="card h-100">
               <div className="card-body">
                 <span className="d-flex align-items-center justify-content-between">
-                  <p
-                    className="card-title"
-                    style={{ color: "#000", fontSize: "20px" }}
+                  <h6
+                    className="card-title text-secondary"
                   >
                     Lead Count
-                  </p>
-                  <h5
-                    style={{
-                      backgroundColor: "#e0dcfe",
-                      color: "#624bff",
-                      padding: "10px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <FaUsers />
-                  </h5>
+                  </h6>
                 </span>
-                <h2 className="card-text">
+                <h4 className="card-text">
                   <strong>{dashboardData?.totalLead}</strong>
-                </h2>
+                </h4>
                 <h6 className="card-text text-secondary">
                   {dashboardData?.leadCountByMonth} Lead In This Month
                 </h6>
@@ -174,8 +163,104 @@ function NewDashboard() {
               </div>
             </div>
           </Link>
+        </div> */}
+        <div className="col-md-3 mb-3">
+          <div
+            className="card h-100 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
+            <div className="card-body">
+              <h6 className="card-title text-secondary">Lead Count</h6>
+              <h5 className="card-text fw-bold text-dark">$32,499.93</h5>
+              <span className="d-flex align-items-center">
+                <span
+                  className="text-success fw-bold me-2"
+                  style={{
+                    backgroundColor: "#e6f8eb",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  ↑ 12.95%
+                </span>
+                <small className="text-secondary">Compared to last month</small>
+              </span>
+            </div>
+          </div>
         </div>
         <div className="col-md-3 mb-3">
+          <div
+            className="card h-100 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
+            <div className="card-body">
+              <h6 className="card-title text-secondary">Student</h6>
+              <h5 className="card-text fw-bold text-dark">$10,499.93</h5>
+              <span className="d-flex align-items-center">
+                <span
+                  className="text-danger fw-bold me-2"
+                  style={{
+                    backgroundColor: "#fdeaea",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  ↓ 0.33%
+                </span>
+                <small className="text-secondary">Compared to last month</small>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3 mb-3">
+          <div
+            className="card h-100 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
+            <div className="card-body">
+              <h6 className="card-title text-secondary">Teacher</h6>
+              <h5 className="card-text fw-bold text-dark">$32,499.93</h5>
+              <span className="d-flex align-items-center">
+                <span
+                  className="text-success fw-bold me-2"
+                  style={{
+                    backgroundColor: "#e6f8eb",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  ↑ 12.95%
+                </span>
+                <small className="text-secondary">Compared to last month</small>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-3 mb-3">
+          <div
+            className="card h-100 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
+            <div className="card-body">
+              <h6 className="card-title text-secondary">Total Revenue</h6>
+              <h5 className="card-text fw-bold text-dark">$10,499.93</h5>
+              <span className="d-flex align-items-center">
+                <span
+                  className="text-danger fw-bold me-2"
+                  style={{
+                    backgroundColor: "#fdeaea",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  ↓ 0.33%
+                </span>
+                <small className="text-secondary">Compared to last month</small>
+              </span>
+            </div>
+          </div>
+        </div>
+        {/* <div className="col-md-3 mb-3">
           <Link to={"/teacher"} style={{ textDecoration: "none" }}>
             <div className="card h-100">
               <div className="card-body">
@@ -206,8 +291,8 @@ function NewDashboard() {
               </div>
             </div>
           </Link>
-        </div>
-        <div className="col-md-3 mb-3">
+        </div> */}
+        {/* <div className="col-md-3 mb-3">
           <div className="card h-100">
             <div className="card-body">
               <span className="d-flex align-items-center justify-content-between">
@@ -239,18 +324,18 @@ function NewDashboard() {
                 {dashboardData?.salesPercentage <= 0
                   ? ` Decrease ${dashboardData?.salesPercentage}`
                   : `Increase ${dashboardData?.salesPercentage}`}
-                %{/* Sales {dashboardData?.salesPercentage || "0.0"} % */}
+                %
               </h6>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="row">
         {/* Revenue Over Time (Line Chart) */}
-        <div className="col-md-7 mb-4">
+        <div className="col-md-8 mb-4">
           <div className="card shadow-sm p-3 h-100">
             <div className="d-flex justify-content-between">
-              <h5 className="card-title">Revenue Over Time</h5>
+              <h6 className="card-title">Revenue Over Time</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
             <Chart
@@ -263,10 +348,10 @@ function NewDashboard() {
         </div>
 
         {/* Product Sales Comparison (Horizontal Bar Chart) */}
-        <div className="col-md-5 mb-4">
+        <div className="col-md-4 mb-4">
           <div className="card shadow-sm p-3 h-100">
             <div className="d-flex justify-content-between">
-              <h5 className="card-title">Product Sales Comparison</h5>
+              <h6 className="card-title">Product Sales Comparison</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
             <Chart
@@ -303,7 +388,7 @@ function NewDashboard() {
         <div className="col-md-4 mb-4">
           <div className="card shadow-sm p-1">
             <div className="d-flex justify-content-between px-2">
-              <h5 className="card-title">Sales by Region</h5>
+              <h6 className="card-title">Sales by Region</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
             <Chart
@@ -319,14 +404,27 @@ function NewDashboard() {
         <div className="col-md-4 mb-4">
           <div className="card shadow-sm p-3 h-100">
             <div className="d-flex justify-content-between">
-              <h5 className="card-title pb-5">Sales by E-commerce Platform</h5>
+              <h6 className="card-title">Sales by E-commerce Platform</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
             <Chart
-              options={donutChartOptions}
-              series={donutChartSeries}
+              options={{
+                chart: {
+                  type: "donut",
+                },
+                labels: ["Amazon", "Alibaba", "Tokopedia"],
+                legend: {
+                  position: "bottom", // Moves the legend below the chart
+                  horizontalAlign: "center", // Centers the legend horizontally
+                },
+                dataLabels: {
+                  enabled: true,
+                },
+                colors: ["#4e73df", "#e74a3b", "#1cc88a"], // Custom colors for slices
+              }}
+              series={[45, 35, 25]} // Data for chart
               type="donut"
-              height={300}
+              height={250}
             />
           </div>
         </div>
@@ -335,14 +433,14 @@ function NewDashboard() {
         <div className="col-md-4 mb-4">
           <div className="card shadow-sm p-3 h-100">
             <div className="d-flex justify-content-between">
-              <h5 className="card-title">Registered Users</h5>
+              <h6 className="card-title">Registered Users</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
             <Chart
               options={gaugeChartOptions}
               series={gaugeChartSeries}
               type="radialBar"
-              height={280}
+              height={300}
               className="py-4"
             />
           </div>
