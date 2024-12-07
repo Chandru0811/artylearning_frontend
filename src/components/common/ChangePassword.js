@@ -5,6 +5,8 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
+import { BsKey } from "react-icons/bs";
+import { LuKeyRound } from "react-icons/lu";
 
 function ChangePassword({ onLogout }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -78,9 +80,9 @@ function ChangePassword({ onLogout }) {
           setShowModal(true);
           formik.resetForm();
         }}
-        className="my-3 btn btn-danger"
+        className="my-3 btn btn-button"
       >
-        Change Password
+        <LuKeyRound /> Change Password
       </Button>
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>

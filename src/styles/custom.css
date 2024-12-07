@@ -51,15 +51,15 @@
 
 .stdViewBtn {
   color: white;
-  background-color: #fa994af5;
-  border: 1px solid #fa994af5;
+  background-color: #eb862a;
+  border: 1px solid #eb862a;
 }
 
 .stdViewBtn:hover,
 .stdViewBtn.active {
   color: white !important;
-  background-color: #fa994af5 !important;
-  border: 1px solid #fa994af5 !important;
+  background-color: #eb862a !important;
+  border: 1px solid #eb862a !important;
 }
 
 /* / / checkbox role / / */
@@ -766,9 +766,14 @@
   display: none;
 }
 
+.cardBorder .card {
+  border-radius: 3px;
+  border-top: 2px solid #eb862a;
+}
+
 .studentView .card {
   border-radius: 3px;
-  border-top: 2px solid #fa994af5;
+  border-top: 2px solid #eb862a;
 }
 
 .stdImg {
@@ -780,7 +785,7 @@
 }
 
 .stdSettings {
-  color: #fa994af5;
+  color: #eb862a;
   font-size: 12px;
   text-align: end;
   cursor: pointer;
@@ -810,8 +815,8 @@
 .stdList1 .btn-primary,
 .stdList1 .btn-primary:hover,
 .stdList1 .btn-primary.active {
-  background-color: #fa994af5 !important;
-  border-color: #fa994af5 !important;
+  background-color: #eb862a !important;
+  border-color: #eb862a !important;
 }
 
 .stdList1 .dropdown-item {

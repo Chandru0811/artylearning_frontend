@@ -198,7 +198,7 @@ const Center = () => {
           <div className="form-group mb-0 ms-2 mb-1 ">
             <button
               type="button"
-              className="btn btn-outline-secondary"
+              className="btn btn-sm btn-border"
               onClick={clearFilters}
             >
               Clear
@@ -210,7 +210,7 @@ const Center = () => {
           <Link to="/center/add">
             <button
               type="button"
-              className="btn btn-button"
+              className="btn btn-button btn-sm"
               style={{ fontWeight: "600px !important" }}
             >
               Add <i className="bx bx-plus"></i>
@@ -229,85 +229,101 @@ const Center = () => {
           </div>
         </div>
       ) : (
-        <div className="table-responsive">
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col">S No</th>
-                <th scope="col">Centre Name</th>
-                <th scope="col">Centre Manager</th>
-                <th scope="col">Code</th>
-                <th scope="col">UEN Number</th>
-                <th scope="col">Mobile</th>
-                <th className="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(datas) &&
-                datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.centerName}</td>
-                    <td>{data.centerManager}</td>
-                    <td>{data.code}</td>
-                    <td>{data.uenNumber}</td>
-                    <td>{data.mobile}</td>
-                    <td>
-                      <div className="d-flex justify-content-center align-items-center">
-                        {storedScreens?.centerListingCreate && (
-                          <DropdownButton
-                            title={<IoMdAdd />}
-                            variant="white"
-                            size="sm"
-                            id="dropdown-basic-button"
-                            style={{ boxShadow: "none" }}
-                          >
-                            <Dropdown.Item as="div" style={{ width: "100%" }}>
-                              <AddRegister
-                                id={data.id}
-                                onSuccess={refreshData}
-                              />
-                            </Dropdown.Item>
-                            <Dropdown.Item as="div" style={{ width: "100%" }}>
-                              <AddBreak id={data.id} onSuccess={refreshData} />
-                            </Dropdown.Item>
-                            <Dropdown.Item as="div" style={{ width: "100%" }}>
-                              <AddClass id={data.id} onSuccess={refreshData} />
-                            </Dropdown.Item>
-                            <Dropdown.Item as="div" style={{ width: "100%" }}>
-                              <AddPackage
-                                id={data.id}
-                                onSuccess={refreshData}
-                              />
-                            </Dropdown.Item>
-                          </DropdownButton>
-                        )}
-                        {storedScreens?.centerListingRead && (
-                          <Link to={`/center/view/${data.id}`}>
-                            <button className="btn btn-sm">
-                              <FaEye />
-                            </button>
-                          </Link>
-                        )}
-                        {storedScreens?.centerListingUpdate && (
-                          <Link to={`/center/edit/${data.id}`}>
-                            <button className="btn btn-sm">
-                              <FaEdit />
-                            </button>
-                          </Link>
-                        )}
-                        {storedScreens?.centerListingDelete && (
-                          <Delete
-                            onSuccess={refreshData}
-                            path={`/deleteCenter/${data.id}`}
-                          />
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+        <div className="cardBorder">
+          <div className="card table-responsive p-3">
+            <table ref={tableRef} className="display">
+              <thead>
+                <tr>
+                  <th scope="col">S No</th>
+                  <th scope="col">Centre Name</th>
+                  <th scope="col">Centre Manager</th>
+                  <th scope="col">Code</th>
+                  <th scope="col">UEN Number</th>
+                  <th scope="col">Mobile</th>
+                  <th className="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(datas) &&
+                  datas.map((data, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{data.centerName}</td>
+                      <td>{data.centerManager}</td>
+                      <td>{data.code}</td>
+                      <td>{data.uenNumber}</td>
+                      <td>{data.mobile}</td>
+                      <td>
+                        <div className="d-flex justify-content-center align-items-center">
+                          {storedScreens?.centerListingCreate && (
+                            <div class="dropdown">
+                              <button
+                                class="btn dropdown-toggle"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                <IoMdAdd />
+                              </button>
+                              <ul
+                                class="dropdown-menu"
+                                aria-labelledby="dropdownMenuButton"
+                              >
+                                <li>
+                                  <AddRegister
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                                </li>
+                                <li>
+                                <AddBreak
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                                </li>
+                                <li>
+                                <AddClass
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                                </li>
+                                <li>
+                                <AddPackage
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                                </li>
+                              </ul>
+                            </div>
+                          )}
+                          {storedScreens?.centerListingRead && (
+                            <Link to={`/center/view/${data.id}`}>
+                              <button className="btn btn-sm">
+                                <FaEye />
+                              </button>
+                            </Link>
+                          )}
+                          {storedScreens?.centerListingUpdate && (
+                            <Link to={`/center/edit/${data.id}`}>
+                              <button className="btn btn-sm">
+                                <FaEdit />
+                              </button>
+                            </Link>
+                          )}
+                          {storedScreens?.centerListingDelete && (
+                            <Delete
+                              onSuccess={refreshData}
+                              path={`/deleteCenter/${data.id}`}
+                            />
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

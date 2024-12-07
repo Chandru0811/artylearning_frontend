@@ -64,14 +64,28 @@
   align-items: center;
   text-decoration: none;
   transition: all 0.4s ease;
+  color: #303030;
+}
+.sidebar .nav-links li a {
+  color: #303030; /* Default black text */
 }
 
 .sidebar .nav-links li a.active {
-  background: #e99e5e;
+  background: #287f71;
+  color: white !important;
 }
 
+.sidebar .nav-links li a.active i {
+  color: white !important; /* White icon */
+}
+
+/* .sidebar .nav-links li a:hover {
+  background: #abbdd3cd;
+} */
+
 .sidebar .nav-links li a:hover {
-  background: #fedcbf;
+  background: #abbdd3cd; /* Hover background */
+  color: #303030 !important; /* Ensure hover doesn't override default text color */
 }
 
 .sidebar .nav-links li i {
@@ -79,11 +93,19 @@
   font-weight: 600;
   text-align: center;
   font-size: 16px;
-  color: #484848;
+  color: #303030;
+}
+
+.sidebar .nav-links li i.active {
+  min-width: 60px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 16px;
+  color: white;
 }
 
 .sidebar .nav-links li a .links_name {
-  color: #303030;
+  /* color: #303030; */
   font-size: 15px;
   font-weight: 500;
   white-space: nowrap;
@@ -119,7 +141,7 @@
 
 .home-section {
   position: relative;
-  background: #f4f4f4;
+  background: #faf8f8;
   min-height: 100vh;
   width: calc(100% - 280px);
   left: 280px;
@@ -357,23 +379,24 @@ nav .profile-details i {
 .sidebar::-webkit-scrollbar {
   width: 1px;
   height: 0px;
+  color: white;
 }
 
 /* Track */
 .sidebar::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
+  box-shadow: inset 0 0 5px #e6e6e6;
   border-radius: 10px;
 }
 
 /* Handle */
 .sidebar::-webkit-scrollbar-thumb {
-  background: #747474;
+  background: #f8f7f7;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 .sidebar::-webkit-scrollbar-thumb:hover {
-  background: rgb(146, 145, 145);
+  background: #f8f7f7;
 }
 
 /* Hide vertical scrollbar */
@@ -383,7 +406,7 @@ nav .profile-details i {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb-vertical:hover {
-  background: rgb(146, 145, 145);
+  background: #f7f4f4;
 }
 
 .btn-button2 {
@@ -423,10 +446,10 @@ nav .profile-details i {
 
 .btn-button {
   color: #fff;
-  padding: 0.5rem 0.9rem;
+  padding: 0.3rem 0.6rem;
   font-weight: 600;
-  background-color: #e60504;
-  border-color: #e60504;
+  background-color: #287f71;
+  border-color: #287f71;
 }
 
 .btn-button i {
@@ -434,14 +457,14 @@ nav .profile-details i {
 }
 .btn-button:hover {
   color: #fff;
-  background-color: #fa0101;
-  border-color: #fa0101;
+  background-color: #287f71;
+  border-color: #287f71;
 }
 .btn-check:focus + .btn-button,
 .btn-button:focus {
   color: #fff;
-  background-color: #fa0101;
-  border-color: #fa0101;
+  background-color: #287f71;
+  border-color: #287f71;
   box-shadow: 0 0 0 0.25rem #fa010188;
 }
 .btn-check:checked + .btn-button,
@@ -450,8 +473,8 @@ nav .profile-details i {
 .btn-button.active,
 .show > .btn-button.dropdown-toggle {
   color: #fff;
-  background-color: #fa0101;
-  border-color: #fa0101;
+  background-color: #287f71;
+  border-color: #287f71;
 }
 .btn-check:checked + .btn-button:focus,
 .btn-check:active + .btn-button:focus,
@@ -472,13 +495,13 @@ nav .profile-details i {
 .btn-button.show,
 .btn-button:first-child:active,
 :not(.btn-button-check) + .btn-button:active {
-  background-color: #fa0101;
-  border-color: #fa0101;
+  background-color: #287f71;
+  border-color: #287f71;
   color: #fff;
 }
 
 .btn-border {
-  padding: 0.5rem 0.9rem;
+  padding: 0.3rem 0.6rem;
   border: 1px solid #424242;
 }
 
@@ -513,7 +536,7 @@ table.dataTable thead > tr {
 }
 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
-  color: #e99e5e !important;
+  color: #287f71 !important;
 }
 
 /* thead tr th {

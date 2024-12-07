@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import fetchAllCentersWithIds from "../../pages/List/CenterList";
 import { toast } from "react-toastify";
 import ChangePassword from "./ChangePassword";
+import { BiLogOut } from "react-icons/bi";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
@@ -83,13 +84,13 @@ function Header({ onLogout }) {
             </div>
           </div>
           <button
-            className="btn border-0"
+            className="btn border border-1 rounded-circle"
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasRight"
             aria-controls="offcanvasRight"
           >
-            <i className="fa fa-user text-danger"></i>
+            <i className="fa fa-user" style={{color:"#eb862a"}}></i>
           </button>
         </div>
       </div>
@@ -137,10 +138,10 @@ function Header({ onLogout }) {
             <div className="row">
               <div className="col-md-6 col-12">
                 <button
-                  className="btn btn-danger mt-3 w-100"
+                  className="btn btn-button mt-3 w-100"
                   onClick={handleLogOutClick}
                 >
-                  Logout
+                  <BiLogOut /> Logout
                 </button>
               </div>
               <div className="col-md-6 col-12" data-bs-dismiss="offcanvas">
