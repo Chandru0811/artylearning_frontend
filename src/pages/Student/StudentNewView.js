@@ -19,6 +19,7 @@ import html2canvas from "html2canvas";
 import Logo from "../../assets/images/Logo.png";
 import PasswordModal from './StudentNewView/PasswordModal';
 import AddTaskNoteModal from './StudentNewView/AddTaskNoteModal';
+import TransferOutModal from '../StudentMovement/TransferOut/TransferOutModal';
 
 function StudentNewView() {
     const [activeTab, setActiveTab] = useState("tab1");
@@ -113,6 +114,30 @@ function StudentNewView() {
 
     return (
         <section className='p-3'>
+            <ol
+                className="breadcrumb my-3 px-2"
+                style={{ listStyle: "none", padding: 0, margin: 0 }}
+            >
+                <li>
+                    <Link to="/" className="custom-breadcrumb">
+                        Home
+                    </Link>
+                    <span className="breadcrumb-separator"> &gt; </span>
+                </li>
+                <li>
+                    Student Management
+                    <span className="breadcrumb-separator"> &gt; </span>
+                </li>
+                <li>
+                    <Link to="/student" className="custom-breadcrumb">
+                        Student Listing
+                    </Link>
+                    <span className="breadcrumb-separator"> &gt; </span>
+                </li>
+                <li className="breadcrumb-item active" aria-current="page">
+                    Student Listing View
+                </li>
+            </ol>
             <div className="d-flex align-items-center justify-content-end mb-4">
                 <button
                     className="btn btn-border btn-sm me-2 stdViewBtn"
@@ -467,11 +492,7 @@ function StudentNewView() {
                 <div className='card' style={{ borderRadius: "3px" }}>
                     <div className='d-flex gap-2' style={{ padding: "10px" }}>
                         <button className='btn btn-success btn-sm' type='button' style={{ fontSize: "12px" }}>Change Class</button>
-                        {storedScreens?.transferOutCreate && (
-                            <Link to={`/student/view/transferOut/${data.id}`}>
-                                <button className='btn btn-success btn-sm' type='button' style={{ fontSize: "12px" }}>Transfer Out</button>
-                            </Link>
-                        )}
+                        {centerId && <TransferOutModal id={data.id} centerId={centerId} />}
                         <button className='btn btn-success btn-sm' type='button' style={{ fontSize: "12px" }}>Withdraw</button>
                         {storedScreens?.endClassCreate && (
                             <Link to={`/student/view/endClass/${data.id}`}>

@@ -235,6 +235,7 @@ import ReferalFees from "../pages/ReferalFees/ReferalFees";
 import ReferalHistory from "../pages/ReferalHistory/ReferalHistory";
 import ReferalFeesAdd from "../pages/ReferalFees/ReferalFeesAdd";
 import NewDashboard from "../pages/NewDashboard";
+import TransferOut from "../pages/StudentMovement/TransferOut/TransferOut";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -323,6 +324,9 @@ function Admin({ handleLogout }) {
                 path="/replaceclasslesson/view/:id"
                 element={<ReplaceClassLessonView />}
               />
+
+              {/* Student Movement */}
+              <Route path="/transferOut" element={<TransferOut />} />
 
               {/* Center */}
               <Route path="/center" element={<Center />} />

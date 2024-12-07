@@ -182,6 +182,18 @@ function Sidebar() {
         ],
       },
       {
+        title: "Student Movement",
+        icon: "bx bx-book-reader",
+        isOpen: false,
+        subMenus: [
+          {
+            title: "Transfer Out",
+            path: "/transferOut",
+            access: storedScreens.studentListingIndex,
+          },
+        ],
+      },
+      {
         title: "Schedule",
         icon: "bx bx-alarm-add",
         isOpen: false,
