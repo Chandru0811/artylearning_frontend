@@ -230,6 +230,7 @@ import AbsentReason from "../pages/Settings/AbsentReason/AbsentReason";
 import CheckIndex from "../pages/Staff/CheckIndex";
 import ChangePassword from "../components/common/ChangePassword";
 import NewTable1 from "../pages/Center/NewTable1";
+import EmailTemplate from "../pages/Settings/Email Template/EmailTemplate";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -714,6 +715,9 @@ function Admin({ handleLogout }) {
 
               {/* Absent Reason */}
               <Route path="/absentreason" element={<AbsentReason />} />
+
+              {/* Email Template */}
+              <Route path="/emailTemplate" element={<EmailTemplate />} />
 
               {/* Messaging */}
               <Route path="/messaging" element={<MyMessages />} />
