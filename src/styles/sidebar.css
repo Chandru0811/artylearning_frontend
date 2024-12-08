@@ -90,7 +90,7 @@
 }
 
 .sidebar .nav-links li a.active i {
-  color: rgb(8, 8, 8) !important;
+  color: #ffffff !important;
 }
 
 .sidebar .nav-links li a:hover {
@@ -148,7 +148,7 @@
 
 .sidebar .nav-links li a .links_name {
   /* color: #303030; */
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
 }
@@ -191,7 +191,7 @@
 }
 
 .sidebar.active~.home-section {
-  width: calc(100% - 60px);
+  width: calc(90% - 60px);
   left: 60px;
 }
 
@@ -209,7 +209,7 @@
 
 .sidebar.active~.home-section nav {
   left: 60px;
-  width: calc(100% - 60px);
+  width: calc(90% - 60px);
 }
 
 .home-section nav .sidebar-button {
@@ -578,11 +578,11 @@ table.dataTable thead>tr {
 
 /* MultiStepFrom  */
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root {
-  color: #f3c8a2 !important;
+  color: #499b8d !important;
 }
 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
-  color: #ff7903 !important;
+  color: #287f71 !important;
 }
 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {

@@ -505,7 +505,7 @@ function Sidebar() {
     <div className="sidebar">
       <div className="logo-details">
         <span className="logo_name">
-          <img src={Logo} alt="logo" width={130} className="img-fluid" />
+          <img src={Logo} alt="logo" width={110} className="img-fluid p-1" />
         </span>
       </div>
       <ul className="nav-links">
@@ -513,11 +513,11 @@ function Sidebar() {
           <NavLink to="/" onClick={() => handleMenuClick(null)}>
             <OverlayTrigger
               placement="right"
-              overlay={<Tooltip id="home-tooltip">Home</Tooltip>}
+              overlay={<Tooltip id="home-tooltip">Over View</Tooltip>}
             >
               <i className="bx bx-grid-alt"></i>
             </OverlayTrigger>
-            <span className="links_name">Home</span>
+            <span className="links_name">Over View</span>
           </NavLink>
         </li>
 
