@@ -854,3 +854,6 @@
   border-right: 1px solid #ddd;
   border-left: none;
 }
+.apexcharts-legend {
+  display: none !important; /* Hide the legend */
+}

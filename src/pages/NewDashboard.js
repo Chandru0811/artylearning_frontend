@@ -12,7 +12,14 @@ function NewDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   //   Line Chart (Revenue Over Time)
   const lineChartOptions = {
-    chart: { id: "revenue-over-time" },
+    chart: {
+      id: "revenue-over-time",
+      height: 350,
+      type: "line", // You can still use 'line' to keep the chart structure
+      zoom: {
+        enabled: false,
+      },
+    },
     xaxis: {
       categories: [
         "Mar 2023",
@@ -23,21 +30,50 @@ function NewDashboard() {
         "Sep 2024",
       ],
     },
-    colors: ["#4bc0c0", "#ff6384"],
-    stroke: { curve: "smooth", width: 2 },
+    colors: ["transparent", "transparent", "transparent"], // Make the lines invisible
+    stroke: {
+      width: [0, 0, 0], // Hide the lines by setting the stroke width to 0
+      curve: "smooth", // Optional
+      dashArray: [0, 0, 0], // No dashes to maintain a clean look
+    },
+    title: {
+      text: "Revenue Statistics",
+      align: "left",
+    },
+    legend: {
+      tooltipHoverFormatter: function (val, opts) {
+        return (
+          val +
+          " - <strong>" +
+          opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] +
+          "</strong>"
+        );
+      },
+    },
+    markers: {
+      size: 0, // Hide the markers
+    },
+    tooltip: {
+      enabled: false, // Disable tooltips if you don't want them
+    },
+    grid: {
+      borderColor: "#f1f1f1",
+    },
   };
-
+  
   const lineChartSeries = [
     { name: "Revenue", data: [12000, 15000, 10000, 20000, 25000, 30000] },
     { name: "Target", data: [10000, 14000, 11000, 18000, 23000, 25000] },
-    { name: "Target", data: [1000, 16000, 12000, 15000, 19300, 25000] },
+    { name: "Additional Revenue", data: [1000, 16000, 12000, 15000, 19300, 25000] },
   ];
+
+  
 
   // Radar Chart (Sales by Region)
   const radarChartOptions = {
     chart: { id: "sales-by-region", type: "radar" },
     labels: ["Asia", "Africa", "Europe", "Americas", "Pacific", "Middle East"],
-    colors: ["#2ecc71"],
+    colors: ["#287F71"],
   };
 
   const radarChartSeries = [
@@ -58,13 +94,13 @@ function NewDashboard() {
       type: "radialBar",
     },
     series: [67],
-    colors: ["#20E647"],
+    colors: ["#287F71"],
     plotOptions: {
       radialBar: {
         startAngle: -135,
         endAngle: 135,
         track: {
-          background: "#333",
+          background: "#ABBDD3",
           startAngle: -135,
           endAngle: 135,
         },
@@ -79,15 +115,15 @@ function NewDashboard() {
         },
       },
     },
-    fill: {
-      type: "gradient",
-      gradient: {
-        shade: "dark",
-        type: "horizontal",
-        gradientToColors: ["#87D4F9"],
-        stops: [0, 100],
-      },
-    },
+    // fill: {
+    //   type: "gradient",
+    //   gradient: {
+    //     // shade: "dark",
+    //     type: "horizontal",
+    //     gradientToColors: ["#ABBDD3"],
+    //     stops: [0, 100],
+    //   },
+    // },
     stroke: {
       lineCap: "butt",
     },
@@ -111,86 +147,36 @@ function NewDashboard() {
   return (
     <div className="container mt-4">
       <div className="row mt-3">
-        {/* <div className="col-md-3 mb-3">
-          <Link to={"/lead/lead"} style={{ textDecoration: "none" }}>
-            <div className="card h-100">
-              <div className="card-body">
-                <span className="d-flex align-items-center justify-content-between">
-                  <h6
-                    className="card-title text-secondary"
-                  >
-                    Lead Count
-                  </h6>
-                </span>
-                <h4 className="card-text">
-                  <strong>{dashboardData?.totalLead}</strong>
-                </h4>
-                <h6 className="card-text text-secondary">
-                  {dashboardData?.leadCountByMonth} Lead In This Month
-                </h6>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className="col-md-3 mb-3">
-          <Link to={"/student"} style={{ textDecoration: "none" }}>
-            <div className="card h-100">
-              <div className="card-body">
-                <span className="d-flex align-items-center justify-content-between">
-                  <p
-                    className="card-title"
-                    style={{ color: "#000", fontSize: "20px" }}
-                  >
-                    Student
-                  </p>
-                  <h5
-                    style={{
-                      backgroundColor: "#e0dcfe",
-                      color: "#624bff",
-                      padding: "10px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <PiStudentFill />
-                  </h5>
-                </span>
-                <h2 className="card-text">
-                  <strong>{dashboardData?.totalStudent}</strong>
-                </h2>
-                <h6 className="card-text text-secondary">
-                  {dashboardData?.studentCountByMonth} Students In This Month
-                </h6>
-              </div>
-            </div>
-          </Link>
-        </div> */}
         <div className="col-md-3 mb-3">
           <div
-            className="card h-100 shadow-sm border-0"
+            className="card shadow-sm border-0"
             style={{ borderRadius: "10px" }}
           >
             <div className="card-body">
               <h6 className="card-title text-secondary">Lead Count</h6>
               <h5 className="card-text fw-bold text-dark">$32,499.93</h5>
-              <span className="d-flex align-items-center">
+              <span className="d-flex align-items-center justify-content-between">
                 <span
                   className="text-success fw-bold me-2"
                   style={{
                     backgroundColor: "#e6f8eb",
-                    padding: "5px 10px",
+                    padding: "2px 5px",
                     borderRadius: "5px",
+                    fontSize: "13px",
                   }}
                 >
                   ↑ 12.95%
                 </span>
-                <small className="text-secondary">Compared to last month</small>
+                <small className="text-secondary" style={{ fontSize: "10px" }}>
+                  Compared to last month
+                </small>
               </span>
             </div>
           </div>
         </div>
         <div className="col-md-3 mb-3">
           <div
-            className="card h-100 shadow-sm border-0"
+            className="card shadow-sm border-0"
             style={{ borderRadius: "10px" }}
           >
             <div className="card-body">
@@ -201,20 +187,23 @@ function NewDashboard() {
                   className="text-danger fw-bold me-2"
                   style={{
                     backgroundColor: "#fdeaea",
-                    padding: "5px 10px",
+                    padding: "2px 5px",
                     borderRadius: "5px",
+                    fontSize: "13px",
                   }}
                 >
                   ↓ 0.33%
                 </span>
-                <small className="text-secondary">Compared to last month</small>
+                <small className="text-secondary" style={{ fontSize: "10px" }}>
+                  Compared to last month
+                </small>
               </span>
             </div>
           </div>
         </div>
         <div className="col-md-3 mb-3">
           <div
-            className="card h-100 shadow-sm border-0"
+            className="card shadow-sm border-0"
             style={{ borderRadius: "10px" }}
           >
             <div className="card-body">
@@ -225,20 +214,23 @@ function NewDashboard() {
                   className="text-success fw-bold me-2"
                   style={{
                     backgroundColor: "#e6f8eb",
-                    padding: "5px 10px",
+                    padding: "2px 5px",
                     borderRadius: "5px",
+                    fontSize: "13px",
                   }}
                 >
                   ↑ 12.95%
                 </span>
-                <small className="text-secondary">Compared to last month</small>
+                <small className="text-secondary" style={{ fontSize: "10px" }}>
+                  Compared to last month
+                </small>
               </span>
             </div>
           </div>
         </div>
         <div className="col-md-3 mb-3">
           <div
-            className="card h-100 shadow-sm border-0"
+            className="card shadow-sm border-0"
             style={{ borderRadius: "10px" }}
           >
             <div className="card-body">
@@ -249,91 +241,27 @@ function NewDashboard() {
                   className="text-danger fw-bold me-2"
                   style={{
                     backgroundColor: "#fdeaea",
-                    padding: "5px 10px",
+                    padding: "2px 5px",
                     borderRadius: "5px",
+                    fontSize: "13px",
                   }}
                 >
                   ↓ 0.33%
                 </span>
-                <small className="text-secondary">Compared to last month</small>
+                <small className="text-secondary" style={{ fontSize: "10px" }}>
+                  Compared to last month
+                </small>
               </span>
             </div>
           </div>
         </div>
-        {/* <div className="col-md-3 mb-3">
-          <Link to={"/teacher"} style={{ textDecoration: "none" }}>
-            <div className="card h-100">
-              <div className="card-body">
-                <span className="d-flex align-items-center justify-content-between">
-                  <p
-                    className="card-title"
-                    style={{ color: "#000", fontSize: "20px" }}
-                  >
-                    Teachers
-                  </p>
-                  <h5
-                    style={{
-                      backgroundColor: "#e0dcfe",
-                      color: "#624bff",
-                      padding: "10px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <GiTeacher />
-                  </h5>
-                </span>
-                <h2 className="card-text">
-                  <strong>{dashboardData?.totalTeachers}</strong>
-                </h2>
-                <h6 className="card-text text-secondary">
-                  {dashboardData?.totalStaffs} Staff
-                </h6>
-              </div>
-            </div>
-          </Link>
-        </div> */}
-        {/* <div className="col-md-3 mb-3">
-          <div className="card h-100">
-            <div className="card-body">
-              <span className="d-flex align-items-center justify-content-between">
-                <p
-                  className="card-title"
-                  style={{ color: "#000", fontSize: "20px" }}
-                >
-                  Total Revenue
-                </p>
-                <h5
-                  style={{
-                    backgroundColor: "#e0dcfe",
-                    color: "#624bff",
-                    padding: "10px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <TbPigMoney />
-                </h5>
-              </span>
-              <h2 className="card-text">
-                <strong>
-                  <span style={{ color: "#624bff" }}>$</span>{" "}
-                  {dashboardData?.totalRevenueOfMonth || 0}
-                </strong>
-              </h2>
-              <h6 className="card-text text-secondary">
-                Sales{" "}
-                {dashboardData?.salesPercentage <= 0
-                  ? ` Decrease ${dashboardData?.salesPercentage}`
-                  : `Increase ${dashboardData?.salesPercentage}`}
-                %
-              </h6>
-            </div>
-          </div>
-        </div> */}
       </div>
       <div className="row">
-        {/* Revenue Over Time (Line Chart) */}
         <div className="col-md-8 mb-4">
-          <div className="card shadow-sm p-3 h-100">
+          <div
+            className="card shadow-sm p-3 h-100 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
             <div className="d-flex justify-content-between">
               <h6 className="card-title">Revenue Over Time</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
@@ -347,46 +275,87 @@ function NewDashboard() {
           </div>
         </div>
 
-        {/* Product Sales Comparison (Horizontal Bar Chart) */}
         <div className="col-md-4 mb-4">
-          <div className="card shadow-sm p-3 h-100">
+          <div
+            className="card shadow-sm p-3 h-100 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
             <div className="d-flex justify-content-between">
               <h6 className="card-title">Product Sales Comparison</h6>
-              <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
-            <Chart
-              options={{
-                chart: { type: "bar" },
-                xaxis: {
-                  categories: [
-                    "Product A",
-                    "Product B",
-                    "Product C",
-                    "Product D",
-                  ],
-                },
-                colors: ["#3498db", "#e74c3c", "#2ecc71"],
-                dataLabels: { enabled: true, style: { colors: ["#fff"] } },
-                plotOptions: {
-                  bar: {
-                    horizontal: true,
-                    distributed: true,
-                    barHeight: "40%",
-                    borderRadius: 5,
-                  },
-                },
-                //   fill: { type: "solid" },
-              }}
-              series={[{ name: "Sales Q1", data: [1200, 1400, 1800, 2200] }]}
-              type="bar"
-              height={200}
-            />
+            <div className="d-flex justify-content-between">
+              <p className="text-secondary m-1">Australia</p>
+              <span style={{fontSize:"13px"}} className="fw-bold">634.8%</span>
+            </div>
+            <div className="progress mb-3" style={{ height: "10px" }}>
+              {" "}
+              {/* Adjust height */}
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: "25%", backgroundColor: "#287F71" }}
+                aria-valuenow="25"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <div className="d-flex justify-content-between">
+              <p className="text-secondary m-1">Indonesia</p>
+              <span style={{fontSize:"13px"}} className="fw-bold">589.8%</span>
+            </div>
+            <div className="progress mb-3" style={{ height: "10px" }}>
+              {" "}
+              {/* Adjust height */}
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: "50%", backgroundColor: "#287F71" }}
+                aria-valuenow="50"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <div className="d-flex justify-content-between">
+              <p className="text-secondary m-1">Germany</p>
+              <span style={{fontSize:"13px"}} className="fw-bold">453.8%</span>
+            </div>
+            <div className="progress mb-3" style={{ height: "10px" }}>
+              {" "}
+              {/* Adjust height */}
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: "75%", backgroundColor: "#287F71" }}
+                aria-valuenow="75"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <div className="d-flex justify-content-between">
+              <p className="text-secondary m-1">Thailand</p>
+              <span style={{fontSize:"13px"}} className="fw-bold">634.8%</span>
+            </div>
+            <div className="progress mb-3" style={{ height: "10px" }}>
+              {" "}
+              {/* Adjust height */}
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{ width: "90%", backgroundColor: "#287F71" }}
+                aria-valuenow="100"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
           </div>
         </div>
 
         {/* Sales by Region (Radar Chart) */}
         <div className="col-md-4 mb-4">
-          <div className="card shadow-sm p-1">
+          <div
+            className="card shadow-sm p-1 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
             <div className="d-flex justify-content-between px-2">
               <h6 className="card-title">Sales by Region</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
@@ -395,14 +364,17 @@ function NewDashboard() {
               options={radarChartOptions}
               series={radarChartSeries}
               type="radar"
-              height={280}
+              height={300}
             />
           </div>
         </div>
 
         {/* Sales by E-commerce Platform (Donut Chart) */}
         <div className="col-md-4 mb-4">
-          <div className="card shadow-sm p-3 h-100">
+          <div
+            className="card shadow-sm p-3 h-100 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
             <div className="d-flex justify-content-between">
               <h6 className="card-title">Sales by E-commerce Platform</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
@@ -420,18 +392,22 @@ function NewDashboard() {
                 dataLabels: {
                   enabled: true,
                 },
-                colors: ["#4e73df", "#e74a3b", "#1cc88a"], // Custom colors for slices
+                colors: ["#ABBDD3", "#287F71", "#EB862A"], // Custom colors for slices
               }}
               series={[45, 35, 25]} // Data for chart
               type="donut"
-              height={250}
+              height={220}
+              className="mt-4"
             />
           </div>
         </div>
 
         {/* Registered Users (Gauge Chart) */}
         <div className="col-md-4 mb-4">
-          <div className="card shadow-sm p-3 h-100">
+          <div
+            className="card shadow-sm p-3 h-100 shadow-sm border-0"
+            style={{ borderRadius: "10px" }}
+          >
             <div className="d-flex justify-content-between">
               <h6 className="card-title">Registered Users</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
@@ -441,7 +417,6 @@ function NewDashboard() {
               series={gaugeChartSeries}
               type="radialBar"
               height={300}
-              className="py-4"
             />
           </div>
         </div>
