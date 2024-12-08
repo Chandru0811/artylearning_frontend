@@ -528,7 +528,9 @@ function Sidebar() {
                 <Nav.Link
                   to="#"
                   onClick={() => handleMenuClick(index)}
-                  className={activeMenu === item.title ? "active" : ""}
+                  className={
+                    activeMenu === item.title ? "active activehover" : ""
+                  }
                 >
                   <div
                     className="w-100 d-flex justify-content-between"
@@ -544,10 +546,12 @@ function Sidebar() {
                         }
                       >
                         <span>
-                          <i className={item.icon}></i>
+                          <i className={`${item.icon} activehover`}></i>
                         </span>
                       </OverlayTrigger>
-                      <span className="links_name">{item.title}</span>
+                      <span className="links_name activehover">
+                        {item.title}
+                      </span>
                     </span>
                     <span>
                       <i
@@ -572,8 +576,9 @@ function Sidebar() {
                           <li key={subIndex}>
                             <NavLink
                               to={subMenu.path}
-                              className="links_name"
-                              activeClassName="active-submenu"
+                              className={({ isActive }) =>
+                                isActive ? "active-submenu" : ""
+                              }
                             >
                               <OverlayTrigger
                                 placement="right"

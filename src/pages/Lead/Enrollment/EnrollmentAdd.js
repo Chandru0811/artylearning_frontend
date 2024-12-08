@@ -23,7 +23,7 @@ const steps = [
 
 export default function EnrollmentAdd() {
   const [activeStep, setActiveStep] = useState(0);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({ lead_id: null });
   const [loadIndicator, setLoadIndicator] = useState(false);
 
   const childRef = React.useRef();
@@ -87,7 +87,7 @@ export default function EnrollmentAdd() {
 
   return (
     <div className="container-fluid minHeight">
-              <ol
+      <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
@@ -182,7 +182,7 @@ export default function EnrollmentAdd() {
             />
           )}
           <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-            {activeStep > 1 && (
+            {activeStep > 0 && (
               <button
                 className="btn btn-border btn-sm mt-5 mb-3"
                 style={{ padding: "7px" }}
