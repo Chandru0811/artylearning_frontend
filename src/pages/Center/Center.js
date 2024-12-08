@@ -267,7 +267,7 @@ const Center = () => {
                       style={{ cursor: "pointer" }}
                     >
                       <th scope="row">{index + 1}</th>
-                      <td>
+                      <td className="text-start">
                         <div className="d-flex justify-content-center align-items-center">
                           {storedScreens?.centerListingCreate && (
                             <div className="dropdown">
@@ -309,7 +309,7 @@ const Center = () => {
                                     onSuccess={refreshData}
                                   />
                                 </li>
-                                <li className="text-center">
+                                <li className="text-start">
                                   {storedScreens?.centerListingUpdate && (
                                     <Link to={`/center/edit/${data.id}`}>
                                       <button className="btn btn-sm">
@@ -318,7 +318,7 @@ const Center = () => {
                                     </Link>
                                   )}
                                 </li>
-                                <li className="text-center">
+                                <li className="text-start">
                                   {storedScreens?.centerListingDelete && (
                                     <Delete
                                       onSuccess={refreshData}
