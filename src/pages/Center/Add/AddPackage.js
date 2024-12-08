@@ -77,7 +77,7 @@ function AddPackage({ id, onSuccess }) {
     <>
       <button
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-normal"
+        className="btn btn-normal text-start"
         onClick={handleShow}
       >
         Add Package

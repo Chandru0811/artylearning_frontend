@@ -7,7 +7,7 @@ import { TbPigMoney } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../config/URL";
-import ApexCharts from 'react-apexcharts';
+import ApexCharts from "react-apexcharts";
 
 function NewDashboard() {
   // const [dashboardData, setDashboardData] = useState(null);

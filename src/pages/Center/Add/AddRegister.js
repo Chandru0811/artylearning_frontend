@@ -97,7 +97,7 @@ function AddRegister({ id, onSuccess }) {
     <>
       <button
         style={{ whiteSpace: "nowrap" }}
-        className="btn btn-normal"
+        className="btn btn-normal text-start"
         onClick={handleShow}
       >
         Add Registration Fees
