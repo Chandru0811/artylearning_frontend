@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { FaTrash } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import { LiaTrashSolid } from "react-icons/lia";
 
 function Delete({ onSuccess, path, staffmsg, teachermsg }) {
   const [show, setShow] = useState(false);
@@ -65,7 +66,7 @@ function Delete({ onSuccess, path, staffmsg, teachermsg }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleShow}>
-        <FaTrash />
+      <LiaTrashSolid /> Delete
       </button>
 
       <Modal show={show} onHide={handleClose}>

@@ -14,6 +14,8 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import { MdViewColumn } from "react-icons/md";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { BiEditAlt } from "react-icons/bi";
 import {
   Dropdown,
   DropdownButton,
@@ -116,8 +118,16 @@ const Center = () => {
     return dateString.substring(0, 10); // Extracts date part "YYYY-MM-DD"
   };
 
-  const handleRowClick = (id) => {
-    navigate(`/center/view/${id}`); // Navigate to the index page when a row is clicked
+  const handleRowClick = (e, id) => {
+    const clickedColumn = e.target.closest("td, th");
+
+    if (
+      clickedColumn &&
+      (clickedColumn.cellIndex === 0 || clickedColumn.cellIndex === 1)
+    ) {
+      return;
+    }
+    navigate(`/center/view/${id}`);
   };
 
   return (
@@ -240,12 +250,12 @@ const Center = () => {
               <thead>
                 <tr>
                   <th scope="col">S No</th>
+                  <th scope="col"></th>
                   <th scope="col">Centre Name</th>
                   <th scope="col">Centre Manager</th>
                   <th scope="col">Code</th>
                   <th scope="col">UEN Number</th>
                   <th scope="col">Mobile</th>
-                  <th className="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -253,30 +263,26 @@ const Center = () => {
                   datas.map((data, index) => (
                     <tr
                       key={index}
-                      onClick={() => handleRowClick(data.id)}
+                      onClick={(e) => handleRowClick(e, data.id)}
                       style={{ cursor: "pointer" }}
                     >
                       <th scope="row">{index + 1}</th>
-                      <td>{data.centerName}</td>
-                      <td>{data.centerManager}</td>
-                      <td>{data.code}</td>
-                      <td>{data.uenNumber}</td>
-                      <td>{data.mobile}</td>
                       <td>
                         <div className="d-flex justify-content-center align-items-center">
                           {storedScreens?.centerListingCreate && (
-                            <div class="dropdown">
+                            <div className="dropdown">
                               <button
-                                class="btn dropdown-toggle"
+                                className="btn dropdown-toggle"
                                 type="button"
                                 id="dropdownMenuButton"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
+                                style={{ background: "none", border: "none" }}
                               >
-                                <IoMdAdd />
+                                <BsThreeDotsVertical />
                               </button>
                               <ul
-                                class="dropdown-menu"
+                                className="dropdown-menu"
                                 aria-labelledby="dropdownMenuButton"
                               >
                                 <li>
@@ -303,10 +309,27 @@ const Center = () => {
                                     onSuccess={refreshData}
                                   />
                                 </li>
+                                <li className="text-center">
+                                  {storedScreens?.centerListingUpdate && (
+                                    <Link to={`/center/edit/${data.id}`}>
+                                      <button className="btn btn-sm">
+                                      <BiEditAlt />  Edit
+                                      </button>
+                                    </Link>
+                                  )}
+                                </li>
+                                <li className="text-center">
+                                  {storedScreens?.centerListingDelete && (
+                                    <Delete
+                                      onSuccess={refreshData}
+                                      path={`/deleteCenter/${data.id}`}
+                                    /> 
+                                  )}
+                                </li>
                               </ul>
                             </div>
                           )}
-                          {storedScreens?.centerListingUpdate && (
+                          {/* {storedScreens?.centerListingUpdate && (
                             <Link to={`/center/edit/${data.id}`}>
                               <button className="btn btn-sm">
                                 <FaEdit />
@@ -318,9 +341,14 @@ const Center = () => {
                               onSuccess={refreshData}
                               path={`/deleteCenter/${data.id}`}
                             />
-                          )}
+                          )} */}
                         </div>
                       </td>
+                      <td>{data.centerName}</td>
+                      <td>{data.centerManager}</td>
+                      <td>{data.code}</td>
+                      <td>{data.uenNumber}</td>
+                      <td>{data.mobile}</td>
                     </tr>
                   ))}
               </tbody>

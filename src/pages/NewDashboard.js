@@ -7,69 +7,99 @@ import { TbPigMoney } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../config/URL";
+import ApexCharts from 'react-apexcharts';
 
 function NewDashboard() {
-  const [dashboardData, setDashboardData] = useState(null);
-  //   Line Chart (Revenue Over Time)
+  // const [dashboardData, setDashboardData] = useState(null);
+
   const lineChartOptions = {
     chart: {
-      id: "revenue-over-time",
       height: 350,
-      type: "line", // You can still use 'line' to keep the chart structure
+      type: "line",
       zoom: {
         enabled: false,
       },
     },
-    xaxis: {
-      categories: [
-        "Mar 2023",
-        "Jun 2023",
-        "Sep 2023",
-        "Dec 2023",
-        "Mar 2024",
-        "Sep 2024",
-      ],
+    dataLabels: {
+      enabled: false,
     },
-    colors: ["transparent", "transparent", "transparent"], // Make the lines invisible
     stroke: {
-      width: [0, 0, 0], // Hide the lines by setting the stroke width to 0
-      curve: "smooth", // Optional
-      dashArray: [0, 0, 0], // No dashes to maintain a clean look
+      width: 5,
+      curve: "straight", // Straight lines without curves
+      dashArray: [0],
     },
     title: {
-      text: "Revenue Statistics",
+      text: "Page Statistics",
       align: "left",
     },
     legend: {
-      tooltipHoverFormatter: function (val, opts) {
-        return (
-          val +
-          " - <strong>" +
-          opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] +
-          "</strong>"
-        );
-      },
+      show: true,
     },
     markers: {
-      size: 0, // Hide the markers
+      size: 0, // Disable the markers (dots)
+    },
+    xaxis: {
+      categories: [
+        "01 Jan",
+        "02 Jan",
+        "03 Jan",
+        "04 Jan",
+        "05 Jan",
+        "06 Jan",
+        "07 Jan",
+        "08 Jan",
+        "09 Jan",
+        "10 Jan",
+        "11 Jan",
+        "12 Jan",
+      ],
     },
     tooltip: {
-      enabled: false, // Disable tooltips if you don't want them
+      y: [
+        {
+          title: {
+            formatter: function (val) {
+              return val + " (mins)";
+            },
+          },
+        },
+        {
+          title: {
+            formatter: function (val) {
+              return val + " per session";
+            },
+          },
+        },
+        {
+          title: {
+            formatter: function (val) {
+              return val;
+            },
+          },
+        },
+      ],
     },
     grid: {
       borderColor: "#f1f1f1",
     },
+    colors: ["#ABBDD3", "#287F71", "#EB862A"],
   };
-  
+
   const lineChartSeries = [
-    { name: "Revenue", data: [12000, 15000, 10000, 20000, 25000, 30000] },
-    { name: "Target", data: [10000, 14000, 11000, 18000, 23000, 25000] },
-    { name: "Additional Revenue", data: [1000, 16000, 12000, 15000, 19300, 25000] },
+    {
+      name: "Session Duration",
+      data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10],
+    },
+    {
+      name: "Page Views",
+      data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35],
+    },
+    {
+      name: "Total Visits",
+      data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47],
+    },
   ];
 
-  
-
-  // Radar Chart (Sales by Region)
   const radarChartOptions = {
     chart: { id: "sales-by-region", type: "radar" },
     labels: ["Asia", "Africa", "Europe", "Americas", "Pacific", "Middle East"],
@@ -80,14 +110,6 @@ function NewDashboard() {
     { name: "Sales", data: [2843, 3028, 2728, 2409, 1838, 800] },
   ];
 
-  // Donut Chart (Sales by E-commerce Platform)
-  const donutChartOptions = {
-    chart: { type: "donut" },
-    labels: ["Amazon", "Alibaba", "Tokopedia"],
-    colors: ["#3498db", "#e74c3c", "#2ecc71"],
-  };
-
-  const donutChartSeries = [45, 35, 25];
   const gaugeChartOptions = {
     chart: {
       height: 280,
@@ -132,17 +154,17 @@ function NewDashboard() {
 
   const gaugeChartSeries = [67];
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/smsDashBoardOverview");
-        setDashboardData(response.data);
-      } catch (error) {
-        toast.error("Error Fetching Data ", error);
-      }
-    };
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await api.get("/smsDashBoardOverview");
+  //       setDashboardData(response.data);
+  //     } catch (error) {
+  //       toast.error("Error Fetching Data ", error);
+  //     }
+  //   };
+  //   getData();
+  // }, []);
 
   return (
     <div className="container mt-4">
@@ -266,7 +288,7 @@ function NewDashboard() {
               <h6 className="card-title">Revenue Over Time</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
-            <Chart
+            <ApexCharts
               options={lineChartOptions}
               series={lineChartSeries}
               type="line"
@@ -285,7 +307,9 @@ function NewDashboard() {
             </div>
             <div className="d-flex justify-content-between">
               <p className="text-secondary m-1">Australia</p>
-              <span style={{fontSize:"13px"}} className="fw-bold">634.8%</span>
+              <span style={{ fontSize: "13px" }} className="fw-bold">
+                634.8%
+              </span>
             </div>
             <div className="progress mb-3" style={{ height: "10px" }}>
               {" "}
@@ -301,7 +325,9 @@ function NewDashboard() {
             </div>
             <div className="d-flex justify-content-between">
               <p className="text-secondary m-1">Indonesia</p>
-              <span style={{fontSize:"13px"}} className="fw-bold">589.8%</span>
+              <span style={{ fontSize: "13px" }} className="fw-bold">
+                589.8%
+              </span>
             </div>
             <div className="progress mb-3" style={{ height: "10px" }}>
               {" "}
@@ -317,7 +343,9 @@ function NewDashboard() {
             </div>
             <div className="d-flex justify-content-between">
               <p className="text-secondary m-1">Germany</p>
-              <span style={{fontSize:"13px"}} className="fw-bold">453.8%</span>
+              <span style={{ fontSize: "13px" }} className="fw-bold">
+                453.8%
+              </span>
             </div>
             <div className="progress mb-3" style={{ height: "10px" }}>
               {" "}
@@ -333,7 +361,9 @@ function NewDashboard() {
             </div>
             <div className="d-flex justify-content-between">
               <p className="text-secondary m-1">Thailand</p>
-              <span style={{fontSize:"13px"}} className="fw-bold">634.8%</span>
+              <span style={{ fontSize: "13px" }} className="fw-bold">
+                634.8%
+              </span>
             </div>
             <div className="progress mb-3" style={{ height: "10px" }}>
               {" "}
