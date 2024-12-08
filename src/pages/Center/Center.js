@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom"; // Use useNavigate
+import { FaEdit } from "react-icons/fa"; // No need for FaEye anymore
 import { IoMdAdd } from "react-icons/io";
 import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
@@ -23,6 +23,7 @@ import {
 
 const Center = () => {
   const tableRef = useRef(null);
+  const navigate = useNavigate(); // Replace useHistory with useNavigate
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const [datas, setDatas] = useState([]);
@@ -113,6 +114,10 @@ const Center = () => {
   const extractDate = (dateString) => {
     if (!dateString) return "";
     return dateString.substring(0, 10); // Extracts date part "YYYY-MM-DD"
+  };
+
+  const handleRowClick = (id) => {
+    navigate(`/center/view/${id}`); // Navigate to the index page when a row is clicked
   };
 
   return (
@@ -246,7 +251,11 @@ const Center = () => {
               <tbody>
                 {Array.isArray(datas) &&
                   datas.map((data, index) => (
-                    <tr key={index}>
+                    <tr
+                      key={index}
+                      onClick={() => handleRowClick(data.id)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <th scope="row">{index + 1}</th>
                       <td>{data.centerName}</td>
                       <td>{data.centerManager}</td>
@@ -272,37 +281,30 @@ const Center = () => {
                               >
                                 <li>
                                   <AddRegister
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
+                                    id={data.id}
+                                    onSuccess={refreshData}
+                                  />
                                 </li>
                                 <li>
-                                <AddBreak
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
+                                  <AddBreak
+                                    id={data.id}
+                                    onSuccess={refreshData}
+                                  />
                                 </li>
                                 <li>
-                                <AddClass
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
+                                  <AddClass
+                                    id={data.id}
+                                    onSuccess={refreshData}
+                                  />
                                 </li>
                                 <li>
-                                <AddPackage
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
+                                  <AddPackage
+                                    id={data.id}
+                                    onSuccess={refreshData}
+                                  />
                                 </li>
                               </ul>
                             </div>
-                          )}
-                          {storedScreens?.centerListingRead && (
-                            <Link to={`/center/view/${data.id}`}>
-                              <button className="btn btn-sm">
-                                <FaEye />
-                              </button>
-                            </Link>
                           )}
                           {storedScreens?.centerListingUpdate && (
                             <Link to={`/center/edit/${data.id}`}>
