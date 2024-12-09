@@ -63,11 +63,11 @@ function ParentSayAboutUs() {
           containerClass="carousel-container"
           removeArrowOnDeviceType={["tablet", "mobile"]}
           dotListClass="custom-dot-list-style"
-          itemClass="carousel-item-padding-40-px"
+          itemClass="carousel-item-padding-10-px"
         >
           {datas &&
             datas.map((data) => (
-              <div key={data.id} className="container-fluid m-0" >
+              <div key={data.id} className="container-fluid m-0 parent-testimonial" >
                 <div className="row">
                   <div className="offset-md-1 col-md-10 col-12 px-4 slidePaddings">
                     <div className="row">
