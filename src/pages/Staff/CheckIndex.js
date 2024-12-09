@@ -1,32 +1,58 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../../config/URL";
 
 const CheckIndex = () => {
   const [workingMode, setWorkingMode] = useState("");
   const [attendanceAction, setAttendanceAction] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    // Manual validation for workingMode and attendanceAction
     if (!workingMode || !attendanceAction) {
       setError("Please select a working mode and an action.");
       return;
     }
 
     setError("");
-    setIsLoading(true); // Set loading to true when submitting
+    setIsLoading(true);
 
-    // Simulate form submission (e.g., API call)
-    setTimeout(() => {
-      console.log("Form Values:", { attendanceAction, workingMode });
-      setWorkingMode("");
-      setAttendanceAction("");
-      setIsLoading(false); // Set loading to false after submission
-    }, 2000); // Simulated delay of 2 seconds
+    const currentDate = new Date().toISOString();
+
+    const payload = {
+      date: currentDate,
+      workingMode,
+      centerId: 608,
+      userId: 1255,
+    };
+
+    api
+      .post("/userCheckIn", payload)
+      .then((response) => {
+        console.log("API response:", response.data);
+        setIsLoading(false);
+        setWorkingMode("");
+        setAttendanceAction("");
+      })
+      .catch((error) => {
+        console.error("Error submitting form:", error);
+
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          setError(error.response.data.message);
+        } else {
+          setError("An error occurred. Please try again.");
+        }
+
+        setIsLoading(false);
+      });
   };
-
   const handleCheckIn = () => {
     setAttendanceAction("Check In");
   };
@@ -41,9 +67,9 @@ const CheckIndex = () => {
 
   return (
     <div className="pt-3">
-      <div className="container  text-center">
+      <div className="container text-center">
         <ol
-          className="breadcrumb "
+          className="breadcrumb"
           style={{ listStyle: "none", padding: 0, margin: 0 }}
         >
           <li>
@@ -121,8 +147,8 @@ const CheckIndex = () => {
               }}
             >
               <option value="">Select Working Mode</option>
-              <option value="workFromOffice">Work from Office</option>
-              <option value="workFromHome">Work from Home</option>
+              <option value="WORK_FROM_OFFICE">Work from Office</option>
+              <option value="WORK_FORM_HOME">Work from Home</option>
             </select>
           </div>
 
