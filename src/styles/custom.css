@@ -847,7 +847,7 @@
 
 .psd .btn-light,
 .psd .btn-light:hover,
-.psd .btn-light.active{
+.psd .btn-light.active {
   background-color: #fff;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
@@ -856,4 +856,24 @@
 }
 .apexcharts-legend {
   display: none !important; /* Hide the legend */
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  background-color: gray;
+  border-radius: 50%;
+}
+
+.dot.active {
+  background-color: #287f71;
+}
+
+.actionArrow::after {
+  display: none !important;
+}
+
+input.searchInputG:hover {
+  border-color: #287f71 !important;
 }

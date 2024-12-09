@@ -654,9 +654,9 @@
   background-color: #f9fafb;
 }
 
-input.form-control:hover {
+/* input.form-control:hover {
   border-color: #eb0505 !important;
-}
+} */
 .contact form button {
   background-color: #eb0505 !important;
   color: white;
@@ -727,6 +727,70 @@ input.form-control:hover {
 }
 
 /* / Carousel  / */
+.parent-testimonial {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto; 
+  min-height: 300px; 
+  padding: 20px; 
+  box-sizing: border-box;
+  word-wrap: break-word; 
+  overflow: hidden; 
+}
+
+.paraSize {
+  font-size: 16px; 
+  line-height: 1.5; 
+  white-space: pre-wrap; 
+}
+
+@media (max-width: 768px) {
+  .paraSize {
+    font-size: 14px; 
+  }
+}
+
+@media (max-width: 576px) {
+  .paraSize {
+    font-size: 12px; 
+  }
+}
+
+.carousel-container .react-multi-carousel-item {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+  height: auto; 
+  padding: 10px; 
+}
+
+.slidePaddings {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+
+.paraSize {
+  max-height: 150px; 
+  overflow-y: auto; 
+  scrollbar-width: thin;
+  scrollbar-color: #dab25a transparent; 
+}
+
+.paraSize::-webkit-scrollbar {
+  width: 5px;
+}
+
+.paraSize::-webkit-scrollbar-thumb {
+  background-color: #dab25a; 
+  border-radius: 5px;
+}
 
 .carousel_container {
   background-color: #dab25a !important;
@@ -739,10 +803,38 @@ input.form-control:hover {
   overflow: hidden;
   background-position: center;
   background-size: cover;
+  padding: 0 !important;
+  margin: 0 !important;
 }
+
+/* .carousel-container {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: 500px; 
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+
+.parent-testimonial {
+  max-height: 500px; 
+  overflow: hidden;
+} */
 
 .imgWidth {
   width: 80%;
+}
+
+.paraSize {
+  font-size: 17px !important;
+}
+
+.carousel-container {
+  padding: 0 !important; 
+  margin: 0 !important; 
+}
+
+.slidePaddings {
+  padding: 0 !important; 
 }
 
 .paraSize {
@@ -762,9 +854,22 @@ input.form-control:hover {
     padding: 10px 0px !important;
   }
 }
-
+@media (max-width: 768px) {
+  .carousel-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: 1200px; 
+    overflow: hidden;
+    text-wrap: nowrap;
+  }
+  
+  .parent-testimonial {
+    max-height: 1200px; 
+    overflow: hidden;
+  }
+}
 .carousel-container {
-  padding: 50px 30px;
+  padding: 10px 30px;
 }
 
 .image-in-text span {

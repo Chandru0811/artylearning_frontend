@@ -1,363 +1,273 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link, useNavigate } from "react-router-dom"; // Use useNavigate
-import { FaEdit } from "react-icons/fa"; // No need for FaEye anymore
-import { IoMdAdd } from "react-icons/io";
-import AddRegister from "./Add/AddRegister";
-import AddBreak from "./Add/AddBreak";
-import AddClass from "./Add/AddClass";
-import AddPackage from "./Add/AddPackage";
-import Delete from "../../components/common/Delete";
+import React, { useEffect, useState } from "react";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Link } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
-import { MdViewColumn } from "react-icons/md";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { BiEditAlt } from "react-icons/bi";
-import {
-  Dropdown,
-  DropdownButton,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+const columnHelper = createColumnHelper();
 
-const Center = () => {
-  const tableRef = useRef(null);
-  const navigate = useNavigate(); // Replace useHistory with useNavigate
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
-  const [datas, setDatas] = useState([]);
+export default function Center() {
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [centerManagerData, setCenterManagerData] = useState([]);
-  const [selectedManager, setSelectedManager] = useState(""); // State for selected center manager
-  const [centerName, setCenterName] = useState("");
-  const [code, setCode] = useState("");
-  const [email, setEmail] = useState("");
-
-  const clearFilters = () => {
-    setCenterName("");
-    setCode("");
-    setEmail("");
-    setSelectedManager("");
-
-    $(tableRef.current).DataTable().search("").draw();
-  };
-
-  const fetchData = async () => {
-    try {
-      const centerManagerData = await fetchAllCentreManager();
-      setCenterManagerData(centerManagerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageSize = 10;
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  useEffect(() => {
-    const getCenterData = async () => {
+    const fetchData = async () => {
       try {
         const response = await api.get("/getAllCenter");
-        setDatas(response.data);
+        setData(response.data);
         setLoading(false);
       } catch (error) {
-        toast.error("Error Fetching Data : ", error);
+        toast.error("Error fetching data: " + error.message);
+        setLoading(false);
       }
     };
-    getCenterData();
-    fetchData(); // Fetch the center manager data as well
+    fetchData();
   }, []);
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
+  const filteredData = data.filter((item) =>
+    Object.values(item).some(
+      (val) =>
+        val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
+  const paginatedData = filteredData.slice(
+    pageIndex * pageSize,
+    (pageIndex + 1) * pageSize
+  );
 
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllCenter");
-      setDatas(response.data);
-      initializeDataTable();
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
+  const columns = [
+    columnHelper.accessor(
+      (_, rowIndex) => rowIndex + 1 + pageIndex * pageSize,
+      {
+        id: "index",
+        header: () => (
+          <span className="flex items-center text-nowrap">S.No</span>
+        ),
+        cell: (info) => <div className="text-center">{info.getValue()}</div>,
+      }
+    ),
+    columnHelper.accessor("actions", {
+      id: "actions",
+      header: "Actions",
+      cell: () => (
+        <div className="dropdown text-center">
+          <button
+            className="btn btn-link p-0"
+            type="button"
+            id="dropdownMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            style={{ textDecoration: "none", color: "black", fontSize: "20px" }}
+          >
+            &#8942;
+          </button>
+          <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li>
+              <button className="dropdown-item">Edit</button>
+            </li>
+            <li>
+              <button className="dropdown-item">Delete</button>
+            </li>
+            <li>
+              <button className="dropdown-item">View</button>
+            </li>
+          </ul>
+        </div>
+      ),
+    }),
+    columnHelper.accessor("centerName", {
+      header: "Center Name",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("centerManager", {
+      header: "Center Manager",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("code", {
+      header: "Code",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("uenNumber", {
+      header: "UEN Number",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("email", {
+      header: () => <span className="flex items-center">Email</span>,
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("address", {
+      header: () => <span className="flex items-center">Address</span>,
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("mobile", {
+      header: () => <span className="flex items-center">Mobile</span>,
+      cell: (info) => info.getValue(),
+    }),
+  ];
 
-  const handleManagerChange = (e) => {
-    setSelectedManager(e.target.value); // Set selected manager
-    const searchValue = e.target.value.toLowerCase();
-    $(tableRef.current).DataTable().search(searchValue).draw();
-  };
-
-  const extractDate = (dateString) => {
-    if (!dateString) return "";
-    return dateString.substring(0, 10); // Extracts date part "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (e, id) => {
-    const clickedColumn = e.target.closest("td, th");
-
-    if (
-      clickedColumn &&
-      (clickedColumn.cellIndex === 0 || clickedColumn.cellIndex === 1)
-    ) {
-      return;
-    }
-    navigate(`/center/view/${id}`);
-  };
+  const table = useReactTable({
+    data: paginatedData,
+    columns,
+    pageCount: Math.ceil(filteredData.length / pageSize),
+    state: {
+      pagination: { pageIndex, pageSize },
+    },
+    getCoreRowModel: getCoreRowModel(),
+    manualPagination: true,
+  });
 
   return (
-    <div className="container my-4 center">
-      <ol
-        className="breadcrumb my-3 px-1"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" className="custom-breadcrumb">
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          Centre Management
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Centre Listing
-        </li>
-      </ol>
-      <div className="mb-3 d-flex justify-content-between">
-        <div className="individual_fliters d-lg-flex">
-          <div className="form-group mb-0 ms-2 mb-1">
-            <input
-              type="text"
-              className="form-control center_list"
-              style={{ width: "160px" }}
-              placeholder="Center Name"
-              value={centerName}
-              onChange={(e) => {
-                const searchValue = e.target.value.toLowerCase();
-                setCenterName(e.target.value);
-                $(tableRef.current).DataTable().search(searchValue).draw();
-              }}
-            />
-          </div>
-          <div className="form-group mb-0 ms-2 mb-1">
-            <input
-              type="text"
-              className="form-control center_list"
-              style={{ width: "160px" }}
-              placeholder="Code"
-              value={code}
-              onChange={(e) => {
-                const searchValue = e.target.value.toLowerCase();
-                setCode(e.target.value);
-                $(tableRef.current).DataTable().search(searchValue).draw();
-              }}
-            />
-          </div>
-          <div className="form-group mb-0 ms-2 mb-1">
-            <input
-              type="text"
-              className="form-control center_list"
-              style={{ width: "160px" }}
-              placeholder="Email"
-              value={email}
-              onChange={(e) => {
-                const searchValue = e.target.value.toLowerCase();
-                setEmail(e.target.value);
-                $(tableRef.current).DataTable().search(searchValue).draw();
-              }}
-            />
-          </div>
-          <div className="form-group mb-0 ms-2 mb-1">
-            <select
-              className="form-control center_list"
-              style={{ width: "100%" }}
-              value={selectedManager}
-              onChange={handleManagerChange}
-            >
-              <option value="">Select Center Manager</option>
-              {centerManagerData.map((manager) => (
-                <option key={manager.id} value={manager.userNames}>
-                  {manager.userNames}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group mb-0 ms-2 mb-1 ">
-            <button
-              type="button"
-              className="btn btn-sm btn-border"
-              onClick={clearFilters}
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-
-        {storedScreens?.centerListingCreate && (
-          <Link to="/center/add">
-            <button
-              type="button"
-              className="btn btn-button btn-sm"
-              style={{ fontWeight: "600px !important" }}
-            >
-              Add <i className="bx bx-plus"></i>
-            </button>
-          </Link>
-        )}
-      </div>
+    <div className="container my-4">
       {loading ? (
         <div className="loader-container">
-          <div className="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
+          <div className="loading">Loading...</div>
+        </div>
+      ) : data.length === 0 ? (
+        <div className="text-center">
+          <p>No records found.</p>
         </div>
       ) : (
-        <div className="cardBorder">
-          <div className="card table-responsive p-3">
-            <table ref={tableRef} className="display">
+        <div className="card">
+          <style>
+            {`
+  .table.table-bordered {
+    border-collapse: collapse;
+  }
+
+  .table.table-bordered th, 
+  .table.table-bordered td {
+    border: none;
+  }
+
+  .table.table-bordered tr {
+    border-bottom: 1px solid #dee2e6;
+  }
+`}
+          </style>
+
+          <div
+            className="d-flex justify-content-between align-items-center p-1"
+            style={{ background: "#edeef0" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2">
+                This Database Show at of your{" "}
+                <span className="bold" style={{ color: "#287f71" }}>
+                  Center
+                </span>
+              </span>
+            </div>
+
+            <div>
+              <Link to="/center/add">
+                <button
+                  type="button"
+                  className="btn btn-button btn-sm"
+                  style={{ fontWeight: "600px !important" }}
+                >
+                  Add <i className="bx bx-plus"></i>
+                </button>
+              </Link>
+            </div>
+          </div>
+          <div className="table-container">
+            <div className="search-input p-2">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="form-control mb-3 searchInputG"
+              />
+            </div>
+            <table className="table table-bordered">
               <thead>
-                <tr>
-                  <th scope="col">S No</th>
-                  <th scope="col"></th>
-                  <th scope="col">Centre Name</th>
-                  <th scope="col">Centre Manager</th>
-                  <th scope="col">Code</th>
-                  <th scope="col">UEN Number</th>
-                  <th scope="col">Mobile</th>
-                </tr>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th
+                        key={header.id}
+                        style={{ background: "#edeef0" }}
+                        className="fw-medium text-secondary"
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
               </thead>
-              <tbody>
-                {Array.isArray(datas) &&
-                  datas.map((data, index) => (
-                    <tr
-                      key={index}
-                      onClick={(e) => handleRowClick(e, data.id)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <th scope="row">{index + 1}</th>
-                      <td className="text-start">
-                        <div className="d-flex justify-content-center align-items-center">
-                          {storedScreens?.centerListingCreate && (
-                            <div className="dropdown">
-                              <button
-                                className="btn dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                                style={{ background: "none", border: "none" }}
-                              >
-                                <BsThreeDotsVertical />
-                              </button>
-                              <ul
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <li>
-                                  <AddRegister
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li>
-                                  <AddBreak
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li>
-                                  <AddClass
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li>
-                                  <AddPackage
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li className="text-start">
-                                  {storedScreens?.centerListingUpdate && (
-                                    <Link to={`/center/edit/${data.id}`}>
-                                      <button className="btn btn-sm">
-                                      <BiEditAlt />  Edit
-                                      </button>
-                                    </Link>
-                                  )}
-                                </li>
-                                <li className="text-start">
-                                  {storedScreens?.centerListingDelete && (
-                                    <Delete
-                                      onSuccess={refreshData}
-                                      path={`/deleteCenter/${data.id}`}
-                                    /> 
-                                  )}
-                                </li>
-                              </ul>
-                            </div>
-                          )}
-                          {/* {storedScreens?.centerListingUpdate && (
-                            <Link to={`/center/edit/${data.id}`}>
-                              <button className="btn btn-sm">
-                                <FaEdit />
-                              </button>
-                            </Link>
-                          )}
-                          {storedScreens?.centerListingDelete && (
-                            <Delete
-                              onSuccess={refreshData}
-                              path={`/deleteCenter/${data.id}`}
-                            />
-                          )} */}
-                        </div>
+              <tbody className="text-start">
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </td>
-                      <td>{data.centerName}</td>
-                      <td>{data.centerManager}</td>
-                      <td>{data.code}</td>
-                      <td>{data.uenNumber}</td>
-                      <td>{data.mobile}</td>
-                    </tr>
-                  ))}
+                    ))}
+                  </tr>
+                ))}
               </tbody>
             </table>
+            <div className="pagination-controls mt-3">
+              <button
+                onClick={() => setPageIndex(0)}
+                disabled={pageIndex === 0}
+                className="btn border-0 mx-1"
+              >
+                <i className="fas fa-angle-double-left"></i>
+              </button>
+              <button
+                onClick={() => setPageIndex(pageIndex - 1)}
+                disabled={pageIndex === 0}
+                className="btn border-0 mx-1"
+              >
+                <i className="fas fa-angle-left"></i>
+              </button>
+              <span>
+                Page <strong>{pageIndex + 1}</strong> of{" "}
+                <strong>{Math.ceil(filteredData.length / pageSize)}</strong>
+              </span>
+              <button
+                onClick={() => setPageIndex(pageIndex + 1)}
+                disabled={
+                  pageIndex + 1 >= Math.ceil(filteredData.length / pageSize)
+                }
+                className="btn border-0 mx-1"
+              >
+                <i className="fas fa-angle-right"></i>
+              </button>
+              <button
+                onClick={() =>
+                  setPageIndex(Math.ceil(filteredData.length / pageSize) - 1)
+                }
+                disabled={
+                  pageIndex + 1 >= Math.ceil(filteredData.length / pageSize)
+                }
+                className="btn border-0 mx-1"
+              >
+                <i className="fas fa-angle-double-right"></i>
+              </button>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
-};
-
-export default Center;
+}

@@ -119,16 +119,28 @@
   /* White color when active */
 }
 
-
-
-
-
+.overview {
+  background: #287f71;
+  width: fit-content;
+  padding: 5px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 60px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.overview i {
+  color: #fff !important;
+}
+.overview span {
+  color: #fff !important;
+}
 
 .nav-links li .active i:hover {
   color: #000000 !important;
   /* Black color when hovered */
 }
-
 
 .nav-links li i {
   color: #303030;
@@ -136,7 +148,6 @@
   transition: color 0.3s ease;
   /* Smooth color transition */
 }
-
 
 .sidebar .nav-links li i.active {
   min-width: 60px;
@@ -190,8 +201,8 @@
   transition: all 0.5s ease;
 }
 
-.sidebar.active~.home-section {
-  width: calc(90% - 60px);
+.sidebar.active ~ .home-section {
+  width: calc(100% - 60px);
   left: 60px;
 }
 
@@ -207,9 +218,9 @@
   transition: all 0.5s ease;
 }
 
-.sidebar.active~.home-section nav {
+.sidebar.active ~ .home-section nav {
   left: 60px;
-  width: calc(90% - 60px);
+  width: calc(100% - 60px);
 }
 
 .home-section nav .sidebar-button {
@@ -312,7 +323,7 @@ nav .profile-details i {
     left: 60px;
   }
 
-  .sidebar.active~.home-section {
+  .sidebar.active ~ .home-section {
     overflow: hidden;
     left: 220px;
   }
@@ -322,7 +333,7 @@ nav .profile-details i {
     left: 60px;
   }
 
-  .sidebar.active~.home-section nav {
+  .sidebar.active ~ .home-section nav {
     width: calc(100% - 220px);
     left: 220px;
   }
@@ -352,7 +363,6 @@ nav .profile-details i {
 }
 
 @media (max-width: 700px) {
-
   nav .sidebar-button .dashboard,
   nav .profile-details .admin_name,
   nav .profile-details i {
@@ -375,7 +385,7 @@ nav .profile-details i {
     margin-bottom: 15px;
   }
 
-  .sidebar.active~.home-section nav .profile-details {
+  .sidebar.active ~ .home-section nav .profile-details {
     display: none;
   }
 }
@@ -394,7 +404,7 @@ nav .profile-details i {
     left: 0;
   }
 
-  .sidebar.active~.home-section {
+  .sidebar.active ~ .home-section {
     left: 60px;
     width: calc(100% - 60px);
   }
@@ -404,7 +414,7 @@ nav .profile-details i {
     left: 0;
   }
 
-  .sidebar.active~.home-section nav {
+  .sidebar.active ~ .home-section nav {
     left: 60px;
     width: calc(100% - 60px);
   }
@@ -507,7 +517,7 @@ nav .profile-details i {
   border-color: #287f71;
 }
 
-.btn-check:focus+.btn-button,
+.btn-check:focus + .btn-button,
 .btn-button:focus {
   color: #fff;
   background-color: #287f71;
@@ -515,21 +525,21 @@ nav .profile-details i {
   box-shadow: 0 0 0 0.25rem #fa010188;
 }
 
-.btn-check:checked+.btn-button,
-.btn-check:active+.btn-button,
+.btn-check:checked + .btn-button,
+.btn-check:active + .btn-button,
 .btn-button:active,
 .btn-button.active,
-.show>.btn-button.dropdown-toggle {
+.show > .btn-button.dropdown-toggle {
   color: #fff;
   background-color: #287f71;
   border-color: #287f71;
 }
 
-.btn-check:checked+.btn-button:focus,
-.btn-check:active+.btn-button:focus,
+.btn-check:checked + .btn-button:focus,
+.btn-check:active + .btn-button:focus,
 .btn-button:active:focus,
 .btn-button.active:focus,
-.show>.btn-button.dropdown-toggle:focus {
+.show > .btn-button.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.25rem #fa010182;
 }
 
@@ -540,11 +550,11 @@ nav .profile-details i {
   border-color: #ff3f3f;
 }
 
-.btn-button-check:checked+.btn-button,
+.btn-button-check:checked + .btn-button,
 .btn-button.active,
 .btn-button.show,
 .btn-button:first-child:active,
-:not(.btn-button-check)+.btn-button:active {
+:not(.btn-button-check) + .btn-button:active {
   background-color: #287f71;
   border-color: #287f71;
   color: #fff;
@@ -560,7 +570,7 @@ nav .profile-details i {
   background-color: #cac8c8;
 }
 
-table.dataTable thead>tr {
+table.dataTable thead > tr {
   white-space: nowrap;
 }
 
@@ -606,6 +616,9 @@ tbody tr th {
 
 .links_names {
   font-size: 14px !important;
+}
+.sidebar .nav-links li span .active {
+  color: #287f71 !important;
 }
 
 a:hover {
@@ -700,7 +713,7 @@ a:hover {
   opacity: 0;
 }
 
-.on-off-toggle__input:checked+.on-off-toggle__slider {
+.on-off-toggle__input:checked + .on-off-toggle__slider {
   background-color: #64e455;
 
   &:before {
@@ -714,7 +727,7 @@ a:hover {
   }
 }
 
-.on-off-toggle__input+.on-off-toggle__slider {
+.on-off-toggle__input + .on-off-toggle__slider {
   position: absolute;
   top: 0;
   left: 0;
@@ -767,13 +780,13 @@ a:hover {
   box-shadow: 0px 3px 5px 0px #e8e8e8;
 }
 
-.plans .plan input[type="radio"]:checked+.plan-content {
+.plans .plan input[type="radio"]:checked + .plan-content {
   border: 2px solid #216ee0;
   background: #eaf1fe;
   transition: ease-in 0.3s;
 }
 
-.plans .plan input[type="radio"]:checked+.plan-content:after {
+.plans .plan input[type="radio"]:checked + .plan-content:after {
   content: "";
   position: absolute;
   height: 8px;

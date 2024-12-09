@@ -508,6 +508,7 @@ function Sidebar() {
           <img src={Logo} alt="logo" width={110} className="img-fluid p-1" />
         </span>
       </div>
+      <div className="pt-4"></div>
       <ul className="nav-links">
         <li>
           <NavLink to="/" onClick={() => handleMenuClick(null)}>
@@ -520,7 +521,6 @@ function Sidebar() {
             <span className="links_name">Over View</span>
           </NavLink>
         </li>
-
         {menuItems.map(
           (item, index) =>
             item.subMenus.some((subMenu) => subMenu.access) && (
@@ -536,24 +536,24 @@ function Sidebar() {
                     className="w-100 d-flex justify-content-between"
                     style={{ overflow: "hidden", whiteSpace: "nowrap" }}
                   >
-                    <span>
-                      <OverlayTrigger
-                        placement="right"
-                        overlay={
-                          <Tooltip id={`${item.title}-tooltip`}>
-                            {item.title}
-                          </Tooltip>
-                        }
-                      >
-                        <span>
-                          <i className={`${item.icon} activehover`}></i>
-                        </span>
-                      </OverlayTrigger>
-                      <span className="links_name activehover">
-                        {item.title}
-                      </span>
+                    <span className="d-flex justify-content-center text-center">
+                      <div className="text-center">
+                        <OverlayTrigger
+                          placement="right"
+                          overlay={
+                            <Tooltip id={`${item.title}-tooltip`}>
+                              {item.title}
+                            </Tooltip>
+                          }
+                        >
+                          <span>
+                            <i className={`${item.icon} activehover`}></i>
+                          </span>
+                        </OverlayTrigger>
+                        <span className="links_name">{item.title}</span>
+                      </div>
                     </span>
-                    <span>
+                    <span className="pe-4">
                       <i
                         className={`bx bx-chevron-down arrow ${
                           item.isOpen ? "open" : ""
@@ -573,7 +573,7 @@ function Sidebar() {
                     {item.subMenus.map(
                       (subMenu, subIndex) =>
                         subMenu.access && (
-                          <li key={subIndex}>
+                          <li key={subIndex} className="ps-2">
                             <NavLink
                               to={subMenu.path}
                               className={({ isActive }) =>
@@ -590,7 +590,7 @@ function Sidebar() {
                               >
                                 <i className="bx bx-radio-circle-marked"></i>
                               </OverlayTrigger>
-                              <span className="links_name links_names">
+                              <span className="links_name links_names active">
                                 {subMenu.title}
                               </span>
                             </NavLink>
