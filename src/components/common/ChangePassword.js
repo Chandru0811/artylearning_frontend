@@ -11,13 +11,13 @@ import { LuKeyRound } from "react-icons/lu";
 function ChangePassword({ onLogout }) {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState(false);
-  const [oldPassword, setOldPassword] = useState(false);
+  // const [oldPassword, setOldPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const togglePasswordVisibility = (type) => {
     if (type === "new") setShowPassword(!showPassword);
     if (type === "confirm") setConfirmPassword(!confirmPassword);
-    if (type === "old") setOldPassword(!oldPassword);
+    // if (type === "old") setOldPassword(!oldPassword);
   };
 
   const validationSchema = Yup.object().shape({
@@ -33,13 +33,11 @@ function ChangePassword({ onLogout }) {
     confirmPassword: Yup.string()
       .required("*Confirm Password is required")
       .oneOf([Yup.ref("newPassword")], "Passwords must match"),
-    oldPassword: Yup.string().required("*Old password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
       email: "",
-      oldPassword: "",
       newPassword: "",
       confirmPassword: "",
     },
@@ -47,27 +45,27 @@ function ChangePassword({ onLogout }) {
     onSubmit: async (values) => {
       console.log("Submitting values:", values);
       const formData = new FormData();
-      formData.append("email", values.email);
-      formData.append("oldPassword", values.oldPassword);
+      formData.append("email", "wanov28182@lofiey.com");
       formData.append("newPassword", values.newPassword);
       formData.append("confirmPassword", values.confirmPassword);
 
       try {
-        const response = await api.post(`/changePassword`, formData, {
+        const response = await api.post(`/changePasswordForAdmin`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
         if (response.status === 200) {
-          onLogout();
           toast.success(response.data.message);
           setShowModal(false);
+          onLogout();
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.warning("Error changing password");
+        // toast.warning("Error changing password");
+        toast.error(error.data.message);
       }
     },
   });
@@ -91,7 +89,7 @@ function ChangePassword({ onLogout }) {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
-            {/* <Form.Group className="mb-3">
+           {/*  <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
@@ -103,7 +101,7 @@ function ChangePassword({ onLogout }) {
               </Form.Control.Feedback>
             </Form.Group> */}
 
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
               <Form.Label>Old Password</Form.Label>
               <div className="input-group">
                 <Form.Control
@@ -124,7 +122,7 @@ function ChangePassword({ onLogout }) {
                   {formik.errors.oldPassword}
                 </Form.Control.Feedback>
               </div>
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group className="mb-3">
               <Form.Label>New Password</Form.Label>
@@ -173,7 +171,7 @@ function ChangePassword({ onLogout }) {
               </div>
             </Form.Group>
             <div className="d-flex justify-content-end">
-              <Button type="submit" className="btn btn-danger">
+              <Button type="submit" className="btn btn-button btn-sm">
                 Save
               </Button>
             </div>

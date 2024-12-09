@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
@@ -46,7 +46,7 @@ const formats = [
   "video",
 ];
 
-function EmailTemplateEdit({id}) {
+function EmailTemplateEdit({ id, onSuccess}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
@@ -54,7 +54,13 @@ function EmailTemplateEdit({id}) {
     setShow(false);
   };
 
-  const handleShow = () => {
+  const handleShow = async() => {
+    try {
+      const response = await api.get(`/getEmailTemplateById/${id}`);
+      formik.setValues(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
     setShow(true);
   };
 
@@ -65,18 +71,20 @@ function EmailTemplateEdit({id}) {
   const formik = useFormik({
     initialValues: {
       subject: "",
-      descriptions: "",
+      description: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Email:", values);
       try {
-        const formData = new FormData();
-        formData.append("subject", values.subject);
-        formData.append("descriptions", values.descriptions);
-        const response = await api.put(`/emailTemp/${id}`, formData);
-        if (response.status === 201) {
+        // const formData = new FormData();
+        // formData.append("subject", values.subject);
+        // formData.append("description", values.description);
+        const response = await api.put(`/updateEmailTemplate/${id}`, values);
+        if (response.status === 200) {
           toast.success(response.data.message);
+          onSuccess();
+          setShow(false);
         } else {
           toast.error(response.data.message);
         }
@@ -88,7 +96,7 @@ function EmailTemplateEdit({id}) {
 
   // Handle `ReactQuill` value change
   const handleDescriptionChange = (value) => {
-    formik.setFieldValue("descriptions", value);
+    formik.setFieldValue("description", value);
   };
 
   return (
@@ -129,12 +137,12 @@ function EmailTemplateEdit({id}) {
               <div className="col-12 mb-3">
                 <label>Description</label>
                 <ReactQuill
-                  value={formik.values.descriptions}
+                  value={formik.values.description}
                   onChange={handleDescriptionChange}
                   modules={modules} // Add custom toolbar modules
                   formats={formats} // Define formats allowed
                   className={`${
-                    formik.touched.descriptions && formik.errors.descriptions
+                    formik.touched.description && formik.errors.description
                       ? "is-invalid"
                       : ""
                   }`}

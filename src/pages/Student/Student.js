@@ -146,8 +146,8 @@ const Student = () => {
                   <th scope="col">Age</th>
                   <th scope="col">Gender</th>
                   <th scope="col">Nationality</th>
-                  <th scope="col">Allow Magazine</th>
-                  <th scope="col">Allow Social Media</th>
+                  {/* <th scope="col">Allow Magazine</th>
+                  <th scope="col">Allow Social Media</th> */}
                   {extraData && (
                     <th
                       scope="col"
@@ -227,8 +227,8 @@ const Student = () => {
                     <td>{data.age}</td>
                     <td>{data.gender}</td>
                     <td>{data.nationality}</td>
-                    <td>{data.allowMagazine === true ? "Yes" : "No"}</td>
-                    <td>{data.allowSocialMedia === true ? "Yes" : "No"}</td>
+                    {/* <td>{data.allowMagazine === true ? "Yes" : "No"}</td>
+                    <td>{data.allowSocialMedia === true ? "Yes" : "No"}</td> */}
                     {extraData && <td>{data.createdBy}</td>}
                     {extraData && <td>{data.createdAt}</td>}
                     {extraData && <td>{data.updatedBy}</td>}

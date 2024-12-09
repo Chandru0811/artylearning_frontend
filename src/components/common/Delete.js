@@ -66,7 +66,7 @@ function Delete({ onSuccess, path, staffmsg, teachermsg }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleShow}>
-      <LiaTrashSolid /> Delete
+      <LiaTrashSolid /> 
       </button>
 
       <Modal show={show} onHide={handleClose}>

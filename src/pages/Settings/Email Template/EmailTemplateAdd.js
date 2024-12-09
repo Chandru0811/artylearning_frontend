@@ -70,7 +70,7 @@ const formats = [
 //   "video",
 ];
 
-function EmailTemplateAdd() {
+function EmailTemplateAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
@@ -89,18 +89,20 @@ function EmailTemplateAdd() {
   const formik = useFormik({
     initialValues: {
       subject: "",
-      descriptions: "",
+      description: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Email:", values);
       try {
-        const formData = new FormData();
-        formData.append("subject", values.subject);
-        formData.append("descriptions", values.descriptions);
-        const response = await api.post(`/emailTemp`, formData);
-        if (response.status === 201) {
+        // const formData = new FormData();
+        // formData.append("subject", values.subject);
+        // formData.append("description", values.description);
+        const response = await api.post(`/createEmailTemplate`, values);
+        if (response.status === 200) {
           toast.success(response.data.message);
+          setShow(false);
+          onSuccess();
         } else {
           toast.error(response.data.message);
         }
@@ -111,7 +113,7 @@ function EmailTemplateAdd() {
   });
 
   const handleDescriptionChange = (value) => {
-    formik.setFieldValue("descriptions", value);
+    formik.setFieldValue("description", value);
   };
 
   return (
@@ -154,12 +156,12 @@ function EmailTemplateAdd() {
               <div className="col-12 mb-3">
                 <label>Description</label>
                 <ReactQuill
-                  value={formik.values.descriptions}
+                  value={formik.values.description}
                   onChange={handleDescriptionChange}
                   modules={modules}
                   formats={formats}
                   className={`${
-                    formik.touched.descriptions && formik.errors.descriptions
+                    formik.touched.description && formik.errors.description
                       ? "is-invalid"
                       : ""
                   }`}
