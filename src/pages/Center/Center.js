@@ -8,6 +8,14 @@ import {
 import { Link } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import { BiEditAlt } from "react-icons/bi";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import AddRegister from "./Add/AddRegister";
+import AddBreak from "./Add/AddBreak";
+import AddClass from "./Add/AddClass";
+import AddPackage from "./Add/AddPackage";
+import Delete from "../../components/common/Delete";
+import { FaEye } from "react-icons/fa";
 const columnHelper = createColumnHelper();
 
 export default function Center() {
@@ -15,28 +23,35 @@ export default function Center() {
   const [loading, setLoading] = useState(true);
   const [pageIndex, setPageIndex] = useState(0);
   const pageSize = 10;
-  const [searchTerm, setSearchTerm] = useState("");
 
+  const [centerName, setCenterName] = useState("");
+  const [code, setCode] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+
+  const refreshData = async () => {
+    try {
+      const response = await api.get("/getAllCenter");
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error fetching data: " + error.message);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/getAllCenter");
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error fetching data: " + error.message);
-        setLoading(false);
-      }
-    };
-    fetchData();
+    refreshData();
   }, []);
 
-  const filteredData = data.filter((item) =>
-    Object.values(item).some(
-      (val) =>
-        val && val.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredData = data.filter((item) => {
+    return (
+      (!centerName ||
+        item.centerName?.toLowerCase().includes(centerName.toLowerCase())) &&
+      (!code || item.code?.toLowerCase().includes(code.toLowerCase())) &&
+      (!email || item.email?.toLowerCase().includes(email.toLowerCase())) &&
+      (!address || item.address?.toLowerCase().includes(address.toLowerCase()))
+    );
+  });
 
   const paginatedData = filteredData.slice(
     pageIndex * pageSize,
@@ -57,31 +72,87 @@ export default function Center() {
     columnHelper.accessor("actions", {
       id: "actions",
       header: "Actions",
-      cell: () => (
-        <div className="dropdown text-center">
-          <button
-            className="btn btn-link p-0"
-            type="button"
-            id="dropdownMenuButton"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-            style={{ textDecoration: "none", color: "black", fontSize: "20px" }}
-          >
-            &#8942;
-          </button>
-          <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li>
-              <button className="dropdown-item">Edit</button>
-            </li>
-            <li>
-              <button className="dropdown-item">Delete</button>
-            </li>
-            <li>
-              <button className="dropdown-item">View</button>
-            </li>
-          </ul>
-        </div>
-      ),
+      cell: (info) => {
+        const rowId = info.row.original.id;
+        return (
+          <div className="dropdown text-center">
+            <button
+              className="btn btn-link p-0"
+              type="button"
+              id={`dropdownMenuButton-${rowId}`}
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style={{
+                textDecoration: "none",
+                color: "black",
+                fontSize: "20px",
+              }}
+            >
+              &#8942;
+            </button>
+            <ul
+              className="dropdown-menu"
+              aria-labelledby={`dropdownMenuButton-${rowId}`}
+            >
+              <li className="dropdown">
+                <button
+                  className="btn dropdown-toggle w-100 text-start"
+                  type="button"
+                  id={`nestedDropdownMenuButton-${rowId}`}
+                  aria-expanded="false"
+                  style={{
+                    textDecoration: "none",
+                    color: "black",
+                    fontSize: "16px",
+                  }}
+                >
+                  <BsThreeDotsVertical /> Others
+                </button>
+                <ul
+                  className="dropdown-menu dropdown-hover"
+                  aria-labelledby={`nestedDropdownMenuButton-${rowId}`}
+                >
+                  <li>
+                    <AddRegister id={rowId} onSuccess={refreshData} />
+                  </li>
+                  <li>
+                    <AddBreak id={rowId} onSuccess={refreshData} />
+                  </li>
+                  <li>
+                    <AddClass id={rowId} onSuccess={refreshData} />
+                  </li>
+                  <li>
+                    <AddPackage id={rowId} onSuccess={refreshData} />
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <Link to={`/center/edit/${rowId}`} className="dropdown-item">
+                  <BiEditAlt /> Edit
+                </Link>
+              </li>
+              <li>
+                <button
+                  className="dropdown-item"
+                  onClick={() =>
+                    Delete({
+                      onSuccess: refreshData,
+                      path: `/deleteCenter/${rowId}`,
+                    })
+                  }
+                >
+                  Delete
+                </button>
+              </li>
+              <li>
+                <Link to={`/center/view/${rowId}`} className="dropdown-item">
+                  <FaEye /> View
+                </Link>
+              </li>
+            </ul>
+          </div>
+        );
+      },
     }),
     columnHelper.accessor("centerName", {
       header: "Center Name",
@@ -182,14 +253,46 @@ export default function Center() {
             </div>
           </div>
           <div className="table-container">
-            <div className="search-input p-2">
+            <div className="search-input p-2 d-flex gap-2">
               <input
                 type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="form-control mb-3 searchInputG"
+                placeholder="Center Name"
+                value={centerName}
+                onChange={(e) => setCenterName(e.target.value)}
+                className="form-control"
               />
+              <input
+                type="text"
+                placeholder="Code"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className="form-control"
+              />
+              <input
+                type="text"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-control"
+              />
+              <input
+                type="text"
+                placeholder="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="form-control"
+              />
+              <button
+                className="btn btn-secondary"
+                onClick={() => {
+                  setCenterName("");
+                  setCode("");
+                  setEmail("");
+                  setAddress("");
+                }}
+              >
+                Clear
+              </button>
             </div>
             <table className="table table-bordered">
               <thead>
@@ -214,7 +317,7 @@ export default function Center() {
                 {table.getRowModel().rows.map((row) => (
                   <tr key={row.id}>
                     {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id}>
+                      <td key={cell.id} className="fw-medium text-dark">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
