@@ -260,6 +260,7 @@ function Admin({ handleLogout }) {
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <Routes>
               {/* <Route path="/" element={<Dashboard />} /> */}
+              <Route path="*" element={<NewDashboard />} />
               <Route path="/" element={<NewDashboard />} />
               <Route path="/datatable" element={<DataTable />} />
               <Route path="/datatable2" element={<Datatable2 />} />
@@ -599,7 +600,7 @@ function Admin({ handleLogout }) {
               {/* {/ Role /} */}
               <Route path="/role/add" element={<RolesAdd />} />
 
-              <Route path="*" element={<Dashboard />} />
+              
 
               {/* Compaign */}
               <Route path="/campaign" element={<Campaign />} />

@@ -1,17 +1,7 @@
-import React, { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
-import { FaUsers } from "react-icons/fa";
-import { GiTeacher } from "react-icons/gi";
-import { PiStudentFill } from "react-icons/pi";
-import { TbPigMoney } from "react-icons/tb";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import api from "../config/URL";
+import React from "react";
 import ApexCharts from "react-apexcharts";
 
 function NewDashboard() {
-  // const [dashboardData, setDashboardData] = useState(null);
-
   const lineChartOptions = {
     chart: {
       height: 350,
@@ -25,18 +15,14 @@ function NewDashboard() {
     },
     stroke: {
       width: 5,
-      curve: "straight", // Straight lines without curves
+      curve: "straight",
       dashArray: [0],
-    },
-    title: {
-      text: "Page Statistics",
-      align: "left",
     },
     legend: {
       show: true,
     },
     markers: {
-      size: 0, // Disable the markers (dots)
+      size: 0,
     },
     xaxis: {
       categories: [
@@ -58,23 +44,17 @@ function NewDashboard() {
       y: [
         {
           title: {
-            formatter: function (val) {
-              return val + " (mins)";
-            },
+            formatter: (val) => `${val} (mins)`,
           },
         },
         {
           title: {
-            formatter: function (val) {
-              return val + " per session";
-            },
+            formatter: (val) => `${val} per session`,
           },
         },
         {
           title: {
-            formatter: function (val) {
-              return val;
-            },
+            formatter: (val) => val,
           },
         },
       ],
@@ -98,16 +78,6 @@ function NewDashboard() {
       name: "Total Visits",
       data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47],
     },
-  ];
-
-  const radarChartOptions = {
-    chart: { id: "sales-by-region", type: "radar" },
-    labels: ["Asia", "Africa", "Europe", "Americas", "Pacific", "Middle East"],
-    colors: ["#287F71"],
-  };
-
-  const radarChartSeries = [
-    { name: "Sales", data: [2843, 3028, 2728, 2409, 1838, 800] },
   ];
 
   const gaugeChartOptions = {
@@ -137,15 +107,6 @@ function NewDashboard() {
         },
       },
     },
-    // fill: {
-    //   type: "gradient",
-    //   gradient: {
-    //     // shade: "dark",
-    //     type: "horizontal",
-    //     gradientToColors: ["#ABBDD3"],
-    //     stops: [0, 100],
-    //   },
-    // },
     stroke: {
       lineCap: "butt",
     },
@@ -154,17 +115,70 @@ function NewDashboard() {
 
   const gaugeChartSeries = [67];
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/smsDashBoardOverview");
-  //       setDashboardData(response.data);
-  //     } catch (error) {
-  //       toast.error("Error Fetching Data ", error);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+  const chartOptions = {
+    chart: {
+      type: "area",
+      height: 200,
+      stacked: true,
+      zoom: {
+        enabled: false,
+      },
+    },
+    colors: ["#ABBDD3", "#287F71", "#EB862A"],
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "smooth",
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        opacityFrom: 0.6,
+        opacityTo: 0.8,
+      },
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "left",
+    },
+    xaxis: {
+      type: "datetime",
+    },
+  };
+
+  const chartSeries = [
+    {
+      name: "South",
+      data: [
+        [1676208000000, 34],
+        [1676294400000, 43],
+        [1676380800000, 31],
+        [1676467200000, 50],
+        [1676553600000, 60],
+      ],
+    },
+    {
+      name: "North",
+      data: [
+        [1676208000000, 20],
+        [1676294400000, 15],
+        [1676380800000, 25],
+        [1676467200000, 18],
+        [1676553600000, 30],
+      ],
+    },
+    {
+      name: "Central",
+      data: [
+        [1676208000000, 12],
+        [1676294400000, 10],
+        [1676380800000, 14],
+        [1676467200000, 16],
+        [1676553600000, 22],
+      ],
+    },
+  ];
 
   return (
     <div className="container mt-4">
@@ -296,7 +310,6 @@ function NewDashboard() {
             />
           </div>
         </div>
-
         <div className="col-md-4 mb-4">
           <div
             className="card shadow-sm p-3 h-100 shadow-sm border-0"
@@ -379,60 +392,22 @@ function NewDashboard() {
             </div>
           </div>
         </div>
-
-        {/* Sales by Region (Radar Chart) */}
-        <div className="col-md-4 mb-4">
+        <div className="col-md-8 col-12 mb-4">
           <div
-            className="card shadow-sm p-1 shadow-sm border-0"
-            style={{ borderRadius: "10px" }}
-          >
-            <div className="d-flex justify-content-between px-2">
-              <h6 className="card-title">Sales by Region</h6>
-              <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
-            </div>
-            <Chart
-              options={radarChartOptions}
-              series={radarChartSeries}
-              type="radar"
-              height={300}
-            />
-          </div>
-        </div>
-
-        {/* Sales by E-commerce Platform (Donut Chart) */}
-        <div className="col-md-4 mb-4">
-          <div
-            className="card shadow-sm p-3 h-100 shadow-sm border-0"
+            className="card shadow-sm p-3 h-100 border-0"
             style={{ borderRadius: "10px" }}
           >
             <div className="d-flex justify-content-between">
-              <h6 className="card-title">Sales by E-commerce Platform</h6>
-              <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
+              <h6 className="card-title">Revenue Growth</h6>
             </div>
-            <Chart
-              options={{
-                chart: {
-                  type: "donut",
-                },
-                labels: ["Amazon", "Alibaba", "Tokopedia"],
-                legend: {
-                  position: "bottom", // Moves the legend below the chart
-                  horizontalAlign: "center", // Centers the legend horizontally
-                },
-                dataLabels: {
-                  enabled: true,
-                },
-                colors: ["#ABBDD3", "#287F71", "#EB862A"], // Custom colors for slices
-              }}
-              series={[45, 35, 25]} // Data for chart
-              type="donut"
-              height={220}
-              className="mt-4"
+            <ApexCharts
+              options={chartOptions}
+              series={chartSeries}
+              type="area"
+              height={200}
             />
           </div>
         </div>
-
-        {/* Registered Users (Gauge Chart) */}
         <div className="col-md-4 mb-4">
           <div
             className="card shadow-sm p-3 h-100 shadow-sm border-0"
@@ -440,9 +415,9 @@ function NewDashboard() {
           >
             <div className="d-flex justify-content-between">
               <h6 className="card-title">Registered Users</h6>
-              <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
+              <i className="fas fa-ellipsis-h"></i>
             </div>
-            <Chart
+            <ApexCharts
               options={gaugeChartOptions}
               series={gaugeChartSeries}
               type="radialBar"
