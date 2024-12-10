@@ -18,6 +18,7 @@ import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
 import { MdViewColumn } from "react-icons/md";
 import ReferalFeesAdd from "./ReferalFeesAdd";
+import ReferalFeesEdit from "./ReferalFeesEdit";
 
 const ReferalFees = () => {
   // const { id } = useParams();
@@ -27,10 +28,11 @@ const ReferalFees = () => {
   const [subjectData, setSubjectData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [extraData, setExtraData] = useState(false);
+
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get("/getAllCourses");
+        const response = await api.get("/getAllReferralFees");
         setDatas(response.data);
         setLoading(false);
       } catch (error) {
@@ -80,9 +82,9 @@ const ReferalFees = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllCourses");
+      const response = await api.get("/getAllReferralFees");
       setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      initializeDataTable();
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
@@ -92,19 +94,11 @@ const ReferalFees = () => {
     fetchSubData();
   }, [loading]);
 
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
   const extractDate = (dateString) => {
     if (!dateString) return ""; // Handle null or undefined date strings
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
+
   return (
     <div className="container my-4">
       <ol
@@ -158,7 +152,37 @@ const ReferalFees = () => {
                 </th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {datas.map((data, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td className="text-break">{data.center}</td>
+                  <td className="text-break">{extractDate(data.effectiveDate)}</td>
+                  <td className="text-break">{data.referralFee}</td>
+                  <td className="text-break">{data.createdBy}</td>
+                  <td className="text-break">{extractDate(data.createdAt)}</td>
+                  <td className="text-break">{extractDate(data.updatedAt)}</td>
+                  <td>
+                    {data.status === "ACTIVE" ? (
+                      <span className="badge badges-Green">Active</span>
+                    ) : (
+                      <span className="badge badges-Red">Inactive</span>
+                    )}
+                  </td>
+                  <td className="d-flex">
+                    {/* {storedScreens?.levelUpdate && ( */}
+                      <ReferalFeesEdit id={data.id} onSuccess={refreshData} />
+                    {/* )} */}
+                    {/* {storedScreens?.levelDelete && ( */}
+                      <Delete
+                        onSuccess={refreshData}
+                        path={`/deleteReferralFees/${data.id}`}
+                      />
+                    {/* )} */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       )}

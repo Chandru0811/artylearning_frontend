@@ -5,11 +5,15 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
+import { FaEdit } from "react-icons/fa";
+import api from "../../config/URL";
 
-function ReferalFeesEdit({ referalData, onSuccess }) {
+function ReferalFeesEdit({ id, referalData, onSuccess }) {
   const [show, setShow] = useState(false);
   const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
+
 
   const handleClose = () => {
     setShow(false);
@@ -17,43 +21,58 @@ function ReferalFeesEdit({ referalData, onSuccess }) {
   };
 
   const handleShow = () => {
+    fetchData();
+    getData();
     setShow(true);
-    if (referalData) {
-      formik.setValues({
-        centerLocation: referalData.centerLocation || [],
-        effectiveDate: referalData.effectiveDate || "",
-        referalFee: referalData.referalFee || "",
-      });
-    }
+    setIsModified(false); 
   };
 
   const validationSchema = yup.object().shape({
-    centerLocation: yup
-      .array()
-      .of(yup.string().required("*Each center must be a valid string"))
-      .min(1, "*At least one center is required"),
+    centerId: yup.string().required("*Centre is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
-    referalFee: yup.string().required("*Referal Fee is required"),
+    referralFee: yup.string().required("*Referal Fee is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      centerLocation: [],
+      centerId: "",
       effectiveDate: "",
-      referalFee: "",
+      referralFee: "",
     },
     validationSchema,
     onSubmit: async (values) => {
+      // console.log(values);
+      setLoadIndicator(true);
+
       try {
-        setLoadIndicator(true);
-        console.log("Updated values:", values);
-        toast.success("Referal Fees updated successfully!");
-        if (onSuccess) onSuccess();
-        handleClose();
+        const response = await api.put(`/updateReferralFees/${id}`, values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 200) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
       } catch (error) {
-        toast.error("Failed to update Referal Fees.");
+        toast.error(error);
       } finally {
         setLoadIndicator(false);
+      }
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
       }
     },
   });
@@ -71,17 +90,28 @@ function ReferalFeesEdit({ referalData, onSuccess }) {
     fetchData();
   }, []);
 
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllReferralFeesById/${id}`);
+      const rest = response.data;
+
+      const formattedData = {
+        ...rest,
+        effectiveDate: rest.effectiveDate
+          ? new Date(rest.effectiveDate).toISOString().split("T")[0]
+          : undefined,
+      };
+      formik.setValues(formattedData);
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
+
   return (
     <>
-      <div className="d-flex justify-content-end mb-3">
-        <button
-          type="button"
-          className="btn btn-button btn-sm"
-          onClick={handleShow}
-        >
-          Edit <i className="bx bx-edit"></i>
-        </button>
-      </div>
+      <button className="btn btn-sm" onClick={handleShow}>
+        <FaEdit />
+      </button>
 
       <Modal
         show={show}
@@ -89,6 +119,8 @@ function ReferalFeesEdit({ referalData, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={isModified ? "static" : true} 
+        keyboard={isModified ? false : true} 
       >
         <form
           onSubmit={formik.handleSubmit}
@@ -104,8 +136,7 @@ function ReferalFeesEdit({ referalData, onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
-                {/* Center Selection */}
-                <div className="col-md-6 col-12 mb-2">
+                {/* <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Centre<span className="text-danger">*</span>
                   </label>
@@ -180,6 +211,62 @@ function ReferalFeesEdit({ referalData, onSuccess }) {
                         {formik.errors.centerLocation}
                       </div>
                     )}
+                </div> */}
+                     {/* <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Centre<span className="text-danger">*</span>
+                  </label>
+                  <MultiSelect
+                    options={centerOptions}
+                    value={selectedCenters}
+                    onChange={(selected) => {
+                      setSelectedCenters(selected);
+                      formik.setFieldValue(
+                        "centerId",
+                        selected.map((option) => option.value)
+                      );
+                    }}
+                    labelledBy="Select Centers"
+                    className={`form-multi-select ${
+                      formik.touched.centerId && formik.errors.centerId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.centerId && formik.errors.centerId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.centerId}
+                    </div>
+                  )}
+                </div> */}
+                 <div class="col-md-6 col-12 mb-4">
+                  <lable class="">
+                    Centre<span class="text-danger">*</span>
+                  </lable>
+                  <select
+                    {...formik.getFieldProps("centerId")}
+                    name="centerId"
+                    className={`form-select   ${
+                      formik.touched.centerId && formik.errors.centerId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Default select example"
+                    class="form-select "
+                  >
+                    <option selected></option>
+                    {centerData &&
+                      centerData.map((centerId) => (
+                        <option key={centerId.id} value={centerId.id}>
+                          {centerId.centerNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.centerId && formik.errors.centerId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.centerId}
+                    </div>
+                  )}
                 </div>
 
                 {/* Effective Date */}
@@ -213,15 +300,15 @@ function ReferalFeesEdit({ referalData, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control ${
-                      formik.touched.referalFee && formik.errors.referalFee
+                      formik.touched.referralFee && formik.errors.referralFee
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("referalFee")}
+                    {...formik.getFieldProps("referralFee")}
                   />
-                  {formik.touched.referalFee && formik.errors.referalFee && (
+                  {formik.touched.referralFee && formik.errors.referralFee && (
                     <div className="invalid-feedback">
-                      {formik.errors.referalFee}
+                      {formik.errors.referralFee}
                     </div>
                   )}
                 </div>
