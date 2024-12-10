@@ -167,7 +167,7 @@ export default function Center() {
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("uenNumber", {
-      header: "UEN Number",
+      header: "UEN",
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("email", {
@@ -283,7 +283,7 @@ export default function Center() {
                 className="form-control"
               />
               <button
-                className="btn btn-secondary"
+                className="btn btn-border"
                 onClick={() => {
                   setCenterName("");
                   setCode("");

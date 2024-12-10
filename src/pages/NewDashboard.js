@@ -319,12 +319,12 @@ function NewDashboard() {
               <h6 className="card-title">Product Sales Comparison</h6>
             </div>
             <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1">Australia</p>
+              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>Australia</p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 634.8%
               </span>
             </div>
-            <div className="progress mb-3" style={{ height: "10px" }}>
+            <div className="progress mb-3" style={{ height: "7px" }}>
               {" "}
               {/* Adjust height */}
               <div
@@ -337,14 +337,12 @@ function NewDashboard() {
               ></div>
             </div>
             <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1">Indonesia</p>
+              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>Indonesia</p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 589.8%
               </span>
             </div>
-            <div className="progress mb-3" style={{ height: "10px" }}>
-              {" "}
-              {/* Adjust height */}
+            <div className="progress mb-3" style={{ height: "7px" }}>
               <div
                 className="progress-bar"
                 role="progressbar"
@@ -355,14 +353,12 @@ function NewDashboard() {
               ></div>
             </div>
             <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1">Germany</p>
+              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>Germany</p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 453.8%
               </span>
             </div>
-            <div className="progress mb-3" style={{ height: "10px" }}>
-              {" "}
-              {/* Adjust height */}
+            <div className="progress mb-3" style={{ height: "7px" }}>
               <div
                 className="progress-bar"
                 role="progressbar"
@@ -373,12 +369,12 @@ function NewDashboard() {
               ></div>
             </div>
             <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1">Thailand</p>
+              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>Thailand</p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 634.8%
               </span>
             </div>
-            <div className="progress mb-3" style={{ height: "10px" }}>
+            <div className="progress mb-3" style={{ height: "7px" }}>
               {" "}
               {/* Adjust height */}
               <div

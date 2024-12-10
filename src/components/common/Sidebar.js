@@ -508,17 +508,16 @@ function Sidebar() {
           <img src={Logo} alt="logo" width={110} className="img-fluid p-1" />
         </span>
       </div>
-      <div className="pt-4"></div>
       <ul className="nav-links">
         <li>
           <NavLink to="/" onClick={() => handleMenuClick(null)}>
             <OverlayTrigger
               placement="right"
-              overlay={<Tooltip id="home-tooltip">Over View</Tooltip>}
+              overlay={<Tooltip id="home-tooltip">OverView</Tooltip>}
             >
               <i className="bx bx-grid-alt"></i>
             </OverlayTrigger>
-            <span className="links_name">Over View</span>
+            <span className="links_name text-center">OverView</span>
           </NavLink>
         </li>
         {menuItems.map(
@@ -573,7 +572,7 @@ function Sidebar() {
                     {item.subMenus.map(
                       (subMenu, subIndex) =>
                         subMenu.access && (
-                          <li key={subIndex} className="ps-2">
+                          <li key={subIndex}>
                             <NavLink
                               to={subMenu.path}
                               className={({ isActive }) =>
