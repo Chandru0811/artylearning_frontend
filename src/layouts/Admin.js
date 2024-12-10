@@ -236,6 +236,8 @@ import ReferalHistory from "../pages/ReferalHistory/ReferalHistory";
 import ReferalFeesAdd from "../pages/ReferalFees/ReferalFeesAdd";
 import NewDashboard from "../pages/NewDashboard";
 import TransferOut from "../pages/StudentMovement/TransferOut/TransferOut";
+import TeacherNewView from "../pages/Teacher/TeacherNewView";
+import StaffNewView from "../pages/Staff/StaffNewView";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -266,7 +268,8 @@ function Admin({ handleLogout }) {
               <Route path="/datatable2" element={<Datatable2 />} />
               <Route path="/batchtable" element={<Test />} />
               <Route path="/newTable1" element={<NewTable1 />} />
-
+              <Route path="/teacher/view/:id" element={<TeacherNewView />} />
+              <Route path="/staff/view/:id" element={<StaffNewView />} />
               <Route
                 path="/changepassword"
                 element={<ChangePassword onLogout={handleLogout} />}

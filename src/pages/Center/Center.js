@@ -13,13 +13,7 @@ import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
-import { MdViewColumn } from "react-icons/md";
-import {
-  Dropdown,
-  DropdownButton,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import { GoSortDesc } from "react-icons/go";
 
 const Center = () => {
   const tableRef = useRef(null);
@@ -81,7 +75,7 @@ const Center = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
+      columnDefs: [{ orderable: false, targets: 1 }],
     });
   };
 
@@ -109,11 +103,6 @@ const Center = () => {
     setSelectedManager(e.target.value); // Set selected manager
     const searchValue = e.target.value.toLowerCase();
     $(tableRef.current).DataTable().search(searchValue).draw();
-  };
-
-  const extractDate = (dateString) => {
-    if (!dateString) return "";
-    return dateString.substring(0, 10); // Extracts date part "YYYY-MM-DD"
   };
 
   const handleRowClick = (id) => {
@@ -251,7 +240,7 @@ const Center = () => {
           </div>
         ) : (
           <div>
-            <div className="table-responsive">
+            <div className="table-responsive p-2">
               <table ref={tableRef} className="display">
                 <thead>
                   <tr style={{ background: "#f5f7f9" }}>
@@ -262,6 +251,10 @@ const Center = () => {
                     >
                       S No
                     </th>
+                    <th
+                      style={{ fontSize: "14px", fontWeight: "normal" }}
+                      className="text-center text-muted"
+                    ></th>
                     <th
                       style={{ fontSize: "14px", fontWeight: "normal" }}
                       className="text-muted"
@@ -290,25 +283,19 @@ const Center = () => {
                     >
                       UEN Number
                     </th>
-                    <th
+                    {/* <th
                       style={{ fontSize: "14px", fontWeight: "normal" }}
                       className="text-muted"
                       scope="col"
                     >
                       Mobile
-                    </th>
+                    </th> */}
                     <th
                       style={{ fontSize: "14px", fontWeight: "normal" }}
                       className="text-muted"
                       scope="col"
                     >
                       Email
-                    </th>
-                    <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
-                      className="text-center text-muted"
-                    >
-                      Action
                     </th>
                   </tr>
                 </thead>
@@ -317,48 +304,13 @@ const Center = () => {
                     datas.map((data, index) => (
                       <tr
                         key={index}
+                        className="odd"
                         style={{
-                          backgroundColor: "#fff !important",
+                          // backgroundColor: "#fff !important",
                           cursor: "pointer",
                         }}
                       >
-                        <th scope="row">{index + 1}</th>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.centerName}
-                        </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.centerManager}
-                        </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.code}
-                        </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.uenNumber}
-                        </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.mobile}
-                        </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.email}
-                        </td>
+                        <th scope="row" style={{ fontSize: "8px", fontWeight: "normal" }}>{index + 1}</th>
                         <td style={{ fontSize: "8px", fontWeight: "normal" }}>
                           <div className="d-flex justify-content-center align-items-center">
                             {storedScreens?.centerListingCreate && (
@@ -370,7 +322,7 @@ const Center = () => {
                                   data-bs-toggle="dropdown"
                                   aria-expanded="false"
                                 >
-                                  <FaEllipsisV className="text-dark" />
+                                  <GoSortDesc className="text-dark" />
                                 </button>
                                 <ul
                                   className="dropdown-menu"
@@ -424,6 +376,42 @@ const Center = () => {
                               </div>
                             )}
                           </div>
+                        </td>
+                        <td
+                          style={{ fontSize: "8px", fontWeight: "normal" }}
+                          onClick={() => handleRowClick(data.id)}
+                        >
+                          {data.centerName}
+                        </td>
+                        <td
+                          style={{ fontSize: "8px", fontWeight: "normal" }}
+                          onClick={() => handleRowClick(data.id)}
+                        >
+                          {data.centerManager}
+                        </td>
+                        <td
+                          style={{ fontSize: "8px", fontWeight: "normal" }}
+                          onClick={() => handleRowClick(data.id)}
+                        >
+                          {data.code}
+                        </td>
+                        {/* <td
+                          style={{ fontSize: "8px", fontWeight: "normal" }}
+                          onClick={() => handleRowClick(data.id)}
+                        >
+                          {data.uenNumber}
+                        </td> */}
+                        <td
+                          style={{ fontSize: "8px", fontWeight: "normal" }}
+                          onClick={() => handleRowClick(data.id)}
+                        >
+                          {data.mobile}
+                        </td>
+                        <td
+                          style={{ fontSize: "8px", fontWeight: "normal" }}
+                          onClick={() => handleRowClick(data.id)}
+                        >
+                          {data.email}
                         </td>
                       </tr>
                     ))}

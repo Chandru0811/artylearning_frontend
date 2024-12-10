@@ -307,6 +307,15 @@
   border-right: 2px solid #000;
 }
 
+table.dataTable.row-border > tbody > tr:first-child > th, table.dataTable.row-border > tbody > tr:first-child > td, table.dataTable.display > tbody > tr:first-child > th, table.dataTable.display > tbody > tr:first-child > td {
+  border-top: none;
+  background: white !important;
+}
+
+tbody tr td{
+  background-color: white !important;
+}
+
 /* cmsfooter  */
 
 .cmsfooter .edit-icon-head {

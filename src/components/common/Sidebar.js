@@ -3,6 +3,41 @@ import { NavLink } from "react-router-dom";
 import { Collapse, Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Logo from "../../assets/images/Logo-Portal_Access.png";
 import api from "../../config/URL";
+import { PiBuildings } from "react-icons/pi";
+import { BiRadioCircleMarked } from "react-icons/bi";
+import { IoIosArrowDown } from "react-icons/io";
+import { PiBookOpenText } from "react-icons/pi";
+import { LiaChildSolid } from "react-icons/lia";
+import { RiDashboardLine } from "react-icons/ri";
+import { HiOutlineUserGroup } from "react-icons/hi2";
+import { TbUserSearch } from "react-icons/tb";
+import { TbStatusChange } from "react-icons/tb";
+import { TbCalendarTime } from "react-icons/tb";
+import { TbFolderCog } from "react-icons/tb";
+import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
+import { VscReferences } from "react-icons/vsc";
+import { BsFileEarmarkRichtext } from "react-icons/bs";
+import { LiaUserEditSolid } from "react-icons/lia";
+import { TbMessageCode } from "react-icons/tb";
+import { GrUserSettings } from "react-icons/gr";
+
+
+const iconMapping = {
+  "Centre Management": <PiBuildings />,
+  "Course Management": <PiBookOpenText />,
+  "Lead Management": <LiaChildSolid />,
+  "Staffing": <HiOutlineUserGroup />,
+  "Student Management": <TbUserSearch />,
+  "Student Movement": <TbStatusChange />,
+  "Schedule": <TbCalendarTime />,
+  "Document Management": <TbFolderCog />,
+  "Invoice and Payment": <LiaFileInvoiceDollarSolid />,
+  "Referal Management": <VscReferences />,
+  "Report Management": <BsFileEarmarkRichtext  />,
+  "Content Management": <LiaUserEditSolid />,
+  "Messaging": <TbMessageCode />,
+  "Settings": <GrUserSettings />,
+};
 
 function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -29,7 +64,7 @@ function Sidebar() {
     const updatedMenuItems = [
       {
         title: "Centre Management",
-        icon: "bx bx-building",
+        icon: "PiBuildings",
         isOpen: false,
         subMenus: [
           {
@@ -37,21 +72,11 @@ function Sidebar() {
             path: "/center",
             access: storedScreens.centerListingIndex,
           },
-          // {
-          //   title: "New Table",
-          //   path: "/newTable1",
-          //   access: storedScreens.centerListingIndex,
-          // },
-          // {
-          //   title: "Centre Manager",
-          //   path: "/centermanager",
-          //   access: storedScreens.centerListingIndex,
-          // },
         ],
       },
       {
         title: "Course Management",
-        icon: "bx bx-book-alt",
+        icon: "PiBookOpenText",
         isOpen: false,
         subMenus: [
           {
@@ -68,16 +93,9 @@ function Sidebar() {
           { title: "Class", path: "/class", access: storedScreens.classIndex },
         ],
       },
-
-      // {
-      //   title: "Campaign",
-      //   icon: "bx bx-box",
-      //   isOpen: false,
-      //   subMenus: [{ title: "Campaign", path: "/campaign" }],
-      // },
       {
         title: "Lead Management",
-        icon: "bx bx-pie-chart-alt-2",
+        icon: "LiaChildSolid",
         isOpen: false,
         subMenus: [
           {
@@ -94,7 +112,7 @@ function Sidebar() {
       },
       {
         title: "Staffing",
-        icon: "bx bx-female",
+        icon: "HiOutlineUserGroup",
         isOpen: false,
         subMenus: [
           {
@@ -161,7 +179,7 @@ function Sidebar() {
       },
       {
         title: "Student Management",
-        icon: "bx bx-book-reader",
+        icon: "TbUserSearch",
         isOpen: false,
         subMenus: [
           {
@@ -183,7 +201,7 @@ function Sidebar() {
       },
       {
         title: "Student Movement",
-        icon: "bx bx-book-reader",
+        icon: "TbStatusChange",
         isOpen: false,
         subMenus: [
           {
@@ -195,7 +213,7 @@ function Sidebar() {
       },
       {
         title: "Schedule",
-        icon: "bx bx-alarm-add",
+        icon: "TbCalendarTime",
         isOpen: false,
         subMenus: [
           {
@@ -209,7 +227,7 @@ function Sidebar() {
       },
       {
         title: "Document Management",
-        icon: "bx bx-folder-open",
+        icon: "TbFolderCog",
         isOpen: false,
         subMenus: [
           {
@@ -227,7 +245,7 @@ function Sidebar() {
       },
       {
         title: "Invoice and Payment",
-        icon: "bx bx-spreadsheet",
+        icon: "LiaFileInvoiceDollarSolid",
         isOpen: false,
         subMenus: [
           {
@@ -235,17 +253,11 @@ function Sidebar() {
             path: "/invoice",
             access: storedScreens.invoiceIndex,
           },
-          // {
-          //   title: "Payment",
-          //   path: "/payment",
-          //   access: storedScreens.paymentIndex,
-          // },
-          // Add more submenus as needed
         ],
       },
       {
         title: "Referal Management",
-        icon: "bx bx-share",
+        icon: "VscReferences",
         isOpen: false,
         subMenus: [
           {
@@ -260,10 +272,9 @@ function Sidebar() {
           },
         ],
       },
-
       {
         title: "Report Management",
-        icon: "bx bx-food-menu",
+        icon: "BsFileEarmarkRichtext ",
         isOpen: false,
         subMenus: [
           {
@@ -320,7 +331,7 @@ function Sidebar() {
       },
       {
         title: "Content Management",
-        icon: "bx bx-message-edit",
+        icon: "LiaUserEditSolid",
         isOpen: false,
         subMenus: [
           {
@@ -353,16 +364,6 @@ function Sidebar() {
             path: "/cms/CmsCourses",
             access: storedScreens.englishCourseIndex,
           },
-          // {
-          //   title: "English Course",
-          //   path: "/cms/englishcourse",
-          //   access: storedScreens.englishCourseIndex,
-          // },
-          // {
-          //   title: "Chinese Course",
-          //   path: "/cms/chineshcourse",
-          //   access: storedScreens.chineseCourseIndex,
-          // },
           {
             title: "Teachers",
             path: "/cms/teacher",
@@ -392,7 +393,7 @@ function Sidebar() {
       },
       {
         title: "Settings",
-        icon: "bx bx-cog",
+        icon: "GrUserSettings",
         isOpen: false,
         subMenus: [
           {
@@ -446,7 +447,7 @@ function Sidebar() {
       },
       {
         title: "Messaging",
-        icon: "bx bx-send",
+        icon: "TbMessageCode",
         isOpen: false,
         subMenus: [
           {
@@ -467,11 +468,9 @@ function Sidebar() {
             access: storedScreens.sendNotificationIndex,
             // access:true
           },
-          // Add more submenus as needed
         ],
       },
     ];
-
     setMenuItems(updatedMenuItems);
   }, []);
 
@@ -513,11 +512,13 @@ function Sidebar() {
           <NavLink to="/" onClick={() => handleMenuClick(null)}>
             <OverlayTrigger
               placement="right"
-              overlay={<Tooltip id="home-tooltip">OverView</Tooltip>}
+              overlay={<Tooltip id="home-tooltip">Overview</Tooltip>}
             >
-              <i className="bx bx-grid-alt"></i>
+              <i className="">
+                <RiDashboardLine/>
+              </i>
             </OverlayTrigger>
-            <span className="links_name text-center">OverView</span>
+            <span className="links_name text-center">Overview</span>
           </NavLink>
         </li>
         {menuItems.map(
@@ -545,15 +546,18 @@ function Sidebar() {
                             </Tooltip>
                           }
                         >
-                          <span>
+                          {/* <span>
                             <i className={`${item.icon} activehover`}></i>
+                          </span> */}
+                          <span className="p-4">
+                            {iconMapping[item.title] || "-"}
                           </span>
                         </OverlayTrigger>
                         <span className="links_name">{item.title}</span>
                       </div>
                     </span>
                     <span className="pe-4">
-                      <i
+                      {/* <i
                         className={`bx bx-chevron-down arrow ${
                           item.isOpen ? "open" : ""
                         }`}
@@ -562,7 +566,23 @@ function Sidebar() {
                           minWidth: "0px",
                           fontWeight: "700",
                         }}
-                      ></i>
+                           <AiOutlineSetting
+                        className={`arrow ${item.isOpen ? "open" : ""}`}
+                        style={{
+                          paddingRight: "5px",
+                          minWidth: "0px",
+                          fontWeight: "700",
+                        }}
+                      />
+                      ></i> */}
+                       <IoIosArrowDown
+                        className={`arrow ${item.isOpen ? "open" : ""}`}
+                        style={{
+                          paddingRight: "5px",
+                          minWidth: "0px",
+                          fontWeight: "700",
+                        }}
+                      />
                     </span>
                   </div>
                 </Nav.Link>
@@ -587,7 +607,8 @@ function Sidebar() {
                                   </Tooltip>
                                 }
                               >
-                                <i className="bx bx-radio-circle-marked"></i>
+                                <i className="bx bx-radio-circle-marked" style={{fontWeight:"400"}}></i>
+                                {/* <BiRadioCircleMarked className=""/> */}
                               </OverlayTrigger>
                               <span className="links_name links_names active">
                                 {subMenu.title}
@@ -601,17 +622,6 @@ function Sidebar() {
               </li>
             )
         )}
-        {/* {storedScreens?.sendNotificationIndex && (
-          <li>
-            <NavLink
-              to="/sendNotification"
-              onClick={() => handleMenuClick(null)}
-            >
-              <i class="bx bx-send"></i>
-              <span className="links_name">Announcement</span>
-            </NavLink>
-          </li>
-        )} */}
       </ul>
     </div>
   );

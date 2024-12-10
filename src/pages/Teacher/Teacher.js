@@ -151,7 +151,7 @@ const Teacher = () => {
           </div>
         </div>
       ) : (
-        <div className="container my-4">
+        <div className="container-fluid my-4">
                <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}

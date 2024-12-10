@@ -206,6 +206,7 @@
 .sidebar.active ~ .home-section {
   width: calc(100% - 60px);
   left: 60px;
+  padding: 0px;
 }
 
 .home-section nav {

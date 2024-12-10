@@ -7,7 +7,7 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
-import PasswordModal from "../Student/StudentNewView/PasswordModal";
+// import PasswordModal from "../Student/StudentNewView/PasswordModal";
 
 function StaffNewView() {
   const { id } = useParams();
@@ -139,7 +139,7 @@ function StaffNewView() {
         </li>
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">
-        <PasswordModal />
+        {/* <PasswordModal /> */}
         <Link to={"/staff"}>
           <button
             className="btn btn-border btn-sm"
