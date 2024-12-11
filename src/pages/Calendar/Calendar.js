@@ -4,43 +4,43 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import resourceTimelinePlugin from "@fullcalendar/resource-timeline"; // Import the resource timeline plugin
-import api from "../../config/URL";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline"; // Resource timeline plugin
+import api from "../../config/URL"; // Replace with your actual API URL config
 import { toast } from "react-toastify";
-import ScheduleTeacherDetails from "./ScheduleTeacherDetails";
+import ScheduleTeacherDetails from "./ScheduleTeacherDetails"; // Ensure this component works for viewing details
 
 function Calendar() {
   const [data, setData] = useState([]);
   const [events, setEvents] = useState([]);
   const [showViewModal, setShowViewModal] = useState(false);
-  const [selectedId, setSelectedId] = useState();
-  const [newEvent, setNewEvent] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [currentDate, setCurrentDate] = useState(null);
 
+  // Process event data for calendar rendering
   const processEventData = (apiData) => {
-    const filteredEvents = apiData
-      .filter((item) => item.days.toUpperCase() === "WEDNESDAY") // Filter for specific day
-      .map((item) => ({
-        id: item.id, // Unique identifier for the event
-        title: `${item.teacher} @ ${item.centerName}`, // Show teacher and center name
-        start: item.startDate, // Event start date
-        end: item.endDate, // Event end date
-        extendedProps: {
-          teacher: item.teacher,
-          centerName: item.centerName,
-          batchId: item.batchId,
-          className: item.className,
-          courseId: item.courseId,
-        },
-      }));
-  
+    const filteredEvents = apiData.map((item) => ({
+      id: item.id,
+      title: `${item.teacher} @ ${item.centerName}`,
+      start: item.startDate,
+      end: item.endDate,
+      className: "custom-event", // Custom class for styling events
+      extendedProps: {
+        teacher: item.teacher,
+        centerName: item.centerName,
+        batchId: item.batchId,
+        className: item.className,
+        courseId: item.courseId,
+        slots: item.slots,
+      },
+    }));
     setEvents(filteredEvents);
   };
-  
+
+  // Fetch data from API
   const fetchData = async () => {
     try {
-      const response = await api.get("/getAllScheduleTeacher");
+      const response = await api.get("/getAllScheduleTeacher"); // Adjust API endpoint
       setData(response.data);
       processEventData(response.data);
       console.log("Schedule Teacher Data:", response.data);
@@ -48,50 +48,37 @@ function Calendar() {
       toast.error("Error fetching data:", error);
     }
   };
-  
+
   useEffect(() => {
-    
-  
     fetchData();
+    setCurrentDate(new Date().toISOString().slice(0, 10)); // Set the current date when the component loads
   }, []);
 
-  const handleDateSelect = (info) => {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    const selectedDate = new Date(info.start);
-    selectedDate.setHours(0, 0, 0, 0);
-
-    if (selectedDate >= currentDate) {
-      const resourceId = info.resource ? info.resource.id : null;
-      const role =
-        info.resource && info.resource.extendedProps
-          ? info.resource.extendedProps.role
-          : null;
-      setNewEvent({
-        title: "",
-        start: info.start,
-        end: info.end,
-        allDay: info.allDay,
-        resourceId: resourceId,
-        role: role,
-      });
-      setShowModal(true);
-    } else {
-      toast.warning("Cannot select a past date for events.");
-    }
+  const handleEventClick = (eventClickInfo) => {
+    const { id, title, extendedProps } = eventClickInfo.event;
+    const selectedEventDetails = {
+      id: id,
+      title: title,
+      teacher: extendedProps.teacher,
+      centerName: extendedProps.centerName,
+      slots: extendedProps.slots,
+      batchId: extendedProps.batchId,
+      className: extendedProps.className,
+      courseId: extendedProps.courseId,
+    };
+    // Log the selected event details
+    console.log("Selected Event Details:", selectedEventDetails);
+  
+    setSelectedId(id);
+    setSelectedEvent(selectedEventDetails);
+    setShowViewModal(true); // Show modal with event data
   };
 
-  const handleEventClick = (eventClickInfo) => {
-    setSelectedEvent(eventClickInfo.event);
-    const { event } = eventClickInfo;
-    const filteredEvents = events.filter((e) => e.id !== event.id);
-    setSelectedId(event.id);
-
-    setEvents(filteredEvents);
-    console.log(
-      `View event: ID - ${event.id}, Title - ${event.title}, Start - ${event.start}, End - ${event.end}`
-    );
-    setShowViewModal(true);
+  
+  const closeModal = () => {
+    setShowViewModal(false);
+    setSelectedId(null); // Clear the selected ID when the modal is closed
+    setSelectedEvent(null);
   };
 
   return (
@@ -99,36 +86,20 @@ function Calendar() {
       <div className="card p-2">
         <div className="calendar">
           <FullCalendar
-            plugins={[
-              dayGridPlugin,
-              timeGridPlugin,
-              interactionPlugin,
-              listPlugin,
-              resourceTimelinePlugin,
-            ]}
-            initialView={"dayGridMonth"}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, resourceTimelinePlugin]}
+            initialView="dayGridMonth"
             headerToolbar={{
               start: "today,prev,next",
               center: "title",
               end: "customMonth,customWeek,customDay",
             }}
-            height={"90vh"}
+            height="90vh"
             events={events}
             editable={true}
             selectable={true}
             selectMirror={true}
             dayMaxEvents={true}
             views={{
-              customWorkWeek: {
-                type: "timeGridWeek",
-                duration: { weeks: 1 },
-                buttonText: "Work Week",
-                hiddenDays: [0, 6],
-              },
-              customAgenda: {
-                type: "listWeek",
-                buttonText: "Agenda",
-              },
               customDay: {
                 type: "timeGridDay",
                 buttonText: "Day",
@@ -141,21 +112,42 @@ function Calendar() {
                 type: "dayGridMonth",
                 buttonText: "Month",
               },
-              resourceTimeline: {
-                type: "resourceTimeline",
-                buttonText: "Timeline",
-                resources: true,
-                slotDuration: "01:00",
-              },
             }}
-            select={handleDateSelect}
-            eventClick={handleEventClick}
+            eventClick={handleEventClick} // Capture event click
+            eventContent={(info) => {
+              const { teacher, centerName, slots } = info.event.extendedProps;
+              return (
+                <div>
+                  <strong>{info.event.title}</strong>
+                  <div>👨‍🏫 Teacher: {teacher}</div>
+                  <div>🏢 Center: {centerName}</div>
+                  <div>🕒 Available Slots: {slots}</div>
+                </div>
+              );
+            }}
+            // Highlight the current date
+            dayCellContent={(info) => {
+              const currentDateString = currentDate; // Use state currentDate to compare
+              const cellDateString = info.date.toISOString().slice(0, 10);
+              return (
+                <div
+                  style={{
+                    backgroundColor: cellDateString === currentDateString ? "lightblue" : "",
+                    borderRadius: "5px",
+                    padding: "10px",
+                  }}
+                >
+                  {info.dayNumberText}
+                </div>
+              );
+            }}
           />
-
+          {/* Pass the selected ID and modal visibility status */}
           <ScheduleTeacherDetails
             id={selectedId}
-            showViewModal={showViewModal}
-            getData={fetchData}
+            teacherDetails={selectedEvent} // Pass the selected event data
+            showViewModal={showViewModal} // Modal visibility
+            onClose={closeModal} // Close modal handler
           />
         </div>
       </div>
