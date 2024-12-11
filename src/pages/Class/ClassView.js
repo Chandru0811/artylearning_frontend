@@ -140,6 +140,88 @@ function ClassView() {
                 </div>
               </div>
             </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">Duration(Mins)</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">
+                    : {data.durationInMins || ""}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">Start Date</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.startDate || ""}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">End Date</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.endDate || ""}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">Day</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.day || ""}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">Teacher</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.teacher || ""}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">Start Time</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.startTime || ""}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">End Time</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.endTime || ""}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
+                  <p className="fw-medium">Class Room</p>
+                </div>
+                <div className="col-6">
+                  <p className="text-muted text-sm">: {data.classRoom || ""}</p>
+                </div>
+              </div>
+            </div>
             <div className="col-md-12 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
