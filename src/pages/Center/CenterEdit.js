@@ -209,7 +209,7 @@ function CenterEdit() {
   };
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -244,7 +244,7 @@ function CenterEdit() {
       >
         <div className="card">
           <div
-            className="d-flex justify-content-between align-items-center p-1 mb-4"
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
             style={{ background: "#f5f7f9" }}
           >
             <div class="d-flex align-items-center">
@@ -275,7 +275,7 @@ function CenterEdit() {
               </button>
             </div>
           </div>
-          <div className="container">
+          <div className="container-fluid px-4">
             <div className="row">
               <div className="col-md-6 col-12">
                 <div className="mb-3">
@@ -671,7 +671,7 @@ function CenterEdit() {
               </div>
             </div>
           </div>
-          <div className="container">
+          <div className="container-fluid">
             <div className="row">
               {/* Centre Registrations */}
               <div className="col-md-12 col-12 mt-4">

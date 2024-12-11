@@ -62,9 +62,9 @@ function Login({ onLogin }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error?.response?.status === 409){
-          toast.warning("Wrong username or password!")
-        } else{
+        if (error?.response?.status === 409) {
+          toast.warning("Wrong username or password!");
+        } else {
           toast.error(error?.response?.data?.message);
         }
       }
@@ -80,13 +80,13 @@ function Login({ onLogin }) {
   };
 
   return (
-    <section style={{ minHeight: "100vh", backgroundColor: "#FEF7EA" }}>
+    <section style={{ minHeight: "100vh" }}>
       <div className="container">
         <div className="row">
           <div className="offset-md-3 col-md-6 col-12">
             <div
               className="d-flex flex-column align-items-center justify-content-center"
-              style={{ minHeight: "100vh", backgroundColor: "#FEF7EA" }}
+              style={{ minHeight: "70vh" }}
             >
               <img
                 className="img-fluid mb-4"
@@ -95,19 +95,23 @@ function Login({ onLogin }) {
                 alt="Logo"
               />
               <div
-                className="card p-3"
+                className="card p-3 shadow"
                 style={{
                   width: "100%",
-                  borderRadius: "5px",
+                  borderRadius: "15px",
+                  border: "none",
                 }}
               >
                 <div className="card-body">
                   <h3 className="card-title text-center mb-4">Login</h3>
-                   <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+                  <form
+                    onSubmit={formik.handleSubmit}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !formik.isSubmitting) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
                     <div className="mb-3">
                       <label className="form-label fw-semibold">
                         Email address
@@ -119,7 +123,13 @@ function Login({ onLogin }) {
                             ? "is-invalid"
                             : ""
                         }`}
-                        style={{ borderRadius: "3px" }}
+                        style={{
+                          borderRadius: "8px",
+                          borderColor:
+                            formik.touched.email && formik.errors.email
+                              ? "red"
+                              : "#ced4da",
+                        }}
                         placeholder="Enter email"
                         {...formik.getFieldProps("email")}
                       />
@@ -141,7 +151,11 @@ function Login({ onLogin }) {
                               : ""
                           }`}
                           style={{
-                            borderRadius: "3px",
+                            borderRadius: "8px",
+                            borderColor:
+                              formik.touched.password && formik.errors.password
+                                ? "red"
+                                : "#ced4da",
                             borderRight: "none",
                             borderTopRightRadius: "0px",
                             borderBottomRightRadius: "0px",
@@ -153,7 +167,9 @@ function Login({ onLogin }) {
                           className={`input-group-text iconInputBackground`}
                           id="basic-addon1"
                           onClick={togglePasswordVisibility}
-                          style={{ cursor: "pointer", borderRadius: "3px" }}
+                          style={{
+                            cursor: "pointer",
+                          }}
                         >
                           {showPassword ? (
                             <IoEyeOffOutline />
@@ -180,7 +196,11 @@ function Login({ onLogin }) {
                     <button
                       type="submit"
                       className="btn btn-danger mt-4"
-                      style={{ width: "100%", height: "45px" }}
+                      style={{
+                        width: "100%",
+                        height: "45px",
+                        borderRadius: "8px",
+                      }}
                     >
                       Submit
                     </button>
