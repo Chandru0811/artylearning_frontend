@@ -11,8 +11,7 @@ import api from "../../../config/URL";
 function CMSContactAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => {
     setShow(false);
@@ -21,23 +20,22 @@ function CMSContactAdd({ onSuccess }) {
 
   const handleShow = () => setShow(true);
 
-
   const validationSchema = Yup.object({
     centerName: Yup.string().required("*Centre Name is required"),
     email: Yup.string()
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "*Enter a valid email address"
-    )
-    .required("*Email is required"),
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "*Enter a valid email address"
+      )
+      .required("*Email is required"),
     address: Yup.string().required("*Address is required"),
     map: Yup.string().required("*Google Address is required"),
     mobileNo: Yup.string()
-    .matches(
-      /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-      "*Invalid Phone Number"
-    )
-    .required("*Mobile Number is required"),
+      .matches(
+        /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
+        "*Invalid Phone Number"
+      )
+      .required("*Mobile Number is required"),
   });
 
   const formik = useFormik({
@@ -48,7 +46,6 @@ function CMSContactAdd({ onSuccess }) {
       map: "",
       mobileNo: "",
       createdBy: userName,
-
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -69,7 +66,7 @@ function CMSContactAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -77,7 +74,7 @@ function CMSContactAdd({ onSuccess }) {
 
   return (
     <>
-       <div className=" d-flex justify-content-end">
+      <div className=" d-flex justify-content-end">
         <button
           type="button"
           className="btn btn-button btn-sm"
@@ -90,11 +87,14 @@ function CMSContactAdd({ onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Contact</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -189,15 +189,17 @@ function CMSContactAdd({ onSuccess }) {
                     {...formik.getFieldProps("map")}
                   />
                   {formik.touched.map && formik.errors.map && (
-                    <div className="invalid-feedback">
-                      {formik.errors.map}
-                    </div>
+                    <div className="invalid-feedback">{formik.errors.map}</div>
                   )}
                 </div>
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

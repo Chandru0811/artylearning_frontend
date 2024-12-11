@@ -31,8 +31,8 @@ function ScheduleTeacherAdd({ onSuccess }) {
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
   const [daysData, setDaysData] = useState([]);
-  console.log("Days:",daysData);
-  
+  console.log("Days:", daysData);
+
   const [teacherData, setTeacherData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -52,9 +52,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
     const dayIndex = daysOfWeek.indexOf(selectedDay);
     const nextDate = new Date(today);
 
-    nextDate.setDate(
-      today.getDate() + ((dayIndex + 7 - today.getDay()) % 7)
-    );
+    nextDate.setDate(today.getDate() + ((dayIndex + 7 - today.getDay()) % 7));
     return nextDate.toISOString().split("T")[0];
   };
 
@@ -105,7 +103,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
   };
   const handleClassChange = (event) => {
     const { value } = event.target;
-    formik.setFieldValue("classId", value); 
+    formik.setFieldValue("classId", value);
   };
 
   const fetchClasses = async (courseId) => {
@@ -221,13 +219,13 @@ function ScheduleTeacherAdd({ onSuccess }) {
           toast.success(response.data.message);
           onSuccess();
           handleClose();
-        }else {
+        } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
@@ -251,7 +249,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
   //   setClassData(null);
   //   setTeacherData(null);
   //   const centerId = event.target.value;
-  //   formik.setFieldValue("centerId", centerId); 
+  //   formik.setFieldValue("centerId", centerId);
   //   console.log("object1",centerId)
   //   fetchCourses(centerId);
   //   fetchTeacher(centerId);
@@ -261,7 +259,7 @@ function ScheduleTeacherAdd({ onSuccess }) {
 
   const handleCenterChange = (event) => {
     const centerId = event.target.value;
-  
+
     // Reset specific dependent form fields
     formik.setFieldValue("centerId", centerId); // Set centerId
     formik.setFieldValue("courseId", ""); // Reset courseId
@@ -269,27 +267,26 @@ function ScheduleTeacherAdd({ onSuccess }) {
     formik.setFieldValue("userId", ""); // Reset teacher/userId
     formik.setFieldValue("days", ""); // Reset days
     formik.setFieldValue("classRoom", ""); // Reset classRoom
-  
+
     // Reset the dependent data arrays in the state
     setCourseData(null);
     setClassData(null);
     setTeacherData(null);
     setDaysData(null);
     setClassRoomData(null);
-  
+
     // Fetch new data for the selected center
     fetchCourses(centerId);
     fetchTeacher(centerId);
     fetchClassRoom(centerId);
   };
 
-  
-const handleTeacherChange = (event) => {
-  const userId = event.target.value; 
-  console.log("object2",userId)
-  formik.setFieldValue("userId", userId);
-  fetchDays(userId);
-}
+  const handleTeacherChange = (event) => {
+    const userId = event.target.value;
+    console.log("object2", userId);
+    formik.setFieldValue("userId", userId);
+    fetchDays(userId);
+  };
 
   const handleCourseChange = (event) => {
     setClassData(null);
@@ -303,7 +300,6 @@ const handleTeacherChange = (event) => {
       console.log("Available Days:", daysData);
     }
   }, [daysData]);
-  
 
   return (
     <>
@@ -404,7 +400,7 @@ const handleTeacherChange = (event) => {
                         ? "is-invalid"
                         : ""
                     }`}
-                     onChange={handleClassChange}
+                    onChange={handleClassChange}
                   >
                     <option></option>
                     {classData &&
@@ -554,7 +550,11 @@ const handleTeacherChange = (event) => {
                         ? "is-invalid"
                         : ""
                     }`}
-                    min={formik.values.days ? getNextDateForDay(formik.values.days) : ""}
+                    min={
+                      formik.values.days
+                        ? getNextDateForDay(formik.values.days)
+                        : ""
+                    }
                   />
                   {formik.touched.startDate && formik.errors.startDate && (
                     <div className="invalid-feedback">
@@ -570,25 +570,38 @@ const handleTeacherChange = (event) => {
                     type="date"
                     name="endDate"
                     {...formik.getFieldProps("endDate")}
-                    className={`form-control ${formik.touched.endDate && formik.errors.endDate ? "is-invalid" : ""
-                      }`}
+                    className={`form-control ${
+                      formik.touched.endDate && formik.errors.endDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     // Add one day to the start date so that the end date only allows dates after the start date
                     min={
                       formik.values.startDate
-                        ? new Date(new Date(formik.values.startDate).setDate(new Date(formik.values.startDate).getDate() + 1))
-                          .toISOString()
-                          .split("T")[0]
+                        ? new Date(
+                            new Date(formik.values.startDate).setDate(
+                              new Date(formik.values.startDate).getDate() + 1
+                            )
+                          )
+                            .toISOString()
+                            .split("T")[0]
                         : new Date().toISOString().split("T")[0]
                     }
                   />
                   {formik.touched.endDate && formik.errors.endDate && (
-                    <div className="invalid-feedback">{formik.errors.endDate}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.endDate}
+                    </div>
                   )}
                 </div>
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

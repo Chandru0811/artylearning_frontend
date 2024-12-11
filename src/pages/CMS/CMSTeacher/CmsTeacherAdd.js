@@ -20,7 +20,7 @@ const CmsTeacherAdd = ({ getData }) => {
   const [showModal, setShowModal] = useState(false);
   const handleShowModal = () => setShowModal(true);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const handleSaveChanges = () => {
     setShowModal(false);
@@ -53,9 +53,8 @@ const CmsTeacherAdd = ({ getData }) => {
       formData.append("role ", data.role);
       formData.append("createdBy ", userName);
 
-
       try {
-        const response = await api.post("/createTeacherSave",formData);
+        const response = await api.post("/createTeacherSave", formData);
         if (response.status === 201) {
           toast.success(response.data.message);
           getData();
@@ -93,11 +92,14 @@ const CmsTeacherAdd = ({ getData }) => {
         <Modal.Header closeButton>
           <Modal.Title>Add Teacher</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
@@ -213,7 +215,10 @@ const CmsTeacherAdd = ({ getData }) => {
           </Modal.Body>
         </form>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button
+            className="btn btn-sm btn-border bg-light text-dark"
+            onClick={handleCloseModal}
+          >
             Close
           </Button>
           <Button

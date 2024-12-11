@@ -13,9 +13,8 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-
 
   const handleClose = () => {
     setShow(false);
@@ -24,8 +23,7 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
   const handleShow = () => {
     fetchData();
     setShow(true);
-    setIsModified(false); 
-
+    setIsModified(false);
   };
 
   useEffect(() => {
@@ -45,8 +43,6 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
     effectiveDate: Yup.string().required("*Effective Date is required"),
     name: Yup.string().required("*Name Code is required"),
     status: Yup.string().required("*Status is required"),
-    
-
   });
 
   const formik = useFormik({
@@ -89,13 +85,15 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
+    },
   });
 
   useEffect(() => {
@@ -123,19 +121,22 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">
             Edit Curriculum Outlet
           </Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -162,7 +163,6 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
                   </label>
                   <input
                     type="date"
-   
                     className={`form-control  ${
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate
@@ -205,7 +205,10 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <button

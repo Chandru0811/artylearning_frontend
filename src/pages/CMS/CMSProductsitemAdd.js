@@ -11,8 +11,7 @@ function CMSProductsItemAdd({ onSuccess }) {
   const handleCloseModal = () => setShowModal(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const handleSaveChanges = () => {
     setShowModal(false);
@@ -40,7 +39,6 @@ function CMSProductsItemAdd({ onSuccess }) {
       formData.append("file", data.files);
       formData.append("imageDetails ", data.imageDetails);
       formData.append("createdBy ", userName);
-
 
       try {
         const response = await api.post("/createProductImageSave", formData, {
@@ -108,11 +106,14 @@ function CMSProductsItemAdd({ onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Product Item</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
@@ -166,7 +167,7 @@ function CMSProductsItemAdd({ onSuccess }) {
           <Modal.Footer>
             <Button
               type="button"
-              variant="secondary"
+              className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleCloseModal}
             >
               Cancel

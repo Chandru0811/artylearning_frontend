@@ -16,15 +16,15 @@ function AddPackage({ id, onSuccess }) {
     formik.resetForm();
     setShow(false);
   };
-  
+
   const handleShow = () => {
-    
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
   const validationSchema = yup.object().shape({
     packageName: yup.string().required("*Package Name is required"),
-    noOfLesson: yup.number()
+    noOfLesson: yup
+      .number()
       .integer("Must be an integer")
       .typeError("Must be a number")
       .positive("Must be positive")
@@ -53,9 +53,9 @@ function AddPackage({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
@@ -66,7 +66,7 @@ function AddPackage({ id, onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -160,7 +160,10 @@ function AddPackage({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-5">
-            <Button className="btn btn-sm btn-secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

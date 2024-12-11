@@ -98,12 +98,12 @@ export default function EnrollmentAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Lead Management
+          &nbsp;Lead Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/lead/lead" className="custom-breadcrumb">
-            Lead
+            &nbsp;Lead
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>

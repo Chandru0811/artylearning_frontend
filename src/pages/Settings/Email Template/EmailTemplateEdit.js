@@ -46,7 +46,7 @@ const formats = [
   "video",
 ];
 
-function EmailTemplateEdit({ id, onSuccess}) {
+function EmailTemplateEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => {
@@ -54,7 +54,7 @@ function EmailTemplateEdit({ id, onSuccess}) {
     setShow(false);
   };
 
-  const handleShow = async() => {
+  const handleShow = async () => {
     try {
       const response = await api.get(`/getEmailTemplateById/${id}`);
       formik.setValues(response.data);
@@ -101,7 +101,7 @@ function EmailTemplateEdit({ id, onSuccess}) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow} >
+      <button className="btn btn-sm" onClick={handleShow}>
         <FaEdit />
       </button>
       <Modal show={show} centered onHide={handleClose} size="lg">
@@ -151,7 +151,10 @@ function EmailTemplateEdit({ id, onSuccess}) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button type="submit" className="btn btn-button btn-sm">

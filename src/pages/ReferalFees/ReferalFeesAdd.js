@@ -14,7 +14,7 @@ function ReferalFeesAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedCenters, setSelectedCenters] = useState([]);
   const [isModified, setIsModified] = useState(false);
-  const createdBy = localStorage.getItem('userName');
+  const createdBy = localStorage.getItem("userName");
   const centerOptions = centerData?.map((center) => ({
     label: center.centerNames,
     value: center.id,
@@ -303,7 +303,10 @@ function ReferalFeesAdd({ onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

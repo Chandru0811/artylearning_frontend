@@ -218,7 +218,8 @@ function CmsEnglishCourseListing({
                     onClick={() => toggleEdit("paragraph1")}
                   >
                     <FaEdit />
-                  </button>)}
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -242,7 +243,8 @@ function CmsEnglishCourseListing({
                   onClick={() => handleEdit(section, index)}
                 >
                   <FaEdit />
-                </button>)}
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -278,7 +280,8 @@ function CmsEnglishCourseListing({
                     onClick={() => toggleEdit("paragraph2")}
                   >
                     <FaEdit />
-                  </button>)}
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -321,7 +324,10 @@ function CmsEnglishCourseListing({
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Close
             </Button>
             <Button variant="primary" onClick={handleSave}>

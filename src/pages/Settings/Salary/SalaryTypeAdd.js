@@ -17,10 +17,10 @@ function SalaryTypeAdd({ onSuccess }) {
     formik.resetForm();
   };
   const handleShow = () => {
-    
     setShow(true);
-    setIsModified(false); 
-  };  const userName = localStorage.getItem("userName"); 
+    setIsModified(false);
+  };
+  const userName = localStorage.getItem("userName");
 
   const validationSchema = Yup.object({
     salaryType: Yup.string().required("*Leave Type is required"),
@@ -30,7 +30,6 @@ function SalaryTypeAdd({ onSuccess }) {
     initialValues: {
       salaryType: "",
       createdBy: userName,
-
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -59,7 +58,7 @@ function SalaryTypeAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -78,17 +77,25 @@ function SalaryTypeAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered
-       backdrop={isModified ? "static" : true} 
-       keyboard={isModified ? false : true} >
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Salary Type</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -114,7 +121,11 @@ function SalaryTypeAdd({ onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

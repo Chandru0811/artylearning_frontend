@@ -137,7 +137,7 @@ function AddMore({
       </button>
       <Modal show={show} size="xl" onHide={handleClose} centered>
         <Modal.Header closeButton>Attendance</Modal.Header>
-         <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit}>
           <Modal.Body>
             <div className="container">
               {formik.values.items.map((item, index) => (
@@ -386,7 +386,11 @@ function AddMore({
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button variant="danger" type="submit">

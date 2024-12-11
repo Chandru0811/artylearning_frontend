@@ -14,7 +14,6 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
-
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
@@ -24,7 +23,7 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
     fetchData();
     getData();
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
 
   const validationSchema = yup.object().shape({
@@ -68,7 +67,9 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
@@ -119,8 +120,8 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <form
           onSubmit={formik.handleSubmit}
@@ -212,7 +213,7 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
                       </div>
                     )}
                 </div> */}
-                     {/* <div className="col-md-6 col-12 mb-2">
+                {/* <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Centre<span className="text-danger">*</span>
                   </label>
@@ -239,7 +240,7 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
                     </div>
                   )}
                 </div> */}
-                 <div class="col-md-6 col-12 mb-4">
+                <div class="col-md-6 col-12 mb-4">
                   <lable class="">
                     Centre<span class="text-danger">*</span>
                   </lable>
@@ -316,7 +317,10 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

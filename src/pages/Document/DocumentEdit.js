@@ -14,8 +14,7 @@ function DocumentEdit({ id, onSuccess }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const validationSchema = Yup.object({
     folderName: Yup.string().required("*Folder Name is required"),
@@ -24,8 +23,7 @@ function DocumentEdit({ id, onSuccess }) {
   const formik = useFormik({
     initialValues: {
       folderName: "",
-      updatedBy:userName,
-
+      updatedBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -85,11 +83,14 @@ function DocumentEdit({ id, onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Document</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -118,7 +119,10 @@ function DocumentEdit({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

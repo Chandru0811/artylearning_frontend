@@ -20,9 +20,8 @@ function CourseFeesAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-
 
   const handleClose = () => {
     setShow(false);
@@ -31,7 +30,7 @@ function CourseFeesAdd({ onSuccess }) {
 
   const handleShow = () => {
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
 
     fetchTaxData();
   };
@@ -49,9 +48,8 @@ function CourseFeesAdd({ onSuccess }) {
       effectiveDate: "",
       depositFees: "",
       taxType: "",
-      status:"ACTIVE",
+      status: "ACTIVE",
       createdBy: userName,
-
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -84,7 +82,7 @@ function CourseFeesAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -99,12 +97,12 @@ function CourseFeesAdd({ onSuccess }) {
   return (
     <>
       <div className="mb-5 mt-4 d-flex justify-content-end">
-      <Link to="/course">
-            <button type="button " className="btn btn-sm btn-border   ">
-              Back
-            </button>
-          </Link>
-          &nbsp;&nbsp;
+        <Link to="/course">
+          <button type="button " className="btn btn-sm btn-border   ">
+            Back
+          </button>
+        </Link>
+        &nbsp;&nbsp;
         <button
           type="button"
           className="btn btn-button btn-sm"
@@ -113,18 +111,25 @@ function CourseFeesAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered
-       backdrop={isModified ? "static" : true} 
-       keyboard={isModified ? false : true} 
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Course Deposit</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -140,7 +145,6 @@ function CourseFeesAdd({ onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
-   
                     {...formik.getFieldProps("effectiveDate")}
                   />
                   {formik.touched.effectiveDate &&
@@ -212,7 +216,6 @@ function CourseFeesAdd({ onSuccess }) {
                     <option value=""></option>
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
-
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
@@ -223,7 +226,11 @@ function CourseFeesAdd({ onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

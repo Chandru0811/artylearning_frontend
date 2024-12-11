@@ -1027,7 +1027,10 @@ export default function InvoiceEdit() {
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this item?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+          <Button
+            className="btn btn-sm btn-border bg-light text-dark"
+            onClick={() => setShowDeleteModal(false)}
+          >
             Cancel
           </Button>
           <Button

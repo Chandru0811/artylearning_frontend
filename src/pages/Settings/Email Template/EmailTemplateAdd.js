@@ -66,8 +66,8 @@ const formats = [
   "bullet",
   "align",
   "link",
-//   "image",
-//   "video",
+  //   "image",
+  //   "video",
 ];
 
 function EmailTemplateAdd({ onSuccess }) {
@@ -170,7 +170,10 @@ function EmailTemplateAdd({ onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button type="submit" className="btn btn-button btn-sm">

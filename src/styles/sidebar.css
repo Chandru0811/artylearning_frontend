@@ -816,3 +816,7 @@ a:hover {
     /* Adjusted margin for better spacing */
   }
 }
+
+.submenu {
+  background-color: #4da899;
+}

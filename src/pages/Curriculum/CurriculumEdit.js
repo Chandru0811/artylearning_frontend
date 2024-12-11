@@ -13,14 +13,12 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
-
-  const handleShow = () => { 
+  const handleShow = () => {
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
   const handleClose = () => setShow(false);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const validationSchema = Yup.object({
     curriculumCode: Yup.string().required("*Curriculum Code is required"),
@@ -29,8 +27,8 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
     // description: Yup.string().required("*Description is required"),
     status: Yup.string().required("*Status is required"),
     description: Yup.string()
-    .notRequired()
-    .max(200, "*The maximum length is 200 characters"),
+      .notRequired()
+      .max(200, "*The maximum length is 200 characters"),
   });
 
   const formik = useFormik({
@@ -40,8 +38,7 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
       curriculumNo: "",
       description: "",
       status: "",
-      updatedBy:userName,
-
+      updatedBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -76,14 +73,15 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
-    
+    },
   });
 
   useEffect(() => {
@@ -107,17 +105,20 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Curriculum</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -231,7 +232,10 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button variant="danger" type="submit" disabled={loadIndicator}>

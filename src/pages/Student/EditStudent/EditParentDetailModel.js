@@ -31,7 +31,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -69,7 +69,6 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         // formDatas.append('parentId', id);
         formDatas.append("password", "12345678");
         formDatas.append("updatedBy", userName);
-
 
         const response = await api.put(
           `/updateStudentParentsDetailsWithProfileImages/${id}`,
@@ -129,11 +128,14 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
           centered
           onHide={handleClose}
         >
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
             <Modal.Header closeButton>
               <Modal.Title>
                 <p className="headColor">Edit Parent/Guardian Detail</p>
@@ -333,7 +335,10 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
               </div>
             </Modal.Body>
             <Modal.Footer className="mt-3">
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
 

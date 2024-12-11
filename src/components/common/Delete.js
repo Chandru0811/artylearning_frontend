@@ -81,7 +81,7 @@ function Delete({ onSuccess, path, staffmsg, teachermsg }) {
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button className="btn btn-sm btn-border bg-light text-dark" onClick={handleClose}>
             Close
           </Button>
           <Button

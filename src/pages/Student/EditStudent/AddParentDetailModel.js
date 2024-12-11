@@ -163,7 +163,7 @@ const AddParentDetailModel = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -283,15 +283,12 @@ const AddParentDetailModel = forwardRef(
                                     </small>
                                   </div>
                                 )} */}
-                            {formik.touched.parentNames && formik.errors.parentNames && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.parentNames
-                                  }
-                                </small>
-                              </div>
-                            )}
+                            {formik.touched.parentNames &&
+                              formik.errors.parentNames && (
+                                <div className="text-danger">
+                                  <small>{formik.errors.parentNames}</small>
+                                </div>
+                              )}
                           </div>
                           <div className="text-start mt-4 mb-4">
                             <label htmlFor="" className="mb-1 fw-medium">
@@ -326,15 +323,14 @@ const AddParentDetailModel = forwardRef(
                                     </small>
                                   </div>
                                 )} */}
-                            {formik.touched.parentDateOfBirths && formik.errors.parentDateOfBirths && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.parentDateOfBirths
-                                  }
-                                </small>
-                              </div>
-                            )}
+                            {formik.touched.parentDateOfBirths &&
+                              formik.errors.parentDateOfBirths && (
+                                <div className="text-danger">
+                                  <small>
+                                    {formik.errors.parentDateOfBirths}
+                                  </small>
+                                </div>
+                              )}
                           </div>
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
@@ -370,11 +366,7 @@ const AddParentDetailModel = forwardRef(
                                 )} */}
                             {formik.touched.emails && formik.errors.emails && (
                               <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.emails
-                                  }
-                                </small>
+                                <small>{formik.errors.emails}</small>
                               </div>
                             )}
                           </div>
@@ -416,15 +408,12 @@ const AddParentDetailModel = forwardRef(
                                     </small>
                                   </div>
                                 )} */}
-                            {formik.touched.relations && formik.errors.relations && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.relations
-                                  }
-                                </small>
-                              </div>
-                            )}
+                            {formik.touched.relations &&
+                              formik.errors.relations && (
+                                <div className="text-danger">
+                                  <small>{formik.errors.relations}</small>
+                                </div>
+                              )}
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-12">
@@ -459,15 +448,12 @@ const AddParentDetailModel = forwardRef(
                                     </small>
                                   </div>
                                 )} */}
-                            {formik.touched.occupations && formik.errors.occupations && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.occupations
-                                  }
-                                </small>
-                              </div>
-                            )}
+                            {formik.touched.occupations &&
+                              formik.errors.occupations && (
+                                <div className="text-danger">
+                                  <small>{formik.errors.occupations}</small>
+                                </div>
+                              )}
                           </div>
                           <div className="text-start mt-4">
                             <label htmlFor="" className="fw-medium">
@@ -485,15 +471,18 @@ const AddParentDetailModel = forwardRef(
                               //   );
                               // }}
                               onChange={(event) => {
-                                formik.setFieldValue('file', event.target.files[0]);
+                                formik.setFieldValue(
+                                  "file",
+                                  event.target.files[0]
+                                );
                               }}
                               onBlur={formik.handleBlur}
                               accept=".jpg, .jpeg, .png"
                             />
                             <p>
                               <small>
-                                Note: File must be PNG,JPG,GIF or BMP, Max
-                                Size 1 MB
+                                Note: File must be PNG,JPG,GIF or BMP, Max Size
+                                1 MB
                               </small>
                             </p>
                           </div>
@@ -529,15 +518,12 @@ const AddParentDetailModel = forwardRef(
                                     </small>
                                   </div>
                                 )} */}
-                            {formik.touched.mobileNumbers && formik.errors.mobileNumbers && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.mobileNumbers
-                                  }
-                                </small>
-                              </div>
-                            )}
+                            {formik.touched.mobileNumbers &&
+                              formik.errors.mobileNumbers && (
+                                <div className="text-danger">
+                                  <small>{formik.errors.mobileNumbers}</small>
+                                </div>
+                              )}
                           </div>
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
@@ -571,15 +557,12 @@ const AddParentDetailModel = forwardRef(
                                     </small>
                                   </div>
                                 )} */}
-                            {formik.touched.postalCodes && formik.errors.postalCodes && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.postalCodes
-                                  }
-                                </small>
-                              </div>
-                            )}
+                            {formik.touched.postalCodes &&
+                              formik.errors.postalCodes && (
+                                <div className="text-danger">
+                                  <small>{formik.errors.postalCodes}</small>
+                                </div>
+                              )}
                           </div>
                         </div>
                         <div className="col-12">
@@ -618,15 +601,12 @@ const AddParentDetailModel = forwardRef(
                                     </small>
                                   </div>
                                 )} */}
-                            {formik.touched.addresses && formik.errors.addresses && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.addresses
-                                  }
-                                </small>
-                              </div>
-                            )}
+                            {formik.touched.addresses &&
+                              formik.errors.addresses && (
+                                <div className="text-danger">
+                                  <small>{formik.errors.addresses}</small>
+                                </div>
+                              )}
                           </div>
                         </div>
                       </div>
@@ -636,7 +616,10 @@ const AddParentDetailModel = forwardRef(
                 {/* ))} */}
               </Modal.Body>
               <Modal.Footer className="mt-3">
-                <Button variant="secondary" onClick={handleClose}>
+                <Button
+                  className="btn btn-sm btn-border bg-light text-dark"
+                  onClick={handleClose}
+                >
                   Cancel
                 </Button>
                 <Button

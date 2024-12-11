@@ -169,17 +169,17 @@ function CenterAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Centre Management
+          &nbsp;Centre Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/center" className="custom-breadcrumb">
-            Centre Listing
+            &nbsp;Centre Listing
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Centre Listing Add
+          &nbsp;Centre Listing Add
         </li>
       </ol>
       <form

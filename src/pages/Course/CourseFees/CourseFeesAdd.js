@@ -14,47 +14,50 @@ import { forEach } from "jszip";
 const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),
   packageId: Yup.string().required("*Package Name is required"),
-  weekdayFee: Yup.number().typeError("*Must be a Number").required("*Weekday Fee is required"),
-  weekendFee: Yup.number().typeError("*Must be a Number").required("*Weekend Fee is required"),
+  weekdayFee: Yup.number()
+    .typeError("*Must be a Number")
+    .required("*Weekday Fee is required"),
+  weekendFee: Yup.number()
+    .typeError("*Must be a Number")
+    .required("*Weekend Fee is required"),
   taxType: Yup.string().required("*TaxType Fee is required"),
   status: Yup.string().required("*Status is required"),
-
 });
 
-function CourseFeesAdd({ onSuccess,centerId }) {
+function CourseFeesAdd({ onSuccess, centerId }) {
   const { id } = useParams();
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState([]);
   const [taxData, setTaxData] = useState([]);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
 
-console.log("centerId",centerId)
-console.log("packageData",packageData)
-const fetchPackageData = async (id) => {
-  if (id) {
-    try {
-      const newData = await fetchAllPackageListByCenter(id);
-      setPackageData((prev) => {
-        if (!Array.isArray(prev)) {
-          return newData;
-        }
-        const uniqueDataMap = new Map();
+  console.log("centerId", centerId);
+  console.log("packageData", packageData);
+  const fetchPackageData = async (id) => {
+    if (id) {
+      try {
+        const newData = await fetchAllPackageListByCenter(id);
+        setPackageData((prev) => {
+          if (!Array.isArray(prev)) {
+            return newData;
+          }
+          const uniqueDataMap = new Map();
 
-        prev.forEach(item => {
-          uniqueDataMap.set(item.id, item); 
+          prev.forEach((item) => {
+            uniqueDataMap.set(item.id, item);
+          });
+          newData.forEach((item) => {
+            uniqueDataMap.set(item.id, item);
+          });
+          return Array.from(uniqueDataMap.values());
         });
-        newData.forEach(item => {
-          uniqueDataMap.set(item.id, item);
-        });
-        return Array.from(uniqueDataMap.values());
-      });
-    } catch (error) {
-      toast.error(error);
+      } catch (error) {
+        toast.error(error);
+      }
     }
-  }
-};
+  };
 
   const fetchTaxData = async () => {
     try {
@@ -75,8 +78,7 @@ const fetchPackageData = async (id) => {
     fetchPackageData();
     fetchTaxData();
     setShow(true);
-    setIsModified(false); 
-
+    setIsModified(false);
   };
 
   const formik = useFormik({
@@ -89,7 +91,6 @@ const fetchPackageData = async (id) => {
       courseId: id,
       status: "ACTIVE",
       createdBy: userName,
-
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -118,7 +119,7 @@ const fetchPackageData = async (id) => {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -129,24 +130,24 @@ const fetchPackageData = async (id) => {
   useEffect(() => {
     const fetchData = async () => {
       await fetchTaxData();
-  
+
       for (const center of centerId) {
         await fetchPackageData(center.id);
       }
     };
-  
+
     fetchData();
-  }, [show,centerId]);
+  }, [show, centerId]);
 
   return (
     <>
       <div className="mb-5 mt-4 d-flex justify-content-end">
-      <Link to="/course">
-            <button type="button " className="btn btn-sm btn-border   ">
-              Back
-            </button>
-          </Link>
-          &nbsp;&nbsp;
+        <Link to="/course">
+          <button type="button " className="btn btn-sm btn-border   ">
+            Back
+          </button>
+        </Link>
+        &nbsp;&nbsp;
         <button
           type="button"
           className="btn btn-button btn-sm"
@@ -155,16 +156,25 @@ const fetchPackageData = async (id) => {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered  backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} >
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Course Fees</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -174,7 +184,6 @@ const fetchPackageData = async (id) => {
                   </label>
                   <input
                     type="date"
-   
                     className={`form-control  ${
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate
@@ -302,7 +311,6 @@ const fetchPackageData = async (id) => {
                     <option value=""></option>
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
-
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
@@ -313,7 +321,11 @@ const fetchPackageData = async (id) => {
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

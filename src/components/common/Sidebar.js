@@ -5,7 +5,7 @@ import Logo from "../../assets/images/Logo-Portal_Access.png";
 import api from "../../config/URL";
 import { PiBuildings } from "react-icons/pi";
 import { BiRadioCircleMarked } from "react-icons/bi";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosAdd, IoIosArrowDown, IoIosRemove } from "react-icons/io";
 import { PiBookOpenText } from "react-icons/pi";
 import { RiDashboardLine } from "react-icons/ri";
 import { HiOutlineUserGroup } from "react-icons/hi2";
@@ -25,17 +25,17 @@ const iconMapping = {
   "Centre Management": <PiBuildings />,
   "Course Management": <PiBookOpenText />,
   "Lead Management": <GiExitDoor />,
-  "Staffing": <HiOutlineUserGroup />,
+  Staffing: <HiOutlineUserGroup />,
   "Student Management": <TbUserSearch />,
   "Student Movement": <TbStatusChange />,
-  "Schedule": <TbCalendarTime />,
+  Schedule: <TbCalendarTime />,
   "Document Management": <TbFolderCog />,
   "Invoice and Payment": <LiaFileInvoiceDollarSolid />,
   "Referal Management": <VscReferences />,
-  "Report Management": <BsFileEarmarkRichtext  />,
+  "Report Management": <BsFileEarmarkRichtext />,
   "Content Management": <LiaUserEditSolid />,
-  "Messaging": <TbMessageCode />,
-  "Settings": <GrUserSettings />,
+  Messaging: <TbMessageCode />,
+  Settings: <GrUserSettings />,
 };
 
 function Sidebar() {
@@ -519,7 +519,7 @@ function Sidebar() {
               overlay={<Tooltip id="home-tooltip">Overview</Tooltip>}
             >
               <i className="">
-                <RiDashboardLine/>
+                <RiDashboardLine />
               </i>
             </OverlayTrigger>
             <span className="links_name text-center">Overview</span>
@@ -561,32 +561,27 @@ function Sidebar() {
                       </div>
                     </span>
                     <span className="pe-4">
-                      {/* <i
-                        className={`bx bx-chevron-down arrow ${
-                          item.isOpen ? "open" : ""
-                        }`}
-                        style={{
-                          paddingRight: "5px",
-                          minWidth: "0px",
-                          fontWeight: "700",
-                        }}
-                           <AiOutlineSetting
-                        className={`arrow ${item.isOpen ? "open" : ""}`}
-                        style={{
-                          paddingRight: "5px",
-                          minWidth: "0px",
-                          fontWeight: "700",
-                        }}
-                      />
-                      ></i> */}
-                       <IoIosArrowDown
-                        className={`arrow ${item.isOpen ? "open" : ""}`}
-                        style={{
-                          paddingRight: "5px",
-                          minWidth: "0px",
-                          fontWeight: "700",
-                        }}
-                      />
+                      {item.isOpen ? (
+                        <IoIosRemove
+                          className="arrow open"
+                          style={{
+                            paddingRight: "5px",
+                            minWidth: "0px",
+                            fontWeight: "700",
+                            fontSize: "24px",
+                          }}
+                        />
+                      ) : (
+                        <IoIosAdd
+                          className="arrow"
+                          style={{
+                            paddingRight: "5px",
+                            minWidth: "0px",
+                            fontWeight: "700",
+                            fontSize: "24px",
+                          }}
+                        />
+                      )}
                     </span>
                   </div>
                 </Nav.Link>
@@ -611,7 +606,10 @@ function Sidebar() {
                                   </Tooltip>
                                 }
                               >
-                                <i className="bx bx-radio-circle-marked" style={{fontWeight:"400"}}></i>
+                                <i
+                                  className="bx bx-radio-circle-marked"
+                                  style={{ fontWeight: "400" }}
+                                ></i>
                                 {/* <BiRadioCircleMarked className=""/> */}
                               </OverlayTrigger>
                               <span className="links_name links_names active">

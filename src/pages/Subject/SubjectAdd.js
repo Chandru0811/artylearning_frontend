@@ -14,21 +14,18 @@ function SubjectAdd({ onSuccess }) {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [levelData, setLevelData] = useState(null);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-
-
 
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
     setLevelData(null);
   };
-  
+
   const handleShow = () => {
-    
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
   // useEffect(() => {
   //   fetchData();
@@ -86,7 +83,7 @@ function SubjectAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -94,7 +91,7 @@ function SubjectAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -108,7 +105,6 @@ function SubjectAdd({ onSuccess }) {
   //   formik.setFieldValue("levelId", levelId);
   //   fetchData(levelId); // Fetch class for the selected center
   // };
-
 
   return (
     <>
@@ -128,14 +124,17 @@ function SubjectAdd({ onSuccess }) {
         size="lg"
         aria-labelledby="contained-model-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title className="headColor">Add Subject</Modal.Title>
           </Modal.Header>
@@ -244,22 +243,25 @@ function SubjectAdd({ onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
+            </Button>
           </Modal.Footer>
         </form>
       </Modal>

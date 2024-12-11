@@ -40,7 +40,7 @@ function AssignMakeUpClass() {
   return (
     <>
       <button type="button" class="btn text-success fs-4" onClick={handleShow}>
-      <FaPlusCircle/>
+        <FaPlusCircle />
       </button>
       <Modal
         show={show}
@@ -52,11 +52,14 @@ function AssignMakeUpClass() {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Assign MakeUp Class</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row ">
@@ -115,7 +118,7 @@ function AssignMakeUpClass() {
               <div className="row ">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  Centre<span className="text-danger">*</span>
+                    Centre<span className="text-danger">*</span>
                   </label>
                   <div class="input-group mb-3">
                     <select
@@ -206,7 +209,6 @@ function AssignMakeUpClass() {
                       <div class="input-group mb-3">
                         <input
                           type="time"
-     
                           className={`form-control  ${
                             formik.touched.batchFrom && formik.errors.batchFrom
                               ? "is-invalid"
@@ -229,7 +231,6 @@ function AssignMakeUpClass() {
                       <div class="input-group mb-3">
                         <input
                           type="time"
-     
                           className={`form-control  ${
                             formik.touched.batchFrom && formik.errors.batchTo
                               ? "is-invalid"
@@ -280,7 +281,10 @@ function AssignMakeUpClass() {
               </div>
             </div>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button variant="danger" type="submit">

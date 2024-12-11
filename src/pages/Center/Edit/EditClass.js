@@ -12,19 +12,22 @@ function EditClass({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
-
   const handleClose = () => setShow(false);
-  const handleShow = () => { 
+  const handleShow = () => {
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
   const validationSchema = yup.object().shape({
     classRoomName: yup.string().required("*Classroom name is required"),
     classRoomType: yup.string().required("*Classroom type is required"),
     classRoomCode: yup.string().required("*Classroom Code is required"),
-    capacity: yup.number().integer("Must be an integer")
-    .typeError("Must be a number")
-    .positive("Must be positive").required("*Capacity is required"),  });
+    capacity: yup
+      .number()
+      .integer("Must be an integer")
+      .typeError("Must be a number")
+      .positive("Must be positive")
+      .required("*Capacity is required"),
+  });
   const formik = useFormik({
     initialValues: {
       classRoomName: "",
@@ -54,9 +57,9 @@ function EditClass({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
@@ -68,21 +71,22 @@ function EditClass({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
-    
+    },
   });
   useEffect(() => {
     const getData = async () => {
-      try{
-      const response = await api.get(`/getCenterClassRoomsById/${id}`);
-      formik.setValues(response.data);
-      }catch (error) {
+      try {
+        const response = await api.get(`/getCenterClassRoomsById/${id}`);
+        formik.setValues(response.data);
+      } catch (error) {
         toast.error("Error Fetching Data");
       }
     };
@@ -103,14 +107,17 @@ function EditClass({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Edit Classroom</p>
@@ -221,23 +228,26 @@ function EditClass({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
+              type="submit"
+              onSubmit={formik.handleSubmit}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </Button>
             {/* <Button
               type="submit"
               variant="danger"

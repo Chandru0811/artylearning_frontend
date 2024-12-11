@@ -112,15 +112,16 @@ const Course = () => {
       >
         <li>
           <Link to="/" className="custom-breadcrumb">
-            Home
+            &nbsp;Home
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li>Course Management
+        <li>
+          &nbsp;Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Course
+          &nbsp;Course
         </li>
       </ol>
       <div className="mb-3 d-flex justify-content-end">
