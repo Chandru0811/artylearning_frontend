@@ -772,7 +772,8 @@ tbody tr td{
 }
 
 .dataTables_filter {
-  display: none;
+  padding-right: 20px;
+  padding-bottom: 10px;
 }
 
 .cardBorder .card {
@@ -888,6 +889,15 @@ input.searchInputG:hover {
 }
 
 
+.find_roll {
+  background-color: #287f71;
+  color: white;
+}
+.find_roll:hover {
+  background-color: #4da899;
+  color: white;
+}
+
 /* Calender CSS */
 .calendar {
   font-size: small;
@@ -940,10 +950,11 @@ input.searchInputG:hover {
 }
 
 .custom-event {
-  background-color: #ff5e5e;
+  background-color: #eb862a;
   color: white;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 10px;
+  margin: 5px 2px;
 }
 
 .fc-theme-standard .fc-popover {
@@ -952,9 +963,35 @@ input.searchInputG:hover {
   z-index: 10 !important;
 }
 
+.fc th {
+  text-align: center;
+  background: #d9e4ef;
+  font-size: small;
+  font-weight: 400;
+  color: #97a3b6 !important;
+}
+
+.fc td {
+  font-size: 14px; 
+  color: #97a3b6 !important;
+  font-weight: 300 !important; 
+}
+
+.fc-day-today {
+  background-color: #f4f8fc !important; 
+  border: 1px solid #287f71 !important;
+}
+
+.fc-day-past {
+  color: #aaa !important; 
+}
+
+.fc-day-future {
+  color: #333 !important; 
+}
 
 
-/* Table */
+/* data table */
 tbody, td, tfoot, th, thead, tr{
   border-top: 1px solid #808080;
 }

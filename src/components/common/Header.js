@@ -4,7 +4,7 @@ import fetchAllCentersWithIds from "../../pages/List/CenterList";
 import { toast } from "react-toastify";
 import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
-import { VscCalendar } from "react-icons/vsc";
+import { CiCalendarDate } from "react-icons/ci";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
@@ -49,9 +49,8 @@ function Header({ onLogout }) {
               className="btn"
               type="button"
             >
-              <VscCalendar
-                className="fw-bold"
-                style={{ color: "#eb862a", fontSize: "22px" }}
+              <CiCalendarDate
+                style={{ color: "#287f71", fontSize: "25px" ,fontWeight:"bolder" }}
               />
             </button>
           </Link>

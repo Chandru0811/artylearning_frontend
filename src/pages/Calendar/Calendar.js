@@ -51,7 +51,7 @@ function Calendar() {
 
   useEffect(() => {
     fetchData();
-    setCurrentDate(new Date().toISOString().slice(0, 10)); // Set the current date when the component loads
+    // setCurrentDate(new Date().toISOString().slice(0, 10)); // Set the current date when the component loads
   }, []);
 
   const handleEventClick = (eventClickInfo) => {
@@ -117,27 +117,11 @@ function Calendar() {
             eventContent={(info) => {
               const { teacher, centerName, slots } = info.event.extendedProps;
               return (
-                <div>
-                  <strong>{info.event.title}</strong>
+                <div className="p-2">
                   <div>👨‍🏫 Teacher: {teacher}</div>
                   <div>🏢 Center: {centerName}</div>
                   <div>🕒 Available Slots: {slots}</div>
-                </div>
-              );
-            }}
-            // Highlight the current date
-            dayCellContent={(info) => {
-              const currentDateString = currentDate; // Use state currentDate to compare
-              const cellDateString = info.date.toISOString().slice(0, 10);
-              return (
-                <div
-                  style={{
-                    backgroundColor: cellDateString === currentDateString ? "lightblue" : "",
-                    borderRadius: "5px",
-                    padding: "10px",
-                  }}
-                >
-                  {info.dayNumberText}
+                  <div>🧑‍🎓 Student Name: {slots}</div>
                 </div>
               );
             }}
