@@ -939,6 +939,20 @@ input.searchInputG:hover {
   box-shadow: none;
 }
 
+.custom-event {
+  background-color: #ff5e5e;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.fc-theme-standard .fc-popover {
+  background: var(--fc-page-bg-color);
+  border: 1px solid var(--fc-border-color);
+  z-index: 10 !important;
+}
+
+
 
 /* Table */
 tbody, td, tfoot, th, thead, tr{
