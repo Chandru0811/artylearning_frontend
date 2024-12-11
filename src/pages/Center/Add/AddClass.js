@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { SiGoogleclassroom } from "react-icons/si";
 
 function AddClass({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -84,10 +85,10 @@ function AddClass({ id, onSuccess }) {
     <>
       <button
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-normal text-start"
+        className="btn btn-sm btn-normal text-start"
         onClick={handleShow}
       >
-        Add Classroom
+        <SiGoogleclassroom /> &nbsp;&nbsp;Add Classroom
       </button>
 
       <Modal
@@ -96,14 +97,17 @@ function AddClass({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Add Classroom</p>
@@ -118,11 +122,12 @@ function AddClass({ id, onSuccess }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control   ${formik.touched.classRoomName &&
+                    className={`form-control   ${
+                      formik.touched.classRoomName &&
                       formik.errors.classRoomName
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("classRoomName")}
                   />
                   {formik.touched.classRoomName &&
@@ -139,10 +144,11 @@ function AddClass({ id, onSuccess }) {
                 </lable>
                 <input
                   type="text"
-                  className={`form-control   ${formik.touched.classRoomCode && formik.errors.classRoomCode
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control   ${
+                    formik.touched.classRoomCode && formik.errors.classRoomCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("classRoomCode")}
                 />
                 {formik.touched.classRoomCode &&
@@ -158,11 +164,12 @@ function AddClass({ id, onSuccess }) {
                 </lable>
                 <div class="input-group mb-3">
                   <select
-                    className={`form-select   ${formik.touched.classRoomType &&
+                    className={`form-select   ${
+                      formik.touched.classRoomType &&
                       formik.errors.classRoomType
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("classRoomType")}
                   >
                     <option></option>
@@ -185,10 +192,11 @@ function AddClass({ id, onSuccess }) {
                 <input
                   type="text"
                   pattern="^\d+$"
-                  className={`form-control   ${formik.touched.capacity && formik.errors.capacity
-                    ? "is-invalid"
-                    : ""
-                    }`}
+                  className={`form-control   ${
+                    formik.touched.capacity && formik.errors.capacity
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("capacity")}
                 />
                 {formik.touched.capacity && formik.errors.capacity && (
@@ -211,7 +219,7 @@ function AddClass({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button className="btn btn-sm btn-secondary" onClick={handleClose}>
               Cancel
             </Button>
             <Button

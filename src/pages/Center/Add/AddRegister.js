@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { MdOutlineAttachMoney } from "react-icons/md";
 
 function AddRegister({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -97,10 +98,10 @@ function AddRegister({ id, onSuccess }) {
     <>
       <button
         style={{ whiteSpace: "nowrap" }}
-        className="btn btn-normal text-start"
+        className="btn btn-sm btn-normal text-start"
         onClick={handleShow}
       >
-        Add Registration Fees
+        <MdOutlineAttachMoney /> &nbsp;&nbsp;Add Registration Fees
       </button>
 
       <Modal
@@ -109,14 +110,17 @@ function AddRegister({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault();
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Add Centre Registration Fees</p>
@@ -130,14 +134,19 @@ function AddRegister({ id, onSuccess }) {
                 </label>
                 <input
                   type="date"
-                  className={`form-control ${formik.touched.effectiveDate && formik.errors.effectiveDate ? "is-invalid" : ""}`}
+                  className={`form-control ${
+                    formik.touched.effectiveDate && formik.errors.effectiveDate
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("effectiveDate")}
                 />
-                {formik.touched.effectiveDate && formik.errors.effectiveDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.effectiveDate}
-                  </div>
-                )}
+                {formik.touched.effectiveDate &&
+                  formik.errors.effectiveDate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.effectiveDate}
+                    </div>
+                  )}
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label>
@@ -146,7 +155,11 @@ function AddRegister({ id, onSuccess }) {
                 <div className="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control ${formik.touched.amount && formik.errors.amount ? "is-invalid" : ""}`}
+                    className={`form-control ${
+                      formik.touched.amount && formik.errors.amount
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("amount")}
                   />
                   {formik.touched.amount && formik.errors.amount && (
@@ -161,21 +174,24 @@ function AddRegister({ id, onSuccess }) {
                   Tax Type<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select ${formik.touched.taxId && formik.errors.taxId ? "is-invalid" : ""}`}
+                  className={`form-select ${
+                    formik.touched.taxId && formik.errors.taxId
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("taxId")}
                   style={{ width: "100%" }}
                 >
                   <option value=""></option>
-                  {taxData && taxData.map((tax) => (
-                    <option key={tax.id} value={tax.id}>
-                      {tax.taxType}
-                    </option>
-                  ))}
+                  {taxData &&
+                    taxData.map((tax) => (
+                      <option key={tax.id} value={tax.id}>
+                        {tax.taxType}
+                      </option>
+                    ))}
                 </select>
                 {formik.touched.taxId && formik.errors.taxId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.taxId}
-                  </div>
+                  <div className="invalid-feedback">{formik.errors.taxId}</div>
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2">
@@ -183,7 +199,11 @@ function AddRegister({ id, onSuccess }) {
                   Status<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select ${formik.touched.status && formik.errors.status ? "is-invalid" : ""}`}
+                  className={`form-select ${
+                    formik.touched.status && formik.errors.status
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("status")}
                   style={{ width: "100%" }}
                 >
@@ -198,7 +218,7 @@ function AddRegister({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button className="btn btn-sm btn-secondary" onClick={handleClose}>
               Cancel
             </Button>
             <Button
