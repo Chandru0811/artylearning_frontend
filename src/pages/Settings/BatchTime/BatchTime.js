@@ -134,11 +134,11 @@ const BatchTime = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Settings
+        &nbsp;Settings
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Batch Time
+        &nbsp;Batch Time
         </li>
       </ol>
       {/* {storedScreens?.levelCreate &&  */}

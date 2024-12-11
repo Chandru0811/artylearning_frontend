@@ -324,7 +324,7 @@ function NewDashboard() {
             </div>
             <div className="d-flex justify-content-between">
               <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
-                Australia
+                Arty Learning @ HG
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 634.8%
@@ -344,7 +344,7 @@ function NewDashboard() {
             </div>
             <div className="d-flex justify-content-between">
               <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
-                Indonesia
+                Arty Learning @ AMK
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 589.8%
@@ -362,7 +362,7 @@ function NewDashboard() {
             </div>
             <div className="d-flex justify-content-between">
               <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
-                Germany
+                Arty Learning @ BB
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 453.8%
@@ -374,26 +374,6 @@ function NewDashboard() {
                 role="progressbar"
                 style={{ width: "75%", backgroundColor: "#287F71" }}
                 aria-valuenow="75"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              ></div>
-            </div>
-            <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
-                Thailand
-              </p>
-              <span style={{ fontSize: "13px" }} className="fw-bold">
-                634.8%
-              </span>
-            </div>
-            <div className="progress mb-3" style={{ height: "7px" }}>
-              {" "}
-              {/* Adjust height */}
-              <div
-                className="progress-bar"
-                role="progressbar"
-                style={{ width: "90%", backgroundColor: "#287F71" }}
-                aria-valuenow="100"
                 aria-valuemin="0"
                 aria-valuemax="100"
               ></div>
