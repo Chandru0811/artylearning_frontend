@@ -516,13 +516,13 @@ function Sidebar() {
           <NavLink to="/" onClick={() => handleMenuClick(null)}>
             <OverlayTrigger
               placement="right"
-              overlay={<Tooltip id="home-tooltip">Overview</Tooltip>}
+              overlay={<Tooltip id="home-tooltip">Home</Tooltip>}
             >
               <i className="">
-                <RiDashboardLine />
+                <RiDashboardLine style={{ color: "#97a3b6" }} />
               </i>
             </OverlayTrigger>
-            <span className="links_name text-center">Overview</span>
+            <span className="links_name text-center">&nbsp;Home</span>
           </NavLink>
         </li>
         {menuItems.map(

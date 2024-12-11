@@ -65,12 +65,15 @@
   align-items: center;
   text-decoration: none;
   transition: all 0.4s ease;
-  color: #303030;
+  color: #97a3b6;
+  font-size: 20px;
   border-radius: 7px;
 }
 
 .sidebar .nav-links li a {
-  color: #303030;
+  color: #97a3b6;
+    font-size: 20px;
+
   /* Default black text */
 }
 
@@ -96,11 +99,11 @@
 }
 
 .sidebar .nav-links li a:hover {
-  background: #abbdd3cd;
+  background: #9ee0d4;
 }
 
 .sidebar .nav-links li a:hover {
-  background: #abbdd3cd;
+  background: #9ee0d4;
   /* Hover background */
   color: #303030 !important;
   /* Ensure hover doesn't override default text color */
@@ -110,9 +113,13 @@
   min-width: 47px;
   font-weight: 600;
   text-align: center;
-  font-size: 16px;
+  font-size: 20px;
   color: #303030;
   /* Default color (black) */
+}
+
+.submenu li a span{
+    color: #303030;
 }
 
 .sidebar .nav-links li.active i {
@@ -145,7 +152,7 @@
 }
 
 .nav-links li i {
-  color: #303030;
+  color: #97a3b6;
   /* Default color */
   transition: color 0.3s ease;
   /* Smooth color transition */
@@ -160,7 +167,7 @@
 }
 
 .sidebar .nav-links li a .links_name {
-  /* color: #303030; */
+  /* color: #97a3b6; */
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
@@ -228,7 +235,7 @@
 
 .home-section nav .sidebar-button {
   display: flex;
-  color: #303030;
+  color: #97a3b6;
   font-weight: 400 !important;
   align-items: center;
   font-size: 24px;
@@ -818,5 +825,6 @@ a:hover {
 }
 
 .submenu {
-  background-color: #4da899;
+  background-color: #71d2c1;
+  border-radius: 5px;
 }

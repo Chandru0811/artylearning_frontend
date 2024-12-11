@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap"; // Example using react-bootstrap
 
-function ScheduleTeacherDetails({ id, showViewModal, onClose}) {
+function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
   const [data, setData] = useState([]);
   const [teacherDetails, setTeacherDetails] = useState(null);
   const [activeTab, setActiveTab] = useState(""); // To manage active tab
-  console.log("Id:",id);
-  
+  console.log("Id:", id);
+
   // Hardcoded data for the teacher schedule and details
   const hardcodedDetails = [
     {
@@ -41,23 +41,30 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose}) {
   }, []);
 
   return (
-    <Modal show={showViewModal} onHide={onClose} size="lg" centered >
+    <Modal show={showViewModal} onHide={onClose} size="xl" centered>
       <Modal.Header closeButton>
         <Modal.Title>Lesson Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {/* Check if teacherDetails data is available */}
-        {teacherDetails && Array.isArray(teacherDetails) && teacherDetails.length > 0 ? (
+        {teacherDetails &&
+        Array.isArray(teacherDetails) &&
+        teacherDetails.length > 0 ? (
           <>
             {/* Dynamic Tabs based on hardcodedDetails */}
             <ul className="nav nav-tabs" style={{ justifyContent: "start" }}>
               {teacherDetails.map((item) => (
                 <li className="nav-item" key={item.time}>
                   <button
-                    className={`nav-link ${activeTab === item.time ? "active" : ""}`}
+                    className={`nav-link ${
+                      activeTab === item.time ? "active" : ""
+                    }`}
                     onClick={() => setActiveTab(item.time)}
                     style={{
-                      borderTop: activeTab === item.time ? "3px solid #fa994af5" : "none",
+                      borderTop:
+                        activeTab === item.time
+                          ? "3px solid #fa994af5"
+                          : "none",
                       borderRadius: "0px",
                     }}
                   >
@@ -73,7 +80,6 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose}) {
                 (item) =>
                   activeTab === item.time && (
                     <div key={item.time}>
-                      {/* <h5 className="mt-3">Schedule Teacher in {item.time}</h5> */}
                       {/* <table className="table table-bordered">
                         <thead>
                           <tr>
@@ -92,97 +98,162 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose}) {
                           ))}
                         </tbody>
                       </table> */}
-                      {/* <div>Srudent Class Detail...</div> */}
                       <div className="container py-4">
-            <div className="row">
-              <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <div className="col-5">
-                    <p className="fw-bold">Centre</p>
-                  </div>
-                  <div className="col-7">
-                    <p>:&nbsp;{data.centerName}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <div className="col-5">
-                    <p className="fw-bold">Course</p>
-                  </div>
-                  <div className="col-7">
-                    <p>:&nbsp;{data.course}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <div className="col-5">
-                    <p className="fw-bold">Class</p>
-                  </div>
-                  <div className="col-7">
-                    <p>:&nbsp;{data.className}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <div className="col-5">
-                    <p className="fw-bold">Teacher</p>
-                  </div>
-                  <div className="col-7">
-                    <p>:&nbsp;{data.teacher}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <div className="col-5">
-                    <p className="fw-bold">Days</p>
-                  </div>
-                  <div className="col-7">
-                    <p>:&nbsp;{data.days}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-              <div className="row">
-                  <div className="col-5">
-                    <p className="fw-bold">Class Room</p>
-                  </div>
-                  <div className="col-7">
-                    <p>:&nbsp;{data.classRoom}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6 col-12 mb-2">
-                <div className="row">
-                  <div className="col-5">
-                    <p className="fw-bold">Start Date</p>
-                  </div>
-                  <div className="col-7">
-                    <p>:&nbsp;{data.startDate}</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-6 col-12 mb-2">
-              <div className="row">
-                  <div className="col-5">
-                    <p className="fw-bold">End Date</p>
-                  </div>
-                  <div className="col-7">
-                    <p>:&nbsp;{data.endDate}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Start Date</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.centerName}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Lesson Outline Set Effective Start Date</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.course}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Class Id</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.className}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Effective Start Date</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.teacher}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Lesson No</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.days}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">End Date</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.classRoom}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Teacher</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.startDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">End Date</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.endDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">First Lesson</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.startDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Class Venue</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.endDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Last lesson</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.startDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Assistant Teacher</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.endDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">Available Slot</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.startDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="fw-bold">No of Students</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.endDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )
               )}

@@ -19,7 +19,7 @@ function Footer() {
 
   return (
     <div className="d-flex align-items-center justify-content-center">
-      <div className="text-muted text-sm">{data.copyRight || "Copyright@ArtyLearning2024"}</div>
+      <div className="text-muted" style={{ fontSize: "12px" }}>{data.copyRight || "Copyright@ArtyLearning2024"}</div>
     </div>
   );
 }
