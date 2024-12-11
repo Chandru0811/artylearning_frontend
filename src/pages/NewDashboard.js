@@ -102,6 +102,7 @@ function NewDashboard() {
           },
           value: {
             fontSize: "30px",
+            fontFamily: "Outdoor, sans-serif", // Specify the font family
             show: true,
           },
         },
@@ -112,73 +113,76 @@ function NewDashboard() {
     },
     labels: ["Progress"],
   };
-
+  
   const gaugeChartSeries = [67];
+  
 
-  const chartOptions = {
+  const lineChartOptions1 = {
     chart: {
-      type: "area",
-      height: 200,
-      stacked: true,
+      height: 350,
+      type: "line",
       zoom: {
         enabled: false,
       },
     },
-    colors: ["#ABBDD3", "#287F71", "#EB862A"],
     dataLabels: {
       enabled: false,
     },
     stroke: {
-      curve: "smooth",
-    },
-    fill: {
-      type: "gradient",
-      gradient: {
-        opacityFrom: 0.6,
-        opacityTo: 0.8,
-      },
+      width: 5,
+      curve: "straight",
+      dashArray: [0],
     },
     legend: {
-      position: "top",
-      horizontalAlign: "left",
+      show: true,
+    },
+    markers: {
+      size: 0,
     },
     xaxis: {
-      type: "datetime",
+      categories: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], // Days of the week
     },
+    tooltip: {
+      y: [
+        {
+          title: {
+            formatter: (val) => `${val} (mins)`,
+          },
+        },
+        {
+          title: {
+            formatter: (val) => `${val} per session`,
+          },
+        },
+        {
+          title: {
+            formatter: (val) => val,
+          },
+        },
+      ],
+    },
+    grid: {
+      borderColor: "#f1f1f1",
+    },
+    colors: ["#ABBDD3", "#287F71", "#EB862A"],
   };
-
-  const chartSeries = [
+  
+  const lineChartSeries1 = [
     {
-      name: "South",
-      data: [
-        [1676208000000, 34],
-        [1676294400000, 43],
-        [1676380800000, 31],
-        [1676467200000, 50],
-        [1676553600000, 60],
-      ],
+      name: "Session Duration",
+      data: [45, 52, 38, 24, 33, 26, 21], // Data for Monday to Sunday
     },
     {
-      name: "North",
-      data: [
-        [1676208000000, 20],
-        [1676294400000, 15],
-        [1676380800000, 25],
-        [1676467200000, 18],
-        [1676553600000, 30],
-      ],
+      name: "Page Views",
+      data: [35, 41, 62, 42, 13, 18, 29], // Data for Monday to Sunday
     },
     {
-      name: "Central",
-      data: [
-        [1676208000000, 12],
-        [1676294400000, 10],
-        [1676380800000, 14],
-        [1676467200000, 16],
-        [1676553600000, 22],
-      ],
+      name: "Total Visits",
+      data: [87, 57, 74, 99, 75, 38, 62], // Data for Monday to Sunday
     },
   ];
+  
+  
 
   return (
     <div className="container mt-4">
@@ -319,7 +323,9 @@ function NewDashboard() {
               <h6 className="card-title">Product Sales Comparison</h6>
             </div>
             <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>Australia</p>
+              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
+                Australia
+              </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 634.8%
               </span>
@@ -337,7 +343,9 @@ function NewDashboard() {
               ></div>
             </div>
             <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>Indonesia</p>
+              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
+                Indonesia
+              </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 589.8%
               </span>
@@ -353,7 +361,9 @@ function NewDashboard() {
               ></div>
             </div>
             <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>Germany</p>
+              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
+                Germany
+              </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 453.8%
               </span>
@@ -369,7 +379,9 @@ function NewDashboard() {
               ></div>
             </div>
             <div className="d-flex justify-content-between">
-              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>Thailand</p>
+              <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
+                Thailand
+              </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
                 634.8%
               </span>
@@ -397,9 +409,9 @@ function NewDashboard() {
               <h6 className="card-title">Revenue Growth</h6>
             </div>
             <ApexCharts
-              options={chartOptions}
-              series={chartSeries}
-              type="area"
+              options={lineChartOptions1}
+              series={lineChartSeries1}
+              type="line"
               height={200}
             />
           </div>
