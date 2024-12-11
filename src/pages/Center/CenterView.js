@@ -46,7 +46,7 @@ function CenterView() {
   };
 
   return (
-    <div className="container ">
+    <div className="container-fluid ">
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -73,7 +73,7 @@ function CenterView() {
       </ol>
       <div className="card">
         <div
-          className="d-flex justify-content-between align-items-center p-1 mb-4"
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
           style={{ background: "#f5f7f9" }}
         >
           <div class="d-flex align-items-center">
@@ -90,7 +90,7 @@ function CenterView() {
             </Link>
           </div>
         </div>
-        <div className="container">
+        <div className="container-fluid px-4">
           <div className="row pb-3">
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">

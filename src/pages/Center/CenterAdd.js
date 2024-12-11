@@ -157,7 +157,7 @@ function CenterAdd() {
     }
   }, [formik.submitCount, formik.errors]);
   return (
-    <div className="container">
+    <div className="container-fluid">
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -192,7 +192,7 @@ function CenterAdd() {
       >
         <div className="card">
           <div
-            className="d-flex justify-content-between align-items-center p-1 mb-4"
+            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
             style={{ background: "#f5f7f9" }}
           >
             <div class="d-flex align-items-center">
@@ -223,7 +223,7 @@ function CenterAdd() {
               </button>
             </div>
           </div>
-          <div className="container">
+          <div className="container-fluid px-4">
             <div className="row">
               <div className="col-md-6 col-12">
                 <div className="mb-3">

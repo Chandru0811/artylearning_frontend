@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import { GoSortDesc } from "react-icons/go";
 
-const Center = () => {
+const Centre = () => {
   const tableRef = useRef(null);
   const navigate = useNavigate(); // Replace useHistory with useNavigate
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
@@ -154,7 +154,7 @@ const Center = () => {
             <span class="me-2 text-muted">
               This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
-                Center
+                Centre
               </span>
             </span>
           </div>
@@ -166,7 +166,7 @@ const Center = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Center Name"
+                placeholder="Centre Name"
                 value={centerName}
                 onChange={(e) => {
                   const searchValue = e.target.value.toLowerCase();
@@ -210,7 +210,7 @@ const Center = () => {
                 value={selectedManager}
                 onChange={handleManagerChange}
               >
-                <option value="">Select Center Manager</option>
+                <option value="">Select Centre Manager</option>
                 {centerManagerData.map((manager) => (
                   <option key={manager.id} value={manager.userNames}>
                     {manager.userNames}
@@ -408,4 +408,4 @@ const Center = () => {
   );
 };
 
-export default Center;
+export default Centre;
