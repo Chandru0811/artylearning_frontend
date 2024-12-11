@@ -7,7 +7,6 @@ import { PiBuildings } from "react-icons/pi";
 import { BiRadioCircleMarked } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
 import { PiBookOpenText } from "react-icons/pi";
-import { LiaChildSolid } from "react-icons/lia";
 import { RiDashboardLine } from "react-icons/ri";
 import { HiOutlineUserGroup } from "react-icons/hi2";
 import { TbUserSearch } from "react-icons/tb";
@@ -20,12 +19,12 @@ import { BsFileEarmarkRichtext } from "react-icons/bs";
 import { LiaUserEditSolid } from "react-icons/lia";
 import { TbMessageCode } from "react-icons/tb";
 import { GrUserSettings } from "react-icons/gr";
-
+import { GiExitDoor } from "react-icons/gi";
 
 const iconMapping = {
   "Centre Management": <PiBuildings />,
   "Course Management": <PiBookOpenText />,
-  "Lead Management": <LiaChildSolid />,
+  "Lead Management": <GiExitDoor />,
   "Staffing": <HiOutlineUserGroup />,
   "Student Management": <TbUserSearch />,
   "Student Movement": <TbStatusChange />,
@@ -95,7 +94,7 @@ function Sidebar() {
       },
       {
         title: "Lead Management",
-        icon: "LiaChildSolid",
+        icon: "GiExitDoor",
         isOpen: false,
         subMenus: [
           {
@@ -417,6 +416,11 @@ function Sidebar() {
             access: storedScreens.shgSettingIndex,
           },
           {
+            title: "Batch Time",
+            path: "/batchtime",
+            access: true,
+          },
+          {
             title: "Leave Type",
             path: "/leavetype",
             access: storedScreens.leaveSettingIndex,
@@ -549,7 +553,7 @@ function Sidebar() {
                           {/* <span>
                             <i className={`${item.icon} activehover`}></i>
                           </span> */}
-                          <span className="p-4">
+                          <span className="p-3">
                             {iconMapping[item.title] || "-"}
                           </span>
                         </OverlayTrigger>

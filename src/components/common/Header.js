@@ -4,6 +4,7 @@ import fetchAllCentersWithIds from "../../pages/List/CenterList";
 import { toast } from "react-toastify";
 import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
+import { VscCalendar } from "react-icons/vsc";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
@@ -11,7 +12,6 @@ function Header({ onLogout }) {
   const userEmail = localStorage.getItem("email");
   const [centerData, setCenterData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("");
-  
 
   const handleLogOutClick = () => {
     onLogout();
@@ -43,7 +43,19 @@ function Header({ onLogout }) {
           <i className="bx bx-menu sidebarBtn"></i>
         </div>
 
-        <div className="d-flex align-items-center justify-content-end">
+        <div className="d-flex align-items-center justify-content-evenly">
+          <Link to={"/calendar"}>
+            <button
+              className="btn"
+              type="button"
+            >
+              <VscCalendar
+                className="fw-bold"
+                style={{ color: "#eb862a", fontSize: "22px" }}
+              />
+            </button>
+          </Link>
+
           <div style={{ width: "40%" }}>
             <div className="position-relative">
               <select
@@ -59,7 +71,7 @@ function Header({ onLogout }) {
                 }}
               >
                 <option value="" disabled>
-                  All Center
+                  All Centre
                 </option>
                 {centerData &&
                   centerData.map((studentRelationCenter) => (
@@ -90,7 +102,7 @@ function Header({ onLogout }) {
             data-bs-target="#offcanvasRight"
             aria-controls="offcanvasRight"
           >
-            <i className="fa fa-user" style={{color:"#eb862a"}}></i>
+            <i className="fa fa-user" style={{ color: "#eb862a" }}></i>
           </button>
         </div>
       </div>
