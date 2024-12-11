@@ -12,7 +12,6 @@ function ClassView() {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
 
-
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -26,11 +25,11 @@ function ClassView() {
 
   useEffect(() => {
     const getData = async () => {
-      try{
-      const response = await api.get(`/getAllCourseClassListingsById/${id}`);
-      setData(response.data);
-      }catch(error){
-        toast.error("Error Fetching Data ", error)
+      try {
+        const response = await api.get(`/getAllCourseClassListingsById/${id}`);
+        setData(response.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
       }
     };
     getData();
@@ -39,7 +38,7 @@ function ClassView() {
 
   return (
     <div className="container ">
-         <ol
+      <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
@@ -49,15 +48,18 @@ function ClassView() {
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
-        <li>Course Management
+        <li>
+          &nbsp;Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/class" className="custom-breadcrumb">Class</Link>
+          <Link to="/class" className="custom-breadcrumb">
+            &nbsp;Class
+          </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Class View
+          &nbsp;Class View
         </li>
       </ol>
       <div className="d-flex justify-content-end align-item-end mt-4">
@@ -76,11 +78,15 @@ function ClassView() {
                   <p className="fw-medium">Centre Name</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {centerData && centerData.map((centerId) =>
-                      parseInt(data.centerId) === centerId.id
-                        ? centerId.centerNames || "--"
-                        : ""
-                    )}</p>
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {centerData &&
+                      centerData.map((centerId) =>
+                        parseInt(data.centerId) === centerId.id
+                          ? centerId.centerNames || "--"
+                          : ""
+                      )}
+                  </p>
                 </div>
               </div>
             </div>
@@ -90,11 +96,15 @@ function ClassView() {
                   <p className="fw-medium">Course</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {courseData && courseData.map((courseId) =>
-                      parseInt(data.courseId) === courseId.id
-                        ? courseId.courseNames || "--"
-                        : ""
-                    )}</p>
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {courseData &&
+                      courseData.map((courseId) =>
+                        parseInt(data.courseId) === courseId.id
+                          ? courseId.courseNames || "--"
+                          : ""
+                      )}
+                  </p>
                 </div>
               </div>
             </div>

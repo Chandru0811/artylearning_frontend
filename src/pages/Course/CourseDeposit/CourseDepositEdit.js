@@ -9,20 +9,18 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
-    effectiveDate: Yup.string().required("*Effective Date is required"),
-    depositFees: Yup.string().required("*Deposit Fees Code is required"),
-    taxType: Yup.string().required("*TaxType is required"),
-    status: Yup.string().required("*Status is required"),
-  });
+  effectiveDate: Yup.string().required("*Effective Date is required"),
+  depositFees: Yup.string().required("*Deposit Fees Code is required"),
+  taxType: Yup.string().required("*TaxType is required"),
+  status: Yup.string().required("*Status is required"),
+});
 
 function CourseFeesEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-
-
 
   const handleClose = () => {
     setShow(false);
@@ -31,8 +29,7 @@ function CourseFeesEdit({ id, onSuccess }) {
   const handleShow = () => {
     setShow(true);
     fetchTaxData();
-    setIsModified(false); 
-
+    setIsModified(false);
   };
   const fetchTaxData = async () => {
     try {
@@ -48,9 +45,8 @@ function CourseFeesEdit({ id, onSuccess }) {
       effectiveDate: "",
       depositFees: "",
       taxType: "",
-      status:"",
-      updatedBy:userName,
-
+      status: "",
+      updatedBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
@@ -85,13 +81,15 @@ function CourseFeesEdit({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
+    },
   });
 
   useEffect(() => {
@@ -123,17 +121,20 @@ function CourseFeesEdit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Course Deposit</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -149,7 +150,6 @@ function CourseFeesEdit({ id, onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
-   
                     {...formik.getFieldProps("effectiveDate")}
                   />
                   {formik.touched.effectiveDate &&
@@ -221,7 +221,6 @@ function CourseFeesEdit({ id, onSuccess }) {
                     <option value=""></option>
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
-
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
@@ -232,7 +231,10 @@ function CourseFeesEdit({ id, onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <button

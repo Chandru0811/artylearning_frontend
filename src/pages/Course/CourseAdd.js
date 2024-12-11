@@ -161,29 +161,30 @@ function CourseAdd({ onSuccess }) {
   return (
     <section className="courseAdd">
       <div className="container">
-      <ol
-        className="breadcrumb my-3"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" className="custom-breadcrumb">
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>Course Management
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link to="/course" className="custom-breadcrumb">
-            Course{" "}
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Course Add
-        </li>
-      </ol>
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            &nbsp;Course Management
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/course" className="custom-breadcrumb">
+              &nbsp;Course{" "}
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            &nbsp;Course Add
+          </li>
+        </ol>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {

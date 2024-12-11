@@ -18,7 +18,6 @@ function DayTableAdd({ onSuccess, id, centerId, courseId, day }) {
     studentId: Yup.string().required("*Student is required"),
   });
 
-  
   const formik = useFormik({
     initialValues: {
       studentId: "",
@@ -53,10 +52,12 @@ function DayTableAdd({ onSuccess, id, centerId, courseId, day }) {
     },
   });
 
-
   const fetchData = async () => {
     try {
-      const studentData = await fetchAllStudentListByCenterAndCourse(centerId ,courseId);
+      const studentData = await fetchAllStudentListByCenterAndCourse(
+        centerId,
+        courseId
+      );
       setStudentData(studentData);
     } catch (error) {
       toast.error(error);
@@ -84,11 +85,14 @@ function DayTableAdd({ onSuccess, id, centerId, courseId, day }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Assign Student</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -124,7 +128,11 @@ function DayTableAdd({ onSuccess, id, centerId, courseId, day }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button variant="danger" type="submit">

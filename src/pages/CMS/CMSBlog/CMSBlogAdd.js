@@ -12,8 +12,7 @@ function CMSBlogAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => {
     setShow(false);
@@ -23,11 +22,10 @@ function CMSBlogAdd({ onSuccess }) {
 
   const handleShow = () => setShow(true);
 
-
   const initialValues = {
-    file: '', // To store the uploaded image file
+    file: "", // To store the uploaded image file
     description: "",
-    title: "",// Details about the image
+    title: "", // Details about the image
   };
 
   const validationSchema = Yup.object().shape({
@@ -36,10 +34,10 @@ function CMSBlogAdd({ onSuccess }) {
     title: Yup.string().required("Image details are required"),
   });
 
-  const handleFileChange = event => {
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue('file', file); // Update Formik's form state with the file
+    formik.setFieldValue("file", file); // Update Formik's form state with the file
   };
 
   const formik = useFormik({
@@ -48,12 +46,11 @@ function CMSBlogAdd({ onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
 
-
       console.log(values);
       const formData = new FormData();
-      formData.append("description", values.description)
-      formData.append("title ", values.title)
-      formData.append("file", values.file)
+      formData.append("description", values.description);
+      formData.append("title ", values.title);
+      formData.append("file", values.file);
       formData.append("createdBy ", userName);
 
       try {
@@ -74,7 +71,6 @@ function CMSBlogAdd({ onSuccess }) {
         setLoadIndicator(false);
       }
     },
-
   });
 
   return (
@@ -113,11 +109,14 @@ function CMSBlogAdd({ onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add BLog</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
@@ -139,9 +138,12 @@ function CMSBlogAdd({ onSuccess }) {
               </div>
               {selectedFile && (
                 <div>
-
-                  {selectedFile.type.startsWith('image') && (
-                    <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxHeight: "200px" }} />
+                  {selectedFile.type.startsWith("image") && (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Selected File"
+                      style={{ maxHeight: "200px" }}
+                    />
                   )}
                 </div>
               )}
@@ -178,12 +180,14 @@ function CMSBlogAdd({ onSuccess }) {
                   <div className="text-danger">{formik.errors.description}</div>
                 )}
               </div>
-
-
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button type="button" variant="secondary" onClick={handleClose}>
+            <Button
+              type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
@@ -203,7 +207,6 @@ function CMSBlogAdd({ onSuccess }) {
         </form>
       </Modal>
     </div>
-
   );
 }
 

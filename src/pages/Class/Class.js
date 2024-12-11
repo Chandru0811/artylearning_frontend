@@ -152,11 +152,11 @@ const Class = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Course Management
+          &nbsp;Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Class
+          &nbsp;Class
         </li>
       </ol>
       <div className="d-flex justify-content-between mb-3">

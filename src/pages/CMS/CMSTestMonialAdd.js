@@ -12,8 +12,7 @@ function CMSTestMonialAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => {
     setShow(false);
@@ -23,11 +22,10 @@ function CMSTestMonialAdd({ onSuccess }) {
 
   const handleShow = () => setShow(true);
 
-
   const initialValues = {
-    parentImage: '', // To store the uploaded image file
+    parentImage: "", // To store the uploaded image file
     parentDescription: "",
-    parentName: "",// Details about the image
+    parentName: "", // Details about the image
   };
 
   const validationSchema = Yup.object().shape({
@@ -36,10 +34,10 @@ function CMSTestMonialAdd({ onSuccess }) {
     parentName: Yup.string().required("Image details are required"),
   });
 
-  const handleFileChange = event => {
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
-    formik.setFieldValue('parentImage', file); // Update Formik's form state with the file
+    formik.setFieldValue("parentImage", file); // Update Formik's form state with the file
   };
 
   const formik = useFormik({
@@ -48,20 +46,23 @@ function CMSTestMonialAdd({ onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
 
-
       console.log(values);
       const formData = new FormData();
-      formData.append("parentDescription", values.parentDescription)
-      formData.append("parentName ", values.parentName)
-      formData.append("file", values.parentImage)
+      formData.append("parentDescription", values.parentDescription);
+      formData.append("parentName ", values.parentName);
+      formData.append("file", values.parentImage);
       formData.append("createdBy ", userName);
 
       try {
-        const response = await api.post("/createTestimonialSaveWithProfileImages", formData, {
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
-        });
+        const response = await api.post(
+          "/createTestimonialSaveWithProfileImages",
+          formData,
+          {
+            // headers: {
+            //   "Content-Type": "application/json",
+            // },
+          }
+        );
         if (response.status === 201) {
           toast.success(response.data.message);
           formik.resetForm();
@@ -74,7 +75,6 @@ function CMSTestMonialAdd({ onSuccess }) {
         setLoadIndicator(false);
       }
     },
-
   });
 
   return (
@@ -113,11 +113,14 @@ function CMSTestMonialAdd({ onSuccess }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add TestiMonial</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
@@ -138,9 +141,12 @@ function CMSTestMonialAdd({ onSuccess }) {
               </div>
               {selectedFile && (
                 <div>
-
-                  {selectedFile.type.startsWith('image') && (
-                    <img src={URL.createObjectURL(selectedFile)} alt="Selected File" style={{ maxHeight: "200px" }} />
+                  {selectedFile.type.startsWith("image") && (
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt="Selected File"
+                      style={{ maxHeight: "200px" }}
+                    />
                   )}
                 </div>
               )}
@@ -173,16 +179,21 @@ function CMSTestMonialAdd({ onSuccess }) {
                   onBlur={formik.handleBlur}
                   value={formik.values.parentDescription}
                 />
-                {formik.touched.parentDescription && formik.errors.parentDescription && (
-                  <div className="text-danger">{formik.errors.parentDescription}</div>
-                )}
+                {formik.touched.parentDescription &&
+                  formik.errors.parentDescription && (
+                    <div className="text-danger">
+                      {formik.errors.parentDescription}
+                    </div>
+                  )}
               </div>
-
-
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button type="button" variant="secondary" onClick={handleClose}>
+            <Button
+              type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
@@ -202,7 +213,6 @@ function CMSTestMonialAdd({ onSuccess }) {
         </form>
       </Modal>
     </div>
-
   );
 }
 

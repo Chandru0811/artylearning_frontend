@@ -30,15 +30,19 @@ function AddRegister({ id, onSuccess }) {
   const handleShow = () => {
     fetchTaxData();
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
 
   const validationSchema = yup.object().shape({
     effectiveDate: yup.string().required("*Effective Date is required"),
-    amount: yup.string()
+    amount: yup
+      .string()
       .typeError("Amount must be a number")
       .required("*Amount is required")
-      .matches(/^\d+(\.\d{1,2})?$/, "*Amount must be a valid number without special characters"),
+      .matches(
+        /^\d+(\.\d{1,2})?$/,
+        "*Amount must be a valid number without special characters"
+      ),
     taxId: yup.string().required("*Tax Type is required"),
     status: yup.string().required("*Status is required"),
   });
@@ -73,12 +77,12 @@ function AddRegister({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error.response.data.message);
         }
-      }  finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -86,7 +90,7 @@ function AddRegister({ id, onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -218,7 +222,10 @@ function AddRegister({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button className="btn btn-sm btn-secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

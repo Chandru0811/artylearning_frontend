@@ -12,7 +12,6 @@ function EditPackage({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
-
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
@@ -21,7 +20,8 @@ function EditPackage({ id, onSuccess }) {
 
   const validationSchema = yup.object().shape({
     packageName: yup.string().required("*Package Name is required"),
-    noOfLesson: yup.number()
+    noOfLesson: yup
+      .number()
       .integer("Must be an integer")
       .typeError("Must be a number")
       .positive("Must be positive")
@@ -50,7 +50,7 @@ function EditPackage({ id, onSuccess }) {
         }
       } catch (error) {
         if (error.response.status === 409) {
-          toast.warning(error?.response?.data?.message)
+          toast.warning(error?.response?.data?.message);
         } else {
           toast.error(error.response.data.message);
         }
@@ -63,14 +63,15 @@ function EditPackage({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
-
+    },
   });
   useEffect(() => {
     const getData = async () => {
@@ -100,11 +101,14 @@ function EditPackage({ id, onSuccess }) {
         backdrop={isModified ? "static" : true}
         keyboard={isModified ? false : true}
       >
-        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Edit Package</p>
@@ -119,10 +123,11 @@ function EditPackage({ id, onSuccess }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control   ${formik.touched.packageName && formik.errors.packageName
-                      ? "is-invalid"
-                      : ""
-                      }`}
+                    className={`form-control   ${
+                      formik.touched.packageName && formik.errors.packageName
+                        ? "is-invalid"
+                        : ""
+                    }`}
                     {...formik.getFieldProps("packageName")}
                   />
                   {formik.touched.packageName && formik.errors.packageName && (
@@ -137,29 +142,36 @@ function EditPackage({ id, onSuccess }) {
                   Number of Lesson<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select ${formik.touched.quantity && formik.errors.quantity
+                  className={`form-select ${
+                    formik.touched.quantity && formik.errors.quantity
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("noOfLesson")}
                   style={{ width: "100%" }}
                 >
                   <option value=""></option>
-                  {Array.from({ length: 100 }, (_, i) => i + 1).map((number) => (
-                    <option key={number} value={number}>
-                      {number}
-                    </option>
-                  ))}
+                  {Array.from({ length: 100 }, (_, i) => i + 1).map(
+                    (number) => (
+                      <option key={number} value={number}>
+                        {number}
+                      </option>
+                    )
+                  )}
                 </select>
                 {formik.touched.noOfLesson && formik.errors.noOfLesson && (
-                  <div className="invalid-feedback">{formik.errors.noOfLesson}</div>
+                  <div className="invalid-feedback">
+                    {formik.errors.noOfLesson}
+                  </div>
                 )}
               </div>
-
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-5">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

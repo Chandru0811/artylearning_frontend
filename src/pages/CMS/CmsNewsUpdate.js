@@ -307,7 +307,10 @@ const CmsNewsUpdate = () => {
           </Modal.Body>
 
           <Modal.Footer className="mt-5">
-            <Button variant="secondary" onClick={handleCloseAddModal}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleCloseAddModal}
+            >
               Cancel
             </Button>
             <Button

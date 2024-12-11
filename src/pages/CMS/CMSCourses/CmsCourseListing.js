@@ -143,7 +143,7 @@ function CmsCourseListing({
       formData.append(`cardTwoImage`, sections[index].image);
       formData.append(`cardTwoHeading`, sections[index].title);
       formData.append(`cardTwoContent`, sections[index].content);
-    } else if (index === 2){
+    } else if (index === 2) {
       formData.append(`cardThreeImage`, sections[index].image);
       formData.append(`cardThreeHeading`, sections[index].title);
       formData.append(`cardThreeContent`, sections[index].content);
@@ -340,7 +340,10 @@ function CmsCourseListing({
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Close
             </Button>
             <Button variant="primary" onClick={handleSave}>

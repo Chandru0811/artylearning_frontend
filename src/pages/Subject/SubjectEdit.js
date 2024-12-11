@@ -10,9 +10,8 @@ import api from "../../config/URL";
 function SubjectEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-
 
   const navigate = useState();
 
@@ -20,7 +19,7 @@ function SubjectEdit({ id, onSuccess }) {
     setShow(false);
     formik.resetForm();
   };
-  
+
   const handleShow = () => {
     getData();
     setShow(true);
@@ -37,8 +36,7 @@ function SubjectEdit({ id, onSuccess }) {
       subject: "",
       code: "",
       status: "",
-      updatedBy:userName,
-
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -70,14 +68,15 @@ function SubjectEdit({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
-    
+    },
   });
 
   const getData = async () => {
@@ -101,14 +100,17 @@ function SubjectEdit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-model-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title className="headColor">Edit Subject</Modal.Title>
           </Modal.Header>
@@ -190,7 +192,10 @@ function SubjectEdit({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <button

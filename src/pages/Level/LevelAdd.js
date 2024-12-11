@@ -14,7 +14,6 @@ function LevelAdd({ onSuccess }) {
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
 
-
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
@@ -24,9 +23,8 @@ function LevelAdd({ onSuccess }) {
   const handleShow = () => {
     fetchData();
     setShow(true);
-    setIsModified(false); 
-
-  }
+    setIsModified(false);
+  };
 
   useEffect(() => {
     fetchData();
@@ -74,7 +72,7 @@ function LevelAdd({ onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -82,14 +80,13 @@ function LevelAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
     },
   });
-
 
   return (
     <>
@@ -102,16 +99,25 @@ function LevelAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered   backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} >
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Level</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -201,11 +207,15 @@ function LevelAdd({ onSuccess }) {
                       {formik.errors.levelCode}
                     </div>
                   )}
-                </div>    
+                </div>
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

@@ -26,8 +26,7 @@ function CurriculumOutletAdd({ onSuccess }) {
   const handleShow = () => {
     fetchData();
     setShow(true);
-    setIsModified(false); 
-
+    setIsModified(false);
   };
 
   useEffect(() => {
@@ -87,7 +86,7 @@ function CurriculumOutletAdd({ onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -98,12 +97,12 @@ function CurriculumOutletAdd({ onSuccess }) {
   return (
     <>
       <div className="mb-5 mt-4 d-flex justify-content-end">
-      <Link to="/course">
-            <button type="button " className="btn btn-sm btn-border   ">
-              Back
-            </button>
-          </Link>
-          &nbsp;&nbsp;
+        <Link to="/course">
+          <button type="button " className="btn btn-sm btn-border   ">
+            Back
+          </button>
+        </Link>
+        &nbsp;&nbsp;
         <button
           type="button"
           className="btn btn-button btn-sm"
@@ -112,10 +111,14 @@ function CurriculumOutletAdd({ onSuccess }) {
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered
-       backdrop={isModified ? "static" : true} 
-       keyboard={isModified ? false : true} 
-       >
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Curriculum Outlet</Modal.Title>
         </Modal.Header>
@@ -195,7 +198,11 @@ function CurriculumOutletAdd({ onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

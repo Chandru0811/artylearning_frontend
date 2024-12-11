@@ -253,8 +253,7 @@ function ReplacementAdd({
                         : ""
                     }`}
                   >
-                    <option value="" disabled selected>
-                    </option>
+                    <option value="" disabled selected></option>
                     {formik.values.preferredDay === "SUNDAY" ||
                     formik.values.preferredDay === "SATURDAY" ? (
                       <>
@@ -385,7 +384,11 @@ function ReplacementAdd({
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

@@ -57,7 +57,10 @@ function EditRegisteration({ id, onSuccess }) {
       .string()
       .typeError("Amount must be a number")
       .required("*Amount is required")
-      .matches(/^\d+(\.\d{1,2})?$/, "*Amount must be a valid number without special characters"),
+      .matches(
+        /^\d+(\.\d{1,2})?$/,
+        "*Amount must be a valid number without special characters"
+      ),
     taxId: yup.string().required("*Tax Type is required"),
     status: yup.string().required("*Status is required"),
   });
@@ -74,11 +77,15 @@ function EditRegisteration({ id, onSuccess }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateCenterRegistrations/${id}`, values, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await api.put(
+          `/updateCenterRegistrations/${id}`,
+          values,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
           onSuccess();
@@ -87,9 +94,9 @@ function EditRegisteration({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
@@ -100,7 +107,11 @@ function EditRegisteration({ id, onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some((value) => typeof value === "string" && value.trim() !== "")) {
+      if (
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
+      ) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -118,7 +129,9 @@ function EditRegisteration({ id, onSuccess }) {
 
     const activeTaxTypes = taxData.filter((tax) => tax.status === "ACTIVE");
 
-    const isValidTaxType = activeTaxTypes.some((tax) => tax.id === parseInt(selectedTaxType));
+    const isValidTaxType = activeTaxTypes.some(
+      (tax) => tax.id === parseInt(selectedTaxType)
+    );
 
     if (!isValidTaxType) {
       formik.setFieldValue("taxId", "");
@@ -165,13 +178,18 @@ function EditRegisteration({ id, onSuccess }) {
                 <input
                   type="date"
                   className={`form-control ${
-                    formik.touched.effectiveDate && formik.errors.effectiveDate ? "is-invalid" : ""
+                    formik.touched.effectiveDate && formik.errors.effectiveDate
+                      ? "is-invalid"
+                      : ""
                   }`}
                   {...formik.getFieldProps("effectiveDate")}
                 />
-                {formik.touched.effectiveDate && formik.errors.effectiveDate && (
-                  <div className="invalid-feedback">{formik.errors.effectiveDate}</div>
-                )}
+                {formik.touched.effectiveDate &&
+                  formik.errors.effectiveDate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.effectiveDate}
+                    </div>
+                  )}
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <label className="form-lable">
@@ -181,12 +199,16 @@ function EditRegisteration({ id, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control ${
-                      formik.touched.amount && formik.errors.amount ? "is-invalid" : ""
+                      formik.touched.amount && formik.errors.amount
+                        ? "is-invalid"
+                        : ""
                     }`}
                     {...formik.getFieldProps("amount")}
                   />
                   {formik.touched.amount && formik.errors.amount && (
-                    <div className="invalid-feedback">{formik.errors.amount}</div>
+                    <div className="invalid-feedback">
+                      {formik.errors.amount}
+                    </div>
                   )}
                 </div>
               </div>
@@ -196,7 +218,9 @@ function EditRegisteration({ id, onSuccess }) {
                 </label>
                 <select
                   className={`form-select ${
-                    formik.touched.taxId && formik.errors.taxId ? "is-invalid" : ""
+                    formik.touched.taxId && formik.errors.taxId
+                      ? "is-invalid"
+                      : ""
                   }`}
                   {...formik.getFieldProps("taxId")}
                   style={{ width: "100%" }}
@@ -219,7 +243,9 @@ function EditRegisteration({ id, onSuccess }) {
                 </label>
                 <select
                   className={`form-select ${
-                    formik.touched.status && formik.errors.status ? "is-invalid" : ""
+                    formik.touched.status && formik.errors.status
+                      ? "is-invalid"
+                      : ""
                   }`}
                   {...formik.getFieldProps("status")}
                   style={{ width: "100%" }}
@@ -235,7 +261,10 @@ function EditRegisteration({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
@@ -245,7 +274,10 @@ function EditRegisteration({ id, onSuccess }) {
               disabled={loadIndicator}
             >
               {loadIndicator && (
-                <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
               )}
               Update
             </Button>

@@ -204,17 +204,17 @@ function CourseEdit() {
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li>
-            Course Management
+            &nbsp;Course Management
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li>
             <Link to="/course" className="custom-breadcrumb">
-              Course{" "}
+              &nbsp;Course{" "}
             </Link>
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            Course Edit
+            &nbsp;Course Edit
           </li>
         </ol>
         <form

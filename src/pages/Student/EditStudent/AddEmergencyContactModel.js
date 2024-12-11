@@ -20,8 +20,7 @@ const AddEmergencyContactModel = forwardRef(
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
     const [loadIndicator, setLoadIndicator] = useState(false);
-    const userName  = localStorage.getItem('userName');
-
+    const userName = localStorage.getItem("userName");
 
     const handleClose = () => setShow(false);
     const handleShow = () => {
@@ -94,13 +93,16 @@ const AddEmergencyContactModel = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          if(error?.response?.status === 400  || error?.response?.status === 500 ){
-            toast.warning("Please Fill The All Feilds")
-          }else{
+          if (
+            error?.response?.status === 400 ||
+            error?.response?.status === 500
+          ) {
+            toast.warning("Please Fill The All Feilds");
+          } else {
             // toast.error(error?.response?.data?.message);
-            toast.warning("Please Fill The All Feilds")
+            toast.warning("Please Fill The All Feilds");
           }
-        }finally {
+        } finally {
           setLoadIndicator(false);
         }
       },
@@ -131,8 +133,8 @@ const AddEmergencyContactModel = forwardRef(
       fetchEmergencyData();
     }, []);
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-     }, []);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
 
     return (
       <div className="container-fluid">
@@ -151,11 +153,14 @@ const AddEmergencyContactModel = forwardRef(
             centered
             onHide={handleClose}
           >
-             <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+            <form
+              onSubmit={formik.handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !formik.isSubmitting) {
+                  e.preventDefault(); // Prevent default form submission
+                }
+              }}
+            >
               <Modal.Header closeButton>
                 <Modal.Title>
                   <p className="headColor">
@@ -249,7 +254,10 @@ const AddEmergencyContactModel = forwardRef(
                 </div>
               </Modal.Body>
               <Modal.Footer className="mt-3">
-                <Button variant="secondary" onClick={handleClose}>
+                <Button
+                  className="btn btn-sm btn-border bg-light text-dark"
+                  onClick={handleClose}
+                >
                   Cancel
                 </Button>
                 <Button

@@ -11,14 +11,13 @@ import { Link, useNavigate } from "react-router-dom";
 function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
 
   const navigate = useNavigate();
-const navigates = () =>{
-  navigate(-1)
-
-}
+  const navigates = () => {
+    navigate(-1);
+  };
 
   const handleClose = () => {
     setShow(false);
@@ -26,9 +25,8 @@ const navigates = () =>{
   };
 
   const handleShow = () => {
-    
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
   const validationSchema = Yup.object({
     curriculumCode: Yup.string().required("*Curriculum Code is required"),
@@ -36,10 +34,8 @@ const navigates = () =>{
     status: Yup.string().required("*Status is required"),
     curriculumNo: Yup.string().required("*Curriculum No is required"),
     description: Yup.string()
-    .notRequired()
-    .max(200, "*The maximum length is 200 characters"),
-    
-
+      .notRequired()
+      .max(200, "*The maximum length is 200 characters"),
   });
 
   const formik = useFormik({
@@ -92,7 +88,7 @@ const navigates = () =>{
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -103,12 +99,16 @@ const navigates = () =>{
   return (
     <>
       <div className="mb-5 mt-4 d-flex justify-content-end">
-      {/* <Link to="/course/curriculumoutlet"> */}
-            <button type="button " onClick={navigates} className="btn btn-sm btn-border   ">
-              Back
-            </button>
-          {/* </Link> */}
-          &nbsp;&nbsp;
+        {/* <Link to="/course/curriculumoutlet"> */}
+        <button
+          type="button "
+          onClick={navigates}
+          className="btn btn-sm btn-border   "
+        >
+          Back
+        </button>
+        {/* </Link> */}
+        &nbsp;&nbsp;
         <button
           type="button"
           className="btn btn-button btn-sm"
@@ -117,18 +117,25 @@ const navigates = () =>{
           Add <i class="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered
-       backdrop={isModified ? "static" : true} 
-       keyboard={isModified ? false : true} 
-       >
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Add Curriculum</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -242,7 +249,11 @@ const navigates = () =>{
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button variant="danger" type="submit" disabled={loadIndicator}>

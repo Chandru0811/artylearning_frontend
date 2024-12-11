@@ -75,18 +75,20 @@ function Edit({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
     },
-    
   });
 
   const handleClose = () => {
-    formik.resetForm();    setShow(false);
+    formik.resetForm();
+    setShow(false);
     setSubjectData(null);
   };
 
@@ -94,8 +96,7 @@ function Edit({ id, onSuccess }) {
     fetchData();
     getData();
     setShow(true);
-    setIsModified(false); 
-
+    setIsModified(false);
   };
 
   return (
@@ -109,17 +110,20 @@ function Edit({ id, onSuccess }) {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Level</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
@@ -213,7 +217,10 @@ function Edit({ id, onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <button

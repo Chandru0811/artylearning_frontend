@@ -100,11 +100,11 @@ const Subject = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Course Management
+          &nbsp;Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Subject
+          &nbsp;Subject
         </li>
       </ol>
       {storedScreens?.subjectCreate && (

@@ -22,7 +22,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   const [teacherData, setTeacherData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
 
   // const navigate = useNavigate();
@@ -36,16 +36,14 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
   };
 
   const handleShow = async () => {
-    try{
+    try {
       const response = await api.get(`/getAllScheduleTeacherById/${id}`);
       formik.setValues(response.data);
       setShow(true);
-      setIsModified(false); 
-
-    }catch (error) {
+      setIsModified(false);
+    } catch (error) {
       console.error("Error fetching data:", error);
-    }
-    finally{
+    } finally {
       setShow(true);
     }
   };
@@ -122,9 +120,9 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
       course: "",
       days: "",
       userId: "",
-      startDate:"",
-      endDate:"",
-      classRoom:"",
+      startDate: "",
+      endDate: "",
+      classRoom: "",
       // batch: "",
     },
     validationSchema: validationSchema,
@@ -170,7 +168,6 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
         }
       });
 
-
       let requestBody = {
         centerId: values.centerId,
         centerName: selectedCenterName,
@@ -185,8 +182,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
         startDate: values.startDate,
         endDate: values.endDate,
         classRoom: selectedClassRoomName,
-        updatedBy:userName,
-
+        updatedBy: userName,
       };
 
       // console.log(requestBody);
@@ -209,7 +205,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
         }
       } catch (error) {
         toast.error(error);
-      }finally {
+      } finally {
         setLoadIndicator(false);
       }
     },
@@ -218,13 +214,15 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
     validateOnBlur: true,
     validate: (values) => {
       if (
-        Object.values(values).some(value => typeof value === 'string' && value.trim() !== "")
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
       ) {
         setIsModified(true);
       } else {
         setIsModified(false);
       }
-    }
+    },
   });
 
   const handleCenterChange = (event) => {
@@ -239,7 +237,6 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
     formik.setFieldValue("courseId", courseId);
     fetchClasses(courseId); // Fetch class for the selected center
   };
-
 
   // const convertTo12Hour = (time24h) => {
   //   let [hours, minutes] = time24h.split(":");
@@ -264,23 +261,31 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
           <FaEdit />
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} >
+      <Modal
+        show={show}
+        size="lg"
+        onHide={handleClose}
+        centered
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
+      >
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit schedule Teacher</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
-                  Centre<span className="text-danger">*</span>
+                    Centre<span className="text-danger">*</span>
                   </label>
                   <select
                     {...formik.getFieldProps("centerId")}
@@ -319,10 +324,12 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                     }`}
                     onChange={handleCourseChange}
                   >
-                     <option value={formik.values.courseId}>{formik.values.course}</option>
+                    <option value={formik.values.courseId}>
+                      {formik.values.course}
+                    </option>
                     {courseData &&
                       courseData.map((course) => (
-                        <option  key={course.id} value={course.id}>
+                        <option key={course.id} value={course.id}>
                           {course.courseNames}
                         </option>
                       ))}
@@ -467,7 +474,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                     Start Date<span className="text-danger">*</span>
                   </label>
                   <input
-                  type="date"
+                    type="date"
                     {...formik.getFieldProps("startDate")}
                     class={`form-control  ${
                       formik.touched.startDate && formik.errors.startDate
@@ -486,7 +493,7 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
                     End Date<span className="text-danger">*</span>
                   </label>
                   <input
-                  type="date"
+                    type="date"
                     {...formik.getFieldProps("endDate")}
                     class={`form-control  ${
                       formik.touched.endDate && formik.errors.endDate
@@ -503,7 +510,11 @@ function ScheduleTeacherEdit({ id, onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

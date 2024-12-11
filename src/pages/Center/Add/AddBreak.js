@@ -12,15 +12,13 @@ function AddBreak({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
-
   const handleClose = () => {
     formik.resetForm();
     setShow(false);
   };
   const handleShow = () => {
-    
     setShow(true);
-    setIsModified(false); 
+    setIsModified(false);
   };
   const validationSchema = yup.object().shape({
     breakName: yup.string().required("*Break Name is required"),
@@ -63,9 +61,9 @@ function AddBreak({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if(error.response.status === 409){
-          toast.warning(error?.response?.data?.message)
-        }else{
+        if (error.response.status === 409) {
+          toast.warning(error?.response?.data?.message);
+        } else {
           toast.error(error.response.data.message);
         }
       } finally {
@@ -76,7 +74,7 @@ function AddBreak({ id, onSuccess }) {
     validateOnChange: true,
     validateOnBlur: true,
     validate: (values) => {
-      if (Object.values(values).some(value => value.trim() !== "")) {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
         setIsModified(true);
       } else {
         setIsModified(false);
@@ -181,7 +179,10 @@ function AddBreak({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button className="btn btn-sm btn-secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

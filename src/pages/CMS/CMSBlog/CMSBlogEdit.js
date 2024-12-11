@@ -11,8 +11,7 @@ function CMSBlogEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -41,10 +40,7 @@ function CMSBlogEdit({ id, onSuccess }) {
       formData.append("updatedBy ", userName);
 
       try {
-        const response = await api.put(
-          `/updateUpdateBlogSave/${id}`,
-          formData
-        );
+        const response = await api.put(`/updateUpdateBlogSave/${id}`, formData);
         if (response.status === 201) {
           toast.success(response.data.message);
           onSuccess();
@@ -94,13 +90,16 @@ function CMSBlogEdit({ id, onSuccess }) {
 
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title  className="headColor">Edit Blog</Modal.Title >
+          <Modal.Title className="headColor">Edit Blog</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
@@ -167,17 +166,18 @@ function CMSBlogEdit({ id, onSuccess }) {
                   onBlur={formik.handleBlur}
                   value={formik.values.description}
                 />
-                {formik.touched.description &&
-                  formik.errors.description && (
-                    <div className="text-danger">
-                      {formik.errors.description}
-                    </div>
-                  )}
+                {formik.touched.description && formik.errors.description && (
+                  <div className="text-danger">{formik.errors.description}</div>
+                )}
               </div>
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button type="button" variant="secondary" onClick={handleClose}>
+            <Button
+              type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

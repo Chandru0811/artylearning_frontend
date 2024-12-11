@@ -177,12 +177,14 @@ function BatchTimeEdit({ id, onSuccess }) {
                         </span>
                         {row.id > 1 && (
                           <span>
-                             <button
+                            <button
                               type="button"
                               className="btn btn-sm pb-2"
                               onClick={() => deleteFields(row.id)}
                             >
-                              <IoCloseCircleOutline style={{ color: "red", fontSize: "18px"  }} />
+                              <IoCloseCircleOutline
+                                style={{ color: "red", fontSize: "18px" }}
+                              />
                             </button>
                           </span>
                         )}
@@ -214,7 +216,11 @@ function BatchTimeEdit({ id, onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button type="button" variant="secondary" onClick={handleClose}>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button

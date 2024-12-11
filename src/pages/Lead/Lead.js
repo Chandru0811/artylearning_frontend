@@ -259,11 +259,11 @@ const Lead = () => {
               <span className="breadcrumb-separator"> &gt; </span>
             </li>
             <li>
-              Lead Management
+              &nbsp;Lead Management
               <span className="breadcrumb-separator"> &gt; </span>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Lead Listing
+              &nbsp;Lead Listing
             </li>
           </ol>
           <form
@@ -1034,7 +1034,7 @@ const Lead = () => {
             <p>{confirmationMessage}</p>
             <div className="d-flex justify-content-between align-items-center">
               <button
-                variant="secondary"
+                className="btn btn-sm btn-border bg-light text-dark"
                 onClick={() => setShowModal(false)}
                 className="btn btn-sm btn-secondary"
               >

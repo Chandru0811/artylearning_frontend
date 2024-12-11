@@ -26,7 +26,6 @@ function MyMessagesAdd({ onSuccess }) {
       message: "",
       recipientName: "",
       files: null,
-      
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -43,7 +42,7 @@ function MyMessagesAdd({ onSuccess }) {
       formData.append("recipientName", values.recipientName);
       formData.append("recipientRole", "SMS_PARENT");
       formData.append("message", values.message);
-      if(values.files){
+      if (values.files) {
         values.files.forEach((file, index) => {
           formData.append(`attachments`, file);
         });
@@ -57,7 +56,7 @@ function MyMessagesAdd({ onSuccess }) {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
-          setShow(false)
+          setShow(false);
           onSuccess();
           formik.resetForm();
         } else {
@@ -133,11 +132,14 @@ function MyMessagesAdd({ onSuccess }) {
         aria-labelledby="contained-model-title-vcenter"
         centered
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title className="headColor">New Message</Modal.Title>
           </Modal.Header>
@@ -226,7 +228,10 @@ function MyMessagesAdd({ onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <button

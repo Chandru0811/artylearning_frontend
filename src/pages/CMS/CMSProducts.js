@@ -245,7 +245,10 @@ function CMSProducts() {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-5">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button

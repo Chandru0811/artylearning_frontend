@@ -129,7 +129,10 @@ function RaceEdit({ id, onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
+              <Button
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <button

@@ -59,17 +59,17 @@ function CourseView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Course Management
+          &nbsp;Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/course" className="custom-breadcrumb">
-            Course{" "}
+            &nbsp;Course{" "}
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Course View
+          &nbsp;Course View
         </li>
       </ol>
       <div className="d-flex justify-content-end align-item-end mt-4">

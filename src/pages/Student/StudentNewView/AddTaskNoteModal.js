@@ -27,7 +27,7 @@ function AddTaskNoteModal() {
       category: "",
       description: "",
       remarks: "",
-      status: ""
+      status: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -37,14 +37,14 @@ function AddTaskNoteModal() {
 
   return (
     <>
-      <button className='btn btn-success btn-sm' type='button' onClick={handleShow}>
+      <button
+        className="btn btn-success btn-sm"
+        type="button"
+        onClick={handleShow}
+      >
         <FaPlus /> Add Task Note
       </button>
-      <Modal
-        show={show}
-        centered
-        onHide={handleClose}
-      >
+      <Modal show={show} centered onHide={handleClose}>
         <form onSubmit={formik.handleSubmit}>
           <Modal.Header closeButton>
             <Modal.Title>
@@ -58,17 +58,24 @@ function AddTaskNoteModal() {
                   Category<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select ${formik.touched.category && formik.errors.category
+                  className={`form-select ${
+                    formik.touched.category && formik.errors.category
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("category")}
                 >
                   <option selected>Select Category</option>
-                  <option value="Transport arrangement">Transport arrangement</option>
-                  <option value="Student progress Enquiry">Student progress Enquiry</option>
+                  <option value="Transport arrangement">
+                    Transport arrangement
+                  </option>
+                  <option value="Student progress Enquiry">
+                    Student progress Enquiry
+                  </option>
                   <option value="Special Care">Special Care</option>
-                  <option value="Payment Instruction">Payment Instruction</option>
+                  <option value="Payment Instruction">
+                    Payment Instruction
+                  </option>
                   <option value="Medical Condition">Medical Condition</option>
                   <option value="Family Situation">Family Situation</option>
                   <option value="Behaviour related">Behaviour related</option>
@@ -83,8 +90,13 @@ function AddTaskNoteModal() {
                 <label className="form-label">
                   Description<span className="text-danger">*</span>
                 </label>
-                <textarea rows={5}
-                  className={`form-control ${formik.touched.description && formik.errors.description ? "is-invalid" : ""}`}
+                <textarea
+                  rows={5}
+                  className={`form-control ${
+                    formik.touched.description && formik.errors.description
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   {...formik.getFieldProps("description")}
                 ></textarea>
                 {formik.touched.description && formik.errors.description && (
@@ -94,10 +106,9 @@ function AddTaskNoteModal() {
                 )}
               </div>
               <div className="col-12 mb-3">
-                <label className="form-label">
-                  Remarks
-                </label>
-                <textarea rows={5}
+                <label className="form-label">Remarks</label>
+                <textarea
+                  rows={5}
                   className={`form-control`}
                   {...formik.getFieldProps("remarks")}
                 ></textarea>
@@ -107,10 +118,11 @@ function AddTaskNoteModal() {
                   Status<span className="text-danger">*</span>
                 </label>
                 <select
-                  className={`form-select ${formik.touched.status && formik.errors.status
+                  className={`form-select ${
+                    formik.touched.status && formik.errors.status
                       ? "is-invalid"
                       : ""
-                    }`}
+                  }`}
                   {...formik.getFieldProps("status")}
                 >
                   <option selected></option>
@@ -118,21 +130,19 @@ function AddTaskNoteModal() {
                   <option value="Inactive">Inactive</option>
                 </select>
                 {formik.touched.status && formik.errors.status && (
-                  <div className="invalid-feedback">
-                    {formik.errors.status}
-                  </div>
+                  <div className="invalid-feedback">{formik.errors.status}</div>
                 )}
               </div>
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              className="btn btn-button btn-sm"
-            >
+            <Button type="submit" className="btn btn-button btn-sm">
               Submit
             </Button>
           </Modal.Footer>

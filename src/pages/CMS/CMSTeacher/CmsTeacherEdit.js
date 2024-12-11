@@ -13,8 +13,7 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
   const handleCloseModal = () => setShowModal(false);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const formik = useFormik({
     initialValues: {
@@ -80,8 +79,9 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
 
   return (
     <>
-    {storedScreens?.teacherSaveDelete && (
-      <Delete path={`/deleteTeacherSave/${id}`} onSuccess={fetchData} />)}
+      {storedScreens?.teacherSaveDelete && (
+        <Delete path={`/deleteTeacherSave/${id}`} onSuccess={fetchData} />
+      )}
       <button className="btn text-end" onClick={handleShowModal}>
         <FaEdit />
       </button>
@@ -89,11 +89,14 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
         <Modal.Header closeButton>
           <Modal.Title>Edit Teacher</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
@@ -207,8 +210,10 @@ const CmsTeacherEdit = ({ id, fetchData }) => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            
-            <Button variant="secondary" onClick={handleCloseModal}>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleCloseModal}
+            >
               Close
             </Button>
             <Button variant="primary" type="submit">

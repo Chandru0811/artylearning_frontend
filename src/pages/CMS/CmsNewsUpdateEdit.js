@@ -205,7 +205,10 @@ function CmsNewsUpdateEdit({ id, onSuccess }) {
               onSuccess={onSuccess}
             />
           )}
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            className="btn btn-sm btn-border bg-light text-dark"
+            onClick={handleClose}
+          >
             Cancel
           </Button>
           <Button

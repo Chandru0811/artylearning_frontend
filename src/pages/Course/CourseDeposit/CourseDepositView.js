@@ -100,7 +100,10 @@ export default function CourseFeesView({ id }) {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button
+            className="btn btn-sm btn-border bg-light text-dark"
+            onClick={handleClose}
+          >
             Close
           </Button>
         </Modal.Footer>

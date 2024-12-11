@@ -13,8 +13,7 @@ function CMSProductsItemEdit({ id, getData }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const userName  = localStorage.getItem('userName');
-
+  const userName = localStorage.getItem("userName");
 
   const [data, setDatas] = useState();
 
@@ -42,7 +41,6 @@ function CMSProductsItemEdit({ id, getData }) {
       formData.append("files", data.files);
       formData.append("imageDetails ", data.imageDetails);
       formData.append("updatedBy ", userName);
-
 
       try {
         const response = await api.put(
@@ -123,11 +121,14 @@ function CMSProductsItemEdit({ id, getData }) {
         <Modal.Header closeButton>
           <Modal.Title className="headColor">Edit Product Item</Modal.Title>
         </Modal.Header>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Body>
             <div className="container">
               <div className="mb-3">
@@ -180,7 +181,11 @@ function CMSProductsItemEdit({ id, getData }) {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button type="button" variant="secondary" onClick={handleClose}>
+            <Button
+              type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
               Cancel
             </Button>
             <Button
