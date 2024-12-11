@@ -11,8 +11,8 @@ function PrivacyPolicy() {
               Privacy Policy
             </h1>
             <p style={{ fontSize: "20px" }}>
-              At Atry Learning Pte Ltd its related corporations and franchises
-              ("Atry Learning"),we are committed to protecting your privacy and
+              At Arty Learning Pte Ltd its related corporations and franchises
+              ("Arty Learning"),we are committed to protecting your privacy and
               personal data. This Privacy Policy explians how we
               collect,use,disclose,and protect your personal data in accordance
               with the Singapore Personal Data Protection Act 2012 ("PDPA") and
@@ -23,7 +23,7 @@ function PrivacyPolicy() {
             </h1>
             <p style={{ fontSize: "20px" }}>
               This Policy applies to personal data
-              collected,stored,disclosed,and/or processed by Atry
+              collected,stored,disclosed,and/or processed by Arty
               Learning,including but not limited to:
               <br />
               <br />
