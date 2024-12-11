@@ -107,7 +107,7 @@
 }
 
 .sidebar .nav-links li i {
-  min-width: 60px;
+  min-width: 47px;
   font-weight: 600;
   text-align: center;
   font-size: 16px;
@@ -505,7 +505,7 @@ nav .profile-details i {
 .btn-button {
   color: #fff;
   padding: 0.3rem 0.6rem;
-  font-weight: 600;
+  font-weight: 400;
   background-color: #287f71;
   border-color: #287f71;
 }
@@ -525,7 +525,7 @@ nav .profile-details i {
   color: #fff;
   background-color: #287f71;
   border-color: #287f71;
-  box-shadow: 0 0 0 0.25rem #fa010188;
+  box-shadow: 0 0 0 0.25rem #53c2af;
 }
 
 .btn-check:checked + .btn-button,
@@ -583,7 +583,7 @@ table.dataTable thead > tr {
 }
 
 .headColor {
-  color: #d86300;
+  color: #287f71;
   font-weight: 400 !important;
   font-size: 19px;
   margin-bottom: 0px;

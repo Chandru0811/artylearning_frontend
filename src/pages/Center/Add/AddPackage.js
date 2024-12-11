@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { GoPackage } from "react-icons/go";
 
 function AddPackage({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -77,10 +78,10 @@ function AddPackage({ id, onSuccess }) {
     <>
       <button
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-normal text-start"
+        className="btn btn-sm  btn-normal text-start"
         onClick={handleShow}
       >
-        Add Package
+        <GoPackage /> &nbsp;&nbsp;Add Package
       </button>
 
       <Modal
@@ -89,14 +90,17 @@ function AddPackage({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Add Package</p>
@@ -111,10 +115,11 @@ function AddPackage({ id, onSuccess }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
-                    className={`form-control   ${formik.touched.packageName && formik.errors.packageName
+                    className={`form-control   ${
+                      formik.touched.packageName && formik.errors.packageName
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                     {...formik.getFieldProps("packageName")}
                   />
                   {formik.touched.packageName && formik.errors.packageName && (
@@ -138,11 +143,13 @@ function AddPackage({ id, onSuccess }) {
                   style={{ width: "100%" }}
                 >
                   <option value=""></option>
-                  {Array.from({ length: 100 }, (_, i) => i + 1).map((number) => (
-                    <option key={number} value={number}>
-                      {number}
-                    </option>
-                  ))}
+                  {Array.from({ length: 100 }, (_, i) => i + 1).map(
+                    (number) => (
+                      <option key={number} value={number}>
+                        {number}
+                      </option>
+                    )
+                  )}
                 </select>
                 {formik.touched.noOfLesson && formik.errors.noOfLesson && (
                   <div className="invalid-feedback">
@@ -153,7 +160,7 @@ function AddPackage({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-5">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button className="btn btn-sm btn-secondary" onClick={handleClose}>
               Cancel
             </Button>
             <Button

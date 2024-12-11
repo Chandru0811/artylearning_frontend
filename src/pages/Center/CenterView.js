@@ -71,17 +71,27 @@ function CenterView() {
           Centre Listing view
         </li>
       </ol>
-      <div className="d-flex justify-content-end align-item-end mt-4">
-        <Link to="/center">
-          <button type="button" className="btn btn-sm btn-border">
-            Back
-          </button>
-        </Link>
-      </div>
-      <div>
+      <div className="card">
+        <div
+          className="d-flex justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">View Centre</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
+            <Link to="/center">
+              <button type="button " className="btn btn-sm btn-border   ">
+                Back
+              </button>
+            </Link>
+          </div>
+        </div>
         <div className="container">
-          <div className="row mt-5 pb-3">
-            <h4 className="headColor mb-4">Centre</h4>
+          <div className="row pb-3">
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">
                 <div className="col-6 ">
@@ -429,7 +439,7 @@ function CenterView() {
                 </tbody>
               </table>
             </div>
-            .{/* Package  */}
+            {/* Package  */}
             <div className="col-md-12 col-12 mt-4">
               <h5 className="headColor mb-3">Centre Package</h5>
               <table class="table table-border-solid">

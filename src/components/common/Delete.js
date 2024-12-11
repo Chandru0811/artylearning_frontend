@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { FaTrash } from "react-icons/fa";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { LiaTrashSolid } from "react-icons/lia";
+import { MdDeleteOutline } from "react-icons/md";
 
 function Delete({ onSuccess, path, staffmsg, teachermsg }) {
   const [show, setShow] = useState(false);
@@ -65,8 +64,15 @@ function Delete({ onSuccess, path, staffmsg, teachermsg }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-      <LiaTrashSolid /> 
+      <button
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
+        onClick={handleShow}
+      >
+        <MdDeleteOutline /> &nbsp;&nbsp;Delete
       </button>
 
       <Modal show={show} onHide={handleClose}>

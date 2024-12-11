@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { MdOutlineFreeBreakfast } from "react-icons/md";
 
 function AddBreak({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -86,10 +87,10 @@ function AddBreak({ id, onSuccess }) {
     <>
       <button
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-normal text-start"
+        className="btn btn-sm btn-normal text-start"
         onClick={handleShow}
       >
-        Add Centre Break
+        <MdOutlineFreeBreakfast /> &nbsp;&nbsp;Add Centre Break
       </button>
 
       <Modal
@@ -98,14 +99,17 @@ function AddBreak({ id, onSuccess }) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         onHide={handleClose}
-        backdrop={isModified ? "static" : true} 
-        keyboard={isModified ? false : true} 
+        backdrop={isModified ? "static" : true}
+        keyboard={isModified ? false : true}
       >
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <Modal.Header closeButton>
             <Modal.Title>
               <p className="headColor">Add Centre Break</p>
@@ -145,7 +149,6 @@ function AddBreak({ id, onSuccess }) {
                       ? "is-invalid"
                       : ""
                   }`}
- 
                   {...formik.getFieldProps("fromDate")}
                 />
                 {formik.touched.fromDate && formik.errors.fromDate && (
@@ -166,7 +169,6 @@ function AddBreak({ id, onSuccess }) {
                         ? "is-invalid"
                         : ""
                     }`}
-   
                     {...formik.getFieldProps("toDate")}
                   />
                   {formik.touched.toDate && formik.errors.toDate && (
@@ -179,7 +181,7 @@ function AddBreak({ id, onSuccess }) {
             </div>
           </Modal.Body>
           <Modal.Footer className="mt-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button className="btn btn-sm btn-secondary" onClick={handleClose}>
               Cancel
             </Button>
             <Button
