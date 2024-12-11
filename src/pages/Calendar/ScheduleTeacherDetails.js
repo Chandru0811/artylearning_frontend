@@ -43,7 +43,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
   return (
     <Modal show={showViewModal} onHide={onClose} size="xl" centered>
       <Modal.Header closeButton>
-        <Modal.Title>Lesson Details</Modal.Title>
+        <Modal.Title>Schedule Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {/* Check if teacherDetails data is available */}
@@ -63,7 +63,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                     style={{
                       borderTop:
                         activeTab === item.time
-                          ? "3px solid #fa994af5"
+                          ? "3px solid #287f71"
                           : "none",
                       borderRadius: "0px",
                     }}
@@ -103,7 +103,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Start Date</p>
+                                <p className="">Start Date</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.centerName}</p>
@@ -113,7 +113,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Lesson Outline Set Effective Start Date</p>
+                                <p className="">Lesson Outline Set Effective Start Date</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.course}</p>
@@ -125,7 +125,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Class Id</p>
+                                <p className="">Class Id</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.className}</p>
@@ -135,7 +135,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Effective Start Date</p>
+                                <p className="">Effective Start Date</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.teacher}</p>
@@ -147,7 +147,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Lesson No</p>
+                                <p className="">Lesson No</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.days}</p>
@@ -157,7 +157,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">End Date</p>
+                                <p className="">End Date</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.classRoom}</p>
@@ -169,7 +169,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Teacher</p>
+                                <p className="">Teacher</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.startDate}</p>
@@ -179,7 +179,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">End Date</p>
+                                <p className="">End Date</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.endDate}</p>
@@ -191,7 +191,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">First Lesson</p>
+                                <p className="">First Lesson</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.startDate}</p>
@@ -201,7 +201,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Class Venue</p>
+                                <p className="">Class Venue</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.endDate}</p>
@@ -213,7 +213,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Last lesson</p>
+                                <p className="">Last lesson</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.startDate}</p>
@@ -223,7 +223,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Assistant Teacher</p>
+                                <p className="">Assistant Teacher</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.endDate}</p>
@@ -235,7 +235,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">Available Slot</p>
+                                <p className="">Available Slot</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.startDate}</p>
@@ -245,7 +245,29 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="fw-bold">No of Students</p>
+                                <p className="">No of Students</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.endDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="">Remarks</p>
+                              </div>
+                              <div className="col-7">
+                                <p>:&nbsp;{data.startDate}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="">Students</p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.endDate}</p>
