@@ -27,7 +27,7 @@ function ClassAdd() {
     durationInMins: Yup.number().required("*Duration Minutes is required"),
     startDate: Yup.date().required("*Start Date is required"),
     endDate: Yup.date().required("*End Date is required"),
-    startTime: Yup.number().required("*Start Time is required"),
+    startTime: Yup.string().required("*Start Time is required"),
     endTime: Yup.string().required("*End Time is required"),
     day: Yup.string().required("*Day is required"),
     remark: Yup.string()
@@ -47,8 +47,8 @@ function ClassAdd() {
       courseId: "",
       className: "",
       classType: "",
-      durationInHrs: "",
-      durationInMins: "",
+      durationInHrs: "01",
+      durationInMins: "30",
       startDate: new Date().toISOString().split("T")[0],
       endDate: getEndDate(),
       startTime: "",
@@ -155,6 +155,33 @@ function ClassAdd() {
     fetchData();
   }, []);
 
+  const calculateEndTime = () => {
+    const { durationInHrs, durationInMins, startTime } = formik.values;
+    if (!startTime) return;
+
+    const [startHours, startMinutes] = startTime.split(":").map(Number);
+    const endHours =
+      (startHours +
+        parseInt(durationInHrs) +
+        Math.floor((startMinutes + parseInt(durationInMins)) / 60)) %
+      24;
+    const endMinutes = (startMinutes + parseInt(durationInMins)) % 60;
+
+    const formattedEndTime = `${String(endHours).padStart(2, "0")}:${String(
+      endMinutes
+    ).padStart(2, "0")}`;
+    formik.setFieldValue("endTime", formattedEndTime);
+  };
+
+  useEffect(() => {
+    calculateEndTime();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    formik.values.durationInHrs,
+    formik.values.durationInMins,
+    formik.values.startTime,
+  ]);
+
   return (
     <div className="container">
       <ol
@@ -168,17 +195,17 @@ function ClassAdd() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Course Management
+        &nbsp;Course Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/class" className="custom-breadcrumb">
-            Class
+          &nbsp;Class
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Class Add
+        &nbsp;Class Add
         </li>
       </ol>
       <form
@@ -498,8 +525,8 @@ function ClassAdd() {
                 value={formik.values.startTime}
               >
                 <option></option>
-                <option value="10.00">10.00 am</option>
-                <option value="11.30">11.30 am</option>
+                <option value="10:00">10:00 am</option>
+                <option value="11:30">11:30 am</option>
               </select>
               {formik.touched.startTime && formik.errors.startTime && (
                 <div className="invalid-feedback">

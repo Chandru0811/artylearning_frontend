@@ -23,41 +23,20 @@ function BatchTimeEdit({ id, onSuccess }) {
   ]);
 
   const validationSchema = Yup.object({
-    batchTime: Yup.string().required("*Batch Time is required"),
+    batchTime: Yup.array()
+      .of(Yup.string().required("Batch time is required"))
+      .min(1, "At least one batch time is required"),
   });
-
-  // const getData = async () => {
-  //   try {
-  //     const response = await api.get(`/getAllSHGSettingById/${id}`);
-  //     formik.setValues(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data ", error);
-  //   }
-  // };
-
-  const getData = async () => {
-    try {
-      const hardcodedData = {
-        id: 1,
-        day: "Monday",
-        batchTime: "10:00",
-      };
-
-      formik.setValues(hardcodedData);
-    } catch (error) {
-      console.error("Error setting data ", error);
-    }
-  };
 
   const formik = useFormik({
     initialValues: {
       day: "",
-      batchTime: "",
+      batchTime: [],
       updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
+      console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateSHGSetting/${id}`, values, {
@@ -95,6 +74,7 @@ function BatchTimeEdit({ id, onSuccess }) {
   });
 
   const handleClose = () => setShow(false);
+
   const handleShow = () => {
     setShow(true);
     setIsModified(false);
@@ -117,7 +97,46 @@ function BatchTimeEdit({ id, onSuccess }) {
   };
 
   const deleteFields = (id) => {
-    setFields(fields.filter((field) => field.id !== id));
+    const updatedFields = fields.filter((field) => field.id !== id);
+    setFields(updatedFields);
+
+    // Update Formik's batchTime array to remove the corresponding value
+    const updatedBatchTime = formik.values.batchTime.filter(
+      (_, index) => fields[index].id !== id
+    );
+    formik.setFieldValue("batchTime", updatedBatchTime);
+  };
+
+  // const getData = async () => {
+  //   try {
+  //     const response = await api.get(`/getAllSHGSettingById/${id}`);
+  //     formik.setValues(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data ", error);
+  //   }
+  // };
+
+  const getData = async () => {
+    try {
+      const hardcodedData = {
+        day: "Monday",
+        batchTime: ["10:00", "11:00"],
+      };
+
+      const updatedFields = hardcodedData.batchTime.map((time, index) => ({
+        id: index + 1,
+        batchTime: time,
+      }));
+      setFields(updatedFields);
+
+      formik.setValues({
+        day: hardcodedData.day,
+        batchTime: hardcodedData.batchTime,
+        updatedBy: userName,
+      });
+    } catch (error) {
+      console.error("Error setting data", error);
+    }
   };
 
   return (
@@ -148,7 +167,7 @@ function BatchTimeEdit({ id, onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
-                <div className="col-md-6 col-12 mt-3">
+                <div className="col-md-12 col-12">
                   <label className="form-label">
                     Day<span className="text-danger">*</span>
                   </label>
@@ -160,13 +179,14 @@ function BatchTimeEdit({ id, onSuccess }) {
                         : ""
                     }`}
                     {...formik.getFieldProps("day")}
+                    readOnly
                   />
                   {formik.touched.day && formik.errors.day && (
                     <div className="invalid-feedback">{formik.errors.day}</div>
                   )}
                 </div>
 
-                <div className="col-md-6 col-12 mb-2">
+                <div className="col-md-12 col-12 mb-2">
                   {fields.map((row, index) => (
                     <div key={row.id}>
                       <div className="d-flex justify-content-between mt-3">
@@ -192,17 +212,19 @@ function BatchTimeEdit({ id, onSuccess }) {
                       <input
                         type="time"
                         className={`form-control  ${
-                          formik.touched.batchTime && formik.errors.batchTime
+                          formik.touched.batchTime?.[index] &&
+                          formik.errors.batchTime?.[index]
                             ? "is-invalid"
                             : ""
                         }`}
-                        {...formik.getFieldProps("batchTime")}
+                        {...formik.getFieldProps(`batchTime[${index}]`)}
                       />
-                      {formik.touched.batchTime && formik.errors.batchTime && (
-                        <div className="invalid-feedback">
-                          {formik.errors.batchTime}
-                        </div>
-                      )}
+                      {formik.touched.batchTime?.[index] &&
+                        formik.errors.batchTime?.[index] && (
+                          <div className="invalid-feedback">
+                            {formik.errors.batchTime[index]}
+                          </div>
+                        )}
                     </div>
                   ))}
                   <button
