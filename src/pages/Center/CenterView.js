@@ -95,7 +95,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Centre Name</p>
+                  <p className="">Centre Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -107,7 +107,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2 mt-3">
                 <div className="col-6  ">
-                  <p className="fw-medium">Code</p>
+                  <p className="">Code</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.code || "--"}</p>
@@ -117,7 +117,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Centre Manager</p>
+                  <p className="">Centre Manager</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -129,7 +129,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Address</p>
+                  <p className="">Address</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.address || "--"}</p>
@@ -139,7 +139,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Zip Code</p>
+                  <p className="">Zip Code</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.zipCode || "--"}</p>
@@ -149,7 +149,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Mobile</p>
+                  <p className="">Mobile</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.mobile || "--"}</p>
@@ -159,7 +159,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6">
-                  <p className="fw-medium">Email</p>
+                  <p className="">Email</p>
                 </div>
                 <div className="col-6">
                   <div
@@ -178,7 +178,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Opening Date</p>
+                  <p className="">Opening Date</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -193,7 +193,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">UEN Number</p>
+                  <p className="">UEN Number</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -205,7 +205,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">GST</p>
+                  <p className="">GST</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -217,7 +217,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Tax Registration Number</p>
+                  <p className="">Tax Registration Number</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -229,7 +229,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Bank Name</p>
+                  <p className="">Bank Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.bankName}</p>
@@ -239,7 +239,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Bank Branch</p>
+                  <p className="">Bank Branch</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.bankBranch}</p>
@@ -249,7 +249,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Bank Account Number</p>
+                  <p className="">Bank Account Number</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -261,7 +261,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Bank Account Name</p>
+                  <p className="">Bank Account Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.bankAccountName}</p>
@@ -271,7 +271,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Invoice Notes</p>
+                  <p className="">Invoice Notes</p>
                 </div>
                 <div className="col-6  ">
                   <p className="text-muted text-sm d-flex text-truncate">
@@ -284,7 +284,7 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">QR Code </p>
+                  <p className="">QR Code </p>
                 </div>
                 <div className="col-6">
                   <p className="my-2 d-flex">
@@ -308,18 +308,18 @@ function CenterView() {
               <table className="table table-border-solid">
                 <thead>
                   <tr>
-                    <th scope="col" className="fw-medium">
+                    <td  className="">
                       S.No
-                    </th>
-                    <th scope="col" className="fw-medium">
+                    </td>
+                    <td  className="">
                       Effective Date
-                    </th>
-                    <th scope="col" className="fw-medium">
+                    </td>
+                    <td  className="">
                       Amount Including(GST)
-                    </th>
-                    <th scope="col" className="fw-medium">
+                    </td>
+                    <td  className="">
                       Tax Type
-                    </th>
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -349,18 +349,18 @@ function CenterView() {
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <th scope="col" className="fw-medium">
+                    <td  className="">
                       S.No
-                    </th>
-                    <th scope="col" className="fw-medium">
+                    </td>
+                    <td  className="">
                       Break Name
-                    </th>
-                    <th scope="col" className="fw-medium">
+                    </td>
+                    <td  className="">
                       From Date
-                    </th>
-                    <th scope="col" className="fw-medium">
+                    </td>
+                    <td  className="">
                       To date
-                    </th>
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -382,44 +382,44 @@ function CenterView() {
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <th scope="col" className="fw-medium">
+                    <td  className="">
                       S.No
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
+                    </td>
+                    <td
+                      
+                      className=""
                       style={{ whiteSpace: "nowrap" }}
                     >
                       Class Room Name
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
+                    </td>
+                    <td
+                      
+                      className=""
                       style={{ whiteSpace: "nowrap" }}
                     >
                       Class Room Code
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
+                    </td>
+                    <td
+                      
+                      className=""
                       style={{ whiteSpace: "nowrap" }}
                     >
                       Class Room Type
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
+                    </td>
+                    <td
+                      
+                      className=""
                       style={{ whiteSpace: "nowrap" }}
                     >
                       Capacity
-                    </th>
-                    <th
-                      scope="col"
-                      className="fw-medium"
+                    </td>
+                    <td
+                      
+                      className=""
                       style={{ whiteSpace: "nowrap" }}
                     >
                       Description
-                    </th>
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -445,15 +445,15 @@ function CenterView() {
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <th scope="col" className="fw-medium">
+                    <td  className="">
                       S.No
-                    </th>
-                    <th scope="col" className="fw-medium">
+                    </td>
+                    <td  className="">
                       Package
-                    </th>
-                    <th scope="col" className="fw-medium">
+                    </td>
+                    <td  className="">
                       Number Of Lesson
-                    </th>
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
