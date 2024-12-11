@@ -345,6 +345,12 @@ function RolesAdd() {
       shgSettingUpdate: true,
       shgSettingDelete: true,
 
+      batchtimeSettingIndex: true,
+      batchtimeSettingRead: true,
+      batchtimeSettingCreate: true,
+      batchtimeSettingUpdate: true,
+      batchtimeSettingDelete: true,
+
       leaveSettingIndex: true,
       leaveSettingRead: true,
       leaveSettingCreate: true,
@@ -3279,6 +3285,58 @@ function RolesAdd() {
                           name="shgSettingDelete"
                           checked={formik.values.shgSettingDelete}
                           onChange={handleCheckboxChange(`shgSettingDelete`)}
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p style={{ marginLeft: "30px", marginBottom: "0px" }}>
+                          Batch Time
+                        </p>
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="batchtimeSettingIndex"
+                          checked={formik.values.batchtimeSettingIndex}
+                          onChange={handleCheckboxChange(`batchtimeSettingIndex`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="batchtimeSettingRead"
+                          checked={formik.values.batchtimeSettingRead}
+                          onChange={handleCheckboxChange(`batchtimeSettingRead`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="batchtimeSettingCreate"
+                          checked={formik.values.batchtimeSettingCreate}
+                          onChange={handleCheckboxChange(`batchtimeSettingCreate`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="batchtimeSettingUpdate"
+                          checked={formik.values.batchtimeSettingUpdate}
+                          onChange={handleCheckboxChange(`batchtimeSettingUpdate`)}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="batchtimeSettingDelete"
+                          checked={formik.values.batchtimeSettingDelete}
+                          onChange={handleCheckboxChange(`batchtimeSettingDelete`)}
                         />
                       </td>
                     </tr>

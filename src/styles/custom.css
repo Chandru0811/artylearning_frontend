@@ -886,3 +886,77 @@ tbody tr td{
 input.searchInputG:hover {
   border-color: #287f71 !important;
 }
+
+
+/* Calender CSS */
+.calendar {
+  font-size: small;
+}
+
+.calendar a {
+  text-decoration: none !important;
+  color: black !important;
+  font-size: 14px !important;
+}
+
+.calendar tbody {
+  background-color: #ffffff;
+}
+
+.calendar thead {
+  background-color: #ffffff;
+}
+
+.fc-license-message{
+  display: none !important;
+}
+
+.fc .fc-button-primary {
+  background-color: #287f71;
+  border-color: #18463f;
+  color: white;
+  box-shadow: none;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #287f71;
+  border-color: #18463f;
+  color: white;
+  box-shadow: none;
+}
+
+.fc .fc-button-primary:disabled {
+  background-color: #287f71;
+  border-color: #18463f;
+  color: white;
+  box-shadow: none;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
+  background-color: #eb862a;
+  border-color: #f4a862;
+  color: white;
+  box-shadow: none;
+}
+
+
+/* Table */
+tbody, td, tfoot, th, thead, tr{
+  border-top: 1px solid #808080;
+}
+
+.dataTables_wrapper .dataTables_length{
+  padding-left: 20px !important;
+  padding-bottom: 10px !important;
+}
+
+.dataTables_wrapper .dataTables_info{
+    padding-left: 20px !important;
+}
+
+table.dataTable.display > tbody > tr > td,
+table.dataTable.display > thead > tr > th,
+table.dataTable.display > tbody > tr > th{
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}

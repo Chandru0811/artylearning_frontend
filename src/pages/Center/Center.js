@@ -3,8 +3,10 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link, useNavigate } from "react-router-dom"; // Use useNavigate
-import { FaEdit, FaEllipsisV } from "react-icons/fa"; // No need for FaEye anymore
-import { IoMdAdd } from "react-icons/io";
+import { FaEdit } from "react-icons/fa"; // No need for FaEye anymore
+import { IoIosAddCircle } from "react-icons/io";
+import { MdOutlineModeEdit } from "react-icons/md";
+
 import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
@@ -109,8 +111,19 @@ const Center = () => {
     navigate(`/center/view/${id}`); // Navigate to the index page when a row is clicked
   };
 
+  useEffect(() => {
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    }
+  }, [datas]);
+
   return (
-    <div className="container my-4 center">
+    <div className="container-fluid my-4 center">
       <ol
         className="breadcrumb my-3 px-1"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -122,11 +135,11 @@ const Center = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Centre Management
+          &nbsp;Centre Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Centre Listing
+          &nbsp;Centre Listing
         </li>
       </ol>
       <div className="card">
@@ -139,26 +152,15 @@ const Center = () => {
               <div class="dot active"></div>
             </div>
             <span class="me-2 text-muted">
-              This Database Show at of your{" "}
+              This database shows the list of{" "}
               <span className="bold" style={{ color: "#287f71" }}>
                 Center
               </span>
             </span>
           </div>
-          {storedScreens?.centerListingCreate && (
-            <Link to="/center/add">
-              <button
-                type="button"
-                className="btn btn-button btn-sm"
-                style={{ fontWeight: "600px !important" }}
-              >
-                Add <i className="bx bx-plus"></i>
-              </button>
-            </Link>
-          )}
         </div>
         <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex">
+          <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -227,6 +229,17 @@ const Center = () => {
               </button>
             </div>
           </div>
+          {storedScreens?.centerListingCreate && (
+            <Link to="/center/add">
+              <button
+                type="button"
+                className="btn btn-button btn-sm me-2"
+                style={{ fontWeight: "600px !important" }}
+              >
+                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+              </button>
+            </Link>
+          )}
         </div>
         {loading ? (
           <div className="loader-container">
@@ -240,61 +253,37 @@ const Center = () => {
           </div>
         ) : (
           <div>
-            <div className="table-responsive p-2">
-              <table ref={tableRef} className="display">
+            <div className="table-responsive py-2">
+              <table
+                style={{ width: "100%" }}
+                ref={tableRef}
+                className="display"
+              >
                 <thead>
-                  <tr style={{ background: "#f5f7f9" }}>
-                    <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
-                      className="text-muted"
-                      scope="col"
-                    >
+                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
+                    <th className="text-muted" scope="col">
                       S No
                     </th>
-                    <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
-                      className="text-center text-muted"
-                    ></th>
-                    <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
-                      className="text-muted"
-                      scope="col"
-                    >
+                    <th className="text-center text-muted"></th>
+                    <th className="text-muted" scope="col">
                       Centre Name
                     </th>
-                    <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
-                      className="text-muted"
-                      scope="col"
-                    >
+                    <th className="text-muted" scope="col">
                       Centre Manager
                     </th>
-                    <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
-                      className="text-muted"
-                      scope="col"
-                    >
+                    <th className="text-muted" scope="col">
                       Code
                     </th>
-                    <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
-                      className="text-muted"
-                      scope="col"
-                    >
+                    <th className="text-muted" scope="col">
                       UEN Number
                     </th>
                     {/* <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
                       className="text-muted"
                       scope="col"
                     >
                       Mobile
                     </th> */}
-                    <th
-                      style={{ fontSize: "14px", fontWeight: "normal" }}
-                      className="text-muted"
-                      scope="col"
-                    >
+                    <th className="text-muted" scope="col">
                       Email
                     </th>
                   </tr>
@@ -304,25 +293,29 @@ const Center = () => {
                     datas.map((data, index) => (
                       <tr
                         key={index}
-                        className="odd"
                         style={{
                           // backgroundColor: "#fff !important",
                           cursor: "pointer",
                         }}
                       >
-                        <th scope="row" style={{ fontSize: "8px", fontWeight: "normal" }}>{index + 1}</th>
-                        <td style={{ fontSize: "8px", fontWeight: "normal" }}>
+                        <th scope="row" className="text-center">
+                          {index + 1}
+                        </th>
+                        <td>
                           <div className="d-flex justify-content-center align-items-center">
                             {storedScreens?.centerListingCreate && (
                               <div className="dropdown">
                                 <button
-                                  className="btn btn-link dropdown-toggle"
+                                  className="btn btn-button btn-sm dropdown-toggle"
                                   type="button"
                                   id="dropdownMenuButton"
                                   data-bs-toggle="dropdown"
                                   aria-expanded="false"
                                 >
-                                  <GoSortDesc className="text-dark" />
+                                  <IoIosAddCircle
+                                    className="text-light"
+                                    style={{ fontSize: "16px" }}
+                                  />
                                 </button>
                                 <ul
                                   className="dropdown-menu"
@@ -355,8 +348,14 @@ const Center = () => {
                                   <li>
                                     {storedScreens?.centerListingUpdate && (
                                       <Link to={`/center/edit/${data.id}`}>
-                                        <button className="btn btn-sm">
-                                          <FaEdit /> Edit
+                                        <button
+                                          style={{
+                                            whiteSpace: "nowrap",
+                                            width: "100%",
+                                          }}
+                                          className="btn btn-sm btn-normal text-start"
+                                        >
+                                          <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
                                         </button>
                                       </Link>
                                     )}
@@ -368,7 +367,6 @@ const Center = () => {
                                           onSuccess={refreshData}
                                           path={`/deleteCenter/${data.id}`}
                                         />{" "}
-                                        Delete
                                       </span>
                                     )}
                                   </li>
@@ -377,40 +375,25 @@ const Center = () => {
                             )}
                           </div>
                         </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
+                        <td onClick={() => handleRowClick(data.id)}>
                           {data.centerName}
                         </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
+                        <td onClick={() => handleRowClick(data.id)}>
                           {data.centerManager}
                         </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
+                        <td onClick={() => handleRowClick(data.id)}>
                           {data.code}
                         </td>
                         {/* <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
+                          
                           onClick={() => handleRowClick(data.id)}
                         >
                           {data.uenNumber}
                         </td> */}
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
+                        <td onClick={() => handleRowClick(data.id)}>
                           {data.mobile}
                         </td>
-                        <td
-                          style={{ fontSize: "8px", fontWeight: "normal" }}
-                          onClick={() => handleRowClick(data.id)}
-                        >
+                        <td onClick={() => handleRowClick(data.id)}>
                           {data.email}
                         </td>
                       </tr>

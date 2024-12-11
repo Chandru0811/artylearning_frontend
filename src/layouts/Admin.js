@@ -238,6 +238,9 @@ import NewDashboard from "../pages/NewDashboard";
 import TransferOut from "../pages/StudentMovement/TransferOut/TransferOut";
 import TeacherNewView from "../pages/Teacher/TeacherNewView";
 import StaffNewView from "../pages/Staff/StaffNewView";
+import Calendar from "../pages/Calendar/Calendar";
+import BatchTime from "../pages/Settings/BatchTime/BatchTime";
+import BatchTimeEdit from "../pages/Settings/BatchTime/BatchTimeEdit";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -274,6 +277,7 @@ function Admin({ handleLogout }) {
                 path="/changepassword"
                 element={<ChangePassword onLogout={handleLogout} />}
               />
+              <Route path="/calendar" element={<Calendar />} />
 
               {/* Lead */}
               <Route path="/lead/lead" element={<Lead />} />
@@ -696,6 +700,10 @@ function Admin({ handleLogout }) {
               <Route path="/shg/add" element={<ShgAdd />} />
               <Route path="/shg/edit/:id" element={<ShgEdit />} />
               <Route path="/shg/view/:id" element={<ShgView />} />
+
+              {/* {/ Batch Time /} */}
+              <Route path="/batchtime" element={<BatchTime />} />
+              <Route path="/batchtime/edit/:id" element={<BatchTimeEdit />} />
 
               {/* LeaveType */}
               <Route path="/leavetype" element={<SettingLeave />} />
