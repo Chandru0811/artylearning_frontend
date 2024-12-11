@@ -241,6 +241,7 @@ import StaffNewView from "../pages/Staff/StaffNewView";
 import Calendar from "../pages/Calendar/Calendar";
 import BatchTime from "../pages/Settings/BatchTime/BatchTime";
 import BatchTimeEdit from "../pages/Settings/BatchTime/BatchTimeEdit";
+import LeadNewView from "../pages/Lead/LeadNewView";
 
 function Admin({ handleLogout }) {
   useEffect(() => {
@@ -283,7 +284,8 @@ function Admin({ handleLogout }) {
               <Route path="/lead/lead" element={<Lead />} />
               <Route path="/lead/lead/add" element={<EnrollmentAdd />} />
               <Route path="/lead/lead/edit/:id" element={<EnrollmentEdit />} />
-              <Route path="/lead/lead/view/:id" element={<LeadView />} />
+              {/* <Route path="/lead/lead/view/:id" element={<LeadView />} /> */}
+              <Route path="/lead/lead/view/:id" element={<LeadNewView />} />
               <Route
                 path="/lead/lead/assessment/:leadId"
                 element={<LeadAssessment />}
