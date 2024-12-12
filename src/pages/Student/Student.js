@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { SCREENS } from "../../config/ScreenFilter";
 import Lead from "../Lead/Lead";
-import { MdViewColumn } from "react-icons/md";
+import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
+import { IoIosAddCircle } from "react-icons/io";
 
 const Student = () => {
   const tableRef = useRef(null);
@@ -18,9 +19,20 @@ const Student = () => {
 
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
-
+  const navigate = useNavigate();
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   console.log("Screens : ", SCREENS);
+  const [studentId, setStudentId] = useState("");
+  const [studentName, setStudentName] = useState("");
+  const [gender, setGender] = useState("");
+
+  const clearFilters = () => {
+    setStudentId("");
+    setStudentName("");
+    setGender("");
+
+    $(tableRef.current).DataTable().search("").draw();
+  };
 
   useEffect(() => {
     const getCenterData = async () => {
@@ -89,65 +101,151 @@ const Student = () => {
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
 
+  const handleRowClick = (id) => {
+    navigate(`/student/view/${id}`); // Navigate to the index page when a row is clicked
+  };
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    }
+  }, [datas]);
+
   return (
-    <div>
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+    <div className="container-fluid my-4 center">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Student Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Student Listing
+        </li>
+      </ol>
+
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Student Listing
+              </span>
+            </span>
           </div>
         </div>
-      ) : (
-        <div className="container my-4">
-          <ol
-            className="breadcrumb my-3 px-1"
-            style={{ listStyle: "none", padding: 0, margin: 0 }}
-          >
-            <li>
-              <Link to="/" className="custom-breadcrumb">
-                Home
-              </Link>
-              <span className="breadcrumb-separator"> &gt; </span>
-            </li>
-            <li>
-              Student Management
-              <span className="breadcrumb-separator"> &gt; </span>
-            </li>
-            <li className="breadcrumb-item active" aria-current="page">
-              Student Listing
-            </li>
-          </ol>
-          <div className="mb-3 d-flex justify-content-end">
+        <div className="mb-3 d-flex justify-content-between">
+          <div className="individual_fliters d-lg-flex ">
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Student Id"
+                value={studentId}
+                onChange={(e) => {
+                  const searchValue = e.target.value.toLowerCase();
+                  setStudentId(e.target.value);
+                  $(tableRef.current).DataTable().search(searchValue).draw();
+                }}
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Student Name"
+                value={studentName}
+                onChange={(e) => {
+                  const searchValue = e.target.value.toLowerCase();
+                  setStudentName(e.target.value);
+                  $(tableRef.current).DataTable().search(searchValue).draw();
+                }}
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Gender"
+                value={gender}
+                onChange={(e) => {
+                  const searchValue = e.target.value.toLowerCase();
+                  setGender(e.target.value);
+                  $(tableRef.current).DataTable().search(searchValue).draw();
+                }}
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1 ">
+              <button
+                type="button"
+                className="btn btn-sm btn-border"
+                onClick={clearFilters}
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+          <div>
             {storedScreens?.studentListingCreate && (
               <Link to="/student/add">
-                <button type="button" className="btn btn-button btn-sm">
-                  Add <i class="bx bx-plus"></i>
+                <button
+                  type="button"
+                  className="btn btn-button btn-sm me-2"
+                  style={{ fontWeight: "600px !important" }}
+                >
+                  &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
                 </button>
               </Link>
             )}
-            {/* <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-          {extraData?"Hide":'Show'}
-          <MdViewColumn className="fs-4 text-secondary"/>
-        </button> */}
           </div>
-          <div className="table-responsive">
-            <table ref={tableRef} className="display">
+        </div>
+        {loading ? (
+          <div className="loader-container">
+            <div class="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : (
+          <div className="table-responsive py-2">
+            <table style={{ width: "100%" }} ref={tableRef} className="display">
               <thead>
-                <tr>
-                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                <tr className="text-center" style={{ background: "#f5f7f9" }}>
+                  <th scope="col" className="text-center">
                     S No
                   </th>
+                  <th className="text-center text-muted"></th>
                   <th scope="col">Student ID</th>
                   <th scope="col">Student Name</th>
                   <th scope="col">Age</th>
                   <th scope="col">Gender</th>
                   <th scope="col">Nationality</th>
-                  {/* <th scope="col">Allow Magazine</th>
-                  <th scope="col">Allow Social Media</th> */}
                   {extraData && (
                     <th
                       scope="col"
@@ -204,68 +302,104 @@ const Student = () => {
                       UpdatedAt
                     </th>
                   )}
-                  {/* <th scope="col">Join Class Date</th>
-                <th scope="col">Status</th> */}
-                  <th scope="col" className="text-center">
-                    Action
-                  </th>
                 </tr>
               </thead>
               <tbody>
                 {datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1} </th>
+                  <tr key={index} style={{ cursor: "pointer" }}>
+                    <th scope="row" className="text-break text-center">
+                      {index + 1}
+                    </th>
                     <td>
-                      {data.studentUniqueId}{" "}
-                      {/* {data?.formStatus === "INCOMPLETE" ? (
-                        <span className="fs-3 fw-bolder text-danger">.</span>
-                      ) : (
-                        <></>
-                      )} */}
-                    </td>
-                    <td>{data.studentName}</td>
-                    <td>{data.age}</td>
-                    <td>{data.gender}</td>
-                    <td>{data.nationality}</td>
-                    {/* <td>{data.allowMagazine === true ? "Yes" : "No"}</td>
-                    <td>{data.allowSocialMedia === true ? "Yes" : "No"}</td> */}
-                    {extraData && <td>{data.createdBy}</td>}
-                    {extraData && <td>{data.createdAt}</td>}
-                    {extraData && <td>{data.updatedBy}</td>}
-                    {extraData && <td>{data.updatedAt}</td>}
-                    {/* <td>{data.joinClassDate}</td>
-                  <td>{data.status}</td> */}
-                    <td>
-                      <div className="d-flex">
-                        {storedScreens?.studentListingRead && (
-                          <Link to={`/student/view/${data.id}`}>
-                            <button className="btn btn-sm">
-                              <FaEye />
+                      <div className="d-flex justify-content-center align-items-center">
+                        {storedScreens?.centerListingCreate && (
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-button btn-sm dropdown-toggle"
+                              type="button"
+                              id="dropdownMenuButton"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <IoIosAddCircle
+                                className="text-light"
+                                style={{ fontSize: "16px" }}
+                              />
                             </button>
-                          </Link>
-                        )}
-                        {storedScreens?.studentListingUpdate && (
-                          <Link to={`/student/edit/${data.id}`}>
-                            <button className="btn btn-sm">
-                              <FaEdit />
-                            </button>
-                          </Link>
-                        )}
-                        {storedScreens?.studentListingDelete && (
-                          <Delete
-                            onSuccess={refreshData}
-                            path={`/deleteStudentDetail/${data.id}`}
-                          />
+                            <ul
+                              className="dropdown-menu"
+                              aria-labelledby="dropdownMenuButton"
+                            >
+                              <li>
+                                {storedScreens?.centerListingUpdate && (
+                                  <Link to={`/student/edit/${data.id}`}>
+                                    <button
+                                      style={{
+                                        whiteSpace: "nowrap",
+                                        width: "100%",
+                                      }}
+                                      className="btn btn-sm btn-normal text-start"
+                                    >
+                                      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+                                    </button>
+                                  </Link>
+                                )}
+                              </li>
+                              <li>
+                                {storedScreens?.centerListingDelete && (
+                                  <span>
+                                    <Delete
+                                      onSuccess={refreshData}
+                                      path={`/deleteStudentDetail/${data.id}`}
+                                    />{" "}
+                                  </span>
+                                )}
+                              </li>
+                            </ul>
+                          </div>
                         )}
                       </div>
                     </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.studentUniqueId}{" "}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.studentName}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>{data.age}</td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.gender}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.nationality}
+                    </td>
+                    {extraData && (
+                      <td onClick={() => handleRowClick(data.id)}>
+                        {data.createdBy}
+                      </td>
+                    )}
+                    {extraData && (
+                      <td onClick={() => handleRowClick(data.id)}>
+                        {data.createdAt}
+                      </td>
+                    )}
+                    {extraData && (
+                      <td onClick={() => handleRowClick(data.id)}>
+                        {data.updatedBy}
+                      </td>
+                    )}
+                    {extraData && (
+                      <td onClick={() => handleRowClick(data.id)}>
+                        {data.updatedAt}
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

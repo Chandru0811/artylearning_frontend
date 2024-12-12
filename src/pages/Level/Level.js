@@ -287,7 +287,12 @@ const Level = () => {
               </thead>
               <tbody>
                 {datas.map((data, index) => (
-                  <tr key={index}>
+                  <tr
+                    key={index}
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
                     <th scope="row">{index + 1}</th>
                     <td>
                       <div className="d-flex justify-content-center align-items-center">
