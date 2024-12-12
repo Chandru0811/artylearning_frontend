@@ -81,6 +81,13 @@
   background: #287f71;
   color: white !important;
 }
+.sidebar .nav-links li a.active {
+  color: white !important;
+}
+.sidebar .nav-links li a.active:hover {
+  background: #287f71;
+  color: #f8f8f8 !important;
+}
 
 .activehover:hover {
   color: #fff !important;
@@ -93,6 +100,11 @@
 .sidebar .nav-links .activehover.active {
   color: #fff !important;
 }
+
+.sidebar .nav-links .homeIcons{
+  color: #97a3b6 !important;
+}
+
 
 .sidebar .nav-links li a.active i {
   color: #ffffff !important;
@@ -124,26 +136,6 @@
 
 .sidebar .nav-links li.active i {
   color: #ffffff !important;
-
-  /* White color when active */
-}
-
-.overview {
-  background: #287f71;
-  width: fit-content;
-  padding: 5px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 60px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.overview i {
-  color: #fff !important;
-}
-.overview span {
-  color: #fff !important;
 }
 
 .nav-links li .active i:hover {
@@ -171,6 +163,7 @@
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
+  padding: 1px 6px;
 }
 
 .sidebar .nav-links .log_out {
@@ -438,6 +431,8 @@ nav .profile-details i {
   display: none;
 }
 
+/* ------------ Scrollbar ----------- */
+
 /* Horizontal Scrollbar */
 .sidebar::-webkit-scrollbar {
   width: 1px;
@@ -471,6 +466,36 @@ nav .profile-details i {
 ::-webkit-scrollbar-thumb-vertical:hover {
   background: #f7f4f4;
 }
+
+/* WebKit-based browsers (Chrome, Edge, Safari) */
+.sidebar::-webkit-scrollbar {
+  width: 10px; /* Adjust as needed */
+  height: 10px; /* Adjust as needed */
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #e6e6e6; /* Track color */
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #f8f7f7; /* Handle color */
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #dcdcdc; /* Handle hover color */
+}
+
+/* Hide vertical scrollbar */
+.sidebar::-webkit-scrollbar:vertical {
+  display: none;
+}
+
+.sidebar::-webkit-scrollbar-thumb:vertical:hover {
+  background: #f7f4f4;
+}
+
 
 .btn-button2 {
   color: #fff;
@@ -806,7 +831,7 @@ a:hover {
   top: 20px;
   border-radius: 100%;
   border: 3px solid #fff;
-  box-shadow: 0px 0px 0px 4px #eb0505;
+  box-shadow: 0px 0px 0px 4px #e7e4e4;
 }
 
 @media screen and (max-width: 991px) {
