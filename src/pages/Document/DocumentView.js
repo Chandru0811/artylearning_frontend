@@ -117,105 +117,111 @@ function DocumentView() {
           Document View
         </li>
       </ol>
-      <div className="d-flex justify-content-end align-item-end mt-4">
-        {approveStatus && (
-          <button
-            type="button"
-            onClick={approveUser}
-            className="btn btn-sm btn-border mx-2"
-          >
-            Approve User
-          </button>
-        )}
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">View Document</span>
+          </div>
+          <div className="d-flex justify-content-end align-item-end p-2">
+            {approveStatus && (
+              <button
+                type="button"
+                onClick={approveUser}
+                className="btn btn-sm btn-border mx-2"
+              >
+                Approve User
+              </button>
+            )}
 
-        <Link to="/document">
-          <button type="button" className="btn btn-sm btn-border">
-            Back
-          </button>
-        </Link>
-        {/* <button className="btn btn-button btn-sm ms-1" onClick={downloadFiles} disabled={loadIndicator}>
-        {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-          Download All
-        </button> */}
-      </div>
-
-      <div className="container my-4">
-        <div className="mb-5 mt-3 d-flex justify-content-between">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">S.No</th>
-                <th scope="col">Files</th>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  File Type
-                </th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data && data.length > 0 ? (
-                data.map((item, index) => (
-                  <tr key={index}>
-                    <th scope="row" className="p-4 align-item-center">
-                      {index + 1}
-                    </th>
-                    <td>
-                      {item.fileExtension === "mp4" ? (
-                        <video
-                          controls
-                          style={{ width: "200px", height: "auto" }}
-                        >
-                          <source src={item.fileAttachment} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                      ) : (
-                        <p className="my-2 d-flex">
-                          {item.fileAttachment ? (
-                            <img
+            <Link to="/document">
+              <button type="button" className="btn btn-sm btn-border">
+                Back
+              </button>
+            </Link>
+          </div>
+        </div>
+        <div className="container my-4">
+          <div className="mb-5 mt-3 d-flex justify-content-between">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">S.No</th>
+                  <th scope="col">Files</th>
+                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                    File Type
+                  </th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data && data.length > 0 ? (
+                  data.map((item, index) => (
+                    <tr key={index}>
+                      <th scope="row" className="p-4 align-item-center">
+                        {index + 1}
+                      </th>
+                      <td>
+                        {item.fileExtension === "mp4" ? (
+                          <video
+                            controls
+                            style={{ width: "200px", height: "auto" }}
+                          >
+                            <source
                               src={item.fileAttachment}
-                              width="200"
-                              height="auto"
-                              alt=""
+                              type="video/mp4"
                             />
-                          ) : (
-                            <></>
-                          )}
-                        </p>
-                      )}
-                    </td>
-                    <td className="p-4">{item.fileExtension}</td>
-                    <td className="p-4">
-                      {storedScreens?.documentListingDelete && (
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteDocumentFiles/${item.id}`}
-                        />
-                      )}
-                      <button
-                        className="btn"
-                        onClick={() =>
-                          window.open(item.fileAttachment, "_blank")
-                        }
-                      >
-                        <IoMdDownload />
-                      </button>
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <p className="my-2 d-flex">
+                            {item.fileAttachment ? (
+                              <img
+                                src={item.fileAttachment}
+                                width="200"
+                                height="auto"
+                                alt=""
+                              />
+                            ) : (
+                              <></>
+                            )}
+                          </p>
+                        )}
+                      </td>
+                      <td className="p-4">{item.fileExtension}</td>
+                      <td className="p-4">
+                        {storedScreens?.documentListingDelete && (
+                          <Delete
+                            onSuccess={refreshData}
+                            path={`/deleteDocumentFiles/${item.id}`}
+                          />
+                        )}
+                        <button
+                          className="btn"
+                          onClick={() =>
+                            window.open(item.fileAttachment, "_blank")
+                          }
+                        >
+                          <IoMdDownload />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-center">
+                      No Records Found
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" className="text-center">
-                    No Records Found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

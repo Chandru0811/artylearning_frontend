@@ -34,7 +34,7 @@ function ScheduleTeacherView({ id, onSuccess }) {
     <>
       <div className="">
         <button className="btn btn-sm" onClick={handleShow}>
-          <FaEye />
+          <FaEye /> View
         </button>
       </div>
       <Modal show={show} size="lg" onHide={handleClose} centered>

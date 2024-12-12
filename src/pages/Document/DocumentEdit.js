@@ -7,6 +7,7 @@ import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function DocumentEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -71,7 +72,7 @@ function DocumentEdit({ id, onSuccess }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
       <Modal
         show={show}

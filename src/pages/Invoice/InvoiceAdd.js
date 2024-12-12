@@ -629,311 +629,356 @@ export default function InvoiceAdd() {
           }
         }}
       >
-        <div className="container py-3">
-          <div className="row mt-3">
-            <div className="col-lg-6 col-md-6 col-12 px-5">
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Centre<span class="text-danger">*</span>
-                </label>
-                <br />
-                <select
-                  {...formik.getFieldProps("center")}
-                  name="center"
-                  className={`form-select ${
-                    formik.touched.center && formik.errors.center
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  onChange={handleCenterChange}
-                >
-                  <option selected></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerName}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.center && formik.errors.center && (
-                  <div className="invalid-feedback">{formik.errors.center}</div>
-                )}
+        <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Student<span class="text-danger">*</span>
-                </label>
-                <br />
-                <select
-                  {...formik.getFieldProps("student")}
-                  className={`form-select ${
-                    formik.touched.student && formik.errors.student
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  onChange={(event) => handleStudentChange(event.target.value)}
-                >
-                  <option selected></option>
-                  {studentData &&
-                    studentData.map((student) => (
-                      <option key={student.id} value={student.id}>
-                        {student.studentNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.student && formik.errors.student && (
-                  <div className="invalid-feedback">
-                    {formik.errors.student}
-                  </div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Parent<span class="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  {...formik.getFieldProps("parent")}
-                  className={`form-control  ${
-                    formik.touched.parent && formik.errors.parent
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  type="text"
-                />
-                {formik.touched.parent && formik.errors.parent && (
-                  <div className="invalid-feedback">{formik.errors.parent}</div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Course<span class="text-danger">*</span>
-                </label>
-                <br />
-                <select
-                  {...formik.getFieldProps("course")}
-                  className={`form-select ${
-                    formik.touched.course && formik.errors.course
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected></option>
-                  {courseData &&
-                    courseData.map((course) => (
-                      <option key={course.id} value={course.id}>
-                        {course.courseNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.course && formik.errors.course && (
-                  <div className="invalid-feedback">{formik.errors.course}</div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Schedule<span class="text-danger">*</span>
-                </label>
-                <br />
-                <select
-                  {...formik.getFieldProps("schedule")}
-                  className={`form-select ${
-                    formik.touched.schedule && formik.errors.schedule
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option value=""></option>
-                  <option value="2:30 pm">2:30 pm</option>
-                  <option value="3:30 pm">3:30 pm</option>
-                  <option value="5:00 pm">5:00 pm</option>
-                  <option value="7:00 pm">7:00 pm</option>
-                  <option value="12:00 pm">12:00 pm</option>
-                  <option value="1:00 pm">1:00 pm</option>
-                </select>
-                {formik.touched.schedule && formik.errors.schedule && (
-                  <div className="invalid-feedback">
-                    {formik.errors.schedule}
-                  </div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Package<span class="text-danger">*</span>
-                </label>
-                <br />
-                <select
-                  name="packageId"
-                  {...formik.getFieldProps("packageId")}
-                  className={`form-select ${
-                    formik.touched.packageId && formik.errors.packageId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    setSelectedPackage(e.target.value); // Update the selected package
-                  }}
-                >
-                  <option selected></option>
-                  {packageData &&
-                    packageData.map((packages) => (
-                      <option key={packages.id} value={packages.id}>
-                        {packages.packageNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.packageId && formik.errors.packageId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.packageId}
-                  </div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Remarks
-                </label>
-                <br />
-                <textarea
-                  {...formik.getFieldProps("remark")}
-                  className="form-control "
-                  type="text"
-                  placeholder="Remarks"
-                  style={{
-                    height: "7rem",
-                  }}
-                  maxLength={200}
-                  onKeyDown={(e) => {
-                    // Allow "Enter" inside the textarea to create a new line
-                    if (e.key === "Enter") {
-                      e.stopPropagation(); // Prevent the event from bubbling up to the parent
-                    }
-                  }}
-                  value={description}
-                  onChange={handleInputChange}
-                />
-              </div>
+              <span class="me-2 text-muted">Add Invoice</span>
             </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/invoice">
+                <button type="button " className="btn btn-sm btn-border   ">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Generate
+              </button>
+            </div>
+          </div>
+          <div className="container py-3">
+            <div className="row mt-3">
+              <div className="col-lg-6 col-md-6 col-12 px-5">
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Centre<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <select
+                    {...formik.getFieldProps("center")}
+                    name="center"
+                    className={`form-select ${
+                      formik.touched.center && formik.errors.center
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={handleCenterChange}
+                  >
+                    <option selected></option>
+                    {centerData &&
+                      centerData.map((center) => (
+                        <option key={center.id} value={center.id}>
+                          {center.centerName}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.center && formik.errors.center && (
+                    <div className="invalid-feedback">
+                      {formik.errors.center}
+                    </div>
+                  )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Student<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <select
+                    {...formik.getFieldProps("student")}
+                    className={`form-select ${
+                      formik.touched.student && formik.errors.student
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(event) =>
+                      handleStudentChange(event.target.value)
+                    }
+                  >
+                    <option selected></option>
+                    {studentData &&
+                      studentData.map((student) => (
+                        <option key={student.id} value={student.id}>
+                          {student.studentNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.student && formik.errors.student && (
+                    <div className="invalid-feedback">
+                      {formik.errors.student}
+                    </div>
+                  )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Parent<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    {...formik.getFieldProps("parent")}
+                    className={`form-control  ${
+                      formik.touched.parent && formik.errors.parent
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    type="text"
+                  />
+                  {formik.touched.parent && formik.errors.parent && (
+                    <div className="invalid-feedback">
+                      {formik.errors.parent}
+                    </div>
+                  )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Course<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <select
+                    {...formik.getFieldProps("course")}
+                    className={`form-select ${
+                      formik.touched.course && formik.errors.course
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected></option>
+                    {courseData &&
+                      courseData.map((course) => (
+                        <option key={course.id} value={course.id}>
+                          {course.courseNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.course && formik.errors.course && (
+                    <div className="invalid-feedback">
+                      {formik.errors.course}
+                    </div>
+                  )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Schedule<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <select
+                    {...formik.getFieldProps("schedule")}
+                    className={`form-select ${
+                      formik.touched.schedule && formik.errors.schedule
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option value=""></option>
+                    <option value="2:30 pm">2:30 pm</option>
+                    <option value="3:30 pm">3:30 pm</option>
+                    <option value="5:00 pm">5:00 pm</option>
+                    <option value="7:00 pm">7:00 pm</option>
+                    <option value="12:00 pm">12:00 pm</option>
+                    <option value="1:00 pm">1:00 pm</option>
+                  </select>
+                  {formik.touched.schedule && formik.errors.schedule && (
+                    <div className="invalid-feedback">
+                      {formik.errors.schedule}
+                    </div>
+                  )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Package<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <select
+                    name="packageId"
+                    {...formik.getFieldProps("packageId")}
+                    className={`form-select ${
+                      formik.touched.packageId && formik.errors.packageId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                      setSelectedPackage(e.target.value); // Update the selected package
+                    }}
+                  >
+                    <option selected></option>
+                    {packageData &&
+                      packageData.map((packages) => (
+                        <option key={packages.id} value={packages.id}>
+                          {packages.packageNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.packageId && formik.errors.packageId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.packageId}
+                    </div>
+                  )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Remarks
+                  </label>
+                  <br />
+                  <textarea
+                    {...formik.getFieldProps("remark")}
+                    className="form-control "
+                    type="text"
+                    placeholder="Remarks"
+                    style={{
+                      height: "7rem",
+                    }}
+                    maxLength={200}
+                    onKeyDown={(e) => {
+                      // Allow "Enter" inside the textarea to create a new line
+                      if (e.key === "Enter") {
+                        e.stopPropagation(); // Prevent the event from bubbling up to the parent
+                      }
+                    }}
+                    value={description}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
 
-            <div className="col-lg-6 col-md-6 col-12 px-5">
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Invoice Date<span className="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  {...formik.getFieldProps("invoiceDate")}
-                  className={`form-control ${
-                    formik.touched.invoiceDate && formik.errors.invoiceDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  type="date"
-                />
-                {formik.touched.invoiceDate && formik.errors.invoiceDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.invoiceDate}
-                  </div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Due Date<span className="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  {...formik.getFieldProps("dueDate")}
-                  className={`form-control ${
-                    formik.touched.dueDate && formik.errors.dueDate
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  type="date"
-                  // Set the minimum due date to the selected invoice date
-                  min={
-                    formik.values.invoiceDate ||
-                    new Date().toISOString().split("T")[0]
-                  }
-                />
-                {formik.touched.dueDate && formik.errors.dueDate && (
-                  <div className="invalid-feedback">
-                    {formik.errors.dueDate}
-                  </div>
-                )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Invoice Period From<span class="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  {...formik.getFieldProps("invoicePeriodFrom")}
-                  {...formik.getFieldProps("invoicePeriodFrom")}
-                  className={`form-control  ${
-                    formik.touched.invoicePeriodFrom &&
-                    formik.errors.invoicePeriodFrom
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  type="date"
-                />
-                {formik.touched.invoicePeriodFrom &&
-                  formik.errors.invoicePeriodFrom && (
+              <div className="col-lg-6 col-md-6 col-12 px-5">
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Invoice Date<span className="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    {...formik.getFieldProps("invoiceDate")}
+                    className={`form-control ${
+                      formik.touched.invoiceDate && formik.errors.invoiceDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    type="date"
+                  />
+                  {formik.touched.invoiceDate && formik.errors.invoiceDate && (
                     <div className="invalid-feedback">
-                      {formik.errors.invoicePeriodFrom}
+                      {formik.errors.invoiceDate}
                     </div>
                   )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Invoice Period To<span class="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  {...formik.getFieldProps("invoicePeriodTo")}
-                  className={`form-control  ${
-                    formik.touched.invoicePeriodTo &&
-                    formik.errors.invoicePeriodTo
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  type="date"
-                />
-                {formik.touched.invoicePeriodTo &&
-                  formik.errors.invoicePeriodTo && (
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Due Date<span className="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    {...formik.getFieldProps("dueDate")}
+                    className={`form-control ${
+                      formik.touched.dueDate && formik.errors.dueDate
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    type="date"
+                    // Set the minimum due date to the selected invoice date
+                    min={
+                      formik.values.invoiceDate ||
+                      new Date().toISOString().split("T")[0]
+                    }
+                  />
+                  {formik.touched.dueDate && formik.errors.dueDate && (
                     <div className="invalid-feedback">
-                      {formik.errors.invoicePeriodTo}
+                      {formik.errors.dueDate}
                     </div>
                   )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Receipt Amount<span class="text-danger">*</span>
-                </label>
-                <br />
-                <input
-                  {...formik.getFieldProps("receiptAmount")}
-                  className={`form-control  ${
-                    formik.touched.receiptAmount && formik.errors.receiptAmount
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  type="text"
-                  placeholder=""
-                />
-                {formik.touched.receiptAmount &&
-                  formik.errors.receiptAmount && (
-                    <div className="text-danger" style={{ fontSize: ".875em" }}>
-                      {formik.errors.receiptAmount}
-                    </div>
-                  )}
-              </div>
-              <div className="text-start mt-3">
-                <label htmlFor="" className="mb-1 fw-medium">
-                  Number of Lesson
-                </label>
-                <br />
-                {/* <select
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Invoice Period From<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    {...formik.getFieldProps("invoicePeriodFrom")}
+                    {...formik.getFieldProps("invoicePeriodFrom")}
+                    className={`form-control  ${
+                      formik.touched.invoicePeriodFrom &&
+                      formik.errors.invoicePeriodFrom
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    type="date"
+                  />
+                  {formik.touched.invoicePeriodFrom &&
+                    formik.errors.invoicePeriodFrom && (
+                      <div className="invalid-feedback">
+                        {formik.errors.invoicePeriodFrom}
+                      </div>
+                    )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Invoice Period To<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    {...formik.getFieldProps("invoicePeriodTo")}
+                    className={`form-control  ${
+                      formik.touched.invoicePeriodTo &&
+                      formik.errors.invoicePeriodTo
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    type="date"
+                  />
+                  {formik.touched.invoicePeriodTo &&
+                    formik.errors.invoicePeriodTo && (
+                      <div className="invalid-feedback">
+                        {formik.errors.invoicePeriodTo}
+                      </div>
+                    )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Receipt Amount<span class="text-danger">*</span>
+                  </label>
+                  <br />
+                  <input
+                    {...formik.getFieldProps("receiptAmount")}
+                    className={`form-control  ${
+                      formik.touched.receiptAmount &&
+                      formik.errors.receiptAmount
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    type="text"
+                    placeholder=""
+                  />
+                  {formik.touched.receiptAmount &&
+                    formik.errors.receiptAmount && (
+                      <div
+                        className="text-danger"
+                        style={{ fontSize: ".875em" }}
+                      >
+                        {formik.errors.receiptAmount}
+                      </div>
+                    )}
+                </div>
+                <div className="text-start mt-3">
+                  <label htmlFor="" className="mb-1 fw-medium">
+                    Number of Lesson
+                  </label>
+                  <br />
+                  {/* <select
                   name="noOfLessons"
                   {...formik.getFieldProps("noOfLessons")}
                   class="form-select "
@@ -945,174 +990,175 @@ export default function InvoiceAdd() {
                     </option>
                   ))}
                 </select> */}
-                <input
-                  id="noOfLessons"
-                  name="noOfLessons"
-                  type="text"
-                  className="form-control"
-                  {...formik.getFieldProps("noOfLessons")}
-                  // If you want to show the default value based on lessonsOptions array
-                  value={formik.values.noOfLessons || lessonsOptions[0] || ""}
-                  onChange={(e) => {
-                    formik.setFieldValue("noOfLessons", e.target.value);
-                  }}
-                  readOnly
-                />
+                  <input
+                    id="noOfLessons"
+                    name="noOfLessons"
+                    type="text"
+                    className="form-control"
+                    {...formik.getFieldProps("noOfLessons")}
+                    // If you want to show the default value based on lessonsOptions array
+                    value={formik.values.noOfLessons || lessonsOptions[0] || ""}
+                    onChange={(e) => {
+                      formik.setFieldValue("noOfLessons", e.target.value);
+                    }}
+                    readOnly
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="row mt-5 pt-5 flex-nowrap">
-            <div className="col-12">
-              <div className="table-responsive table-bordered">
-                <table className="table table-light table-nowrap">
-                  <thead className="thead-light">
-                    <tr>
-                      <th>
-                        Item<span className="text-danger">*</span>
-                      </th>
-                      <th>
-                        Item Amount (Exc GST)
-                        <span className="text-danger">*</span>
-                      </th>
-                      <th>
-                        Tax Type<span className="text-danger">*</span>
-                      </th>
-                      <th>
-                        GST Amount<span className="text-danger">*</span>
-                      </th>
-                      <th>
-                        Total Amount (Inc GST)
-                        <span className="text-danger">*</span>
-                      </th>
-                      <th>
-                        {/* Total Amount (Inc GST)
+            <div className="row mt-5 pt-5 flex-nowrap">
+              <div className="col-12">
+                <div className="table-responsive table-bordered">
+                  <table className="table table-light table-nowrap">
+                    <thead className="thead-light">
+                      <tr>
+                        <th>
+                          Item<span className="text-danger">*</span>
+                        </th>
+                        <th>
+                          Item Amount (Exc GST)
+                          <span className="text-danger">*</span>
+                        </th>
+                        <th>
+                          Tax Type<span className="text-danger">*</span>
+                        </th>
+                        <th>
+                          GST Amount<span className="text-danger">*</span>
+                        </th>
+                        <th>
+                          Total Amount (Inc GST)
+                          <span className="text-danger">*</span>
+                        </th>
+                        <th>
+                          {/* Total Amount (Inc GST)
                         <span className="text-danger">*</span> */}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows.map((row, index) => (
-                      <tr key={index}>
-                        <td>
-                          <input
-                            {...formik.getFieldProps(
-                              `invoiceItems[${index}].item`
-                            )}
-                            className={`form-control ${
-                              formik.touched.invoiceItems?.[index]?.item &&
-                              formik.errors.invoiceItems?.[index]?.item
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            type="text"
-                            style={{ width: "80%" }}
-                          />
-                          {formik.touched.invoiceItems?.[index]?.item &&
-                            formik.errors.invoiceItems?.[index]?.item && (
-                              <div className="invalid-feedback">
-                                {formik.errors.invoiceItems[index].item}
-                              </div>
-                            )}
-                        </td>
-                        <td>
-                          <input
-                            {...formik.getFieldProps(
-                              `invoiceItems[${index}].itemAmount`
-                            )}
-                            className={`form-control ${
-                              formik.touched.invoiceItems?.[index]
-                                ?.itemAmount &&
-                              formik.errors.invoiceItems?.[index]?.itemAmount
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            type="number"
-                            min={0}
-                            style={{ width: "80%" }}
-                            onChange={formik.handleChange}
-                            readOnly
-                          />
-                          {formik.touched.invoiceItems?.[index]?.itemAmount &&
-                            formik.errors.invoiceItems?.[index]?.itemAmount && (
-                              <div className="invalid-feedback">
-                                {formik.errors.invoiceItems[index].itemAmount}
-                              </div>
-                            )}
-                        </td>
-                        <td>
-                          <select
-                            className={`form-select ${
-                              formik.touched.invoiceItems?.[index]?.taxType &&
-                              formik.errors.invoiceItems?.[index]?.taxType
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            {...formik.getFieldProps(
-                              `invoiceItems[${index}].taxType`
-                            )}
-                            style={{ width: "100%" }}
-                            onChange={(e) =>
-                              handleSelectChange(index, e.target.value)
-                            }
-                          >
-                            <option value=""></option>
-                            {taxData &&
-                              taxData.map((tax) => (
-                                <option key={tax.id} value={tax.id}>
-                                  {`${tax.taxType} ${tax.rate}%`}
-                                </option>
-                              ))}
-                          </select>
-                          {formik.touched.invoiceItems?.[index]?.taxType &&
-                            formik.errors.invoiceItems?.[index]?.taxType && (
-                              <div className="invalid-feedback">
-                                {formik.errors.invoiceItems[index].taxType}
-                              </div>
-                            )}
-                        </td>
-                        <td>
-                          <input
-                            {...formik.getFieldProps(
-                              `invoiceItems[${index}].gstAmount`
-                            )}
-                            className="form-control"
-                            type="text"
-                            style={{ width: "80%" }}
-                            readOnly
-                            onChange={formik.handleChange}
-                          />
-                        </td>
-                        <td>
-                          <input
-                            onInput={(event) => {
-                              event.target.value = event.target.value.replace(
-                                /[^0-9]/g,
-                                ""
-                              );
-                            }}
-                            {...formik.getFieldProps(
-                              `invoiceItems[${index}].totalAmount`
-                            )}
-                            className="form-control"
-                            type="text"
-                            style={{ width: "80%" }}
-                            onChange={(e) =>
-                              handelTotalAmountChange(index, e.target.value)
-                            }
-                          />
-                        </td>
-                        <td>
-                          {index !== 0 && (
-                            <button
-                              type="button"
-                              className="btn btn-sm mx-2 text-danger border-danger bg-white"
-                              onClick={() => handleRowDelete(index)}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((row, index) => (
+                        <tr key={index}>
+                          <td>
+                            <input
+                              {...formik.getFieldProps(
+                                `invoiceItems[${index}].item`
+                              )}
+                              className={`form-control ${
+                                formik.touched.invoiceItems?.[index]?.item &&
+                                formik.errors.invoiceItems?.[index]?.item
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              type="text"
+                              style={{ width: "80%" }}
+                            />
+                            {formik.touched.invoiceItems?.[index]?.item &&
+                              formik.errors.invoiceItems?.[index]?.item && (
+                                <div className="invalid-feedback">
+                                  {formik.errors.invoiceItems[index].item}
+                                </div>
+                              )}
+                          </td>
+                          <td>
+                            <input
+                              {...formik.getFieldProps(
+                                `invoiceItems[${index}].itemAmount`
+                              )}
+                              className={`form-control ${
+                                formik.touched.invoiceItems?.[index]
+                                  ?.itemAmount &&
+                                formik.errors.invoiceItems?.[index]?.itemAmount
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              type="number"
+                              min={0}
+                              style={{ width: "80%" }}
+                              onChange={formik.handleChange}
+                              readOnly
+                            />
+                            {formik.touched.invoiceItems?.[index]?.itemAmount &&
+                              formik.errors.invoiceItems?.[index]
+                                ?.itemAmount && (
+                                <div className="invalid-feedback">
+                                  {formik.errors.invoiceItems[index].itemAmount}
+                                </div>
+                              )}
+                          </td>
+                          <td>
+                            <select
+                              className={`form-select ${
+                                formik.touched.invoiceItems?.[index]?.taxType &&
+                                formik.errors.invoiceItems?.[index]?.taxType
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              {...formik.getFieldProps(
+                                `invoiceItems[${index}].taxType`
+                              )}
+                              style={{ width: "100%" }}
+                              onChange={(e) =>
+                                handleSelectChange(index, e.target.value)
+                              }
                             >
-                              Delete
-                            </button>
-                          )}
-                          {/* <input
+                              <option value=""></option>
+                              {taxData &&
+                                taxData.map((tax) => (
+                                  <option key={tax.id} value={tax.id}>
+                                    {`${tax.taxType} ${tax.rate}%`}
+                                  </option>
+                                ))}
+                            </select>
+                            {formik.touched.invoiceItems?.[index]?.taxType &&
+                              formik.errors.invoiceItems?.[index]?.taxType && (
+                                <div className="invalid-feedback">
+                                  {formik.errors.invoiceItems[index].taxType}
+                                </div>
+                              )}
+                          </td>
+                          <td>
+                            <input
+                              {...formik.getFieldProps(
+                                `invoiceItems[${index}].gstAmount`
+                              )}
+                              className="form-control"
+                              type="text"
+                              style={{ width: "80%" }}
+                              readOnly
+                              onChange={formik.handleChange}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              onInput={(event) => {
+                                event.target.value = event.target.value.replace(
+                                  /[^0-9]/g,
+                                  ""
+                                );
+                              }}
+                              {...formik.getFieldProps(
+                                `invoiceItems[${index}].totalAmount`
+                              )}
+                              className="form-control"
+                              type="text"
+                              style={{ width: "80%" }}
+                              onChange={(e) =>
+                                handelTotalAmountChange(index, e.target.value)
+                              }
+                            />
+                          </td>
+                          <td>
+                            {index !== 0 && (
+                              <button
+                                type="button"
+                                className="btn btn-sm mx-2 text-danger border-danger bg-white"
+                                onClick={() => handleRowDelete(index)}
+                              >
+                                Delete
+                              </button>
+                            )}
+                            {/* <input
                             {...formik.getFieldProps(
                               `invoiceItems[${index}].totalAmount`
                             )}
@@ -1123,18 +1169,18 @@ export default function InvoiceAdd() {
                               handelTotalAmountChange(index, e.target.value)
                             }
                           /> */}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="row mt-3">
-            <div className="col-12 text-end mt-3">
-              {/* {rows.length > 1 && (
+            <div className="row mt-3">
+              <div className="col-12 text-end mt-3">
+                {/* {rows.length > 1 && (
                 <button
                   type="button"
                   className="btn btn-sm mx-2 text-danger border-danger bg-white"
@@ -1143,81 +1189,78 @@ export default function InvoiceAdd() {
                   Delete
                 </button>
               )} */}
-              <button
-                className="btn btn-sm btn-danger me-2"
-                type="button"
-                onClick={() => {
-                  setRows((pr) => [...pr, {}]);
-                }}
-              >
-                Add Row
-              </button>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12"></div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="">
-                <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
-                    Credit Advise Offset
-                  </label>
-                  <br />
-                  <input
-                    {...formik.getFieldProps("creditAdviceOffset")}
-                    className="form-control"
-                    type="text"
-                    placeholder=""
-                    readOnly
-                  />
-                </div>
-                <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
-                    GST Amount
-                  </label>
-                  <br />
-                  <input
-                    {...formik.getFieldProps("gst")}
-                    className="form-control  "
-                    type="text"
-                    placeholder=""
-                    readOnly
-                  />
-                </div>
-                <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
-                    Total Amount
-                  </label>
-                  <br />
-                  <input
-                    {...formik.getFieldProps("totalAmount")}
-                    className="form-control  "
-                    type="text"
-                    placeholder=""
-                    readOnly
-                  />
+                <button
+                  className="btn btn-sm btn-danger me-2"
+                  type="button"
+                  onClick={() => {
+                    setRows((pr) => [...pr, {}]);
+                  }}
+                >
+                  Add Row
+                </button>
+              </div>
+              <div className="col-lg-6 col-md-6 col-12"></div>
+              <div className="col-lg-6 col-md-6 col-12">
+                <div className="">
+                  <div className="text-start mt-3">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      Credit Advise Offset
+                    </label>
+                    <br />
+                    <input
+                      {...formik.getFieldProps("creditAdviceOffset")}
+                      className="form-control"
+                      type="text"
+                      placeholder=""
+                      readOnly
+                    />
+                  </div>
+                  <div className="text-start mt-3">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      GST Amount
+                    </label>
+                    <br />
+                    <input
+                      {...formik.getFieldProps("gst")}
+                      className="form-control  "
+                      type="text"
+                      placeholder=""
+                      readOnly
+                    />
+                  </div>
+                  <div className="text-start mt-3">
+                    <label htmlFor="" className="mb-1 fw-medium">
+                      Total Amount
+                    </label>
+                    <br />
+                    <input
+                      {...formik.getFieldProps("totalAmount")}
+                      className="form-control  "
+                      type="text"
+                      placeholder=""
+                      readOnly
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-12 text-end  mt-3">
-              <Link to="/invoice">
-                <button className="btn btn-sm btn-border mx-2">Cancel</button>
-              </Link>
-              <button
-                type="submit"
-                className="btn btn-sm btn-button mx-2"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Generate
-              </button>
-
-              {/* <button type="submit" className="btn btn-sm btn-button mx-2">
-                Generate
-              </button> */}
+              {/* <div className="col-12 text-end  mt-3">
+                <Link to="/invoice">
+                  <button className="btn btn-sm btn-border mx-2">Cancel</button>
+                </Link>
+                <button
+                  type="submit"
+                  className="btn btn-sm btn-button mx-2"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Generate
+                </button>
+              </div> */}
             </div>
           </div>
         </div>

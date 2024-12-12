@@ -177,6 +177,19 @@ const RevenueReport = () => {
             Revenue Report
           </li>
         </ol>
+        <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">Revenue Report</span>
+            </div>
+          </div>
+          <div className="container">
         <div className="row my-5">
           <div className="col-md-4 col-12">
             <label className="form-label">Centre</label>
@@ -299,6 +312,8 @@ const RevenueReport = () => {
               />
             </div>
           </div>
+        </div>
+        </div>
         </div>
       </div>
     </div>
