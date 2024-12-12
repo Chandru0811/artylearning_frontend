@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { FaEdit } from "react-icons/fa";
 import api from "../../config/URL";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function ReferalFeesEdit({ id, referalData, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -111,7 +112,7 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <MdOutlineModeEdit /> Edit
       </button>
 
       <Modal

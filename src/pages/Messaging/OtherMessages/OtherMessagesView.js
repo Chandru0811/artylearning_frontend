@@ -145,6 +145,25 @@ function OtherMessagesView() {
           Other Messages View
         </li>
       </ol>
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">View OtherMessages</span>
+          </div>
+          <div className="d-flex justify-content-end align-item-end p-2">
+            <Link to="/othermessaging">
+              <button type="button" className="btn btn-sm btn-border">
+                Back
+              </button>
+            </Link>
+          </div>
+        </div>
       <div className="container-fluid">
         <div className="row message-list">
           <div className="col-12">
@@ -182,6 +201,7 @@ function OtherMessagesView() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

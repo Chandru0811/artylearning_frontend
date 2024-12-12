@@ -147,14 +147,27 @@ function SendNotificationView() {
           School Announcement View
         </li>
       </ol>
-      <div className="d-flex justify-content-end align-item-end mt-4">
-        <Link to="/sendNotification">
-          <button type="button" className="btn btn-sm btn-border">
-            Back
-          </button>
-        </Link>
-      </div>
       <div>
+      <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">School Announcement View</span>
+            </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/sendNotification">
+                <button type="button " className="btn btn-sm btn-border   ">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+            </div>
+          </div>
         <div className="container">
           {/* <h1 className="headColor">View Announcement</h1> */}
           <div className="row mt-2 pb-3">
@@ -266,6 +279,7 @@ function SendNotificationView() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

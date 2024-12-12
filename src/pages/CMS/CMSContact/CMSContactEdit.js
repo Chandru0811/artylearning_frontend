@@ -8,6 +8,7 @@ import * as Yup from "yup";
 // import api from "../../config/URL";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function CMSContactEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -86,7 +87,7 @@ function CMSContactEdit({ id, onSuccess }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit{" "}
       </button>
       <Modal
         show={show}

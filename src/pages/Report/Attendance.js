@@ -153,102 +153,118 @@ const Attendance = () => {
           }
         }}
       >
-        <div className="row my-4">
-          <div className="col-md-4 col-12 mb-2">
-            <label className="form-label">Centre</label>
-            <select
-              {...formik.getFieldProps("centerId")}
-              className={`form-select ${
-                formik.touched.centerId && formik.errors.centerId
-                  ? "is-invalid"
-                  : ""
-              }`}
-              aria-label="Default select example"
-              onChange={handleCenterChange}
-            >
-              <option></option>
-              {centerData &&
-                centerData.map((center) => (
-                  <option key={center.id} value={center.id}>
-                    {center.centerNames}
-                  </option>
-                ))}
-            </select>
-            {formik.touched.centerId && formik.errors.centerId && (
-              <div className="invalid-feedback">{formik.errors.centerId}</div>
-            )}
-          </div>
-          <div className="col-md-4 col-12 mb-2">
-            <label className="form-label">Course</label>
-            <select
-              {...formik.getFieldProps("courseId")}
-              className={`form-select ${
-                formik.touched.courseId && formik.errors.courseId
-                  ? "is-invalid"
-                  : ""
-              }`}
-            >
-              <option></option>
-              {courseData &&
-                courseData.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.courseNames}
-                  </option>
-                ))}
-            </select>
-            {formik.touched.courseId && formik.errors.courseId && (
-              <div className="invalid-feedback">{formik.errors.courseId}</div>
-            )}
-          </div>
-          <div className="col-md-4 col-12 mb-2">
-            <label className="form-label">Attendance Date</label>
-            <input
-              {...formik.getFieldProps("attendanceDate")}
-              type="date"
-              onFocus={(e) => e.target.showPicker()}
-              className={`form-control ${
-                formik.touched.attendanceDate && formik.errors.attendanceDate
-                  ? "is-invalid"
-                  : ""
-              }`}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              value={selectedDate}
-            />
-            {formik.touched.attendanceDate && formik.errors.attendanceDate && (
-              <div className="invalid-feedback">
-                {formik.errors.attendanceDate}
+        <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
-            )}
+              <span class="me-2 text-muted">Attendance</span>
+            </div>
           </div>
-          <div className="col-md-4 col-12">
-            <label className="form-label">Status</label>
-            <select
-              {...formik.getFieldProps("attendanceStatus")}
-              className={`form-select ${
-                formik.touched.attendanceStatus &&
-                formik.errors.attendanceStatus
-                  ? "is-invalid"
-                  : ""
-              }`}
-            >
-              <option disabled></option>
-              <option value="present">Present</option>
-              <option value="absent">Absent</option>
-            </select>
-            {formik.touched.attendanceStatus &&
-              formik.errors.attendanceStatus && (
-                <div className="invalid-feedback">
-                  {formik.errors.attendanceStatus}
-                </div>
+          <div className="container">
+          <div className="row my-4">
+            <div className="col-md-4 col-12 mb-2">
+              <label className="form-label">Centre</label>
+              <select
+                {...formik.getFieldProps("centerId")}
+                className={`form-select ${
+                  formik.touched.centerId && formik.errors.centerId
+                    ? "is-invalid"
+                    : ""
+                }`}
+                aria-label="Default select example"
+                onChange={handleCenterChange}
+              >
+                <option></option>
+                {centerData &&
+                  centerData.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.centerNames}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.centerId && formik.errors.centerId && (
+                <div className="invalid-feedback">{formik.errors.centerId}</div>
               )}
+            </div>
+            <div className="col-md-4 col-12 mb-2">
+              <label className="form-label">Course</label>
+              <select
+                {...formik.getFieldProps("courseId")}
+                className={`form-select ${
+                  formik.touched.courseId && formik.errors.courseId
+                    ? "is-invalid"
+                    : ""
+                }`}
+              >
+                <option></option>
+                {courseData &&
+                  courseData.map((course) => (
+                    <option key={course.id} value={course.id}>
+                      {course.courseNames}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.courseId && formik.errors.courseId && (
+                <div className="invalid-feedback">{formik.errors.courseId}</div>
+              )}
+            </div>
+            <div className="col-md-4 col-12 mb-2">
+              <label className="form-label">Attendance Date</label>
+              <input
+                {...formik.getFieldProps("attendanceDate")}
+                type="date"
+                onFocus={(e) => e.target.showPicker()}
+                className={`form-control ${
+                  formik.touched.attendanceDate && formik.errors.attendanceDate
+                    ? "is-invalid"
+                    : ""
+                }`}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                value={selectedDate}
+              />
+              {formik.touched.attendanceDate &&
+                formik.errors.attendanceDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.attendanceDate}
+                  </div>
+                )}
+            </div>
+            <div className="col-md-4 col-12">
+              <label className="form-label">Status</label>
+              <select
+                {...formik.getFieldProps("attendanceStatus")}
+                className={`form-select ${
+                  formik.touched.attendanceStatus &&
+                  formik.errors.attendanceStatus
+                    ? "is-invalid"
+                    : ""
+                }`}
+              >
+                <option disabled></option>
+                <option value="present">Present</option>
+                <option value="absent">Absent</option>
+              </select>
+              {formik.touched.attendanceStatus &&
+                formik.errors.attendanceStatus && (
+                  <div className="invalid-feedback">
+                    {formik.errors.attendanceStatus}
+                  </div>
+                )}
+            </div>
+            <div className="col-md-4 col-12 d-flex align-items-end">
+              <button
+                type="submit"
+                className="btn btn-light btn-border btn-sm mt-3"
+              >
+                Search
+              </button>
+            </div>
           </div>
-          <div className="col-md-4 col-12 d-flex align-items-end">
-            <button
-              type="submit"
-              className="btn btn-light btn-border btn-sm mt-3"
-            >
-              Search
-            </button>
           </div>
         </div>
       </form>

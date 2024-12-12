@@ -206,8 +206,8 @@
 }
 
 .campaignStudentAdd .form-check-input:checked {
-  background-color: #d86300;
-  border-color: #d86300;
+  background-color: #eb862a !important;
+  border-color: #eb862a !important;
 }
 
 /* Loader Css  */
@@ -767,10 +767,6 @@ tbody tr td{
   border-bottom: 1.8px solid #000;
 }
 
-.center_list:focus {
-  box-shadow: none;
-}
-
 .dataTables_filter {
   padding-right: 20px;
   padding-bottom: 10px;
@@ -990,6 +986,21 @@ input.searchInputG:hover {
   color: #333 !important; 
 }
 
+.fc-direction-ltr .fc-daygrid-block-event:not(.fc-event-end), .fc-direction-rtl .fc-daygrid-block-event:not(.fc-event-start) {
+  border-bottom-right-radius: 7px;
+  border-right-width: 7px;
+  border-top-right-radius: 7px;
+}
+
+.fc-direction-ltr .fc-daygrid-block-event:not(.fc-event-start), .fc-direction-rtl .fc-daygrid-block-event:not(.fc-event-end) {
+  border-bottom-left-radius: 7px;
+  border-left-width: 7px;
+  border-top-left-radius: 7px;
+}
+.fc-h-event {
+  border: none;
+  display: block;
+}
 
 /* data table */
 tbody, td, tfoot, th, thead, tr{

@@ -10,6 +10,7 @@ import CMSContactEdit from "./CMSContactEdit";
 import CMSContactView from "./CMSContactView";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { IoIosAddCircle } from "react-icons/io";
 
 const CMSContact = () => {
   const tableRef = useRef(null);
@@ -46,7 +47,7 @@ const CMSContact = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
+      columnDefs: [{ orderable: false, targets: 1 }],
     });
   };
 
@@ -125,69 +126,113 @@ const CMSContact = () => {
           </div>
         </div>
       </div>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Contact Us
+              </span>
+            </span>
           </div>
         </div>
-      ) : (
-        <div className="table-responsive">
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col" className="text-center">
-                  S No
-                </th>
-                <th scope="col" className="text-center">
-                  Centre Name
-                </th>
-                <th scope="col" className="text-center">
-                  Email
-                </th>
-                <th scope="col" className="text-center">
-                  Mobile Number
-                </th>
-                <th scope="col" className="text-center">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas.map((data, index) => (
-                <tr key={index}>
-                  <th scope="row" className="text-center">
-                    {index + 1}
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : (
+          <div className="table-responsive">
+            <table ref={tableRef} className="display">
+              <thead>
+                <tr>
+                  <th scope="col" className="text-center">
+                    S No
                   </th>
-                  <td className="text-center">{data.centerName}</td>
-                  <td className="text-center">{data.email}</td>
-                  <td className="text-center">{data.mobileNo}</td>
-                  <td className="text-center">
-                    <div className="d-flex justify-content-center">
-                      {storedScreens?.contactUsRead && (
-                        <CMSContactView id={data.id} />
-                      )}
-                      {storedScreens?.contactUsUpdate && (
-                        <CMSContactEdit id={data.id} onSuccess={refreshData} />
-                      )}
-                      {storedScreens?.contactUsDelete && (
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteContactUsSave/${data.id}`}
-                        />
-                      )}
-                    </div>
-                  </td>
+                  <th scope="" className="text-center"></th>
+                  <th scope="col" className="text-center">
+                    Centre Name
+                  </th>
+                  <th scope="col" className="text-center">
+                    Email
+                  </th>
+                  <th scope="col" className="text-center">
+                    Mobile Number
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {datas.map((data, index) => (
+                  <tr key={index}>
+                    <th scope="row" className="text-center">
+                      {index + 1}
+                    </th>
+                    <td className="text-center">
+                      <div className="d-flex justify-content-center align-items-center">
+                        <div className="dropdown">
+                          <button
+                            className="btn btn-button btn-sm"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <IoIosAddCircle
+                              className="text-light"
+                              style={{ fontSize: "16px" }}
+                            />
+                          </button>
+                          <ul
+                            className="dropdown-menu"
+                            aria-labelledby="dropdownMenuButton"
+                          >
+                            <li>
+                              {storedScreens?.contactUsRead && (
+                                <CMSContactView id={data.id} />
+                              )}
+                            </li>
+                            <li>
+                              {storedScreens?.contactUsUpdate && (
+                                <CMSContactEdit
+                                  id={data.id}
+                                  onSuccess={refreshData}
+                                />
+                              )}
+                            </li>
+                            <li>
+                              {storedScreens?.contactUsDelete && (
+                                <Delete
+                                  onSuccess={refreshData}
+                                  path={`/deleteContactUsSave/${data.id}`}
+                                />
+                              )}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="text-center">{data.centerName}</td>
+                    <td className="text-center">{data.email}</td>
+                    <td className="text-center">{data.mobileNo}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

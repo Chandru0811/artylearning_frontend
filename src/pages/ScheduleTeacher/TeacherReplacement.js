@@ -7,6 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function TeacherReplacement({ onSuccess }) {
   const [show, setShow] = useState(false);
@@ -78,8 +79,11 @@ function TeacherReplacement({ onSuccess }) {
 
   return (
     <>
-      <div>
-        <span onClick={handleShow}>Teacher Replacement</span>
+      <div className="ms-2">
+        <span onClick={handleShow}>
+          {" "}
+          <MdOutlineModeEdit /> &nbsp;&nbsp;Edit{" "}
+        </span>
       </div>
       <Modal show={show} size="lg" onHide={handleClose} centered>
         <Modal.Header closeButton>

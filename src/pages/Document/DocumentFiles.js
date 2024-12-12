@@ -192,6 +192,40 @@ function DocumentFile() {
               Document File
             </li>
           </ol>
+          <div className="card">
+          <div
+            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">Add Document</span>
+            </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/document">
+                <button type="button " className="btn btn-sm btn-border">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                <span className="fw-medium">Save</span>
+              </button>
+            </div>
+          </div>
+          <div className="container">
           <div className="row px-1">
             <div className="py-3">
               <p className="headColor">Centre Files</p>
@@ -332,30 +366,8 @@ function DocumentFile() {
                 </label>
               </div>
             </div>
-
-            <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-              <Link to="/document">
-                <button
-                  type="button"
-                  className="btn btn-light btn-border btn-sm mx-3"
-                >
-                  Back
-                </button>
-              </Link>
-              <button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Save
-              </button>
-            </div>
+          </div>
+          </div>
           </div>
         </div>
       </form>
