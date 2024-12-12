@@ -90,13 +90,13 @@ function LevelAdd({ onSuccess }) {
 
   return (
     <>
-      <div className="mb-3 d-flex justify-content-end">
+      <div className="d-flex justify-content-end mb-3">
         <button
           type="button"
           className="btn btn-button btn-sm"
           onClick={handleShow}
         >
-          Add <i class="bx bx-plus"></i>
+          &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
         </button>
       </div>
       <Modal

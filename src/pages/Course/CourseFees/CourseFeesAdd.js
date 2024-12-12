@@ -141,7 +141,7 @@ function CourseFeesAdd({ onSuccess, centerId }) {
 
   return (
     <>
-      <div className="mb-5 mt-4 d-flex justify-content-end">
+      <div className="py-2 d-flex justify-content-end">
         <Link to="/course">
           <button type="button " className="btn btn-sm btn-border   ">
             Back

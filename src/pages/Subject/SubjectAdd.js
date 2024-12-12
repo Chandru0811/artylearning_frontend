@@ -114,7 +114,7 @@ function SubjectAdd({ onSuccess }) {
           className="btn btn-button btn-sm"
           onClick={handleShow}
         >
-          Add <i className="bx bx-plus"></i>
+          &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
         </button>
       </div>
 

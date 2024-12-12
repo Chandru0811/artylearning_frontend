@@ -90,10 +90,22 @@ function CurriculumOutlet() {
     if (!dateString) return ""; // Handle null or undefined date strings
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    }
+  }, [datas]);
+
   return (
-    <div className="container my-4">
+    <div className="container-fluid">
       <ol
-        className="breadcrumb my-3"
+        className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -116,143 +128,137 @@ function CurriculumOutlet() {
           Curriculum Outlet
         </li>
       </ol>
-      {storedScreens?.levelCreate && (
-        <div className="d-flex justify-content-end align-items-center">
+      <div className="card">
+        <div
+          style={{ background: "#f5f7f9" }}
+          className="d-flex justify-content-between align-items-center px-2"
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Curriculum Olutlet
+              </span>
+            </span>
+          </div>
           <span>
             <CurriculumOutletAdd onSuccess={refreshData} />
           </span>
-          {/* } */}
-          {/* <p className="mb-4">        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-
-          {extraData?"Hide":'Show'}
-          <MdViewColumn className="fs-4 text-secondary"/>
-
-        </button> </p> */}
         </div>
-      )}
-      {/* <div className="my-3 d-flex justify-content-end mb-5">
-                {storedScreens?.courseCreate && (
-                    <Link to={{
-                        pathname: "/course/coursefees/add",
-                        state: { subjectData }
-                    }}>
-                        <button type="button" className="btn btn-button btn-sm">
-                            Add <i class="bx bx-plus"></i>
-                        </button>
-                    </Link>
-                )}
-            </div> */}
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+        {loading ? (
+          <div className="loader-container">
+            <div class="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="table-responsive">
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col">S No</th>
-                <th scope="col">Effective Date</th>
-                <th scope="col">Title</th>
-                <th scope="col">Status</th>
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    CreatedBy
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    CreatedAt
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    UpdatedBy
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    UpdatedAt
-                  </th>
-                )}
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(datas) &&
-                datas?.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.effectiveDate}</td>
-                    <td>{data.name}</td>
-                    <td>
-                      {data.status === "ACTIVE" ? (
-                        <span className="badge badges-Green">Active</span>
-                      ) : (
-                        <span className="badge badges-Red">Inactive</span>
-                      )}
-                    </td>
-                    {extraData && <td>{data.createdBy}</td>}
-                    {extraData && <td>{extractDate(data.createdAt)}</td>}
-                    {extraData && <td>{data.updatedBy}</td>}
-                    {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                    <td className="d-flex">
-                      {/* {storedScreens?.courseRead && (
+        ) : (
+          <div className="table-responsive py-2">
+            <table style={{ width: "100%" }} ref={tableRef} className="display">
+              <thead>
+                <tr className="text-center" style={{ background: "#f5f7f9" }}>
+                  <th scope="col">S No</th>
+                  <th scope="col">Effective Date</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Status</th>
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      CreatedBy
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      CreatedAt
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      UpdatedBy
+                    </th>
+                  )}
+                  {extraData && (
+                    <th
+                      scope="col"
+                      class="sorting"
+                      tabindex="0"
+                      aria-controls="DataTables_Table_0"
+                      rowspan="1"
+                      colspan="1"
+                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
+                      style={{ width: "92px" }}
+                    >
+                      UpdatedAt
+                    </th>
+                  )}
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.isArray(datas) &&
+                  datas?.map((data, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{data.effectiveDate}</td>
+                      <td>{data.name}</td>
+                      <td>
+                        {data.status === "ACTIVE" ? (
+                          <span className="badge badges-Green">Active</span>
+                        ) : (
+                          <span className="badge badges-Red">Inactive</span>
+                        )}
+                      </td>
+                      {extraData && <td>{data.createdBy}</td>}
+                      {extraData && <td>{extractDate(data.createdAt)}</td>}
+                      {extraData && <td>{data.updatedBy}</td>}
+                      {extraData && <td>{extractDate(data.updatedAt)}</td>}
+                      <td className="d-flex">
+                        {/* {storedScreens?.courseRead && (
                     <CurriculumOutletView
                       id={data.id}
                       onSuccess={refreshData}
                     />
                   )} */}
-                      {storedScreens?.courseUpdate && (
-                        <CurriculumOutletEdit
-                          id={data.id}
-                          courseId={id}
-                          onSuccess={refreshData}
-                        />
-                      )}
-                      {/* {storedScreens?.curriculumIndex && (
+                        {storedScreens?.courseUpdate && (
+                          <CurriculumOutletEdit
+                            id={data.id}
+                            courseId={id}
+                            onSuccess={refreshData}
+                          />
+                        )}
+                        {/* {storedScreens?.curriculumIndex && (
                                         <OverlayTrigger
                                             placement="top"
                                             overlay={<Tooltip id="tooltip-top">Curriculum</Tooltip>}
@@ -260,34 +266,37 @@ function CurriculumOutlet() {
                                             
                                         </OverlayTrigger>
                                     )} */}
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={
-                          <Tooltip id="tooltip-top">Course Curriculum</Tooltip>
-                        }
-                      >
-                        <Link
-                          to={`/course/curriculumoutlet/curriculum/${data.id}?courseId=${id}`}
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip id="tooltip-top">
+                              Course Curriculum
+                            </Tooltip>
+                          }
                         >
-                          <button className="btn btn-sm">
-                            <FaFileInvoice />
-                          </button>
-                        </Link>
-                      </OverlayTrigger>
+                          <Link
+                            to={`/course/curriculumoutlet/curriculum/${data.id}?courseId=${id}`}
+                          >
+                            <button className="btn btn-sm">
+                              <FaFileInvoice />
+                            </button>
+                          </Link>
+                        </OverlayTrigger>
 
-                      {storedScreens?.courseDelete && (
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteCurriculumOutLet/${data.id}`}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+                        {storedScreens?.courseDelete && (
+                          <Delete
+                            onSuccess={refreshData}
+                            path={`/deleteCurriculumOutLet/${data.id}`}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function SubjectEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -90,8 +91,15 @@ function SubjectEdit({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <button
+        onClick={handleShow}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
+      >
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
 
       <Modal

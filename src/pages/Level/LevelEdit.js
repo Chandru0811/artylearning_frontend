@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function Edit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -101,9 +102,17 @@ function Edit({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <button
+        onClick={handleShow}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
+      >
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
+
       <Modal
         show={show}
         onHide={handleClose}

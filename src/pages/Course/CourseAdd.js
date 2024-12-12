@@ -159,62 +159,73 @@ function CourseAdd({ onSuccess }) {
     }
   };
   return (
-    <section className="courseAdd">
-      <div className="container">
-        <ol
-          className="breadcrumb my-3"
-          style={{ listStyle: "none", padding: 0, margin: 0 }}
-        >
-          <li>
-            <Link to="/" className="custom-breadcrumb">
-              Home
-            </Link>
-            <span className="breadcrumb-separator"> &gt; </span>
-          </li>
-          <li>
-            &nbsp;Course Management
-            <span className="breadcrumb-separator"> &gt; </span>
-          </li>
-          <li>
-            <Link to="/course" className="custom-breadcrumb">
-              &nbsp;Course{" "}
-            </Link>
-            <span className="breadcrumb-separator"> &gt; </span>
-          </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            &nbsp;Course Add
-          </li>
-        </ol>
-        <form
-          onSubmit={formik.handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
-          }}
-        >
-          <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-            <Link to="/course">
-              <button type="button " className="btn btn-sm btn-border   ">
-                Back
+    <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Course Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/course" className="custom-breadcrumb">
+            &nbsp;Course{" "}
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Course Add
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault();
+          }
+        }}
+      >
+        <div className="card">
+          <div
+            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">Add Course</span>
+            </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/course">
+                <button type="button " className="btn btn-sm btn-border">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                <span className="fw-medium">Save</span>
               </button>
-            </Link>
-            &nbsp;&nbsp;
-            <button
-              type="submit"
-              className="btn btn-button btn-sm"
-              disabled={loadIndicator}
-            >
-              {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
-              Save
-            </button>
+            </div>
           </div>
-          <div className="container">
+          <div className="container-fluid px-4">
             <div className="row">
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
@@ -589,9 +600,9 @@ function CourseAdd({ onSuccess }) {
               </div>
             </div>
           </div>
-        </form>
-      </div>
-    </section>
+        </div>
+      </form>
+    </div>
   );
 }
 
