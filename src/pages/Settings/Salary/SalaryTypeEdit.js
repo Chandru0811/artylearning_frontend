@@ -7,6 +7,7 @@ import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 const validationSchema = Yup.object({
   salaryType: Yup.string().required("*Leave Type is required"),
@@ -85,8 +86,15 @@ function SalaryEdit({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <button
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
+        onClick={handleShow}
+      >
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
       <Modal
         show={show}
@@ -110,7 +118,7 @@ function SalaryEdit({ id, onSuccess }) {
         >
           <Modal.Body>
             <div className="container">
-              <div className="row py-4">
+              <div className="row">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Salary Type<span className="text-danger">*</span>
@@ -132,7 +140,7 @@ function SalaryEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer>
+            <Modal.Footer className="mt-3">
               <Button
                 className="btn btn-sm btn-border bg-light text-dark"
                 onClick={handleClose}

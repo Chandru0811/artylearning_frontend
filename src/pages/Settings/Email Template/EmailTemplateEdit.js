@@ -8,6 +8,7 @@ import "react-quill/dist/quill.snow.css"; // Import the styling for React-Quill
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import { FaEdit } from "react-icons/fa";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 // Define custom toolbar modules
 const modules = {
@@ -101,8 +102,15 @@ function EmailTemplateEdit({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <button
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
+        onClick={handleShow}
+      >
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
       <Modal show={show} centered onHide={handleClose} size="lg">
         <form onSubmit={formik.handleSubmit}>

@@ -19,7 +19,7 @@ import { GoSortDesc } from "react-icons/go";
 
 const Centre = () => {
   const tableRef = useRef(null);
-  const navigate = useNavigate(); // Replace useHistory with useNavigate
+  const navigate = useNavigate(); 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const [datas, setDatas] = useState([]);
@@ -125,7 +125,7 @@ const Centre = () => {
   return (
     <div className="container-fluid my-4 center">
       <ol
-        className="breadcrumb my-3 px-1"
+        className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>

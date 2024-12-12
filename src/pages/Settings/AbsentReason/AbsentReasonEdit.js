@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { FaEdit } from "react-icons/fa";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function AbsentReasonEdit() {
   const [show, setShow] = useState(false);
@@ -34,8 +35,15 @@ function AbsentReasonEdit() {
 
   return (
     <>
-      <button type="button" className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <button
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
+        onClick={handleShow}
+      >
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
       <Modal show={show} centered onHide={handleClose}>
         <form onSubmit={formik.handleSubmit}>

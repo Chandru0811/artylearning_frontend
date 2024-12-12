@@ -222,17 +222,17 @@ function StaffView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Staffing
+          &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/staff" className="custom-breadcrumb">
-            Staff
+            &nbsp;Staff
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Staff View
+          &nbsp;Staff View
         </li>
       </ol>
       <div class="container-fluid py-4">
@@ -266,11 +266,13 @@ function StaffView() {
                   </button>
                 </Link>
               )} */}
-              <Link to="/staff">
-                <button type="button" className="btn btn-border btn-sm">
-                  <span>Back</span>
-                </button>
-              </Link>
+              <div className="my-2 pe-3 d-flex align-items-center">
+                <Link to="/staff">
+                  <button type="button" className="btn btn-border btn-sm">
+                    <span>Back</span>
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

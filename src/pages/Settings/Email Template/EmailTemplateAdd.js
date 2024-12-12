@@ -118,13 +118,16 @@ function EmailTemplateAdd({ onSuccess }) {
 
   return (
     <>
-      <button
-        type="button"
-        className="btn btn-button btn-sm"
-        onClick={handleShow}
-      >
-        Add <i className="bx bx-plus"></i>
-      </button>
+      <div className="mb-3 d-flex justify-content-end">
+        <button
+          type="button"
+          className="btn btn-button btn-sm me-2"
+          style={{ fontWeight: "600px !important" }}
+          onClick={handleShow}
+        >
+          &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+        </button>
+      </div>
       <Modal show={show} centered onHide={handleClose} size="lg">
         <form onSubmit={formik.handleSubmit}>
           <Modal.Header closeButton>

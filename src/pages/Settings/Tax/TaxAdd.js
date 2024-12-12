@@ -81,10 +81,11 @@ function TaxAdd({ onSuccess }) {
       <div className="mb-3 d-flex justify-content-end">
         <button
           type="button"
-          className="btn btn-button btn-sm"
+          className="btn btn-button btn-sm me-2"
+          style={{ fontWeight: "600px !important" }}
           onClick={handleShow}
         >
-          Add <i class="bx bx-plus"></i>
+          &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
         </button>
       </div>
       <Modal
@@ -108,7 +109,7 @@ function TaxAdd({ onSuccess }) {
         >
           <Modal.Body>
             <div className="container">
-              <div className="row py-4">
+              <div className="row">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Tax Type<span className="text-danger">*</span>
@@ -197,7 +198,7 @@ function TaxAdd({ onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer>
+            <Modal.Footer className="mt-3">
               <Button
                 type="button"
                 className="btn btn-sm btn-border bg-light text-dark"

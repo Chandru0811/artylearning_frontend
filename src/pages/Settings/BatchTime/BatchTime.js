@@ -4,10 +4,11 @@ import "datatables.net-responsive-dt";
 import $ from "jquery";
 import api from "../../../config/URL";
 import Delete from "../../../components/common/Delete";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { MdViewColumn } from "react-icons/md";
 import BatchTimeEdit from "./BatchTimeEdit";
+import { IoIosAddCircle } from "react-icons/io";
 
 const BatchTime = () => {
   const tableRef = useRef(null);
@@ -15,6 +16,7 @@ const BatchTime = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   const getData = async () => {
@@ -121,8 +123,23 @@ const BatchTime = () => {
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
 
+  const handleRowClick = (id) => {
+    navigate(`/batchtime`); // Navigate to the index page when a row is clicked
+  };
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    }
+  }, [datas]);
+
   return (
-    <div className="container my-4">
+    <div className="container-fluid my-4 center">
       <ol
         className="breadcrumb my-3 px-1"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -134,128 +151,120 @@ const BatchTime = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-        &nbsp;Settings
+          &nbsp;Settings
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-        &nbsp;Batch Time
+          &nbsp;Batch Time
         </li>
       </ol>
-      {/* {storedScreens?.levelCreate &&  */}
-
-      {loading ? (
-        <div className="loader-container">
-          <div className="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Batch Time
+              </span>
+            </span>
           </div>
         </div>
-      ) : (
-        <div className="table-responsive">
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
-                <th scope="col" className="text-center">
-                  Day
-                </th>
-                <th scope="col" className="text-center">
-                  Batch Time
-                </th>
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    CreatedBy
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    CreatedAt
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    UpdatedBy
-                  </th>
-                )}
-                {extraData && (
-                  <th
-                    scope="col"
-                    class="sorting"
-                    tabindex="0"
-                    aria-controls="DataTables_Table_0"
-                    rowspan="1"
-                    colspan="1"
-                    aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                    style={{ width: "92px" }}
-                  >
-                    UpdatedAt
-                  </th>
-                )}
-                <th scope="col" className="text-center">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas.map((data, index) => (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
-                  <td className="text-center">{data.day}</td>
-                  <td className="text-center">{data.batchTime}</td>
-                  {extraData && <td>{data.createdBy}</td>}
-                  {extraData && <td>{extractDate(data.createdAt)}</td>}
-                  {extraData && <td>{data.updatedBy}</td>}
-                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                  <td className="text-center">
-                    {/* {storedScreens?.levelRead && ( */}
-                    {/* <Link to={`/shg/view/${data.id}`}>
-                                        <button className="btn btn-sm">
-                                            <FaEye />
-                                        </button>
-                                    </Link> */}
-                    {/* )} */}
-                    {/* {storedScreens?.levelUpdate && ( */}
-                    <BatchTimeEdit id={data.id} onSuccess={refreshData} />
-                    {/* )} */}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="table-responsive py-2">
+              <table
+                style={{ width: "100%" }}
+                ref={tableRef}
+                className="display"
+              >
+                <thead>
+                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
+                    <th className="text-muted" scope="col">
+                      S No
+                    </th>
+                    <th className="text-center text-muted"></th>
+                    <th className="text-muted" scope="col">
+                      Day
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Batch Time
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.isArray(datas) &&
+                    datas.map((data, index) => (
+                      <tr
+                        key={index}
+                        style={{
+                          // backgroundColor: "#fff !important",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <th scope="row" className="text-center">
+                          {index + 1}
+                        </th>
+                        <td>
+                          <div className="d-flex justify-content-center align-items-center">
+                            {/* {storedScreens?.centerListingCreate && ( */}
+                            <div className="dropdown">
+                              <button
+                                className="btn btn-button btn-sm dropdown-toggle"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                              >
+                                <IoIosAddCircle
+                                  className="text-light"
+                                  style={{ fontSize: "16px" }}
+                                />
+                              </button>
+                              <ul
+                                className="dropdown-menu"
+                                aria-labelledby="dropdownMenuButton"
+                              >
+                                <li>
+                                  <BatchTimeEdit
+                                    id={data.id}
+                                    onSuccess={refreshData}
+                                  />
+                                </li>
+                              </ul>
+                            </div>
+                            {/* )} */}
+                          </div>
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.day}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.batchTime}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -112,17 +112,17 @@ function StaffEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Staffing
+          &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/staff" className="custom-breadcrumb">
-            Staff
+            &nbsp;Staff
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Staff Edit
+          &nbsp;Staff Edit
         </li>
       </ol>
       <Stepper className="my-5" activeStep={activeStep} alternativeLabel>

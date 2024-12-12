@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function BatchTimeEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -141,8 +142,15 @@ function BatchTimeEdit({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+      <button
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
+        onClick={handleShow}
+      >
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
       <Modal
         show={show}
@@ -166,7 +174,7 @@ function BatchTimeEdit({ id, onSuccess }) {
         >
           <Modal.Body>
             <div className="container">
-              <div className="row py-4">
+              <div className="row">
                 <div className="col-md-12 col-12">
                   <label className="form-label">
                     Day<span className="text-danger">*</span>
