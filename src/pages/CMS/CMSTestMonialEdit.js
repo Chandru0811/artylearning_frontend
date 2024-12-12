@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 function CMSTestMonialEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -86,120 +87,125 @@ function CMSTestMonialEdit({ id, onSuccess }) {
   };
 
   return (
-    <div className="container">
+    <>
       <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-
-      <Modal show={show} size="lg" onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Testimonial</Modal.Title>
-        </Modal.Header>
-        <form
-          onSubmit={formik.handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
-          }}
-        >
-          <Modal.Body>
-            <div className="container">
-              <div className="mb-3">
-                <label htmlFor="parentImage" className="form-label">
-                  Upload Image
-                </label>
-                <input
-                  type="file"
-                  id="parentImage"
-                  name="parentImage"
-                  className="form-control"
-                  onChange={handleFileChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.parentImage && formik.errors.parentImage && (
-                  <div className="text-danger">{formik.errors.parentImage}</div>
-                )}
-              </div>
-              {selectedFile && (
-                <div>
-                  {typeof selectedFile === "string" ? (
-                    <img
-                      src={selectedFile}
-                      alt="Selected File"
-                      style={{ maxHeight: "200px" }}
-                    />
-                  ) : selectedFile.type.startsWith("image") ? (
-                    <img
-                      src={URL.createObjectURL(selectedFile)}
-                      alt="Selected File"
-                      style={{ maxHeight: "200px" }}
-                    />
-                  ) : null}
-                </div>
-              )}
-              <div className="mb-3">
-                <label htmlFor="parentName" className="form-label">
-                  Parent Name
-                </label>
-                <input
-                  id="parentName"
-                  name="parentName"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.parentName}
-                />
-                {formik.touched.parentName && formik.errors.parentName && (
-                  <div className="text-danger">{formik.errors.parentName}</div>
-                )}
-              </div>
-              <div className="mb-3">
-                <label htmlFor="parentDescription" className="form-label">
-                  Parent Description
-                </label>
-                <textarea
-                  id="parentDescription"
-                  name="parentDescription"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.parentDescription}
-                />
-                {formik.touched.parentDescription &&
-                  formik.errors.parentDescription && (
+      <div className="container">
+        <Modal show={show} size="lg" onHide={handleClose} centered>
+          <Modal.Header closeButton>
+            <Modal.Title className="headColor">Edit Testimonial</Modal.Title>
+          </Modal.Header>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
+            <Modal.Body>
+              <div className="container">
+                <div className="mb-3">
+                  <label htmlFor="parentImage" className="form-label">
+                    Upload Image
+                  </label>
+                  <input
+                    type="file"
+                    id="parentImage"
+                    name="parentImage"
+                    className="form-control"
+                    onChange={handleFileChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.parentImage && formik.errors.parentImage && (
                     <div className="text-danger">
-                      {formik.errors.parentDescription}
+                      {formik.errors.parentImage}
                     </div>
                   )}
+                </div>
+                {selectedFile && (
+                  <div>
+                    {typeof selectedFile === "string" ? (
+                      <img
+                        src={selectedFile}
+                        alt="Selected File"
+                        style={{ maxHeight: "200px" }}
+                      />
+                    ) : selectedFile.type.startsWith("image") ? (
+                      <img
+                        src={URL.createObjectURL(selectedFile)}
+                        alt="Selected File"
+                        style={{ maxHeight: "200px" }}
+                      />
+                    ) : null}
+                  </div>
+                )}
+                <div className="mb-3">
+                  <label htmlFor="parentName" className="form-label">
+                    Parent Name
+                  </label>
+                  <input
+                    id="parentName"
+                    name="parentName"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.parentName}
+                  />
+                  {formik.touched.parentName && formik.errors.parentName && (
+                    <div className="text-danger">
+                      {formik.errors.parentName}
+                    </div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="parentDescription" className="form-label">
+                    Parent Description
+                  </label>
+                  <textarea
+                    id="parentDescription"
+                    name="parentDescription"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.parentDescription}
+                  />
+                  {formik.touched.parentDescription &&
+                    formik.errors.parentDescription && (
+                      <div className="text-danger">
+                        {formik.errors.parentDescription}
+                      </div>
+                    )}
+                </div>
               </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              type="button"
-              className="btn btn-sm btn-border bg-light text-dark"
-              onClick={handleClose}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="btn btn-button btn-sm"
-              disabled={loadIndicator}
-            >
-              {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
-              Save
-            </Button>
-          </Modal.Footer>
-        </form>
-      </Modal>
-    </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                type="button"
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Save
+              </Button>
+            </Modal.Footer>
+          </form>
+        </Modal>
+      </div>
+    </>
   );
 }
 

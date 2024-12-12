@@ -101,7 +101,8 @@ function StudentRegisterCourse() {
         }
         if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
-          navigate("/student");
+          // navigate("/student");
+          navigate(`/invoice/add?studentID=${id}`);
           formik.resetForm();
         } else {
           toast.error(response.data.message);

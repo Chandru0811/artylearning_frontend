@@ -304,12 +304,27 @@ function InvoiceView() {
           Invoice View
         </li>
       </ol>
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">View Invoice</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
+            <Link to="/invoice">
+              <button type="button " className="btn btn-sm btn-border   ">
+                Back
+              </button>
+            </Link>
+          </div>
+        </div>
       <div className=" row">
-        <div className="col-12 d-flex justify-content-end my-3 ">
-          <Link to="/invoice">
-            <button className="btn btn-border btn-sm me-1 ">Back</button>
-          </Link>
-
+        <div className="col-12 d-flex justify-content-end my-1">
           <button
             type="button"
             className="btn btn-border btn-sm me-1"
@@ -524,6 +539,7 @@ function InvoiceView() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

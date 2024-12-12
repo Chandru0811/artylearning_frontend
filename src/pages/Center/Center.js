@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom"; // Use useNavigate
 import { FaEdit } from "react-icons/fa"; // No need for FaEye anymore
 import { IoIosAddCircle } from "react-icons/io";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { useFormik } from "formik";
 
 import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
@@ -16,57 +17,55 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import { GoSortDesc } from "react-icons/go";
+import fetchAllCentersWithIds from "../List/CenterList";
 
 const Centre = () => {
   const tableRef = useRef(null);
   const navigate = useNavigate(); 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerManagerData, setCenterManagerData] = useState([]);
-  const [selectedManager, setSelectedManager] = useState(""); // State for selected center manager
-  const [centerName, setCenterName] = useState("");
-  const [code, setCode] = useState("");
-  const [email, setEmail] = useState("");
+  const [centerData, setCenterData] = useState([]);
+
+  const formik = useFormik({
+    initialValues: {
+      centerId: "",
+      centerManager: "",
+      centerCode: "",
+      email: "",
+    },
+    onSubmit: async (data) => {
+      console.log("Selected Values :", data);
+    },
+  });
 
   const clearFilters = () => {
-    setCenterName("");
-    setCode("");
-    setEmail("");
-    setSelectedManager("");
+    formik.resetForm();
+  };
 
-    $(tableRef.current).DataTable().search("").draw();
+  const getCenterData = async () => {
+    try {
+      const response = await api.get("/getAllCenter");
+      setDatas(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
   };
 
   const fetchData = async () => {
     try {
       const centerManagerData = await fetchAllCentreManager();
+      const centerData = await fetchAllCentersWithIds();
       setCenterManagerData(centerManagerData);
+      setCenterData(centerData);
     } catch (error) {
       toast.error(error);
     }
   };
 
   useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllCenter");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
     getCenterData();
     fetchData(); // Fetch the center manager data as well
   }, []);
@@ -101,10 +100,36 @@ const Centre = () => {
     setLoading(false);
   };
 
-  const handleManagerChange = (e) => {
-    setSelectedManager(e.target.value); // Set selected manager
-    const searchValue = e.target.value.toLowerCase();
-    $(tableRef.current).DataTable().search(searchValue).draw();
+  const getData = async () => {
+    destroyDataTable();
+    setLoading(true);
+    let params = {};
+
+    if (formik.values.centerId !== "") {
+      params.centerId = formik.values.centerId;
+    }
+
+    if (formik.values.centerCode !== "") {
+      params.centerCode = formik.values.centerCode;
+    }
+
+    if (formik.values.email !== "") {
+      params.email = formik.values.email;
+    }
+
+    if (formik.values.centerManager !== "") {
+      params.centerManager = formik.values.centerManager;
+    }
+
+    try {
+      const response = await api.get(`/getCenterWithCustomInfo/${params}`);
+      setDatas(response.data);
+      initializeDataTable();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRowClick = (id) => {
@@ -121,6 +146,24 @@ const Centre = () => {
       thElements.forEach((th) => th.classList.remove("sorting_1"));
     }
   }, [datas]);
+
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    getData();
+  }, [
+    formik.values.centerId,
+    formik.values.code,
+    formik.values.email,
+    formik.values.centerManager,
+  ]);
 
   return (
     <div className="container-fluid my-4 center">
@@ -160,75 +203,77 @@ const Centre = () => {
           </div>
         </div>
         <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Centre Name"
-                value={centerName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCenterName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Code"
-                value={code}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCode(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Email"
-                value={email}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setEmail(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-control form-control-sm center_list"
-                style={{ width: "100%" }}
-                value={selectedManager}
-                onChange={handleManagerChange}
-              >
-                <option value="">Select Centre Manager</option>
-                {centerManagerData.map((manager) => (
-                  <option key={manager.id} value={manager.userNames}>
-                    {manager.userNames}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault();
+              }
+            }}
+          >
+            <div className="individual_fliters d-lg-flex ">
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  style={{ width: "100%" }}
+                  {...formik.getFieldProps("centerId")}
+                  name="centerId"
+                >
+                  <option value="">Select Centre</option>
+                  {centerData?.map((center) => (
+                    <option key={center.id} value={center.id}>
+                      {center.centerNames}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <input
+                  type="text"
+                  {...formik.getFieldProps("centerCode")}
+                  name="centerCode"
+                  className="form-control form-control-sm center_list"
+                  style={{ width: "160px" }}
+                  placeholder="Code"
+                />
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <input
+                  type="text"
+                  {...formik.getFieldProps("email")}
+                  name="email"
+                  className="form-control form-control-sm center_list"
+                  style={{ width: "160px" }}
+                  placeholder="Email"
+                />
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  {...formik.getFieldProps("centerManager")}
+                  name="centerManager"
+                  className="form-control form-control-sm center_list"
+                  style={{ width: "100%" }}
+                >
+                  <option value="">Select Centre Manager</option>
+                  {centerManagerData.map((manager) => (
+                    <option key={manager.id} value={manager.userNames}>
+                      {manager.userNames}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="form-group mb-0 ms-2 mb-1 ">
-              <button
-                type="button"
-                className="btn btn-sm btn-border"
-                onClick={clearFilters}
-              >
-                Clear
-              </button>
+              <div className="form-group mb-0 ms-2 mb-1 ">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-border"
+                  onClick={clearFilters}
+                >
+                  Clear
+                </button>
+              </div>
             </div>
-          </div>
+          </form>
           {storedScreens?.centerListingCreate && (
             <Link to="/center/add">
               <button
@@ -277,12 +322,6 @@ const Centre = () => {
                     <th className="text-muted" scope="col">
                       UEN Number
                     </th>
-                    {/* <th
-                      className="text-muted"
-                      scope="col"
-                    >
-                      Mobile
-                    </th> */}
                     <th className="text-muted" scope="col">
                       Email
                     </th>
@@ -294,7 +333,6 @@ const Centre = () => {
                       <tr
                         key={index}
                         style={{
-                          // backgroundColor: "#fff !important",
                           cursor: "pointer",
                         }}
                       >
@@ -384,12 +422,6 @@ const Centre = () => {
                         <td onClick={() => handleRowClick(data.id)}>
                           {data.code}
                         </td>
-                        {/* <td
-                          
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.uenNumber}
-                        </td> */}
                         <td onClick={() => handleRowClick(data.id)}>
                           {data.mobile}
                         </td>

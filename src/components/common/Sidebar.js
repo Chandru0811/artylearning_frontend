@@ -276,26 +276,26 @@ function Sidebar() {
         icon: "BsFileEarmarkRichtext ",
         isOpen: false,
         subMenus: [
-          {
-            title: "Document Report",
-            path: "/report/document",
-            access: storedScreens.documentReportIndex,
-          },
+          // {
+          //   title: "Document Report",
+          //   path: "/report/document",
+          //   access: storedScreens.documentReportIndex,
+          // },
           {
             title: "Attendance Report",
             path: "/report/attendance",
             access: storedScreens.attendanceReportIndex,
           },
-          {
-            title: "Student Report",
-            path: "/report/studentreport",
-            access: storedScreens.studentReportIndex,
-          },
-          {
-            title: "Assessment Report",
-            path: "/report/assessment",
-            access: storedScreens.assessmentReportIndex,
-          },
+          // {
+          //   title: "Student Report",
+          //   path: "/report/studentreport",
+          //   access: storedScreens.studentReportIndex,
+          // },
+          // {
+          //   title: "Assessment Report",
+          //   path: "/report/assessment",
+          //   access: storedScreens.assessmentReportIndex,
+          // },
           {
             title: "Revenue Report",
             path: "/report/revenue",
@@ -306,26 +306,26 @@ function Sidebar() {
             path: "/report/enrolment",
             access: storedScreens.enrollmentReportIndex,
           },
-          {
-            title: "Fee Collection Report",
-            path: "/report/fee",
-            access: storedScreens.feeCollectionReportIndex,
-          },
-          {
-            title: "Package Balance Report",
-            path: "/report/package",
-            access: storedScreens.packageBalanceReportIndex,
-          },
-          {
-            title: "Sales Revenue Report",
-            path: "/report/sales",
-            access: storedScreens.salesRevenueReportindex,
-          },
-          {
-            title: "Replace Class Lesson List",
-            path: "/report/replace_class",
-            access: storedScreens.replaceClassLessonListindex,
-          },
+          // {
+          //   title: "Fee Collection Report",
+          //   path: "/report/fee",
+          //   access: storedScreens.feeCollectionReportIndex,
+          // },
+          // {
+          //   title: "Package Balance Report",
+          //   path: "/report/package",
+          //   access: storedScreens.packageBalanceReportIndex,
+          // },
+          // {
+          //   title: "Sales Revenue Report",
+          //   path: "/report/sales",
+          //   access: storedScreens.salesRevenueReportindex,
+          // },
+          // {
+          //   title: "Replace Class Lesson List",
+          //   path: "/report/replace_class",
+          //   access: storedScreens.replaceClassLessonListindex,
+          // },
         ],
       },
       {
@@ -513,13 +513,17 @@ function Sidebar() {
       </div>
       <ul className="nav-links">
         <li>
-          <NavLink to="/" onClick={() => handleMenuClick(null)}>
+          <NavLink
+            to="/"
+            onClick={() => handleMenuClick(null)}
+            className={activeMenu === true ? "active activehover" : ""}
+          >
             <OverlayTrigger
               placement="right"
               overlay={<Tooltip id="home-tooltip">Home</Tooltip>}
             >
-              <i className="">
-                <RiDashboardLine style={{ color: "#97a3b6" }} />
+              <i className="homeIcons">
+                <RiDashboardLine/>
               </i>
             </OverlayTrigger>
             <span className="links_name text-center">&nbsp;Home</span>
@@ -528,6 +532,7 @@ function Sidebar() {
         {menuItems.map(
           (item, index) =>
             item.subMenus.some((subMenu) => subMenu.access) && (
+              
               <li key={index}>
                 <Nav.Link
                   to="#"

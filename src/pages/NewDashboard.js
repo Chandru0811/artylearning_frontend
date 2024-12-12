@@ -2,6 +2,8 @@ import React from "react";
 import ApexCharts from "react-apexcharts";
 
 function NewDashboard() {
+  const fontFamily = "'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'";
+
   const lineChartOptions = {
     chart: {
       height: 350,
@@ -20,6 +22,11 @@ function NewDashboard() {
     },
     legend: {
       show: true,
+      labels: {
+        useSeriesColors: false,
+        fontSize: "14px",
+        fontFamily: fontFamily,
+      },
     },
     markers: {
       size: 0,
@@ -39,17 +46,32 @@ function NewDashboard() {
         "11 Jan",
         "12 Jan",
       ],
+      labels: {
+        style: {
+          fontFamily: fontFamily,
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          fontFamily: fontFamily,
+        },
+      },
     },
     tooltip: {
+      style: {
+        fontFamily: fontFamily,
+      },
       y: [
         {
           title: {
-            formatter: (val) => `${val} (mins)`,
+            formatter: (val) => `${val}`,
           },
         },
         {
           title: {
-            formatter: (val) => `${val} per session`,
+            formatter: (val) => `${val}`,
           },
         },
         {
@@ -67,16 +89,16 @@ function NewDashboard() {
 
   const lineChartSeries = [
     {
-      name: "Session Duration",
-      data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10],
+      name: "Total Enrolment",
+      data: [45, 52, 38, 24, 33, 26, 21],
     },
     {
-      name: "Page Views",
-      data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35],
+      name: "Total Package",
+      data: [35, 41, 62, 42, 13, 18, 29],
     },
     {
-      name: "Total Visits",
-      data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47],
+      name: "Total Revenue",
+      data: [87, 57, 74, 99, 75, 38, 62],
     },
   ];
 
@@ -102,7 +124,7 @@ function NewDashboard() {
           },
           value: {
             fontSize: "30px",
-            fontFamily: "Outdoor, sans-serif", // Specify the font family
+            fontFamily: fontFamily,
             show: true,
           },
         },
@@ -146,12 +168,12 @@ function NewDashboard() {
       y: [
         {
           title: {
-            formatter: (val) => `${val} (mins)`,
+            formatter: (val) => `${val}`,
           },
         },
         {
           title: {
-            formatter: (val) => `${val} per session`,
+            formatter: (val) => `${val}`,
           },
         },
         {
@@ -169,15 +191,15 @@ function NewDashboard() {
   
   const lineChartSeries1 = [
     {
-      name: "Session Duration",
+      name: "Total Enrolment",
       data: [45, 52, 38, 24, 33, 26, 21], // Data for Monday to Sunday
     },
     {
-      name: "Page Views",
+      name: "Total Package",
       data: [35, 41, 62, 42, 13, 18, 29], // Data for Monday to Sunday
     },
     {
-      name: "Total Visits",
+      name: "Total Revenue",
       data: [87, 57, 74, 99, 75, 38, 62], // Data for Monday to Sunday
     },
   ];

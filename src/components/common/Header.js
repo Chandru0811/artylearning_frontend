@@ -18,23 +18,30 @@ function Header({ onLogout }) {
     navigate("/login");
   };
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const handleCenterChange = (e) => {
     setSelectedCenter(e.target.value);
     console.log("Selected Center:", e.target.value);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const centerData = await fetchAllCentersWithIds();
+        setCenterData(centerData);
+  
+        // Set the default selected value to the first center ID
+        if (centerData && centerData.length > 0) {
+          setSelectedCenter(centerData[0].id);
+          console.log("Default Selected Center:", centerData[0].id); // Log the first center ID
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
 
   return (
     <nav>
@@ -55,23 +62,22 @@ function Header({ onLogout }) {
             </button>
           </Link>
 
-          <div style={{ width: "40%" }}>
+          <div style={{ minWidth: "50%" }}>
             <div className="position-relative">
               <select
                 value={selectedCenter}
                 name="studentRelationCenter"
-                className="form-select center_list"
+                className="form-select shadow-none"
                 onChange={handleCenterChange}
                 style={{
-                  background: "transparent",
                   border: "none",
                   outline: "none",
-                  paddingRight: "20px",
+                  paddingRight: "5px",
                 }}
               >
-                <option value="" disabled>
-                  All Centre
-                </option>
+                {/* <option>Atry Learning @ AMK</option>
+                <option>Atry Learning @ HG</option>
+                <option>Atry Learning @ BB</option> */}
                 {centerData &&
                   centerData.map((studentRelationCenter) => (
                     <option
@@ -82,16 +88,6 @@ function Header({ onLogout }) {
                     </option>
                   ))}
               </select>
-              <i
-                className="fa fa-chevron-down position-absolute"
-                style={{
-                  right: "15px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  fontSize: "14px",
-                  color: "#333",
-                }}
-              ></i>
             </div>
           </div>
           <button

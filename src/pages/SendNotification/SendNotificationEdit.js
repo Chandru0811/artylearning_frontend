@@ -306,27 +306,39 @@ function SendNotificationEdit() {
           }
         }}
       >
-        <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-          <Link to="/sendNotification">
-            <button type="button" className="btn btn-sm btn-border">
-              Back
-            </button>
-          </Link>
-          &nbsp;&nbsp;
-          <button
-            type="submit"
-            className="btn btn-button btn-sm"
-            disabled={loadIndicator}
+           <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
           >
-            {loadIndicator && (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                aria-hidden="true"
-              ></span>
-            )}
-            Update
-          </button>
-        </div>
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">School Announcement Edit</span>
+            </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/sendNotification">
+                <button type="button " className="btn btn-sm btn-border   ">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Update
+              </button>
+            </div>
+          </div>
         <div className="container">
           <div className="row ">
             <div class="col-md-6 col-12 mb-4">
@@ -581,6 +593,7 @@ function SendNotificationEdit() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </form>
     </div>

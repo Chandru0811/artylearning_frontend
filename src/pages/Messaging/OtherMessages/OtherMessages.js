@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import api from "../../../config/URL";
 import Delete from "../../../components/common/Delete";
+import { IoIosAddCircle } from "react-icons/io";
 
 const OtherMessages = () => {
   const tableRef = useRef(null);
@@ -14,6 +15,8 @@ const OtherMessages = () => {
   const [loading, setLoading] = useState(true);
   // const loginAdminId = localStorage.getItem("loginUserId");
   const userId = localStorage.getItem("userId");
+  const [centerName, setCenterName] = useState("");
+  const navigate = useNavigate();
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
@@ -47,6 +50,7 @@ const OtherMessages = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
+      columnDefs: [{ orderable: false, targets: 1 }],
     });
   };
 
@@ -68,6 +72,14 @@ const OtherMessages = () => {
       console.error("Error refreshing data:", error);
     }
     setLoading(false);
+  };
+  const clearFilters = () => {
+    setCenterName("");
+    $(tableRef.current).DataTable().search("").draw();
+  };
+
+  const handleRowClick = (receiverId, senderId) => {
+    navigate(`/othermessaging/view/${receiverId}?senderId=${senderId}`);
   };
 
   return (
@@ -91,67 +103,144 @@ const OtherMessages = () => {
             Other Messages
           </li>
         </ol>
-        {loading ? (
-          <div className="loader-container">
-            <div class="loading">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
+        <div className="card">
+          <div
+            className="mb-3 d-flex justify-content-between align-items-center p-1"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">
+                This database shows the list of{" "}
+                <span className="bold" style={{ color: "#287f71" }}>
+                  Other Message
+                </span>
+              </span>
             </div>
           </div>
-        ) : (
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
-                <th scope="col">Student Name</th>
-                <th scope="col">Receiver Name</th>
-                <th scope="col">Message</th>
-                <th scope="col">Created Date</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(datas && Array.isArray(datas) ? datas : []).map(
-                (data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.senderName}</td>
-                    <td>{data.receiverName}</td>
-                    <td>{data.message}</td>
-                    <td>{data.createdAt.substring(0, 10)}</td>
-                    <td>
-                      <div className="d-flex">
-                        {/* {storedScreens?.messagingRead && ( */}
-                        <Link
-                          to={`/othermessaging/view/${data.receiverId}?senderId=${data.senderId}`}
-                        >
-                          <button className="btn btn-sm">
-                            <FaEye />
-                          </button>
-                        </Link>
-                        {/* )} */}
-                        {/* {storedScreens?.messagingUpdate && (
-                        <LevelEdit id={data.id} onSuccess={refreshData} />
-                      )} */}
-                        {/* {storedScreens?.messagingDelete && ( */}
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteMessage/${data.id}`}
-                        />
-                        {/* )} */}
-                      </div>
-                    </td>
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
-        )}
+          <div className="mb-3 d-flex justify-content-between">
+            <div className="individual_fliters d-lg-flex ">
+              <div className="form-group mb-0 ms-2 mb-1">
+                <input
+                  type="text"
+                  className="form-control form-control-sm center_list"
+                  style={{ width: "160px" }}
+                  placeholder="From"
+                  value={centerName}
+                  onChange={(e) => {
+                    const searchValue = e.target.value.toLowerCase();
+                    setCenterName(e.target.value);
+                    $(tableRef.current).DataTable().search(searchValue).draw();
+                  }}
+                />
+              </div>
+
+              <div className="form-group mb-0 ms-2 mb-1 ">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-border"
+                  onClick={clearFilters}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+          </div>
+          {loading ? (
+            <div className="loader-container">
+              <div class="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          ) : (
+            <table ref={tableRef} className="display">
+              <thead>
+                <tr>
+                  <th scope="" style={{ whiteSpace: "nowrap" }}>
+                    S No
+                  </th>
+                  <th scope=""></th>
+                  <th scope="col">Student Name</th>
+                  <th scope="col">Receiver Name</th>
+                  <th scope="col">Message</th>
+                  <th scope="col">Created Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(datas && Array.isArray(datas) ? datas : []).map(
+                  (data, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td className="text-center">
+                        <div className="d-flex justify-content-center align-items-center">
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-button btn-sm"
+                              type="button"
+                              id="dropdownMenuButton"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <IoIosAddCircle
+                                className="text-light"
+                                style={{ fontSize: "16px" }}
+                              />
+                            </button>
+                            <ul
+                              className="dropdown-menu"
+                              aria-labelledby="dropdownMenuButton"
+                            >
+                              <li>
+                                <Delete
+                                  onSuccess={refreshData}
+                                  path={`/deleteMessage/${data.id}`}
+                                />
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </td>
+                      <td
+                        onClick={() =>
+                          handleRowClick(data.receiverId, data.senderId)
+                        }
+                      >
+                        {data.senderName}
+                      </td>
+                      <td
+                        onClick={() =>
+                          handleRowClick(data.receiverId, data.senderId)
+                        }
+                      >
+                        {data.receiverName}
+                      </td>
+                      <td
+                        onClick={() =>
+                          handleRowClick(data.receiverId, data.senderId)
+                        }
+                      >
+                        {data.message}
+                      </td>
+                      <td
+                        onClick={() =>
+                          handleRowClick(data.receiverId, data.senderId)
+                        }
+                      >
+                        {data.createdAt.substring(0, 10)}
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -16,18 +16,7 @@ function ReplaceClassLessonView() {
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
 
-  //   const fetchData = async () => {
-  //     try {
-  //       const centerData = await fetchAllCentersWithIds();
-  //       const courseData = await fetchAllCoursesWithIds();
-  //       setCenterData(centerData);
-  //       setCourseData(courseData);
-  //     } catch (error) {
-  //       toast.error(error);
-  //     }
-  //   };
   const handleStatusToggle = async (newStatus) => {
-    // Update the status locally
     setStatus(newStatus);
     try {
       const response = await api.put(
@@ -76,7 +65,7 @@ function ReplaceClassLessonView() {
   }, [id]);
 
   return (
-    <div className="container ">
+    <div className="container-fluid">
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -101,49 +90,41 @@ function ReplaceClassLessonView() {
           Replace Class Lesson List View
         </li>
       </ol>
-      <div className="d-flex justify-content-end align-items-end mt-4 p-0">
-        <div className="d-flex justify-content-end align-items-end">
-          <Link to="/replaceclasslesson">
-            <button type="button" className="btn btn-sm btn-border mx-1">
-              Back
-            </button>
-          </Link>
-          {data.status === "APPROVED" ? (
-            <>
-              <Link
-                to={`/replaceclasslessonList?centerId=${data.centerId}&studentId=${data.studentId}`}
-              >
-                <button type="button" className="btn btn-button2 btn-sm">
-                  Replace Class Lesson
-                </button>
-              </Link>
-            </>
-          ) : (
-            <></>
-          )}
-
-          {/* <select
-            value={status}
-            className={`ms-3 form-select fw-bold 
-              ${
-                status === "PENDING"
-                  ? "text-warning"
-                  : status === "APPROVED"
-                  ? "text-success"
-                  : "text-danger"
-              }`}
-            onChange={(e) => handleStatusToggle(e.target.value)}
-          >
-            <option value="PENDING">Pending</option>
-            <option value="APPROVED">Approved</option>
-            <option value="REJECTED">Rejected</option>
-          </select> */}
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">View Replace Class Lesson List</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
+            <Link to="/replaceclasslesson">
+              <button type="button " className="btn btn-sm btn-border   ">
+                Back
+              </button>
+            </Link>
+            &nbsp; &nbsp;
+            {data.status === "APPROVED" ? (
+              <>
+                <Link
+                  to={`/replaceclasslessonList?centerId=${data.centerId}&studentId=${data.studentId}`}
+                >
+                  <button type="button" className="btn btn-button2 btn-sm">
+                    Replace Class Lesson
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
-      </div>
-
-      <div>
-        <div className="container">
-          <div className="row mt-5 pb-3">
+        <div className="container-fluid px-4">
+          <div className="row pb-3">
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
