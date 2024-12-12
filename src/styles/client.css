@@ -71,7 +71,7 @@
 }
 
 .course-icons {
-  background-color: #eb0505;
+  background-color: #eb862a;
   padding: 10px;
   border-radius: 5px;
   margin-right: 10px;
@@ -117,7 +117,7 @@
 }
 
 .donateBtnHeader:hover {
-  background-color: #eb0505;
+  background-color: #eb862a;
 }
 
 .navMenu .nav-link {
@@ -167,7 +167,7 @@
 }
 
 .btn-danger-button {
-  background-color: #eb0505 !important;
+  background-color: #eb862a !important;
   color: white;
   border: none;
   padding: 9px 20px;
@@ -236,156 +236,6 @@
   }
 }
 
-/* / / Why Arty Learning /  / */
-
-/* Tried with media query  */
-
-/* .whyArty .card-title {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  margin-bottom: 50px;
-  color: #eb0505;
-}
-
-.whyArty .card {
-  border-top: 10px solid #000;
-  border-right: 10px solid #000;
-  border-radius: 20px;
-  background-color: #fffdec;
-  height: 560px;
-}
-
-.whyArty .card-text {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  font-size: 20px;
-}
-
-.whyArty .learnMoreBtn {
-  border-radius: 3px;
-  font-weight: 500;
-  font-size: 20px;
-}
-
-.whyArty .cardCol {
-  margin-left: 350px;
-}
-
-@media screen and (max-width: 1023px) {
-  .whyArty .card {
-    height: auto;
-    margin-top: 500px;
-  }
-
-  .whyArty .glassPicture {
-    align-items: center;
-    padding-left: 150px;
-  }
-
-  .whyArty .cardCol {
-    margin-left: 0;
-  }
-
-  .whyArty .card {
-    border-top: 1px solid #fff;
-    border-right: 10px solid #000;
-    border-radius: 20px;
-    background-color: #fffdec;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .whyArty .glassPicture {
-    align-items: center;
-    padding-left: 50px;
-  }
-}
-
-@media screen and (max-width: 491px) {
-  .whyArty .glassPicture {
-    align-items: center;
-    padding-left: 10px;
-  }
-}
-
-@media screen and (max-width: 453px) {
-  .whyArty .glassPicture {
-    align-items: center;
-    padding-left: 0;
-  }
-}
-
-@media screen and (max-width: 491px) {
-  .whyArty .card {
-    border-top: 1px solid #fff;
-    border-right: 10px solid #000;
-    border-radius: 20px;
-    background-color: #fffdec;
-    height: 700px;
-  }
-}
-
-@media screen and (max-width: 395px) {
-  .whyArty .card {
-    border-top: 1px solid #fff;
-    border-right: 10px solid #000;
-    border-radius: 20px;
-    background-color: #fffdec;
-    height: 700px;
-    margin-left: 5px;
-  }
-}
-
-@media screen and (max-width: 376px) {
-  .whyArty .card {
-    height: auto;
-    margin-top: 470px;
-  }
-}
-
-@media screen and (max-width: 344px) {
-  .whyArty .card {
-    height: auto;
-    margin-top: 400px;
-  }
-}
-
-@media screen and (max-width: 290px) {
-  .whyArty .card {
-    height: auto;
-    margin-top: 380px;
-  }
-
-  .whyArty .card {
-    border-top: 1px solid #fff;
-    border-right: 10px solid #000;
-    border-radius: 20px;
-    background-color: #fffdec;
-    height: 700px;
-    margin-left: 10px;
-  }
-}
-
-@media screen and (max-width: 390px) {
-  .whyArty .card {
-    border-top: 1px solid #fff;
-    border-right: 10px solid #000;
-    border-radius: 20px;
-    background-color: #fffdec;
-    height: 900px;
-  }
-}
-
-@media screen and (max-width: 331px) {
-  .whyArty .card {
-    border-top: 1px solid #fff;
-    border-right: 10px solid #000;
-    border-radius: 20px;
-    background-color: #fffdec;
-    height: 1000px;
-  }
-} */
-
 .whyArty {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
@@ -400,7 +250,7 @@
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   margin-bottom: 50px;
-  color: #eb0505;
+  color: #eb862a;
 }
 
 .whyArty .learnMoreBtn {
@@ -569,7 +419,7 @@
 }
 
 .news .calender button {
-  background-color: #eb0505;
+  background-color: #eb862a;
   color: white;
   border: none;
   padding: 12px 22px;
@@ -609,7 +459,7 @@
   margin-bottom: 10px;
 }
 .newsupdate .comment button {
-  background-color: #eb0505;
+  background-color: #eb862a;
   color: white;
   border: none;
   padding: 14px 24px;
@@ -625,14 +475,14 @@
   }
 }
 .form-check-input:checked {
-  background-color: #eb0505;
-  border-color: #eb0505;
+  background-color: #eb862a;
+  border-color: #eb862a;
 }
 .form input:hover {
-  border-color: #eb0505;
+  border-color: #eb862a;
 }
 .form textarea:hover {
-  border-color: #eb0505;
+  border-color: #eb862a;
 }
 
 /* / Contact / */
@@ -655,10 +505,10 @@
 }
 
 /* input.form-control:hover {
-  border-color: #eb0505 !important;
+  border-color: #eb862a !important;
 } */
 .contact form button {
-  background-color: #eb0505 !important;
+  background-color: #eb862a !important;
   color: white;
   border: none;
   padding: 12px 20px;

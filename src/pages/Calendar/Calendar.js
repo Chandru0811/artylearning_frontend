@@ -68,13 +68,12 @@ function Calendar() {
     };
     // Log the selected event details
     console.log("Selected Event Details:", selectedEventDetails);
-  
+
     setSelectedId(id);
     setSelectedEvent(selectedEventDetails);
     setShowViewModal(true); // Show modal with event data
   };
 
-  
   const closeModal = () => {
     setShowViewModal(false);
     setSelectedId(null); // Clear the selected ID when the modal is closed
@@ -84,9 +83,69 @@ function Calendar() {
   return (
     <>
       <div className="card p-2">
+        <div className="row p-1">
+          <div className="mb-3 d-flex justify-content-between">
+            <div className="individual_fliters d-lg-flex ">
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  style={{ width: "100%" }}
+                >
+                  <option value="">Select Centre</option>
+                </select>
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  style={{ width: "100%" }}
+                >
+                  <option value="">Select Course</option>
+                </select>
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  style={{ width: "100%" }}
+                >
+                  <option value="">Select Teacher</option>
+                </select>
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <input
+                  type="date"
+                  className="form-control form-control-sm center_list"
+                  style={{ width: "160px" }}
+                  placeholder="Date"
+                />
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1 ">
+                <button type="button" className="btn btn-sm btn-border me-2">
+                  Clear
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-sm text-white"
+                  style={{
+                    fontWeight: "600px !important",
+                    background: "#eb862a",
+                  }}
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="calendar">
           <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, resourceTimelinePlugin]}
+            plugins={[
+              dayGridPlugin,
+              timeGridPlugin,
+              interactionPlugin,
+              listPlugin,
+              resourceTimelinePlugin,
+            ]}
             initialView="dayGridMonth"
             headerToolbar={{
               start: "today,prev,next",
@@ -121,7 +180,6 @@ function Calendar() {
                   <div>👨‍🏫 Teacher: {teacher}</div>
                   <div>🏢 Center: {centerName}</div>
                   <div>🕒 Available Slots: {slots}</div>
-                  <div>🧑‍🎓 Student Name: {slots}</div>
                 </div>
               );
             }}
