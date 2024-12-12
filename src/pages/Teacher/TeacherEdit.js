@@ -11,7 +11,12 @@ import RequiredEdit from "./EditTeacher/RequiredEdit";
 import SalaryEdit from "./EditTeacher/SalaryEdit";
 import LeaveEdit from "./EditTeacher/LeaveEdit";
 import ContractEdit from "./EditTeacher/ContractEdit";
-import { Link, useLocation, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 
@@ -36,7 +41,7 @@ export default function TeacherEdit() {
   const roleFromURL = searchParams.get("role");
   const childRef = React.useRef();
   const [formData, setFormData] = useState({ staff_id });
-  console.log("object",formData)
+  console.log("object", formData);
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
@@ -65,7 +70,7 @@ export default function TeacherEdit() {
 
     if (role === "freelancer") {
       if (activeStep === 3) {
-        nextStep = 6; 
+        nextStep = 6;
       } else if (activeStep === 4) {
         nextStep = 6;
       }
@@ -86,7 +91,7 @@ export default function TeacherEdit() {
         previousStep = 3; // Skip step 5 and go back to step 3
       }
     }
-  
+
     setActiveStep(previousStep);
   };
 
@@ -194,30 +199,30 @@ export default function TeacherEdit() {
   return (
     <>
       <div className="container-fluid minHeight my-5">
-      <ol
-        className="breadcrumb my-3"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" className="custom-breadcrumb">
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          Staffing
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link to="/teacher" className="custom-breadcrumb">
-            Teacher
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Teacher Edit
-        </li>
-      </ol>
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            &nbsp;Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/teacher" className="custom-breadcrumb">
+              &nbsp;Teacher
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            &nbsp;Teacher Edit
+          </li>
+        </ol>
         {/* <Stepper className="my-5" activeStep={activeStep} alternativeLabel>
         {steps.map((step, index) => (
           <Step key={index} onClick={() => setActiveStep(index)}>
@@ -236,8 +241,7 @@ export default function TeacherEdit() {
           {steps.map((step, index) => {
             // Determine if the step should be disabled based on the role
             const isStepDisabled =
-              roleFromURL === "freelancer" &&
-              (index === 4 || index === 5); // Disable step 4 (Salary Information) and step 5 (Leave Information) for freelancers
+              roleFromURL === "freelancer" && (index === 4 || index === 5); // Disable step 4 (Salary Information) and step 5 (Leave Information) for freelancers
 
             return (
               <Step

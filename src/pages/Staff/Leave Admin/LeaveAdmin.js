@@ -2,14 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
 import fetchAllCentersWithIds from "../../List/CenterList";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { IoIosAddCircle } from "react-icons/io";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 const LeaveAdmin = () => {
   const tableRef = useRef(null);
+  const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   console.log("Leave Data:", datas);
   const [loading, setLoading] = useState(true);
@@ -34,7 +37,7 @@ const LeaveAdmin = () => {
       toast.error(error.message);
     }
   };
-  
+
   const findname = (id) => {
     const name = leaveTypeData?.find((item) => item.id === id);
     return name?.leaveType;
@@ -53,7 +56,6 @@ const LeaveAdmin = () => {
     getData();
     fetchData();
     fetchLeaveType();
-
   }, []);
 
   useEffect(() => {
@@ -72,9 +74,7 @@ const LeaveAdmin = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
+      columnDefs: [{ orderable: false, targets: -1 }],
     });
   };
 
@@ -85,11 +85,24 @@ const LeaveAdmin = () => {
     }
   };
 
+  const handleRowClick = (id) => {
+    navigate(`/leaveadmin/view/${id}`); // Navigate to the index page when a row is clicked
+  };
 
+  useEffect(() => {
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    }
+  }, [datas]);
 
   return (
-    <div className="container my-4">
-                 <ol
+    <div className="container-fluid my-4 center">
+      <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
@@ -100,89 +113,152 @@ const LeaveAdmin = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Staffing
+          &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-         Leave
+          &nbsp;Leave
         </li>
       </ol>
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Leave
+              </span>
+            </span>
           </div>
         </div>
-      ) : (
-        <table ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                S No
-              </th>
-              <th scope="col">Centre Name</th>
-              <th scope="col">Employee Name</th>
-              <th scope="col">Leave Type</th>
-              <th scope="col">Leave Status</th>
-              <th className="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>
-                  {centerData && data.centerId  ?
-                    centerData.map((centerId) =>
-                      parseInt(data.centerId) === centerId.id
-                        ? centerId.centerNames
-                        : ""
-                    ):data.centerName}
-                </td>
-                <td>{data.employeeName}</td>
-                <td>{findname(data?.leaveTypeId)}</td>
-                <td>
-                  {data.leaveStatus === "APPROVED" ? (
-                    <span className="badge badges-Green">Approved</span>
-                  ) : data.leaveStatus === "REJECTED" ? (
-                    <span className="badge badges-Red">Rejected</span>
-                  ) : (
-                    <span className="badge badges-Yellow">Pending</span>
-                  )}
-                </td>
-                <td>
-                  <div className="d-flex justify-content-center align-items-center ">
-                    {storedScreens?.leaveAdminRead && (
-                      <Link
-                        to={`/leaveadmin/view/${data.id}`}
-                        style={{ display: "inline-block" }}
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="table-responsive py-2">
+              <table
+                style={{ width: "100%" }}
+                ref={tableRef}
+                className="display"
+              >
+                <thead>
+                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
+                    <th className="text-muted" scope="col">
+                      S No
+                    </th>
+                    <th className="text-center text-muted"></th>
+                    <th className="text-muted" scope="col">
+                      Centre Name
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Employee Name
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Leave Type
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Leave Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.isArray(datas) &&
+                    datas.map((data, index) => (
+                      <tr
+                        key={index}
+                        style={{
+                          cursor: "pointer",
+                        }}
                       >
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                    )}
-                    {storedScreens?.leaveAdminUpdate && (
-                      <Link
-                        to={`/leaveadmin/edit/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      >
-                        <button className="btn btn-sm">
-                          <FaEdit />
-                        </button>
-                      </Link>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+                        <th scope="row" className="text-center">
+                          {index + 1}
+                        </th>
+                        <td>
+                          <div className="d-flex justify-content-center align-items-center">
+                            {storedScreens?.leaveAdminUpdate && (
+                              <div className="dropdown">
+                                <button
+                                  className="btn btn-button btn-sm dropdown-toggle"
+                                  type="button"
+                                  id="dropdownMenuButton"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                >
+                                  <IoIosAddCircle
+                                    className="text-light"
+                                    style={{ fontSize: "16px" }}
+                                  />
+                                </button>
+                                <ul
+                                  className="dropdown-menu"
+                                  aria-labelledby="dropdownMenuButton"
+                                >
+                                  <li>
+                                    {storedScreens?.leaveAdminUpdate && (
+                                      <Link to={`/leaveadmin/edit/${data.id}`}>
+                                        <button
+                                          style={{
+                                            whiteSpace: "nowrap",
+                                            width: "100%",
+                                          }}
+                                          className="btn btn-sm btn-normal text-start"
+                                        >
+                                          <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+                                        </button>
+                                      </Link>
+                                    )}
+                                  </li>
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {centerData && data.centerId
+                            ? centerData.map((centerId) =>
+                                parseInt(data.centerId) === centerId.id
+                                  ? centerId.centerNames
+                                  : ""
+                              )
+                            : data.centerName}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.employeeName}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {findname(data?.leaveTypeId)}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.leaveStatus === "APPROVED" ? (
+                            <span className="badge badges-Green">Approved</span>
+                          ) : data.leaveStatus === "REJECTED" ? (
+                            <span className="badge badges-Red">Rejected</span>
+                          ) : (
+                            <span className="badge badges-Yellow">Pending</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

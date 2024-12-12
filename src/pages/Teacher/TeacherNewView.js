@@ -125,25 +125,24 @@ function TeacherNewView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Staffing
+          &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/teacher" className="custom-breadcrumb">
-            Teacher
+            &nbsp;Teacher
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Teacher View
+          &nbsp;Teacher View
         </li>
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">
         {/* <PasswordModal /> */}
         <Link to={"/teacher"}>
           <button
-            className="btn btn-border btn-sm"
-            style={{ padding: "3px 5px", fontSize: "12px" }}
+            className="btn btn-border btn-sm me-3"
           >
             Back
           </button>

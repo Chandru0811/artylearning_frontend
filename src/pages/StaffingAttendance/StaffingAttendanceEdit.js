@@ -238,44 +238,50 @@ function StaffingAttendanceEdit() {
 
   return (
     <section className="AttendanceAdd p-3">
-      <ol
-        className="breadcrumb my-3"
-        style={{ listStyle: "none", padding: 0, margin: 0 }}
-      >
-        <li>
-          <Link to="/" className="custom-breadcrumb">
-            Home
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          Staffing
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li>
-          <Link to="/staffing/attendance" className="custom-breadcrumb">
-            Attendance
-          </Link>
-          <span className="breadcrumb-separator"> &gt; </span>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Attendance Edit
-        </li>
-      </ol>
       <div className="container-fluid">
-        <div className="container">
-          <form
-            onSubmit={formik.handleSubmit}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !formik.isSubmitting) {
-                e.preventDefault(); // Prevent default form submission
-              }
-            }}
-          >
-            <div className="row">
-              <div className="col-12 text-end">
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            &nbsp;Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            &nbsp;Attendance Edit
+          </li>
+        </ol>
+
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
+          <div className="card">
+            <div
+              className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+              style={{ background: "#f5f7f9" }}
+            >
+              <div class="d-flex align-items-center">
+                <div class="d-flex">
+                  <div class="dot active"></div>
+                </div>
+                <span class="me-2 text-muted">Edit Attendance</span>
+              </div>
+              <div className="my-2 pe-3 d-flex align-items-center">
                 <Link to="/staffing/attendance">
-                  <button className="btn btn-sm btn-border">Back</button>
+                  <button type="button " className="btn btn-sm btn-border">
+                    Back
+                  </button>
                 </Link>
                 &nbsp;&nbsp;
                 <button
@@ -289,220 +295,223 @@ function StaffingAttendanceEdit() {
                       aria-hidden="true"
                     ></span>
                   )}
-                  Update
-                </button>{" "}
+                  <span className="fw-medium">Update</span>
+                </button>
               </div>
             </div>
-            <div className="row mt-3">
-              <div className="col-md-6 col-12 mb-3 ">
-                <label className="">Centre Name</label>
-                <span className="text-danger">*</span>
-                <select
-                  {...formik.getFieldProps("centerId")}
-                  className={`form-select ${
-                    formik.touched.centerId && formik.errors.centerId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  aria-label="Default select example"
-                  onChange={handleCenterChange}
-                >
-                  <option selected disabled></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.centerId && formik.errors.centerId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.centerId}
-                  </div>
-                )}
-              </div>
-
-              <div className="col-md-6 col-12 mb-3 ">
-                <label className="">Employee Name</label>
-                <span className="text-danger">*</span>
-                <select
-                  {...formik.getFieldProps("userId")}
-                  className={`form-select  ${
-                    formik.touched.userId && formik.errors.userId
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                >
-                  <option selected value={""}></option>
-                  {userNamesData &&
-                    userNamesData.map((userName) => (
-                      <option key={userName.id} value={userName.id}>
-                        {userName.userNames}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.userId && formik.errors.userId && (
-                  <div className="invalid-feedback">{formik.errors.userId}</div>
-                )}
-              </div>
-
-              <div className="col-md-6 col-12 mb-3 ">
-                <label className="">Date</label>
-                <span className="text-danger">*</span>
-                <input
-                  type="date"
-                  className={`form-control ${
-                    formik.touched.date && formik.errors.date
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("date")}
-                  value={formik.values.date}
-                  readOnly
-                />
-                {formik.touched.date && formik.errors.date && (
-                  <div className="invalid-feedback">{formik.errors.date}</div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-3 ">
-                <label className="">Attendance Status</label>
-                <span className="text-danger">*</span>
-                <select
-                  className={`form-select ${
-                    formik.touched.attendanceStatus &&
-                    formik.errors.attendanceStatus
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("attendanceStatus")}
-                  aria-label="Default select example"
-                  onChange={handleAttendanceChange}
-                >
-                  <option selected></option>
-                  <option value="Present">Present</option>
-                  <option value="Absent">Absent</option>
-                </select>
-                {formik.touched.attendanceStatus &&
-                  formik.errors.attendanceStatus && (
+            <div className="container-fluid px-4 pb-3">
+              <div className="row">
+                <div className="col-md-6 col-12 mb-3 ">
+                  <lable className="">Centre Name</lable>
+                  <span className="text-danger">*</span>
+                  <select
+                    {...formik.getFieldProps("centerId")}
+                    className={`form-select ${
+                      formik.touched.centerId && formik.errors.centerId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Default select example"
+                    onChange={handleCenterChange}
+                  >
+                    <option selected disabled></option>
+                    {centerData &&
+                      centerData.map((center) => (
+                        <option key={center.id} value={center.id}>
+                          {center.centerNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.centerId && formik.errors.centerId && (
                     <div className="invalid-feedback">
-                      {formik.errors.attendanceStatus}
+                      {formik.errors.centerId}
                     </div>
                   )}
-              </div>
+                </div>
 
-              {formik.values.attendanceStatus === "Present" && (
-                <>
-                  <div className="col-md-6 col-12 mb-3 ">
-                    <label className="">Check In</label>
-                    {/* <span className="text-danger">*</span> */}
-                    <input
-                      type="time"
-                      // onFocus={(e) => e.target.showPicker()}
-                      className={`form-control ${
-                        formik.touched.checkIn && formik.errors.checkIn
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("checkIn")}
-                    />
-                    {formik.touched.checkIn && formik.errors.checkIn && (
+                <div className="col-md-6 col-12 mb-3 ">
+                  <lable className="">Employee Name</lable>
+                  <span className="text-danger">*</span>
+                  <select
+                    {...formik.getFieldProps("userId")}
+                    class={`form-select  ${
+                      formik.touched.userId && formik.errors.userId
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  >
+                    <option selected value={""}></option>
+                    {userNamesData &&
+                      userNamesData.map((userName) => (
+                        <option key={userName.id} value={userName.id}>
+                          {userName.userNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.userId && formik.errors.userId && (
+                    <div className="invalid-feedback">
+                      {formik.errors.userId}
+                    </div>
+                  )}
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <label className="">Date</label>
+                  <span className="text-danger">*</span>
+                  <input
+                    type="date"
+                    className={`form-control ${
+                      formik.touched.date && formik.errors.date
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("date")}
+                    value={formik.values.date}
+                    readOnly
+                  />
+                  {formik.touched.date && formik.errors.date && (
+                    <div className="invalid-feedback">{formik.errors.date}</div>
+                  )}
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <label>Attendance Status</label>
+                  <span className="text-danger">*</span>
+                  <select
+                    className={`form-select ${
+                      formik.touched.attendanceStatus &&
+                      formik.errors.attendanceStatus
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("attendanceStatus")}
+                  >
+                    <option value="" />
+                    <option value="Present" label="Present" />
+                    <option value="Absent" label="Absent" />
+                  </select>
+                  {formik.touched.attendanceStatus &&
+                    formik.errors.attendanceStatus && (
                       <div className="invalid-feedback">
-                        {formik.errors.checkIn}
+                        {formik.errors.attendanceStatus}
                       </div>
                     )}
-                  </div>
+                </div>
 
-                  <div className="col-md-6 col-12 mb-3 ">
-                    <label className="">Check Out</label>
-                    {/* <span className="text-danger">*</span> */}
-                    <input
-                      type="time"
-                      // onFocus={(e) => e.target.showPicker()}
-                      className={`form-control ${
-                        formik.touched.checkOut && formik.errors.checkOut
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("checkOut")}
-                    />
-                    {formik.touched.checkOut && formik.errors.checkOut && (
-                      <div className="invalid-feedback">
-                        {formik.errors.checkOut}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="col-md-6 col-12 mb-3 ">
-                    <label className="">OT Start Time</label>
-                    {/* <span className="text-danger">*</span> */}
-                    <input
-                      type="time"
-                      // onFocus={(e) => e.target.showPicker()}
-                      className={`form-control ${
-                        formik.touched.otStartTime && formik.errors.otStartTime
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("otStartTime")}
-                    />
-                    {formik.touched.otStartTime &&
-                      formik.errors.otStartTime && (
-                        <div className="invalid-feedback">
-                          {formik.errors.otStartTime}
-                        </div>
-                      )}
-                  </div>
-
-                  <div className="col-md-6 col-12 mb-3 ">
-                    <label className="">OT End Time</label>
-                    {/* <span className="text-danger">*</span> */}
-                    <input
-                      type="time"
-                      // onFocus={(e) => e.target.showPicker()}
-                      className={`form-control  ${
-                        formik.touched.otEndTime && formik.errors.otEndTime
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("otEndTime")}
-                    />
-                    {formik.touched.otEndTime && formik.errors.otEndTime && (
-                      <div className="invalid-feedback">
-                        {formik.errors.otEndTime}
-                      </div>
-                    )}
-                  </div>
-                  <div className="col-md-6 col-12 mb-3 ">
-                    <label className="">Mode Of Working</label>
-                    <span className="text-danger">*</span>
-                    <select
-                      className={`form-select ${
-                        formik.touched.modeOfWorking &&
-                        formik.errors.modeOfWorking
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("modeOfWorking")}
-                      aria-label="Default select example"
-                    >
-                      <option value="" label="Select Mode" />
-                      <option value="WORK_FROM_HOME" label="Work From Home" />
-                      <option
-                        value="WORK_FROM_OFFICE"
-                        label="Work From Office"
+                {formik.values.attendanceStatus === "Present" && (
+                  <>
+                    <div className="col-md-6 col-12 mb-3">
+                      <label>Check In</label>
+                      {/* <span className="text-danger">*</span> */}
+                      <input
+                        type="time"
+                        // onFocus={(e) => e.target.showPicker()}
+                        className={`form-control ${
+                          formik.touched.checkIn && formik.errors.checkIn
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("checkIn")}
                       />
-                    </select>
-                    {formik.touched.modeOfWorking &&
-                      formik.errors.modeOfWorking && (
+                      {formik.touched.checkIn && formik.errors.checkIn && (
                         <div className="invalid-feedback">
-                          {formik.errors.modeOfWorking}
+                          {formik.errors.checkIn}
                         </div>
                       )}
-                  </div>
-                </>
-              )}
+                    </div>
 
-              {/* <div className="col-md-6 col-12 mb-3 ">
+                    <div className="col-md-6 col-12 mb-3 ">
+                      <label className="">Check Out</label>
+                      {/* <span className="text-danger">*</span> */}
+                      <input
+                        type="time"
+                        // onFocus={(e) => e.target.showPicker()}
+                        className={`form-control ${
+                          formik.touched.checkOut && formik.errors.checkOut
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("checkOut")}
+                      />
+                      {formik.touched.checkOut && formik.errors.checkOut && (
+                        <div className="invalid-feedback">
+                          {formik.errors.checkOut}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="col-md-6 col-12 mb-3 ">
+                      <label className="">OT Start Time</label>
+                      {/* <span className="text-danger">*</span> */}
+                      <input
+                        type="time"
+                        // onFocus={(e) => e.target.showPicker()}
+                        className={`form-control ${
+                          formik.touched.otStartTime &&
+                          formik.errors.otStartTime
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("otStartTime")}
+                      />
+                      {formik.touched.otStartTime &&
+                        formik.errors.otStartTime && (
+                          <div className="invalid-feedback">
+                            {formik.errors.otStartTime}
+                          </div>
+                        )}
+                    </div>
+
+                    <div className="col-md-6 col-12 mb-3 ">
+                      <label className="">OT End Time</label>
+                      {/* <span className="text-danger">*</span> */}
+                      <input
+                        type="time"
+                        // onFocus={(e) => e.target.showPicker()}
+                        className={`form-control  ${
+                          formik.touched.otEndTime && formik.errors.otEndTime
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("otEndTime")}
+                      />
+                      {formik.touched.otEndTime && formik.errors.otEndTime && (
+                        <div className="invalid-feedback">
+                          {formik.errors.otEndTime}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="col-md-6 col-12 mb-3">
+                      <label>Mode Of Working</label>
+                      <span className="text-danger">*</span>
+                      <select
+                        className={`form-select ${
+                          formik.touched.modeOfWorking &&
+                          formik.errors.modeOfWorking
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                        {...formik.getFieldProps("modeOfWorking")}
+                      >
+                        <option value="" label="Select Mode" />
+                        <option value="WORK_FROM_HOME" label="Work From Home" />
+                        <option
+                          value="WORK_FROM_OFFICE"
+                          label="Work From Office"
+                        />
+                      </select>
+                      {formik.touched.modeOfWorking &&
+                        formik.errors.modeOfWorking && (
+                          <div className="invalid-feedback">
+                            {formik.errors.modeOfWorking}
+                          </div>
+                        )}
+                    </div>
+                  </>
+                )}
+
+                {/* <div className="col-md-6 col-12 mb-3 ">
                 <lable className="">Check In Mode</lable>
                 <span className="text-danger">*</span>
                 <select
@@ -547,34 +556,35 @@ function StaffingAttendanceEdit() {
                 )}
               </div> */}
 
-              <div className="col-md-6 col-12">
-                <div className="text-start mt-2">
-                  <label className="form-lable">Attendance Remark</label>
-                  <span className="text-danger">*</span>
-                  <br />
-                  <textarea
-                    id="floatingTextarea2"
-                    style={{ height: "100px" }}
-                    className={`form-control  ${
-                      formik.touched.attendanceRemark &&
-                      formik.errors.attendanceRemark
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("attendanceRemark")}
-                    maxLength={200}
-                  />
-                  {formik.touched.attendanceRemark &&
-                    formik.errors.attendanceRemark && (
-                      <div className="invalid-feedback">
-                        {formik.errors.attendanceRemark}
-                      </div>
-                    )}
+                <div className="col-md-6 col-12">
+                  <div className="text-start mt-2">
+                    <lable className="form-lable">Attendance Remark</lable>
+                    <span className="text-danger">*</span>
+                    <br />
+                    <textarea
+                      id="floatingTextarea2"
+                      style={{ height: "100px" }}
+                      className={`form-control  ${
+                        formik.touched.attendanceRemark &&
+                        formik.errors.attendanceRemark
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("attendanceRemark")}
+                      maxLength={200}
+                    />
+                    {formik.touched.attendanceRemark &&
+                      formik.errors.attendanceRemark && (
+                        <div className="invalid-feedback">
+                          {formik.errors.attendanceRemark}
+                        </div>
+                      )}
+                  </div>
                 </div>
               </div>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </section>
   );

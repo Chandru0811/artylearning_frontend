@@ -57,7 +57,7 @@ function LeaveAdminEdit() {
       setLoadIndicator(true);
       try {
         const payload = {
-          leaveStatus: data.leaveStatus
+          leaveStatus: data.leaveStatus,
         };
         const response = await api.put(
           `/updateUserLeaveRequestStatus/${id}`,
@@ -96,7 +96,7 @@ function LeaveAdminEdit() {
       try {
         const response = await api.get(`/getUserLeaveRequestById/${id}`);
         console.log(response.data);
-        setLeaveDatas(response.data)
+        setLeaveDatas(response.data);
         setData(response.data);
 
         formik.setValues(response.data);
@@ -128,25 +128,60 @@ function LeaveAdminEdit() {
   }, []);
 
   return (
-    <section>
-      <div className="container">
-        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+    <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/center" className="custom-breadcrumb">
+            &nbsp;Leave
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Leave Edit
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
-          <div className="row my-3 mb-5">
-            <div className="col-12 text-end">
+        }}
+      >
+        <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">Edit Leave</span>
+            </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
               <Link to="/leaveadmin">
-                <button type="button" className="btn btn-sm btn-border">
+                <button type="button " className="btn btn-sm btn-border   ">
                   Back
                 </button>
               </Link>
               &nbsp;&nbsp;
               <button
                 type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-sm btn-button"
+                className="btn btn-button btn-sm"
                 disabled={loadIndicator}
               >
                 {loadIndicator && (
@@ -159,233 +194,253 @@ function LeaveAdminEdit() {
               </button>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Centre Name<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="centerName"
-                className="form-control"
-                {...formik.getFieldProps("centerName")}
-                readOnly
-              />
-            </div>
+          <div className="container">
+            <div className="row">
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Centre Name<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="centerName"
+                  className="form-control"
+                  {...formik.getFieldProps("centerName")}
+                  readOnly
+                />
+              </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Employee Name<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                name="employeeName"
-                className="form-control"
-                {...formik.getFieldProps("employeeName")}
-                readOnly
-              />
-            </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Employee Name<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="employeeName"
+                  className="form-control"
+                  {...formik.getFieldProps("employeeName")}
+                  readOnly
+                />
+              </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                From Date<span className="text-danger">*</span>
-              </label>
-              <input
-                type="date"
-                className={`form-control  ${formik.touched.fromDate && formik.errors.fromDate
-                  ? "is-invalid"
-                  : ""
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  From Date<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="date"
+                  className={`form-control  ${
+                    formik.touched.fromDate && formik.errors.fromDate
+                      ? "is-invalid"
+                      : ""
                   }`}
-                readOnly
-                {...formik.getFieldProps("fromDate")}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                  const daysDiff = calculateDays(
-                    e.target.value,
-                    formik.values.toDate
-                  );
-                  setDaysDifference(daysDiff);
-                }}
-              />
-              {formik.touched.fromDate && formik.errors.fromDate && (
-                <div className="invalid-feedback">{formik.errors.fromDate}</div>
-              )}
-            </div>
+                  readOnly
+                  {...formik.getFieldProps("fromDate")}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    const daysDiff = calculateDays(
+                      e.target.value,
+                      formik.values.toDate
+                    );
+                    setDaysDifference(daysDiff);
+                  }}
+                />
+                {formik.touched.fromDate && formik.errors.fromDate && (
+                  <div className="invalid-feedback">
+                    {formik.errors.fromDate}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                To Date<span className="text-danger">*</span>
-              </label>
-              <input
-                type="date"
-                readOnly
-                className={`form-control  ${formik.touched.toDate && formik.errors.toDate
-                  ? "is-invalid"
-                  : ""
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  To Date<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="date"
+                  readOnly
+                  className={`form-control  ${
+                    formik.touched.toDate && formik.errors.toDate
+                      ? "is-invalid"
+                      : ""
                   }`}
-                {...formik.getFieldProps("toDate")}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                  const daysDiff = calculateDays(
-                    formik.values.fromDate,
-                    e.target.value || "0"
-                  );
-                  setDaysDifference(daysDiff);
-                }}
-              />
-              {formik.touched.toDate && formik.errors.toDate && (
-                <div className="invalid-feedback">{formik.errors.toDate}</div>
-              )}
-            </div>
+                  {...formik.getFieldProps("toDate")}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    const daysDiff = calculateDays(
+                      formik.values.fromDate,
+                      e.target.value || "0"
+                    );
+                    setDaysDifference(daysDiff);
+                  }}
+                />
+                {formik.touched.toDate && formik.errors.toDate && (
+                  <div className="invalid-feedback">{formik.errors.toDate}</div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                No.Of.Days<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className={`form-control  ${formik.touched.noOfDays && formik.errors.noOfDays
-                  ? "is-invalid"
-                  : ""
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  No.Of.Days<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.noOfDays && formik.errors.noOfDays
+                      ? "is-invalid"
+                      : ""
                   }`}
-                {...formik.getFieldProps("noOfDays")}
-                value={daysDifference || "0"}
-                readOnly
-              />
-              {formik.touched.noOfDays && formik.errors.noOfDays && (
-                <div className="invalid-feedback">{formik.errors.noOfDays}</div>
-              )}
-            </div>
+                  {...formik.getFieldProps("noOfDays")}
+                  value={daysDifference || "0"}
+                  readOnly
+                />
+                {formik.touched.noOfDays && formik.errors.noOfDays && (
+                  <div className="invalid-feedback">
+                    {formik.errors.noOfDays}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Day Type<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className={`form-control  ${formik.touched.dayType && formik.errors.dayType
-                  ? "is-invalid"
-                  : ""
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Day Type<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.dayType && formik.errors.dayType
+                      ? "is-invalid"
+                      : ""
                   }`}
-                {...formik.getFieldProps("dayType")}
-                readOnly
-              />
-              {formik.touched.dayType && formik.errors.dayType && (
-                <div className="invalid-feedback">{formik.errors.dayType}</div>
-              )}
-            </div>
+                  {...formik.getFieldProps("dayType")}
+                  readOnly
+                />
+                {formik.touched.dayType && formik.errors.dayType && (
+                  <div className="invalid-feedback">
+                    {formik.errors.dayType}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Leave Type<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className={`form-control  ${formik.touched.leaveType && formik.errors.leaveType
-                  ? "is-invalid"
-                  : ""
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Leave Type<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.leaveType && formik.errors.leaveType
+                      ? "is-invalid"
+                      : ""
                   }`}
-                {...formik.getFieldProps("leaveType")}
-                readOnly
-              />
-              {formik.touched.leaveType && formik.errors.leaveType && (
-                <div className="invalid-feedback">
-                  {formik.errors.leaveType}
-                </div>
-              )}
-            </div>
+                  {...formik.getFieldProps("leaveType")}
+                  readOnly
+                />
+                {formik.touched.leaveType && formik.errors.leaveType && (
+                  <div className="invalid-feedback">
+                    {formik.errors.leaveType}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Leave Status<span className="text-danger">*</span>
-              </label>
-              <select
-                name="leaveStatus"
-                className={`form-select ${formik.touched.leaveStatus && formik.errors.leaveStatus
-                  ? "is-invalid"
-                  : ""
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Leave Status<span className="text-danger">*</span>
+                </label>
+                <select
+                  name="leaveStatus"
+                  className={`form-select ${
+                    formik.touched.leaveStatus && formik.errors.leaveStatus
+                      ? "is-invalid"
+                      : ""
                   }`}
-                {...formik.getFieldProps("leaveStatus")}
-              >
-                <option value="PENDING">Pending</option>
-                <option value="REJECTED">Rejected</option>
-                <option value="APPROVED">Approved</option>
-              </select>
-              {formik.touched.leaveStatus && formik.errors.leaveStatus && (
-                <div className="invalid-feedback">
-                  {formik.errors.leaveStatus}
-                </div>
-              )}
-            </div>
+                  {...formik.getFieldProps("leaveStatus")}
+                >
+                  <option value="PENDING">Pending</option>
+                  <option value="REJECTED">Rejected</option>
+                  <option value="APPROVED">Approved</option>
+                </select>
+                {formik.touched.leaveStatus && formik.errors.leaveStatus && (
+                  <div className="invalid-feedback">
+                    {formik.errors.leaveStatus}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Leave Reason<span className="text-danger">*</span>
-              </label>
-              <textarea
-                rows={5}
-                className={`form-control  ${formik.touched.leaveReason && formik.errors.leaveReason
-                  ? "is-invalid"
-                  : ""
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Leave Reason<span className="text-danger">*</span>
+                </label>
+                <textarea
+                  rows={5}
+                  className={`form-control  ${
+                    formik.touched.leaveReason && formik.errors.leaveReason
+                      ? "is-invalid"
+                      : ""
                   }`}
-                {...formik.getFieldProps("leaveReason")}
-                readOnly
-              ></textarea>
-              {formik.touched.leaveReason && formik.errors.leaveReason && (
-                <div className="invalid-feedback">
-                  {formik.errors.leaveReason}
-                </div>
-              )}
+                  {...formik.getFieldProps("leaveReason")}
+                  readOnly
+                ></textarea>
+                {formik.touched.leaveReason && formik.errors.leaveReason && (
+                  <div className="invalid-feedback">
+                    {formik.errors.leaveReason}
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <p className="headColor mt-5">Attachment</p>
+                {data.attachment && (
+                  <div className="mt-3">
+                    {data?.attachment?.endsWith(".pdf") ? (
+                      <div
+                        className="card border-0 shadow"
+                        style={{ width: "12rem" }}
+                      >
+                        <a
+                          href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                            data?.attachment
+                          )}&embedded=true`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <img
+                            className="card-img-top img-fluid"
+                            style={{ height: "100px", objectFit: "contain" }}
+                            src={pdfLogo}
+                            alt="Card image cap"
+                          />
+                        </a>
+                        <div className="card-body d-flex justify-content-between">
+                          <p
+                            className="card-title fw-semibold text-wrap"
+                            style={{ fontSize: "0.85rem" }}
+                          >
+                            {data?.attachment?.split("/").pop()}
+                          </p>
+                          <a
+                            href={data?.attachment}
+                            className="btn text-dark"
+                            download={data?.attachment?.split("/").pop()}
+                          >
+                            <MdOutlineDownloadForOffline size={20} />
+                          </a>
+                        </div>
+                      </div>
+                    ) : (
+                      <img
+                        src={data?.attachment}
+                        alt="Attachment"
+                        className="img-fluid"
+                        style={{ height: "100px", objectFit: "contain" }}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="col-md-6 col-12 mb-3">
-  <p className="headColor mt-5">Attachment</p>
-  {data.attachment && (
-    <div className="mt-3">
-      {data?.attachment?.endsWith(".pdf") ? (
-        <div className="card border-0 shadow" style={{ width: "12rem" }}> 
-          <a
-            href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-              data?.attachment
-            )}&embedded=true`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              className="card-img-top img-fluid"
-              style={{ height: "100px", objectFit: "contain" }} 
-              src={pdfLogo}
-              alt="Card image cap"
-            />
-          </a>
-          <div className="card-body d-flex justify-content-between">
-            <p className="card-title fw-semibold text-wrap" style={{ fontSize: "0.85rem" }}>
-              {data?.attachment?.split("/").pop()}
-            </p>
-            <a
-              href={data?.attachment}
-              className="btn text-dark"
-              download={data?.attachment?.split("/").pop()}
-            >
-              <MdOutlineDownloadForOffline size={20} /> 
-            </a>
           </div>
         </div>
-      ) : (
-        <img
-          src={data?.attachment}
-          alt="Attachment"
-          className="img-fluid"
-          style={{ height: "100px", objectFit: "contain" }} 
-        />
-      )}
+      </form>
     </div>
-  )}
-</div>
-
-          </div>
-        </form>
-      </div>
-    </section>
   );
 }
 
