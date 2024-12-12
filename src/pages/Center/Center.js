@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
-import { Link, useNavigate } from "react-router-dom"; // Use useNavigate
-import { FaEdit } from "react-icons/fa"; // No need for FaEye anymore
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosAddCircle } from "react-icons/io";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { useFormik } from "formik";
-
 import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
@@ -16,7 +14,6 @@ import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
-import { GoSortDesc } from "react-icons/go";
 import fetchAllCentersWithIds from "../List/CenterList";
 
 const Centre = () => {
@@ -36,13 +33,12 @@ const Centre = () => {
       email: "",
     },
     onSubmit: async (data) => {
+      getData();
       console.log("Selected Values :", data);
     },
   });
 
-  const clearFilters = () => {
-    formik.resetForm();
-  };
+  
 
   const getCenterData = async () => {
     try {
@@ -64,11 +60,6 @@ const Centre = () => {
       toast.error(error);
     }
   };
-
-  useEffect(() => {
-    getCenterData();
-    fetchData(); // Fetch the center manager data as well
-  }, []);
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
@@ -100,33 +91,55 @@ const Centre = () => {
     setLoading(false);
   };
 
+  // const getData = async () => {
+  //   destroyDataTable();
+  //   setLoading(true);
+  //   let params = {};
+
+  //   if (formik.values.centerId !== "") {
+  //     params.centerId = formik.values.centerId;
+  //   }
+
+  //   if (formik.values.centerCode !== "") {
+  //     params.centerCode = formik.values.centerCode;
+  //   }
+
+  //   if (formik.values.email !== "") {
+  //     params.email = formik.values.email;
+  //   }
+
+  //   if (formik.values.centerManager !== "") {
+  //     params.centerManager = formik.values.centerManager;
+  //   }
+
+  //   try {
+  //     const response = await api.get(`/getCenterWithCustomInfo?${params}`);
+  //     setDatas(response.data);
+  //     initializeDataTable();
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const getData = async () => {
     destroyDataTable();
     setLoading(true);
-    let params = {};
+    const params = {};
 
-    if (formik.values.centerId !== "") {
-      params.centerId = formik.values.centerId;
-    }
-
-    if (formik.values.centerCode !== "") {
-      params.centerCode = formik.values.centerCode;
-    }
-
-    if (formik.values.email !== "") {
-      params.email = formik.values.email;
-    }
-
-    if (formik.values.centerManager !== "") {
-      params.centerManager = formik.values.centerManager;
-    }
+    if (formik.values.centerId) params.centerId = formik.values.centerId;
+    if (formik.values.centerCode) params.centerCode = formik.values.centerCode;
+    if (formik.values.email) params.email = formik.values.email;
+    if (formik.values.centerManager) params.centerManager = formik.values.centerManager;
 
     try {
-      const response = await api.get(`/getCenterWithCustomInfo/${params}`);
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
       setDatas(response.data);
       initializeDataTable();
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching filtered data: ", error);
     } finally {
       setLoading(false);
     }
@@ -146,6 +159,12 @@ const Centre = () => {
       thElements.forEach((th) => th.classList.remove("sorting_1"));
     }
   }, [datas]);
+
+  useEffect(() => {
+    getCenterData();
+    fetchData(); // Fetch the center manager data as well
+  }, []);
+
 
   useEffect(() => {
     if (!loading) {
@@ -251,7 +270,7 @@ const Centre = () => {
                 <select
                   {...formik.getFieldProps("centerManager")}
                   name="centerManager"
-                  className="form-control form-control-sm center_list"
+                  className="form-select form-select-sm center_list"
                   style={{ width: "100%" }}
                 >
                   <option value="">Select Centre Manager</option>
@@ -262,17 +281,37 @@ const Centre = () => {
                   ))}
                 </select>
               </div>
-
-              <div className="form-group mb-0 ms-2 mb-1 ">
+              {/* <div className="form-group mb-2 ms-2">
+                <button
+                  type="submit"
+                  className="btn btn-sm text-white"
+                  style={{
+                    fontWeight: "600px !important",
+                    background: "#eb862a",
+                  }}
+                >
+                  Search
+                </button>
+              </div> */}
+              <div className="form-group mb-2 ms-2">
                 <button
                   type="button"
                   className="btn btn-sm btn-border"
-                  onClick={clearFilters}
+                  onClick={() =>
+                    formik.resetForm({
+                      values: {
+                        centerId: "",
+                        centerManager: "",
+                        centerCode: "",
+                        email: "",
+                      },
+                    })
+                  }
                 >
                   Clear
                 </button>
               </div>
-            </div>
+              </div>
           </form>
           {storedScreens?.centerListingCreate && (
             <Link to="/center/add">
