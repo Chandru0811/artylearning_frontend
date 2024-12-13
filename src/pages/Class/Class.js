@@ -256,14 +256,40 @@ const Class = () => {
             <table style={{ width: "100%" }} ref={tableRef} className="display">
               <thead>
                 <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th scope="col">S No</th>
+                  <th className="text-muted" scope="col">
+                    S No
+                  </th>
                   <th className="text-center text-muted"></th>
-                  {showColumns.className && <th scope="col">Class Name</th>}
-                  {showColumns.classType && <th scope="col">Class Type</th>}
-                  {showColumns.createdBy && <th scope="col">Created By</th>}
-                  {showColumns.createdAt && <th scope="col">Created At</th>}
-                  {showColumns.updatedBy && <th scope="col">Updated By</th>}
-                  {showColumns.updatedAt && <th scope="col">Updated At</th>}
+                  {showColumns.className && (
+                    <th className="text-muted" scope="col">
+                      Class Name
+                    </th>
+                  )}
+                  {showColumns.classType && (
+                    <th className="text-muted" scope="col">
+                      Class Type
+                    </th>
+                  )}
+                  {showColumns.createdBy && (
+                    <th className="text-muted" scope="col">
+                      Created By
+                    </th>
+                  )}
+                  {showColumns.createdAt && (
+                    <th className="text-muted" scope="col">
+                      Created At
+                    </th>
+                  )}
+                  {showColumns.updatedBy && (
+                    <th className="text-muted" scope="col">
+                      Updated By
+                    </th>
+                  )}
+                  {showColumns.updatedAt && (
+                    <th className="text-muted" scope="col">
+                      Updated At
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody>

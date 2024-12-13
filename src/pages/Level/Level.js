@@ -220,12 +220,20 @@ const Level = () => {
           <div className="table-responsive">
             <table ref={tableRef} className="display">
               <thead>
-                <tr>
-                  <th scope="col">S No</th>
+                <tr className="text-center" style={{ background: "#f5f7f9" }}>
+                  <th className="text-muted" scope="col">
+                    S No
+                  </th>
                   <th className="text-center text-muted"></th>
-                  <th scope="col">Level</th>
-                  <th scope="col">Subject</th>
-                  <th scope="col">Code</th>
+                  <th className="text-muted" scope="col">
+                    Level
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Subject
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Code
+                  </th>
                   {extraData && (
                     <th
                       scope="col"
@@ -282,7 +290,9 @@ const Level = () => {
                       UpdatedAt
                     </th>
                   )}
-                  <th scope="col">Status</th>
+                  <th className="text-muted" scope="col">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody>

@@ -72,7 +72,7 @@
 
 .sidebar .nav-links li a {
   color: #97a3b6;
-    font-size: 20px;
+  font-size: 20px;
 
   /* Default black text */
 }
@@ -101,10 +101,9 @@
   color: #fff !important;
 }
 
-.sidebar .nav-links .homeIcons{
+.sidebar .nav-links .homeIcons {
   color: #97a3b6 !important;
 }
-
 
 .sidebar .nav-links li a.active i {
   color: #ffffff !important;
@@ -130,8 +129,8 @@
   /* Default color (black) */
 }
 
-.submenu li a span{
-    color: #303030;
+.submenu li a span {
+  color: #303030;
 }
 
 .sidebar .nav-links li.active i {
@@ -496,7 +495,6 @@ nav .profile-details i {
   background: #f7f4f4;
 }
 
-
 .btn-button2 {
   color: #fff;
   padding: 0.5rem 0.9rem;
@@ -663,41 +661,49 @@ a:hover {
 .badges-Green {
   background-color: #668d47 !important;
   font-weight: 500;
+  border-radius: 3px;
 }
 
 .badges-Orange {
   background-color: #e37343 !important;
   font-weight: 500;
+  border-radius: 3px;
 }
 
 .badges-Yellow {
   background-color: #ffba32 !important;
   font-weight: 500;
+  border-radius: 3px;
 }
 
 .badges-Red {
   background-color: #f94c4c !important;
   font-weight: 500;
+  border-radius: 3px;
 }
 
 .badges-Brown {
   background-color: #ae4f3a !important;
   font-weight: 500;
+  border-radius: 3px;
 }
 
 .badges-LightGreen {
   background-color: #46b28b !important;
   font-weight: 500;
+  border-radius: 3px;
 }
 
 .badges-Ash {
   background-color: #787878 !important;
   font-weight: 500;
+  border-radius: 3px;
 }
 
 .badges-Blue {
   background-color: #155387 !important;
   font-weight: 500;
+  border-radius: 3px;
 }
 
 .on-off-toggle {

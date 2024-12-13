@@ -147,21 +147,51 @@ const TransferOut = () => {
         <table style={{ width: "100%" }} ref={tableRef} className="display">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Action</th>
-              <th scope="col">Center Name</th>
-              <th scope="col">Transfer To</th>
-              <th scope="col">Student ID</th>
-              <th scope="col">Student Name</th>
-              <th scope="col">Current Course</th>
-              <th scope="col">Current Class</th>
-              <th scope="col">Last lesson date</th>
-              <th scope="col">Center Remark</th>
-              <th scope="col">Prefer Timing</th>
-              <th scope="col">Prefer Days</th>
-              <th scope="col">Prefer Start Date</th>
-              <th scope="col">Reason</th>
-              <th scope="col">Parent Remark</th>
+              <th className="text-muted" scope="col">
+                S No
+              </th>
+              <th className="text-muted" scope="col">
+                Action
+              </th>
+              <th className="text-muted" scope="col">
+                Center Name
+              </th>
+              <th className="text-muted" scope="col">
+                Transfer To
+              </th>
+              <th className="text-muted" scope="col">
+                Student ID
+              </th>
+              <th className="text-muted" scope="col">
+                Student Name
+              </th>
+              <th className="text-muted" scope="col">
+                Current Course
+              </th>
+              <th className="text-muted" scope="col">
+                Current Class
+              </th>
+              <th className="text-muted" scope="col">
+                Last lesson date
+              </th>
+              <th className="text-muted" scope="col">
+                Center Remark
+              </th>
+              <th className="text-muted" scope="col">
+                Prefer Timing
+              </th>
+              <th className="text-muted" scope="col">
+                Prefer Days
+              </th>
+              <th className="text-muted" scope="col">
+                Prefer Start Date
+              </th>
+              <th className="text-muted" scope="col">
+                Reason
+              </th>
+              <th className="text-muted" scope="col">
+                Parent Remark
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -172,7 +202,7 @@ const TransferOut = () => {
                   className={`btn btn-${
                     actions[1] === "approved" ? "success" : "danger"
                   }`}
-                  style={{ fontSize: "12px" }}
+                  style={{ fontSize: "10px" }}
                   onClick={() => toggleAction(1)}
                 >
                   {actions[1] === "approved" ? "Approved" : "Rejected"}

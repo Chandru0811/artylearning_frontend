@@ -244,11 +244,19 @@ const Course = () => {
             <table style={{ width: "100%" }} ref={tableRef} className="display">
               <thead>
                 <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th scope="col">S No</th>
+                  <th className="text-muted" scope="col">
+                    S No
+                  </th>
                   <th className="text-center text-muted"></th>
-                  <th scope="col">Course Name</th>
-                  <th scope="col">Course Code</th>
-                  <th scope="col">Course Type</th>
+                  <th className="text-muted" scope="col">
+                    Course Name
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Course Code
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Course Type
+                  </th>
                   {extraData && (
                     <th
                       scope="col"
@@ -305,7 +313,9 @@ const Course = () => {
                       UpdatedAt
                     </th>
                   )}
-                  <th scope="col">Status</th>
+                  <th className="text-muted" scope="col">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody>
