@@ -9,53 +9,54 @@ import fetchAllSubjectsWithIds from "../List/SubjectList";
 import { toast } from "react-toastify";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
+import fetchAllCentersWithIds from "../List/CenterList";
 
 const Course = () => {
-  // const { id } = useParams();
   const tableRef = useRef(null);
-  const [datas, setDatas] = useState([]);
   const navigate = useNavigate();
+  const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [subjectData, setSubjectData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [extraData, setExtraData] = useState(false);
-  const [centerName, setCenterName] = useState("");
+  const centerLocalId = localStorage.getItem("centerId");
+  const [centerData, setCenterData] = useState([]);
+  const [centerId, setCenterId] = useState("");
   const [code, setCode] = useState("");
-  const [email, setEmail] = useState("");
+  const [course, setCourse] = useState("");
 
-  const clearFilters = () => {
-    setCenterName("");
-    setCode("");
-    setEmail("");
+  const getCourseData = async () => {
+    try {
+      const params = {};
 
-    $(tableRef.current).DataTable().search("").draw();
+      if (centerId) params.centerId = centerId;
+      if (code) params.code = code;
+      if (course) params.course = course;
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
+      setDatas(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllCourses");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data ", error);
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setCenterId(centerLocalId[0]);
+      } else if (centerData !== null && centerData.length > 0) {
+        setCenterId(centerData[0].id);
       }
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
     }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  };
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
     $(tableRef.current).DataTable({
@@ -71,6 +72,15 @@ const Course = () => {
     }
   };
 
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
+
   const fetchSubData = async () => {
     try {
       const subjectData = await fetchAllSubjectsWithIds();
@@ -84,9 +94,15 @@ const Course = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllCourses");
+      const params = {};
+
+      if (centerId) params.centerId = centerId;
+      if (code) params.code = code;
+      if (course) params.course = course;
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
       setDatas(response.data);
-      initializeDataTable();
+      setLoading(false);
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
@@ -110,6 +126,14 @@ const Course = () => {
     return dateString.substring(0, 10);
   };
 
+  const clearFilters = () => {
+    setCenterId("");
+    setCode("");
+    setCourse("");
+
+    $(tableRef.current).DataTable().search("").draw();
+  };
+
   const handleRowClick = (id) => {
     navigate(`/course/view/${id}`);
   };
@@ -124,6 +148,16 @@ const Course = () => {
       thElements.forEach((th) => th.classList.remove("sorting_1"));
     }
   }, [datas]);
+
+  useEffect(() => {
+    fetchData(); // Fetch the center manager data as well
+  }, [centerLocalId]);
+
+  useEffect(() => {
+    if (centerId !== undefined && centerId !== "") {
+      getCourseData();
+    }
+  }, [code, centerId, course, centerLocalId]);
 
   return (
     <div className="container my-4 center">
@@ -165,17 +199,28 @@ const Course = () => {
         <div className="d-flex justify-content-between mb-3 px-2">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                onChange={(e) => setCenterId(e.target.value)}
+                name="centerId"
+                value={centerId}
+              >
+                {centerData?.map((center) => (
+                  <option key={center.id} value={center.id} selected>
+                    {center.centerNames}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Centre Name"
-                value={centerName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCenterName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                placeholder="Course"
+                value={course}
+                onChange={(e) => setCourse(e.target.value)}
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -185,25 +230,7 @@ const Course = () => {
                 style={{ width: "160px" }}
                 placeholder="Code"
                 value={code}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCode(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Email"
-                value={email}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setEmail(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                onChange={(e) => setCode(e.target.value)}
               />
             </div>
 
