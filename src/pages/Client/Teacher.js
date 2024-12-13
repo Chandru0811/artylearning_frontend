@@ -24,19 +24,19 @@ function Teacher() {
     try {
       const response = await api.get(`/getAllTeacherSavePublish`);
       // formik.setValues(response.data);
-      setDatas(response.data)
+      setDatas(response.data);
     } catch (error) {
       toast.error("Error Fetch Data ", error);
     }
   };
-useEffect(() => {
-  getData();
-}, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
-const adminData = datas.filter(data => data.teacherRole === "ADMIN");
-const cTeacherData = datas.filter(data => data.teacherRole === "CHINESE");
-const engTeacherData = datas.filter(data => data.teacherRole === "ENGLISH");
-console.log("object",datas)
+  const adminData = datas.filter((data) => data.teacherRole === "ADMIN");
+  const cTeacherData = datas.filter((data) => data.teacherRole === "CHINESE");
+  const engTeacherData = datas.filter((data) => data.teacherRole === "ENGLISH");
+  console.log("object", datas);
   return (
     <section style={{ backgroundColor: "#f9fafb" }}>
       <div className="container py-5">
@@ -59,62 +59,63 @@ console.log("object",datas)
         >
           <Tab eventKey="home" title="English Teachers">
             <div className="row mt-5">
-              {engTeacherData && engTeacherData.map((data,i)=>(
-                <div className="col-md-6 col-12 mb-3">
-                <div className="row">
-                  <div className="col-md-6 col-12">
-                    <img
-                      src={data.image}
-                      alt="Teacher"
-                      style={{ borderRadius: "10px" }}
-                      className="img-fluid"
-                    />
-                  </div>
-                  <div className="col-md-6 col-12">
-                  
-                    <div className="mx-2">
-                      <h1 className="fw-bold">{data.teacherName}</h1>
-                      <h4 className="text-danger">{data.teacherRoleName}</h4>
-                      <p style={{ fontSize: "20px" }}>
-                        {data.teacherDescription}
-                      </p>
+              {engTeacherData &&
+                engTeacherData.map((data, i) => (
+                  <div className="col-md-6 col-12 mb-3">
+                    <div className="row">
+                      <div className="col-md-6 col-12">
+                        <img
+                          src={data.image}
+                          alt="Teacher"
+                          style={{ borderRadius: "10px" }}
+                          className="img-fluid"
+                        />
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <div className="mx-2">
+                          <h1 className="fw-bold">{data.teacherName}</h1>
+                          <h4 className="text-danger">
+                            {data.teacherRoleName}
+                          </h4>
+                          <p style={{ fontSize: "20px" }}>
+                            {data.teacherDescription}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              ))}
-              
+                ))}
             </div>
           </Tab>
           <Tab eventKey="profile" title="Chinese Teachers">
             <div className="row mt-5">
-              {cTeacherData&& cTeacherData.map((data,i)=>(
-                <div className="col-md-6 col-12">
-                <div className="row">
+              {cTeacherData &&
+                cTeacherData.map((data, i) => (
                   <div className="col-md-6 col-12">
-                    <img
-                      src={data.image}
-                      alt="Teacher"
-                      style={{ borderRadius: "10px" }}
-                      className="img-fluid"
-                    />
-                  </div>
-                  <div className="col-md-6 col-12">
-                  
-                    <div className="mx-2">
-                      <h1 className="fw-bold">{data.teacherName}</h1>
-                      <h5 className="text-danger">
-                        {data.teacherRoleName}
-                      </h5>
-                      <p style={{ fontSize: "20px" }}>{data.experience}</p>
-                      <p style={{ fontSize: "20px" }}>
-                       {data.teacherDescription}
-                      </p>
+                    <div className="row">
+                      <div className="col-md-6 col-12">
+                        <img
+                          src={data.image}
+                          alt="Teacher"
+                          style={{ borderRadius: "10px" }}
+                          className="img-fluid"
+                        />
+                      </div>
+                      <div className="col-md-6 col-12">
+                        <div className="mx-2">
+                          <h1 className="fw-bold">{data.teacherName}</h1>
+                          <h5 className="text-danger">
+                            {data.teacherRoleName}
+                          </h5>
+                          <p style={{ fontSize: "20px" }}>{data.experience}</p>
+                          <p style={{ fontSize: "20px" }}>
+                            {data.teacherDescription}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              ))}
+                ))}
             </div>
           </Tab>
           <Tab eventKey="longer-tab" title="Admin">
@@ -133,16 +134,18 @@ console.log("object",datas)
                           />
                         </div>
                         <div className="col-md-6 col-12">
-                        
                           <div className="mx-2">
                             <h1 className="fw-bold">{data.teacherName}</h1>
-                            <h4 className="text-danger">{data.teacherRoleName}</h4>
-                            <p style={{ fontSize: "20px" }}>{data.teacherDescription}</p>
+                            <h4 className="text-danger">
+                              {data.teacherRoleName}
+                            </h4>
+                            <p style={{ fontSize: "20px" }}>
+                              {data.teacherDescription}
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    
                   </>
                 ))}
             </div>

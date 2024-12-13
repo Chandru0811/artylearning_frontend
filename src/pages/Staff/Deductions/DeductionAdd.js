@@ -123,65 +123,74 @@ function DeductionAdd() {
   }, []);
 
   return (
-    <section className="HolidayAdd p-3">
-      <div className="container-fluid">
-        <ol
-          className="breadcrumb my-3"
-          style={{ listStyle: "none", padding: 0, margin: 0 }}
-        >
-          <li>
-            <Link to="/" className="custom-breadcrumb">
-              Home
-            </Link>
-            <span className="breadcrumb-separator"> &gt; </span>
-          </li>
-          <li>
-            Staffing
-            <span className="breadcrumb-separator"> &gt; </span>
-          </li>
-          <li>
-            <Link to="/deduction" className="custom-breadcrumb">
-              Deduction
-            </Link>
-            <span className="breadcrumb-separator"> &gt; </span>
-          </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            Deduction Add
-          </li>
-        </ol>
-        <div className="container">
-          <form
-            onSubmit={formik.handleSubmit}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !formik.isSubmitting) {
-                e.preventDefault(); // Prevent default form submission
-              }
-            }}
+    <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/deduction" className="custom-breadcrumb">
+            &nbsp;Deduction
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Deduction Add
+        </li>
+      </ol>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
+        <div className="card">
+          <div
+            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            style={{ background: "#f5f7f9" }}
           >
-            <div className="row">
-              <div className="col-12 text-end">
-                <Link to="/deduction">
-                  <button type="button" className="btn btn-sm btn-border">
-                    Back
-                  </button>
-                </Link>
-                &nbsp;&nbsp;
-                <button
-                  type="submit"
-                  className="btn btn-button btn-sm"
-                  disabled={loadIndicator}
-                >
-                  {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  Save
-                </button>
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
+              <span class="me-2 text-muted">Add Deduction</span>
             </div>
-            <div className="row mt-3">
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/deduction">
+                <button type="button " className="btn btn-sm btn-border">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                <span className="fw-medium">Save</span>
+              </button>
+            </div>
+          </div>
+          <div className="container-fluid px-4">
+            <div className="row">
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Centre Name</label>
                 <span className="text-danger">*</span>
@@ -322,10 +331,10 @@ function DeductionAdd() {
                 </div>
               </div> */}
             </div>
-          </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </form>
+    </div>
   );
 }
 

@@ -176,9 +176,9 @@ function StaffNewView() {
                   </p>
                 </Link>
               )}
-              <p className="stdSettings mt-1 mb-0" onClick={handleGeneratePDF}>
+              {/* <p className="stdSettings mt-1 mb-0" onClick={handleGeneratePDF}>
                 <IoIosSettings /> Student Detail PDF
-              </p>
+              </p> */}
               <hr className="mt-2 mb-0" />
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                 <li className="stdList">

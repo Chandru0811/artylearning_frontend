@@ -314,26 +314,24 @@ const Staff = () => {
                           {data.teacherType}
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
-                          {data.staffId}
+                          {data.teacherName}
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
-                          <td>
-                            {data.role === "branch_admin" ? (
-                              <span className="badge badges-Red">
-                                Branch Admin
-                              </span>
-                            ) : data.role === "staff_admin" ? (
-                              <span className="badge badges-Blue">
-                                Staff Admin
-                              </span>
-                            ) : data.role === "center_manager" ? (
-                              <span className="badge badges-Yellow">
-                                Centre Manager
-                              </span>
-                            ) : (
-                              <span className="badge badges-Green">Staff</span>
-                            )}
-                          </td>
+                          {data.role === "branch_admin" ? (
+                            <span className="badge badges-Red">
+                              Branch Admin
+                            </span>
+                          ) : data.role === "staff_admin" ? (
+                            <span className="badge badges-Blue">
+                              Staff Admin
+                            </span>
+                          ) : data.role === "center_manager" ? (
+                            <span className="badge badges-Yellow">
+                              Centre Manager
+                            </span>
+                          ) : (
+                            <span className="badge badges-Green">Staff</span>
+                          )}
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
                           {data.contactNumber}

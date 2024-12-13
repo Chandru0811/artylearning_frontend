@@ -1,265 +1,332 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import pdfLogo from "../../../assets/images/Attactmentpdf.jpg";
-import { MdOutlineDownloadForOffline } from "react-icons/md";
+import { format } from "date-fns";
+import fetchUserListWithoutFreelancerByCenterId from "../../List/UserListWithoutFreelancer";
 
-function LeaveAdminView() {
-  const [data, setData] = useState([]);
-  console.log("Leave Datas:", data);
-  const { id } = useParams();
+const validationSchema = Yup.object({
+  centerId: Yup.number().required("*Center Name is required"),
+  userId: Yup.number().required("*Employee Name is required"),
+  deductionName: Yup.string().required("*Select the Deduction Name"),
+  deductionMonth: Yup.string().required("*Select the Deduction Month"),
+  deductionAmount: Yup.number()
+    .typeError("*Deduction Amount must be a number")
+    .required("*Deduction Amount is required")
+    .positive("*Deduction Amount must be a positive value"),
+});
+
+function DeductionAdd() {
   const [centerData, setCenterData] = useState(null);
-  // const [teacherData, setTeacherData] = useState(null);
+  const [userNamesData, setUserNameData] = useState(null);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const navigate = useNavigate();
 
+  const formik = useFormik({
+    initialValues: {
+      centerId: "",
+      userId: "",
+      deductionName: "",
+      deductionMonth: "",
+      deductionAmount: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      setLoadIndicator(true);
+      console.log("Attendance Emp:", values);
+      let selectedCenterName = "";
+      let selectedEmployeeName = "";
+
+      centerData.forEach((center) => {
+        if (parseInt(values.centerId) === center.id) {
+          selectedCenterName = center.centerNames || "--";
+        }
+      });
+
+      userNamesData.forEach((employee) => {
+        if (parseInt(values.userId) === employee.id) {
+          selectedEmployeeName = employee.userNames || "--";
+        }
+      });
+
+      let payload = {
+        centerId: values.centerId,
+        centerName: selectedCenterName,
+        userId: values.userId,
+        employeeName: selectedEmployeeName,
+        deductionName: values.deductionName,
+        deductionMonth: values.deductionMonth,
+        deductionAmount: values.deductionAmount,
+      };
+
+      try {
+        const response = await api.post("/createUserDeduction", payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          toast.success(response.data.message);
+          navigate("/deduction");
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
+    },
+  });
+
+  const handleCenterChange = async (event) => {
+    setUserNameData(null);
+    const centerId = event.target.value;
+    formik.setFieldValue("centerId", centerId);
+    try {
+      await fetchUserName(centerId);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      // const teacherData = await fetchAllTeachersWithIds();
-      setCenterData(centerData);
-      // setTeacherData(teacherData);
+      const centers = await fetchAllCentersWithIds();
+      setCenterData(centers);
     } catch (error) {
       toast.error(error);
     }
   };
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getUserLeaveRequestById/${id}`);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    getData();
     fetchData();
   }, []);
 
+  const fetchUserName = async (centerId) => {
+    try {
+      const userNames = await fetchUserListWithoutFreelancerByCenterId(
+        centerId
+      );
+      setUserNameData(userNames);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const currentMonth = format(new Date(), "yyyy-MM");
+    formik.setFieldValue("deductionMonth", currentMonth);
+  }, []);
+
   return (
-    <div class="container-fluid">
-        <div class="row align-items-center">
-          <div class="hstack gap-2 justify-content-end">
-            <Link to="/leaveadmin">
-              <button type="button" class="btn btn-sm btn-border">
-                <span>Back</span>
-              </button>
+    <section className="HolidayAdd p-3">
+      <div className="container-fluid">
+        <ol
+          className="breadcrumb my-3"
+          style={{ listStyle: "none", padding: 0, margin: 0 }}
+        >
+          <li>
+            <Link to="/" className="custom-breadcrumb">
+              Home
             </Link>
-          </div>
-        </div>
-      <div className="row mt-5">
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Centre Name</p>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/deduction" className="custom-breadcrumb">
+              Deduction
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            Deduction Add
+          </li>
+        </ol>
+        <div className="container">
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
+            <div className="row">
+              <div className="col-12 text-end">
+                <Link to="/deduction">
+                  <button type="button" className="btn btn-sm btn-border">
+                    Back
+                  </button>
+                </Link>
+                &nbsp;&nbsp;
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  Save
+                </button>
+              </div>
             </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                : {data.centerName || "--"}
-              </p>
+            <div className="row mt-3">
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Centre Name</label>
+                <span className="text-danger">*</span>
+                <select
+                  {...formik.getFieldProps("centerId")}
+                  className={`form-select ${
+                    formik.touched.centerId && formik.errors.centerId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  aria-label="Default select example"
+                  onChange={handleCenterChange}
+                >
+                  <option selected disabled></option>
+                  {centerData &&
+                    centerData.map((center) => (
+                      <option key={center.id} value={center.id}>
+                        {center.centerNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.centerId && formik.errors.centerId && (
+                  <div className="invalid-feedback">
+                    {formik.errors.centerId}
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Employee Name</label>{" "}
+                <span className="text-danger">*</span>
+                <select
+                  {...formik.getFieldProps("userId")}
+                  class={`form-select  ${
+                    formik.touched.userId && formik.errors.userId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                >
+                  <option selected disabled></option>
+                  {userNamesData &&
+                    userNamesData.map((userName) => (
+                      <option key={userName.id} value={userName.id}>
+                        {userName.userNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.userId && formik.errors.userId && (
+                  <div className="invalid-feedback">{formik.errors.userId}</div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Deduction Name</label>
+                <span className="text-danger">*</span>
+                <select
+                  {...formik.getFieldProps("deductionName")}
+                  className={`form-select ${
+                    formik.touched.deductionName && formik.errors.deductionName
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  aria-label="Default select example"
+                >
+                  <option></option>
+                  <option>CPF</option>
+                  <option>LOP</option>
+                  <option>LOAN INTEREST</option>
+                </select>
+                {formik.touched.deductionName &&
+                  formik.errors.deductionName && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionName}
+                    </div>
+                  )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Deduction Month<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="month"
+                  className={`form-control ${
+                    formik.touched.deductionMonth &&
+                    formik.errors.deductionMonth
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("deductionMonth")}
+                />
+                {formik.touched.deductionMonth &&
+                  formik.errors.deductionMonth && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionMonth}
+                    </div>
+                  )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Deduction Amount<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.deductionAmount &&
+                    formik.errors.deductionAmount
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("deductionAmount")}
+                />
+                {formik.touched.deductionAmount &&
+                  formik.errors.deductionAmount && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionAmount}
+                    </div>
+                  )}
+              </div>
+              {/* <div className="col-md-6 col-12">
+                <div className="text-start mb-3">
+                  <label className="form-label">
+                    Total Deduction Amount<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      formik.touched.totalDeductionAmount &&
+                      formik.errors.totalDeductionAmount
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("totalDeductionAmount")}
+                  />
+                  {formik.touched.totalDeductionAmount &&
+                    formik.errors.totalDeductionAmount && (
+                      <div className="invalid-feedback">
+                        {formik.errors.totalDeductionAmount}
+                      </div>
+                    )}
+                </div>
+              </div> */}
             </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Employee Name</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                {/* : {teacherData &&
-                      teacherData.map((teacher) =>
-                        parseInt(data.teacher) === teacher.id
-                          ? teacher.teacherNames || "--"
-                          : ""
-                      )} */}
-                : {data.employeeName || "--"}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Leave Type</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {data.leaveType || "--"}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex ">
-              <p className="text-sm fw-medium">No.Of.Days</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {data.noOfDays || "0"} Days</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12 ">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">From Date</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {data.fromDate || "--"}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">To Date</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {data.toDate || "--"}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Day Type</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {data.dayType || "--"}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex">
-              <p className="text-sm fw-medium">Request Date</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {data.requestDate || "--"}</p>
-            </div>
-          </div>
-        </div> */}
-
-        {/* <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex ">
-              <p className="text-sm fw-medium">Approver Name</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">
-                : {data.approverName || "--"}
-              </p>
-            </div>
-          </div>
-        </div> */}
-
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex ">
-              <p className="text-sm fw-medium">Status</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {data.leaveStatus || "--"}</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-md-6 col-12">
-          <div className="row mb-3">
-            <div className="col-6 d-flex ">
-              <p className="text-sm fw-medium">Leave Reason</p>
-            </div>
-            <div className="col-6">
-              <p className="text-muted text-sm">: {data.leaveReason || "--"}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="headColor mt-5">Attachment</p>
-      <hr></hr>
-      <div className="row mt-4">
-  <div className="container p-2">
-    {data.attachment && (
-      <div className="mt-3">
-        {data?.attachment?.endsWith(".pdf") ? (
-          <div className="card border-0 shadow" style={{ width: "12rem" }}>
-            <a
-              href={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                data?.attachment
-              )}&embedded=true`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                className="card-img-top img-fluid"
-                style={{ height: "150px", objectFit: "contain" }}
-                src={pdfLogo}
-                alt="Card image cap"
-              />
-            </a>
-            <div className="card-body d-flex justify-content-between">
-              <p className="card-title fw-semibold text-wrap" style={{ fontSize: "0.8rem" }}>
-                {data?.attachment?.split("/").pop()}
-              </p>
-              <a
-                href={data?.attachment}
-                className="btn text-dark"
-                download={data?.attachment?.split("/").pop()}
-              >
-                <MdOutlineDownloadForOffline size={20} />
-              </a>
-            </div>
-          </div>
-        ) : (
-          <img
-            src={data?.attachment}
-            alt="Attachment"
-            className="img-fluid"
-            style={{ height: "150px", objectFit: "contain" }}
-          />
-        )}
-      </div>
-    )}
-  </div>
-</div>
-
-      {/* <div className="row ">
-        <div className="">
-          <div className="row mb-3 d-flex">
-            <div className="col-4 ">
-              <p className="text-sm text-muted">Leave Attendance</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">evelynchiasiting.pdf</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">
-                <FaCloudDownloadAlt />
-              </p>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
-      <div className="row ">
-        <div className="">
-          <div className="row mb-3 d-flex">
-            <div className="col-4 ">
-              <p className="text-sm text-muted">Medical Certificates</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">evelynchiasiting.pdf</p>
-            </div>
-            <div className="col-4">
-              <p className="text-sm text-muted">
-                <FaCloudDownloadAlt />
-              </p>
-            </div>
-          </div>
-        </div>
-      </div> */}
-    </div>
+    </section>
   );
 }
 
-export default LeaveAdminView;
+export default DeductionAdd;

@@ -100,8 +100,7 @@ function DeductionEdit() {
   }, []);
 
   return (
-    <section className="HolidayAdd p-3">
-      <div className="container-fluid">
+    <div className="container-fluid">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -113,51 +112,64 @@ function DeductionEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Staffing
+          &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/deduction" className="custom-breadcrumb">
-            Deduction
+            &nbsp;Deduction
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Deduction Edit
+          &nbsp;Deduction Edit
         </li>
       </ol>
-        <div className="container">
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
-            <div className="row">
-              <div className="col-12 text-end">
-                <Link to="/deduction">
-                  <button type="button" className="btn btn-sm btn-border">
-                    Back
-                  </button>
-                </Link>
-                &nbsp;&nbsp;
-                <button
-                  type="submit"
-                  className="btn btn-button btn-sm"
-                  disabled={loadIndicator}
-                >
-                  {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  Update
-                </button>
+        }}
+      >
+        <div className="card">
+          <div
+            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
+              <span class="me-2 text-muted">Edit Deduction</span>
             </div>
-            <div className="row mt-3">
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Centre Name</lable>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/deduction">
+                <button type="button " className="btn btn-sm btn-border">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                <span className="fw-medium">Update</span>
+              </button>
+            </div>
+          </div>
+          <div className="container-fluid px-4">
+            <div className="row">
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Centre Name</label>
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("centerId")}
@@ -169,7 +181,7 @@ function DeductionEdit() {
                   aria-label="Default select example"
                   onChange={handleCenterChange}
                 >
-                  <option selected></option>
+                  <option selected disabled></option>
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
@@ -183,8 +195,8 @@ function DeductionEdit() {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Employee Name</lable>{" "}
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Employee Name</label>{" "}
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("userId")}
@@ -206,8 +218,8 @@ function DeductionEdit() {
                   <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3 ">
-                <lable className="">Deduction Name</lable>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Deduction Name</label>
                 <span className="text-danger">*</span>
                 <select
                   {...formik.getFieldProps("deductionName")}
@@ -218,9 +230,10 @@ function DeductionEdit() {
                   }`}
                   aria-label="Default select example"
                 >
-                  <option value="CPF">CPF</option>
-                  <option value="LOP">LOP</option>
-                  <option value="LOAN INTEREST">LOAN INTEREST</option>
+                  <option></option>
+                  <option>CPF</option>
+                  <option>LOP</option>
+                  <option>LOAN INTEREST</option>
                 </select>
                 {formik.touched.deductionName &&
                   formik.errors.deductionName && (
@@ -229,61 +242,56 @@ function DeductionEdit() {
                     </div>
                   )}
               </div>
-
-              <div className="col-lg-6 col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
-                  <lable className="form-lable">
-                    Deduction Month<span className="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="month"
-                    className={`form-control  ${
-                      formik.touched.deductionMonth &&
-                      formik.errors.deductionMonth
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("deductionMonth")}
-                  />
-                  {formik.touched.deductionMonth &&
-                    formik.errors.deductionMonth && (
-                      <div className="invalid-feedback">
-                        {formik.errors.deductionMonth}
-                      </div>
-                    )}
-                </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Deduction Month<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="month"
+                  className={`form-control ${
+                    formik.touched.deductionMonth &&
+                    formik.errors.deductionMonth
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("deductionMonth")}
+                />
+                {formik.touched.deductionMonth &&
+                  formik.errors.deductionMonth && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionMonth}
+                    </div>
+                  )}
               </div>
-              <div className="col-lg-6 col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
-                  <lable className="form-lable">
-                    Deduction Amount<span className="text-danger">*</span>
-                  </lable>
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.deductionAmount &&
-                      formik.errors.deductionAmount
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("deductionAmount")}
-                  />
-                  {formik.touched.deductionAmount &&
-                    formik.errors.deductionAmount && (
-                      <div className="invalid-feedback">
-                        {formik.errors.deductionAmount}
-                      </div>
-                    )}
-                </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Deduction Amount<span className="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  className={`form-control ${
+                    formik.touched.deductionAmount &&
+                    formik.errors.deductionAmount
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("deductionAmount")}
+                />
+                {formik.touched.deductionAmount &&
+                  formik.errors.deductionAmount && (
+                    <div className="invalid-feedback">
+                      {formik.errors.deductionAmount}
+                    </div>
+                  )}
               </div>
-              {/* <div className="col-lg-6 col-md-6 col-12">
-                <div className="text-start mt-2 mb-3">
-                  <lable className="form-lable">
+              {/* <div className="col-md-6 col-12">
+                <div className="text-start mb-3">
+                  <label className="form-label">
                     Total Deduction Amount<span className="text-danger">*</span>
-                  </lable>
+                  </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.totalDeductionAmount &&
                       formik.errors.totalDeductionAmount
                         ? "is-invalid"
@@ -300,10 +308,10 @@ function DeductionEdit() {
                 </div>
               </div> */}
             </div>
-          </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </form>
+    </div>
   );
 }
 

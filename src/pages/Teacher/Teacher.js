@@ -361,17 +361,21 @@ const Teacher = () => {
                         >
                           {data.uenNumber}
                         </td> */}
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {/* {roles === "SMS_ADMIN" ? ( */}
-                          {data.role === "teacher" ? (
-                            <span className="badge badges-Green">Teacher</span>
-                          ) : (
-                            <span className="badge badges-Red">Freelancer</span>
-                          )}
-                          {/* ) : (
+                        {roles === "SMS_ADMIN" ? (
+                          <td onClick={() => handleRowClick(data.id)}>
+                            {data.role === "teacher" ? (
+                              <span className="badge badges-Green">
+                                Teacher
+                              </span>
+                            ) : (
+                              <span className="badge badges-Red">
+                                Freelancer
+                              </span>
+                            )}
+                          </td>
+                        ) : (
                           <></>
-                        )} */}
-                        </td>
+                        )}
                       </tr>
                     ))}
                 </tbody>

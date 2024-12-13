@@ -27,7 +27,7 @@ function HolidayEdit() {
   });
   const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const userName  = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -50,8 +50,7 @@ function HolidayEdit() {
           startDate: values.startDate,
           endDate: values.endDate,
           holidayDescription: values.holidayDescription,
-          updatedBy:userName,
-
+          updatedBy: userName,
         };
         const response = await api.put(`/updateUserHoliday/${id}`, payload, {
           headers: {
@@ -104,10 +103,9 @@ function HolidayEdit() {
   }, []);
 
   return (
-    <section className="HolidayAdd p-3">
-      <div className="container-fluid">
+    <div className="container-fluid">
       <ol
-        className="breadcrumb my-3"
+        className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -117,52 +115,65 @@ function HolidayEdit() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Staffing
+          &nbsp;Staffing
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
           <Link to="/holiday" className="custom-breadcrumb">
-            Holiday
+            &nbsp;Holiday
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Holiday Edit
+          &nbsp;Holiday Edit
         </li>
       </ol>
-        <div className="container">
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
-            <div className="row">
-              <div className="col-12 text-end">
-                <Link to="/holiday">
-                  <button type="button" className="btn btn-sm btn-border">
-                    Back
-                  </button>
-                </Link>
-                &nbsp;&nbsp;
-                <button
-                  type="submit"
-                  className="btn btn-button btn-sm"
-                  disabled={loadIndicator}
-                >
-                  {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  Update
-                </button>
+        }}
+      >
+        <div className="card">
+          <div
+            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
+              <span class="me-2 text-muted">Edit Holiday</span>
             </div>
-            <div className="row mt-3">
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/holiday">
+                <button type="button " className="btn btn-sm btn-border">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                <span className="fw-medium">Update</span>
+              </button>
+            </div>
+          </div>
+          <div className="container-fluid px-4">
+            <div className="row">
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="text-start mt-2 mb-3">
-                  <label className="form-label">
+                  <label className="form-label m-0">
                     Centre Name<span className="text-danger">*</span>
                   </label>
                   <select
@@ -277,10 +288,10 @@ function HolidayEdit() {
                 </div>
               </div>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </form>
+    </div>
   );
 }
 

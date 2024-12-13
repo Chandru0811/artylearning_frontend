@@ -46,101 +46,111 @@ function DeductionView() {
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li>
-            Staffing
+            &nbsp;Staffing
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li>
             <Link to="/deduction" className="custom-breadcrumb">
-              Deduction
+              &nbsp;Deduction
             </Link>
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            Deduction View
+            &nbsp;Deduction View
           </li>
         </ol>
-        <div className="row mt-3">
-          <div className="col-12 text-end">
+        <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">View Deduction</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
             <Link to="/deduction">
-              <button type="button" className="btn btn-sm btn-border">
+              <button type="button " className="btn btn-sm btn-border   ">
                 Back
               </button>
             </Link>
           </div>
         </div>
-        <div className="container">
-          <div className="row mt-5 pb-3">
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Centre Name</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    :{" "}
-                    {centerData &&
-                      centerData.map((centerId) =>
-                        parseInt(data.centerId) === centerId.id
-                          ? centerId.centerNames || "--"
-                          : ""
-                      )}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Employee Name</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {""}
-                    {data.employeeName || "--"}
-                  </p>
+          <div className="container-fluid px-4 mt-3">
+            <div className="row pb-3">
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6 ">
+                    <p className="">Centre Name</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      :{" "}
+                      {centerData &&
+                        centerData.map((centerId) =>
+                          parseInt(data.centerId) === centerId.id
+                            ? centerId.centerNames || "--"
+                            : ""
+                        )}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6 ">
-                  <p className="fw-medium">Deduction Name</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.deductionName || "--"}
-                  </p>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6 ">
+                    <p className="">Employee Name</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      : {""}
+                      {data.employeeName || "--"}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6 col-12">
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6 ">
+                    <p className="">Deduction Name</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      : {data.deductionName || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6  ">
+                    <p className="">Deduction Month</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      : {data.deductionMonth || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="row mb-2">
+                  <div className="col-6  ">
+                    <p className="">Deduction Amount</p>
+                  </div>
+                  <div className="col-6">
+                    <p className="text-muted text-sm">
+                      : {data.deductionAmount || "--"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {/* <div className="col-md-6 col-12">
               <div className="row mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Deduction Month</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.deductionMonth || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6  ">
-                  <p className="fw-medium">Deduction Amount</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    : {data.deductionAmount || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* <div className="col-md-6 col-12">
-              <div className="row mb-2">
-                <div className="col-6  ">
-                  <p className="fw-medium">Total Deduction Amount</p>
+                  <p className="">Total Deduction Amount</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -149,6 +159,7 @@ function DeductionView() {
                 </div>
               </div>
             </div> */}
+            </div>
           </div>
         </div>
       </div>
