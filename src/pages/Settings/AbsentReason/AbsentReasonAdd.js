@@ -3,9 +3,13 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import api from "../../../config/URL";
 
-function AbsentReasonAdd() {
+function AbsentReasonAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
     formik.resetForm();
@@ -14,20 +18,50 @@ function AbsentReasonAdd() {
 
   const handleShow = () => {
     setShow(true);
+    setIsModified(false);
   };
 
   const validationSchema = yup.object().shape({
-    reason: yup.string().required("*Absent Reason is required"),
+    absentReason: yup.string().required("*Absent Reason is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      reason: "",
+      absentReason: "",
       remarks: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("Absent Reason Datas:", values);
+      setLoadIndicator(true);
+      // console.log(values);
+      try {
+        const response = await api.post("/createAbsentReason", values, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.status === 201) {
+          onSuccess();
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error(error);
+      } finally {
+        setLoadIndicator(false);
+      }
+    },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (Object.values(values).some((value) => value.trim() !== "")) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
     },
   });
 
@@ -59,14 +93,14 @@ function AbsentReasonAdd() {
                 <input
                   type="text"
                   className={`form-control ${
-                    formik.touched.reason && formik.errors.reason
+                    formik.touched.absentReason && formik.errors.absentReason
                       ? "is-invalid"
                       : ""
                   }`}
-                  {...formik.getFieldProps("reason")}
+                  {...formik.getFieldProps("absentReason")}
                 />
-                {formik.touched.reason && formik.errors.reason && (
-                  <div className="invalid-feedback">{formik.errors.reason}</div>
+                {formik.touched.absentReason && formik.errors.absentReason && (
+                  <div className="invalid-feedback">{formik.errors.absentReason}</div>
                 )}
               </div>
               <div className="col-12 mb-3">

@@ -7,51 +7,68 @@ import AbsentReasonAdd from "./AbsentReasonAdd";
 import AbsentReasonEdit from "./AbsentReasonEdit";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosAddCircle } from "react-icons/io";
+import { MdOutlineModeEdit } from "react-icons/md";
+import api from "../../../config/URL";
 
 const AbsentReason = () => {
   const tableRef = useRef(null);
   const [loading, setLoading] = useState(true);
+  const [datas, setDatas] = useState([]);
+
   const navigate = useNavigate();
 
-  const datas = [
-    {
-      id: 1,
-      reason: "Medical Appointment",
-      remarks: "Provided a doctor's note.",
-    },
-    {
-      id: 2,
-      reason: "Family Emergency",
-      remarks: "Informed via parent call.",
-    },
-    {
-      id: 3,
-      reason: "Travel for Competition",
-      remarks: "Participating in inter-school sports event.",
-    },
-  ];
-
   useEffect(() => {
-    const table = $(tableRef.current).DataTable({
-      responsive: true,
-    });
-
-    return () => {
-      table.destroy();
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllAbsentReason");
+        setDatas(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+    getData();
   }, []);
 
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
+
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      // DataTable already initialized, no need to initialize again
+      return;
+    }
+    $(tableRef.current).DataTable({
+      responsive: true,
+      columnDefs: [{ orderable: false, targets: -1 }],
+    });
+  };
+
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
+
   const refreshData = async () => {
-    // destroyDataTable();
-    // setLoading(true);
-    // try {
-    //   const response = await api.get("/getAllTaxSetting");
-    //   setDatas(response.data);
-    //   initializeDataTable();
-    // } catch (error) {
-    //   console.error("Error refreshing data:", error);
-    // }
-    // setLoading(false);
+    destroyDataTable();
+    setLoading(true);
+    try {
+      const response = await api.get("/getAllAbsentReason");
+      setDatas(response.data);
+      initializeDataTable();
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+    setLoading(false);
   };
 
   const handleRowClick = (id) => {
@@ -72,7 +89,7 @@ const AbsentReason = () => {
   return (
     <div className="container-fluid my-4 center">
       <ol
-        className="breadcrumb my-3 px-1"
+        className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -106,19 +123,12 @@ const AbsentReason = () => {
             </span>
           </div>
         </div>
-        <div className="d-flex justify-content-end align-items-center">
-          <span>
-            <AbsentReasonAdd onSuccess={refreshData} />
-          </span>
-          {/* } */}
-          {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-
-          {extraData?"Hide":'Show'}
-          <MdViewColumn className="fs-4 text-secondary"/>
-
-        </button> </p> */}
+        <div className="mb-3 d-flex justify-content-end">
+          {/* {storedScreens?.centerListingCreate && ( */}
+          <AbsentReasonAdd onSuccess={refreshData} />
+          {/* )} */}
         </div>
-        {!loading ? (
+        {loading ? (
           <div className="loader-container">
             <div className="loading">
               <span></span>
@@ -130,7 +140,10 @@ const AbsentReason = () => {
           </div>
         ) : (
           <div>
-            <div className="table-responsive py-2">
+            <div
+              style={{ minHeight: "60vh" }}
+              className="table-responsive py-2"
+            >
               <table
                 style={{ width: "100%" }}
                 ref={tableRef}
@@ -156,7 +169,6 @@ const AbsentReason = () => {
                       <tr
                         key={index}
                         style={{
-                          // backgroundColor: "#fff !important",
                           cursor: "pointer",
                         }}
                       >
@@ -194,7 +206,7 @@ const AbsentReason = () => {
                                   <span>
                                     <Delete
                                       onSuccess={refreshData}
-                                      path={`/deleteAbsentreason/${data.id}`}
+                                      path={`/deleteAbsentReason/${data.id}`}
                                     />{" "}
                                   </span>
                                   {/* )} */}
@@ -205,7 +217,7 @@ const AbsentReason = () => {
                           </div>
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
-                          {data.reason}
+                          {data.absentReason}
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
                           {data.remarks}
