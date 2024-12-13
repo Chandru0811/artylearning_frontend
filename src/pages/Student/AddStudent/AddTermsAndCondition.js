@@ -58,14 +58,6 @@ const AddTermsAndCondition = forwardRef(
 
           formDatas.append("file", blob, `${randomNumber}Signature.png`);
         }
-
-        // Generate a random number
-        // const randomNumber = Math.floor(Math.random() * 1000);
-        // Convert URL to Blob
-        // const apiResponse = await fetch(url);
-        // const blob = await apiResponse.blob();
-        // formDatas.append("file", blob, `${randomNumber}Signature.png` || null);
-
         formDatas.append(
           "termsAndConditionSignatureDate",
           data.termsAndConditionSignatureDate
@@ -107,6 +99,24 @@ const AddTermsAndCondition = forwardRef(
           } else {
             toast.error(response.data.message);
           }
+           // Trigger the second API call to update referral lead info
+        if (formData.LeadId) {
+          try {
+            const referralResponse = await api.put(
+              `/updateLeadInfoForReferral/${formData.LeadId}`,{
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+            if (referralResponse.status === 200) {
+              console.log("Referral Lead Info UPDATED");
+            } else {
+              console.log("Referral Lead Info NOT UPDATED");
+            }
+          } catch (error) {
+            console.log("Error updating Referral Lead Info", error);
+          }
+        }
         } catch (error) {
           toast.error(error);
         } finally {

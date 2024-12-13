@@ -132,9 +132,9 @@ const EmailTemplate = () => {
           </div>
         </div>
         <div className="d-flex justify-content-end align-items-center">
-          <span>
+          {/* <span>
             <EmailTemplateAdd onSuccess={refreshData} />
-          </span>
+          </span> */}
           {/* } */}
           {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
 
@@ -213,16 +213,6 @@ const EmailTemplate = () => {
                                     id={data.id}
                                     onSuccess={refreshData}
                                   />
-                                </li>
-                                <li>
-                                  {/* {storedScreens?.centerListingDelete && ( */}
-                                  <span>
-                                    <Delete
-                                      onSuccess={refreshData}
-                                      path={`/deleteEmailTemplate/${data.id}`}
-                                    />{" "}
-                                  </span>
-                                  {/* )} */}
                                 </li>
                               </ul>
                             </div>

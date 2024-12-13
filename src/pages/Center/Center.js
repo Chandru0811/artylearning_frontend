@@ -83,11 +83,18 @@ const Centre = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllCenter");
+      const params = {};
+
+      if (centerId) params.centerId = centerId;
+      if (centerCode) params.centerCode = centerCode;
+      if (email) params.email = email;
+      if (centerManager) params.centerManager = centerManager;
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
       setDatas(response.data);
-      initializeDataTable();
+      setLoading(false);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      toast.error("Error Fetching Data : ", error);
     }
     setLoading(false);
   };
@@ -119,6 +126,14 @@ const Centre = () => {
       destroyDataTable();
     };
   }, [loading]);
+
+  const clearFilters = () => {
+    setCenterId(""); // Reset centerId to empty string
+    setCenterCode(""); // Reset centerCode to empty string
+    setEmail(""); // Reset email to empty string
+    setcenterManager(""); // Reset centerManager to empty string
+    refreshData(); // Optional: Refresh data to fetch all default entries
+  };
 
   useEffect(() => {
     if (centerId !== undefined && centerId !== "") {
@@ -218,20 +233,12 @@ const Centre = () => {
                 ))}
               </select>
             </div>
-            {/* <div className="form-group mb-2 ms-2">
-                <button
-                  type="submit"
-                  className="btn btn-sm text-white"
-                  style={{
-                    fontWeight: "600px !important",
-                    background: "#eb862a",
-                  }}
-                >
-                  Search
-                </button>
-              </div> */}
             <div className="form-group mb-2 ms-2">
-              <button type="button" className="btn btn-sm btn-border">
+              <button
+                type="button"
+                className="btn btn-sm btn-border"
+                onClick={clearFilters}
+              >
                 Clear
               </button>
             </div>
@@ -261,7 +268,10 @@ const Centre = () => {
           </div>
         ) : (
           <div>
-            <div style={{ minHeight: '60vh' }} className="table-responsive py-2">
+            <div
+              style={{ minHeight: "60vh" }}
+              className="table-responsive py-2"
+            >
               <table
                 style={{ width: "100%" }}
                 ref={tableRef}

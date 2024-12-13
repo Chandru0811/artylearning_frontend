@@ -55,6 +55,7 @@ const Form1 = forwardRef(
         // nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
         fathersFullName: formData.fathersFullName || "",
         leadStatus: "NEW_WAITLIST" || "",
+        referby:""
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -263,16 +264,15 @@ const Form1 = forwardRef(
                 )}
               </div>
             </div>
-            <div className="col-md-12 col-12">
+            <div className="col-md-6 col-12">
               <div className="mb-3">
                 <div>
                   <label for="exampleFormControlInput1" className="form-label">
                     Allergy / Medical Condition (For Instance: Asthma)
-                    {/* <span className="text-danger">*</span> */}
                   </label>
                 </div>
                 <div className="">
-                  <textarea
+                  <input
                     type="text"
                     name="medicalCondition"
                     className="form-control"
@@ -289,6 +289,31 @@ const Form1 = forwardRef(
                 </div>
               </div>
             </div>
+            {/* <div className="col-md-6 col-12">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Refer By
+                  </label>
+                </div>
+                <div className="">
+                  <input
+                    type="text"
+                    name="referby"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.referby}
+                  />
+                  {formik.touched.referby &&
+                    formik.errors.referby && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.referby}</small>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div> */}
             <div className="col-md-6 col-12 ">
               <div className="mb-3">
                 <div>

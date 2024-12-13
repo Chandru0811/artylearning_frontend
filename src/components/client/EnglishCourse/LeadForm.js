@@ -379,18 +379,17 @@ function LeadForm() {
               <label for="exampleFormControlInput1" className="form-label">
                 Referred by / 介绍人 
               </label>
-              {/* <input
+              <input
+                type="text"
+                name="referBy"
                 className={`form-control  ${
                   formik.touched.referBy && formik.errors.referBy
                     ? "is-invalid"
                     : ""
                 }`}
-                aria-label="Username"
-                aria-describedby="basic-addon1"
                 {...formik.getFieldProps("referBy")}
-                type="text"
-              /> */}
-               <select
+              />
+               {/* <select
                   {...formik.getFieldProps("referBy")}
                   className={`form-select ${
                     formik.touched.referBy && formik.errors.referBy
@@ -405,7 +404,7 @@ function LeadForm() {
                         {referBy.studentNames}
                       </option>
                     ))}
-                </select>
+                </select> */}
               {formik.touched.referBy && formik.errors.referBy && (
                 <div className="invalid-feedback">{formik.errors.referBy}</div>
               )}

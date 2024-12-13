@@ -132,39 +132,40 @@ const AddStudentDetails = forwardRef(
 
           // console.log("Center ", selectedCenter);
 
-          const formData = new FormData();
+          const formDatas = new FormData();
 
           // Add each data field manually to the FormData object
-          formData.append("studentName", values.studentName);
-          formData.append("studentChineseName", values.studentChineseName);
-          formData.append("dateOfBirth", values.dateOfBirth);
-          formData.append("age", values.age);
-          formData.append("gender", values.gender);
-          formData.append("medicalCondition", values.medicalCondition);
-          formData.append("schoolType", values.schoolType);
-          formData.append("schoolName", values.schoolName);
-          formData.append("preAssessmentResult", values.preAssessmentResult);
-          formData.append("race", values.race);
-          formData.append("nationality", values.nationality);
-          formData.append("referByParent", values.referByParent);
-          formData.append("referByStudent", values.referByStudent);
-          formData.append("remark", values.remark);
-          formData.append("allowMagazine", values.allowMagazine);
-          formData.append("allowSocialMedia", values.allowSocialMedia);
-          formData.append("centerId", values.centerId);
-          formData.append("center", selectedCenter);
-          formData.append("primaryLanguage", values.primaryLanguage);
-          formData.append("groupName", values.groupName);
-          formData.append("file", values.file);
-          formData.append("createdBy", userName);
+          formDatas.append("studentName", values.studentName);
+          formDatas.append("leadId", formData.LeadId);
+          formDatas.append("studentChineseName", values.studentChineseName);
+          formDatas.append("dateOfBirth", values.dateOfBirth);
+          formDatas.append("age", values.age);
+          formDatas.append("gender", values.gender);
+          formDatas.append("medicalCondition", values.medicalCondition);
+          formDatas.append("schoolType", values.schoolType);
+          formDatas.append("schoolName", values.schoolName);
+          formDatas.append("preAssessmentResult", values.preAssessmentResult);
+          formDatas.append("race", values.race);
+          formDatas.append("nationality", values.nationality);
+          formDatas.append("referByParent", values.referByParent);
+          formDatas.append("referByStudent", values.referByStudent);
+          formDatas.append("remark", values.remark);
+          formDatas.append("allowMagazine", values.allowMagazine);
+          formDatas.append("allowSocialMedia", values.allowSocialMedia);
+          formDatas.append("centerId", values.centerId);
+          formDatas.append("center", selectedCenter);
+          formDatas.append("primaryLanguage", values.primaryLanguage);
+          formDatas.append("groupName", values.groupName);
+          formDatas.append("file", values.file);
+          formDatas.append("createdBy", userName);
 
-          for (let [key, value] of formData.entries()) {
+          for (let [key, value] of formDatas.entries()) {
             console.log(`${key}: ${value}`);
           }
 
           const response = await api.post(
             "/createStudentDetailsWithProfileImageLatest",
-            formData,
+            formDatas,
             {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -220,6 +221,7 @@ const AddStudentDetails = forwardRef(
             formik.setValues({
               centerId: leadData.centerId || "",
               studentName: leadData.studentName || "",
+              leadId:leadData.id || "",
               studentChineseName: leadData.studentChineseName || "",
               file: null || "",
               age: leadData.dateOfBirth

@@ -48,6 +48,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext, setLoadIndica
       // nameOfChildrenInTotal: "",
       fathersFullName: "",
       // leadStatus: "",
+      referby:""
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -241,31 +242,56 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext, setLoadIndica
               )}
             </div>
           </div>
-          <div className="col-md-12 col-12">
-            <div className="mb-3">
-              <div>
-                <label for="exampleFormControlInput1" className="form-label">
-                  Allergy / Medical Condition (For Instance: Asthma)
-                </label>
-              </div>
-              <div className="">
-                <textarea
-                  type="text"
-                  name="medicalCondition"
-                  className="form-control"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.medicalCondition}
-                />
-                {formik.touched.medicalCondition &&
-                  formik.errors.medicalCondition && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.medicalCondition}</small>
-                    </div>
-                  )}
+          <div className="col-md-6 col-12">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Allergy / Medical Condition (For Instance: Asthma)
+                  </label>
+                </div>
+                <div className="">
+                  <input
+                    type="text"
+                    name="medicalCondition"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.medicalCondition}
+                  />
+                  {formik.touched.medicalCondition &&
+                    formik.errors.medicalCondition && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.medicalCondition}</small>
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
-          </div>
+            <div className="col-md-6 col-12">
+              <div className="mb-3">
+                <div>
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Refer By
+                  </label>
+                </div>
+                <div className="">
+                  <input
+                    type="text"
+                    name="referby"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.referby}
+                  />
+                  {formik.touched.referby &&
+                    formik.errors.referby && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.referby}</small>
+                      </div>
+                    )}
+                </div>
+              </div>
+            </div>
           <div className="col-md-6 col-12 ">
             <div className="mb-3">
               <div>
