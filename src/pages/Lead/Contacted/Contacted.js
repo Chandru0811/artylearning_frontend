@@ -93,6 +93,17 @@ const Level = () => {
     return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
 
+  useEffect(() => {
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    }
+  }, [datas]);
+
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -202,17 +213,17 @@ const Level = () => {
             <table style={{ width: "100%" }} ref={tableRef} className="display">
               <thead>
                 <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th scope="col" className="text-center">
+                  <th scope="col" className="text-center text-muted">
                     S No
                   </th>
                   <th className="text-center text-muted"></th>
-                  <th scope="col" className="text-center">
+                  <th scope="col" className="text-center text-muted">
                     Name
                   </th>
-                  <th scope="col" className="text-center">
+                  <th scope="col" className="text-center text-muted">
                     Email
                   </th>
-                  <th scope="col" className="text-center">
+                  <th scope="col" className="text-center text-muted">
                     Message
                   </th>
                   {extraData && (

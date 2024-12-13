@@ -211,12 +211,20 @@ const Subject = () => {
             <table style={{ width: "100%" }} ref={tableRef} className="display">
               <thead>
                 <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                  <th
+                    className="text-muted"
+                    scope="col"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
                     S No
                   </th>
                   <th className="text-center text-muted"></th>
-                  <th scope="col">Subject</th>
-                  <th scope="col">Subject Code</th>
+                  <th className="text-muted" scope="col">
+                    Subject
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Subject Code
+                  </th>
 
                   {extraData && (
                     <th
@@ -274,7 +282,9 @@ const Subject = () => {
                       UpdatedAt
                     </th>
                   )}
-                  <th scope="col">Status</th>
+                  <th className="text-muted" scope="col">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody>

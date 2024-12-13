@@ -266,11 +266,21 @@ const ReplaceClassLesson = () => {
                   <th className="text-muted" scope="col">
                     S No
                   </th>
-                  <th scope="col">Centre Name</th>
-                  <th scope="col">Student Name</th>
-                  <th scope="col">Course</th>
-                  <th scope="col">Class Code</th>
-                  <th scope="col">Status</th>
+                  <th className="text-muted" scope="col">
+                    Centre Name
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Student Name
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Course
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Class Code
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody>

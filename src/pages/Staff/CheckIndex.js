@@ -11,7 +11,6 @@ const CheckIndex = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Manual validation for workingMode and attendanceAction
     if (!workingMode || !attendanceAction) {
       setError("Please select a working mode and an action.");
       return;
@@ -29,8 +28,15 @@ const CheckIndex = () => {
       userId: 1255,
     };
 
+    if (attendanceAction === "Check Out") {
+      payload.updatedBy = "string";
+    }
+
+    const endpoint =
+      attendanceAction === "Check In" ? "/userCheckIn" : "/userCheckOut";
+
     api
-      .post("/userCheckIn", payload)
+      .post(endpoint, payload)
       .then((response) => {
         console.log("API response:", response.data);
         setIsLoading(false);
@@ -53,6 +59,7 @@ const CheckIndex = () => {
         setIsLoading(false);
       });
   };
+
   const handleCheckIn = () => {
     setAttendanceAction("Check In");
   };
@@ -154,7 +161,11 @@ const CheckIndex = () => {
 
           {error && (
             <div className="alert alert-danger text-center" role="alert">
-              {error}
+              {error === "You have already checkIn on this date."
+                ? "You have already checked-in on this date."
+                : error === "You have already checked out for this date."
+                ? "You have already checked-out on this date."
+                : error}
             </div>
           )}
 

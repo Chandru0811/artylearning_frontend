@@ -241,11 +241,21 @@ const Student = () => {
                     S No
                   </th>
                   <th className="text-center text-muted"></th>
-                  <th scope="col">Student ID</th>
-                  <th scope="col">Student Name</th>
-                  <th scope="col">Age</th>
-                  <th scope="col">Gender</th>
-                  <th scope="col">Nationality</th>
+                  <th className="text-muted" scope="col">
+                    Student ID
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Student Name
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Age
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Gender
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Nationality
+                  </th>
                   {extraData && (
                     <th
                       scope="col"

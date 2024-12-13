@@ -428,14 +428,26 @@ const Lead = () => {
                       className="text-center"
                       style={{ background: "#f5f7f9" }}
                     >
-                      <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                      <th
+                        className="text-muted"
+                        scope="col"
+                        style={{ whiteSpace: "nowrap" }}
+                      >
                         S No
                       </th>
                       <th className="text-center text-muted"></th>
-                      <th scope="col">Centre</th>
-                      <th scope="col">Student Name</th>
-                      <th scope="col">Subject</th>
-                      <th scope="col">Status</th>
+                      <th className="text-muted" scope="col">
+                        Centre
+                      </th>
+                      <th className="text-muted" scope="col">
+                        Student Name
+                      </th>
+                      <th className="text-muted" scope="col">
+                        Subject
+                      </th>
+                      <th className="text-muted" scope="col">
+                        Status
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -518,7 +530,7 @@ const Lead = () => {
                                   : ""
                               )}
                           </td>
-                          <td onClick={() => handleRowClick(data.id)}>
+                          <td>
                             {data.leadStatus === "NEW_WAITLIST" ? (
                               <div className="dropdown">
                                 <button
