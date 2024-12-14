@@ -62,20 +62,31 @@ function ClassView() {
           &nbsp;Class View
         </li>
       </ol>
-      <div className="d-flex justify-content-end align-item-end mt-4">
-        <Link to="/class">
-          <button type="button" className="btn btn-sm btn-border">
-            Back
-          </button>
-        </Link>
-      </div>
-      <div>
-        <div className="container">
-          <div className="row mt-5 pb-3">
+      <div className="card">
+        <div
+          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">View Class</span>
+          </div>
+          <div className="my-2 pe-3 d-flex align-items-center">
+            <Link to="/class">
+              <button type="button " className="btn btn-sm btn-border   ">
+                Back
+              </button>
+            </Link>
+          </div>
+        </div>
+        <div className="container-fluid px-4">
+          <div className="row pb-3">
             <div className="col-md-6 col-12">
               <div className="row mt-3  mb-2">
                 <div className="col-6 ">
-                  <p className="fw-medium">Centre Name</p>
+                  <p className="">Centre Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -93,7 +104,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2 mt-3">
                 <div className="col-6  ">
-                  <p className="fw-medium">Course</p>
+                  <p className="">Course</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -111,7 +122,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Class Name</p>
+                  <p className="">Class Name</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.className || ""}</p>
@@ -121,7 +132,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Class Type</p>
+                  <p className="">Class Type</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.classType || ""}</p>
@@ -131,7 +142,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Duration(Hrs)</p>
+                  <p className="">Duration(Hrs)</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -143,7 +154,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Duration(Mins)</p>
+                  <p className="">Duration(Mins)</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
@@ -155,7 +166,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Start Date</p>
+                  <p className="">Start Date</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.startDate || ""}</p>
@@ -165,7 +176,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">End Date</p>
+                  <p className="">End Date</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.endDate || ""}</p>
@@ -175,7 +186,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Day</p>
+                  <p className="">Day</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.day || ""}</p>
@@ -185,7 +196,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Teacher</p>
+                  <p className="">Teacher</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.teacher || ""}</p>
@@ -195,7 +206,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Start Time</p>
+                  <p className="">Start Time</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.startTime || ""}</p>
@@ -205,7 +216,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">End Time</p>
+                  <p className="">End Time</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.endTime || ""}</p>
@@ -215,7 +226,7 @@ function ClassView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
-                  <p className="fw-medium">Class Room</p>
+                  <p className="">Class Room</p>
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">: {data.classRoom || ""}</p>
@@ -225,7 +236,7 @@ function ClassView() {
             <div className="col-md-12 col-12">
               <div className="row  mb-2">
                 <div className="col-3  ">
-                  <p className="fw-medium">Remarks</p>
+                  <p className="">Remarks</p>
                 </div>
                 <div className="col-9">
                   <p className="text-muted text-sm d-flex text-break">

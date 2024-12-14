@@ -139,18 +139,21 @@ function ClassAdd() {
     }
   };
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get(`/getAllCoursesById/${id}`);
-  //       formik.setValues(response.data);
-  //     } catch (error) {
-  //       toast.error("Error Fetching Data ", error);
-  //     }
-  //   };
-  //   getData();
-  //   fetchData();
-  // }, [id]);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`/getAllCoursesById/${formik.values.courseId}`);
+        formik.setFieldValue("durationInHrs", response.data.durationInHrs);
+        formik.setFieldValue("durationInMins", response.data.durationInMins);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    if(formik.values.courseId){
+      getData();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.courseId]);
 
   const handleCenterChange = (event) => {
     const center = event.target.value;
