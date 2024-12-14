@@ -1037,3 +1037,6 @@ table.dataTable.display > tbody > tr > th {
   font-size: 12px !important;
   font-weight: 400 !important;
 }
+.regular-font {
+  font-size: 1rem;
+}

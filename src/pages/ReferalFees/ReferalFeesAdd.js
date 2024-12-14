@@ -34,7 +34,12 @@ function ReferalFeesAdd({ onSuccess }) {
   const validationSchema = yup.object().shape({
     centerId: yup.string().required("*Centre is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
-    referralFee: yup.string().required("*Referal Fee is required"),
+    referralFee: yup
+      .number()
+      .typeError("*Referral Fee must be a number")
+      .positive("*Referral Fee must be a positive number")
+      .integer("*Referral Fee must be an integer")
+      .required("*Referral Fee is required"),
   });
 
   const formik = useFormik({
@@ -62,7 +67,7 @@ function ReferalFeesAdd({ onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }

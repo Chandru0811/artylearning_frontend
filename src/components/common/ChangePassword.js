@@ -13,6 +13,7 @@ function ChangePassword({ onLogout }) {
   const [confirmPassword, setConfirmPassword] = useState(false);
   // const [oldPassword, setOldPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const email = localStorage.getItem("email")
 
   const togglePasswordVisibility = (type) => {
     if (type === "new") setShowPassword(!showPassword);
@@ -45,7 +46,7 @@ function ChangePassword({ onLogout }) {
     onSubmit: async (values) => {
       console.log("Submitting values:", values);
       const formData = new FormData();
-      formData.append("email", "wanov28182@lofiey.com");
+      formData.append("email",email);
       formData.append("newPassword", values.newPassword);
       formData.append("confirmPassword", values.confirmPassword);
 

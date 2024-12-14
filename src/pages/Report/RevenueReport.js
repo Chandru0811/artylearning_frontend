@@ -143,7 +143,7 @@ const RevenueReport = () => {
           datasets: dashboardData.map((item) => ({
             label: item.label,
             data: item.data,
-            borderColor: item.label === "Registration" ? "blue" : "green",
+            borderColor: item.label === "Registration" ? "#287F71" : "#EB862A",
             fill: false,
           })),
         },

@@ -134,6 +134,16 @@ const Invoice = () => {
   const handleRowClick = (id) => {
     navigate(`/invoice/view/${id}`); 
   };
+    useEffect(() => {
+      if (tableRef.current) {
+        const rows = tableRef.current.querySelectorAll("tr.odd");
+        rows.forEach((row) => {
+          row.classList.remove("odd");
+        });
+        const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+        thElements.forEach((th) => th.classList.remove("sorting_1"));
+      }
+    }, [datas]);
   return (
     <div className="container my-4">
       <ol
@@ -258,6 +268,11 @@ const Invoice = () => {
                   <th scope=""></th>
                   <th scope="col">Course</th>
                   <th scope="col">Centre</th>
+                  <th scope="col">Invoice Number</th>
+                  <th scope="col">Parent Name</th>
+                  <th scope="col">Student ID</th>
+                  <th scope="col">Invoice Date</th>
+                  <th scope="col">Number Of Lesson</th>
                   <th scope="col">Student</th>
                   <th scope="col">Package</th>
                   <th scope="col">Status</th>
@@ -378,6 +393,21 @@ const Invoice = () => {
                             ? center.centerNames || "--"
                             : ""
                         )}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                     {data.invoiceNumber}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                     {data.parent}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                     {data.studentUnickId}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                     {data.invoiceDate?.slice(0,10)}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                     {data.noOfLessons}
                     </td>
                     <td onClick={() => handleRowClick(data.id)}>
                       {studentData &&

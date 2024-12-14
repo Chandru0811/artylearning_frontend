@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../config/URL";
+import { toast } from "react-toastify";
 
 const CheckIndex = () => {
-  const [workingMode, setWorkingMode] = useState("");
+  const [workingMode, setWorkingMode] = useState("WORK_FROM_OFFICE");
   const [attendanceAction, setAttendanceAction] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const centerId = localStorage.getItem("centerId");
+  const userId = localStorage.getItem("userId");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,13 +22,13 @@ const CheckIndex = () => {
     setError("");
     setIsLoading(true);
 
-    const currentDate = new Date().toISOString();
+    // const currentDate = new Date().toISOString();
 
     const payload = {
-      date: currentDate,
+      // createdBy: currentDate,
       workingMode,
-      centerId: 608,
-      userId: 1255,
+      centerId: centerId,
+      userId: userId,
     };
 
     if (attendanceAction === "Check Out") {
@@ -38,13 +41,12 @@ const CheckIndex = () => {
     api
       .post(endpoint, payload)
       .then((response) => {
-        console.log("API response:", response.data);
+        toast.success(response.data.message);
         setIsLoading(false);
-        setWorkingMode("");
         setAttendanceAction("");
       })
       .catch((error) => {
-        console.error("Error submitting form:", error);
+        console.error("Error submitting form:", error.message);
 
         if (
           error.response &&
@@ -62,10 +64,12 @@ const CheckIndex = () => {
 
   const handleCheckIn = () => {
     setAttendanceAction("Check In");
+    setError(""); 
   };
 
   const handleCheckOut = () => {
     setAttendanceAction("Check Out");
+    setError(""); 
   };
 
   const handleWorkingModeChange = (e) => {
@@ -93,7 +97,7 @@ const CheckIndex = () => {
             Check Attendance
           </li>
         </ol>
-        <h2 className="mb-4">Marked Attendance</h2>
+        <h2 className="mb-4">Mark Attendance</h2>
 
         <div className="d-flex justify-content-center mb-4 gap-3">
           <button
@@ -153,9 +157,8 @@ const CheckIndex = () => {
                 boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <option value="">Select Working Mode</option>
               <option value="WORK_FROM_OFFICE">Work from Office</option>
-              <option value="WORK_FORM_HOME">Work from Home</option>
+              <option value="WORK_FROM_HOME">Work from Home</option>
             </select>
           </div>
 

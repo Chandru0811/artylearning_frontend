@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllLevelsWithIds from "../List/LevelList";
 
 const Course = () => {
   const tableRef = useRef(null);
@@ -17,6 +18,7 @@ const Course = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [subjectData, setSubjectData] = useState(null);
+  const [levelData, setLavelData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [extraData, setExtraData] = useState(false);
   const centerLocalId = localStorage.getItem("centerId");
@@ -84,7 +86,9 @@ const Course = () => {
   const fetchSubData = async () => {
     try {
       const subjectData = await fetchAllSubjectsWithIds();
+      const levelData = await fetchAllLevelsWithIds();
       setSubjectData(subjectData);
+      setLavelData(levelData);
     } catch (error) {
       toast.error(error);
     }
@@ -276,13 +280,31 @@ const Course = () => {
                   </th>
                   <th className="text-center text-muted"></th>
                   <th className="text-muted" scope="col">
+                    Center Name
+                  </th>
+                  <th className="text-muted" scope="col">
                     Course Name
                   </th>
                   <th className="text-muted" scope="col">
                     Course Code
                   </th>
                   <th className="text-muted" scope="col">
+                    Subject
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Level
+                  </th>
+                  <th className="text-muted" scope="col">
                     Course Type
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Min class size
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Maximum clas size
+                  </th>
+                  <th className="text-muted" scope="col">
+                    updatedBy
                   </th>
                   {extraData && (
                     <th
@@ -446,13 +468,43 @@ const Course = () => {
                       </div>
                     </td>
                     <td onClick={() => handleRowClick(data.id)}>
+                      {data.centers[0].centerName}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
                       {data.courseName}
                     </td>
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.courseCode}
                     </td>
                     <td onClick={() => handleRowClick(data.id)}>
+                      {/* {data.subjectId} */}
+                      {subjectData &&
+                        subjectData.map((subject) =>
+                          parseInt(data.subjectId) === subject.id
+                            ? subject.subjects || "--"
+                            : ""
+                        )}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {/* {data.levelId} */}
+                      {levelData &&
+                        levelData.map((level) =>
+                          parseInt(data.levelId) === level.id
+                            ? level.levels || "--"
+                            : ""
+                        )}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
                       {data.courseType}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.minClassSize}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.maxClassSize}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.updatedBy}
                     </td>
                     {extraData && (
                       <td onClick={() => handleRowClick(data.id)}>

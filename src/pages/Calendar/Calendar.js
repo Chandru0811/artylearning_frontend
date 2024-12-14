@@ -132,6 +132,7 @@ function Calendar() {
               onChange={handleCenterChange}
             >
               <option selected></option>
+              <option value="All">All</option>
               {centerData &&
                 centerData.map((center) => (
                   <option key={center.id} value={center.id}>

@@ -111,6 +111,17 @@ const ReferalFees = () => {
     $(tableRef.current).DataTable().search("").draw();
   };
 
+    useEffect(() => {
+      if (tableRef.current) {
+        const rows = tableRef.current.querySelectorAll("tr.odd");
+        rows.forEach((row) => {
+          row.classList.remove("odd");
+        });
+        const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+        thElements.forEach((th) => th.classList.remove("sorting_1"));
+      }
+    }, [datas]);
+
   return (
     <div className="container my-4">
       <ol

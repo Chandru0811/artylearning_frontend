@@ -270,13 +270,25 @@ const Teacher = () => {
                     </th>
                     <th className="text-center text-muted"></th>
                     <th className="text-muted" scope="col">
+                      Country
+                    </th>
+                    <th className="text-muted" scope="col">
                       Teacher Id
                     </th>
                     <th className="text-muted" scope="col">
                       Teacher Name
                     </th>
                     <th className="text-muted" scope="col">
+                      Teacher Type
+                    </th>
+                    <th className="text-muted" scope="col">
                       Email
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Mobile
+                    </th>
+                    <th className="text-muted" scope="col">
+                      UpdatedBy
                     </th>
                     {roles === "SMS_ADMIN" ? <th scope="col">Role</th> : <></>}
                   </tr>
@@ -347,13 +359,25 @@ const Teacher = () => {
                           </div>
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
+                          {data.nationality}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
                           {data.userUniqueId}
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
                           {data.teacherName}
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
+                          {data.employeeType}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
                           {data.email}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.mobile}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.updatedBy}
                         </td>
                         {/* <td
                           

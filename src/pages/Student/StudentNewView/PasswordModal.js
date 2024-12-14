@@ -8,7 +8,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
-function PasswordModal() {
+function PasswordModal({password}) {
   const [show, setShow] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -42,7 +42,7 @@ function PasswordModal() {
     onSubmit: async (values) => {
       console.log("Change Password Datas:", values);
       const formData = new FormData();
-      formData.append("email", "wanov28182@lofiey.com");
+      formData.append("email", password);
       formData.append("newPassword", values.password);
       formData.append("confirmPassword", values.confirmPassword);
 

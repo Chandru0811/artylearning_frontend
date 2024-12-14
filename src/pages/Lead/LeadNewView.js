@@ -232,52 +232,12 @@ function LeadNewView() {
             </div>
           </div>
           <div className="col-md-3 col-12 mb-3">
-            <div className="card mb-3">
+          <div className="card">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2 headColor">
-                  {/* <FaBook size={20} /> */}
-                  &nbsp;&nbsp;Child Ability
+                  {" "}
+                  Parent Information
                 </p>
-              </div>
-              <div style={{ padding: "10px" }}>
-                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
-                    <b>Pencil Grip</b>
-                    <span>{data.pencilGrip || "--"}</span>
-                  </li>
-                  <li className="stdList">
-                    <b>Writing</b>
-                    <span>{data.writing || "--"}</span>
-                  </li>
-                  <li className="stdList">
-                    <b>Recognize A-Z</b>
-                    <span>{data.recognizeAToZ || "--"}</span>
-                  </li>
-                  <li className="stdList">
-                    <b> Write A-Z(Uppercase)</b>
-                    <span>{data.writeUpperAToZ ? "Yes" : "No"}</span>
-                  </li>
-                  <li className="stdList">
-                    <b> Write a-z(lowercase)</b>
-                    <span>{data.writeLowerAToZ ? "Yes" : "No"}</span>
-                  </li>
-                  <li className="stdList">
-                    <b>Sounds of a-z</b>
-                    <span>{data.soundOfAToZ ? "Yes" : "No"}</span>
-                  </li>
-                  <li className="stdList">
-                    <b>Can read simple sentence</b>
-                    <span>{data.canReadSimpleSentence ? "Yes" : "No"}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="card">
-              <div className="withBorder">
-                <p className="fw-medium ms-3 my-2 headColor"> Parent Information</p>
               </div>
               <div style={{ padding: "10px" }}>
                 <ul style={{ listStyle: "none", paddingLeft: "0" }}>
@@ -361,66 +321,56 @@ function LeadNewView() {
                 </ul>
               </div>
             </div>
+         
+           
           </div>
           <div className="col-md-3 col-12 mb-3">
-            <div className="card" style={{ padding: "10px" }}>
-              <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                <p className="headColor"> Address Information</p>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Address</b>
-                  <span> {data.address || "--"}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Postal Code</b>
-                  <span> {data.postalCode || "--"}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Emergency Contact Name</b>
-                  <span> {data.nameOfEmergency || "--"}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Emergency Contact NRIC</b>
-                  <span> {data.emergencyNric || "--"}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Emergency Contact Mobile</b>
-                  <span> {data.emergencyContact || "--"}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Relation To Child</b>
-                  <span> {data.relationToChild || "--"}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Name Of Authorised Person To Take child From Class</b>
-                  <span> {data.nameOfAuthorised || "--"}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>
-                    {" "}
-                    Relation To Child Of Authorised Person To Take Child From
-                    Class
-                  </b>
-                  <span> {data.relationToChils || data.relation || ""}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>
-                    {" "}
-                    NRIC/FIN No. Authorised Person To Take Child From Class
-                  </b>
-                  <span> {data.noAuthorisedNric || "--"}</span>
-                </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>
-                    {" "}
-                    Contact Number Authorised Person To Take Child From Class
-                  </b>
-                  <span> {data.contactOfAuthorised || "--"}</span>
-                </li>
-              </ul>
-            </div>
-            <div className="card mb-3 mt-3">
+          <div className="card mb-3">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2 headColor">
+                  {/* <FaBook size={20} /> */}
+                  &nbsp;&nbsp;Child Ability
+                </p>
+              </div>
+              <div style={{ padding: "10px" }}>
+                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                  <li
+                    className="stdList"
+                    style={{ borderTop: "1px solid #ddd" }}
+                  >
+                    <b>Pencil Grip</b>
+                    <span>{data.pencilGrip || "--"}</span>
+                  </li>
+                  <li className="stdList">
+                    <b>Writing</b>
+                    <span>{data.writing || "--"}</span>
+                  </li>
+                  <li className="stdList">
+                    <b>Recognize A-Z</b>
+                    <span>{data.recognizeAToZ || "--"}</span>
+                  </li>
+                  <li className="stdList">
+                    <b> Write A-Z(Uppercase)</b>
+                    <span>{data.writeUpperAToZ ? "Yes" : "No"}</span>
+                  </li>
+                  <li className="stdList">
+                    <b> Write a-z(lowercase)</b>
+                    <span>{data.writeLowerAToZ ? "Yes" : "No"}</span>
+                  </li>
+                  <li className="stdList">
+                    <b>Sounds of a-z</b>
+                    <span>{data.soundOfAToZ ? "Yes" : "No"}</span>
+                  </li>
+                  <li className="stdList">
+                    <b>Can read simple sentence</b>
+                    <span>{data.canReadSimpleSentence ? "Yes" : "No"}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="card mb-3 ">
+              <div className="withBorder">
+                <p className="fw-medium ms-3 headColor">
                   {/* <FaUsers size={20} /> */}
                   &nbsp;&nbsp; Account Information
                 </p>
@@ -546,6 +496,63 @@ function LeadNewView() {
                 </div>
               </div>
             )}
+          </div>
+          <div className="col-md-3 col-12 mb-3">
+            <div className="card" style={{ padding: "10px" }}>
+              <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                <p className="headColor"> Address Information</p>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>Address</b>
+                  <span> {data.address || "--"}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>Postal Code</b>
+                  <span> {data.postalCode || "--"}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>Emergency Contact Name</b>
+                  <span> {data.nameOfEmergency || "--"}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>Emergency Contact NRIC</b>
+                  <span> {data.emergencyNric || "--"}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>Emergency Contact Mobile</b>
+                  <span> {data.emergencyContact || "--"}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>Relation To Child</b>
+                  <span> {data.relationToChild || "--"}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>Name Of Authorised Person To Take child From Class</b>
+                  <span> {data.nameOfAuthorised || "--"}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>
+                    {" "}
+                    Relation To Child Of Authorised Person To Take Child From
+                    Class
+                  </b>
+                  <span> {data.relationToChils || data.relation || ""}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>
+                    {" "}
+                    NRIC/FIN No. Authorised Person To Take Child From Class
+                  </b>
+                  <span> {data.noAuthorisedNric || "--"}</span>
+                </li>
+                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                  <b>
+                    {" "}
+                    Contact Number Authorised Person To Take Child From Class
+                  </b>
+                  <span> {data.contactOfAuthorised || "--"}</span>
+                </li>
+              </ul>
+            </div>
           </div>
           <div className="col-md-3 col-12 mb-3">
             {arrangeassesmentData.assessmentArrange &&
@@ -948,16 +955,15 @@ function LeadNewView() {
             )}
           </div>
         </div>
-        <div className="card mt-3">
-          <div className="withBorder m-0">
-          </div>
+     
+          <div className="withBorder m-0"></div>
           {doassesmentData.leadDoAssessmentAlphabet &&
           doassesmentData.leadDoAssessmentAlphabet.length > 0 &&
           doassesmentData.leadDoAssessmentArtyPursuers &&
           doassesmentData.leadDoAssessmentArtyPursuers.length > 0 &&
           doassesmentData.leadDoAssessmentModel &&
           doassesmentData.leadDoAssessmentModel.length > 0 ? (
-            <>
+            <div className="card mt-3">
               {/* Alphabet */}
               {doassesmentData.leadDoAssessmentAlphabet &&
               doassesmentData.leadDoAssessmentAlphabet.length > 0 ? (
@@ -5094,11 +5100,11 @@ function LeadNewView() {
                   <p>Arty Pursuers Information not available </p>
                 </div>
               )}
-            </>
+            </div>
           ) : (
             <></>
           )}
-        </div>
+       
       </div>
     </div>
   );

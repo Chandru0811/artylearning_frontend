@@ -60,7 +60,7 @@ const Staff = () => {
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
+      columnDefs: [{ orderable: false, targets: 1 }],
     });
   };
 
@@ -237,10 +237,22 @@ const Staff = () => {
                       Staff Name
                     </th>
                     <th className="text-muted" scope="col">
+                      Email
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Gender
+                    </th>
+                    <th className="text-muted" scope="col">
                       Role
                     </th>
                     <th className="text-muted" scope="col">
                       Mobile
+                    </th>
+                    <th className="text-muted" scope="col">
+                      CreatedBy
+                    </th>
+                    <th className="text-muted" scope="col">
+                      UpdatedBy
                     </th>
                   </tr>
                 </thead>
@@ -317,6 +329,12 @@ const Staff = () => {
                           {data.teacherName}
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
+                          {data.email}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.gender}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
                           {data.role === "branch_admin" ? (
                             <span className="badge badges-Red">
                               Branch Admin
@@ -335,6 +353,12 @@ const Staff = () => {
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
                           {data.contactNumber}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.createdBy}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.updatedBy}
                         </td>
                       </tr>
                     ))}

@@ -2,6 +2,9 @@ import React from "react";
 import ApexCharts from "react-apexcharts";
 
 function NewDashboard() {
+  const progressValue1 = 25;
+  const progressValue2 = 50;
+  const progressValue3 = 70;
   const fontFamily = "'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'";
 
   const lineChartOptions = {
@@ -216,7 +219,7 @@ function NewDashboard() {
           >
             <div className="card-body">
               <h6 className="card-title text-secondary">Lead Count</h6>
-              <h5 className="card-text fw-bold text-dark">$32,499.93</h5>
+              <h5 className="card-text fw-bold text-dark">132</h5>
               <span className="d-flex align-items-center justify-content-between">
                 <span
                   className="text-success fw-bold me-2"
@@ -243,7 +246,7 @@ function NewDashboard() {
           >
             <div className="card-body">
               <h6 className="card-title text-secondary">Student</h6>
-              <h5 className="card-text fw-bold text-dark">$10,499.93</h5>
+              <h5 className="card-text fw-bold text-dark">103</h5>
               <span className="d-flex align-items-center">
                 <span
                   className="text-danger fw-bold me-2"
@@ -270,7 +273,7 @@ function NewDashboard() {
           >
             <div className="card-body">
               <h6 className="card-title text-secondary">Teacher</h6>
-              <h5 className="card-text fw-bold text-dark">$32,499.93</h5>
+              <h5 className="card-text fw-bold text-dark">54</h5>
               <span className="d-flex align-items-center">
                 <span
                   className="text-success fw-bold me-2"
@@ -349,7 +352,7 @@ function NewDashboard() {
                 Arty Learning @ HG
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
-                634.8%
+              {progressValue1}%
               </span>
             </div>
             <div className="progress mb-3" style={{ height: "7px" }}>
@@ -358,7 +361,7 @@ function NewDashboard() {
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: "25%", backgroundColor: "#287F71" }}
+                style={{ width: `${progressValue1}%`, backgroundColor: "#287F71" }}
                 aria-valuenow="25"
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -369,14 +372,14 @@ function NewDashboard() {
                 Arty Learning @ AMK
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
-                589.8%
+              {progressValue2}%
               </span>
             </div>
             <div className="progress mb-3" style={{ height: "7px" }}>
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: "50%", backgroundColor: "#287F71" }}
+                style={{ width: `${progressValue2}%`, backgroundColor: "#287F71" }}
                 aria-valuenow="50"
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -387,15 +390,15 @@ function NewDashboard() {
                 Arty Learning @ BB
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
-                453.8%
+              {progressValue3}%
               </span>
             </div>
             <div className="progress mb-3" style={{ height: "7px" }}>
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: "75%", backgroundColor: "#287F71" }}
-                aria-valuenow="75"
+                style={{ width: `${progressValue3}%`, backgroundColor: "#287F71" }}
+                aria-valuenow="70"
                 aria-valuemin="0"
                 aria-valuemax="100"
               ></div>

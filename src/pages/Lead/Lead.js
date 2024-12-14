@@ -281,7 +281,7 @@ const Lead = () => {
             }
           }}
         >
-          <div className="row my-3 mb-5">
+          <div className="row mb-3">
             <div className="col-12 d-flex flex-wrap justify-content-center">
               <div
                 className={`btn-group bg-light ${
@@ -443,7 +443,16 @@ const Lead = () => {
                         Student Name
                       </th>
                       <th className="text-muted" scope="col">
+                        Date Of Birth
+                      </th>
+                      <th className="text-muted" scope="col">
                         Subject
+                      </th>
+                      <th className="text-muted" scope="col">
+                        Parent Name
+                      </th>
+                      <th className="text-muted" scope="col">
+                      Sounds of a-z
                       </th>
                       <th className="text-muted" scope="col">
                         Status
@@ -523,12 +532,21 @@ const Lead = () => {
                             {data.studentName}
                           </td>
                           <td onClick={() => handleRowClick(data.id)}>
+                            {data.dateOfBirth.slice(0,10)}
+                          </td>
+                          <td onClick={() => handleRowClick(data.id)}>
                             {subjectData &&
                               subjectData.map((subject) =>
                                 parseInt(data.subjectId) === subject.id
                                   ? subject.subjects || "--"
                                   : ""
                               )}
+                          </td>
+                          <td onClick={() => handleRowClick(data.id)}>
+                            {data.parentName}
+                          </td>
+                          <td onClick={() => handleRowClick(data.id)}>
+                            {data.soundOfAToZ === true ? "Yes" : "No"}
                           </td>
                           <td>
                             {data.leadStatus === "NEW_WAITLIST" ? (
@@ -540,7 +558,7 @@ const Lead = () => {
                                   aria-expanded="false"
                                 >
                                   <span
-                                    className="text-white fw-bold"
+                                    className="text-white "
                                     style={{ textWrap: "nowrap" }}
                                   >
                                     New/WaitList
@@ -613,7 +631,7 @@ const Lead = () => {
                                   aria-expanded="false"
                                 >
                                   <span
-                                    className="text-white fw-bold"
+                                    className="text-white "
                                     style={{ textWrap: "nowrap" }}
                                   >
                                     Drop
@@ -689,7 +707,7 @@ const Lead = () => {
                                   aria-expanded="false"
                                 >
                                   <span
-                                    className="text-white fw-bold"
+                                    className="text-white "
                                     style={{ textWrap: "nowrap" }}
                                   >
                                     Assessment Arranged
@@ -761,7 +779,7 @@ const Lead = () => {
                                   aria-expanded="false"
                                 >
                                   <span
-                                    className="text-white fw-bold"
+                                    className="text-white "
                                     style={{ textWrap: "nowrap" }}
                                   >
                                     KIV
@@ -837,7 +855,7 @@ const Lead = () => {
                                   aria-expanded="false"
                                 >
                                   <span
-                                    className="text-white fw-bold"
+                                    className="text-white "
                                     style={{ textWrap: "nowrap" }}
                                   >
                                     Assessment Done
@@ -914,7 +932,7 @@ const Lead = () => {
                                 type="button"
                               >
                                 <span
-                                  className="text-white fw-bold"
+                                  className="text-white "
                                   style={{
                                     textDecoration: "none",
                                     cursor: "default",
@@ -930,7 +948,7 @@ const Lead = () => {
                                 style={{ cursor: "default" }}
                               >
                                 <span
-                                  className="text-white fw-bold"
+                                  className="text-white "
                                   style={{ textWrap: "nowrap" }}
                                 >
                                   Enrolled
@@ -945,7 +963,7 @@ const Lead = () => {
                                   aria-expanded="false"
                                 >
                                   <span
-                                    className="text-white fw-bold"
+                                    className="text-white "
                                     style={{ textWrap: "nowrap" }}
                                   >
                                     Waiting For Payment
@@ -1018,7 +1036,7 @@ const Lead = () => {
                                   aria-expanded="false"
                                 >
                                   <span
-                                    className="text-white fw-bold"
+                                    className="text-white "
                                     style={{ textWrap: "nowrap" }}
                                   >
                                     New/WaitList
