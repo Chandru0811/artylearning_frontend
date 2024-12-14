@@ -14,15 +14,13 @@ function Header({ onLogout }) {
   const [selectedCenter, setSelectedCenter] = useState("");
 
   const handleLogOutClick = () => {
+    // Ensure the offcanvas closes and scroll is restored
+    document.body.classList.remove("offcanvas-backdrop", "modal-open");
+    document.body.style.overflow = "auto"; // Restore scrolling
     onLogout();
     navigate("/login");
   };
 
-  // const handleCenterChange = (e) => {
-  //   setSelectedCenter(e.target.value);
-  //   console.log("Selected Center:", e.target.value);
-  //   const selectedCenter = sessionStorage.setItem('selectedCenterId',e.target.value);
-  // };
   const handleCenterChange = (e) => {
     const centerId = e.target.value; // Get the selected value
     setSelectedCenter(centerId); // Update the component state
@@ -69,27 +67,6 @@ function Header({ onLogout }) {
 
           <div style={{ minWidth: "50%" }}>
             <div className="position-relative">
-              {/* <select
-                value={selectedCenter}
-                name="studentRelationCenter"
-                className="form-select shadow-none"
-                onChange={handleCenterChange}
-                style={{
-                  border: "none",
-                  outline: "none",
-                  paddingRight: "5px",
-                }}
-              >
-                {centerData &&
-                  centerData.map((studentRelationCenter) => (
-                    <option
-                      key={studentRelationCenter.id}
-                      value={studentRelationCenter.id}
-                    >
-                      {studentRelationCenter.centerNames}
-                    </option>
-                  ))}
-              </select> */}
               <select
                 value={selectedCenter}
                 name="studentRelationCenter"
