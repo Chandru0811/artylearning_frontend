@@ -3,68 +3,78 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../components/common/Delete";
+import { toast } from "react-toastify";
 import api from "../../config/URL";
-import { SCREENS } from "../../config/ScreenFilter";
-import Lead from "../Lead/Lead";
-import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
+import fetchAllCentersWithIds from "../List/CenterList";
 import { IoIosAddCircle } from "react-icons/io";
+import Delete from "../../components/common/Delete";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 const Student = () => {
   const tableRef = useRef(null);
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
   const [datas, setDatas] = useState([]);
-  console.log("Student All datas:", datas);
-
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
+  const [centerData, setCenterData] = useState([]);
+  const [centerId, setCenterId] = useState(
+    localStorage.getItem("centerId") || ""
+  );
+  const centerLocalId = localStorage.getItem("centerId");
+  const [studentId, setStudentName] = useState("");
+  const [parentId, setParentId] = useState("");
+
   const navigate = useNavigate();
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  console.log("Screens : ", SCREENS);
-  const [studentId, setStudentId] = useState("");
-  const [studentName, setStudentName] = useState("");
-  const [gender, setGender] = useState("");
 
-  const clearFilters = () => {
-    setStudentId("");
-    setStudentName("");
-    setGender("");
+  // Fetch student data with filters
+  const getCenterData = async () => {
+    try {
+      const params = {};
 
-    $(tableRef.current).DataTable().search("").draw();
+      if (centerId) params.centerId = centerId;
+      if (studentId) params.studentId = studentId;
+      if (parentId) params.parentId = parentId;
+
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(
+        `/getStudentWithCustomInfo?${queryParams}`
+      );
+      setDatas(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error(`Error Fetching Data: ${error.message}`);
+    }
   };
 
-  useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllStudentDetails");
-        setDatas(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setCenterId(centerLocalId[0]);
+      } else if (centerData !== null && centerData.length > 0) {
+        setCenterId(centerData[0].id);
       }
-    };
-    getCenterData();
-  }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(`Error Fetching Center Data: ${error.message}`);
     }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  };
+
+  const clearFilters = () => {
+    setCenterId("");
+    setStudentName("");
+    setParentId("");
+    refreshData();
+  };
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
     $(tableRef.current).DataTable({
       responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
+      columnDefs: [{ orderable: false, targets: 1 }],
     });
   };
 
@@ -78,43 +88,41 @@ const Student = () => {
   const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
-    try {
-      const response = await api.get("/getAllStudentDetails");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
+    await getCenterData();
     setLoading(false);
   };
+
+  const handleRowClick = (id) => {
+    navigate(`/student/view/${id}`);
+  };
+
+  const extractDate = (dateString) => {
+    return dateString?.substring(0, 10) || "";
+  };
+
   const handleDataShow = () => {
+    setExtraData((prev) => !prev);
+    initializeDataTable();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [centerLocalId]);
+
+  useEffect(() => {
     if (!loading) {
-      setExtraData(!extraData);
       initializeDataTable();
     }
     return () => {
       destroyDataTable();
     };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/student/view/${id}`); // Navigate to the index page when a row is clicked
-  };
+  }, [loading]);
 
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    if (centerId !== undefined && centerId !== "") {
+      getCenterData();
     }
-  }, [datas]);
+  }, [centerId, studentId, parentId]);
 
   return (
     <div className="container-fluid my-4 center">
@@ -157,18 +165,19 @@ const Student = () => {
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Student Id"
-                value={studentId}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setStudentId(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                onChange={(e) => setCenterId(e.target.value)}
+                name="centerId"
+                value={centerId}
+              >
+                {centerData?.map((center) => (
+                  <option key={center.id} value={center.id} selected>
+                    {center.centerNames}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
@@ -176,7 +185,7 @@ const Student = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Student Name"
-                value={studentName}
+                value={studentId}
                 onChange={(e) => {
                   const searchValue = e.target.value.toLowerCase();
                   setStudentName(e.target.value);
@@ -189,11 +198,11 @@ const Student = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Gender"
-                value={gender}
+                placeholder="Parent"
+                value={parentId}
                 onChange={(e) => {
                   const searchValue = e.target.value.toLowerCase();
-                  setGender(e.target.value);
+                  setParentId(e.target.value);
                   $(tableRef.current).DataTable().search(searchValue).draw();
                 }}
               />
@@ -242,6 +251,9 @@ const Student = () => {
                   </th>
                   <th className="text-center text-muted"></th>
                   <th className="text-muted" scope="col">
+                    Centre
+                  </th>
+                  <th className="text-muted" scope="col">
                     Student ID
                   </th>
                   <th className="text-muted" scope="col">
@@ -255,6 +267,12 @@ const Student = () => {
                   </th>
                   <th className="text-muted" scope="col">
                     Nationality
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Allow Magazine
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Allow Social Media
                   </th>
                   {extraData && (
                     <th
@@ -371,6 +389,9 @@ const Student = () => {
                       </div>
                     </td>
                     <td onClick={() => handleRowClick(data.id)}>
+                      {data.center}{" "}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
                       {data.studentUniqueId}{" "}
                     </td>
                     <td onClick={() => handleRowClick(data.id)}>
@@ -382,6 +403,12 @@ const Student = () => {
                     </td>
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.nationality}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.allowMagazine === "false" ? "Yes" : "No"}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.allowSocialMedia === "false" ? "Yes" : "No"}
                     </td>
                     {extraData && (
                       <td onClick={() => handleRowClick(data.id)}>

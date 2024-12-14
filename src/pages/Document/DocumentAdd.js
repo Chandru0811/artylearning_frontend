@@ -9,6 +9,7 @@ import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllCentersWithScheduleStudentList from "../List/CenterAvailableScheduleStudentLidt";
+import fetchAllCentersWithIds from "../List/CenterList";
 
 const validationSchema = Yup.object({
   center: Yup.string().required("*Centre is required"),
@@ -154,7 +155,7 @@ function DocumentAdd() {
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithScheduleStudentList();
+      const centerData = await fetchAllCentersWithIds();
 
       setCenterData(centerData);
     } catch (error) {
@@ -332,7 +333,7 @@ function DocumentAdd() {
                   {centerData &&
                     centerData.map((center) => (
                       <option key={center.id} value={center.id}>
-                        {center.centerName}
+                        {center.centerNames}
                       </option>
                     ))}
                 </select>

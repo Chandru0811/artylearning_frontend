@@ -36,7 +36,7 @@ const Form5 = forwardRef(
         preferredDay: formData.preferredDay || "",
         enquiryDate: formData.enquiryDate || "",
         marketingSource: formData.marketingSource || "",
-        referBy: formData.referBy || "",
+        studentId: formData.studentId || "",
         nameOfReferral: formData.nameOfReferral || "",
         referedStudentCenterNameId: formData.referedStudentCenterNameId || "",
         remark: formData.remark || "",
@@ -179,8 +179,8 @@ const Form5 = forwardRef(
                 <label>Refer By(Child’s Name)</label>
                 <div className="input-group ">
                   <select
-                    {...formik.getFieldProps("referBy")}
-                    className={`form-select ${formik.touched.referBy && formik.errors.referBy
+                    {...formik.getFieldProps("studentId")}
+                    className={`form-select ${formik.touched.studentId && formik.errors.studentId
                         ? "is-invalid"
                         : ""
                       }`}
@@ -194,9 +194,9 @@ const Form5 = forwardRef(
                       ))}
                   </select>
                 </div>
-                {formik.touched.referBy && formik.errors.referBy && (
+                {formik.touched.studentId && formik.errors.studentId && (
                   <div className="error text-danger">
-                    <small>{formik.errors.referBy}</small>
+                    <small>{formik.errors.studentId}</small>
                   </div>
                 )}
               </div>
