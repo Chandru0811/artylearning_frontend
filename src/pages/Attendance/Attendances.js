@@ -6,12 +6,15 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import ReplacementAdd from "./ReplacementAdd";
 import { Link } from "react-router-dom";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
 function Attendances() {
   const [attendanceData, setAttendanceData] = useState([]);
   console.log("Attendance Data Reload again", attendanceData);
   const [centerData, setCenterData] = useState(null);
+  const [courseData, setCourseData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("1");
+  const [selectedCourse, setSelectedCourse] = useState("1");
   const [selectedBatch, setSelectedBatch] = useState("1");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [batchOptions, setBatchOptions] = useState([]);
@@ -59,9 +62,29 @@ function Attendances() {
     }
   };
 
+  const fetchCourses = async (centerId) => {
+    try {
+      const courseData = await fetchAllCoursesWithIdsC(centerId);
+      setCourseData(courseData);
+      setSelectedCourse(courseData[0].id);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchListData();
   }, []);
+
+    const handleCenterChange = (event) => {
+      const center = event.target.value;
+      setCourseData(null);
+      fetchCourses(center);
+    };
+  
+    useEffect(() => {
+      fetchData();
+    }, []);
 
   useEffect(() => {
     if (selectedDate) {
@@ -74,6 +97,7 @@ function Attendances() {
     try {
       const requestBody = {
         centerId: selectedCenter,
+        courseId: selectedCourse,
         batchId: selectedBatch,
         date: selectedDate,
       };
@@ -157,11 +181,11 @@ function Attendances() {
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li>
-            Student Management
+            &nbsp;Student Management
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
-            Attendance
+            &nbsp;Attendance
           </li>
         </ol>
         <div className="card">
@@ -187,13 +211,28 @@ function Attendances() {
               <select
                 className="form-select "
                 aria-label="Default select example"
-                onChange={(e) => setSelectedCenter(e.target.value)}
+                // onChange={(e) => setSelectedCenter(e.target.value)}
+                onChange={handleCenterChange}
               >
                 <option selected></option>
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
                       {center.centerNames}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="col-md-6 col-12 mb-2">
+              <label className="form-lable">Course</label>
+              <select
+                className="form-select "
+              >
+                <option selected></option>
+                {courseData &&
+                  courseData.map((courseId) => (
+                    <option key={courseId.id} value={courseId.id}>
+                      {courseId.courseNames}
                     </option>
                   ))}
               </select>
@@ -213,7 +252,7 @@ function Attendances() {
                 ))}
               </select>
             </div>
-            <div className="col-md-6 col-12 mb-3">
+            <div className="col-md-6 col-12">
               <label className="form-lable">Attendance Date</label>
               <input
                 type="date"
@@ -222,7 +261,7 @@ function Attendances() {
                 value={selectedDate}
               />
             </div>
-            <div className="col-md-4 col-12 d-flex align-items-end mb-3">
+            <div className="col-md-12 col-12 d-flex align-items-end justify-content-end mb-3">
               <button
                 className="btn btn-light btn-button btn-sm mt-3"
                 onClick={handelSubmitData}

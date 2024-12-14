@@ -48,7 +48,7 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext, setLoadIndica
       // nameOfChildrenInTotal: "",
       fathersFullName: "",
       // leadStatus: "",
-      referby:""
+      referBy:""
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -277,16 +277,16 @@ const EditForm1 = forwardRef(({ formData, setFormData, handleNext, setLoadIndica
                 <div className="">
                   <input
                     type="text"
-                    name="referby"
+                    name="referBy"
                     className="form-control"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.referby}
+                    value={formik.values.referBy}
                   />
-                  {formik.touched.referby &&
-                    formik.errors.referby && (
+                  {formik.touched.referBy &&
+                    formik.errors.referBy && (
                       <div className="error text-danger ">
-                        <small>{formik.errors.referby}</small>
+                        <small>{formik.errors.referBy}</small>
                       </div>
                     )}
                 </div>

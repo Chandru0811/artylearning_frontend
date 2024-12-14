@@ -14,13 +14,18 @@ function Header({ onLogout }) {
   const [selectedCenter, setSelectedCenter] = useState("");
 
   const handleLogOutClick = () => {
+    // Ensure the offcanvas closes and scroll is restored
+    document.body.classList.remove("offcanvas-backdrop", "modal-open");
+    document.body.style.overflow = "auto"; // Restore scrolling
     onLogout();
     navigate("/login");
   };
 
   const handleCenterChange = (e) => {
-    setSelectedCenter(e.target.value);
-    console.log("Selected Center:", e.target.value);
+    const centerId = e.target.value; // Get the selected value
+    setSelectedCenter(centerId); // Update the component state
+    localStorage.setItem("selectedCenterId", centerId); // Store in localStorage
+    console.log("Selected Center:", centerId); // Log for debugging
   };
 
   useEffect(() => {
@@ -28,20 +33,17 @@ function Header({ onLogout }) {
       try {
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
-  
-        // Set the default selected value to the first center ID
         if (centerData && centerData.length > 0) {
           setSelectedCenter(centerData[0].id);
-          console.log("Default Selected Center:", centerData[0].id); // Log the first center ID
-        }
+          localStorage.setItem("selectedCenterId", centerData[0].id); // Set in localStorage
+        }        
       } catch (error) {
         toast.error(error.message);
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
   return (
     <nav>
@@ -52,12 +54,13 @@ function Header({ onLogout }) {
 
         <div className="d-flex align-items-center justify-content-evenly">
           <Link to={"/calendar"}>
-            <button
-              className="btn"
-              type="button"
-            >
+            <button className="btn" type="button">
               <CiCalendarDate
-                style={{ color: "#287f71", fontSize: "25px" ,fontWeight:"bolder" }}
+                style={{
+                  color: "#287f71",
+                  fontSize: "25px",
+                  fontWeight: "bolder",
+                }}
               />
             </button>
           </Link>
@@ -68,16 +71,13 @@ function Header({ onLogout }) {
                 value={selectedCenter}
                 name="studentRelationCenter"
                 className="form-select shadow-none"
-                onChange={handleCenterChange}
+                onChange={handleCenterChange} // Update local storage dynamically here
                 style={{
                   border: "none",
                   outline: "none",
                   paddingRight: "5px",
                 }}
               >
-                {/* <option>Atry Learning @ AMK</option>
-                <option>Atry Learning @ HG</option>
-                <option>Atry Learning @ BB</option> */}
                 {centerData &&
                   centerData.map((studentRelationCenter) => (
                     <option

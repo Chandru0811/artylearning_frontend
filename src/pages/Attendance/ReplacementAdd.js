@@ -16,12 +16,13 @@ function ReplacementAdd({
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const [attendanceDatas, setAttendanceData] = useState([]);
 
   const validationSchema = Yup.object({
     studentName: Yup.string().required("*Student Name is required"),
     studentId: Yup.string().required("*student ID is required"),
-    course: Yup.string().required("*Course is required"),
-    classCode: Yup.string().required("*Class Code is required"),
+    // course: Yup.string().required("*Course is required"),
+    // classCode: Yup.string().required("*Class Code is required"),
     absentDate: Yup.string().required("*Absent Date is required"),
     absentReason: Yup.string().required("*Absent Reason is required"),
   });
@@ -98,6 +99,18 @@ function ReplacementAdd({
       formik.setFieldValue("absentDate", attendanceDate);
     }
   }, [attendanceDate]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllAbsentReason");
+        setAttendanceData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <>
@@ -318,8 +331,14 @@ function ReplacementAdd({
                     }`}
                   >
                     <option selected></option>
-                    <option value="HOLIDAY">HOLIDAY</option>
-                    <option value="STUDENT_SICK">STUDENT_SICK</option>
+                    {/* <option value="HOLIDAY">HOLIDAY</option>
+                    <option value="STUDENT_SICK">STUDENT_SICK</option> */}
+                    {attendanceDatas &&
+                      attendanceDatas.map((attendance) => (
+                        <option key={attendance.id} value={attendance.absentReason}>
+                          {attendance.absentReason}
+                        </option>
+                      ))}
                   </select>
                   {formik.touched.absentReason &&
                     formik.errors.absentReason && (
