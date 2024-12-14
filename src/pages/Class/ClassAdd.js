@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -10,6 +10,7 @@ import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 
 function ClassAdd() {
+  // const { id } = useParams();
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -47,8 +48,8 @@ function ClassAdd() {
       courseId: "",
       className: "",
       classType: "",
-      durationInHrs: "01",
-      durationInMins: "30",
+      durationInHrs: "",
+      durationInMins: "",
       startDate: new Date().toISOString().split("T")[0],
       endDate: getEndDate(),
       startTime: "",
@@ -137,6 +138,19 @@ function ClassAdd() {
       toast.error(error.message);
     }
   };
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await api.get(`/getAllCoursesById/${id}`);
+  //       formik.setValues(response.data);
+  //     } catch (error) {
+  //       toast.error("Error Fetching Data ", error);
+  //     }
+  //   };
+  //   getData();
+  //   fetchData();
+  // }, [id]);
 
   const handleCenterChange = (event) => {
     const center = event.target.value;

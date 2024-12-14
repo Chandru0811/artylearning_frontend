@@ -3,69 +3,68 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
 import Delete from "../../components/common/Delete"; // Ensure correct import
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
-import Dropdown from "react-bootstrap/Dropdown";
-import Form from "react-bootstrap/Form";
+import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
-
-const ColumnToggleDropdown = ({ showColumns, onToggle }) => {
-  const columns = [
-    { key: "createdBy", label: "Created By" },
-    { key: "createdAt", label: "Created At" },
-    { key: "updatedBy", label: "Updated By" },
-    { key: "updatedAt", label: "Updated At" },
-    { key: "className", label: "Class Name" },
-    { key: "classType", label: "Class Type" },
-  ];
-
-  return (
-    <Dropdown.Menu>
-      {columns.map((column) => (
-        <Dropdown.Item key={column.key}>
-          <Form.Check
-            type="checkbox"
-            label={column.label}
-            checked={showColumns[column.key]}
-            onChange={() => onToggle(column.key)}
-          />
-        </Dropdown.Item>
-      ))}
-    </Dropdown.Menu>
-  );
-};
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
+import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
+import { useFormik } from "formik";
 
 const Class = () => {
   const tableRef = useRef(null);
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showColumns, setShowColumns] = useState({
-    className: true,
-    classType: true,
-    createdBy: false,
-    updatedBy: false,
-    createdAt: false,
-    updatedAt: false,
-  });
-
+  const [centerData, setCenterData] = useState([]);
+  const centerLocalId = localStorage.getItem("centerId");
+  const [clas, setClass] = useState("");
+  const [status, setStatus] = useState("");
+  const [day, setDay] = useState("");
+  const [classGroupType, setClassGroupType] = useState("");
+  const [courseData, setCourseData] = useState(null);
+  const [teacherData, setTeacherData] = useState(null);
+  const [centerId, setCenterId] = useState("");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
-  useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllCourseClassListings");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data");
+  const formik = useFormik({
+    initialValues: {
+      centerId: "",
+      courseId: "",
+      className: "",
+      // createdBy: userName,
+    },
+  });
+
+  const getClassData = async () => {
+    try {
+      const params = {};
+
+      if (centerId) params.centerId = centerId;
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
+      setDatas(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setCenterId(centerLocalId[0]);
+      } else if (centerData !== null && centerData.length > 0) {
+        setCenterId(centerData[0].id);
       }
-    };
-    getCenterData();
-  }, []);
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   useEffect(() => {
     if (!loading) {
@@ -76,21 +75,9 @@ const Class = () => {
     };
   }, [loading]);
 
-  useEffect(() => {
-    if (!loading) {
-      refreshData();
-    }
-  }, [showColumns]);
-
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       const table = $(tableRef.current).DataTable();
-      table.columns().every((index) => {
-        const column = table.column(index);
-        const header = $(column.header());
-        const columnKey = header.text().replace(/\s+/g, "").toLowerCase();
-        column.visible(showColumns[columnKey]);
-      });
       table.draw();
       return;
     }
@@ -107,6 +94,36 @@ const Class = () => {
     }
   };
 
+  const fetchCourses = async (centerId) => {
+    try {
+      const courseData = await fetchAllCoursesWithIdsC(centerId);
+      setCourseData(courseData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const fetchTeacher = async (centerId) => {
+    try {
+      const teacher = await fetchAllTeacherListByCenter(centerId);
+      setTeacherData(teacher);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleCenterChange = (event) => {
+    const center = event.target?.value;
+    setCenterId(center);
+    formik.setFieldValue("centerId", center);
+    formik.setFieldValue("classRoom", "");
+    formik.setFieldValue("userId", "");
+    setCourseData(null);
+    setTeacherData(null);
+    fetchCourses(center);
+    fetchTeacher(center);
+  };
+
   const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
@@ -119,24 +136,14 @@ const Class = () => {
     }
   };
 
-  const handleColumnToggle = (column) => {
-    setShowColumns((prevColumns) => ({
-      ...prevColumns,
-      [column]: !prevColumns[column],
-    }));
-  };
-
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-
-  const [classNameData, setClassNameData] = useState("");
-  const [classType, setClassType] = useState("");
-
   const clearFilters = () => {
-    setClassNameData("");
-    setClassType("");
+    setCenterId("");
+    setCourseData("");
+    setClass("");
+    setTeacherData("");
+    setClassGroupType("");
+    setDay("");
+    setStatus("");
 
     $(tableRef.current).DataTable().search("").draw();
   };
@@ -144,6 +151,10 @@ const Class = () => {
   const handleRowClick = (id) => {
     navigate(`/class/view/${id}`);
   };
+
+  useEffect(() => {
+    fetchData(); // Fetch the center manager data as well
+  }, [centerLocalId]);
 
   useEffect(() => {
     if (tableRef.current) {
@@ -155,6 +166,12 @@ const Class = () => {
       thElements.forEach((th) => th.classList.remove("sorting_1"));
     }
   }, [datas]);
+
+  useEffect(() => {
+    if (centerId !== undefined && centerId !== "") {
+      getClassData();
+    }
+  }, [centerData, centerId, centerLocalId]);
 
   return (
     <div className="container my-4 center">
@@ -193,53 +210,134 @@ const Class = () => {
             </span>
           </div>
         </div>
-        <div className="d-flex justify-content-between mb-3 px-2">
-          <div className="individual_fliters d-flex">
+        <div className="mb-3">
+          <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Class Name"
-                value={classNameData}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setClassNameData(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Class type"
-                value={classType}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setClassType(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary"
-                onClick={clearFilters}
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                onChange={(e) => handleCenterChange(e.target.value)}
+                name="centerId"
+                value={centerId}
               >
-                Clear
-              </button>
+                {centerData?.map((center) => (
+                  <option key={center.id} value={center.id} selected>
+                    {center.centerNames}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                onChange={(e) => setCourseData(e.target.value)}
+                name="courseData"
+                value={courseData}
+              >
+                <option selected>Select a Course</option>
+                {courseData &&
+                  courseData.map((courseId) => (
+                    <option key={courseId.id} value={courseId.id}>
+                      {courseId.courseNames}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                className="form-control form-control-sm center_list"
+                style={{ width: "100%" }}
+                placeholder="Class Code"
+                onChange={(e) => setClass(e.target.value)}
+                value={clas}
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                onChange={(e) => setCenterId(e.target.value)}
+                name="teacherData"
+                value={teacherData}
+              >
+                <option selected>Select a Teacher</option>
+                {teacherData &&
+                  teacherData.map((teacher) => (
+                    <option key={teacher.id} value={teacher.id}>
+                      {teacher.teacherNames}
+                    </option>
+                  ))}
+              </select>
             </div>
           </div>
-          {storedScreens?.classCreate && (
-            <Link to={`/class/add`}>
-              <button type="button" className="btn btn-button btn-sm">
-                Add <i className="bx bx-plus"></i>
-              </button>
-            </Link>
-          )}
+          <div className="d-flex justify-content-between">
+            <div className="individual_fliters d-lg-flex ">
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  style={{ width: "100%" }}
+                  onChange={(e) => setCenterId(e.target.value)}
+                  name="classGroupType"
+                  value={classGroupType}
+                >
+                  <option selected>Select a Class Group Type</option>
+                  <option value="Group">Group</option>
+                  <option value="Individual">Individual</option>
+                </select>
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  style={{ width: "100%" }}
+                  onChange={(e) => setCenterId(e.target.value)}
+                  name="day"
+                  value={day}
+                >
+                  <option selected>Select a Day</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thrusday">Thrusday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                  <option value="Sunday">Sunday</option>
+                </select>
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm center_list"
+                  style={{ width: "100%" }}
+                  onChange={(e) => setCenterId(e.target.value)}
+                  name="status"
+                  value={status}
+                >
+                  <option selected>Select a Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+              <div className="form-group mb-0 ms-2 mb-1 ">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-border"
+                  onClick={clearFilters}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+            <div className="me-2">
+              {storedScreens?.documentListingCreate && (
+                <Link to="/class/add">
+                  <button type="button" className="btn btn-button btn-sm">
+                    Add <i className="bx bx-plus"></i>
+                  </button>
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
         {loading ? (
           <div className="loader-container">
@@ -260,36 +358,49 @@ const Class = () => {
                     S No
                   </th>
                   <th className="text-center text-muted"></th>
-                  {showColumns.className && (
-                    <th className="text-muted" scope="col">
-                      Class Name
-                    </th>
-                  )}
-                  {showColumns.classType && (
-                    <th className="text-muted" scope="col">
-                      Class Type
-                    </th>
-                  )}
-                  {showColumns.createdBy && (
-                    <th className="text-muted" scope="col">
-                      Created By
-                    </th>
-                  )}
-                  {showColumns.createdAt && (
-                    <th className="text-muted" scope="col">
-                      Created At
-                    </th>
-                  )}
-                  {showColumns.updatedBy && (
-                    <th className="text-muted" scope="col">
-                      Updated By
-                    </th>
-                  )}
-                  {showColumns.updatedAt && (
-                    <th className="text-muted" scope="col">
-                      Updated At
-                    </th>
-                  )}
+                  <th className="text-muted" scope="col">
+                    Centre Name
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Course Name
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Class Name
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Class Type
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Start Date
+                  </th>
+                  <th className="text-muted" scope="col">
+                    End Date
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Holiday Title
+                  </th>
+
+                  <th className="text-muted" scope="col">
+                    Class Code
+                  </th>
+                  <th className="text-muted" scope="col">
+                    Status
+                  </th>
+                  {/* <th className="text-muted" scope="col">
+                    Created By
+                  </th> */}
+
+                  {/* <th className="text-muted" scope="col">
+                    Created At
+                  </th> */}
+
+                  <th className="text-muted" scope="col">
+                    Updated By
+                  </th>
+
+                  {/* <th className="text-muted" scope="col">
+                    Updated At
+                  </th> */}
                 </tr>
               </thead>
               <tbody>
@@ -351,36 +462,55 @@ const Class = () => {
                         )}
                       </div>
                     </td>
-                    {showColumns.className && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.className}
-                      </td>
-                    )}
-                    {showColumns.classType && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.classType}
-                      </td>
-                    )}
-                    {showColumns.createdBy && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.createdBy}
-                      </td>
-                    )}
-                    {showColumns.createdAt && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {extractDate(data.createdAt)}
-                      </td>
-                    )}
-                    {showColumns.updatedBy && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.updatedBy}
-                      </td>
-                    )}
-                    {showColumns.updatedAt && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {extractDate(data.updatedAt)}
-                      </td>
-                    )}
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.centerName}
+                    </td>
+
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.courseId}
+                    </td>
+
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.className}
+                    </td>
+
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.classType}
+                    </td>
+
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.startDate}
+                    </td>
+
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.endDate}
+                    </td>
+
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.holidayTitle}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.classCode}
+                    </td>
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.status === "Active" ? (
+                        <span className="badge badges-Green">Active</span>
+                      ) : (
+                        <span className="badge badges-Red">Inactive</span>
+                      )}
+                    </td>
+                    {/* <td onClick={() => handleRowClick(data.id)}>
+                      {data.createdBy}
+                    </td> */}
+                    {/* <td onClick={() => handleRowClick(data.id)}>
+                      {data.createdAt}
+                    </td> */}
+                    <td onClick={() => handleRowClick(data.id)}>
+                      {data.updatedBy}
+                    </td>
+                    {/* <td onClick={() => handleRowClick(data.id)}>
+                      {data.updatedAt}
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
