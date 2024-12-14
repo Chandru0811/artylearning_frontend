@@ -41,7 +41,7 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
   }, []);
 
   return (
-    <Modal show={showViewModal} onHide={onClose} size="xl" centered>
+    <Modal show={showViewModal} onHide={onClose} size="lg" centered>
       <Modal.Header closeButton>
         <Modal.Title>Schedule Details</Modal.Title>
       </Modal.Header>
@@ -60,12 +60,18 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                       activeTab === item.time ? "active" : ""
                     }`}
                     onClick={() => setActiveTab(item.time)}
+                    // style={{
+                    //   borderTop:
+                    //     activeTab === item.time
+                    //       ? "3px solid #287f71"
+                    //       : "none",
+                    //   borderRadius: "0px",
+                    // }}
                     style={{
                       borderTop:
-                        activeTab === item.time
-                          ? "3px solid #287f71"
-                          : "none",
+                        activeTab === item.time ? "3px solid #287f71" : "none",
                       borderRadius: "0px",
+                      color: activeTab === item.time ? "orange" : "inherit",
                     }}
                   >
                     {item.time}
@@ -98,7 +104,10 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           ))}
                         </tbody>
                       </table> */}
-                      <div className="container py-4">
+                      <div
+                        className="container py-4 "
+                        style={{ fontSize: "0.85rem" }}
+                      >
                         <div className="row">
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
@@ -113,7 +122,9 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="">Lesson Outline Set Effective Start Date</p>
+                                <p className="">
+                                  Lesson Outline Set Effective Start Date
+                                </p>
                               </div>
                               <div className="col-7">
                                 <p>:&nbsp;{data.course}</p>
