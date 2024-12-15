@@ -1040,3 +1040,13 @@ table.dataTable.display > tbody > tr > th {
 .regular-font {
   font-size: 1rem;
 }
+
+/* Material React Table */
+.css-11yrv3u-MuiTableRow-root td {
+  font-size: 12px !important;
+  padding: 15px 20px !important;
+}
+
+tbody, td, tfoot, th, thead, tr {
+  border-top: none !important;
+}

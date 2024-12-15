@@ -10,7 +10,6 @@ import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 
 function ClassAdd() {
-  // const { id } = useParams();
   const navigate = useNavigate();
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
@@ -45,9 +44,15 @@ function ClassAdd() {
   const formik = useFormik({
     initialValues: {
       centerId: "",
+      centerName: "",
       courseId: "",
       className: "",
+      courseName: "",
       classType: "",
+      classCode: "",
+      userId: 0,
+      teacher: "",
+      classRoome: "",
       durationInHrs: "",
       durationInMins: "",
       startDate: new Date().toISOString().split("T")[0],
@@ -55,10 +60,8 @@ function ClassAdd() {
       startTime: "",
       endTime: "",
       day: "",
-      teacher: "",
-      classRoome: "",
       remark: "",
-      // createdBy: userName,
+      createdBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -78,7 +81,7 @@ function ClassAdd() {
       console.log(values);
 
       try {
-        const response = await api.post("/createCourseClassListings", values, {
+        const response = await api.post("/createClassSchedules", values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -122,8 +125,8 @@ function ClassAdd() {
 
   const fetchClassRoom = async (centerId) => {
     try {
-      const classRoom = await fetchAllClassRoomWithCenterIds(centerId);
-      setClassRoomData(classRoom);
+      const classRoome = await fetchAllClassRoomWithCenterIds(centerId);
+      setClassRoomData(classRoome);
       console.log("first", setClassRoomData);
     } catch (error) {
       toast.error(error.message);
@@ -142,23 +145,25 @@ function ClassAdd() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`/getAllCoursesById/${formik.values.courseId}`);
+        const response = await api.get(
+          `/getAllCoursesById/${formik.values.courseId}`
+        );
         formik.setFieldValue("durationInHrs", response.data.durationInHrs);
         formik.setFieldValue("durationInMins", response.data.durationInMins);
       } catch (error) {
         toast.error("Error Fetching Data ", error);
       }
     };
-    if(formik.values.courseId){
+    if (formik.values.courseId) {
       getData();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.courseId]);
 
   const handleCenterChange = (event) => {
     const center = event.target.value;
     formik.setFieldValue("centerId", center);
-    formik.setFieldValue("classRoom", "");
+    formik.setFieldValue("classRoome", "");
     formik.setFieldValue("userId", ""); // Reset teacher/userId
     setCourseData(null);
     setClassRoomData(null);
@@ -408,6 +413,12 @@ function ClassAdd() {
                   <option value="02">02</option>
                   <option value="03">03</option>
                   <option value="04">04</option>
+                  <option value="05">05</option>
+                  <option value="06">06</option>
+                  <option value="07">07</option>
+                  <option value="08">08</option>
+                  <option value="09">09</option>
+                  <option value="10">10</option>
                 </select>
                 {formik.touched.durationInHrs &&
                   formik.errors.durationInHrs && (
@@ -507,13 +518,13 @@ function ClassAdd() {
                   value={formik.values.day}
                 >
                   <option></option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-                  <option value="Saturday">Saturday</option>
-                  <option value="Sunday">Sunday</option>
+                  <option value="MONDAY">Monday</option>
+                  <option value="TUESDAY">Tuesday</option>
+                  <option value="WEDNESDAY">Wednesday</option>
+                  <option value="THURSDAY">Thursday</option>
+                  <option value="FRIDAY">Friday</option>
+                  <option value="SATURDAY">Saturday</option>
+                  <option value="SUNDAY">Sunday</option>
                 </select>
                 {formik.touched.day && formik.errors.day && (
                   <div className="invalid-feedback">{formik.errors.day}</div>
@@ -522,28 +533,28 @@ function ClassAdd() {
               <div class="col-md-6 col-12 mb-4">
                 <label>Teacher</label>
                 <select
-                  {...formik.getFieldProps("teacher")}
+                  {...formik.getFieldProps("userId")}
                   className={`form-select  ${
-                    formik.touched.teacher && formik.errors.teacher
+                    formik.touched.userId && formik.errors.userId
                       ? "is-invalid"
                       : ""
                   }`}
-                  name="teacher"
+                  name="userId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.teacher}
+                  value={formik.values.userId}
                 >
                   <option></option>
                   {teacherData &&
-                    teacherData.map((teacher) => (
-                      <option key={teacher.id} value={teacher.id}>
-                        {teacher.teacherNames}
+                    teacherData.map((userId) => (
+                      <option key={userId.id} value={userId.id}>
+                        {userId.teacherNames}
                       </option>
                     ))}
                 </select>
-                {formik.touched.teacher && formik.errors.teacher && (
+                {formik.touched.userId && formik.errors.userId && (
                   <div className="invalid-feedback">
-                    {formik.errors.teacher}
+                    {formik.errors.userId}
                   </div>
                 )}
               </div>
@@ -564,6 +575,9 @@ function ClassAdd() {
                   value={formik.values.startTime}
                 >
                   <option></option>
+                  <option value="02:30">02:30 am</option>
+                  <option value="03:00">03:00 am</option>
+                  <option value="04:30">04:30 am</option>
                   <option value="10:00">10:00 am</option>
                   <option value="11:30">11:30 am</option>
                 </select>
@@ -599,28 +613,28 @@ function ClassAdd() {
               <div class="col-md-6 col-12 mb-4">
                 <label>Class Room</label>
                 <select
-                  {...formik.getFieldProps("classRoom")}
+                  {...formik.getFieldProps("classRoome")}
                   className={`form-select  ${
-                    formik.touched.classRoom && formik.errors.classRoom
+                    formik.touched.classRoome && formik.errors.classRoome
                       ? "is-invalid"
                       : ""
                   }`}
-                  name="classRoom"
+                  name="classRoome"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.classRoom}
+                  value={formik.values.classRoome}
                 >
                   <option></option>
                   {classRoomData &&
-                    classRoomData.map((classRoom) => (
-                      <option key={classRoom.id} value={classRoom.id}>
-                        {classRoom.classRoomName}
+                    classRoomData.map((classRoome) => (
+                      <option key={classRoome.id} value={classRoome.id}>
+                        {classRoome.classRoomName}
                       </option>
                     ))}
                 </select>
-                {formik.touched.classRoom && formik.errors.classRoom && (
+                {formik.touched.classRoome && formik.errors.classRoome && (
                   <div className="invalid-feedback">
-                    {formik.errors.classRoom}
+                    {formik.errors.classRoome}
                   </div>
                 )}
               </div>

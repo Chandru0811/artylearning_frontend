@@ -1,129 +1,166 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link, useNavigate } from "react-router-dom"; // Use useNavigate
-import { FaEdit } from "react-icons/fa"; // No need for FaEye anymore
-import { IoMdAdd } from "react-icons/io";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../config/URL";
+import { MaterialReactTable } from "material-react-table";
+import { ThemeProvider, createTheme } from "@mui/material";
+import { CiViewColumn } from "react-icons/ci";
 import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
-import Delete from "../../components/common/Delete";
-import api from "../../config/URL";
-import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
-import { MdViewColumn } from "react-icons/md";
-import {
-  Dropdown,
-  DropdownButton,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
-
-const Center = () => {
-  const tableRef = useRef(null);
-  const navigate = useNavigate(); // Replace useHistory with useNavigate
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
-  const [datas, setDatas] = useState([]);
+import { MdOutlineModeEdit } from "react-icons/md";
+import { Delete } from "@mui/icons-material";
+const NewTable1 = () => {
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [centerManagerData, setCenterManagerData] = useState([]);
-  const [selectedManager, setSelectedManager] = useState(""); // State for selected center manager
-  const [centerName, setCenterName] = useState("");
-  const [code, setCode] = useState("");
-  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
-  const clearFilters = () => {
-    setCenterName("");
-    setCode("");
-    setEmail("");
-    setSelectedManager("");
-
-    $(tableRef.current).DataTable().search("").draw();
-  };
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true, 
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      // {
+      //   header: "Actions",
+      //   enableSorting: false,
+      //   size: 100,
+      //   cell: ({ row }) => {
+      //     const data = row.original;
+      //     return (
+      //       <div className="dropdown">
+      //         <button
+      //           className="btn btn-button btn-sm dropdown-toggle"
+      //           type="button"
+      //           data-bs-toggle="dropdown"
+      //           aria-expanded="false"
+      //         >
+      //           {/* <IoIosAddCircle
+      //             className="text-light"
+      //             style={{ fontSize: "16px" }}
+      //           />  */} 00
+      //         </button>
+      //         <ul
+      //           className="dropdown-menu"
+      //         >
+      //           <li>
+      //             <AddRegister id={data.id} onSuccess={fetchData} />
+      //           </li>
+      //           <li>
+      //             <AddBreak id={data.id} onSuccess={fetchData} />
+      //           </li>
+      //           <li>
+      //             <AddClass id={data.id} onSuccess={fetchData} />
+      //           </li>
+      //           <li>
+      //             <AddPackage id={data.id} onSuccess={fetchData} />
+      //           </li>
+      //           <li>
+      //               <Link to={`/center/edit/${data.id}`}>
+      //                 <button
+      //                   style={{
+      //                     whiteSpace: "nowrap",
+      //                     width: "100%",
+      //                   }}
+      //                   className="btn btn-sm btn-normal text-start"
+      //                 >
+      //                   <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+      //                 </button>
+      //               </Link>
+      //           </li>
+      //           <li>
+      //               <span>
+      //                 <Delete
+      //                   onSuccess={fetchData}
+      //                   path={`/deleteCenter/${data.id}`}
+      //                 />
+      //               </span>
+      //           </li>
+      //         </ul>
+      //       </div>
+      //     );
+      //   },
+      // },
+      { accessorKey: "centerName", header: "Centre Name" },
+      { accessorKey: "centerManager", header: "Centre Manager" },
+      { accessorKey: "code", header: "Code" ,size:40},
+      { accessorKey: "uenNumber", header: "UEN Number" ,size:50},
+      { accessorKey: "email", header: "Email" },
+      { accessorKey: "mobile", header: "Mobile" },
+      { accessorKey: "address", header: "Address" },
+      { accessorKey: "invoiceNotes", header: "Invoice Notes" },
+      { accessorKey: "openingDate", header: "Opening Date" },
+      { accessorKey: "bankAccountName", header: "Bank A/C Name" },
+      { accessorKey: "bankAccountNumber", header: "Bank A/C Number" },
+      { accessorKey: "bankBranch", header: "Bank Branch" },
+      { accessorKey: "bankName", header: "Bank Name" },
+      { accessorKey: "gst", header: "GST" },
+      { accessorKey: "taxRegistrationNumber", header: "Tax Reg Number" },
+      { accessorKey: "zipCode", header: "Zip Code" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
   const fetchData = async () => {
     try {
-      const centerManagerData = await fetchAllCentreManager();
-      setCenterManagerData(centerManagerData);
+      setLoading(true);
+      const response = await api.get(`/getCenterWithCustomInfo`);
+      setData(response.data); // Ensure response contains an array matching the column keys
     } catch (error) {
-      toast.error(error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllCenter");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
-    getCenterData();
-    fetchData(); // Fetch the center manager data as well
+    fetchData();
   }, []);
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllCenter");
-      setDatas(response.data);
-      initializeDataTable();
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
-
-  const handleManagerChange = (e) => {
-    setSelectedManager(e.target.value); // Set selected manager
-    const searchValue = e.target.value.toLowerCase();
-    $(tableRef.current).DataTable().search(searchValue).draw();
-  };
-
-  const extractDate = (dateString) => {
-    if (!dateString) return "";
-    return dateString.substring(0, 10); // Extracts date part "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/center/view/${id}`); // Navigate to the index page when a row is clicked
-  };
-
+  const CustomIcon = () => (
+    <CiViewColumn />
+  );
   return (
-    <div className="container my-4 center">
+    <div className="container-fluid my-4 center">
       <ol
-        className="breadcrumb my-3 px-1"
+        className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -133,209 +170,74 @@ const Center = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Centre Management
+          &nbsp;Centre Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Centre Listing
+          &nbsp;Centre Listing
         </li>
       </ol>
-      <div className="mb-3 d-flex justify-content-between">
-        <div className="individual_fliters d-lg-flex">
-          <div className="form-group mb-0 ms-2 mb-1">
-            <input
-              type="text"
-              className="form-control center_list"
-              style={{ width: "160px" }}
-              placeholder="Center Name"
-              value={centerName}
-              onChange={(e) => {
-                const searchValue = e.target.value.toLowerCase();
-                setCenterName(e.target.value);
-                $(tableRef.current).DataTable().search(searchValue).draw();
-              }}
-            />
-          </div>
-          <div className="form-group mb-0 ms-2 mb-1">
-            <input
-              type="text"
-              className="form-control center_list"
-              style={{ width: "160px" }}
-              placeholder="Code"
-              value={code}
-              onChange={(e) => {
-                const searchValue = e.target.value.toLowerCase();
-                setCode(e.target.value);
-                $(tableRef.current).DataTable().search(searchValue).draw();
-              }}
-            />
-          </div>
-          <div className="form-group mb-0 ms-2 mb-1">
-            <input
-              type="text"
-              className="form-control center_list"
-              style={{ width: "160px" }}
-              placeholder="Email"
-              value={email}
-              onChange={(e) => {
-                const searchValue = e.target.value.toLowerCase();
-                setEmail(e.target.value);
-                $(tableRef.current).DataTable().search(searchValue).draw();
-              }}
-            />
-          </div>
-          <div className="form-group mb-0 ms-2 mb-1">
-            <select
-              className="form-control center_list"
-              style={{ width: "100%" }}
-              value={selectedManager}
-              onChange={handleManagerChange}
-            >
-              <option value="">Select Center Manager</option>
-              {centerManagerData.map((manager) => (
-                <option key={manager.id} value={manager.userNames}>
-                  {manager.userNames}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group mb-0 ms-2 mb-1 ">
-            <button
-              type="button"
-              className="btn btn-sm btn-border"
-              onClick={clearFilters}
-            >
-              Clear
-            </button>
-          </div>
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <span className="text-muted">
+            This database shows the list of{" "}
+            <strong style={{ color: "#287f71" }}>Centre</strong>
+          </span>
         </div>
-
-        {storedScreens?.centerListingCreate && (
-          <Link to="/center/add">
-            <button
-              type="button"
-              className="btn btn-button btn-sm"
-              style={{ fontWeight: "600px !important" }}
-            >
-              Add <i className="bx bx-plus"></i>
-            </button>
-          </Link>
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : (
+          <ThemeProvider theme={theme}>
+            <MaterialReactTable
+              columns={columns}
+              data={data}
+              icons={{
+                ViewColumnIcon: CustomIcon,
+              }}
+              enableColumnActions={false}
+              enableColumnFilters={false}
+              enableDensityToggle={false}
+              enableFullScreenToggle={false}
+              initialState={{
+                columnVisibility: {
+                  mobile: false,
+                  gst: false,
+                  address: false,
+                  bankAccountName: false,
+                  bankAccountNumber: false,
+                  bankBranch: false,
+                  bankName: false,
+                  createdBy: false,
+                  createdAt: false,
+                  updatedBy: false,
+                  updatedAt:false,
+                  invoiceNotes: false,
+                  openingDate: false,
+                  taxRegistrationNumber: false,
+                  zipCode: false,
+                },
+              }}
+              muiTableBodyRowProps={({ row }) => ({
+                onClick: () => navigate(`/center/view/${row.original.id}`),
+                style: { cursor: "pointer" },
+              })}
+            />
+          </ThemeProvider>
         )}
       </div>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      ) : (
-        <div className="cardBorder">
-          <div className="card table-responsive p-3">
-            <table ref={tableRef} className="display">
-              <thead>
-                <tr>
-                  <th scope="col">S No</th>
-                  <th scope="col">Centre Name</th>
-                  <th scope="col">Centre Manager</th>
-                  <th scope="col">Code</th>
-                  <th scope="col">UEN Number</th>
-                  <th scope="col">Mobile</th>
-                  <th className="text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.isArray(datas) &&
-                  datas.map((data, index) => (
-                    <tr key={index} style={{ cursor: "pointer" }}>
-                      <th scope="row">{index + 1}</th>
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.centerName}
-                      </td>
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.centerManager}
-                      </td>
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.code}
-                      </td>
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.uenNumber}
-                      </td>
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.mobile}
-                      </td>
-                      <td>
-                        <div className="d-flex justify-content-center align-items-center">
-                          {storedScreens?.centerListingCreate && (
-                            <div class="dropdown">
-                              <button
-                                class="btn dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                              >
-                                <IoMdAdd />
-                              </button>
-                              <ul
-                                class="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <li>
-                                  <AddRegister
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li>
-                                  <AddBreak
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li>
-                                  <AddClass
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li>
-                                  <AddPackage
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                              </ul>
-                            </div>
-                          )}
-                          {storedScreens?.centerListingUpdate && (
-                            <Link to={`/center/edit/${data.id}`}>
-                              <button className="btn btn-sm">
-                                <FaEdit />
-                              </button>
-                            </Link>
-                          )}
-                          {storedScreens?.centerListingDelete && (
-                            <Delete
-                              onSuccess={refreshData}
-                              path={`/deleteCenter/${data.id}`}
-                            />
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default Center;
+export default NewTable1;

@@ -9,43 +9,36 @@ import { toast } from "react-toastify";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import fetchAllCentersWithIds from "../List/CenterList";
-import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
-import { useFormik } from "formik";
 
 const Class = () => {
   const tableRef = useRef(null);
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState([]);
-  const centerLocalId = localStorage.getItem("centerId");
-  const [clas, setClass] = useState("");
-  const [status, setStatus] = useState("");
-  const [day, setDay] = useState("");
-  const [classGroupType, setClassGroupType] = useState("");
-  const [courseData, setCourseData] = useState(null);
-  const [teacherData, setTeacherData] = useState(null);
-  const [centerId, setCenterId] = useState("");
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [courseData, setCourseData] = useState([]);
+  const [teacherData, setTeacherData] = useState([]);
 
-  const formik = useFormik({
-    initialValues: {
-      centerId: "",
-      courseId: "",
-      className: "",
-      // createdBy: userName,
-    },
-  });
+  const [centerId, setCenterId] = useState("");
+  const [courseId, setCourseId] = useState("");
+  const [classCode, setClassCode] = useState("");
+  const [userId, setUserId] = useState("");
+  const [classType, setClassType] = useState("");
 
   const getClassData = async () => {
     try {
       const params = {};
-
       if (centerId) params.centerId = centerId;
+      if (courseId) params.courseId = courseId;
+      if (classCode) params.classCode = classCode;
+      if (userId) params.userId = userId;
+      if (classType) params.classType = classType;
       const queryParams = new URLSearchParams(params).toString();
-      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
+      const response = await api.get(`/getClassWithCustomInfo?${queryParams}`);
       setDatas(response.data);
+      console.log("Class Filter Data:",response.data);
       setLoading(false);
     } catch (error) {
       toast.error("Error Fetching Data : ", error);
@@ -66,15 +59,6 @@ const Class = () => {
     }
   };
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
       const table = $(tableRef.current).DataTable();
@@ -94,58 +78,34 @@ const Class = () => {
     }
   };
 
-  const fetchCourses = async (centerId) => {
-    try {
-      const courseData = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courseData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const fetchTeacher = async (centerId) => {
-    try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setTeacherData(teacher);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const handleCenterChange = (event) => {
-    const center = event.target?.value;
-    setCenterId(center);
-    formik.setFieldValue("centerId", center);
-    formik.setFieldValue("classRoom", "");
-    formik.setFieldValue("userId", "");
-    setCourseData(null);
-    setTeacherData(null);
-    fetchCourses(center);
-    fetchTeacher(center);
-  };
-
   const refreshData = async () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllCourseClassListings");
+      const params = {};
+      if (centerId) params.centerId = centerId;
+      if (courseId) params.courseId = courseId;
+      if (classCode) params.classCode = classCode;
+      if (userId) params.userId = userId;
+      if (classType) params.classType = classType;
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(`/getClassWithCustomInfo?${queryParams}`);
       setDatas(response.data);
+      console.log("Class Filter Data:",response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      toast.error("Error Fetching Data : ", error);
     }
   };
 
   const clearFilters = () => {
     setCenterId("");
-    setCourseData("");
-    setClass("");
-    setTeacherData("");
-    setClassGroupType("");
-    setDay("");
-    setStatus("");
-
-    $(tableRef.current).DataTable().search("").draw();
+    setCourseId("");
+    setClassCode("");
+    setClassType("");
+    setUserId("");
+    getClassData();
+    // $(tableRef.current).DataTable().search("").draw();
   };
 
   const handleRowClick = (id) => {
@@ -168,10 +128,22 @@ const Class = () => {
   }, [datas]);
 
   useEffect(() => {
-    if (centerId !== undefined && centerId !== "") {
+    if (centerLocalId) {
       getClassData();
     }
-  }, [centerData, centerId, centerLocalId]);
+  }, [centerData, centerLocalId]);
+
+  useEffect(() => {
+    if (!loading && datas.length > 0) {
+        initializeDataTable();
+    }
+    return () => {
+        if ($.fn.DataTable.isDataTable(tableRef.current)) {
+            destroyDataTable();
+        }
+    };
+}, [datas, loading]);
+
 
   return (
     <div className="container my-4 center">
@@ -193,6 +165,7 @@ const Class = () => {
           &nbsp;Class
         </li>
       </ol>
+
       <div className="card">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
@@ -215,9 +188,9 @@ const Class = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
-                style={{ width: "100%" }}
-                onChange={(e) => handleCenterChange(e.target.value)}
                 name="centerId"
+                style={{ width: "100%" }}
+                onChange={(e) => setCenterId(e.target.value)}
                 value={centerId}
               >
                 {centerData?.map((center) => (
@@ -231,9 +204,9 @@ const Class = () => {
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
-                onChange={(e) => setCourseData(e.target.value)}
-                name="courseData"
-                value={courseData}
+                name="courseId"
+                onChange={(e) => setCourseId(e.target.value)}
+                value={courseId}
               >
                 <option selected>Select a Course</option>
                 {courseData &&
@@ -247,20 +220,21 @@ const Class = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="classCode"
                 className="form-control form-control-sm center_list"
                 style={{ width: "100%" }}
                 placeholder="Class Code"
-                onChange={(e) => setClass(e.target.value)}
-                value={clas}
+                onChange={(e) => setClassCode(e.target.value)}
+                value={classCode}
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
-                onChange={(e) => setCenterId(e.target.value)}
-                name="teacherData"
-                value={teacherData}
+                onChange={(e) => setUserId(e.target.value)}
+                name="userId"
+                value={userId}
               >
                 <option selected>Select a Teacher</option>
                 {teacherData &&
@@ -277,45 +251,14 @@ const Class = () => {
               <div className="form-group mb-0 ms-2 mb-1">
                 <select
                   className="form-select form-select-sm center_list"
+                  name="classCode"
                   style={{ width: "100%" }}
-                  onChange={(e) => setCenterId(e.target.value)}
-                  name="classGroupType"
-                  value={classGroupType}
+                  onChange={(e) => setClassType(e.target.value)}
+                  value={classCode}
                 >
-                  <option selected>Select a Class Group Type</option>
+                  <option selected>Select Class Type</option>
                   <option value="Group">Group</option>
                   <option value="Individual">Individual</option>
-                </select>
-              </div>
-              <div className="form-group mb-0 ms-2 mb-1">
-                <select
-                  className="form-select form-select-sm center_list"
-                  style={{ width: "100%" }}
-                  onChange={(e) => setCenterId(e.target.value)}
-                  name="day"
-                  value={day}
-                >
-                  <option selected>Select a Day</option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thrusday">Thrusday</option>
-                  <option value="Friday">Friday</option>
-                  <option value="Saturday">Saturday</option>
-                  <option value="Sunday">Sunday</option>
-                </select>
-              </div>
-              <div className="form-group mb-0 ms-2 mb-1">
-                <select
-                  className="form-select form-select-sm center_list"
-                  style={{ width: "100%" }}
-                  onChange={(e) => setCenterId(e.target.value)}
-                  name="status"
-                  value={status}
-                >
-                  <option selected>Select a Status</option>
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
                 </select>
               </div>
               <div className="form-group mb-0 ms-2 mb-1 ">
@@ -379,28 +322,15 @@ const Class = () => {
                   <th className="text-muted" scope="col">
                     Holiday Title
                   </th>
-
                   <th className="text-muted" scope="col">
                     Class Code
                   </th>
                   <th className="text-muted" scope="col">
                     Status
                   </th>
-                  {/* <th className="text-muted" scope="col">
-                    Created By
-                  </th> */}
-
-                  {/* <th className="text-muted" scope="col">
-                    Created At
-                  </th> */}
-
                   <th className="text-muted" scope="col">
                     Updated By
                   </th>
-
-                  {/* <th className="text-muted" scope="col">
-                    Updated At
-                  </th> */}
                 </tr>
               </thead>
               <tbody>
@@ -465,27 +395,21 @@ const Class = () => {
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.centerName}
                     </td>
-
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.courseId}
                     </td>
-
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.className}
                     </td>
-
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.classType}
                     </td>
-
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.startDate}
                     </td>
-
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.endDate}
                     </td>
-
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.holidayTitle}
                     </td>
@@ -499,18 +423,9 @@ const Class = () => {
                         <span className="badge badges-Red">Inactive</span>
                       )}
                     </td>
-                    {/* <td onClick={() => handleRowClick(data.id)}>
-                      {data.createdBy}
-                    </td> */}
-                    {/* <td onClick={() => handleRowClick(data.id)}>
-                      {data.createdAt}
-                    </td> */}
                     <td onClick={() => handleRowClick(data.id)}>
                       {data.updatedBy}
                     </td>
-                    {/* <td onClick={() => handleRowClick(data.id)}>
-                      {data.updatedAt}
-                    </td> */}
                   </tr>
                 ))}
               </tbody>

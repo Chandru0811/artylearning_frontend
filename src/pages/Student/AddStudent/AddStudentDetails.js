@@ -237,7 +237,7 @@ const AddStudentDetails = forwardRef(
               nationality: leadData.nationality || "",
               primaryLanguage: leadData.primaryLanguage || "",
               referByParent: leadData.mothersFullName || leadData.fathersFullName || "",
-              referByStudent: leadData.referBy || "",
+              referByStudent: leadData.studentId || "",
               remark: leadData.remark || "",
               allowMagazine: leadData.allowMagazine || "",
               allowSocialMedia: leadData.allowSocialMedia || "",
@@ -501,6 +501,7 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByParent}
+                        readOnly
                       />
                       {formik.touched.referByParent &&
                         formik.errors.referByParent && (
@@ -690,15 +691,16 @@ const AddStudentDetails = forwardRef(
                         {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
-                      {/* <input
+                      <input
                         className="form-control "
                         type="text"
                         name="referByStudent"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.referByStudent}
-                      /> */}
-                      <select
+                        readOnly
+                      />
+                      {/* <select
                         name="referByStudent"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -712,7 +714,7 @@ const AddStudentDetails = forwardRef(
                               {student.studentNames}
                             </option>
                           ))}
-                      </select>
+                      </select> */}
                       {formik.touched.referByStudent &&
                         formik.errors.referByStudent && (
                           <div className="error text-danger ">
