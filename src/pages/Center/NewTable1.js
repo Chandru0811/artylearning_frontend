@@ -10,7 +10,20 @@ import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { Delete } from "@mui/icons-material";
+import fetchAllCentreManager from "../List/CentreMangerList";
+import { toast } from "react-toastify";
+import { IoIosAddCircle } from "react-icons/io";
+
 const NewTable1 = () => {
+  const [filters, setFilters] = useState({
+    centerName: "",
+    centerCode: "",
+    email: "",
+    centerManagerId: "",
+  });
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [centerManagerData, setCenterManagerData] = useState([]);
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -20,78 +33,93 @@ const NewTable1 = () => {
       {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
-        enableSorting: true, 
+        enableSorting: true,
+        enableHiding: false,
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      // {
-      //   header: "Actions",
-      //   enableSorting: false,
-      //   size: 100,
-      //   cell: ({ row }) => {
-      //     const data = row.original;
-      //     return (
-      //       <div className="dropdown">
-      //         <button
-      //           className="btn btn-button btn-sm dropdown-toggle"
-      //           type="button"
-      //           data-bs-toggle="dropdown"
-      //           aria-expanded="false"
-      //         >
-      //           {/* <IoIosAddCircle
-      //             className="text-light"
-      //             style={{ fontSize: "16px" }}
-      //           />  */} 00
-      //         </button>
-      //         <ul
-      //           className="dropdown-menu"
-      //         >
-      //           <li>
-      //             <AddRegister id={data.id} onSuccess={fetchData} />
-      //           </li>
-      //           <li>
-      //             <AddBreak id={data.id} onSuccess={fetchData} />
-      //           </li>
-      //           <li>
-      //             <AddClass id={data.id} onSuccess={fetchData} />
-      //           </li>
-      //           <li>
-      //             <AddPackage id={data.id} onSuccess={fetchData} />
-      //           </li>
-      //           <li>
-      //               <Link to={`/center/edit/${data.id}`}>
-      //                 <button
-      //                   style={{
-      //                     whiteSpace: "nowrap",
-      //                     width: "100%",
-      //                   }}
-      //                   className="btn btn-sm btn-normal text-start"
-      //                 >
-      //                   <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-      //                 </button>
-      //               </Link>
-      //           </li>
-      //           <li>
-      //               <span>
-      //                 <Delete
-      //                   onSuccess={fetchData}
-      //                   path={`/deleteCenter/${data.id}`}
-      //                 />
-      //               </span>
-      //           </li>
-      //         </ul>
-      //       </div>
-      //     );
-      //   },
-      // },
-      { accessorKey: "centerName", header: "Centre Name" },
-      { accessorKey: "centerManager", header: "Centre Manager" },
-      { accessorKey: "code", header: "Code" ,size:40},
-      { accessorKey: "uenNumber", header: "UEN Number" ,size:50},
-      { accessorKey: "email", header: "Email" },
-      { accessorKey: "mobile", header: "Mobile" },
+      {
+        accessorKey: "id",
+        enableHiding: false,
+        header: "",
+        size: 40,
+        Cell: ({ row }) => (
+          <div className="dropdown">
+            <button
+              className="btn btn-button btn-sm dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              data-bs-auto-close="outside"
+            >
+              <IoIosAddCircle
+                className="text-light"
+                style={{ fontSize: "16px" }}
+              />
+            </button>
+            <ul
+              className="dropdown-menu dropdown-menu-end"
+              aria-labelledby="dropdownMenuButton"
+            >
+              <li>
+                <AddRegister id={row.original.id} onSuccess={fetchData} />
+              </li>
+              <li>
+                <AddBreak id={row.original.id} onSuccess={fetchData} />
+              </li>
+              <li>
+                <AddClass id={row.original.id} onSuccess={fetchData} />
+              </li>
+              <li>
+                <AddPackage id={row.original.id} onSuccess={fetchData} />
+              </li>
+              <li>
+                {storedScreens?.centerListingUpdate && (
+                  <Link to={`/center/edit/${row.original.id}`}>
+                    <button
+                      style={{
+                        whiteSpace: "nowrap",
+                        width: "100%",
+                      }}
+                      className="btn btn-sm btn-normal text-start"
+                    >
+                      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+                    </button>
+                  </Link>
+                )}
+              </li>
+              <li>
+                {storedScreens?.centerListingDelete && (
+                  <span>
+                    <Delete
+                      onSuccess={fetchData}
+                      path={`/deleteCenter/${row.original.id}`}
+                    />
+                  </span>
+                )}
+              </li>
+            </ul>
+          </div>
+        ),
+      },
+      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      {
+        accessorKey: "centerManager",
+        enableHiding: false,
+        header: "Centre Manager",
+      },
+      { accessorKey: "code", header: "Code", enableHiding: false, size: 40 },
+      {
+        accessorKey: "uenNumber",
+        header: "UEN Number",
+        enableHiding: false,
+        size: 50,
+      },
+      { accessorKey: "email", enableHiding: false, header: "Email" },
+      { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
       { accessorKey: "address", header: "Address" },
       { accessorKey: "invoiceNotes", header: "Invoice Notes" },
       { accessorKey: "openingDate", header: "Opening Date" },
@@ -122,11 +150,32 @@ const NewTable1 = () => {
     []
   );
 
+  const fetchCenterManagerData = async () => {
+    try {
+      const centerManagerData = await fetchAllCentreManager();
+      setCenterManagerData(centerManagerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchCenterManagerData(); // Fetch the center manager data as well
+  }, []);
+
+  // const debounce = (func, delay) => {
+  //   let timer;
+  //   return (...args) => {
+  //     clearTimeout(timer);
+  //     timer = setTimeout(() => func(...args), delay);
+  //   };
+  // };
+
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/getCenterWithCustomInfo`);
-      setData(response.data); // Ensure response contains an array matching the column keys
+      const queryParams = new URLSearchParams(filters).toString();
+      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
+      setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -136,7 +185,7 @@ const NewTable1 = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [filters]);
 
   const theme = createTheme({
     components: {
@@ -154,11 +203,24 @@ const NewTable1 = () => {
     },
   });
 
-  const CustomIcon = () => (
-    <CiViewColumn />
-  );
+  const CustomIcon = () => <CiViewColumn />;
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      centerName: "",
+      centerCode: "",
+      email: "",
+      centerManagerId: "",
+    });
+  };
+
   return (
-    <div className="container-fluid my-4 center">
+    <div className="container-fluid px-2 my-4 center">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -187,6 +249,83 @@ const NewTable1 = () => {
             <strong style={{ color: "#287f71" }}>Centre</strong>
           </span>
         </div>
+        <div className="mb-3 d-flex justify-content-between">
+          <div className="individual_fliters d-lg-flex ">
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="centerName"
+                value={filters.centerName}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Center Name"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="code"
+                value={filters.code}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Code"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="email"
+                value={filters.email}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Email"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                name="centerManagerId"
+                value={filters.centerManagerId}
+                onChange={handleFilterChange}
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+              >
+                <option value="">Select Centre Manager</option>
+                {centerManagerData.map((manager) => (
+                  <option key={manager.id} value={manager.id}>
+                    {manager.userNames}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group mb-2 ms-2">
+              <button
+                type="button"
+                onClick={clearFilter}
+                className="btn btn-sm btn-border"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+
+          {storedScreens?.centerListingCreate && (
+            <Link to="/center/add">
+              <button
+                type="button"
+                className="btn btn-button btn-sm me-2"
+                style={{ fontWeight: "600px !important" }}
+              >
+                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+              </button>
+            </Link>
+          )}
+        </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -211,7 +350,6 @@ const NewTable1 = () => {
               enableFullScreenToggle={false}
               initialState={{
                 columnVisibility: {
-                  mobile: false,
                   gst: false,
                   address: false,
                   bankAccountName: false,
@@ -221,17 +359,13 @@ const NewTable1 = () => {
                   createdBy: false,
                   createdAt: false,
                   updatedBy: false,
-                  updatedAt:false,
+                  updatedAt: false,
                   invoiceNotes: false,
                   openingDate: false,
                   taxRegistrationNumber: false,
                   zipCode: false,
                 },
               }}
-              muiTableBodyRowProps={({ row }) => ({
-                onClick: () => navigate(`/center/view/${row.original.id}`),
-                style: { cursor: "pointer" },
-              })}
             />
           </ThemeProvider>
         )}

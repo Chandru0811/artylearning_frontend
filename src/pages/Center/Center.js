@@ -13,7 +13,6 @@ import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
-import fetchAllCentersWithIds from "../List/CenterList";
 
 const Centre = () => {
   const tableRef = useRef(null);
@@ -22,18 +21,18 @@ const Centre = () => {
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerManagerData, setCenterManagerData] = useState([]);
-  const [centerData, setCenterData] = useState([]);
-  const centerLocalId = localStorage.getItem("centerId");
-  const [centerId, setCenterId] = useState("");
   const [centerCode, setCenterCode] = useState();
+  const [centerName, setCenterName] = useState();
   const [email, setEmail] = useState();
   const [centerManager, setcenterManager] = useState();
 
   const getCenterData = async () => {
+    setLoading(true);
+    destroyDataTable();
     try {
       const params = {};
 
-      if (centerId) params.centerId = centerId;
+      if (centerName) params.centerName = centerName;
       if (centerCode) params.centerCode = centerCode;
       if (email) params.email = email;
       if (centerManager) params.centerManager = centerManager;
@@ -43,20 +42,15 @@ const Centre = () => {
       setLoading(false);
     } catch (error) {
       toast.error("Error Fetching Data : ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchData = async () => {
     try {
       const centerManagerData = await fetchAllCentreManager();
-      const centerData = await fetchAllCentersWithIds();
-      if (centerLocalId !== null && centerLocalId !== "undefined") {
-        setCenterId(centerLocalId[0]);
-      } else if (centerData !== null && centerData.length > 0) {
-        setCenterId(centerData[0].id);
-      }
       setCenterManagerData(centerManagerData);
-      setCenterData(centerData);
     } catch (error) {
       toast.error(error);
     }
@@ -70,6 +64,15 @@ const Centre = () => {
       responsive: true,
       columnDefs: [{ orderable: false, targets: 1 }],
     });
+
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    }
   };
 
   const destroyDataTable = () => {
@@ -80,12 +83,12 @@ const Centre = () => {
   };
 
   const refreshData = async () => {
-    destroyDataTable();
     setLoading(true);
+    destroyDataTable();
     try {
       const params = {};
 
-      if (centerId) params.centerId = centerId;
+      if (centerName) params.centerName = centerName;
       if (centerCode) params.centerCode = centerCode;
       if (email) params.email = email;
       if (centerManager) params.centerManager = centerManager;
@@ -100,23 +103,12 @@ const Centre = () => {
   };
 
   const handleRowClick = (id) => {
-    navigate(`/center/view/${id}`); // Navigate to the index page when a row is clicked
+    navigate(`/center/view/${id}`);
   };
 
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
-
-  useEffect(() => {
     fetchData(); // Fetch the center manager data as well
-  }, [centerLocalId]);
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -128,18 +120,18 @@ const Centre = () => {
   }, [loading]);
 
   const clearFilters = () => {
-    setCenterId(""); // Reset centerId to empty string
-    setCenterCode(""); // Reset centerCode to empty string
-    setEmail(""); // Reset email to empty string
-    setcenterManager(""); // Reset centerManager to empty string
-    refreshData(); // Optional: Refresh data to fetch all default entries
+    setCenterName("");
+    setCenterCode(""); 
+    setEmail("");
+    setcenterManager(""); 
+    refreshData(); 
   };
 
   useEffect(() => {
-    if (centerId !== undefined && centerId !== "") {
-      getCenterData();
-    }
-  }, [centerData, centerId, centerLocalId, centerCode, centerManager, email]);
+    getCenterData();
+  }, [centerName, centerCode, centerManager, email]);
+
+
 
   return (
     <div className="container-fluid my-4 center">
@@ -181,19 +173,16 @@ const Centre = () => {
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
-              <select
-                className="form-select form-select-sm center_list"
-                style={{ width: "100%" }}
-                onChange={(e) => setCenterId(e.target.value)}
-                name="centerId"
-                value={centerId}
-              >
-                {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
-                    {center.centerNames}
-                  </option>
-                ))}
-              </select>
+              <input
+                type="text"
+                onChange={(e) => setCenterName(e.target.value)}
+                name="centerName"
+                value={centerName}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Center Name"
+                autoComplete="off"
+              />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
@@ -204,6 +193,7 @@ const Centre = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Code"
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -215,6 +205,7 @@ const Centre = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Email"
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
