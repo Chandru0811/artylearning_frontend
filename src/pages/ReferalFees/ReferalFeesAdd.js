@@ -38,7 +38,6 @@ function ReferalFeesAdd({ onSuccess }) {
       .number()
       .typeError("*Referral Fee must be a number")
       .positive("*Referral Fee must be a positive number")
-      .integer("*Referral Fee must be an integer")
       .required("*Referral Fee is required"),
   });
 

@@ -30,7 +30,11 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
   const validationSchema = yup.object().shape({
     centerId: yup.string().required("*Centre is required"),
     effectiveDate: yup.string().required("*Effective Date is required"),
-    referralFee: yup.string().required("*Referal Fee is required"),
+    referralFee: yup
+      .number()
+      .typeError("*Referral Fee must be a number")
+      .positive("*Referral Fee must be a positive number")
+      .required("*Referral Fee is required"),
   });
 
   const formik = useFormik({
@@ -112,7 +116,7 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleShow}>
-      <MdOutlineModeEdit /> Edit
+        <MdOutlineModeEdit /> Edit
       </button>
 
       <Modal

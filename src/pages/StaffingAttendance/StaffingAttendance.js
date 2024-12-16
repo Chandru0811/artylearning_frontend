@@ -192,6 +192,12 @@ const StaffingAttendance = () => {
                       Employee Name
                     </th>
                     <th className="text-muted" scope="col">
+                    Check In
+                    </th>
+                    <th className="text-muted" scope="col">
+                    Check Out
+                    </th>
+                    <th className="text-muted" scope="col">
                       Date
                     </th>
                     <th className="text-muted" scope="col">
@@ -273,6 +279,12 @@ const StaffingAttendance = () => {
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
                           {data.employeeName}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.checkIn}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.checkOut}
                         </td>
                         <td onClick={() => handleRowClick(data.id)}>
                           {data.date}

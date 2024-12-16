@@ -23,9 +23,10 @@ const validationSchema = Yup.object().shape({
   citizenship: Yup.string().required("*Citizenship is required"),
   role: Yup.string().required("*Role is required"),
   file: Yup.mixed().required("*Photo is required"),
-  password: Yup.string()
-    .min(8, "*Password must be at least 8 characters")
-    .required("*Password is required"),
+  password: Yup
+  .string()
+  .matches(/^\S*$/, "*Password must not contain spaces.")
+  .required("*Enter the valid Password"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "*Passwords must match")
     .required("*Confirm Password is required"),

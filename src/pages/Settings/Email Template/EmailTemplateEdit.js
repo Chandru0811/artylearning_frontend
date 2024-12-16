@@ -83,7 +83,7 @@ function EmailTemplateEdit({ id, onSuccess }) {
         // formData.append("description", values.description);
         const response = await api.put(`/updateEmailTemplate/${id}`, values);
         if (response.status === 200) {
-          toast.success(response.data.message);
+          toast.success("The email template has been successfully updated");
           onSuccess();
           setShow(false);
         } else {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IoIosSettings, IoIosMail } from "react-icons/io";
+import { IoIosSettings, IoIosMail, IoIosMedkit } from "react-icons/io";
 import { FaBook, FaUsers, FaPlus } from "react-icons/fa";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { BiSolidMessageRounded } from "react-icons/bi";
@@ -21,6 +21,7 @@ import PasswordModal from "./StudentNewView/PasswordModal";
 import AddTaskNoteModal from "./StudentNewView/AddTaskNoteModal";
 import TransferOutModal from "../StudentMovement/TransferOut/TransferOutModal";
 import NoImage from "../../assets/images/no-photo.png";
+import { Modal, Button } from "react-bootstrap";
 
 function StudentNewView() {
   const [activeTab, setActiveTab] = useState("tab1");
@@ -34,6 +35,48 @@ function StudentNewView() {
   const centerId = data.centerId;
   const table1Ref = useRef();
   const table2Ref = useRef();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const [responseMessage, setResponseMessage] = useState("");
+
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file));
+      setProfileImage(file);
+    }
+  };
+
+  const handleUploadImage = async () => {
+    if (!profileImage) {
+      alert("Please select an image before uploading.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("profileImage", profileImage);
+
+    try {
+      const imageResponse = await api.put(`/updateImageOnly/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (imageResponse.data.success) {
+        setResponseMessage(imageResponse.data.message);
+        setProfileImage(null);
+        handleCloseModal();
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setResponseMessage("Failed to update profile image.");
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -51,6 +94,7 @@ function StudentNewView() {
       try {
         const response = await api.get(`/getAllStudentById/${id}`);
         setData(response.data);
+        console.log("responseData", response.data);
         const primaryParent = response.data.studentParentsDetails.find(
           (parent) => parent.primaryContact === true
         );
@@ -120,6 +164,20 @@ function StudentNewView() {
     pdf.save("student-details.pdf");
   };
 
+  const handleClick = async () => {
+    try {
+      const response = await api.post(`/resendWelcomeMail?${id}`);
+
+      toast.success(
+        response.data.message || "Welcome mail resent successfully!"
+      );
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to resend the welcome mail."
+      );
+    }
+  };
+
   return (
     <section className="p-3">
       <ol
@@ -150,6 +208,7 @@ function StudentNewView() {
         <button
           className="btn btn-border btn-sm me-2 stdViewBtn"
           style={{ padding: "3px 5px", fontSize: "12px" }}
+          onClick={handleClick}
         >
           <IoIosMail size={18} />
           &nbsp;Resend Welcome Mail
@@ -167,13 +226,21 @@ function StudentNewView() {
         <div className="row mb-3">
           <div className="col-md-3 col-12 mb-3">
             <div className="card" style={{ padding: "10px" }}>
-            <div className="d-flex flex-column align-items-center">
-              
+              <div className="d-flex flex-column align-items-center">
+                <div className="d-flex justify-content-around align-items-end ms-3">
                   <img
-                    src={data.profileImage ||NoImage}
+                    src={data.profileImage || NoImage}
                     className="img-fluid stdImg"
                     alt=""
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = NoImage;
+                    }}
                   />
+                  <p onClick={handleOpenModal} style={{ cursor: "pointer" }}>
+                    <IoIosMedkit />
+                  </p>
+                </div>
                 <p className="fw-medium mt-2 mb-1">
                   {data.studentName || "--"}
                 </p>
@@ -1367,6 +1434,45 @@ function StudentNewView() {
           </div>
         </div>
       </div>
+
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Profile Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="mb-3">
+            <label htmlFor="profileImage" className="form-label">
+              Select a new profile image:
+            </label>
+            <input
+              type="file"
+              className="form-control"
+              id="profileImage"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+            {selectedImage && (
+              <div className="mt-3">
+                <p>Preview:</p>
+                <img
+                  src={selectedImage}
+                  alt="Preview"
+                  className="img-fluid"
+                  style={{ maxWidth: "100px", borderRadius: "50%" }}
+                />
+              </div>
+            )}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleUploadImage}>
+            Update Image
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </section>
   );
 }
