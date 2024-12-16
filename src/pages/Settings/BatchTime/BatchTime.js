@@ -3,71 +3,41 @@ import "datatables.net-dt";
 import "datatables.net-responsive-dt";
 import $ from "jquery";
 import api from "../../../config/URL";
-import Delete from "../../../components/common/Delete";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
-import { MdViewColumn } from "react-icons/md";
 import BatchTimeEdit from "./BatchTimeEdit";
 import { IoIosAddCircle } from "react-icons/io";
 
 const BatchTime = () => {
   const tableRef = useRef(null);
-  // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [extraData, setExtraData] = useState(false);
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await api.get("/getAllSHGSetting");
-  //       setDatas(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getData();
-  // }, []);
+//  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}"); 
 
   useEffect(() => {
-    setTimeout(() => {
-      const fetchedData = [
-        {
-          day: "Monday",
-          batchTime: "2.30 PM, 3.30 PM",
-        },
-        {
-          day: "Tuesday",
-          batchTime: "2.30 PM",
-        },
-        {
-          day: "Wednesday",
-          batchTime: "2.30 PM",
-        },
-        {
-          day: "Thursday",
-          batchTime: "2.30 PM",
-        },
-        {
-          day: "Friday",
-          batchTime: "2.30 PM",
-        },
-        {
-          day: "Saturday",
-          batchTime: "2.30 PM",
-        },
-        {
-          day: "Sunday",
-          batchTime: "2.30 PM",
-        },
-      ];
-      setDatas(fetchedData);
-      setLoading(false);
-    });
+    const getData = async () => {
+      try {
+        const response = await api.get("/getAllBatches");
+        setDatas(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getData();
   }, []);
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
+    }
+  }, [datas]);
 
   useEffect(() => {
     if (!loading) {
@@ -80,7 +50,6 @@ const BatchTime = () => {
 
   const initializeDataTable = () => {
     if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
       return;
     }
     $(tableRef.current).DataTable({
@@ -100,43 +69,39 @@ const BatchTime = () => {
     destroyDataTable();
     setLoading(true);
     try {
-      const response = await api.get("/getAllSHGSetting");
+      const response = await api.get("/getAllBatches");
       setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      initializeDataTable();
     } catch (error) {
       console.error("Error refreshing data:", error);
     }
     setLoading(false);
   };
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
 
   const handleRowClick = (id) => {
-    navigate(`/batchtime`); // Navigate to the index page when a row is clicked
+    navigate(`/batchtime`);
   };
 
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+  const formatBatchTimes = (batchTimes) => {
+    if (!batchTimes) return "";
+    const batchTimesString = String(batchTimes);
+
+    const times = batchTimesString.includes(",")
+      ? batchTimesString.split(",").map((time) => time.trim())
+      : batchTimesString.match(/.{1,5}/g) || [];
+
+    const convertTo12Hour = (time) => {
+      const [hour, minute] = time.split(":").map(Number);
+      if (isNaN(hour) || isNaN(minute)) return time;
+      const period = hour >= 12 ? "PM" : "AM";
+      const hour12 = hour % 12 || 12;
+      return `${hour12}:${minute.toString().padStart(2, "0")} ${period}`;
+    };
+
+    const formattedTimes = times.map(convertTo12Hour);
+
+    return formattedTimes.join(", ");
+  };
 
   return (
     <div className="container-fluid my-4 center">
@@ -213,7 +178,6 @@ const BatchTime = () => {
                       <tr
                         key={index}
                         style={{
-                          // backgroundColor: "#fff !important",
                           cursor: "pointer",
                         }}
                       >
@@ -222,40 +186,40 @@ const BatchTime = () => {
                         </th>
                         <td>
                           <div className="d-flex justify-content-center align-items-center">
-                            {/* {storedScreens?.centerListingCreate && ( */}
-                            <div className="dropdown">
-                              <button
-                                className="btn btn-button btn-sm dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                              >
-                                <IoIosAddCircle
-                                  className="text-light"
-                                  style={{ fontSize: "16px" }}
-                                />
-                              </button>
-                              <ul
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <li>
-                                  <BatchTimeEdit
-                                    id={data.id}
-                                    onSuccess={refreshData}
+                             {/* {storedScreens?.batchtimeSettingCreate && (    */}
+                              <div className="dropdown">
+                                <button
+                                  className="btn btn-button btn-sm dropdown-toggle"
+                                  type="button"
+                                  id="dropdownMenuButton"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                >
+                                  <IoIosAddCircle
+                                    className="text-light"
+                                    style={{ fontSize: "16px" }}
                                   />
-                                </li>
-                              </ul>
-                            </div>
+                                </button>
+                                <ul
+                                  className="dropdown-menu"
+                                  aria-labelledby="dropdownMenuButton"
+                                >
+                                  <li>
+                                    <BatchTimeEdit
+                                      id={data.batchId}
+                                      onSuccess={refreshData}
+                                    />
+                                  </li>
+                                </ul>
+                              </div>
                             {/* )} */}
                           </div>
                         </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.day}
+                        <td onClick={() => handleRowClick(data.batchId)}>
+                          {data.batchDay}
                         </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.batchTime}
+                        <td onClick={() => handleRowClick(data.batchId)}>
+                          {formatBatchTimes(data.batchTimes)}
                         </td>
                       </tr>
                     ))}
