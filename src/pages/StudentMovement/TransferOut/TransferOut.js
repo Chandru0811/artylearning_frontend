@@ -1,36 +1,147 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link } from "react-router-dom";
+import React, { useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 
 const TransferOut = () => {
-  const tableRef = useRef(null);
-  const [centerName, setCenterName] = useState("");
-  const [studentId, setStudentId] = useState("");
-  const [studentName, setStudentName] = useState("");
-
-  const clearFilters = () => {
-    setCenterName("");
-    setStudentId("");
-    setStudentName("");
-
-    $(tableRef.current).DataTable().search("").draw();
-  };
+  const [filters, setFilters] = useState({
+    centerName: "",
+    transferTo: "",
+    studentName: "",
+  });
 
   const [actions, setActions] = useState({
     1: "approved",
+    2: "rejected",
   });
 
-  useEffect(() => {
-    const table = $(tableRef.current).DataTable({
-      responsive: true,
-    });
+  const data = [
+    {
+      id: 1,
+      centerName: "Center A",
+      transferTo: "Center B",
+      studentId: "S001",
+      studentName: "John Doe",
+      currentCourse: "Math",
+      currentClass: "10th Grade",
+      lastLessonDate: "2024-12-15",
+      preferDays: "Monday, Wednesday",
+      centreRemark: "Good progress",
+      createdBy: "Admin",
+      createdAt: "2024-12-01",
+      updatedBy: "Manager",
+      updatedAt: "2024-12-10",
+    },
+    {
+      id: 2,
+      centerName: "Center C",
+      transferTo: "Center D",
+      studentId: "S002",
+      studentName: "Jane Smith",
+      currentCourse: "Science",
+      currentClass: "9th Grade",
+      lastLessonDate: "2024-12-14",
+      preferDays: "Tuesday, Thursday",
+      centreRemark: "Excellent",
+      status: "Active",
+      createdBy: "Teacher",
+      createdAt: "2024-12-02",
+      updatedBy: "Admin",
+      updatedAt: "2024-12-12",
+    },
+  ];
 
-    return () => {
-      table.destroy();
-    };
-  }, []);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      {
+        accessorKey: "transferTo",
+        enableHiding: false,
+        header: "Transfer To",
+      },
+      {
+        accessorKey: "studentId",
+        header: "Student ID",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        accessorKey: "studentName",
+        header: "Student Name",
+        enableHiding: false,
+        size: 50,
+      },
+      {
+        accessorKey: "currentCourse",
+        enableHiding: false,
+        header: "Current Course",
+      },
+      {
+        accessorKey: "currentClass",
+        enableHiding: false,
+        header: "Current Class",
+      },
+      {
+        accessorKey: "lastLessonDate",
+        enableHiding: false,
+        header: "Last Lesson Date",
+      },
+      { accessorKey: "preferDays", enableHiding: false, header: "Prefer Days" },
+      {
+        accessorKey: "centreRemark",
+        enableHiding: false,
+        header: "Centre Remark",
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+      {
+        accessorKey: "id",
+        header: "Action",
+        Cell: ({ row }) => {
+          const rowId = row.original.id;
+          return (
+            <button
+              className={`btn btn-${
+                actions[rowId] === "approved" ? "success" : "danger"
+              }`}
+              style={{ fontSize: "10px" }}
+              onClick={() => toggleAction(rowId)}
+            >
+              {actions[rowId] === "approved" ? "Approved" : "Rejected"}
+            </button>
+          );
+        },
+      },
+    ],
+    [actions]
+  );
 
   const toggleAction = (id) => {
     setActions((prevActions) => ({
@@ -39,21 +150,39 @@ const TransferOut = () => {
     }));
   };
 
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, []);
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      centerName: "",
+      transferTo: "",
+      studentName: "",
+    });
+  };
 
   return (
-    <div className="container-fluid my-4 center">
+    <div className="container-fluid px-2 my-4 center">
       <ol
-        className="breadcrumb my-3 px-2"
+        className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -63,167 +192,108 @@ const TransferOut = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Student Movement
+          &nbsp;Student Movement
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Transfer Out
+          &nbsp;Transfer Out
         </li>
       </ol>
-
       <div className="card">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
-            </div>
-            <span class="me-2 text-muted">
-              This database shows the list of{" "}
-              <span className="bold" style={{ color: "#287f71" }}>
-                Transfer Out
-              </span>
-            </span>
-          </div>
+          <span className="text-muted">
+            This database shows the list of{" "}
+            <strong style={{ color: "#287f71" }}>Transfer Out</strong>
+          </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="centerName"
+                value={filters.centerName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Centre Name"
-                value={centerName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCenterName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                placeholder="Center Name"
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="centerName"
+                value={filters.centerName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Student Id"
-                value={studentId}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setStudentId(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                placeholder="Centre"
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="studentName"
+                value={filters.studentName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Student Name"
-                value={studentName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setStudentName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                autoComplete="off"
               />
             </div>
-
-            <div className="form-group mb-0 ms-2 mb-1 ">
+            <div className="form-group mb-2 ms-2">
               <button
                 type="button"
+                onClick={clearFilter}
                 className="btn btn-sm btn-border"
-                onClick={clearFilters}
               >
                 Clear
               </button>
             </div>
           </div>
         </div>
-        <table style={{ width: "100%" }} ref={tableRef} className="display">
-          <thead>
-            <tr>
-              <th className="text-muted" scope="col">
-                S No
-              </th>
-              <th className="text-muted" scope="col">
-                Action
-              </th>
-              <th className="text-muted" scope="col">
-                Center Name
-              </th>
-              <th className="text-muted" scope="col">
-                Transfer To
-              </th>
-              <th className="text-muted" scope="col">
-                Student ID
-              </th>
-              <th className="text-muted" scope="col">
-                Student Name
-              </th>
-              <th className="text-muted" scope="col">
-                Current Course
-              </th>
-              <th className="text-muted" scope="col">
-                Current Class
-              </th>
-              <th className="text-muted" scope="col">
-                Last lesson date
-              </th>
-              <th className="text-muted" scope="col">
-                Center Remark
-              </th>
-              <th className="text-muted" scope="col">
-                Prefer Timing
-              </th>
-              <th className="text-muted" scope="col">
-                Prefer Days
-              </th>
-              <th className="text-muted" scope="col">
-                Prefer Start Date
-              </th>
-              <th className="text-muted" scope="col">
-                Reason
-              </th>
-              <th className="text-muted" scope="col">
-                Parent Remark
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>
-                <button
-                  className={`btn btn-${
-                    actions[1] === "approved" ? "success" : "danger"
-                  }`}
-                  style={{ fontSize: "10px" }}
-                  onClick={() => toggleAction(1)}
-                >
-                  {actions[1] === "approved" ? "Approved" : "Rejected"}
-                </button>
-              </td>
-              <td>Arty@hougang</td>
-              <td>AMK</td>
-              <td>S000082</td>
-              <td>KC Marquez</td>
-              <td>Arty Pursuers</td>
-              <td>ALP/TUE500PM/Tue/2</td>
-              <td>2023-02-07</td>
-              <td>gg</td>
-              <td></td>
-              <td></td>
-              <td>2024-02-14</td>
-              <td>Change timing of class</td>
-              <td>1</td>
-            </tr>
-          </tbody>
-        </table>
+        {/* {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : ( */}
+        <>
+          <ThemeProvider theme={theme}>
+            <MaterialReactTable
+              columns={columns}
+              data={data}
+              enableColumnActions={false}
+              enableColumnFilters={false}
+              enableDensityToggle={false}
+              enableFullScreenToggle={false}
+              initialState={{
+                columnVisibility: {
+                  createdBy: false,
+                  createdAt: false,
+                  updatedBy: false,
+                  updatedAt: false,
+                },
+              }}
+              // muiTableBodyRowProps={({ row }) => ({
+              //   onClick: () => navigate(`/center/view/${row.original.id}`),
+              //   style: { cursor: "pointer" },
+              // })}
+            />
+          </ThemeProvider>
+        </>
+        {/* )} */}
       </div>
     </div>
   );

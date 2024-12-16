@@ -1,131 +1,161 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../components/common/Delete";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../config/URL";
-import { FaFileInvoice } from "react-icons/fa";
+import { MaterialReactTable } from "material-react-table";
 import {
-  OverlayTrigger,
-  Tooltip,
-  Dropdown,
-  DropdownButton,
-} from "react-bootstrap";
-import { SCREENS } from "../../config/ScreenFilter";
-import fetchAllSubjectsWithIds from "../List/SubjectList";
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import { MdViewColumn } from "react-icons/md";
+import fetchAllCentreManager from "../List/CentreMangerList";
+import GlobalDelete from "../../components/common/GlobalDelete";
 import ReferalFeesAdd from "./ReferalFeesAdd";
 import ReferalFeesEdit from "./ReferalFeesEdit";
-import { IoIosAddCircle } from "react-icons/io";
 
 const ReferalFees = () => {
-  // const { id } = useParams();
-  const tableRef = useRef(null);
-  const [datas, setDatas] = useState([]);
+  const [filters, setFilters] = useState({
+    centerName: "",
+  });
+  const [centerManagerData, setCenterManagerData] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [subjectData, setSubjectData] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [extraData, setExtraData] = useState(false);
-  const [centerName, setCenterName] = useState("");
+  const navigate = useNavigate();
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllReferralFees");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      }
-    };
-    getData();
-  }, []);
-  useEffect(() => {
-    console.log({
-      centerName,
-    });
-  }, [centerName]);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      { accessorKey: "center", enableHiding: false, header: "Centre Name" },
+      {
+        accessorKey: "effectiveDate",
+        enableHiding: false,
+        header: "Effective Date",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "referralFee",
+        header: "Referal fee",
+        enableHiding: false,
+        size: 40,
+      },
+      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+      {
+        accessorKey: "createdDate",
+        enableHiding: false,
+        header: "Created Date",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        enableHiding: false,
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: 1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const fetchSubData = async () => {
+  const fetchCenterManagerData = async () => {
     try {
-      const subjectData = await fetchAllSubjectsWithIds();
-      setSubjectData(subjectData);
+      const centerManagerData = await fetchAllCentreManager();
+      setCenterManagerData(centerManagerData);
     } catch (error) {
       toast.error(error);
     }
   };
 
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  useEffect(() => {
+    fetchCenterManagerData();
+  }, []);
+
+  const getData = async () => {
     try {
       const response = await api.get("/getAllReferralFees");
-      setDatas(response.data);
-      initializeDataTable();
+      setData(response.data);
+      setLoading(false);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data ", error);
     }
-    setLoading(false);
   };
+
   useEffect(() => {
-    fetchSubData();
-  }, [loading]);
+    getData();
+  }, []);
 
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  const clearFilters = () => {
-    setCenterName("");
-    $(tableRef.current).DataTable().search("").draw();
+  const clearFilter = () => {
+    setFilters({
+      centerName: "",
+    });
   };
 
-    useEffect(() => {
-      if (tableRef.current) {
-        const rows = tableRef.current.querySelectorAll("tr.odd");
-        rows.forEach((row) => {
-          row.classList.remove("odd");
-        });
-        const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-        thElements.forEach((th) => th.classList.remove("sorting_1"));
-      }
-    }, [datas]);
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container my-4">
+    <div className="container-fluid px-2 my-4 center">
       <ol
-        className="breadcrumb"
+        className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -135,69 +165,52 @@ const ReferalFees = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Referal Management
+          &nbsp;Referal Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Referal Fees
+          &nbsp;Referal Fees
         </li>
       </ol>
-      {/* <div className="mb-3 d-flex justify-content-end">
-        <div>
-          <ReferalFeesAdd onSuccess={refreshData} />
-        </div>
-      </div> */}
       <div className="card">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
-            </div>
-            <span class="me-2 text-muted">
-              This database shows the list of{" "}
-              <span className="bold" style={{ color: "#287f71" }}>
-                Referal Fees
-              </span>
-            </span>
-          </div>
+          <span className="text-muted">
+            This database shows the list of{" "}
+            <strong style={{ color: "#287f71" }}>Referal Fees</strong>
+          </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="centerName"
+                value={filters.centerName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Centre Name"
-                value={centerName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCenterName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                placeholder="Center Name"
+                autoComplete="off"
               />
             </div>
-
-            <div className="form-group mb-0 ms-2 mb-1 ">
+            <div className="form-group mb-2 ms-2">
               <button
                 type="button"
+                onClick={clearFilter}
                 className="btn btn-sm btn-border"
-                onClick={clearFilters}
               >
                 Clear
               </button>
             </div>
           </div>
-          <div className="me-2">
-          <ReferalFeesAdd onSuccess={refreshData} />
-          </div>
+          <ReferalFeesAdd onSuccess={getData} />
         </div>
         {loading ? (
           <div className="loader-container">
-            <div class="loading">
+            <div className="loading">
               <span></span>
               <span></span>
               <span></span>
@@ -206,84 +219,53 @@ const ReferalFees = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table ref={tableRef} className="display">
-              <thead>
-                <tr>
-                  <th scope="">S No</th>
-                  <th scope=""></th>
-                  <th scope="col">Center</th>
-                  <th scope="col">Effective Date</th>
-                  <th scope="col">Referal fee</th>
-                  <th scope="col">Created By</th>
-                  <th scope="col">Created At</th>
-                  <th scope="col">Updated At</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td className="text-center">
-                      <div className="d-flex justify-content-center align-items-center">
-                        <div className="dropdown">
-                          <button
-                            className="btn btn-button btn-sm"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <IoIosAddCircle
-                              className="text-light"
-                              style={{ fontSize: "16px" }}
-                            />
-                          </button>
-                          <ul
-                            className="dropdown-menu"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            <li>
-                              <ReferalFeesEdit
-                                id={data.id}
-                                onSuccess={refreshData}
-                              />
-                            </li>
-                            <li>
-                              <Delete
-                                onSuccess={refreshData}
-                                path={`/deleteReferralFees/${data.id}`}
-                              />
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-break">{data.center}</td>
-                    <td className="text-break">
-                      {extractDate(data.effectiveDate)}
-                    </td>
-                    <td className="text-break">{data.referralFee}</td>
-                    <td className="text-break">{data.createdBy}</td>
-                    <td className="text-break">
-                      {extractDate(data.createdAt)}
-                    </td>
-                    <td className="text-break">
-                      {extractDate(data.updatedAt)}
-                    </td>
-                    <td>
-                      {data.status === "ACTIVE" ? (
-                        <span className="badge badges-Green">Active</span>
-                      ) : (
-                        <span className="badge badges-Red">Inactive</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    gst: false,
+                    address: false,
+                    bankAccountName: false,
+                    bankAccountNumber: false,
+                    bankBranch: false,
+                    bankName: false,
+                    createdAt: false,
+                    updatedAt: false,
+                    invoiceNotes: false,
+                    openingDate: false,
+                    taxRegistrationNumber: false,
+                    zipCode: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <ReferalFeesEdit id={data.id} onSuccess={getData} />
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteReferralFees/${selectedId}`}
+                  onDeleteSuccess={getData}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>
