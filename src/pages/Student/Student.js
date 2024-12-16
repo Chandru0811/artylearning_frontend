@@ -1,128 +1,255 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import api from "../../config/URL";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import GlobalDelete from "../../components/common/GlobalDelete";
 import fetchAllCentersWithIds from "../List/CenterList";
-import { IoIosAddCircle } from "react-icons/io";
-import Delete from "../../components/common/Delete";
-import { MdOutlineModeEdit } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const Student = () => {
-  const tableRef = useRef(null);
+  const [filters, setFilters] = useState({
+    centerId: "",
+    studentName: "",
+    parentName: "",
+    email: "",
+    mobileNumber: "",
+  });
+  const [centerData, setCenterData] = useState([]);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
 
-  const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [extraData, setExtraData] = useState(false);
-  const [centerData, setCenterData] = useState([]);
-  const [centerId, setCenterId] = useState(
-    localStorage.getItem("centerId") || ""
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span
+            style={{ textAlign: "center" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {cell.getValue()}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "studentUniqueId",
+        header: "Student ID",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        accessorKey: "center",
+        header: "Centre Name",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "studentName",
+        header: "Student Name",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "parentPrimaryName",
+        header: "Parent Name",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "parentPrimaryEmail",
+        header: "Parent Email",
+        enableHiding: false,
+      },
+      {
+        accessorKey: "age",
+        header: "Age",
+        enableHiding: false,
+        size: 50,
+      },
+      {
+        accessorKey: "gender",
+        header: "Gender",
+        enableHiding: false,
+        size: 30,
+      },
+      {
+        accessorKey: "allowMagazine",
+        header: "Allow Magazine",
+        enableHiding: false,
+        size: 30,
+      },
+      {
+        accessorKey: "allowSocialMedia",
+        header: "Allow Social Media",
+        enableHiding: false,
+        size: 30,
+      },
+      {
+        accessorKey: "studentChineseName",
+        header: "Chinese Name",
+      },
+      {
+        accessorKey: "medicalCondition",
+        header: "Medical Condition",
+      },
+      {
+        accessorKey: "dateOfBirth",
+        header: "Date of Birth",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "schoolType",
+        header: "School Type",
+      },
+      {
+        accessorKey: "schoolName",
+        header: "School Name",
+      },
+      {
+        accessorKey: "race",
+        header: "Race",
+      },
+      {
+        accessorKey: "primaryLanguage",
+        header: "Primary Language",
+      },
+      {
+        accessorKey: "referByParent",
+        header: "Referred By Parent",
+      },
+      {
+        accessorKey: "referByStudent",
+        header: "Referred By Student",
+      },
+      {
+        accessorKey: "remark",
+        header: "Remark",
+      },
+    ],
+    []
   );
-  const centerLocalId = localStorage.getItem("centerId");
-  const [studentId, setStudentName] = useState("");
-  const [parentId, setParentId] = useState("");
-
-  const navigate = useNavigate();
-
-  // Fetch student data with filters
-  const getCenterData = async () => {
-    try {
-      const params = {};
-
-      if (centerId) params.centerId = centerId;
-      if (studentId) params.studentId = studentId;
-      if (parentId) params.parentId = parentId;
-
-      const queryParams = new URLSearchParams(params).toString();
-      const response = await api.get(
-        `/getStudentWithCustomInfo?${queryParams}`
-      );
-      setDatas(response.data);
-      setLoading(false);
-    } catch (error) {
-      toast.error(`Error Fetching Data: ${error.message}`);
-    }
-  };
-
+  
   const fetchData = async () => {
     try {
+      setLoading(true);
+      const queryParams = new URLSearchParams(filters).toString();
+      const response = await api.get(`/getStudentWithCustomInfo?${queryParams}`);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const fetchCenterData = async () => {
+    try {
       const centerData = await fetchAllCentersWithIds();
-      if (centerLocalId !== null && centerLocalId !== "undefined") {
-        setCenterId(centerLocalId[0]);
-      } else if (centerData !== null && centerData.length > 0) {
-        setCenterId(centerData[0].id);
-      }
       setCenterData(centerData);
     } catch (error) {
-      toast.error(`Error Fetching Center Data: ${error.message}`);
+      toast.error(error);
     }
   };
 
-  const clearFilters = () => {
-    setCenterId("");
-    setStudentName("");
-    setParentId("");
-    refreshData();
-  };
+  useEffect(() => {
+    fetchCenterData();
+  }, []);
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: 1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    await getCenterData();
-    setLoading(false);
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/student/view/${id}`);
-  };
-
-  const extractDate = (dateString) => {
-    return dateString?.substring(0, 10) || "";
-  };
-
-  const handleDataShow = () => {
-    setExtraData((prev) => !prev);
-    initializeDataTable();
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
   useEffect(() => {
     fetchData();
-  }, [centerLocalId]);
+  }, [filters]);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  const clearFilter = () => {
+    setFilters({
+      centerId: "",
+      studentName: "",
+      parentName: "",
+      email: "",
+      mobileNumber: "",
+    });
+  };
 
-  useEffect(() => {
-    if (centerId !== undefined && centerId !== "") {
-      getCenterData();
-    }
-  }, [centerId, studentId, parentId]);
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div className="container-fluid my-4 center">
@@ -167,10 +294,10 @@ const Student = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
-                style={{ width: "100%" }}
-                onChange={(e) => setCenterId(e.target.value)}
                 name="centerId"
-                value={centerId}
+                style={{ width: "100%" }}
+                value={filters.centerId}
+                onChange={handleFilterChange}
               >
                 {centerData?.map((center) => (
                   <option key={center.id} value={center.id} selected>
@@ -182,36 +309,60 @@ const Student = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="studentName"
+                value={filters.studentName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Student Name"
-                value={studentId}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setStudentName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                style={{ width: "180px" }}
+                placeholder="Student"
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="parentName"
+                value={filters.parentName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
+                style={{ width: "190px" }}
                 placeholder="Parent"
-                value={parentId}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setParentId(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                autoComplete="off"
               />
             </div>
-            <div className="form-group mb-0 ms-2 mb-1 ">
+          </div>
+        </div>
+        <div className="mb-3 d-flex justify-content-between">
+          <div className="individual_fliters d-lg-flex ">
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="email"
+                value={filters.email}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Email"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="mobileNumber"
+                value={filters.mobileNumber}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Mobile"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-2 ms-2">
               <button
                 type="button"
+                onClick={clearFilter}
                 className="btn btn-sm btn-border"
-                onClick={clearFilters}
               >
                 Clear
               </button>
@@ -242,199 +393,64 @@ const Student = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive py-2">
-            <table style={{ width: "100%" }} ref={tableRef} className="display">
-              <thead>
-                <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th scope="col" className="text-center">
-                    S No
-                  </th>
-                  <th className="text-center text-muted"></th>
-                  <th className="text-muted" scope="col">
-                    Centre
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Student ID
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Student Name
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Age
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Gender
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Nationality
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Allow Magazine
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Allow Social Media
-                  </th>
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedAt
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedAt
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr key={index} style={{ cursor: "pointer" }}>
-                    <th scope="row" className="text-break text-center">
-                      {index + 1}
-                    </th>
-                    <td>
-                      <div className="d-flex justify-content-center align-items-center">
-                        {storedScreens?.centerListingCreate && (
-                          <div className="dropdown">
-                            <button
-                              className="btn btn-button btn-sm dropdown-toggle"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              <IoIosAddCircle
-                                className="text-light"
-                                style={{ fontSize: "16px" }}
-                              />
-                            </button>
-                            <ul
-                              className="dropdown-menu"
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <li>
-                                {storedScreens?.centerListingUpdate && (
-                                  <Link to={`/student/edit/${data.studentDetail.id}`}>
-                                    <button
-                                      style={{
-                                        whiteSpace: "nowrap",
-                                        width: "100%",
-                                      }}
-                                      className="btn btn-sm btn-normal text-start"
-                                    >
-                                      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                                    </button>
-                                  </Link>
-                                )}
-                              </li>
-                              <li>
-                                {storedScreens?.centerListingDelete && (
-                                  <span>
-                                    <Delete
-                                      onSuccess={refreshData}
-                                      path={`/deleteStudentDetail/${data.studentDetail.id}`}
-                                    />{" "}
-                                  </span>
-                                )}
-                              </li>
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                      {data.center}{" "}
-                    </td>
-                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                      {data.studentUniqueId}{" "}
-                    </td>
-                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                      {data.studentName}
-                    </td>
-                    <td onClick={() => handleRowClick(data.studentDetail.id)}>{data.age}</td>
-                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                      {data.gender}
-                    </td>
-                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                      {data.nationality}
-                    </td>
-                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                      {data.allowMagazine === "false" ? "Yes" : "No"}
-                    </td>
-                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                      {data.allowSocialMedia === "false" ? "Yes" : "No"}
-                    </td>
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                        {data.createdBy}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                        {data.createdAt}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                        {data.updatedBy}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.studentDetail.id)}>
-                        {data.updatedAt}
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    studentChineseName: false,
+                    dateOfBirth: false,
+                    medicalCondition: false,
+                    schoolType: false,
+                    schoolName: false,
+                    preAssessmentResult: false,
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                    nationality: false,
+                    race: false,
+                    primaryLanguage: false,
+                    referByParent: false,
+                    referByStudent: false,
+                    referByParent: false,
+                    remark: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+              disableScrollLock
+            >
+              <MenuItem onClick={() => navigate(`/student/view/${selectedId}`)}>
+                View
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/student/edit/${selectedId}`)}>
+                Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteCenter/${selectedId}`}
+                  onDeleteSuccess={fetchData}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

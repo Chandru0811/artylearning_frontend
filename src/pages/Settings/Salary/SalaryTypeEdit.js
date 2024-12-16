@@ -1,16 +1,15 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 const validationSchema = Yup.object({
-  salaryType: Yup.string().required("*Leave Type is required"),
+  salaryType: Yup.string().required("*Salary Type is required"),
 });
 
 function SalaryEdit({ id, onSuccess }) {
@@ -35,7 +34,6 @@ function SalaryEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateSalarySetting/${id}`, values, {
@@ -79,11 +77,6 @@ function SalaryEdit({ id, onSuccess }) {
     getData();
   };
 
-  // useEffect(() => {
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   return (
     <>
       <button
@@ -96,18 +89,18 @@ function SalaryEdit({ id, onSuccess }) {
       >
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+
+      <Dialog
+        open={show}
+        onClose={handleClose}
+        aria-labelledby="contained-dialog-title-vcenter"
+        maxWidth="sm"
+        fullWidth
+        disableBackdropClick={isModified}
+        disableEscapeKeyDown={isModified}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Salary Type Edit </Modal.Title>
-        </Modal.Header>
+        <DialogTitle id="contained-dialog-title-vcenter" className="headColor">Salary Type Edit</DialogTitle>
+
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -116,7 +109,7 @@ function SalaryEdit({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row">
                 <div className="col-md-6 col-12 mb-2">
@@ -140,31 +133,34 @@ function SalaryEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer className="mt-3">
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+
+          <DialogActions>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="small"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </Button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

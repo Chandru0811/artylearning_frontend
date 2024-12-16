@@ -1,111 +1,110 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
-import { SCREENS } from "../../config/ScreenFilter";
-import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Teacher = () => {
-  const tableRef = useRef(null);
+  const [filters, setFilters] = useState({
+    teacherName: "",
+    email: "",
+  });
   const navigate = useNavigate();
-  const [datas, setDatas] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [extraData, setExtraData] = useState(false);
   const roles = localStorage.getItem("userName");
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  console.log("Screens : ", SCREENS);
 
   const [teacherName, setTeacherName] = useState("");
   const [email, setEmail] = useState("");
 
-  const clearFilters = () => {
-    setTeacherName("");
-    setEmail("");
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-    $(tableRef.current).DataTable().search("").draw();
-  };
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      { accessorKey: "country", enableHiding: false, header: "Country" },
+      {
+        accessorKey: "userUniqueId",
+        enableHiding: false,
+        header: "Teacher Id",
+      },
+      {
+        accessorKey: "teacherName",
+        header: "Teacher Name",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        accessorKey: "employeeType",
+        header: "Teacher Type",
+        enableHiding: false,
+        size: 50,
+      },
+      { accessorKey: "email", enableHiding: false, header: "Email" },
+      { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
+      {
+        accessorKey: "updatedBy",
+        enableHiding: false,
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+      { accessorKey: "role", enableHiding: false, header: "Role" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        let response;
-
-        // Check role and call the appropriate API
-        if (roles === "SMS_ADMIN") {
-          response = await api.get("/getAllTeachersAndFreelancers");
-        } else if (roles === "SMS_TEACHER") {
-          response = await api.get("/getAllUsersByRole/teacher");
-        } else if (roles === "SMS_FREELANCER") {
-          response = await api.get("/getAllFreelance");
-        }
-
-        // If a response was received, set the data
-        if (response) {
-          setDatas(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getData();
-  }, [roles]); // Add "role" as a dependency
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  // const refreshData = async () => {
-  //   destroyDataTable();
-  //   setLoading(true);
-  //   try {
-  //     const response = await api.get("/getAllTeachersAndFreelancers");
-  //     setDatas(response.data);
-  //     initializeDataTable(); // Reinitialize DataTable after successful data update
-  //   } catch (error) {
-  //     console.error("Error refreshing data:", error);
-  //   }
-  //   setLoading(false);
-  // };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const fetchData = async () => {
     try {
       let response;
 
-      // Check role and call the appropriate API
       if (roles === "SMS_ADMIN") {
         response = await api.get("/getAllTeachersAndFreelancers");
       } else if (roles === "SMS_TEACHER") {
@@ -114,46 +113,49 @@ const Teacher = () => {
         response = await api.get("/getAllFreelance");
       }
 
-      // If a response was received, set the data and initialize the DataTable
       if (response) {
-        setDatas(response.data);
-        initializeDataTable(); // Reinitialize DataTable after successful data update
+        setData(response.data);
       }
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/teacher/view/${id}`); // Navigate to the index page when a row is clicked
-  };
-
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+    fetchData();
+  }, [filters]);
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      teacherName: "",
+      email: "",
+    });
+  };
+
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div className="container-fluid my-4 center">
@@ -201,11 +203,7 @@ const Teacher = () => {
                 style={{ width: "160px" }}
                 placeholder="Teacher Name"
                 value={teacherName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setTeacherName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                onChange={handleFilterChange}
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -215,11 +213,7 @@ const Teacher = () => {
                 style={{ width: "160px" }}
                 placeholder="Email"
                 value={email}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setEmail(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                onChange={handleFilterChange}
               />
             </div>
 
@@ -227,7 +221,7 @@ const Teacher = () => {
               <button
                 type="button"
                 className="btn btn-sm btn-border"
-                onClick={clearFilters}
+                onClick={clearFilter}
               >
                 Clear
               </button>
@@ -257,154 +251,54 @@ const Teacher = () => {
           </div>
         ) : (
           <div>
-            <div className="table-responsive py-2">
-              <table
-                style={{ width: "100%" }}
-                ref={tableRef}
-                className="display"
-              >
-                <thead>
-                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                    <th className="text-muted" scope="col">
-                      S No
-                    </th>
-                    <th className="text-center text-muted"></th>
-                    <th className="text-muted" scope="col">
-                      Country
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Teacher Id
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Teacher Name
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Teacher Type
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Email
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Mobile
-                    </th>
-                    <th className="text-muted" scope="col">
-                      UpdatedBy
-                    </th>
-                    {roles === "SMS_ADMIN" ? <th scope="col">Role</th> : <></>}
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(datas) &&
-                    datas.map((data, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          // backgroundColor: "#fff !important",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <th scope="row" className="text-center">
-                          {index + 1}
-                        </th>
-                        <td>
-                          <div className="d-flex justify-content-center align-items-center">
-                            {storedScreens?.teacherCreate && (
-                              <div className="dropdown">
-                                <button
-                                  className="btn btn-button btn-sm dropdown-toggle"
-                                  type="button"
-                                  id="dropdownMenuButton"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <IoIosAddCircle
-                                    className="text-light"
-                                    style={{ fontSize: "16px" }}
-                                  />
-                                </button>
-                                <ul
-                                  className="dropdown-menu"
-                                  aria-labelledby="dropdownMenuButton"
-                                >
-                                  <li>
-                                    {storedScreens?.teacherUpdate && (
-                                      <Link
-                                        to={`/teacher/edit/${data.id}?role=${data.role}`}
-                                      >
-                                        <button
-                                          style={{
-                                            whiteSpace: "nowrap",
-                                            width: "100%",
-                                          }}
-                                          className="btn btn-sm btn-normal text-start"
-                                        >
-                                          <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                                        </button>
-                                      </Link>
-                                    )}
-                                  </li>
-                                  <li>
-                                    {storedScreens?.teacherDelete && (
-                                      <span>
-                                        <Delete
-                                          onSuccess={refreshData}
-                                          path={`/deleteUser/${data.id}`}
-                                        />{" "}
-                                      </span>
-                                    )}
-                                  </li>
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.nationality}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.userUniqueId}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.teacherName}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.employeeType}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.email}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.mobile}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.updatedBy}
-                        </td>
-                        {/* <td
-                          
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.uenNumber}
-                        </td> */}
-                        {roles === "SMS_ADMIN" ? (
-                          <td onClick={() => handleRowClick(data.id)}>
-                            {data.role === "teacher" ? (
-                              <span className="badge badges-Green">
-                                Teacher
-                              </span>
-                            ) : (
-                              <span className="badge badges-Red">
-                                Freelancer
-                              </span>
-                            )}
-                          </td>
-                        ) : (
-                          <></>
-                        )}
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    gst: false,
+                    address: false,
+                    bankAccountName: false,
+                    bankAccountNumber: false,
+                    bankBranch: false,
+                    bankName: false,
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                    invoiceNotes: false,
+                    openingDate: false,
+                    taxRegistrationNumber: false,
+                    zipCode: false,
+                  },
+                }}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={() => navigate(`/teacher/view/${selectedId}`)}>
+                View
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/teacher/edit/${selectedId}`)}>
+                Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteTeacher/${selectedId}`}
+                  onDeleteSuccess={fetchData}
+                />
+              </MenuItem>
+            </Menu>
           </div>
         )}
       </div>

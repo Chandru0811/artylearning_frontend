@@ -136,7 +136,7 @@ const AddStudentDetails = forwardRef(
 
           // Add each data field manually to the FormData object
           formDatas.append("studentName", values.studentName);
-          formDatas.append("leadId", formData.LeadId);
+          formDatas.append("leadId", formData.LeadId || "");
           formDatas.append("studentChineseName", values.studentChineseName);
           formDatas.append("dateOfBirth", values.dateOfBirth);
           formDatas.append("age", values.age);

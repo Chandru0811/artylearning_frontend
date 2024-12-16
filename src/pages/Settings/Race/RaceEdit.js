@@ -1,13 +1,19 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
+import { MdOutlineModeEdit } from "react-icons/md";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import { MdOutlineModeEdit } from "react-icons/md";
 
 function RaceEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -30,6 +36,7 @@ function RaceEdit({ id, onSuccess }) {
     setIsModified(false);
     getData();
   };
+
   const validationSchema = Yup.object({
     race: Yup.string().required("*Race is required"),
   });
@@ -41,7 +48,6 @@ function RaceEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateRaceSetting/${id}`, values, {
@@ -57,7 +63,7 @@ function RaceEdit({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error("An error occurred.");
       } finally {
         setLoadIndicator(false);
       }
@@ -78,10 +84,6 @@ function RaceEdit({ id, onSuccess }) {
     },
   });
 
-  // useEffect(() => {
-  //        getData();
-  // }, []);
-
   return (
     <>
       <button
@@ -94,18 +96,14 @@ function RaceEdit({ id, onSuccess }) {
       >
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+
+      <Dialog
+        open={show}
+        onClose={!isModified ? handleClose : null}
+        fullWidth
+        maxWidth="sm"
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Race Edit</Modal.Title>
-        </Modal.Header>
+        <DialogTitle className="headColor">Race Edit</DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -114,10 +112,10 @@ function RaceEdit({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row">
-                <div className="col-md-6 col-12 mb-2">
+                <div className="col-12 mb-2">
                   <label className="form-label">
                     Race<span className="text-danger">*</span>
                   </label>
@@ -136,31 +134,30 @@ function RaceEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer className="mt-3">
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

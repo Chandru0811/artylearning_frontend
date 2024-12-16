@@ -1,110 +1,136 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
-import Delete from "../../../components/common/Delete";
 import TaxAdd from "./TaxAdd";
 import TaxEdit from "./TaxEdit";
-import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
+import {
+  createTheme,
+  IconButton,
+  Menu,
+  MenuItem,
+  ThemeProvider,
+} from "@mui/material";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 // import { SCREENS } from "../../config/ScreenFilter";
 
 const Tax = () => {
-  const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [extraData, setExtraData] = useState(false);
   const navigate = useNavigate();
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   // console.log("Screens : ", SCREENS);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllTaxSetting");
-        setDatas(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const getData = async () => {
     try {
       const response = await api.get("/getAllTaxSetting");
       setDatas(response.data);
-      initializeDataTable();
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/tax`); // Navigate to the index page when a row is clicked
-  };
-
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+    getData();
+  }, []);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "taxType",
+        enableHiding: false,
+        header: "Tax Type",
+        size: 20,
+      },
+      {
+        accessorKey: "rate",
+        enableHiding: false,
+        header: "Rate",
+        size: 50,
+      },
+      {
+        accessorKey: "effectiveDate",
+        header: "Effective Date",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        enableHiding: false,
+        size: 40,
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div className="container-fluid my-4 center">
@@ -145,7 +171,7 @@ const Tax = () => {
         </div>
         <div className="d-flex justify-content-end align-items-center">
           <span>
-            <TaxAdd onSuccess={refreshData} />
+            <TaxAdd onSuccess={getData} />
           </span>
           {/* } */}
           {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
@@ -166,121 +192,47 @@ const Tax = () => {
             </div>
           </div>
         ) : (
-          <div>
-            <div className="table-responsive py-2">
-              <table
-                style={{ width: "100%" }}
-                ref={tableRef}
-                className="display"
-              >
-                <thead>
-                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                    <th className="text-muted" scope="col">
-                      S No
-                    </th>
-                    <th className="text-center text-muted"></th>
-                    <th className="text-muted" scope="col">
-                      Tax Type
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Rate
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Effective Date
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Status
-                    </th>
-                    {/* <th
-                      className="text-muted"
-                      scope="col"
-                    >
-                      Mobile
-                    </th> */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(datas) &&
-                    datas.map((data, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          // backgroundColor: "#fff !important",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <th scope="row" className="text-center">
-                          {index + 1}
-                        </th>
-                        <td>
-                          <div className="d-flex justify-content-center align-items-center">
-                            {/* {storedScreens?.centerListingCreate && ( */}
-                            <div className="dropdown">
-                              <button
-                                className="btn btn-button btn-sm dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                              >
-                                <IoIosAddCircle
-                                  className="text-light"
-                                  style={{ fontSize: "16px" }}
-                                />
-                              </button>
-                              <ul
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <li>
-                                  <TaxEdit
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li>
-                                  {/* {storedScreens?.centerListingDelete && ( */}
-                                  <span>
-                                    <Delete
-                                      onSuccess={refreshData}
-                                      path={`/deleteTaxSetting/${data.id}`}
-                                    />{" "}
-                                  </span>
-                                  {/* )} */}
-                                </li>
-                              </ul>
-                            </div>
-                            {/* )} */}
-                          </div>
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.taxType}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.rate} %
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.effectiveDate}
-                        </td>
-                        {/* <td
-                          
-                          onClick={() => handleRowClick(data.id)}
-                        >
-                          {data.uenNumber}
-                        </td> */}
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.status === "ACTIVE" ? (
-                            <span className="badge badges-Green">Active</span>
-                          ) : (
-                            <span className="badge badges-Red">Inactive</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <TaxEdit onSuccess={getData} id={selectedId} />
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteTaxSetting/${selectedId}`}
+                  onDeleteSuccess={getData}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

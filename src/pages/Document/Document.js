@@ -1,139 +1,167 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
 import api from "../../config/URL";
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import fetchAllStudentsWithIds from "../List/StudentList";
+import fetchAllCentreManager from "../List/CentreMangerList";
+import GlobalDelete from "../../components/common/GlobalDelete";
 import DocumentEdit from "./DocumentEdit";
-// import { SCREENS } from "../../config/ScreenFilter";
-import { MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
 
 const Document = () => {
-  const tableRef = useRef(null);
-  const navigate = useNavigate();
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [datas, setDatas] = useState([]);
+  const [filters, setFilters] = useState({
+    centerName: "",
+    centerCode: "",
+    email: "",
+    centerManagerId: "",
+  });
+  const [centerManagerData, setCenterManagerData] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [studentData, setStudentData] = useState(null);
-  const [extraData, setExtraData] = useState(false);
-  const [centerName, setCenterName] = useState("");
-  const [course, setCourse] = useState("");
-  const [clas, setClas] = useState("");
-  const [date, setDate] = useState("");
-  const [day, setDay] = useState("");
-  const [teacher, setTeacher] = useState("");
+  const navigate = useNavigate();
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const fetchData = async () => {
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
+      {
+        accessorKey: "studentNames",
+        enableHiding: false,
+        header: "Student Name",
+      },
+      {
+        accessorKey: "course",
+        header: "Course",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        accessorKey: "classListing",
+        header: "Class",
+        enableHiding: false,
+        size: 50,
+      },
+      { accessorKey: "batchTime", enableHiding: false, header: "Batch" },
+      { accessorKey: "dayTime", enableHiding: false, header: "Day/Time" },
+      { accessorKey: "teacher", enableHiding: false, header: "Teacher" },
+      {
+        accessorKey: "folderCategory",
+        enableHiding: false,
+        header: "Folder Category",
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const fetchCenterManagerData = async () => {
     try {
-      const studentData = await fetchAllStudentsWithIds();
-      setStudentData(studentData);
+      const centerManagerData = await fetchAllCentreManager();
+      setCenterManagerData(centerManagerData);
     } catch (error) {
       toast.error(error);
     }
   };
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await api.get("/getAllDocumentFolder");
-      setDatas(response.data);
-      setLoading(false);
-    };
-    getData();
-    fetchData();
+    fetchCenterManagerData();
   }, []);
 
   useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: 1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
+    const getData = async () => {
       const response = await api.get("/getAllDocumentFolder");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
+      setData(response.data);
+      setLoading(false);
     };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-  const handleRowClick = (id, approveStatus) => {
-    navigate(`/document/view/${id}?approveStatus=${approveStatus}`);
+    getData();
+  }, []);
+
+  useEffect(() => {}, [filters]);
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  const clearFilters = () => {
-    setCenterName("");
-    setClas("");
-    setCourse("");
-    setDate("");
-    setDay("");
-    setTeacher("");
-    $(tableRef.current).DataTable().search("").draw();
-  };
-  useEffect(() => {
-    console.log({
-      centerName,
-      course,
-      clas,
-      date,
-      day,
-      teacher,
+  const clearFilter = () => {
+    setFilters({
+      centerName: "",
+      centerCode: "",
+      email: "",
+      centerManagerId: "",
     });
-  }, [centerName, course, clas, date, day, teacher]);
-    useEffect(() => {
-      if (tableRef.current) {
-        const rows = tableRef.current.querySelectorAll("tr.odd");
-        rows.forEach((row) => {
-          row.classList.remove("odd");
-        });
-        const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-        thElements.forEach((th) => th.classList.remove("sorting_1"));
-      }
-    }, [datas]);
-    
+  };
+
+  const handleMenuClose = () => setMenuAnchor(null);
+
   return (
-    <div className="container my-4">
+    <div className="container-fluid px-2 my-4 center">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -145,11 +173,11 @@ const Document = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Document Management
+          &nbsp;Document Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Document
+          &nbsp;Document
         </li>
       </ol>
       <div className="card">
@@ -157,88 +185,71 @@ const Document = () => {
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
-            </div>
-            <span class="me-2 text-muted">
-              This database shows the list of{" "}
-              <span className="bold" style={{ color: "#287f71" }}>
-                Document
-              </span>
-            </span>
-          </div>
+          <span className="text-muted">
+            This database shows the list of{" "}
+            <strong style={{ color: "#287f71" }}>Document</strong>
+          </span>
         </div>
         <div className="mb-3">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="centerName"
+                value={filters.centerName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Centre Name"
-                value={centerName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCenterName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                placeholder="Center Name"
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="course"
+                value={filters.course}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Course"
-                value={course}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCourse(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="class"
+                value={filters.class}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Class"
-                value={clas}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setClas(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="date"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Date"
-                value={date}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setDate(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="date"
+                value={filters.date}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Date"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="day"
+                value={filters.day}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Day"
-                value={day}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setDay(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                autoComplete="off"
               />
             </div>
           </div>
@@ -247,41 +258,30 @@ const Document = () => {
               <div className="form-group mb-0 ms-2 mb-1">
                 <input
                   type="text"
+                  name="teacher"
+                  value={filters.teacher}
+                  onChange={handleFilterChange}
                   className="form-control form-control-sm center_list"
                   style={{ width: "160px" }}
                   placeholder="Teacher"
-                  value={teacher}
-                  onChange={(e) => {
-                    const searchValue = e.target.value.toLowerCase();
-                    setTeacher(e.target.value);
-                    $(tableRef.current).DataTable().search(searchValue).draw();
-                  }}
+                  autoComplete="off"
                 />
               </div>
               <div className="form-group mb-0 ms-2 mb-1 ">
                 <button
                   type="button"
                   className="btn btn-sm btn-border"
-                  onClick={clearFilters}
+                  onClick={clearFilter}
                 >
                   Clear
                 </button>
               </div>
             </div>
-            <div className="me-2">
-            {storedScreens?.documentListingCreate && (
-              <Link to="/document/add">
-                <button type="button" className="btn btn-button btn-sm">
-                  Add <i className="bx bx-plus"></i>
-                </button>
-              </Link>
-            )}
-            </div>
           </div>
         </div>
         {loading ? (
           <div className="loader-container">
-            <div class="loading">
+            <div className="loading">
               <span></span>
               <span></span>
               <span></span>
@@ -290,189 +290,51 @@ const Document = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table ref={tableRef} className="display">
-              <thead>
-                <tr>
-                  <th scope="col">S No</th>
-                  <th scope=""></th>
-                  <th scope="col">Folder Name</th>
-                  <th scope="col">Student Name</th>
-                  <th scope="col">Course</th>
-                  <th scope="col">Class</th>
-                  <th scope="col">Batch</th>
-                  <th scope="col">Status</th>
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedAt
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedAt
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>
-                      <div className="">
-                        <div className="dropdown">
-                          <button
-                            className="btn btn-button btn-sm"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <IoIosAddCircle
-                              className="text-light"
-                              style={{ fontSize: "16px" }}
-                            />
-                          </button>
-                          <ul
-                            className="dropdown-menu"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            <li>
-                              {storedScreens?.scheduleTeacherRead && (
-                                <div>
-                                  <DocumentEdit
-                                    onSuccess={refreshData}
-                                    id={data.id}
-                                  />
-                                </div>
-                              )}
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="d-flex">
-                        {/* {storedScreens?.documentListingRead && (
-                          <Link
-                            to={`/document/view/${data.id}?approveStatus=${data.approveStatus}`}
-                          >
-                            <button className="btn btn-sm">
-                              <FaEye />
-                            </button>
-                          </Link>
-                        )} */}
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    gst: false,
+                    address: false,
+                    bankAccountName: false,
+                    bankAccountNumber: false,
+                    bankBranch: false,
+                    bankName: false,
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                    invoiceNotes: false,
+                    openingDate: false,
+                    taxRegistrationNumber: false,
+                    zipCode: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
 
-                        {/* <Delete
-                      onSuccess={refreshData}
-                      path={`/deleteCourseClassListing/${data.id}`}
-                    /> */}
-                      </div>
-                    </td>
-                    <td
-                      onClick={() =>
-                        handleRowClick(data.id, data.approveStatus)
-                      }
-                    >
-                      {data.folderName}
-                    </td>
-                    <td
-                      onClick={() =>
-                        handleRowClick(data.id, data.approveStatus)
-                      }
-                    >
-                      {studentData &&
-                        studentData.map((student) =>
-                          parseInt(data.studentId) === student.id
-                            ? student.studentNames || "--"
-                            : ""
-                        )}
-                    </td>
-                    <td
-                      onClick={() =>
-                        handleRowClick(data.id, data.approveStatus)
-                      }
-                    >
-                      {data.course}
-                    </td>
-                    <td
-                      onClick={() =>
-                        handleRowClick(data.id, data.approveStatus)
-                      }
-                    >
-                      {data.classListing}
-                    </td>
-                    <td
-                      onClick={() =>
-                        handleRowClick(data.id, data.approveStatus)
-                      }
-                    >
-                      {data.batchTime}
-                    </td>
-                    <td
-                      onClick={() =>
-                        handleRowClick(data.id, data.approveStatus)
-                      }
-                    >
-                      {data.approveStatus === true ? (
-                        <span className="badge badges-Yellow">Pending</span>
-                      ) : (
-                        <span className="badge badges-Green">Approval</span>
-                      )}
-                    </td>
-                    {extraData && <td>{data.createdBy}</td>}
-                    {extraData && <td>{extractDate(data.createdAt)}</td>}
-                    {extraData && <td>{data.updatedBy}</td>}
-                    {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <DocumentEdit id={data.id} />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>
