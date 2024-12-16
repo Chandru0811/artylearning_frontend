@@ -1,7 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
 import api from "../../config/URL";
@@ -15,13 +12,23 @@ import ArrangeAssesmentEdit from "./ArrangeAssesmentEdit";
 import { useFormik } from "formik";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
+import GlobalDelete from "../../components/common/GlobalDelete";
+
+import { MaterialReactTable } from "material-react-table";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
 
 const Lead = () => {
-  const tableRef = useRef(null);
   const navigate = useNavigate();
   const [confirmationMessage, setConfirmationMessage] = useState("");
   const [datas, setDatas] = useState([]);
-  console.log("Lead All Datas", datas);
+  // console.log("Lead All Datas", datas);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newStatus, setNewStatus] = useState("");
@@ -34,59 +41,40 @@ const Lead = () => {
   const [subjectData, setSubjectData] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [filters, setFilters] = useState({
+    centerId: "",
+    subjectId: "",
+    leadStatus: "ALL",
+  });
+
+  // console.log("object", filters);
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      const subjectData = await fetchAllSubjectsWithIds();
-      console.log("subjectData", subjectData);
+      const centerDatas = await fetchAllCentersWithIds();
+      const subjectDatas = await fetchAllSubjectsWithIds();
 
-      setCenterData(centerData);
-      setSubjectData(subjectData);
+      setCenterData(centerDatas);
+      setSubjectData(subjectDatas);
     } catch (error) {
       toast.error(error);
     }
   };
 
+  const getLeadData = async () => {
+    try {
+      const response = await api.get("/getAllLeadInfo");
+      setDatas(response.data);
+    } catch (error) {
+      toast.error("Error Fetch Data ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const getCenterData = async () => {
-      try {
-        const response = await api.get("/getAllLeadInfo");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetch Data ", error);
-      }
-    };
-    getCenterData();
+    getLeadData();
     fetchData();
   }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
 
   const handleStatusChange = async (id, status) => {
     let message = "Are you sure want to change the lead status?";
@@ -117,8 +105,10 @@ const Lead = () => {
       if (response.status === 200) {
         toast.success("Lead Status Updated");
         setShowModal(false);
-        formik.resetForm();
-        refreshData();
+        // formik.resetForm();
+        ResetFilter();
+        getLeadData();
+        // refreshData();
       } else {
         toast.error(response.data.message);
       }
@@ -127,55 +117,28 @@ const Lead = () => {
     }
   };
 
-  const formik = useFormik({
-    initialValues: {
-      centerId: "",
-      subjectId: "",
-      leadStatus: "ALL",
-    },
-    onSubmit: async (data) => {
-      console.log("Selected Values :", data);
-    },
-  });
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllLeadInfos");
-      setDatas(response.data);
-      initializeDataTable();
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
-
   // Get filtered data based on Formik values
   const getData = async () => {
-    destroyDataTable();
     setLoading(true);
     let params = {};
 
-    if (formik.values.centerId !== "") {
-      params.centerId = formik.values.centerId;
+    if (filters.centerId !== "") {
+      params.centerId = filters.centerId;
     }
 
-    if (formik.values.subjectId !== "") {
-      params.subjectId = formik.values.subjectId;
+    if (filters.subjectId !== "") {
+      params.subjectId = filters.subjectId;
     }
 
-    if (formik.values.leadStatus !== "" && formik.values.leadStatus !== "ALL") {
-      params.leadStatus = formik.values.leadStatus;
+    if (filters.leadStatus !== "" && filters.leadStatus !== "ALL") {
+      params.leadStatus = filters.leadStatus;
     }
 
     try {
       const response = await api.get("/getAllLeadInfos", { params });
       setDatas(response.data);
-      initializeDataTable();
-      // Update activeButton state to reflect the current leadStatus
       setActiveButton(
-        formik.values.leadStatus === "ALL"
+        filters.leadStatus === "ALL"
           ? "All"
           : [
               { displayName: "New / Waitlist", backendName: "NEW_WAITLIST" },
@@ -196,7 +159,7 @@ const Lead = () => {
               { displayName: "Enrolled", backendName: "ENROLLED" },
               { displayName: "Drop", backendName: "DROP" },
               { displayName: "All", backendName: "ALL" },
-            ].find((status) => status.backendName === formik.values.leadStatus)
+            ].find((status) => status.backendName === filters.leadStatus)
               ?.displayName || "All"
       );
     } catch (error) {
@@ -209,14 +172,14 @@ const Lead = () => {
   useEffect(() => {
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    formik.values.centerId,
-    formik.values.subjectId,
-    formik.values.leadStatus,
-  ]);
+  }, [filters.centerId, filters.subjectId, filters.leadStatus]);
 
   const ResetFilter = () => {
-    formik.resetForm();
+    setFilters({
+      centerId: "",
+      subjectId: "",
+      leadStatus: "",
+    });
   };
 
   useEffect(() => {
@@ -241,17 +204,183 @@ const Lead = () => {
     navigate(`/lead/lead/view/${id}`);
   };
 
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+  // ===new Data table
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        header: "Centre Name",
+        accessorKey: "centreName",
+        enableHiding: false,
+        cell: ({ cell }) => <span>{cell.getValue()}</span>,
+      },
+      {
+        accessorKey: "studentName",
+        enableHiding: false,
+        header: "Student Name",
+      },
+      {
+        accessorKey: "dateOfBirth",
+        header: "Date Of Birth",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        header: "Subject",
+        accessorKey: "subject",
+        enableHiding: false,
+      },
+      { accessorKey: "parentName", enableHiding: false, header: "Parent Name" },
+      {
+        accessorKey: "leadStatus",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) => (
+          <div
+            style={{
+              position: "relative",
+              display: "inline-block",
+              width: "100%",
+            }}
+          >
+            <span
+              style={{
+                position: "absolute",
+                left: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+                fontSize: "16px",
+                color: "#fff",
+              }}
+            >
+              {row.original.leadStatus}
+              {/* <BsThreeDotsVertical /> */}
+            </span>
+            <select
+              // value={selectedValue}
+              // onChange={(e) =>
+              //   handleSelectChange(e.target.value, row.original.id)
+              // }
+              className="form-control"
+              style={{
+                padding: "4px 10px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                width: "36px",
+                appearance: "none",
+                textIndent: "20px",
+                color: "#fff",
+                backgroundColor: "#287f71",
+              }}
+            >
+              <option
+                value="basics"
+                style={{
+                  backgroundColor: "white",
+                  padding: "10px",
+                  color: "#000", // Ensuring text is visible on a white background
+                }}
+              >
+                <MdOutlineModeEdit /> Add Registration
+              </option>
+              <option
+                value="basic"
+                style={{
+                  backgroundColor: "white",
+                  padding: "10px",
+                  color: "#000",
+                }}
+              >
+                Editor
+              </option>
+              <option
+                value="admin"
+                style={{
+                  backgroundColor: "white",
+                  padding: "10px",
+                  color: "#000",
+                }}
+              >
+                Admin Admin &nbsp;
+              </option>
+            </select>
+          </div>
+        ),
+      },
+      { accessorKey: "address", header: "  Sounds of a-z" },
+      { accessorKey: "invoiceNotes", header: "Invoice Notes" },
+      { accessorKey: "openingDate", header: "Opening Date" },
+      { accessorKey: "bankAccountName", header: "Bank A/C Name" },
+      { accessorKey: "bankAccountNumber", header: "Bank A/C Number" },
+      { accessorKey: "bankBranch", header: "Bank Branch" },
+      { accessorKey: "bankName", header: "Bank Name" },
+      { accessorKey: "gst", header: "GST" },
+      { accessorKey: "taxRegistrationNumber", header: "Tax Reg Number" },
+      { accessorKey: "zipCode", header: "Zip Code" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleMenuClose = () => setMenuAnchor(null);
   return (
     <div>
       <div className="container my-4 center">
@@ -273,843 +402,225 @@ const Lead = () => {
             &nbsp;Lead Listing
           </li>
         </ol>
-        <form
+        {/* <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
               e.preventDefault(); // Prevent default form submission
             }
           }}
-        >
-          <div className="row mb-3">
-            <div className="col-12 d-flex flex-wrap justify-content-center">
-              <div
-                className={`btn-group bg-light ${
-                  isSmallScreen ? "btn-group-vertical" : ""
-                }`}
-                role="group"
-                aria-label="Status buttons"
-              >
-                {[
-                  {
-                    displayName: "New / Waitlist",
-                    backendName: "NEW_WAITLIST",
-                  },
-                  {
-                    displayName: "Assessment Arranged",
-                    backendName: "ARRANGING_ASSESSMENT",
-                  },
-                  { displayName: "KIV", backendName: "KIV" },
-                  {
-                    displayName: "Waiting for Payment",
-                    backendName: "WAITING_FOR_PAYMENT",
-                  },
-                  { displayName: "Confirmed", backendName: "CONFIRMED" },
-                  {
-                    displayName: "Assessment Done",
-                    backendName: "ASSESSMENT_DONE",
-                  },
-                  { displayName: "Enrolled", backendName: "ENROLLED" },
-                  { displayName: "Drop", backendName: "DROP" },
-                  { displayName: "All", backendName: "ALL" },
-                ].map((status, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className={`btn btn-white status-txt ${
-                      activeButton === status.displayName ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      formik.setFieldValue("leadStatus", status.backendName);
-                      setActiveButton(status.displayName);
-                    }}
-                  >
-                    {status.displayName}
-                  </button>
-                ))}
-              </div>
+        > */}
+        <div className="row mb-3">
+          <div className="col-12 d-flex flex-wrap justify-content-center">
+            <div
+              className={`btn-group bg-light ${
+                isSmallScreen ? "btn-group-vertical" : ""
+              }`}
+              role="group"
+              aria-label="Status buttons"
+            >
+              {[
+                {
+                  displayName: "New / Waitlist",
+                  backendName: "NEW_WAITLIST",
+                },
+                {
+                  displayName: "Assessment Arranged",
+                  backendName: "ARRANGING_ASSESSMENT",
+                },
+                { displayName: "KIV", backendName: "KIV" },
+                {
+                  displayName: "Waiting for Payment",
+                  backendName: "WAITING_FOR_PAYMENT",
+                },
+                { displayName: "Confirmed", backendName: "CONFIRMED" },
+                {
+                  displayName: "Assessment Done",
+                  backendName: "ASSESSMENT_DONE",
+                },
+                { displayName: "Enrolled", backendName: "ENROLLED" },
+                { displayName: "Drop", backendName: "DROP" },
+                { displayName: "All", backendName: "ALL" },
+              ].map((status, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`btn btn-white status-txt ${
+                    activeButton === status.displayName ? "active" : ""
+                  }`}
+                  onClick={() => {
+                    setFilters((pre) => ({
+                      ...pre,
+                      leadStatus: status.backendName,
+                    }));
+                    setActiveButton(status.displayName);
+                  }}
+                >
+                  {status.displayName}
+                </button>
+              ))}
             </div>
           </div>
-          <div className="card">
-            <div
-              className="mb-3 d-flex justify-content-between align-items-center p-1"
-              style={{ background: "#f5f7f9" }}
-            >
-              <div class="d-flex align-items-center">
-                <div class="d-flex">
-                  <div class="dot active"></div>
-                </div>
-                <span class="me-2 text-muted">
-                  This database shows the list of{" "}
-                  <span className="bold" style={{ color: "#287f71" }}>
-                    Lead
-                  </span>
+        </div>
+        <div className="card">
+          <div
+            className="mb-3 d-flex justify-content-between align-items-center p-1"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">
+                This database shows the list of{" "}
+                <span className="bold" style={{ color: "#287f71" }}>
+                  Lead
                 </span>
-              </div>
+              </span>
             </div>
-            <div className="d-flex justify-content-between mb-3 px-2">
-              <div className="individual_fliters d-lg-flex ">
-                <div className="form-group mb-0 ms-2 mb-1">
-                  <select
-                    className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
-                    name="centerId"
-                    {...formik.getFieldProps("centerId")}
-                  >
-                    <option value="" disabled selected>
-                      Select Centre
-                    </option>
-                    {centerData &&
-                      centerData.map((center) => (
-                        <option key={center.id} value={center.id}>
-                          {center.centerNames}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <div className="form-group mb-0 ms-2 mb-1">
-                  <select
-                    className="form-select form-select-sm mb-2 mb-md-0"
-                    name="subjectId"
-                    {...formik.getFieldProps("subjectId")}
-                  >
-                    <option value="" disabled selected>
-                      Select Subject
-                    </option>
-                    {subjectData &&
-                      subjectData.map((subject) => (
-                        <option key={subject.id} value={subject.id}>
-                          {subject.subjects}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-
-                <div className="form-group mb-0 ms-2 mb-1 ">
-                  <button
-                    type="button"
-                    className="btn btn-sm border-secondary ms-3"
-                    onClick={ResetFilter}
-                  >
-                    Clear
-                  </button>
-                </div>
-              </div>
-              {storedScreens?.centerListingCreate && (
-                <Link to="/lead/lead/add">
-                  <button
-                    type="button"
-                    className="btn btn-button btn-sm me-2"
-                    style={{ fontWeight: "600px !important" }}
-                  >
-                    &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
-                  </button>
-                </Link>
-              )}
-            </div>
-            {loading ? (
-              <div className="loader-container">
-                <div className="loading">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-              </div>
-            ) : (
-              <div className="table-responsive py-2">
-                <table
-                  style={{ width: "100%" }}
-                  ref={tableRef}
-                  className="display"
+          </div>
+          <div className="d-flex justify-content-between mb-3 px-2">
+            <div className="individual_fliters d-lg-flex ">
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
+                  name="centerId"
+                  value={filters.centerId}
+                  onChange={(e) =>
+                    setFilters((pre) => ({ ...pre, centerId: e.target.value }))
+                  }
                 >
-                  <thead>
-                    <tr
-                      className="text-center"
-                      style={{ background: "#f5f7f9" }}
-                    >
-                      <th
-                        className="text-muted"
-                        scope="col"
-                        style={{ whiteSpace: "nowrap" }}
-                      >
-                        S No
-                      </th>
-                      <th className="text-center text-muted"></th>
-                      <th className="text-muted" scope="col">
-                        Centre
-                      </th>
-                      <th className="text-muted" scope="col">
-                        Student Name
-                      </th>
-                      <th className="text-muted" scope="col">
-                        Date Of Birth
-                      </th>
-                      <th className="text-muted" scope="col">
-                        Subject
-                      </th>
-                      <th className="text-muted" scope="col">
-                        Parent Name
-                      </th>
-                      <th className="text-muted" scope="col">
-                      Sounds of a-z
-                      </th>
-                      <th className="text-muted" scope="col">
-                        Status
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {datas &&
-                      datas.map((data, index) => (
-                        <tr
-                          key={index}
-                          style={{
-                            cursor: "pointer",
-                          }}
-                        >
-                          <th scope="row">{index + 1}</th>
-                          <td>
-                            <div className="d-flex justify-content-center align-items-center">
-                              {storedScreens?.centerListingCreate && (
-                                <div className="dropdown">
-                                  <button
-                                    className="btn btn-button btn-sm dropdown-toggle"
-                                    type="button"
-                                    id="dropdownMenuButton"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                  >
-                                    <IoIosAddCircle
-                                      className="text-light"
-                                      style={{ fontSize: "16px" }}
-                                    />
-                                  </button>
-                                  <ul
-                                    className="dropdown-menu"
-                                    aria-labelledby="dropdownMenuButton"
-                                  >
-                                    <li>
-                                      {storedScreens?.leadListingUpdate && (
-                                        <Link to={`/lead/lead/edit/${data.id}`}>
-                                          <button
-                                            style={{
-                                              whiteSpace: "nowrap",
-                                              width: "100%",
-                                            }}
-                                            className="btn btn-sm btn-normal text-start"
-                                          >
-                                            <MdOutlineModeEdit />{" "}
-                                            &nbsp;&nbsp;Edit
-                                          </button>
-                                        </Link>
-                                      )}
-                                    </li>
-                                    <li>
-                                      {storedScreens?.centerListingDelete && (
-                                        <span>
-                                          <Delete
-                                            onSuccess={refreshData}
-                                            path={`/deleteLeadInfo/${data.id}`}
-                                          />{" "}
-                                        </span>
-                                      )}
-                                    </li>
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          </td>
-                          <td onClick={() => handleRowClick(data.id)}>
-                            {centerData &&
-                              centerData.map((center) =>
-                                parseInt(data.centerId) === center.id
-                                  ? center.centerNames || "--"
-                                  : ""
-                              )}
-                          </td>
-                          <td onClick={() => handleRowClick(data.id)}>
-                            {data.studentName}
-                          </td>
-                          <td onClick={() => handleRowClick(data.id)}>
-                            {data.dateOfBirth.slice(0,10)}
-                          </td>
-                          <td onClick={() => handleRowClick(data.id)}>
-                            {subjectData &&
-                              subjectData.map((subject) =>
-                                parseInt(data.subjectId) === subject.id
-                                  ? subject.subjects || "--"
-                                  : ""
-                              )}
-                          </td>
-                          <td onClick={() => handleRowClick(data.id)}>
-                            {data.parentName}
-                          </td>
-                          <td onClick={() => handleRowClick(data.id)}>
-                            {data.soundOfAToZ === true ? "Yes" : "No"}
-                          </td>
-                          <td>
-                            {data.leadStatus === "NEW_WAITLIST" ? (
-                              <div className="dropdown">
-                                <button
-                                  className={`btn btn-sm leadStatus text-bg-primary`}
-                                  type="button"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <span
-                                    className="text-white "
-                                    style={{ textWrap: "nowrap" }}
-                                  >
-                                    New/WaitList
-                                  </span>
-                                </button>
-                                <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                  <li>
-                                    <ArrangeAssesmentAdd
-                                      leadId={data.id}
-                                      onSuccess={refreshData}
-                                      centerId={data.centerId}
-                                      studentNames={data.studentName}
-                                      setAll={ResetFilter}
-                                    />
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "KIV")
-                                      }
-                                    >
-                                      KIV
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "WAITING_FOR_PAYMENT"
-                                        )
-                                      }
-                                    >
-                                      Waiting For Payment
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                      style={{
-                                        textDecoration: "none",
-                                        cursor: "default",
-                                      }}
-                                    >
-                                      <button className="dropdown-item">
-                                        Confirmed
-                                      </button>
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "DROP")
-                                      }
-                                    >
-                                      Drop
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : data.leadStatus === "DROP" ? (
-                              <div className="dropdown">
-                                <button
-                                  className={`btn btn-sm leadStatus text-bg-danger`}
-                                  type="button"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <span
-                                    className="text-white "
-                                    style={{ textWrap: "nowrap" }}
-                                  >
-                                    Drop
-                                  </span>
-                                </button>
-                                <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "NEW_WAITLIST"
-                                        )
-                                      }
-                                    >
-                                      New / Waitlist
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <ArrangeAssesmentAdd
-                                      leadId={data.id}
-                                      onSuccess={refreshData}
-                                      centerId={data.centerId}
-                                      studentNames={data.studentName}
-                                      setAll={ResetFilter}
-                                    />
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "KIV")
-                                      }
-                                    >
-                                      KIV
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "WAITING_FOR_PAYMENT"
-                                        )
-                                      }
-                                    >
-                                      Waiting For Payment
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                      style={{
-                                        textDecoration: "none",
-                                        cursor: "default",
-                                      }}
-                                    >
-                                      <button className="dropdown-item">
-                                        Confirmed
-                                      </button>
-                                    </Link>
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : data.leadStatus === "ARRANGING_ASSESSMENT" ? (
-                              <div className="dropdown">
-                                <button
-                                  className={`btn btn-sm leadStatus text-bg-warning`}
-                                  type="button"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <span
-                                    className="text-white "
-                                    style={{ textWrap: "nowrap" }}
-                                  >
-                                    Assessment Arranged
-                                  </span>
-                                </button>
-                                <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "NEW_WAITLIST"
-                                        )
-                                      }
-                                    >
-                                      New / WaitList
-                                    </button>
-                                  </li>
-                                  {data.assessmentArrange &&
-                                  data.assessmentArrange.length > 0 &&
-                                  new Date(
-                                    data.assessmentArrange[0].assessmentDate
-                                  ).toDateString() ===
-                                    new Date().toDateString() ? (
-                                    <li>
-                                      <Link
-                                        to={`/lead/lead/assessment/${data.id}`}
-                                        style={{ textDecoration: "none" }}
-                                      >
-                                        <button className="dropdown-item">
-                                          Do Assessment
-                                        </button>
-                                      </Link>
-                                    </li>
-                                  ) : (
-                                    ""
-                                  )}
-                                  <li>
-                                    <ArrangeAssesmentEdit
-                                      leadId={data.id}
-                                      arrangeAssesmentId={
-                                        data.assessmentArrange[0].id
-                                      }
-                                      studentNames={data.studentName}
-                                      onSuccess={refreshData}
-                                      centerId={data.centerId}
-                                      setAll={ResetFilter}
-                                    />
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "DROP")
-                                      }
-                                    >
-                                      Drop
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : data.leadStatus === "KIV" ? (
-                              <div className="dropdown">
-                                <button
-                                  className={`btn btn-sm leadStatus text-bg-secondary`}
-                                  type="button"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <span
-                                    className="text-white "
-                                    style={{ textWrap: "nowrap" }}
-                                  >
-                                    KIV
-                                  </span>
-                                </button>
-                                <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "NEW_WAITLIST"
-                                        )
-                                      }
-                                    >
-                                      New / Waitlist
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <ArrangeAssesmentAdd
-                                      leadId={data.id}
-                                      onSuccess={refreshData}
-                                      centerId={data.centerId}
-                                      studentNames={data.studentName}
-                                      setAll={ResetFilter}
-                                    />
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "WAITING_FOR_PAYMENT"
-                                        )
-                                      }
-                                    >
-                                      Waiting For Payment
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      to={`/student/add?LeadId=${data.id}&LeadStatus=CONFIRMED`}
-                                      style={{
-                                        textDecoration: "none",
-                                        cursor: "default",
-                                      }}
-                                    >
-                                      <button className="dropdown-item">
-                                        Confirmed
-                                      </button>
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "DROP")
-                                      }
-                                    >
-                                      Drop
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : data.leadStatus === "ASSESSMENT_DONE" ? (
-                              <div className="dropdown">
-                                <button
-                                  className={`btn btn-sm leadStatus text-bg-info`}
-                                  type="button"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <span
-                                    className="text-white "
-                                    style={{ textWrap: "nowrap" }}
-                                  >
-                                    Assessment Done
-                                  </span>
-                                </button>
-                                <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "NEW_WAITLIST"
-                                        )
-                                      }
-                                    >
-                                      New / WaitList
-                                    </button>
-                                  </li>
-                                  <li>
-                                    {/* <Link
-                                    to={`/lead/lead/assessment?editDo="editDoAssessment"/${data.id}`}
-                                    style={{ textDecoration: "none" }}
-                                  >
-                                    <button className="dropdown-item">
-                                      Edit Do Assessment
-                                    </button>
-                                  </Link> */}
-                                    <Link
-                                      to={`/lead/lead/assessment/${data.id}?mode=edit`}
-                                      style={{ textDecoration: "none" }}
-                                    >
-                                      <button className="dropdown-item">
-                                        Edit Do Assessment
-                                      </button>
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "KIV")
-                                      }
-                                    >
-                                      KIV
-                                    </button>
-                                  </li>
-
-                                  <li>
-                                    <Link
-                                      to={`/student/add?LeadId=${data.id}&LeadStatus=ENROLLED`}
-                                      style={{ textDecoration: "none" }}
-                                    >
-                                      <button className="dropdown-item">
-                                        Enrolled
-                                      </button>
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "DROP")
-                                      }
-                                    >
-                                      Drop
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : data.leadStatus === "CONFIRMED" ? (
-                              <button
-                                className={`btn btn-sm leadStatus text-bg-success`}
-                                type="button"
-                              >
-                                <span
-                                  className="text-white "
-                                  style={{
-                                    textDecoration: "none",
-                                    cursor: "default",
-                                  }}
-                                >
-                                  Confirmed
-                                </span>
-                              </button>
-                            ) : data.leadStatus === "ENROLLED" ? (
-                              <button
-                                className={`btn btn-sm leadStatus text-bg-success`}
-                                type="button"
-                                style={{ cursor: "default" }}
-                              >
-                                <span
-                                  className="text-white "
-                                  style={{ textWrap: "nowrap" }}
-                                >
-                                  Enrolled
-                                </span>
-                              </button>
-                            ) : data.leadStatus === "WAITING_FOR_PAYMENT" ? (
-                              <div className="dropdown">
-                                <button
-                                  className={`btn btn-sm leadStatus text-bg-primary`}
-                                  type="button"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <span
-                                    className="text-white "
-                                    style={{ textWrap: "nowrap" }}
-                                  >
-                                    Waiting For Payment
-                                  </span>
-                                </button>
-                                <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "NEW_WAITLIST"
-                                        )
-                                      }
-                                    >
-                                      New / Waitlist
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <ArrangeAssesmentAdd
-                                      leadId={data.id}
-                                      onSuccess={refreshData}
-                                      centerId={data.centerId}
-                                      studentNames={data.studentName}
-                                      setAll={ResetFilter}
-                                    />
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "KIV")
-                                      }
-                                    >
-                                      KIV
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      to={`/student/add?LeadId=${data.id}`}
-                                      style={{
-                                        textDecoration: "none",
-                                        cursor: "default",
-                                      }}
-                                    >
-                                      <button className="dropdown-item">
-                                        Confirmed
-                                      </button>
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "DROP")
-                                      }
-                                    >
-                                      Drop
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              <div className="dropdown">
-                                <button
-                                  className={`btn btn-sm leadStatus text-bg-primary`}
-                                  type="button"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <span
-                                    className="text-white "
-                                    style={{ textWrap: "nowrap" }}
-                                  >
-                                    New/WaitList
-                                  </span>
-                                </button>
-                                <ul className="dropdown-menu text-capitalize leadStatuslist">
-                                  <li>
-                                    <ArrangeAssesmentAdd
-                                      leadId={data.id}
-                                      onSuccess={refreshData}
-                                      centerId={data.centerId}
-                                      studentNames={data.studentName}
-                                      setAll={ResetFilter}
-                                    />
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "KIV")
-                                      }
-                                    >
-                                      KIV
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(
-                                          data.id,
-                                          "WAITING_FOR_PAYMENT"
-                                        )
-                                      }
-                                    >
-                                      Waiting For Payment
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <Link
-                                      to={`/student/add?LeadId=${data.id}`}
-                                      style={{
-                                        textDecoration: "none",
-                                        cursor: "default",
-                                      }}
-                                    >
-                                      <button className="dropdown-item">
-                                        Confirmed
-                                      </button>
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <button
-                                      className="dropdown-item"
-                                      onClick={(e) =>
-                                        handleStatusChange(data.id, "DROP")
-                                      }
-                                    >
-                                      Drop
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+                  <option value="" disabled selected>
+                    Select Centre
+                  </option>
+                  {centerData &&
+                    centerData.map((center) => (
+                      <option key={center.id} value={center.id}>
+                        {center.centerNames}
+                      </option>
+                    ))}
+                </select>
               </div>
+              <div className="form-group mb-0 ms-2 mb-1">
+                <select
+                  className="form-select form-select-sm mb-2 mb-md-0"
+                  name="subjectId"
+                  value={filters.subjectId}
+                  onChange={(e) =>
+                    setFilters((pre) => ({ ...pre, subjectId: e.target.value }))
+                  }
+                >
+                  <option value="" disabled selected>
+                    Select Subject
+                  </option>
+                  {subjectData &&
+                    subjectData.map((subject) => (
+                      <option key={subject.id} value={subject.id}>
+                        {subject.subjects}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div className="form-group mb-0 ms-2 mb-1 ">
+                <button
+                  type="button"
+                  className="btn btn-sm border-secondary ms-3"
+                  onClick={ResetFilter}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+            {storedScreens?.centerListingCreate && (
+              <Link to="/lead/lead/add">
+                <button
+                  type="button"
+                  className="btn btn-button btn-sm me-2"
+                  style={{ fontWeight: "600px !important" }}
+                >
+                  &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+                </button>
+              </Link>
             )}
           </div>
-        </form>
+          {loading ? (
+            <div className="loader-container">
+              <div className="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <ThemeProvider theme={theme}>
+                <MaterialReactTable
+                  columns={columns}
+                  data={datas}
+                  enableColumnActions={false}
+                  enableColumnFilters={false}
+                  enableSorting={true}
+                  enableDensityToggle={false}
+                  enableFullScreenToggle={false}
+                  initialState={{
+                    columnVisibility: {
+                      gst: false,
+                      address: false,
+                      bankAccountName: false,
+                      bankAccountNumber: false,
+                      bankBranch: false,
+                      bankName: false,
+                      createdBy: false,
+                      createdAt: false,
+                      updatedBy: false,
+                      updatedAt: false,
+                      invoiceNotes: false,
+                      openingDate: false,
+                      taxRegistrationNumber: false,
+                      zipCode: false,
+                    },
+                  }}
+                  // muiTableBodyRowProps={({ row }) => ({
+                  //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                  //   style: { cursor: "pointer" },
+                  // })}
+                />
+              </ThemeProvider>
+
+              <Menu
+                id="action-menu"
+                anchorEl={menuAnchor}
+                open={Boolean(menuAnchor)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem
+                  onClick={() => navigate(`/center/view/${selectedId}`)}
+                >
+                  View
+                </MenuItem>
+                {storedScreens?.leadListingUpdate && (
+                  <MenuItem
+                    onClick={() => navigate(`/lead/lead/edit/${selectedId}`)}
+                  >
+                    Edit
+                  </MenuItem>
+                )}
+                {storedScreens?.centerListingDelete && (
+                  <MenuItem>
+                    <GlobalDelete
+                      path={`/deleteCenter/${selectedId}`}
+                      onDeleteSuccess={getLeadData}
+                    />
+                  </MenuItem>
+                )}
+              </Menu>
+            </>
+          )}
+        </div>
+        {/* </form> */}
       </div>
 
       <Modal
