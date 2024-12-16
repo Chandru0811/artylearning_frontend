@@ -162,7 +162,7 @@ const Attendance = () => {
               <div class="d-flex">
                 <div class="dot active"></div>
               </div>
-              <span class="me-2 text-muted">Attendance</span>
+              <span class="me-2 text-muted">Attendance Report</span>
             </div>
           </div>
           <div className="container">

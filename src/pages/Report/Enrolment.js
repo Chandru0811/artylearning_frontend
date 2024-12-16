@@ -215,65 +215,80 @@ function Datatable2() {
             Enrollment Report
           </li>
         </ol>
-        <div className="row my-5">
-          <div className="col-md-4 col-12">
-            <label className="form-label">Centre</label>
-            <select
-              className="form-select"
-              value={selectedCenterId || ""}
-              onChange={handleCenterChange}
-              aria-label="Default select example"
-            >
-              {centerData &&
-                centerData.map((center) => (
-                  <option key={center.id} value={center.id}>
-                    {center.centerNames}
-                  </option>
-                ))}
-            </select>
+        <div className="card">
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">Enrollment Report</span>
+            </div>
           </div>
-          <div className="col-md-4 col-12">
-            <label className="form-label">Week</label>
-            <input
-              type="week"
-              className="form-control"
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-            />
-          </div>
-          <div className="col-md-4 col-12">
-            <label className="form-label">Day</label>
-            <select
-              className="form-select"
-              onChange={handleDayChange}
-              value={selectedDay}
-              aria-label="Default select example"
-            >
-              <option value="ALL">ALL</option>
-              <option value="SUNDAY">SUNDAY</option>
-              <option value="MONDAY">MONDAY</option>
-              <option value="TUESDAY">TUESDAY</option>
-              <option value="WEDNESDAY">WEDNESDAY</option>
-              <option value="THURSDAY">THURSDAY</option>
-              <option value="FRIDAY">FRIDAY</option>
-              <option value="SATURDAY">SATURDAY</option>
-            </select>
-          </div>
-        </div>
-        <div className="card p-4 mb-4">
-          <div className="row">
-            <div className="col-12">
-              {/* Render chart only if labels have loaded */}
-              {chartData.labels.length > 0 ? (
-                <ReactApexChart
-                  options={options}
-                  series={chartData?.dayData}
-                  type="bar"
-                  height={350}
+          <div className="container">
+            <div className="row my-5">
+              <div className="col-md-4 col-12">
+                <label className="form-label">Centre</label>
+                <select
+                  className="form-select"
+                  value={selectedCenterId || ""}
+                  onChange={handleCenterChange}
+                  aria-label="Default select example"
+                >
+                  {centerData &&
+                    centerData.map((center) => (
+                      <option key={center.id} value={center.id}>
+                        {center.centerNames}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="col-md-4 col-12">
+                <label className="form-label">Week</label>
+                <input
+                  type="week"
+                  className="form-control"
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
                 />
-              ) : (
-                <></>
-              )}
+              </div>
+              <div className="col-md-4 col-12">
+                <label className="form-label">Day</label>
+                <select
+                  className="form-select"
+                  onChange={handleDayChange}
+                  value={selectedDay}
+                  aria-label="Default select example"
+                >
+                  <option value="ALL">ALL</option>
+                  <option value="SUNDAY">SUNDAY</option>
+                  <option value="MONDAY">MONDAY</option>
+                  <option value="TUESDAY">TUESDAY</option>
+                  <option value="WEDNESDAY">WEDNESDAY</option>
+                  <option value="THURSDAY">THURSDAY</option>
+                  <option value="FRIDAY">FRIDAY</option>
+                  <option value="SATURDAY">SATURDAY</option>
+                </select>
+              </div>
+            </div>
+            <div className="card p-4 mb-4">
+              <div className="row">
+                <div className="col-12">
+                  {/* Render chart only if labels have loaded */}
+                  {chartData.labels.length > 0 ? (
+                    <ReactApexChart
+                      options={options}
+                      series={chartData?.dayData}
+                      type="bar"
+                      height={350}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
