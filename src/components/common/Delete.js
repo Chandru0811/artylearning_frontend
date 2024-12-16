@@ -69,10 +69,10 @@ function Delete({ onSuccess, path, staffmsg, teachermsg }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="btn btn-sm btn-normal text-start"
+        className="btn btn-normal text-start"
         onClick={handleShow}
       >
-        <MdDeleteOutline /> &nbsp;&nbsp;Delete
+        Delete
       </button>
 
       <Modal show={show} onHide={handleClose}>

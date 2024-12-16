@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { MdOutlineModeEdit } from "react-icons/md";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
-import { MdOutlineModeEdit } from "react-icons/md";
 
 function SubjectEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-
-  const navigate = useState();
 
   const handleClose = () => {
     setShow(false);
@@ -32,6 +33,7 @@ function SubjectEdit({ id, onSuccess }) {
     code: yup.string().required("*Code is required"),
     status: yup.string().required("*Status is required"),
   });
+
   const formik = useFormik({
     initialValues: {
       subject: "",
@@ -41,9 +43,7 @@ function SubjectEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
-
       try {
         const response = await api.put(`/updateCourseSubject/${id}`, values, {
           headers: {
@@ -54,12 +54,11 @@ function SubjectEdit({ id, onSuccess }) {
           toast.success(response.data.message);
           onSuccess();
           handleClose();
-          navigate("/level");
         } else {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "Error occurred");
       } finally {
         setLoadIndicator(false);
       }
@@ -102,27 +101,17 @@ function SubjectEdit({ id, onSuccess }) {
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
 
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-model-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
-      >
+      <Dialog open={show} onClose={handleClose} fullWidth maxWidth="md">
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
+              e.preventDefault();
             }
           }}
         >
-          <Modal.Header closeButton>
-            <Modal.Title className="headColor">Edit Subject</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+          <DialogTitle>Edit Subject</DialogTitle>
+          <DialogContent>
             <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
@@ -138,7 +127,6 @@ function SubjectEdit({ id, onSuccess }) {
                           : ""
                       }`}
                       aria-label="Subject"
-                      aria-describedby="basic-addon1"
                       {...formik.getFieldProps("subject")}
                     />
                     {formik.touched.subject && formik.errors.subject && (
@@ -160,8 +148,7 @@ function SubjectEdit({ id, onSuccess }) {
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="code"
-                      aria-describedby="basic-addon1"
+                      aria-label="Code"
                       {...formik.getFieldProps("code")}
                     />
                     {formik.touched.code && formik.errors.code && (
@@ -171,11 +158,11 @@ function SubjectEdit({ id, onSuccess }) {
                     )}
                   </div>
                 </div>
-                <div class="col-md-6 col-12 mb-2">
-                  <lable class="">
-                    Status<span class="text-danger">*</span>
-                  </lable>
-                  <div class="input-group mb-3">
+                <div className="col-md-6 col-12 mb-2">
+                  <label className="form-label">
+                    Status<span className="text-danger">*</span>
+                  </label>
+                  <div className="input-group mb-3">
                     <select
                       {...formik.getFieldProps("status")}
                       className={`form-select  ${
@@ -183,7 +170,6 @@ function SubjectEdit({ id, onSuccess }) {
                           ? "is-invalid"
                           : ""
                       }`}
-                      aria-label="Default select example"
                     >
                       <option></option>
                       <option value="Active">Active</option>
@@ -198,8 +184,8 @@ function SubjectEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer>
+          </DialogContent>
+          <DialogActions>
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -208,7 +194,6 @@ function SubjectEdit({ id, onSuccess }) {
             </Button>
             <button
               type="submit"
-              onSubmit={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >
@@ -220,9 +205,9 @@ function SubjectEdit({ id, onSuccess }) {
               )}
               Update
             </button>
-          </Modal.Footer>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

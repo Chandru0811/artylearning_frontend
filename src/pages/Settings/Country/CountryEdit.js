@@ -1,13 +1,16 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import Button from "@mui/material/Button";
+import { MdOutlineModeEdit } from "react-icons/md";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import { MdOutlineModeEdit } from "react-icons/md";
 
 const validationSchema = Yup.object({
   country: Yup.string().required("*Country is required"),
@@ -16,7 +19,7 @@ const validationSchema = Yup.object({
 });
 
 function CountryEdit({ id, onSuccess }) {
-  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
@@ -39,7 +42,6 @@ function CountryEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateCountrySetting/${id}`, values, {
@@ -55,7 +57,7 @@ function CountryEdit({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message || "An error occurred");
       } finally {
         setLoadIndicator(false);
       }
@@ -76,16 +78,16 @@ function CountryEdit({ id, onSuccess }) {
     },
   });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setOpen(false);
+    setIsModified(false);
+  };
+
   const handleShow = () => {
-    setShow(true);
+    setOpen(true);
     setIsModified(false);
     getData();
   };
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
 
   return (
     <>
@@ -99,29 +101,15 @@ function CountryEdit({ id, onSuccess }) {
       >
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={open}
+        onClose={isModified ? undefined : handleClose}
+        maxWidth="md"
+        fullWidth
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">
-            Country & Nationality Edit
-          </Modal.Title>
-        </Modal.Header>
-        <form
-          onSubmit={formik.handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
-          }}
-        >
-          <Modal.Body>
+        <DialogTitle className="headColor">Country & Nationality Edit</DialogTitle>
+        <form onSubmit={formik.handleSubmit}>
+          <DialogContent>
             <div className="container">
               <div className="row">
                 <div className="col-md-6 col-12 mb-2">
@@ -130,7 +118,7 @@ function CountryEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.country && formik.errors.country
                         ? "is-invalid"
                         : ""
@@ -150,7 +138,7 @@ function CountryEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.nationality && formik.errors.nationality
                         ? "is-invalid"
                         : ""
@@ -170,7 +158,7 @@ function CountryEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.citizenship && formik.errors.citizenship
                         ? "is-invalid"
                         : ""
@@ -185,31 +173,30 @@ function CountryEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer className="mt-3">
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleClose}
+              className="btn btn-sm btn-border bg-light text-dark"
+            >
+              Cancel
+            </Button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

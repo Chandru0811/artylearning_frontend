@@ -1,13 +1,16 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import { MdOutlineModeEdit } from "react-icons/md";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import { MdOutlineModeEdit } from "react-icons/md";
 
 const validationSchema = Yup.object({
   shgType: Yup.string().required("*SHG Type is required"),
@@ -15,7 +18,7 @@ const validationSchema = Yup.object({
 });
 
 function ShgEdit({ id, onSuccess }) {
-  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
@@ -37,7 +40,6 @@ function ShgEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateSHGSetting/${id}`, values, {
@@ -74,17 +76,12 @@ function ShgEdit({ id, onSuccess }) {
     },
   });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => setOpen(false);
   const handleShow = () => {
-    setShow(true);
+    setOpen(true);
     setIsModified(false);
     getData();
   };
-
-  // useEffect(() => {
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   return (
     <>
@@ -98,18 +95,13 @@ function ShgEdit({ id, onSuccess }) {
       >
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={open}
+        onClose={isModified ? undefined : handleClose}
+        maxWidth="md"
+        fullWidth
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">SHG Edit</Modal.Title>
-        </Modal.Header>
+        <DialogTitle className="headColor">SHG Edit</DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -118,7 +110,7 @@ function ShgEdit({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row">
                 <div className="col-md-6 col-12 mb-2">
@@ -127,7 +119,7 @@ function ShgEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.shgType && formik.errors.shgType
                         ? "is-invalid"
                         : ""
@@ -140,13 +132,14 @@ function ShgEdit({ id, onSuccess }) {
                     </div>
                   )}
                 </div>
+
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     SHG Amount<span className="text-danger">*</span>
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.shgAmount && formik.errors.shgAmount
                         ? "is-invalid"
                         : ""
@@ -161,32 +154,30 @@ function ShgEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer className="mt-3">
-              <Button
-                type="button"
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-                onClick={formik.handleSubmit}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleClose}
+              className="btn btn-sm btn-border bg-light text-dark"
+            >
+              Cancel
+            </Button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

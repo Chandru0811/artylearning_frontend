@@ -1,7 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Delete from "../../../components/common/Delete";
 import AbsentReasonAdd from "./AbsentReasonAdd";
 import AbsentReasonEdit from "./AbsentReasonEdit";
@@ -9,82 +6,113 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoIosAddCircle } from "react-icons/io";
 import { MdOutlineModeEdit } from "react-icons/md";
 import api from "../../../config/URL";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { createTheme, IconButton, Menu, MenuItem } from "@mui/material";
+import { ThemeProvider } from "react-bootstrap";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const AbsentReason = () => {
-  const tableRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllAbsentReason");
-        setDatas(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const getData = async () => {
     try {
       const response = await api.get("/getAllAbsentReason");
       setDatas(response.data);
-      initializeDataTable();
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/absentreason`); // Navigate to the index page when a row is clicked
   };
 
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+    getData();
+  }, []);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "absentReason",
+        enableHiding: false,
+        header: "Absent Reason",
+        size: 20,
+      },
+      {
+        accessorKey: "remarks",
+        enableHiding: false,
+        header: "Remarks",
+        size: 20,
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div className="container-fluid my-4 center">
@@ -125,7 +153,7 @@ const AbsentReason = () => {
         </div>
         <div className="mb-3 d-flex justify-content-end">
           {/* {storedScreens?.centerListingCreate && ( */}
-          <AbsentReasonAdd onSuccess={refreshData} />
+          <AbsentReasonAdd onSuccess={getData} />
           {/* )} */}
         </div>
         {loading ? (
@@ -139,95 +167,47 @@ const AbsentReason = () => {
             </div>
           </div>
         ) : (
-          <div>
-            <div
-              style={{ minHeight: "60vh" }}
-              className="table-responsive py-2"
-            >
-              <table
-                style={{ width: "100%" }}
-                ref={tableRef}
-                className="display"
-              >
-                <thead>
-                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                    <th className="text-muted" scope="col">
-                      S No
-                    </th>
-                    <th className="text-center text-muted"></th>
-                    <th className="text-muted" scope="col">
-                      Absent Reason
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Remark
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(datas) &&
-                    datas.map((data, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        <th scope="row" className="text-center">
-                          {index + 1}
-                        </th>
-                        <td>
-                          <div className="d-flex justify-content-center align-items-center">
-                            {/* {storedScreens?.centerListingCreate && ( */}
-                            <div className="dropdown">
-                              <button
-                                className="btn btn-button btn-sm dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                              >
-                                <IoIosAddCircle
-                                  className="text-light"
-                                  style={{ fontSize: "16px" }}
-                                />
-                              </button>
-                              <ul
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <li>
-                                  <AbsentReasonEdit
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                                <li>
-                                  {/* {storedScreens?.centerListingDelete && ( */}
-                                  <span>
-                                    <Delete
-                                      onSuccess={refreshData}
-                                      path={`/deleteAbsentReason/${data.id}`}
-                                    />{" "}
-                                  </span>
-                                  {/* )} */}
-                                </li>
-                              </ul>
-                            </div>
-                            {/* )} */}
-                          </div>
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.absentReason}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.remarks}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <>
+          <ThemeProvider theme={theme}>
+            <MaterialReactTable
+              columns={columns}
+              data={datas}
+              enableColumnActions={false}
+              enableColumnFilters={false}
+              enableDensityToggle={false}
+              enableFullScreenToggle={false}
+              initialState={{
+                columnVisibility: {
+                  createdBy: false,
+                  createdAt: false,
+                  updatedBy: false,
+                  updatedAt: false,
+                },
+              }}
+              // muiTableBodyRowProps={({ row }) => ({
+              //   onClick: () => navigate(`/center/view/${row.original.id}`),
+              //   style: { cursor: "pointer" },
+              // })}
+            />
+          </ThemeProvider>
+
+          <Menu
+            id="action-menu"
+            anchorEl={menuAnchor}
+            open={Boolean(menuAnchor)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem>
+              <AbsentReasonEdit onSuccess={getData} id={selectedId} />
+            </MenuItem>
+            <MenuItem>
+              <GlobalDelete
+                path={`/deleteAbsentReason/${selectedId}`}
+                onDeleteSuccess={getData}
+              />
+            </MenuItem>
+          </Menu>
+        </>
         )}
       </div>
     </div>

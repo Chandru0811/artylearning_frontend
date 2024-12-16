@@ -1,167 +1,228 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
-import fetchAllSubjectsWithIds from "../List/SubjectList";
-import { toast } from "react-toastify";
-import { MdOutlineModeEdit } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import GlobalDelete from "../../components/common/GlobalDelete";
+import { MaterialReactTable } from "material-react-table";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllLevelsWithIds from "../List/LevelList";
+import fetchAllSubjectsWithIds from "../List/SubjectList";
+import { toast } from "react-toastify";
 
 const Course = () => {
-  const tableRef = useRef(null);
+  const [filters, setFilters] = useState({
+    centerId: "",
+    courseName: "",
+    courseCode: "",
+  });
   const navigate = useNavigate();
-  const [datas, setDatas] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [subjectData, setSubjectData] = useState(null);
-  const [levelData, setLavelData] = useState(null);
+  const [levelData, setLevelData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [extraData, setExtraData] = useState(false);
   const centerLocalId = localStorage.getItem("centerId");
   const [centerData, setCenterData] = useState([]);
   const [centerId, setCenterId] = useState("");
   const [code, setCode] = useState("");
   const [course, setCourse] = useState("");
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const getCourseData = async () => {
-    try {
-      const params = {};
-
-      if (centerId) params.centerId = centerId;
-      if (code) params.code = code;
-      if (course) params.course = course;
-      const queryParams = new URLSearchParams(params).toString();
-      const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
-      setDatas(response.data);
-      setLoading(false);
-    } catch (error) {
-      toast.error("Error Fetching Data : ", error);
-    }
-  };
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "centerName",
+        enableHiding: false,
+        header: "Center Name",
+      },
+      { accessorKey: "levelId", enableHiding: false, header: "Level" },
+      {
+        accessorKey: "courseName",
+        enableHiding: false,
+        header: "Course Name",
+      },
+      {
+        accessorKey: "courseCode",
+        enableHiding: false,
+        header: "Course Code",
+      },
+      {
+        accessorKey: "subjectId",
+        enableHiding: false,
+        header: "Subject",
+      },
+      {
+        accessorKey: "courseType",
+        enableHiding: false,
+        header: "Course Type",
+      },
+      {
+        accessorKey: "minClassSize",
+        enableHiding: false,
+        header: "Min Class size",
+      },
+      {
+        accessorKey: "maxClassSize",
+        enableHiding: false,
+        header: "Maximum Class size",
+      },
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+      },
+      { accessorKey: "colorCode", header: "Color Code" },
+      { accessorKey: "description", header: "Description" },
+      { accessorKey: "durationInHrs", header: "Duration In Hrs" },
+      { accessorKey: "durationInMins", header: "Duration In Mins" },
+      {
+        accessorKey: "replacementLessonStudentBuffer",
+        header: "Replacement Lesson",
+      },
+      {
+        accessorKey: "classReplacementAllowed",
+        header: "Class Replacement Allowed",
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      if (centerLocalId !== null && centerLocalId !== "undefined") {
-        setCenterId(centerLocalId[0]);
-      } else if (centerData !== null && centerData.length > 0) {
-        setCenterId(centerData[0].id);
-      }
-      setCenterData(centerData);
+      const queryParams = new URLSearchParams(filters).toString();
+      const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
+      setData(response.data);
+      setLoading(false);
     } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
+      toast.error(`Error Fetching Data: ${error.message}`);
     }
   };
 
   useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
+    fetchData();
+  }, [filters]);
+
+  const refreshData = async () => {
+    try {
+      const centers = await fetchAllCentersWithIds();
+      if (centerLocalId) {
+        setCenterId(centerLocalId);
+      } else if (centers.length > 0) {
+        setCenterId(centers[0].id);
+      }
+      setCenterData(centers);
+    } catch (error) {
+      toast.error(`Error loading centers: ${error.message}`);
     }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  };
+
+  useEffect(() => {
+    if (centerData.length > 0) {
+      const defaultCenterId = centerData[0].id;
+      setCenterId(defaultCenterId);
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        centerId: defaultCenterId,
+      }));
+    }
+  }, [centerData]);
 
   const fetchSubData = async () => {
     try {
-      const subjectData = await fetchAllSubjectsWithIds();
-      const levelData = await fetchAllLevelsWithIds();
-      setSubjectData(subjectData);
-      setLavelData(levelData);
+      const subjects = await fetchAllSubjectsWithIds();
+      const levels = await fetchAllLevelsWithIds();
+      setSubjectData(subjects);
+      setLevelData(levels);
     } catch (error) {
-      toast.error(error);
+      toast.error(`Error loading additional data: ${error.message}`);
     }
   };
 
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const params = {};
-
-      if (centerId) params.centerId = centerId;
-      if (code) params.code = code;
-      if (course) params.course = course;
-      const queryParams = new URLSearchParams(params).toString();
-      const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
-      setDatas(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
   useEffect(() => {
+    refreshData();
     fetchSubData();
-  }, [loading]);
+  }, []);
 
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return "";
-    return dateString.substring(0, 10);
-  };
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
 
-  const clearFilters = () => {
-    setCenterId("");
-    setCode("");
-    setCourse("");
-
-    $(tableRef.current).DataTable().search("").draw();
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/course/view/${id}`);
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+  const clearFilter = () => {
+    setFilters({
+      centerId: "",
+      courseName: "",
+      courseCode: "",
+    });
+  };
 
-  useEffect(() => {
-    fetchData(); // Fetch the center manager data as well
-  }, [centerLocalId]);
-
-  useEffect(() => {
-    if (centerId !== undefined && centerId !== "") {
-      getCourseData();
-    }
-  }, [code, centerId, course, centerLocalId]);
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div className="container my-4 center">
@@ -188,12 +249,12 @@ const Course = () => {
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
+          <div className="d-flex align-items-center">
+            <div className="d-flex">
+              <div className="dot active"></div>
             </div>
-            <span class="me-2 text-muted">
-              This database shows the list of{" "}
+            <span className="me-2 text-muted">
+              This database shows the list of
               <span className="bold" style={{ color: "#287f71" }}>
                 Course
               </span>
@@ -201,17 +262,24 @@ const Course = () => {
           </div>
         </div>
         <div className="d-flex justify-content-between mb-3 px-2">
-          <div className="individual_fliters d-lg-flex ">
+          <div className="individual_fliters d-lg-flex">
             <div className="form-group mb-0 ms-2 mb-1">
               <select
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
-                onChange={(e) => setCenterId(e.target.value)}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setFilters((prevFilters) => ({
+                    ...prevFilters,
+                    centerId: value,
+                  }));
+                  setCenterId(value);
+                }}
                 name="centerId"
-                value={centerId}
+                value={filters.centerId}
               >
                 {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
+                  <option key={center.id} value={center.id}>
                     {center.centerNames}
                   </option>
                 ))}
@@ -220,11 +288,13 @@ const Course = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="courseName"
+                value={filters.courseName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Course"
-                value={course}
-                onChange={(e) => setCourse(e.target.value)}
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -233,16 +303,17 @@ const Course = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Code"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
+                name="courseCode"
+                value={filters.courseCode}
+                onChange={handleFilterChange}
+                autoComplete="off"
               />
             </div>
-
-            <div className="form-group mb-0 ms-2 mb-1 ">
+            <div className="form-group mb-0 ms-2 mb-1">
               <button
                 type="button"
                 className="btn btn-sm btn-border"
-                onClick={clearFilters}
+                onClick={clearFilter}
               >
                 Clear
               </button>
@@ -253,7 +324,7 @@ const Course = () => {
               <button
                 type="button"
                 className="btn btn-button btn-sm me-2"
-                style={{ fontWeight: "600px !important" }}
+                style={{ fontWeight: "600" }}
               >
                 &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
               </button>
@@ -262,7 +333,7 @@ const Course = () => {
         </div>
         {loading ? (
           <div className="loader-container">
-            <div class="loading">
+            <div className="loading">
               <span></span>
               <span></span>
               <span></span>
@@ -271,273 +342,62 @@ const Course = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive py-2">
-            <table style={{ width: "100%" }} ref={tableRef} className="display">
-              <thead>
-                <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th className="text-muted" scope="col">
-                    S No
-                  </th>
-                  <th className="text-center text-muted"></th>
-                  <th className="text-muted" scope="col">
-                    Center Name
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Course Name
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Course Code
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Subject
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Level
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Course Type
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Min class size
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Maximum clas size
-                  </th>
-                  <th className="text-muted" scope="col">
-                    updatedBy
-                  </th>
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedAt
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedAt
-                    </th>
-                  )}
-                  <th className="text-muted" scope="col">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr
-                    key={index}
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    <th scope="row">{index + 1}</th>
-                    <td>
-                      <div className="d-flex justify-content-center align-items-center">
-                        {storedScreens?.centerListingCreate && (
-                          <div className="dropdown">
-                            <button
-                              className="btn btn-button btn-sm dropdown-toggle"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              <IoIosAddCircle
-                                className="text-light"
-                                style={{ fontSize: "16px" }}
-                              />
-                            </button>
-                            <ul
-                              className="dropdown-menu"
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <li>
-                                <Link to={`/course/coursefees/${data.id}`}>
-                                  <button
-                                    style={{
-                                      whiteSpace: "nowrap",
-                                      width: "100%",
-                                    }}
-                                    className="btn btn-sm btn-normal text-start"
-                                  >
-                                    Course Fees
-                                  </button>
-                                </Link>
-                              </li>
-                              <li>
-                                <Link to={`/course/coursedeposit/${data.id}`}>
-                                  <button
-                                    style={{
-                                      whiteSpace: "nowrap",
-                                      width: "100%",
-                                    }}
-                                    className="btn btn-sm btn-normal text-start"
-                                  >
-                                    Course Deposit Fees
-                                  </button>
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  to={`/course/curriculumoutlet/${data.id}`}
-                                >
-                                  <button
-                                    style={{
-                                      whiteSpace: "nowrap",
-                                      width: "100%",
-                                    }}
-                                    className="btn btn-sm btn-normal text-start"
-                                  >
-                                    Curriculum Outlet
-                                  </button>
-                                </Link>
-                              </li>
-                              <li>
-                                {storedScreens?.centerListingUpdate && (
-                                  <Link to={`/course/edit/${data.id}`}>
-                                    <button
-                                      style={{
-                                        whiteSpace: "nowrap",
-                                        width: "100%",
-                                      }}
-                                      className="btn btn-sm btn-normal text-start"
-                                    >
-                                      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                                    </button>
-                                  </Link>
-                                )}
-                              </li>
-                              <li>
-                                {storedScreens?.centerListingDelete && (
-                                  <span>
-                                    <Delete
-                                      onSuccess={refreshData}
-                                      path={`/deleteCourse/${data.id}`}
-                                    />{" "}
-                                  </span>
-                                )}
-                              </li>
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.centers[0].centerName}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.courseName}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.courseCode}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {/* {data.subjectId} */}
-                      {subjectData &&
-                        subjectData.map((subject) =>
-                          parseInt(data.subjectId) === subject.id
-                            ? subject.subjects || "--"
-                            : ""
-                        )}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {/* {data.levelId} */}
-                      {levelData &&
-                        levelData.map((level) =>
-                          parseInt(data.levelId) === level.id
-                            ? level.levels || "--"
-                            : ""
-                        )}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.courseType}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.minClassSize}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.maxClassSize}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.updatedBy}
-                    </td>
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.createdBy}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {extractDate(data.createdAt)}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.updatedBy}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {extractDate(data.updatedAt)}
-                      </td>
-                    )}
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.status === "Active" ? (
-                        <span className="badge badges-Green">Active</span>
-                      ) : (
-                        <span className="badge badges-Red">Inactive</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+              />
+            </ThemeProvider>
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem
+                onClick={() => navigate(`/course/coursefees/${selectedId}`)}
+              >
+                Course Fees
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate(`/course/coursedeposit/${selectedId}`)}
+              >
+                Course Deposit Fees
+              </MenuItem>
+              <MenuItem
+                onClick={() =>
+                  navigate(`/course/curriculumoutlet/${selectedId}`)
+                }
+              >
+                Curriculum Outlet
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/course/view/${selectedId}`)}>
+                View
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/course/edit/${selectedId}`)}>
+                Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteCourse/${selectedId}`}
+                  onDeleteSuccess={fetchData}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

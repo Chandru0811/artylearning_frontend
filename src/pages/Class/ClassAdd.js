@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../config/URL";
@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllClassRoomWithCenterIds from "../List/ClassRoomList";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 
 function ClassAdd() {
   const navigate = useNavigate();
@@ -15,6 +14,7 @@ function ClassAdd() {
   const [courseData, setCourseData] = useState(null);
   const [classRoomData, setClassRoomData] = useState(null);
   const [teacherData, setTeacherData] = useState(null);
+  const [batchData, setBatchData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
 
@@ -51,7 +51,7 @@ function ClassAdd() {
       classType: "",
       classCode: "",
       userId: 0,
-      teacher: "",
+      teacherName: "",
       classRoome: "",
       durationInHrs: "",
       durationInMins: "",
@@ -67,7 +67,7 @@ function ClassAdd() {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       values.createdBy = userName;
-      const selectedValue = formik.values.centerId; // Assuming formik is in scope
+      const selectedValue = formik.values.centerId;
       let selectedOptionName = "";
 
       centerData.forEach((center) => {
@@ -77,9 +77,6 @@ function ClassAdd() {
       });
 
       values.centerName = selectedOptionName;
-
-      console.log(values);
-
       try {
         const response = await api.post("/createClassSchedules", values, {
           headers: {
@@ -93,9 +90,9 @@ function ClassAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        console.log("Duplicate Error:", error);
+        console.log(error);
         if (error.response.status === 409) {
-          toast.warning("Class Name Already Created!");
+          toast.warning(error?.response?.data?.message);
         } else {
           toast.error(error);
         }
@@ -133,14 +130,22 @@ function ClassAdd() {
     }
   };
 
-  const fetchTeacher = async (centerId) => {
+  const fetchBatchandTeacherData = async (day) => {
     try {
-      const teacher = await fetchAllTeacherListByCenter(centerId);
-      setTeacherData(teacher);
+      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+      setTeacherData(response.data.teacherList);
+      setBatchData(response.data.batchList);
     } catch (error) {
       toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    if (formik.values.day) {
+      fetchBatchandTeacherData(formik.values.day);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.day]);
 
   useEffect(() => {
     const getData = async () => {
@@ -164,13 +169,12 @@ function ClassAdd() {
     const center = event.target.value;
     formik.setFieldValue("centerId", center);
     formik.setFieldValue("classRoome", "");
-    formik.setFieldValue("userId", ""); // Reset teacher/userId
+    formik.setFieldValue("userId", "");
     setCourseData(null);
     setClassRoomData(null);
     setTeacherData(null);
     fetchCourses(center);
     fetchClassRoom(center);
-    fetchTeacher(center);
   };
 
   useEffect(() => {
@@ -203,6 +207,45 @@ function ClassAdd() {
     formik.values.durationInMins,
     formik.values.startTime,
   ]);
+
+  const formatTo12Hour = (time) => {
+    const [hours, minutes] = time.split(":");
+    let period = "AM";
+    let hour = parseInt(hours, 10);
+
+    if (hour === 0) {
+      hour = 12;
+    } else if (hour >= 12) {
+      period = "PM";
+      if (hour > 12) hour -= 12;
+    }
+
+    return `${hour}:${minutes} ${period}`;
+  };
+
+  const normalizeTime = (time) => {
+    if (time.includes("AM") || time.includes("PM")) {
+      return time;
+    }
+
+    return formatTo12Hour(time);
+  };
+
+  const convertTo24Hour = (time) => {
+    const [timePart, modifier] = time.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+
+    if (modifier === "PM" && hours < 12) {
+      hours += 12;
+    } else if (modifier === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}`;
+  };
 
   return (
     <div className="container-fluid">
@@ -547,15 +590,13 @@ function ClassAdd() {
                   <option></option>
                   {teacherData &&
                     teacherData.map((userId) => (
-                      <option key={userId.id} value={userId.id}>
-                        {userId.teacherNames}
+                      <option key={userId.teacherId} value={userId.teacherId}>
+                        {userId.teacherName}
                       </option>
                     ))}
                 </select>
                 {formik.touched.userId && formik.errors.userId && (
-                  <div className="invalid-feedback">
-                    {formik.errors.userId}
-                  </div>
+                  <div className="invalid-feedback">{formik.errors.userId}</div>
                 )}
               </div>
               <div class="col-md-6 col-12 mb-4">
@@ -575,11 +616,20 @@ function ClassAdd() {
                   value={formik.values.startTime}
                 >
                   <option></option>
-                  <option value="02:30">02:30 am</option>
-                  <option value="03:00">03:00 am</option>
-                  <option value="04:30">04:30 am</option>
-                  <option value="10:00">10:00 am</option>
-                  <option value="11:30">11:30 am</option>
+                  {batchData &&
+                    batchData.map((time) => {
+                      const displayTime = normalizeTime(time);
+                      const valueTime =
+                        time.includes("AM") || time.includes("PM")
+                          ? convertTo24Hour(time)
+                          : time;
+
+                      return (
+                        <option key={time} value={valueTime}>
+                          {displayTime}
+                        </option>
+                      );
+                    })}
                 </select>
                 {formik.touched.startTime && formik.errors.startTime && (
                   <div className="invalid-feedback">

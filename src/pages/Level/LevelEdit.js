@@ -2,16 +2,20 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import { MdOutlineModeEdit } from "react-icons/md";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
-import { MdOutlineModeEdit } from "react-icons/md";
 
 function Edit({ id, onSuccess }) {
-  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
@@ -49,7 +53,6 @@ function Edit({ id, onSuccess }) {
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
 
       try {
@@ -89,21 +92,21 @@ function Edit({ id, onSuccess }) {
 
   const handleClose = () => {
     formik.resetForm();
-    setShow(false);
+    setOpen(false);
     setSubjectData(null);
   };
 
-  const handleShow = () => {
+  const handleOpen = () => {
     fetchData();
     getData();
-    setShow(true);
+    setOpen(true);
     setIsModified(false);
   };
 
   return (
     <>
       <button
-        onClick={handleShow}
+        onClick={handleOpen}
         style={{
           whiteSpace: "nowrap",
           width: "100%",
@@ -113,27 +116,24 @@ function Edit({ id, onSuccess }) {
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
 
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="md"
+        disableBackdropClick={isModified}
+        disableEscapeKeyDown={isModified}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Level</Modal.Title>
-        </Modal.Header>
+        <DialogTitle className="headColor">Edit Level</DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
+              e.preventDefault();
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
@@ -142,7 +142,7 @@ function Edit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("subjectId")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.subjectId && formik.errors.subjectId
                         ? "is-invalid"
                         : ""
@@ -168,7 +168,7 @@ function Edit({ id, onSuccess }) {
                   </label>
                   <select
                     {...formik.getFieldProps("status")}
-                    class={`form-select  ${
+                    className={`form-select  ${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
@@ -225,31 +225,31 @@ function Edit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer>
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <button
+              type="submit"
+              onSubmit={formik.handleSubmit}
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }
