@@ -1,156 +1,53 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import "datatables.net-dt";
+import "datatables.net-responsive-dt";
+import $ from "jquery";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../../config/URL";
-import { MaterialReactTable } from "material-react-table";
-import { ThemeProvider, createTheme } from "@mui/material";
-import { CiViewColumn } from "react-icons/ci";
+import { IoIosAddCircle } from "react-icons/io";
+import { MdOutlineModeEdit } from "react-icons/md";
 import AddRegister from "./Add/AddRegister";
 import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
-import { MdOutlineModeEdit } from "react-icons/md";
-import { Delete } from "@mui/icons-material";
-import fetchAllCentreManager from "../List/CentreMangerList";
+import Delete from "../../components/common/Delete";
+import api from "../../config/URL";
 import { toast } from "react-toastify";
-import { IoIosAddCircle } from "react-icons/io";
+import fetchAllCentreManager from "../List/CentreMangerList";
 
-const NewTable1 = () => {
-  const [filters, setFilters] = useState({
-    centerName: "",
-    centerCode: "",
-    email: "",
-    centerManagerId: "",
-  });
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [centerManagerData, setCenterManagerData] = useState([]);
-
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Centre = () => {
+  const tableRef = useRef(null);
   const navigate = useNavigate();
+  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const [datas, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [centerManagerData, setCenterManagerData] = useState([]);
+  const [centerCode, setCenterCode] = useState();
+  const [centerName, setCenterName] = useState();
+  const [email, setEmail] = useState();
+  const [centerManager, setcenterManager] = useState();
 
-  const columns = useMemo(
-    () => [
-      {
-        accessorFn: (row, index) => index + 1,
-        header: "S.NO",
-        enableSorting: true,
-        enableHiding: false,
-        size: 40,
-        cell: ({ cell }) => (
-          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
-        ),
-      },
-      {
-        accessorKey: "id",
-        enableHiding: false,
-        header: "",
-        size: 40,
-        Cell: ({ row }) => (
-          <div className="dropdown">
-            <button
-              className="btn btn-button btn-sm dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              data-bs-auto-close="outside"
-            >
-              <IoIosAddCircle
-                className="text-light"
-                style={{ fontSize: "16px" }}
-              />
-            </button>
-            <ul
-              className="dropdown-menu dropdown-menu-end"
-              aria-labelledby="dropdownMenuButton"
-            >
-              <li>
-                <AddRegister id={row.original.id} onSuccess={fetchData} />
-              </li>
-              <li>
-                <AddBreak id={row.original.id} onSuccess={fetchData} />
-              </li>
-              <li>
-                <AddClass id={row.original.id} onSuccess={fetchData} />
-              </li>
-              <li>
-                <AddPackage id={row.original.id} onSuccess={fetchData} />
-              </li>
-              <li>
-                {storedScreens?.centerListingUpdate && (
-                  <Link to={`/center/edit/${row.original.id}`}>
-                    <button
-                      style={{
-                        whiteSpace: "nowrap",
-                        width: "100%",
-                      }}
-                      className="btn btn-sm btn-normal text-start"
-                    >
-                      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                    </button>
-                  </Link>
-                )}
-              </li>
-              <li>
-                {storedScreens?.centerListingDelete && (
-                  <span>
-                    <Delete
-                      onSuccess={fetchData}
-                      path={`/deleteCenter/${row.original.id}`}
-                    />
-                  </span>
-                )}
-              </li>
-            </ul>
-          </div>
-        ),
-      },
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
-      {
-        accessorKey: "centerManager",
-        enableHiding: false,
-        header: "Centre Manager",
-      },
-      { accessorKey: "code", header: "Code", enableHiding: false, size: 40 },
-      {
-        accessorKey: "uenNumber",
-        header: "UEN Number",
-        enableHiding: false,
-        size: 50,
-      },
-      { accessorKey: "email", enableHiding: false, header: "Email" },
-      { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
-      { accessorKey: "address", header: "Address" },
-      { accessorKey: "invoiceNotes", header: "Invoice Notes" },
-      { accessorKey: "openingDate", header: "Opening Date" },
-      { accessorKey: "bankAccountName", header: "Bank A/C Name" },
-      { accessorKey: "bankAccountNumber", header: "Bank A/C Number" },
-      { accessorKey: "bankBranch", header: "Bank Branch" },
-      { accessorKey: "bankName", header: "Bank Name" },
-      { accessorKey: "gst", header: "GST" },
-      { accessorKey: "taxRegistrationNumber", header: "Tax Reg Number" },
-      { accessorKey: "zipCode", header: "Zip Code" },
-      { accessorKey: "createdBy", header: "Created By" },
-      {
-        accessorKey: "createdAt",
-        header: "Created At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
-      },
-      {
-        accessorKey: "updatedAt",
-        header: "Updated At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
-      },
-      {
-        accessorKey: "updatedBy",
-        header: "Updated By",
-        Cell: ({ cell }) => cell.getValue() || "",
-      },
-    ],
-    []
-  );
+  const getCenterData = async () => {
+    setLoading(true);
+    destroyDataTable();
+    try {
+      const params = {};
 
-  const fetchCenterManagerData = async () => {
+      if (centerName) params.centerName = centerName;
+      if (centerCode) params.centerCode = centerCode;
+      if (email) params.email = email;
+      if (centerManager) params.centerManager = centerManager;
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
+      setDatas(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchData = async () => {
     try {
       const centerManagerData = await fetchAllCentreManager();
       setCenterManagerData(centerManagerData);
@@ -158,69 +55,86 @@ const NewTable1 = () => {
       toast.error(error);
     }
   };
-  useEffect(() => {
-    fetchCenterManagerData(); // Fetch the center manager data as well
-  }, []);
 
-  // const debounce = (func, delay) => {
-  //   let timer;
-  //   return (...args) => {
-  //     clearTimeout(timer);
-  //     timer = setTimeout(() => func(...args), delay);
-  //   };
-  // };
+  const initializeDataTable = () => {
+    if ($.fn.DataTable.isDataTable(tableRef.current)) {
+      return;
+    }
+    $(tableRef.current).DataTable({
+      responsive: true,
+      columnDefs: [{ orderable: false, targets: 1 }],
+    });
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const queryParams = new URLSearchParams(filters).toString();
-      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
+    if (tableRef.current) {
+      const rows = tableRef.current.querySelectorAll("tr.odd");
+      rows.forEach((row) => {
+        row.classList.remove("odd");
+      });
+      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
+      thElements.forEach((th) => th.classList.remove("sorting_1"));
     }
   };
 
+  const destroyDataTable = () => {
+    const table = $(tableRef.current).DataTable();
+    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
+      table.destroy();
+    }
+  };
+
+  const refreshData = async () => {
+    setLoading(true);
+    destroyDataTable();
+    try {
+      const params = {};
+
+      if (centerName) params.centerName = centerName;
+      if (centerCode) params.centerCode = centerCode;
+      if (email) params.email = email;
+      if (centerManager) params.centerManager = centerManager;
+      const queryParams = new URLSearchParams(params).toString();
+      const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
+      setDatas(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
+    setLoading(false);
+  };
+
+  const handleRowClick = (id) => {
+    navigate(`/center/view/${id}`);
+  };
+
   useEffect(() => {
-    fetchData();
-  }, [filters]);
+    fetchData(); // Fetch the center manager data as well
+  }, []);
 
-  const theme = createTheme({
-    components: {
-      MuiTableCell: {
-        styleOverrides: {
-          head: {
-            color: "#535454 !important",
-            backgroundColor: "#e6edf7 !important",
-            fontWeight: "400 !important",
-            fontSize: "13px !important",
-            textAlign: "center !important",
-          },
-        },
-      },
-    },
-  });
+  useEffect(() => {
+    if (!loading) {
+      initializeDataTable();
+    }
+    return () => {
+      destroyDataTable();
+    };
+  }, [loading]);
 
-  const CustomIcon = () => <CiViewColumn />;
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  const clearFilters = () => {
+    setCenterName("");
+    setCenterCode(""); 
+    setEmail("");
+    setcenterManager(""); 
+    refreshData(); 
   };
 
-  const clearFilter = () => {
-    setFilters({
-      centerName: "",
-      centerCode: "",
-      email: "",
-      centerManagerId: "",
-    });
-  };
+  useEffect(() => {
+    getCenterData();
+  }, [centerName, centerCode, centerManager, email]);
+
+
 
   return (
-    <div className="container-fluid px-2 my-4 center">
+    <div className="container-fluid my-4 center">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -244,19 +158,26 @@ const NewTable1 = () => {
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <span className="text-muted">
-            This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>Centre</strong>
-          </span>
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Centre
+              </span>
+            </span>
+          </div>
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                onChange={(e) => setCenterName(e.target.value)}
                 name="centerName"
-                value={filters.centerName}
-                onChange={handleFilterChange}
+                value={centerName}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Center Name"
@@ -266,9 +187,9 @@ const NewTable1 = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
-                name="code"
-                value={filters.code}
-                onChange={handleFilterChange}
+                onChange={(e) => setCenterCode(e.target.value)}
+                name="centerCode"
+                value={centerCode}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Code"
@@ -278,9 +199,9 @@ const NewTable1 = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                onChange={(e) => setEmail(e.target.value)}
                 name="email"
-                value={filters.email}
-                onChange={handleFilterChange}
+                value={email}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Email"
@@ -289,15 +210,15 @@ const NewTable1 = () => {
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <select
-                name="centerManagerId"
-                value={filters.centerManagerId}
-                onChange={handleFilterChange}
+                onChange={(e) => setcenterManager(e.target.value)}
+                name="centerManager"
                 className="form-select form-select-sm center_list"
                 style={{ width: "100%" }}
+                value={centerManager}
               >
                 <option value="">Select Centre Manager</option>
                 {centerManagerData.map((manager) => (
-                  <option key={manager.id} value={manager.id}>
+                  <option key={manager.id} value={manager.userNames}>
                     {manager.userNames}
                   </option>
                 ))}
@@ -306,8 +227,8 @@ const NewTable1 = () => {
             <div className="form-group mb-2 ms-2">
               <button
                 type="button"
-                onClick={clearFilter}
                 className="btn btn-sm btn-border"
+                onClick={clearFilters}
               >
                 Clear
               </button>
@@ -337,41 +258,150 @@ const NewTable1 = () => {
             </div>
           </div>
         ) : (
-          <ThemeProvider theme={theme}>
-            <MaterialReactTable
-              columns={columns}
-              data={data}
-              icons={{
-                ViewColumnIcon: CustomIcon,
-              }}
-              enableColumnActions={false}
-              enableColumnFilters={false}
-              enableDensityToggle={false}
-              enableFullScreenToggle={false}
-              initialState={{
-                columnVisibility: {
-                  gst: false,
-                  address: false,
-                  bankAccountName: false,
-                  bankAccountNumber: false,
-                  bankBranch: false,
-                  bankName: false,
-                  createdBy: false,
-                  createdAt: false,
-                  updatedBy: false,
-                  updatedAt: false,
-                  invoiceNotes: false,
-                  openingDate: false,
-                  taxRegistrationNumber: false,
-                  zipCode: false,
-                },
-              }}
-            />
-          </ThemeProvider>
+          <div>
+            <div
+              style={{ minHeight: "60vh" }}
+              className="table-responsive py-2"
+            >
+              <table
+                style={{ width: "100%" }}
+                ref={tableRef}
+                className="display"
+              >
+                <thead>
+                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
+                    <th className="text-muted" scope="col">
+                      S No
+                    </th>
+                    <th className="text-center text-muted"></th>
+                    <th className="text-muted" scope="col">
+                      Centre Name
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Centre Manager
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Code
+                    </th>
+                    <th className="text-muted" scope="col">
+                      UEN Number
+                    </th>
+                    <th className="text-muted" scope="col">
+                      Email
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.isArray(datas) &&
+                    datas.map((data, index) => (
+                      <tr
+                        key={index}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        <th scope="row" className="text-center">
+                          {index + 1}
+                        </th>
+                        <td>
+                          <div className="d-flex justify-content-center align-items-center">
+                            {storedScreens?.centerListingCreate && (
+                              <div className="dropdown">
+                                <button
+                                  className="btn btn-button btn-sm dropdown-toggle"
+                                  type="button"
+                                  id="dropdownMenuButton"
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                >
+                                  <IoIosAddCircle
+                                    className="text-light"
+                                    style={{ fontSize: "16px" }}
+                                  />
+                                </button>
+                                <ul
+                                  className="dropdown-menu"
+                                  aria-labelledby="dropdownMenuButton"
+                                >
+                                  <li>
+                                    <AddRegister
+                                      id={data.id}
+                                      onSuccess={refreshData}
+                                    />
+                                  </li>
+                                  <li>
+                                    <AddBreak
+                                      id={data.id}
+                                      onSuccess={refreshData}
+                                    />
+                                  </li>
+                                  <li>
+                                    <AddClass
+                                      id={data.id}
+                                      onSuccess={refreshData}
+                                    />
+                                  </li>
+                                  <li>
+                                    <AddPackage
+                                      id={data.id}
+                                      onSuccess={refreshData}
+                                    />
+                                  </li>
+                                  <li>
+                                    {storedScreens?.centerListingUpdate && (
+                                      <Link to={`/center/edit/${data.id}`}>
+                                        <button
+                                          style={{
+                                            whiteSpace: "nowrap",
+                                            width: "100%",
+                                          }}
+                                          className="btn btn-sm btn-normal text-start"
+                                        >
+                                          <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+                                        </button>
+                                      </Link>
+                                    )}
+                                  </li>
+                                  <li>
+                                    {storedScreens?.centerListingDelete && (
+                                      <span>
+                                        <Delete
+                                          onSuccess={refreshData}
+                                          path={`/deleteCenter/${data.id}`}
+                                        />{" "}
+                                      </span>
+                                    )}
+                                  </li>
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.centerName}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.centerManager}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.code}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.mobile}
+                        </td>
+                        <td onClick={() => handleRowClick(data.id)}>
+                          {data.email}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
       </div>
     </div>
   );
 };
 
-export default NewTable1;
+export default Centre;
