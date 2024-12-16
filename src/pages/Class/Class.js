@@ -151,11 +151,13 @@ const Class = () => {
           ...prevFilters,
           centerId: centerLocalId,
         }));
+        fetchListData(centerLocalId);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
           centerId: centerData[0].id,
         }));
+        fetchListData(centerData[0].id);
       }
       setCenterData(centerData);
     } catch (error) {
@@ -188,7 +190,7 @@ const Class = () => {
   useEffect(() => {
     getClassData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [filters, datas]);
 
   const fetchListData = async (centerId) => {
     try {
