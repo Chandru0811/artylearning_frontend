@@ -156,7 +156,7 @@ function ClassEdit() {
         const response = await api.get(`/getAllCourseClassListingsById/${id}`);
         formik.setValues(response.data);
         fetchCourses(response.data.centerId);
-        fetchAllClassRoomWithCenterIds(response.data.centerId);
+        fetchClassRoom(response.data.centerId);
       } catch (error) {
         toast.error("Error Fetch Data ", error);
       }
