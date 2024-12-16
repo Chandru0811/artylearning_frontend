@@ -23,10 +23,10 @@ function PasswordModal({password}) {
   };
 
   const validationSchema = yup.object().shape({
-    password: yup
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Password is required"),
+    password:yup
+    .string()
+    .matches(/^\S*$/, "*Password must not contain spaces.")
+    .required("*Enter the valid Password"),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref("password"), null], "Passwords must match")

@@ -1050,3 +1050,12 @@ table.dataTable.display > tbody > tr > th {
 tbody, td, tfoot, th, thead, tr {
   border-top: none !important;
 }
+.breadcrumb-separator {
+  margin-left: 0.5rem; 
+  margin-right: 0.5rem; 
+}
+.badges-Green {
+  background-color: #287f71 !important; 
+  font-weight: 500;
+  border-radius: 3px;
+}
