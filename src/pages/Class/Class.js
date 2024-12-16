@@ -190,7 +190,7 @@ const Class = () => {
   useEffect(() => {
     getClassData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters, datas]);
+  }, [filters]);
 
   const fetchListData = async (centerId) => {
     try {
