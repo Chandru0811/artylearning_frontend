@@ -360,7 +360,7 @@ const Student = () => {
                             >
                               <li>
                                 {storedScreens?.centerListingUpdate && (
-                                  <Link to={`/student/edit/${data.id}`}>
+                                  <Link to={`/student/edit/${data.studentDetail.id}`}>
                                     <button
                                       style={{
                                         whiteSpace: "nowrap",
@@ -378,7 +378,7 @@ const Student = () => {
                                   <span>
                                     <Delete
                                       onSuccess={refreshData}
-                                      path={`/deleteStudentDetail/${data.id}`}
+                                      path={`/deleteStudentDetail/${data.studentDetail.id}`}
                                     />{" "}
                                   </span>
                                 )}
@@ -388,45 +388,45 @@ const Student = () => {
                         )}
                       </div>
                     </td>
-                    <td onClick={() => handleRowClick(data.id)}>
+                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
                       {data.center}{" "}
                     </td>
-                    <td onClick={() => handleRowClick(data.id)}>
+                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
                       {data.studentUniqueId}{" "}
                     </td>
-                    <td onClick={() => handleRowClick(data.id)}>
+                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
                       {data.studentName}
                     </td>
-                    <td onClick={() => handleRowClick(data.id)}>{data.age}</td>
-                    <td onClick={() => handleRowClick(data.id)}>
+                    <td onClick={() => handleRowClick(data.studentDetail.id)}>{data.age}</td>
+                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
                       {data.gender}
                     </td>
-                    <td onClick={() => handleRowClick(data.id)}>
+                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
                       {data.nationality}
                     </td>
-                    <td onClick={() => handleRowClick(data.id)}>
+                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
                       {data.allowMagazine === "false" ? "Yes" : "No"}
                     </td>
-                    <td onClick={() => handleRowClick(data.id)}>
+                    <td onClick={() => handleRowClick(data.studentDetail.id)}>
                       {data.allowSocialMedia === "false" ? "Yes" : "No"}
                     </td>
                     {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
+                      <td onClick={() => handleRowClick(data.studentDetail.id)}>
                         {data.createdBy}
                       </td>
                     )}
                     {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
+                      <td onClick={() => handleRowClick(data.studentDetail.id)}>
                         {data.createdAt}
                       </td>
                     )}
                     {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
+                      <td onClick={() => handleRowClick(data.studentDetail.id)}>
                         {data.updatedBy}
                       </td>
                     )}
                     {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
+                      <td onClick={() => handleRowClick(data.studentDetail.id)}>
                         {data.updatedAt}
                       </td>
                     )}

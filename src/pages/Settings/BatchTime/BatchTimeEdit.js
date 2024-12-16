@@ -1,9 +1,8 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
@@ -15,24 +14,23 @@ function BatchTimeEdit({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
-  const [paymentTerm, setPaymentTerm] = useState(null);
   const [fields, setFields] = useState([
     {
       id: 1,
-      batchTime: "",
+      batchTimes: "",
     },
   ]);
 
   const validationSchema = Yup.object({
-    batchTime: Yup.array()
+    batchTimes: Yup.array()
       .of(Yup.string().required("Batch time is required"))
       .min(1, "At least one batch time is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      day: "",
-      batchTime: [],
+      batchDay: "",
+      batchTimes: [],
       updatedBy: userName,
     },
     validationSchema: validationSchema,
@@ -40,7 +38,7 @@ function BatchTimeEdit({ id, onSuccess }) {
       console.log(values);
       setLoadIndicator(true);
       try {
-        const response = await api.put(`/updateSHGSetting/${id}`, values, {
+        const response = await api.put(`/updateBatchDays/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -82,17 +80,12 @@ function BatchTimeEdit({ id, onSuccess }) {
     getData();
   };
 
-  // useEffect(() => {
-  //   getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   const addFields = () => {
     setFields([
       ...fields,
       {
         id: fields.length + 1,
-        batchTime: "",
+        batchTimes: "",
       },
     ]);
   };
@@ -101,42 +94,30 @@ function BatchTimeEdit({ id, onSuccess }) {
     const updatedFields = fields.filter((field) => field.id !== id);
     setFields(updatedFields);
 
-    // Update Formik's batchTime array to remove the corresponding value
-    const updatedBatchTime = formik.values.batchTime.filter(
+    const updatedBatchTime = formik.values.batchTimes.filter(
       (_, index) => fields[index].id !== id
     );
-    formik.setFieldValue("batchTime", updatedBatchTime);
+    formik.setFieldValue("batchTimes", updatedBatchTime);
   };
-
-  // const getData = async () => {
-  //   try {
-  //     const response = await api.get(`/getAllSHGSettingById/${id}`);
-  //     formik.setValues(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data ", error);
-  //   }
-  // };
 
   const getData = async () => {
     try {
-      const hardcodedData = {
-        day: "Monday",
-        batchTime: ["10:00", "11:00"],
-      };
-
-      const updatedFields = hardcodedData.batchTime.map((time, index) => ({
-        id: index + 1,
-        batchTime: time,
-      }));
-      setFields(updatedFields);
+      const response = await api.get(`/getBatchForSingleDay/${id}`);
+      const fetchedData = response.data;
 
       formik.setValues({
-        day: hardcodedData.day,
-        batchTime: hardcodedData.batchTime,
+        batchDay: fetchedData.batchDay,
+        batchTimes: fetchedData.batchTimes,
         updatedBy: userName,
       });
+
+      const updatedFields = fetchedData.batchTimes.map((time, index) => ({
+        id: index + 1,
+        batchTimes: time,
+      }));
+      setFields(updatedFields);
     } catch (error) {
-      console.error("Error setting data", error);
+      console.error("Error fetching data", error?.message);
     }
   };
 
@@ -168,7 +149,7 @@ function BatchTimeEdit({ id, onSuccess }) {
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
+              e.preventDefault();
             }
           }}
         >
@@ -182,15 +163,17 @@ function BatchTimeEdit({ id, onSuccess }) {
                   <input
                     type="text"
                     className={`form-control  ${
-                      formik.touched.day && formik.errors.day
+                      formik.touched.batchDay && formik.errors.batchDay
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("day")}
+                    {...formik.getFieldProps("batchDay")}
                     readOnly
                   />
-                  {formik.touched.day && formik.errors.day && (
-                    <div className="invalid-feedback">{formik.errors.day}</div>
+                  {formik.touched.batchDay && formik.errors.batchDay && (
+                    <div className="invalid-feedback">
+                      {formik.errors.batchDay}
+                    </div>
                   )}
                 </div>
 
@@ -203,34 +186,32 @@ function BatchTimeEdit({ id, onSuccess }) {
                             Batch Time<span className="text-danger">*</span>
                           </label>
                         </span>
-                        {row.id > 1 && (
-                          <span>
-                            <button
-                              type="button"
-                              className="btn btn-sm pb-2"
-                              onClick={() => deleteFields(row.id)}
-                            >
-                              <IoCloseCircleOutline
-                                style={{ color: "red", fontSize: "18px" }}
-                              />
-                            </button>
-                          </span>
-                        )}
+                        <span>
+                          <button
+                            type="button"
+                            className="btn btn-sm pb-2"
+                            onClick={() => deleteFields(row.id)}
+                          >
+                            <IoCloseCircleOutline
+                              style={{ color: "red", fontSize: "18px" }}
+                            />
+                          </button>
+                        </span>
                       </div>
                       <input
                         type="time"
                         className={`form-control  ${
-                          formik.touched.batchTime?.[index] &&
-                          formik.errors.batchTime?.[index]
+                          formik.touched.batchTimes?.[index] &&
+                          formik.errors.batchTimes?.[index]
                             ? "is-invalid"
                             : ""
                         }`}
-                        {...formik.getFieldProps(`batchTime[${index}]`)}
+                        {...formik.getFieldProps(`batchTimes[${index}]`)}
                       />
-                      {formik.touched.batchTime?.[index] &&
-                        formik.errors.batchTime?.[index] && (
+                      {formik.touched.batchTimes?.[index] &&
+                        formik.errors.batchTimes?.[index] && (
                           <div className="invalid-feedback">
-                            {formik.errors.batchTime[index]}
+                            {formik.errors.batchTimes[index]}
                           </div>
                         )}
                     </div>

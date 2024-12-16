@@ -53,7 +53,12 @@ const CheckIndex = () => {
           error.response.data &&
           error.response.data.message
         ) {
-          setError(error.response.data.message);
+          setError(
+            error.response.data.message ===
+              "You have already check-in on this date."
+              ? "You have already checked-in on this date."
+              : "You have already checked-out on this date."
+          );
         } else {
           setError("An error occurred. Please try again.");
         }
@@ -64,12 +69,12 @@ const CheckIndex = () => {
 
   const handleCheckIn = () => {
     setAttendanceAction("Check In");
-    setError(""); 
+    setError("");
   };
 
   const handleCheckOut = () => {
     setAttendanceAction("Check Out");
-    setError(""); 
+    setError("");
   };
 
   const handleWorkingModeChange = (e) => {

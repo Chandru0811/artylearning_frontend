@@ -25,12 +25,10 @@ function ChangePassword({ onLogout }) {
     // email: Yup.string()
     //   .email("*Enter a valid email address")
     //   .required("*Email is required"),
-    newPassword: Yup.string()
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Must contain 8 characters, one uppercase, one lowercase, one number, and one special character"
-      )
-      .required("*New password is required"),
+    newPassword: Yup
+    .string()
+    .matches(/^\S*$/, "*Password must not contain spaces.")
+    .required("*Enter the valid Password"),
     confirmPassword: Yup.string()
       .required("*Confirm Password is required")
       .oneOf([Yup.ref("newPassword")], "Passwords must match"),
