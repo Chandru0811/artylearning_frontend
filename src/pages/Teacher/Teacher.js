@@ -145,7 +145,10 @@ const Teacher = () => {
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
   };
 
   const clearFilter = () => {
@@ -154,6 +157,22 @@ const Teacher = () => {
       email: "",
     });
   };
+
+  const filteredData = useMemo(() => {
+    return data.filter((item) => {
+      const matchesTeacherName = item.teacherName
+        ?.toLowerCase()
+        .includes(filters.teacherName.toLowerCase());
+      const matchesEmail = item.email
+        ?.toLowerCase()
+        .includes(filters.email.toLowerCase());
+
+      return (
+        (filters.teacherName ? matchesTeacherName : true) &&
+        (filters.email ? matchesEmail : true)
+      );
+    });
+  }, [data, filters]);
 
   const handleMenuClose = () => setMenuAnchor(null);
 
@@ -195,29 +214,31 @@ const Teacher = () => {
           </div>
         </div>
         <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
+          <div className="individual_fliters d-lg-flex">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="teacherName"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Teacher Name"
-                value={teacherName}
+                value={filters.teacherName}
                 onChange={handleFilterChange}
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="email"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Email"
-                value={email}
+                value={filters.email}
                 onChange={handleFilterChange}
               />
             </div>
 
-            <div className="form-group mb-0 ms-2 mb-1 ">
+            <div className="form-group mb-0 ms-2 mb-1">
               <button
                 type="button"
                 className="btn btn-sm btn-border"
@@ -254,7 +275,7 @@ const Teacher = () => {
             <ThemeProvider theme={theme}>
               <MaterialReactTable
                 columns={columns}
-                data={data}
+                data={filteredData}
                 enableColumnActions={false}
                 enableColumnFilters={false}
                 enableDensityToggle={false}
