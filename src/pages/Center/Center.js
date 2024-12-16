@@ -12,7 +12,6 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
-import AddRegister from "./Add/AddRegister";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Center = () => {
@@ -146,6 +145,34 @@ const Center = () => {
           },
         },
       },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
+          },
+        },
+      },
     },
   });
 
@@ -164,7 +191,7 @@ const Center = () => {
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
-  
+
   return (
     <div className="container-fluid px-2 my-4 center">
       <ol
@@ -212,8 +239,8 @@ const Center = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
-                name="code"
-                value={filters.code}
+                name="centerCode"
+                value={filters.centerCode}
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
@@ -319,6 +346,7 @@ const Center = () => {
               anchorEl={menuAnchor}
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
+              disableScrollLock
             >
               <MenuItem onClick={() => navigate(`/center/view/${selectedId}`)}>
                 View

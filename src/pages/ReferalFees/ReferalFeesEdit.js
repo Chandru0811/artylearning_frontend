@@ -9,7 +9,7 @@ import { FaEdit } from "react-icons/fa";
 import api from "../../config/URL";
 import { MdOutlineModeEdit } from "react-icons/md";
 
-function ReferalFeesEdit({ id, referalData, onSuccess }) {
+function ReferalFeesEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -42,6 +42,7 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
       centerId: "",
       effectiveDate: "",
       referralFee: "",
+      status:""
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -142,111 +143,8 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row py-4">
-                {/* <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Centre<span className="text-danger">*</span>
-                  </label>
-                  <div
-                    className={`form-control form-control-sm ${
-                      formik.touched.centerLocation &&
-                      formik.errors.centerLocation
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "5px",
-                      alignItems: "center",
-                      minHeight: "38px",
-                    }}
-                  >
-                    {formik.values.centerLocation?.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="badge bg-primary text-white d-flex align-items-center"
-                        style={{ padding: "5px 10px", borderRadius: "10px" }}
-                      >
-                        {tag}
-                        <button
-                          type="button"
-                          className="btn-close btn-close-white ms-2"
-                          style={{ fontSize: "10px", lineHeight: 1 }}
-                          onClick={() => {
-                            const updatedCenters = [
-                              ...formik.values.centerLocation,
-                            ];
-                            updatedCenters.splice(index, 1);
-                            formik.setFieldValue(
-                              "centerLocation",
-                              updatedCenters
-                            );
-                          }}
-                        />
-                      </span>
-                    ))}
-                    <select
-                      onChange={(e) => {
-                        const selectedCenter = e.target.value;
-                        if (
-                          selectedCenter &&
-                          !formik.values.centerLocation.includes(selectedCenter)
-                        ) {
-                          formik.setFieldValue("centerLocation", [
-                            ...formik.values.centerLocation,
-                            selectedCenter,
-                          ]);
-                        }
-                      }}
-                      className="form-select form-select-sm border-0"
-                    >
-                      <option value="" disabled>
-                        Select a Centre
-                      </option>
-                      {centerData &&
-                        centerData.map((center) => (
-                          <option key={center.id} value={center.centerNames}>
-                            {center.centerNames}
-                          </option>
-                        ))}
-                    </select>
-                  </div>
-                  {formik.touched.centerLocation &&
-                    formik.errors.centerLocation && (
-                      <div className="invalid-feedback">
-                        {formik.errors.centerLocation}
-                      </div>
-                    )}
-                </div> */}
-                {/* <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Centre<span className="text-danger">*</span>
-                  </label>
-                  <MultiSelect
-                    options={centerOptions}
-                    value={selectedCenters}
-                    onChange={(selected) => {
-                      setSelectedCenters(selected);
-                      formik.setFieldValue(
-                        "centerId",
-                        selected.map((option) => option.value)
-                      );
-                    }}
-                    labelledBy="Select Centers"
-                    className={`form-multi-select ${
-                      formik.touched.centerId && formik.errors.centerId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                  />
-                  {formik.touched.centerId && formik.errors.centerId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.centerId}
-                    </div>
-                  )}
-                </div> */}
                 <div class="col-md-6 col-12 mb-4">
-                  <lable class="">
+                  <lable className="form-label">
                     Centre<span class="text-danger">*</span>
                   </lable>
                   <select
@@ -315,6 +213,32 @@ function ReferalFeesEdit({ id, referalData, onSuccess }) {
                   {formik.touched.referralFee && formik.errors.referralFee && (
                     <div className="invalid-feedback">
                       {formik.errors.referralFee}
+                    </div>
+                  )}
+                </div>
+
+                <div class="col-md-6 col-12 mb-4">
+                  <lable className="form-label">
+                    Status<span class="text-danger">*</span>
+                  </lable>
+                  <select
+                    {...formik.getFieldProps("status")}
+                    name="status"
+                    className={`form-select   ${
+                      formik.touched.status && formik.errors.status
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    aria-label="Default select example"
+                    class="form-select"
+                  >
+                    <option selected></option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">INactive</option>
+                  </select>
+                  {formik.touched.status && formik.errors.status && (
+                    <div className="invalid-feedback">
+                      {formik.errors.status}
                     </div>
                   )}
                 </div>
