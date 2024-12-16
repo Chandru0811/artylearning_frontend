@@ -1,22 +1,20 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import { MdOutlineModeEdit } from "react-icons/md";
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import * as Yup from "yup";
-// import api from "../../config/URL";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import { MdOutlineModeEdit } from "react-icons/md";
 
 function CMSContactEdit({ id, onSuccess }) {
-  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpen(true);
 
   const validationSchema = Yup.object({
     centerName: Yup.string().required("*Centre Name is required"),
@@ -45,9 +43,8 @@ function CMSContactEdit({ id, onSuccess }) {
       mobileNo: "",
       updatedBy: userName,
     },
-    // validationSchema: validationSchema, // Assign the validation schema
+    validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateContactUsSave/${id}`, values, {
@@ -63,12 +60,13 @@ function CMSContactEdit({ id, onSuccess }) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
     },
   });
+
   const getData = async () => {
     if (id) {
       try {
@@ -79,42 +77,23 @@ function CMSContactEdit({ id, onSuccess }) {
       }
     }
   };
-  // useEffect(() => {
-  // getData();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [show]);
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit{" "}
+      <button className="btn btn-sm" onClick={handleOpen}>
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Contact</Modal.Title>
-        </Modal.Header>
-        <form
-          onSubmit={formik.handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
-          }}
-        >
-          <Modal.Body>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+        <DialogTitle className="headColor">Edit Contact</DialogTitle>
+        <form onSubmit={formik.handleSubmit}>
+          <DialogContent>
             <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">Centre Name</label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.centerName && formik.errors.centerName
                         ? "is-invalid"
                         : ""
@@ -131,7 +110,7 @@ function CMSContactEdit({ id, onSuccess }) {
                   <label className="form-label">Email</label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.email && formik.errors.email
                         ? "is-invalid"
                         : ""
@@ -148,7 +127,7 @@ function CMSContactEdit({ id, onSuccess }) {
                   <label className="form-label">Mobile</label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.mobileNo && formik.errors.mobileNo
                         ? "is-invalid"
                         : ""
@@ -165,7 +144,7 @@ function CMSContactEdit({ id, onSuccess }) {
                   <label className="form-label">Address</label>
                   <textarea
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.address && formik.errors.address
                         ? "is-invalid"
                         : ""
@@ -183,7 +162,7 @@ function CMSContactEdit({ id, onSuccess }) {
                   <label className="form-label">Google Address</label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.map && formik.errors.map
                         ? "is-invalid"
                         : ""
@@ -196,31 +175,31 @@ function CMSContactEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer>
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </Button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

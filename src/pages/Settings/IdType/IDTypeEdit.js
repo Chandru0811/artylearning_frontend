@@ -1,13 +1,17 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { MdOutlineModeEdit } from "react-icons/md";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import Button from "react-bootstrap/Button"; // Still using Bootstrap's Button for styling
 
 function IDTypeEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -21,6 +25,7 @@ function IDTypeEdit({ id, onSuccess }) {
     setIsModified(false);
     getData();
   };
+
   const validationSchema = Yup.object({
     idType: Yup.string().required("*ID Type is required"),
   });
@@ -32,7 +37,6 @@ function IDTypeEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateIdTypeSetting/${id}`, values, {
@@ -68,6 +72,7 @@ function IDTypeEdit({ id, onSuccess }) {
       }
     },
   });
+
   const getData = async () => {
     try {
       const response = await api.get(`/getAllIdTypeSettingById/${id}`);
@@ -76,12 +81,6 @@ function IDTypeEdit({ id, onSuccess }) {
       console.error("Error fetching data ", error);
     }
   };
-
-  // useEffect(() => {
-
-  //     getData();
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   return (
     <>
@@ -95,18 +94,19 @@ function IDTypeEdit({ id, onSuccess }) {
       >
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
+
+      <Dialog
+        open={show}
+        onClose={handleClose}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        fullWidth
+        maxWidth="sm"
         backdrop={isModified ? "static" : true}
         keyboard={isModified ? false : true}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit ID Type</Modal.Title>
-        </Modal.Header>
+        <DialogTitle className="headColor">Edit ID Type</DialogTitle>
+
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -115,7 +115,7 @@ function IDTypeEdit({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row">
                 <div className="col-md-6 col-12 mb-2">
@@ -139,31 +139,31 @@ function IDTypeEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer className="mt-3">
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+
+          <DialogActions>
+            <Button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

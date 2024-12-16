@@ -199,7 +199,9 @@ function ClassView() {
                   <p className="">Teacher</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.teacher || ""}</p>
+                  <p className="text-muted text-sm">
+                    : {data.teacherName || ""}
+                  </p>
                 </div>
               </div>
             </div>
@@ -229,7 +231,9 @@ function ClassView() {
                   <p className="">Class Room</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {data.classRoom || ""}</p>
+                  <p className="text-muted text-sm">
+                    : {data?.classRoom || ""}
+                  </p>
                 </div>
               </div>
             </div>
