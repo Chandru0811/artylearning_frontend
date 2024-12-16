@@ -20,6 +20,7 @@ const Subject = () => {
     subject: "",
     code: "",
   });
+  const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -27,8 +28,6 @@ const Subject = () => {
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   console.log("Screens : ", SCREENS);
-  const [subjectName, setSubjectName] = useState("");
-  const [subjectCode, setSubjectCode] = useState("");
 
   const columns = useMemo(
     () => [
@@ -94,6 +93,7 @@ const Subject = () => {
     try {
       setLoading(true);
       const response = await api.get("/getAllCourseSubjects");
+      setAllData(response.data);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -101,9 +101,10 @@ const Subject = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchData();
-  }, [filters]);
+  }, []);
 
   const theme = createTheme({
     components: {
@@ -121,9 +122,28 @@ const Subject = () => {
     },
   });
 
+  useEffect(() => {
+    const filteredData = allData.filter((item) => {
+      const subjectMatch = filters.subject
+        ? item.subject?.toLowerCase().includes(filters.subject.toLowerCase())
+        : true;
+
+      const codeMatch = filters.code
+        ? item.code?.toLowerCase().includes(filters.code.toLowerCase())
+        : true;
+
+      return subjectMatch && codeMatch;
+    });
+
+    setData(filteredData);
+  }, [filters, allData]);
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
   };
 
   const clearFilter = () => {
@@ -181,7 +201,8 @@ const Subject = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Subject"
-                value={subjectName}
+                name="subject"
+                value={filters.subject}
                 onChange={handleFilterChange}
               />
             </div>
@@ -191,7 +212,8 @@ const Subject = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Subject Code"
-                value={subjectCode}
+                name="code"
+                value={filters.code}
                 onChange={handleFilterChange}
               />
             </div>

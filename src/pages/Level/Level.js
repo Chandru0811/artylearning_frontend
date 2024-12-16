@@ -22,11 +22,6 @@ const Level = () => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [subjectData, setSubjectData] = useState(null);
-  const [levelName, setlevelName] = useState("");
-  const [code, setCode] = useState("");
-  const [subjectName, setSubjectName] = useState("");
-  const [subjectCode, setSubjectCode] = useState("");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -108,7 +103,7 @@ const Level = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [filters]);
+  }, []);
 
   const theme = createTheme({
     components: {
@@ -139,6 +134,19 @@ const Level = () => {
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
+
+  const filteredData = useMemo(() => {
+    return data.filter((item) => {
+      const matchesLevel = item.level
+        ?.toLowerCase()
+        .includes(filters.level.toLowerCase());
+      const matchesCode = item.levelCode
+        ?.toLowerCase()
+        .includes(filters.code.toLowerCase());
+
+      return matchesLevel && matchesCode;
+    });
+  }, [data, filters]);
 
   return (
     <div className="container-fluid my-4 center">
@@ -186,7 +194,8 @@ const Level = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Level"
-                value={levelName}
+                name="level"
+                value={filters.level}
                 onChange={handleFilterChange}
               />
             </div>
@@ -196,7 +205,8 @@ const Level = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Code"
-                value={code}
+                name="code"
+                value={filters.code}
                 onChange={handleFilterChange}
               />
             </div>
@@ -234,7 +244,7 @@ const Level = () => {
             <ThemeProvider theme={theme}>
               <MaterialReactTable
                 columns={columns}
-                data={data}
+                data={filteredData}
                 enableColumnActions={false}
                 enableColumnFilters={false}
                 enableDensityToggle={false}

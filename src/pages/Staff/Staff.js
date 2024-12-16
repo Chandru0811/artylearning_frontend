@@ -169,13 +169,14 @@ const Staff = () => {
 
   const filteredData = useMemo(() => {
     return data.filter((item) => {
-      return (
-        (!filters.staffId || item.teacherId.includes(filters.staffId)) &&
-        (!filters.staffName ||
-          item.teacherName
-            .toLowerCase()
-            .includes(filters.staffName.toLowerCase()))
-      );
+      const staffIdMatch = item.teacherId
+        ?.toLowerCase()
+        .includes(filters.staffId.toLowerCase());
+      const staffNameMatch = item.teacherName
+        ?.toLowerCase()
+        .includes(filters.staffName.toLowerCase());
+
+      return staffIdMatch && staffNameMatch;
     });
   }, [data, filters]);
 
@@ -223,6 +224,7 @@ const Staff = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
+                name="staffId"
                 placeholder="Staff Id"
                 value={filters.staffId}
                 onChange={handleFilterChange}
@@ -233,6 +235,7 @@ const Staff = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
+                name="staffName"
                 placeholder="Staff Name"
                 value={filters.staffName}
                 onChange={handleFilterChange}
@@ -276,7 +279,7 @@ const Staff = () => {
             <ThemeProvider theme={theme}>
               <MaterialReactTable
                 columns={columns}
-                data={data}
+                data={filteredData}
                 enableColumnActions={false}
                 enableColumnFilters={false}
                 enableDensityToggle={false}
