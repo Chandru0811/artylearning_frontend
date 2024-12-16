@@ -1,117 +1,183 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
-import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
-// import { SCREENS } from "../../config/ScreenFilter";
+import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Staff = () => {
-  const tableRef = useRef(null);
   const navigate = useNavigate();
-  const [datas, setDatas] = useState([]);
+  const [filters, setFilters] = useState({
+    staffId: "",
+    staffName: "",
+  });
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [extraData, setExtraData] = useState(false);
-
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  // console.log("Screens : ", SCREENS);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const [staffId, setStaffId] = useState("");
-  const [staffName, setSTaffName] = useState("");
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      { accessorKey: "teacherId", enableHiding: false, header: "Staff Id" },
+      {
+        accessorKey: "teacherType",
+        enableHiding: false,
+        header: "Staff Type",
+      },
+      {
+        accessorKey: "teacherName",
+        enableHiding: false,
+        header: "Staff Name",
+      },
+      {
+        accessorKey: "email",
+        enableHiding: false,
+        header: "Email",
+      },
+      {
+        accessorKey: "gender",
+        enableHiding: false,
+        header: "Gender",
+      },
+      {
+        accessorKey: "role",
+        enableHiding: false,
+        header: "Role",
+      },
+      {
+        accessorKey: "contactNumber",
+        enableHiding: false,
+        header: "Mobile",
+      },
+      {
+        accessorKey: "citizenship",
 
-  const clearFilters = () => {
-    setStaffId("");
-    setSTaffName("");
+        header: "Citizenship",
+      },
+      { accessorKey: "centerId", header: "Center Id" },
+      {
+        accessorKey: "dateOfBirth",
 
-    $(tableRef.current).DataTable().search("").draw();
-  };
+        header: "Date Of Birth",
+      },
+      { accessorKey: "idNo", header: "Id No" },
+      { accessorKey: "idType", header: "Id Type" },
+      { accessorKey: "idTypeId", header: "Id Type Id" },
+      {
+        accessorKey: "userUniqueId",
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllUserListExceptTeacher");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetch Data", error);
-      }
-    };
-    getData();
-  }, []);
-  console.log("staff", datas);
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+        header: "User Unique Id",
+      },
+      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: 1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const fetchData = async () => {
     try {
       const response = await api.get("/getAllUserListExceptTeacher");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      setData(response.data);
+      setLoading(false);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
-
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/staff/view/${id}`); // Navigate to the index page when a row is clicked
   };
 
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+    fetchData();
+  }, []);
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilters({ staffId: "", staffName: "" });
+  };
+
+  const handleMenuClose = () => setMenuAnchor(null);
+
+  const filteredData = useMemo(() => {
+    return data.filter((item) => {
+      return (
+        (!filters.staffId || item.teacherId.includes(filters.staffId)) &&
+        (!filters.staffName ||
+          item.teacherName
+            .toLowerCase()
+            .includes(filters.staffName.toLowerCase()))
+      );
+    });
+  }, [data, filters]);
 
   return (
     <div className="container-fluid my-4 center">
@@ -158,12 +224,8 @@ const Staff = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Staff Id"
-                value={staffId}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setStaffId(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                value={filters.staffId}
+                onChange={handleFilterChange}
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -172,12 +234,8 @@ const Staff = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Staff Name"
-                value={staffName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setSTaffName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                value={filters.staffName}
+                onChange={handleFilterChange}
               />
             </div>
 
@@ -185,7 +243,7 @@ const Staff = () => {
               <button
                 type="button"
                 className="btn btn-sm btn-border"
-                onClick={clearFilters}
+                onClick={clearFilter}
               >
                 Clear
               </button>
@@ -215,156 +273,62 @@ const Staff = () => {
           </div>
         ) : (
           <div>
-            <div className="table-responsive py-2">
-              <table
-                style={{ width: "100%" }}
-                ref={tableRef}
-                className="display"
-              >
-                <thead>
-                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                    <th className="text-muted" scope="col">
-                      S No
-                    </th>
-                    <th className="text-center text-muted"></th>
-                    <th className="text-muted" scope="col">
-                      Staff ID
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Staff Type
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Staff Name
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Email
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Gender
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Role
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Mobile
-                    </th>
-                    <th className="text-muted" scope="col">
-                      CreatedBy
-                    </th>
-                    <th className="text-muted" scope="col">
-                      UpdatedBy
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(datas) &&
-                    datas.map((data, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          // backgroundColor: "#fff !important",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <th scope="row" className="text-center">
-                          {index + 1}
-                        </th>
-                        <td>
-                          <div className="d-flex justify-content-center align-items-center">
-                            {storedScreens?.centerListingCreate && (
-                              <div className="dropdown">
-                                <button
-                                  className="btn btn-button btn-sm dropdown-toggle"
-                                  type="button"
-                                  id="dropdownMenuButton"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <IoIosAddCircle
-                                    className="text-light"
-                                    style={{ fontSize: "16px" }}
-                                  />
-                                </button>
-                                <ul
-                                  className="dropdown-menu"
-                                  aria-labelledby="dropdownMenuButton"
-                                >
-                                  <li>
-                                    {storedScreens?.staffUpdate && (
-                                      <Link to={`/staff/edit/${data.id}`}>
-                                        <button
-                                          style={{
-                                            whiteSpace: "nowrap",
-                                            width: "100%",
-                                          }}
-                                          className="btn btn-sm btn-normal text-start"
-                                        >
-                                          <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                                        </button>
-                                      </Link>
-                                    )}
-                                  </li>
-                                  <li>
-                                    {storedScreens?.staffDelete && (
-                                      <span>
-                                        <Delete
-                                          onSuccess={refreshData}
-                                          path={`/deleteUser/${data.id}`}
-                                        />{" "}
-                                      </span>
-                                    )}
-                                  </li>
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.teacherId}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.teacherType}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.teacherName}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.email}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.gender}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.role === "branch_admin" ? (
-                            <span className="badge badges-Red">
-                              Branch Admin
-                            </span>
-                          ) : data.role === "staff_admin" ? (
-                            <span className="badge badges-Blue">
-                              Staff Admin
-                            </span>
-                          ) : data.role === "center_manager" ? (
-                            <span className="badge badges-Yellow">
-                              Centre Manager
-                            </span>
-                          ) : (
-                            <span className="badge badges-Green">Staff</span>
-                          )}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.contactNumber}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.createdBy}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.updatedBy}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    teacherId: true,
+                    teacherName: true,
+                    teacherType: true,
+                    email: true,
+                    gender: true,
+                    role: true,
+                    contactNumber: true,
+                    citizenship: true,
+                    centerId: true,
+                    dateOfBirth: true,
+                    idNo: true,
+                    idType: true,
+                    idTypeId: true,
+                    userUniqueId: true,
+                    createdBy: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    updatedBy: true,
+                  },
+                  columnFilters: [
+                    { id: "teacherId", value: filters.staffId },
+                    { id: "teacherName", value: filters.staffName },
+                  ],
+                }}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={() => navigate(`/staff/view/${selectedId}`)}>
+                View
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/staff/edit/${selectedId}`)}>
+                Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteStaff/${selectedId}`}
+                  onDeleteSuccess={fetchData}
+                />
+              </MenuItem>
+            </Menu>
           </div>
         )}
       </div>
