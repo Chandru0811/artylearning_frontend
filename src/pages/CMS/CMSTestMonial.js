@@ -1,25 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-
-import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import profile from "../../assets/images/profile.png";
-import CMSProductsItemAdd from "./CMSProductsitemAdd";
-import CMSProductsItemEdit from "./CMSProductsItemEdit";
 import CMSTestMonialAdd from "./CMSTestMonialAdd";
 import CMSTestMonialEdit from "./CMSTestMonialEdit";
-import { IoIosAddCircle } from "react-icons/io";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import {
+  createTheme,
+  IconButton,
+  Menu,
+  MenuItem,
+  ThemeProvider,
+} from "@mui/material";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../components/common/GlobalDelete";
 
 const CMSTestMonail = () => {
-  const tableRef = useRef(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   const getTestimonial = async () => {
     try {
@@ -34,44 +35,96 @@ const CMSTestMonail = () => {
     getTestimonial();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "parentImage",
+        enableHiding: false,
+        header: "Parent Image",
+        size: 20,
+        Cell: ({ cell }) => (
+          <img
+            src={cell.getValue()}
+            alt="Blog"
+            style={{ width: "50px", height: "50px", objectFit: "cover" }}
+            // onError={(e) => (e.target.src = "path/to/placeholder-image.jpg")}
+          />
+        ),
+      },
+      {
+        accessorKey: "parentDescription",
+        enableHiding: false,
+        header: "Parent Description",
+        size: 50,
+      },
+      {
+        accessorKey: "parentName",
+        header: "Parent Name",
+        enableHiding: false,
+        size: 40,
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllTestimonialSave");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
 
   const testimonialPublish = async () => {
     try {
@@ -86,16 +139,9 @@ const CMSTestMonail = () => {
       toast.error("Error refreshing data:", error);
     }
   };
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+
+  const handleMenuClose = () => setMenuAnchor(null);
+
   return (
     <div className="container center p-0">
       <ol
@@ -123,7 +169,7 @@ const CMSTestMonail = () => {
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
             {storedScreens?.testimonialCreate && (
-              <CMSTestMonialAdd onSuccess={refreshData} />
+              <CMSTestMonialAdd onSuccess={getTestimonial} />
             )}
             {storedScreens?.testimonialIndex && (
               <button
@@ -138,7 +184,8 @@ const CMSTestMonail = () => {
         </div>
       </div>
 
-      <div className="card">
+      <div className="container">
+      <div className="card ">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
@@ -166,89 +213,49 @@ const CMSTestMonail = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table ref={tableRef} className="display">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="text-center"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    S No
-                  </th>
-                  <th scope="" className="text-center"></th>
-                  <th scope="col" className="text-center">
-                    Parent Image
-                  </th>
-                  <th scope="col" className="text-center">
-                    Parent Description
-                  </th>
-                  <th scope="col" className="text-center">
-                    Parent Name
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr key={index}>
-                    <td className="text-center">{index + 1}</td>
-                    <td className="text-center">
-                      <div className="d-flex justify-content-center align-items-center">
-                        <div className="dropdown">
-                          <button
-                            className="btn btn-button btn-sm"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <IoIosAddCircle
-                              className="text-light"
-                              style={{ fontSize: "16px" }}
-                            />
-                          </button>
-                          <ul
-                            className="dropdown-menu"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            <li>
-                              {storedScreens?.testimonialUpdate && (
-                                <CMSTestMonialEdit
-                                  id={data.id}
-                                  onSuccess={refreshData}
-                                />
-                              )}
-                            </li>
-                            <li>
-                              {storedScreens?.testimonialDelete && (
-                                <Delete
-                                  onSuccess={refreshData}
-                                  path={`/deleteTestimonialSave/${data.id}`}
-                                  style={{ display: "inline-block" }}
-                                />
-                              )}
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <img
-                        src={data.parentImage}
-                        className="img-fluid"
-                        alt="image"
-                        width={150}
-                      />
-                    </td>
-                    <td className="text-center">{data.parentDescription}</td>
-                    <td className="text-center"> {data.parentName}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <CMSTestMonialEdit onSuccess={getTestimonial} id={selectedId} />
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteTestimonialSave/${selectedId}`}
+                  onDeleteSuccess={getTestimonial}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
+      </div>
       </div>
     </div>
   );
