@@ -234,7 +234,6 @@ function StudentNewView() {
                     alt=""
                     onError={(e) => {
                       e.target.onerror = null;
-                      ils;
                       e.target.src = NoImage;
                     }}
                   />
