@@ -1,22 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Delete from "../../../components/common/Delete";
 import api from "../../../config/URL";
-import CmsCourseEdit from "./CmsCourseEdit";
-import CmsCourseAdd from "./CmsCourseAdd";
-import { Link } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosAddCircle } from "react-icons/io";
 import { MdOutlineModeEdit } from "react-icons/md";
+import {
+  createTheme,
+  IconButton,
+  Menu,
+  MenuItem,
+  ThemeProvider,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const CmsCourses = () => {
-  const tableRef = useRef(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
   const getAllCourses = async () => {
     try {
@@ -31,46 +37,96 @@ const CmsCourses = () => {
   useEffect(() => {
     getAllCourses();
   }, []);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "menuLogo",
+        enableHiding: false,
+        header: "Menu Logo",
+        size: 20,
+        Cell: ({ cell }) => (
+          <img
+            src={cell.getValue()}
+            alt="Blog"
+            style={{ width: "50px", height: "50px", objectFit: "cover" }}
+            // onError={(e) => (e.target.src = "path/to/placeholder-image.jpg")}
+          />
+        ),
+      },
+      {
+        accessorKey: "menuTitle",
+        enableHiding: false,
+        header: "Menu Title",
+        size: 50,
+      },
+      {
+        accessorKey: "heading",
+        header: " Heading",
+        enableHiding: false,
+        size: 40,
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: 1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllCoursesSave");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
 
   const coursesPublish = async () => {
     try {
@@ -90,17 +146,7 @@ const CmsCourses = () => {
       console.error("Error saving data:", error.message);
     }
   };
-
-    useEffect(() => {
-      if (tableRef.current) {
-        const rows = tableRef.current.querySelectorAll("tr.odd");
-        rows.forEach((row) => {
-          row.classList.remove("odd");
-        });
-        const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-        thElements.forEach((th) => th.classList.remove("sorting_1"));
-      }
-    }, [datas]);
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div className="container center p-0">
@@ -175,89 +221,49 @@ const CmsCourses = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table ref={tableRef} className="display">
-              <thead>
-                <tr>
-                  <th
-                    scope=""
-                    className="text-center"
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    S No
-                  </th>
-                  <th scope="" className="text-center"></th>
-                  <th scope="col" className="text-center">
-                    Menu Logo
-                  </th>
-                  <th scope="col" className="text-center">
-                    Menu Title
-                  </th>
-                  <th scope="col" className="text-center">
-                    Heading
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr key={index}>
-                    <td className="text-center">{index + 1}</td>
-                    <td className="text-center">
-                      <div className="d-flex justify-content-center align-items-center">
-                        <div className="dropdown">
-                          <button
-                            className="btn btn-button btn-sm"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <IoIosAddCircle
-                              className="text-light"
-                              style={{ fontSize: "16px" }}
-                            />
-                          </button>
-                          <ul
-                            className="dropdown-menu"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            <li>
-                              {storedScreens?.testimonialUpdate && (
-                                <Link to={`/cms/CmsCourses/edit/${data.id}`}>
-                                  <button className="btn btn-sm">
-                                    <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                                  </button>
-                                </Link>
-                              )}
-                            </li>
-                            <li>
-                              {storedScreens?.testimonialDelete && (
-                                <Delete
-                                  onSuccess={refreshData}
-                                  path={`/deleteCoursesSave/${data.id}`}
-                                  style={{ display: "inline-block" }}
-                                />
-                              )}
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <img
-                        src={data.menuLogo}
-                        className="img-fluid"
-                        alt="image"
-                        width={50}
-                      />
-                    </td>
-                    <td className="text-center">{data.menuTitle}</td>
-                    <td className="text-center"> {data.heading}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem
+                onClick={() => navigate(`/cms/CmsCourses/edit/${selectedId}`)}
+              >
+                 <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteCoursesSavePublish/${selectedId}`}
+                  onDeleteSuccess={getAllCourses}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

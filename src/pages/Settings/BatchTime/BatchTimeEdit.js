@@ -1,8 +1,12 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
@@ -35,7 +39,6 @@ function BatchTimeEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateBatchDays/${id}`, values, {
@@ -133,18 +136,14 @@ function BatchTimeEdit({ id, onSuccess }) {
       >
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="md"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={show}
+        onClose={handleClose}
+        maxWidth="sm"
+        fullWidth
+        aria-labelledby="batch-time-edit-dialog"
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Batch Time Edit</Modal.Title>
-        </Modal.Header>
+        <DialogTitle className="headColor">Batch Time Edit</DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -153,7 +152,7 @@ function BatchTimeEdit({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row">
                 <div className="col-md-12 col-12">
@@ -218,7 +217,7 @@ function BatchTimeEdit({ id, onSuccess }) {
                   ))}
                   <button
                     type="button"
-                    className="btn btn-sm btn-danger mt-3"
+                    className="btn btn-button btn-sm mt-3"
                     onClick={addFields}
                   >
                     Add more
@@ -226,32 +225,31 @@ function BatchTimeEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer>
-              <Button
-                type="button"
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-                onClick={formik.handleSubmit}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </Button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

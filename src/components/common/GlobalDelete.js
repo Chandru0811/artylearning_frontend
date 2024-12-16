@@ -27,9 +27,9 @@ function GlobalDelete({ path, onDeleteSuccess }) {
   const handleDelete = async () => {
     try {
       const response = await api.delete(path);
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         toast.success(response.data.message);
-        onDeleteSuccess(); // Callback to refresh data
+        onDeleteSuccess();
       }
     } catch (error) {
       if (error?.response?.status === 409) {
@@ -38,19 +38,19 @@ function GlobalDelete({ path, onDeleteSuccess }) {
         toast.error("An error occurred while deleting the record.");
       }
     } finally {
-      handleCloseDialog(); // Close dialog and reset scroll
+      handleCloseDialog();
     }
   };
 
   return (
     <>
-      <button
-        className="btn btn-sm btn-normal text-start"
+      <p
+        className="text-start mb-0"
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleOpenDialog} // Open dialog
       >
-        <MdDeleteOutline /> &nbsp;Delete
-      </button>
+        Delete
+      </p>
 
       <Dialog
         open={deleteDialogOpen}

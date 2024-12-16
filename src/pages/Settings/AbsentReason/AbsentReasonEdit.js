@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { FaEdit } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 function AbsentReasonEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -43,7 +42,6 @@ function AbsentReasonEdit({ id, onSuccess }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
       try {
         const response = await api.put(`/updateAbsentReason/${id}`, values, {
@@ -92,23 +90,18 @@ function AbsentReasonEdit({ id, onSuccess }) {
       >
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={show}
+        onClose={handleClose}
+        maxWidth="sm"
+        fullWidth
+        aria-labelledby="edit-absent-reason-title"
       >
-        {" "}
         <form onSubmit={formik.handleSubmit}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <p className="headColor">Edit Absent Reason</p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+          <DialogTitle id="edit-absent-reason-title">
+            <p className="headColor">Edit Absent Reason</p>
+          </DialogTitle>
+          <DialogContent>
             <div className="row">
               <div className="col-12 mb-3">
                 <label className="form-label">
@@ -130,14 +123,14 @@ function AbsentReasonEdit({ id, onSuccess }) {
               <div className="col-12 mb-3">
                 <label className="form-label">Remarks</label>
                 <textarea
-                  rows={5}
-                  className={`form-control`}
+                  rows={4}
+                  className="form-control"
                   {...formik.getFieldProps("remarks")}
-                ></textarea>
+                />
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="mt-3">
+          </DialogContent>
+          <DialogActions>
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -146,7 +139,6 @@ function AbsentReasonEdit({ id, onSuccess }) {
             </Button>
             <button
               type="submit"
-              onSubmit={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >
@@ -158,9 +150,9 @@ function AbsentReasonEdit({ id, onSuccess }) {
               )}
               Update
             </button>
-          </Modal.Footer>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }
