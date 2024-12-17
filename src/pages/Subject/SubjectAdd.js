@@ -75,9 +75,10 @@ function SubjectAdd({ onSuccess }) {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
+          setShow(false);
           navigate("/subject");
-          handleClose();
           onSuccess();
+          handleClose();
         } else {
           toast.error(response.data.message);
         }

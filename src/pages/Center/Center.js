@@ -236,7 +236,7 @@ const Center = () => {
                 onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Center Name"
+                placeholder="Centre Name"
                 autoComplete="off"
               />
             </div>
