@@ -502,7 +502,7 @@ function CenterEdit() {
                   <input
                     {...formik.getFieldProps("uenNumber")}
                     type="text"
-                    className={`form-controls ${
+                    className={`form-control ${
                       formik.touched.uenNumber && formik.errors.uenNumber
                         ? "is-invalid"
                         : ""
@@ -822,7 +822,7 @@ function CenterEdit() {
                         >
                           Description
                         </th>
-                        <th scope="col" className="fw-medium">
+                        <th scope="col" className="fw-medium ps-4">
                           Action
                         </th>
                       </tr>
