@@ -20,14 +20,14 @@ const ReferalHistory = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      {
-        accessorKey: "id",
-        header: "",
-        enableHiding: false,
-        enableSorting: false,
-        size: 10,
-        Cell: ({ cell }) => <IconButton></IconButton>,
-      },
+      // {
+      //   accessorKey: "id",
+      //   header: "",
+      //   enableHiding: false,
+      //   enableSorting: false,
+      //   size: 10,
+      //   Cell: ({ cell }) => <IconButton></IconButton>,
+      // },
       {
         accessorKey: "referByStudent",
         enableHiding: false,
@@ -45,19 +45,22 @@ const ReferalHistory = () => {
         size: 40,
       },
       {
+        accessorKey: "referralFee",
+        enableHiding: false,
+        header: "Referal Fee",
+        size: 30,
+      },
+      {
         accessorKey: "enrollDate",
         header: "Enroll Date",
         enableHiding: false,
         size: 50,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
-      { accessorKey: "attendance", enableHiding: false, header: "Attendance" },
-      {
-        accessorKey: "referralFee",
-        enableHiding: false,
-        header: "Referal Fee",
-      },
-      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+     
+        { accessorKey: "attendance", enableHiding: false, header: "Attendance" ,   size: 30,},
+     
+      { accessorKey: "createdBy",header: "Created By" },
       {
         accessorKey: "createdAt",
         header: "Created At",
@@ -188,7 +191,7 @@ const ReferalHistory = () => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
-                    createdBy: true,
+                    createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
