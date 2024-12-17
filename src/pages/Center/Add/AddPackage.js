@@ -6,7 +6,12 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import { GoPackage } from "react-icons/go";
-
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 function AddPackage({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -76,22 +81,19 @@ function AddPackage({ id, onSuccess }) {
 
   return (
     <>
-      <button
+       <p
+        className="text-start mb-0"
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-sm  btn-normal text-start"
         onClick={handleShow}
       >
-        <GoPackage /> &nbsp;&nbsp;Add Package
-      </button>
+      Add Package
+      </p>
 
-      <Modal
-        show={show}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        onHide={handleClose}
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={show}
+        onClose={handleClose} 
+        maxWidth="md"
+        fullWidth
       >
         <form
           onSubmit={formik.handleSubmit}
@@ -101,12 +103,10 @@ function AddPackage({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Header closeButton>
-            <Modal.Title>
+            <DialogTitle>
               <p className="headColor">Add Package</p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+            </DialogTitle>
+          <DialogContent>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
@@ -158,8 +158,8 @@ function AddPackage({ id, onSuccess }) {
                 )}
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="mt-5">
+          </DialogContent>
+          <DialogActions className="mt-5">
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -179,9 +179,9 @@ function AddPackage({ id, onSuccess }) {
               )}
               Submit
             </Button>
-          </Modal.Footer>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

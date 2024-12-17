@@ -1062,6 +1062,19 @@ tbody, td, tfoot, th, thead, tr {
 }
 .badges-Green {
   background-color: #287f71 !important; 
-  font-weight: 500;
+  font-weight: 400;
   border-radius: 3px;
+}
+.badges-orange {
+  background-color: #eb862a !important; 
+  font-weight: 400;
+  border-radius: 3px;
+}
+.custom-outline-danger {
+  border-color: #eb862a!important; 
+  height: 32px;
+}
+.custom-outline-danger:hover {
+  background-color: #eb862a !important;
+  color: #fff !important; 
 }

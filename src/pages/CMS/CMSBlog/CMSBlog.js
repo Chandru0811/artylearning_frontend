@@ -172,27 +172,6 @@ const CMSBlog = () => {
           Blog
         </li>
       </ol>
-      <div className="container cms-header shadow-sm py-2 mb-4">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            <h4>Blogs</h4>
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {storedScreens?.testimonialCreate && (
-              <CMSBlogAdd onSuccess={fetchData} />
-            )}
-            {storedScreens?.testimonialIndex && (
-              <button
-                onClick={blogsPublish}
-                className="btn btn-sm btn-outline-danger border ms-2"
-                style={{ whiteSpace: "nowrap" }}
-              >
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
       <div className="card">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
@@ -208,6 +187,27 @@ const CMSBlog = () => {
                 Blog
               </span>
             </span>
+          </div>
+        </div>
+        <div className="container cms-header shadow-sm py-2 mb-4">
+          <div className="row p-1">
+            <div className="col-md-6 col-12">
+              <h4>Blogs</h4>
+            </div>
+            <div className="col-md-6 col-12 d-flex justify-content-end">
+              {storedScreens?.testimonialCreate && (
+                <CMSBlogAdd onSuccess={fetchData} />
+              )}
+              {storedScreens?.testimonialIndex && (
+                <button
+                  onClick={blogsPublish}
+                  className="btn btn-sm custom-outline-danger border ms-2"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Publish
+                </button>
+              )}
+            </div>
           </div>
         </div>
         {loading ? (
@@ -251,8 +251,8 @@ const CMSBlog = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem >
-                <CMSBlogEdit onSuccess={fetchData} id={selectedId}/>
+              <MenuItem>
+                <CMSBlogEdit onSuccess={fetchData} id={selectedId} />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

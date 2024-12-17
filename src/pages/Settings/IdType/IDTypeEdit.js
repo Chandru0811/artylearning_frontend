@@ -10,7 +10,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import Button from "react-bootstrap/Button"; // Still using Bootstrap's Button for styling
 
 function IDTypeEdit({ id, onSuccess }) {
@@ -105,7 +107,16 @@ function IDTypeEdit({ id, onSuccess }) {
         backdrop={isModified ? "static" : true}
         keyboard={isModified ? false : true}
       >
-        <DialogTitle className="headColor">Edit ID Type</DialogTitle>
+        <DialogTitle className="headColor">
+          Edit ID Type{" "}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
 
         <form
           onSubmit={formik.handleSubmit}
@@ -118,7 +129,7 @@ function IDTypeEdit({ id, onSuccess }) {
           <DialogContent>
             <div className="container">
               <div className="row">
-                <div className="col-md-6 col-12 mb-2">
+                <div className="col-12 mb-2">
                   <label className="form-label">
                     ID Type<span className="text-danger">*</span>
                   </label>
@@ -142,12 +153,14 @@ function IDTypeEdit({ id, onSuccess }) {
           </DialogContent>
 
           <DialogActions>
-            <Button
-              className="btn btn-sm btn-border bg-light text-dark"
+            <button
+              type="button"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
+            </button>
             <button
               type="submit"
               className="btn btn-button btn-sm"

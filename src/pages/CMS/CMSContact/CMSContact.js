@@ -157,25 +157,7 @@ const CMSContact = () => {
             Contact Us
           </li>
         </ol>
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            <h4>Contact</h4>
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end gap-2">
-            {storedScreens?.contactUsCreate && (
-              <CMSContactAdd onSuccess={getCenterData} />
-            )}
-            {storedScreens?.contactUsPublish && (
-              <button
-                type="button"
-                className="btn btn-outline-danger border"
-                onClick={contactPublish}
-              >
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
+   
       </div>
       <div className="card">
         <div
@@ -193,6 +175,27 @@ const CMSContact = () => {
               </span>
             </span>
           </div>
+        </div>
+        <div className="container cms-header shadow-sm py-2 mb-4">
+        <div className="row p-1">
+          <div className="col-md-6 col-12">
+            <h4>Contact</h4>
+          </div>
+          <div className="col-md-6 col-12 d-flex justify-content-end gap-2">
+            {storedScreens?.contactUsCreate && (
+              <CMSContactAdd onSuccess={getCenterData} />
+            )}
+            {storedScreens?.contactUsPublish && (
+              <button
+                type="button"
+                className="btn custom-outline-danger border"
+                onClick={contactPublish}
+              >
+                Publish
+              </button>
+            )}
+          </div>
+        </div>
         </div>
         {loading ? (
           <div className="loader-container">

@@ -90,16 +90,15 @@ function SubjectEdit({ id, onSuccess }) {
 
   return (
     <>
-      <button
+      <span
         onClick={handleShow}
         style={{
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="btn btn-sm btn-normal text-start"
       >
-        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-      </button>
+        Edit
+      </span>
 
       <Dialog open={show} onClose={handleClose} fullWidth maxWidth="md">
         <form

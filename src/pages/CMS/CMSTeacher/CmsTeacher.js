@@ -107,7 +107,7 @@ export const CmsTeacher = () => {
             )}
             {storedScreens?.teacherSavePublish && (
               <button
-                className="btn btn-sm btn-outline-danger border ms-2"
+                className="btn btn-sm custom-outline-danger border ms-2"
                 onClick={publish}
               >
                 Publish

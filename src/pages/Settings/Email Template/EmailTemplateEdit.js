@@ -166,15 +166,26 @@ function EmailTemplateEdit({ id, onSuccess }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button
-              className="btn btn-sm btn-border bg-light text-dark"
+            <button
+            type="button"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
-            <Button type="submit" className="btn btn-button btn-sm">
-              Submit
-            </Button>
+            </button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+            >
+              {/* {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )} */}
+              Update
+            </button>
           </DialogActions>
         </form>
       </Dialog>

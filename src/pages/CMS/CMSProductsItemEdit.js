@@ -8,28 +8,35 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
 } from "@mui/material";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 import { MdOutlineModeEdit } from "react-icons/md";
 
 function CMSProductsItemEdit({ id, getData }) {
-  console.log("Id", id);
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const userName = localStorage.getItem("userName");
 
-  const [data, setDatas] = useState();
-
   const handleClose = () => {
     setOpen(false);
     formik.resetForm();
+    setSelectedFile(null); // Clear file state on close
   };
 
   const handleOpen = () => setOpen(true);
 
-  const validationSchema = Yup.object().shape({
-    files: Yup.mixed().required("Image file is required"),
+  const validationSchema = Yup.object({
+    files: Yup.mixed()
+      .nullable()
+      .required("Image file is required")
+      .test(
+        "fileType",
+        "Only image files are allowed",
+        (value) => !value || (value && value.type.startsWith("image"))
+      ),
     imageDetails: Yup.string().required("Image details are required"),
   });
 
@@ -40,7 +47,7 @@ function CMSProductsItemEdit({ id, getData }) {
     },
     validationSchema,
     onSubmit: async (data) => {
-      console.log(data);
+      setLoadIndicator(true);
       const formData = new FormData();
       formData.append("files", data.files);
       formData.append("imageDetails", data.imageDetails);
@@ -59,13 +66,14 @@ function CMSProductsItemEdit({ id, getData }) {
         if (response.status === 200) {
           toast.success(response.data.message);
           getData();
-          formik.resetForm();
-          setOpen(false);
+          handleClose();
         } else {
-          toast.error(response.data.message);
+          toast.error(response.data.message || "Update failed.");
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error("Error: " + error.message);
+      } finally {
+        setLoadIndicator(false);
       }
     },
   });
@@ -79,10 +87,11 @@ function CMSProductsItemEdit({ id, getData }) {
   const fetchData = async () => {
     try {
       const response = await api.get(`/getProductImageSaveById/${id}`);
-      formik.setValues(response.data);
-      setDatas(response.data);
+      if (response.status === 200) {
+        formik.setFieldValue("imageDetails", response.data.imageDetails || "");
+      }
     } catch (error) {
-      toast.error("Error Fetch Data: " + error.message);
+      toast.error("Error fetching data: " + error.message);
     }
   };
 
@@ -98,18 +107,24 @@ function CMSProductsItemEdit({ id, getData }) {
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle className="headColor">Edit Product Item</DialogTitle>
+        <DialogTitle className="headColor">Edit Product Item  <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton></DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
+              e.preventDefault(); // Prevent accidental form submission
             }
           }}
         >
           <DialogContent>
             <div className="mb-3">
-              <label htmlFor="image" className="form-label">
+              <label htmlFor="files" className="form-label">
                 Upload Image
               </label>
               <input
@@ -125,12 +140,12 @@ function CMSProductsItemEdit({ id, getData }) {
               )}
             </div>
             {selectedFile && (
-              <div>
+              <div className="mb-3">
                 {selectedFile.type.startsWith("image") && (
                   <img
                     src={URL.createObjectURL(selectedFile)}
                     alt="Selected File"
-                    style={{ maxWidth: "100%" }}
+                    style={{ maxWidth: "100%", marginTop: "10px" }}
                   />
                 )}
               </div>
@@ -144,6 +159,7 @@ function CMSProductsItemEdit({ id, getData }) {
                 id="imageDetails"
                 name="imageDetails"
                 className="form-control"
+                rows="4"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.imageDetails}
@@ -154,17 +170,18 @@ function CMSProductsItemEdit({ id, getData }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button
-              type="button"
-              className="btn btn-sm btn-border bg-light text-dark"
+            <button
+            type="button"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               className="btn btn-button btn-sm"
-              disabled={loadIndicator}
+              disabled={loadIndicator || formik.isSubmitting}
             >
               {loadIndicator && (
                 <span
@@ -172,8 +189,8 @@ function CMSProductsItemEdit({ id, getData }) {
                   aria-hidden="true"
                 ></span>
               )}
-              Save
-            </Button>
+              Update
+            </button>
           </DialogActions>
         </form>
       </Dialog>
