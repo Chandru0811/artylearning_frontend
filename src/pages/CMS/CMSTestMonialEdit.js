@@ -11,6 +11,7 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { MdOutlineModeEdit } from "react-icons/md";
 
 function CMSTestMonialEdit({ id, onSuccess }) {
@@ -99,7 +100,16 @@ function CMSTestMonialEdit({ id, onSuccess }) {
 
       <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
         <form onSubmit={formik.handleSubmit}>
-          <DialogTitle className="headColor">Edit Testimonial</DialogTitle>
+          <DialogTitle className="headColor">
+            Edit Testimonial{" "}
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              style={{ position: "absolute", right: 8, top: 8 }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
           <DialogContent>
             <div className="container">
               <div className="mb-3">
@@ -177,14 +187,15 @@ function CMSTestMonialEdit({ id, onSuccess }) {
           </DialogContent>
 
           <DialogActions>
-            <Button
+            <button
               type="button"
-              className="btn btn-sm btn-border bg-light text-dark"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
@@ -196,7 +207,7 @@ function CMSTestMonialEdit({ id, onSuccess }) {
                 ></span>
               )}
               Save
-            </Button>
+            </button>
           </DialogActions>
         </form>
       </Dialog>

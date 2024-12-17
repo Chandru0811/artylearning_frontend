@@ -144,6 +144,7 @@ const RevenueReport = () => {
             label: item.label,
             data: item.data,
             borderColor: item.label === "Registration" ? "#287F71" : "#EB862A",
+            backgroundColor: item.label === "Registration" ? "#287F71" : "#EB862A",
             fill: false,
           })),
         },

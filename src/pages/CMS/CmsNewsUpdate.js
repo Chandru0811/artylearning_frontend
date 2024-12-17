@@ -145,7 +145,7 @@ const CmsNewsUpdate = () => {
           <div className="col-md-6 col-12 d-flex justify-content-end">
             {storedScreens?.newsUpdatesPublish && (
               <button
-                className="btn btn-sm btn-outline-danger border ms-2"
+                className="btn btn-sm custom-outline-danger border ms-2"
                 onClick={publish}
               >
                 Publish

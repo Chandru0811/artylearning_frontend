@@ -220,7 +220,7 @@ function CmsHome() {
                   <button
                     type="button"
                     onClick={PublishHomeSection}
-                    className="btn btn-sm btn-outline-danger border ms-2"
+                    className="btn btn-sm custom-outline-danger border ms-2"
                   >
                     Publish
                   </button>

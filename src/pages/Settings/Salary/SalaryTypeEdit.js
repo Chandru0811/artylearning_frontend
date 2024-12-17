@@ -6,7 +6,14 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { MdOutlineModeEdit } from "react-icons/md";
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const validationSchema = Yup.object({
   salaryType: Yup.string().required("*Salary Type is required"),
@@ -99,7 +106,16 @@ function SalaryEdit({ id, onSuccess }) {
         disableBackdropClick={isModified}
         disableEscapeKeyDown={isModified}
       >
-        <DialogTitle id="contained-dialog-title-vcenter" className="headColor">Salary Type Edit</DialogTitle>
+        <DialogTitle id="contained-dialog-title-vcenter" className="headColor">
+          Salary Type Edit{" "}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
 
         <form
           onSubmit={formik.handleSubmit}
@@ -112,7 +128,7 @@ function SalaryEdit({ id, onSuccess }) {
           <DialogContent>
             <div className="container">
               <div className="row">
-                <div className="col-md-6 col-12 mb-2">
+                <div className="col-12 mb-2">
                   <label className="form-label">
                     Salary Type<span className="text-danger">*</span>
                   </label>
@@ -136,18 +152,17 @@ function SalaryEdit({ id, onSuccess }) {
           </DialogContent>
 
           <DialogActions>
-            <Button
-              variant="outlined"
-              size="small"
+            <button
+              type="button"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
-              variant="contained"
-              color="primary"
-              size="small"
+              className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >
               {loadIndicator && (
@@ -157,7 +172,7 @@ function SalaryEdit({ id, onSuccess }) {
                 ></span>
               )}
               Update
-            </Button>
+            </button>
           </DialogActions>
         </form>
       </Dialog>

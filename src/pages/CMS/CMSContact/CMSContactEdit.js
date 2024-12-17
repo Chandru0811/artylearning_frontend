@@ -3,10 +3,17 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
 import { MdOutlineModeEdit } from "react-icons/md";
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import CloseIcon from "@mui/icons-material/Close";
 
 function CMSContactEdit({ id, onSuccess }) {
   const [open, setOpen] = useState(false);
@@ -84,7 +91,16 @@ function CMSContactEdit({ id, onSuccess }) {
         <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-        <DialogTitle className="headColor">Edit Contact</DialogTitle>
+        <DialogTitle className="headColor">
+          Edit Contact{" "}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <div className="container">
@@ -177,14 +193,15 @@ function CMSContactEdit({ id, onSuccess }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button
+            <button
               type="button"
-              className="btn btn-sm btn-border bg-light text-dark"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
@@ -196,7 +213,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 ></span>
               )}
               Update
-            </Button>
+            </button>
           </DialogActions>
         </form>
       </Dialog>

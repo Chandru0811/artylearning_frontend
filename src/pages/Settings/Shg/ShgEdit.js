@@ -7,7 +7,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
@@ -101,7 +103,16 @@ function ShgEdit({ id, onSuccess }) {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle className="headColor">SHG Edit</DialogTitle>
+        <DialogTitle className="headColor">
+          SHG Edit{" "}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -156,12 +167,14 @@ function ShgEdit({ id, onSuccess }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button
+            <button
+              type="button"
               onClick={handleClose}
-              className="btn btn-sm btn-border bg-light text-dark"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
             >
               Cancel
-            </Button>
+            </button>
             <button
               type="submit"
               className="btn btn-button btn-sm"

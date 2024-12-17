@@ -170,27 +170,7 @@ const CMSProductsItem = () => {
           Product Item
         </li>
       </ol>
-      <div className="container cms-header shadow-sm py-2 mb-5">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            <h4>Product Item</h4>
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {storedScreens?.productImageSaveCreate && (
-              <CMSProductsItemAdd onSuccess={getData} />
-            )}
-            {storedScreens?.productImageSavePublish && (
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-danger border ms-2"
-                onClick={PublishProductImageSection}
-              >
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+ 
       <div className="card">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
@@ -208,6 +188,27 @@ const CMSProductsItem = () => {
             </span>
           </div>
         </div>
+        <div className="container cms-header shadow-sm py-2 mb-5">
+        <div className="row p-1">
+          <div className="col-md-6 col-12">
+            <h4>Product Item</h4>
+          </div>
+          <div className="col-md-6 col-12 d-flex justify-content-end">
+            {storedScreens?.productImageSaveCreate && (
+              <CMSProductsItemAdd onSuccess={getData} />
+            )}
+            {storedScreens?.productImageSavePublish && (
+              <button
+                type="button"
+                className="btn btn-sm custom-outline-danger border ms-2"
+                onClick={PublishProductImageSection}
+              >
+                Publish
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">
