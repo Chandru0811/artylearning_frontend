@@ -45,7 +45,7 @@ function StudentRegisterCourse() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const centerId = searchParams.get('centerId');
+  const centerId = searchParams.get("centerId");
 
   const formik = useFormik({
     initialValues: {
@@ -266,6 +266,36 @@ function StudentRegisterCourse() {
 
   return (
     <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Student Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/student" className="custom-breadcrumb">
+            &nbsp;Student Listing{" "}
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to={`/student/view/${id}`} className="custom-breadcrumb">
+            &nbsp;Studnet View
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Studnet Course Detail
+        </li>
+      </ol>
       <form
         onSubmit={formik.handleSubmit}
         onKeyDown={(e) => {
@@ -274,290 +304,279 @@ function StudentRegisterCourse() {
           }
         }}
       >
-        <div className="border-0 mb-5">
-          <div className="mb-5">
-            <div className="border-0 my-2 px-2">
-              <div className="row my-2">
-                <div className="col-md-6">
-                  <p className="headColor">Course Detail</p>
-                </div>
-                <div className="col-md-6 d-flex justify-content-end align-items-center">
-                  <Link to={`/student/view/${id}`}>
-                    <button
-                      className="btn btn-border btn-sm mx-3"
-                      style={{ padding: "7px" }}
-                    >
-                      Back
-                    </button>
-                  </Link>
-                  <button
-                    type="submit"
-                    className="btn btn-button btn-sm"
-                    disabled={loadIndicator}
-                  >
-                    {loadIndicator && (
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        aria-hidden="true"
-                      ></span>
-                    )}
-                    Update
-                  </button>
-                </div>
+        <div className="card">
+          <div
+            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
               </div>
-              <div className="row mt-2">
-                <table className="table table-border-solid">
-                  <thead>
-                    <tr>
-                      <th scope="col" className="fw-medium">
-                        S.No
-                      </th>
-                      <th scope="col" className="fw-medium">
-                        Course
-                      </th>
-                      <th scope="col" className="fw-medium">
-                        Batch
-                      </th>
-                      <th scope="col" className="fw-medium">
-                        Days
-                      </th>
-                      <th scope="col" className="fw-medium">
-                        Package
-                      </th>
-                      <th scope="col" className="fw-medium">
-                        Lesson Start Date
-                      </th>
+              <span class="me-2 text-muted">Course Detail</span>
+            </div>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to={`/student/view/${id}`}>
+                <button type="button " className="btn btn-sm btn-border">
+                  Back
+                </button>
+              </Link>
+              &nbsp;&nbsp;
+              <button type="submit" className="btn btn-button btn-sm">
+                <span className="fw-medium">Update</span>
+              </button>
+            </div>
+          </div>
+          <div className="p-2">
+            <table className="table table-border-solid">
+              <thead>
+                <tr>
+                  <th scope="col" className="fw-medium">
+                    S.No
+                  </th>
+                  <th scope="col" className="fw-medium">
+                    Course
+                  </th>
+                  <th scope="col" className="fw-medium">
+                    Batch
+                  </th>
+                  <th scope="col" className="fw-medium">
+                    Days
+                  </th>
+                  <th scope="col" className="fw-medium">
+                    Package
+                  </th>
+                  <th scope="col" className="fw-medium">
+                    Lesson Start Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.studentCourseDetailModels &&
+                  data.studentCourseDetailModels.map((stdCourse, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{stdCourse.course || "--"}</td>
+                      <td>{stdCourse.batch || "--"}</td>
+                      <td>{stdCourse.days || "--"}</td>
+                      <td>{stdCourse.packageName || "--"}</td>
+                      <td>{stdCourse.lessonName || "--"}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {data.studentCourseDetailModels &&
-                      data.studentCourseDetailModels.map((stdCourse, index) => (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{stdCourse.course || "--"}</td>
-                          <td>{stdCourse.batch || "--"}</td>
-                          <td>{stdCourse.days || "--"}</td>
-                          <td>{stdCourse.packageName || "--"}</td>
-                          <td>{stdCourse.lessonName || "--"}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="border-0 my-2 px-2">
+            <div className="row mt-2">
+              <div className="col-md-4">
+                <select
+                  {...formik.getFieldProps("courseId")}
+                  class={`form-select  ${
+                    formik.touched.courseId && formik.errors.courseId
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  id="courseId"
+                  name="courseId"
+                >
+                  <option value="" disabled selected>
+                    Select Course
+                  </option>
+                  {courseData &&
+                    courseData.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.courseNames}
+                      </option>
+                    ))}
+                </select>
               </div>
-              <div className="row mt-2">
-                <div className="col-md-4">
-                  <select
-                    {...formik.getFieldProps("courseId")}
-                    class={`form-select  ${
-                      formik.touched.courseId && formik.errors.courseId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    id="courseId"
-                    name="courseId"
-                  >
-                    <option value="" disabled selected>
-                      Select Course
-                    </option>
-                    {courseData &&
-                      courseData.map((course) => (
-                        <option key={course.id} value={course.id}>
-                          {course.courseNames}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <div className="col-md-4">
-                  <select
-                    {...formik.getFieldProps("days")}
-                    class={`form-select  ${
-                      formik.touched.days && formik.errors.days
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    id="days"
-                    name="days"
-                  >
-                    <option value="" disabled selected>
-                      Select Day
-                    </option>
-                    <option value="MONDAY">MONDAY</option>
-                    <option value="TUESDAY">TUESDAY</option>
-                    <option value="WEDNESDAY">WEDNESDAY</option>
-                    <option value="THURSDAY">THURSDAY</option>
-                    <option value="FRIDAY">FRIDAY</option>
-                    <option value="SATURDAY">SATURDAY</option>
-                    <option value="SUNDAY">SUNDAY</option>
-                  </select>
-                </div>
-                <div className="col-md-4 d-flex">
-                  <select
-                    {...formik.getFieldProps("batchId")}
-                    className="form-select"
-                    id="batchId"
-                    name="batchId"
-                  >
-                    <option value="" disabled selected>
-                      Select Batch Time
-                    </option>
-                    {formik.values.days === "SUNDAY" ||
-                    formik.values.days === "SATURDAY" ? (
-                      <>
-                        <option value="1">9:00 am</option>
-                        <option value="2">10:30 am</option>
-                        <option value="3">12:00 pm</option>
-                        <option value="4">1:30 pm</option>
-                        <option value="5">3:00 pm</option>
-                        <option value="6">4:30 pm</option>
-                        <option value="7">6:00 pm</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="1">2:30 pm</option>
-                        <option value="2">3:30 pm</option>
-                        <option value="3">5:00 pm</option>
-                        <option value="4">7:00 pm</option>
-                        <option value="5">8:30 pm</option>
-                      </>
-                    )}
-                  </select>
-                  <button
-                    type="button"
-                    className="btn btn-sm border-secondary ms-3 my-1"
-                    style={{ width: "100px" }}
-                    onClick={() =>
-                      formik.resetForm({
-                        values: {
-                          lessonName: "",
-                          packageName: "",
-                          courseId: "",
-                          days: "",
-                          batchId: "",
-                        },
-                      })
-                    }
-                  >
-                    Clear
-                  </button>
-                </div>
+              <div className="col-md-4">
+                <select
+                  {...formik.getFieldProps("days")}
+                  class={`form-select  ${
+                    formik.touched.days && formik.errors.days
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  id="days"
+                  name="days"
+                >
+                  <option value="" disabled selected>
+                    Select Day
+                  </option>
+                  <option value="MONDAY">MONDAY</option>
+                  <option value="TUESDAY">TUESDAY</option>
+                  <option value="WEDNESDAY">WEDNESDAY</option>
+                  <option value="THURSDAY">THURSDAY</option>
+                  <option value="FRIDAY">FRIDAY</option>
+                  <option value="SATURDAY">SATURDAY</option>
+                  <option value="SUNDAY">SUNDAY</option>
+                </select>
               </div>
-              {/* ScheduleTeachers Table */}
-              <div className="container my-4">
-                {loading ? (
-                  <div className="loader-container">
-                    <div className="loading">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
+              <div className="col-md-4 d-flex">
+                <select
+                  {...formik.getFieldProps("batchId")}
+                  className="form-select"
+                  id="batchId"
+                  name="batchId"
+                >
+                  <option value="" disabled selected>
+                    Select Batch Time
+                  </option>
+                  {formik.values.days === "SUNDAY" ||
+                  formik.values.days === "SATURDAY" ? (
+                    <>
+                      <option value="1">9:00 am</option>
+                      <option value="2">10:30 am</option>
+                      <option value="3">12:00 pm</option>
+                      <option value="4">1:30 pm</option>
+                      <option value="5">3:00 pm</option>
+                      <option value="6">4:30 pm</option>
+                      <option value="7">6:00 pm</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="1">2:30 pm</option>
+                      <option value="2">3:30 pm</option>
+                      <option value="3">5:00 pm</option>
+                      <option value="4">7:00 pm</option>
+                      <option value="5">8:30 pm</option>
+                    </>
+                  )}
+                </select>
+                <button
+                  type="button"
+                  className="btn btn-sm border-secondary ms-3 my-1"
+                  style={{ width: "100px" }}
+                  onClick={() =>
+                    formik.resetForm({
+                      values: {
+                        lessonName: "",
+                        packageName: "",
+                        courseId: "",
+                        days: "",
+                        batchId: "",
+                      },
+                    })
+                  }
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+            {/* ScheduleTeachers Table */}
+            <div className="container my-4">
+              {loading ? (
+                <div className="loader-container">
+                  <div className="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                   </div>
-                ) : (
-                  <div className="table-responsive">
-                    <table ref={tableRef} className="display">
-                      <thead>
-                        <tr>
-                          <th scope="col"></th>
-                          <th scope="col">Course</th>
-                          <th scope="col">Batch</th>
-                          <th scope="col">Start Date</th>
-                          <th scope="col">End Date</th>
-                          <th scope="col">Day</th>
-                          <th scope="col">Available Slot</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Array.isArray(datas) &&
-                          datas.map((data, index) => (
-                            <tr
-                              key={index}
-                              onClick={() => handleRowSelect(data)}
-                              className={
-                                selectedRow === data.id ? "selected-row" : ""
-                              }
-                              style={{ cursor: "pointer" }}
-                            >
-                              <th scope="row" className="text-center">
-                                <input
-                                  type="radio"
-                                  className="form-check-input"
-                                  checked={selectedRow === data.id}
-                                  onChange={() => handleRowSelect(data)}
-                                />
-                              </th>
-                              <td>{data.course}</td>
-                              <td>{data.batch}</td>
-                              <td>{data.startDate}</td>
-                              <td>{data.endDate}</td>
-                              <td>{data.days}</td>
-                              <td className="text-center">
-                                <span className="badge rounded-pill text-bg-success">
-                                  {data.availableSlots}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                      </tbody>
-                    </table>
+                </div>
+              ) : (
+                <div className="table-responsive">
+                  <table ref={tableRef} className="display">
+                    <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Course</th>
+                        <th scope="col">Batch</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Day</th>
+                        <th scope="col">Available Slot</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array.isArray(datas) &&
+                        datas.map((data, index) => (
+                          <tr
+                            key={index}
+                            onClick={() => handleRowSelect(data)}
+                            className={
+                              selectedRow === data.id ? "selected-row" : ""
+                            }
+                            style={{ cursor: "pointer" }}
+                          >
+                            <th scope="row" className="text-center">
+                              <input
+                                type="radio"
+                                className="form-check-input"
+                                checked={selectedRow === data.id}
+                                onChange={() => handleRowSelect(data)}
+                              />
+                            </th>
+                            <td>{data.course}</td>
+                            <td>{data.batch}</td>
+                            <td>{data.startDate}</td>
+                            <td>{data.endDate}</td>
+                            <td>{data.days}</td>
+                            <td className="text-center">
+                              <span className="badge rounded-pill text-bg-success">
+                                {data.availableSlots}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+            <div className="row mt-2">
+              <div className="col-md-4">
+                <select
+                  {...formik.getFieldProps("packageName")}
+                  class={`form-select  ${
+                    formik.touched.packageName && formik.errors.packageName
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  id="packageName"
+                  name="packageName"
+                >
+                  <option value="" disabled selected>
+                    Select Package
+                  </option>
+                  {packageData &&
+                    packageData.map((packages) => (
+                      <option key={packages.id} value={packages.packageNamesas}>
+                        {packages.packageNames}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.packageName && formik.errors.packageName && (
+                  <div className="invalid-feedback">
+                    {formik.errors.packageName}
                   </div>
                 )}
               </div>
-              <div className="row mt-2">
+              {availableDays.length > 0 && (
                 <div className="col-md-4">
                   <select
-                    {...formik.getFieldProps("packageName")}
-                    class={`form-select  ${
-                      formik.touched.packageName && formik.errors.packageName
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    id="packageName"
-                    name="packageName"
+                    className="form-select"
+                    name="lessonName"
+                    {...formik.getFieldProps("lessonName")}
                   >
                     <option value="" disabled selected>
-                      Select Package
+                      Select Date
                     </option>
-                    {packageData &&
-                      packageData.map((packages) => (
-                        <option
-                          key={packages.id}
-                          value={packages.packageNamesas}
-                        >
-                          {packages.packageNames}
-                        </option>
-                      ))}
+                    {availableDays.map((day) => (
+                      <option key={day.value} value={day.value}>
+                        {day.label}
+                      </option>
+                    ))}
                   </select>
-                  {formik.touched.packageName && formik.errors.packageName && (
+                  {formik.touched.lessonName && formik.errors.lessonName && (
                     <div className="invalid-feedback">
-                      {formik.errors.packageName}
+                      {formik.errors.lessonName}
                     </div>
                   )}
                 </div>
-                {availableDays.length > 0 && (
-                  <div className="col-md-4">
-                    <select
-                      className="form-select"
-                      name="lessonName"
-                      {...formik.getFieldProps("lessonName")}
-                    >
-                      <option value="" disabled selected>
-                        Select Date
-                      </option>
-                      {availableDays.map((day) => (
-                        <option key={day.value} value={day.value}>
-                          {day.label}
-                        </option>
-                      ))}
-                    </select>
-                    {formik.touched.lessonName && formik.errors.lessonName && (
-                      <div className="invalid-feedback">
-                        {formik.errors.lessonName}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LevelAdd from "./LevelAdd";
 import LevelEdit from "./LevelEdit";
 import api from "../../config/URL";
@@ -19,6 +19,7 @@ const Level = () => {
     level: "",
     code: "",
   });
+  const navigate = useNavigate();
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -69,6 +70,26 @@ const Level = () => {
         accessorKey: "status",
         enableHiding: false,
         header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "ACTIVE" ||
+          row.original.status === "active" ||
+          row.original.status === "Active" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#287f71" }}
+            >
+              Active
+            </span>
+          ) : row.original.status === "In Active" ||
+            row.original.status === "Inactive" ||
+            row.original.status === "string" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#eb862a" }}
+            >
+              In Active
+            </span>
+          ) : null,
       },
       { accessorKey: "createdBy", header: "Created By" },
       {
@@ -266,6 +287,9 @@ const Level = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
+              <MenuItem onClick={() => navigate(`/level/view/${selectedId}`)}>
+                View
+              </MenuItem>
               <MenuItem>
                 <LevelEdit onSuccess={fetchData} id={selectedId} />
               </MenuItem>

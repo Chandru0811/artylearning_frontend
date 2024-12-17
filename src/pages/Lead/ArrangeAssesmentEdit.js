@@ -7,11 +7,16 @@ import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 // const validationSchema = Yup.object({});
 
-function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId ,setAll,studentNames}) {
-  const [show, setShow] = useState(false);
+function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId ,setAll,studentNames,showDialog,handleShow,handleClose,centerDatas}) {
+  
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setCenterData] = useState(null);
   const navigate = useNavigate();
@@ -19,10 +24,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
   // console.log("Centre ID :", centerId);
   // console.log("Student Name :", studentNames);
 
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-  };
+ 
 
   const fetchCenterData = async () => {
     try {
@@ -32,9 +34,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
       toast.error(error);
     }
   };
-  const handleShow = async() => {
-    fetchCenterData();
-    setShow(true);
+  const handleFetch = async() => {
     try {
       const response = await api.get(`/getAssessmentById/${arrangeAssesmentId}`);
       formik.setValues(response.data);
@@ -43,6 +43,12 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
       toast.error("Error Fetching Data");
     }
   };
+  useEffect(()=>{
+    fetchCenterData()
+    if(arrangeAssesmentId){
+      handleFetch();
+    }
+  },[])
   const formik = useFormik({
     initialValues: {
       centerId: centerId || "",
@@ -114,19 +120,18 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
 
   return (
     <>
-      <li>
+      {/* <li>
         <button className="dropdown-item" onClick={handleShow}>
         Edit Assessment Arranged
         </button>
-      </li>
+      </li> */}
 
-      <Modal show={show} size="lg" onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">
+      <Dialog open={showDialog} onClose={handleClose} maxWidth="md" fullWidth>
+        
+          <DialogTitle className="headColor">
             Leads Assessment Booking
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+          </DialogTitle>
+        <DialogContent>
            <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
           if (e.key === 'Enter' && !formik.isSubmitting) {
             e.preventDefault();  // Prevent default form submission
@@ -246,8 +251,8 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
               </button>
             </div>
           </form>
-        </Modal.Body>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -210,6 +210,10 @@ function TeacherNewView() {
                   <span>{data.idNo || "--"}</span>
                 </li>
                 <li className="stdList">
+                  <b>Country</b>
+                  <span>{data.country || "--"}</span>
+                </li>
+                <li className="stdList">
                   <b>Citizenship</b>
                   <span>{data.citizenship || "--"}</span>
                 </li>

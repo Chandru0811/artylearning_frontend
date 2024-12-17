@@ -162,27 +162,6 @@ const CMSTestMonail = () => {
           Testimonial
         </li>
       </ol>
-      <div className="container cms-header shadow-sm py-2 mb-4">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            <h4>Testimonial</h4>
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {storedScreens?.testimonialCreate && (
-              <CMSTestMonialAdd onSuccess={getTestimonial} />
-            )}
-            {storedScreens?.testimonialIndex && (
-              <button
-                onClick={testimonialPublish}
-                className="btn btn-sm btn-outline-danger border ms-2"
-                style={{ whiteSpace: "nowrap" }}
-              >
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
 
       <div className="container">
       <div className="card ">
@@ -202,6 +181,27 @@ const CMSTestMonail = () => {
             </span>
           </div>
         </div>
+        <div className="container cms-header shadow-sm py-2 mb-4">
+        <div className="row p-1">
+          <div className="col-md-6 col-12">
+            <h4>Testimonial</h4>
+          </div>
+          <div className="col-md-6 col-12 d-flex justify-content-end">
+            {storedScreens?.testimonialCreate && (
+              <CMSTestMonialAdd onSuccess={getTestimonial} />
+            )}
+            {storedScreens?.testimonialIndex && (
+              <button
+                onClick={testimonialPublish}
+                className="btn btn-sm custom-outline-danger border ms-2"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                Publish
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">

@@ -6,6 +6,12 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import { SiGoogleclassroom } from "react-icons/si";
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 
 function AddClass({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -85,22 +91,19 @@ function AddClass({ id, onSuccess }) {
 
   return (
     <>
-      <button
+       <p
+        className="text-start mb-0"
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-sm btn-normal text-start"
         onClick={handleShow}
       >
-        <SiGoogleclassroom /> &nbsp;&nbsp;Add Classroom
-      </button>
+      Add Classroom
+      </p>
 
-      <Modal
-        show={show}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        onHide={handleClose}
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={show}
+        onClose={handleClose} 
+        maxWidth="md"
+        fullWidth
       >
         <form
           onSubmit={formik.handleSubmit}
@@ -110,12 +113,10 @@ function AddClass({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Header closeButton>
-            <Modal.Title>
+            <DialogTitle>
               <p className="headColor">Add Classroom</p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+            </DialogTitle>
+          <DialogContent>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
@@ -219,8 +220,8 @@ function AddClass({ id, onSuccess }) {
                 ></textarea>
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="mt-3">
+          </DialogContent>
+          <DialogActions className="mt-3">
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -240,9 +241,9 @@ function AddClass({ id, onSuccess }) {
               )}
               Submit
             </Button>
-          </Modal.Footer>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

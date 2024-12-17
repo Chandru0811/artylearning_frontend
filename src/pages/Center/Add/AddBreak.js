@@ -6,6 +6,12 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import { MdOutlineFreeBreakfast } from "react-icons/md";
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 
 function AddBreak({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -83,23 +89,20 @@ function AddBreak({ id, onSuccess }) {
   });
   return (
     <>
-      <button
+       <p
+        className="text-start mb-0"
         style={{ whiteSpace: "nowrap", width: "100%" }}
-        className="btn btn-sm btn-normal text-start"
         onClick={handleShow}
       >
-        <MdOutlineFreeBreakfast /> &nbsp;&nbsp;Add Centre Break
-      </button>
+        Add Centre Break
+      </p>
 
-      <Modal
-        show={show}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        onHide={handleClose}
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
-      >
+      <Dialog
+              open={show}
+              onClose={handleClose} 
+              maxWidth="md"
+              fullWidth
+            >
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -108,12 +111,10 @@ function AddBreak({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Header closeButton>
-            <Modal.Title>
+            <DialogTitle>
               <p className="headColor">Add Centre Break</p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+            </DialogTitle>
+          <DialogContent>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
@@ -177,8 +178,8 @@ function AddBreak({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="mt-3">
+          </DialogContent>
+          <DialogActions className="mt-3">
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -198,9 +199,9 @@ function AddBreak({ id, onSuccess }) {
               )}
               Submit
             </Button>
-          </Modal.Footer>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

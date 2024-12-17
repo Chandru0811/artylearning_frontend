@@ -5,7 +5,14 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { MdOutlineModeEdit } from "react-icons/md";
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import Button from "react-bootstrap/Button"; // Keep using Bootstrap's Button for styling
 
 function LeaveEdit({ id, onSuccess }) {
@@ -92,13 +99,22 @@ function LeaveEdit({ id, onSuccess }) {
       <Dialog
         open={show}
         onClose={handleClose}
-         fullWidth
+        fullWidth
         maxWidth="sm"
         centered
         backdrop={isModified ? "static" : true}
         keyboard={isModified ? false : true}
       >
-        <DialogTitle className="headColor">Leave Type Edit</DialogTitle>
+        <DialogTitle className="headColor">
+          Leave Type Edit{" "}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -133,12 +149,14 @@ function LeaveEdit({ id, onSuccess }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button
-              className="btn btn-sm btn-border bg-light text-dark"
+            <button
+              type="button"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
+            </button>
             <button
               type="submit"
               className="btn btn-button btn-sm"

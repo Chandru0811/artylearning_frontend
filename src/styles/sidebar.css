@@ -67,7 +67,7 @@
   transition: all 0.4s ease;
   color: #97a3b6;
   font-size: 20px;
-  border-radius: 7px;
+  /* border-radius: 7px; */
 }
 
 .sidebar .nav-links li a {
@@ -857,5 +857,5 @@ a:hover {
 
 .submenu {
   background-color: #71d2c1;
-  border-radius: 5px;
+  /* border-radius: 5px; */
 }

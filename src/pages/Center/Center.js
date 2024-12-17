@@ -13,6 +13,10 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
+import AddRegister from "./Add/AddRegister";
+import AddBreak from "./Add/AddBreak";
+import AddClass from "./Add/AddClass";
+import AddPackage from "./Add/AddPackage";
 
 const Center = () => {
   const [filters, setFilters] = useState({
@@ -354,10 +358,22 @@ const Center = () => {
               <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)}>
                 Edit
               </MenuItem>
+              <MenuItem >
+                <AddRegister id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
+              </MenuItem>
+              <MenuItem >
+                <AddClass id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
+              </MenuItem>
+              <MenuItem >
+                <AddPackage id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
+              </MenuItem>
+              <MenuItem >
+                <AddBreak id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
+              </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteCenter/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={()=>{fetchData();handleMenuClose();}}
                 />
               </MenuItem>
             </Menu>

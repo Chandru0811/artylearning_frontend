@@ -56,6 +56,17 @@ const ReferalFees = () => {
           </IconButton>
         ),
       },
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "ACTIVE" ? (
+            <span className="badge bg-success fw-light">Active</span>
+          ) : (
+            <span className="badge bg-danger fw-light">Inactive</span>
+          ),
+      },
       { accessorKey: "center", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "effectiveDate",
@@ -69,7 +80,6 @@ const ReferalFees = () => {
         enableHiding: false,
         size: 40,
       },
-      { accessorKey: "status", enableHiding: false, header: "Status" },
       { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
       {
         accessorKey: "createdDate",

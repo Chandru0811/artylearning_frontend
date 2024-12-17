@@ -78,6 +78,29 @@ const Payroll = () => {
         accessorKey: "status",
         enableHiding: false,
         header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "APPROVED" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#287f71" }}
+            >
+              Approved
+            </span>
+          ) : row.original.status === "PENDING" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#eb862a" }}
+            >
+              Pending
+            </span>
+          ) : row.original.status === "REJECTED" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#ed1a1a" }}
+            >
+              Rejected
+            </span>
+          ) : null,
       },
       { accessorKey: "bonus", header: "Bonus" },
       { accessorKey: "cpfContributions", header: "Cpf Contributions" },

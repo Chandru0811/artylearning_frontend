@@ -9,7 +9,9 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import { MdOutlineModeEdit } from "react-icons/md";
 import api from "../../../config/URL";
 
@@ -96,7 +98,13 @@ function CMSBlogEdit({ id, onSuccess }) {
       </button>
 
       <Dialog open={show} onClose={handleClose} fullWidth maxWidth="md">
-        <DialogTitle className="headColor">Edit Blog</DialogTitle>
+        <DialogTitle className="headColor">Edit Blog  <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton></DialogTitle>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <div className="mb-3">
@@ -133,46 +141,51 @@ function CMSBlogEdit({ id, onSuccess }) {
                 ) : null}
               </div>
             )}
-            <TextField
-              id="title"
-              name="title"
-              label="Blog Title"
-              fullWidth
-              margin="normal"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.title}
-              error={formik.touched.title && Boolean(formik.errors.title)}
-              helperText={formik.touched.title && formik.errors.title}
-            />
-            <TextField
-              id="description"
-              name="description"
-              label="Blog Description"
-              fullWidth
-              multiline
-              rows={4}
-              margin="normal"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.description}
-              error={
-                formik.touched.description && Boolean(formik.errors.description)
-              }
-              helperText={
-                formik.touched.description && formik.errors.description
-              }
-            />
+            <div className="mb-3">
+              <label htmlFor="title" className="form-label">
+                Blog Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                className="form-control"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.title}
+              />
+              {formik.touched.title && formik.errors.title && (
+                <div className="text-danger">{formik.errors.title}</div>
+              )}
+            </div>
+            <div className="mb-3">
+              <label htmlFor="description" className="form-label">
+                Blog Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                className="form-control"
+                rows={4}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.description}
+              />
+              {formik.touched.description && formik.errors.description && (
+                <div className="text-danger">{formik.errors.description}</div>
+              )}
+            </div>
           </DialogContent>
           <DialogActions>
-            <Button
-              type="button"
-              className="btn btn-sm btn-border bg-light text-dark"
+            <button
+            type="button"
+              className="btn btn-border btn-sm"
+              style={{  fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
@@ -184,7 +197,7 @@ function CMSBlogEdit({ id, onSuccess }) {
                 ></span>
               )}
               Save
-            </Button>
+            </button>
           </DialogActions>
         </form>
       </Dialog>

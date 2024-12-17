@@ -93,6 +93,12 @@ const Tax = () => {
         header: "Status",
         enableHiding: false,
         size: 40,
+        Cell: ({ row }) =>
+          row.original.status === "ACTIVE" ? (
+            <span className="badge badges-Green py-2">ACTIVE</span>
+          ) : row.original.status === "INACTIVE" ? (
+            <span className="badge badges-orange py-2">INACTIVE</span>
+          ) : null,
       },
       { accessorKey: "createdBy", header: "Created By" },
       {

@@ -168,31 +168,7 @@ const CmsCourses = () => {
           Courses
         </li>
       </ol>
-      <div className="container cms-header shadow-sm py-2 mb-4">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            <h4>Courses</h4>
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {storedScreens?.testimonialCreate && (
-              <Link to={"/cms/CmsCourses/add"}>
-                <button type="button" className="btn btn-button btn-sm">
-                  Add <i class="bx bx-plus"></i>
-                </button>
-              </Link>
-            )}
-            {storedScreens?.testimonialIndex && (
-              <button
-                onClick={coursesPublish}
-                className="btn btn-sm btn-outline-danger border ms-2"
-                style={{ whiteSpace: "nowrap" }}
-              >
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+
       <div className="card">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
@@ -209,7 +185,32 @@ const CmsCourses = () => {
               </span>
             </span>
           </div>
+        </div>,
+        <div className="container cms-header shadow-sm py-2 mb-4">
+        <div className="row p-1">
+          <div className="col-md-6 col-12">
+            <h4>Courses</h4>
+          </div>
+          <div className="col-md-6 col-12 d-flex justify-content-end">
+            {storedScreens?.testimonialCreate && (
+              <Link to={"/cms/CmsCourses/add"}>
+                <button type="button" className="btn btn-button btn-sm">
+                  Add <i class="bx bx-plus"></i>
+                </button>
+              </Link>
+            )}
+            {storedScreens?.testimonialIndex && (
+              <button
+                onClick={coursesPublish}
+                className="btn btn-sm custom-outline-danger border ms-2"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                Publish
+              </button>
+            )}
+          </div>
         </div>
+      </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">
