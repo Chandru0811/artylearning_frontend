@@ -105,16 +105,15 @@ function Edit({ id, onSuccess }) {
 
   return (
     <>
-      <button
+      <span
         onClick={handleOpen}
         style={{
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="btn btn-sm btn-normal text-start"
       >
-        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-      </button>
+        Edit
+      </span>
 
       <Dialog
         open={open}

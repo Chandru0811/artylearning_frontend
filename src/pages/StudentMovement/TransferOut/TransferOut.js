@@ -1,10 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
-import {
-  ThemeProvider,
-  createTheme,
-} from "@mui/material";
+import { IconButton, ThemeProvider, createTheme } from "@mui/material";
 
 const TransferOut = () => {
   const [filters, setFilters] = useState({
@@ -66,6 +63,24 @@ const TransferOut = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => <IconButton></IconButton>,
+      },
+      {
+        accessorKey: "action",
+        header: "Action",
+        Cell: ({ row }) =>
+          row.original.status === "APPROVED" ? (
+            <span className="badge bg-success fw-light">Approved</span>
+          ) : (
+            <span className="badge bg-danger fw-light">Rejected</span>
+          ),
+      },
       { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "transferTo",
@@ -120,24 +135,6 @@ const TransferOut = () => {
         accessorKey: "updatedBy",
         header: "Updated By",
         Cell: ({ cell }) => cell.getValue() || "",
-      },
-      {
-        accessorKey: "id",
-        header: "Action",
-        Cell: ({ row }) => {
-          const rowId = row.original.id;
-          return (
-            <button
-              className={`btn btn-${
-                actions[rowId] === "approved" ? "success" : "danger"
-              }`}
-              style={{ fontSize: "10px" }}
-              onClick={() => toggleAction(rowId)}
-            >
-              {actions[rowId] === "approved" ? "Approved" : "Rejected"}
-            </button>
-          );
-        },
       },
     ],
     [actions]

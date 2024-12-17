@@ -235,7 +235,7 @@ function EditClass({ id, onSuccess }) {
               Cancel
             </Button>
             <Button
-              type="submit"
+              type="button"
               onSubmit={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}

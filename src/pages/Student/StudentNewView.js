@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IoIosSettings, IoIosMail, IoIosMedkit } from "react-icons/io";
+import { MdModeEdit } from "react-icons/md";
 import { FaBook, FaUsers, FaPlus } from "react-icons/fa";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { BiSolidMessageRounded } from "react-icons/bi";
@@ -58,7 +59,7 @@ function StudentNewView() {
     }
 
     const formData = new FormData();
-    formData.append("profileImage", profileImage);
+    formData.append("file", profileImage);
 
     try {
       const imageResponse = await api.put(`/updateImageOnly/${id}`, formData, {
@@ -72,6 +73,9 @@ function StudentNewView() {
         setProfileImage(null);
         handleCloseModal();
       }
+      toast.success(
+        imageResponse.data.message || "Image Updated successfully!"
+      );
     } catch (error) {
       console.error("Error uploading image:", error);
       setResponseMessage("Failed to update profile image.");
@@ -166,7 +170,9 @@ function StudentNewView() {
 
   const handleClick = async () => {
     try {
-      const response = await api.post(`/resendWelcomeMail?${id}`);
+      const response = await api.post(`/resendWelcomeMail`, null, {
+        params: { studentId: id },
+      });
 
       toast.success(
         response.data.message || "Welcome mail resent successfully!"
@@ -238,7 +244,7 @@ function StudentNewView() {
                     }}
                   />
                   <p onClick={handleOpenModal} style={{ cursor: "pointer" }}>
-                    <IoIosMedkit />
+                    <MdModeEdit />
                   </p>
                 </div>
                 <p className="fw-medium mt-2 mb-1">
@@ -366,7 +372,7 @@ function StudentNewView() {
             </div>
           </div>
           <div className="col-md-3 col-12 mb-3">
-            <div className="card mb-3">
+            {/* <div className="card mb-3">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
                   <FaBook size={20} />
@@ -411,7 +417,7 @@ function StudentNewView() {
                     </ul>
                   ))}
               </div>
-            </div>
+            </div> */}
             <div className="card">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
@@ -659,21 +665,21 @@ function StudentNewView() {
       <div className="container-fluid">
         <div className="card" style={{ borderRadius: "3px" }}>
           <div className="d-flex gap-2" style={{ padding: "10px" }}>
-            <button
+            {/* <button
               className="btn btn-success btn-sm"
               type="button"
               style={{ fontSize: "12px" }}
             >
               Change Class
-            </button>
+            </button> */}
             {centerId && <TransferOutModal id={data.id} centerId={centerId} />}
-            <button
+            {/* <button
               className="btn btn-success btn-sm"
               type="button"
               style={{ fontSize: "12px" }}
             >
               Withdraw
-            </button>
+            </button> */}
             {storedScreens?.endClassCreate && (
               <Link to={`/student/view/endClass/${data.id}`}>
                 <button
@@ -1437,7 +1443,11 @@ function StudentNewView() {
 
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Update Profile Image</Modal.Title>
+          <Modal.Title>
+            <span className="fw-light" style={{ color: "#198754" }}>
+              Update Profile Image
+            </span>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="mb-3">
@@ -1451,24 +1461,16 @@ function StudentNewView() {
               accept="image/*"
               onChange={handleImageChange}
             />
-            {selectedImage && (
-              <div className="mt-3">
-                <p>Preview:</p>
-                <img
-                  src={selectedImage}
-                  alt="Preview"
-                  className="img-fluid"
-                  style={{ maxWidth: "100px", borderRadius: "50%" }}
-                />
-              </div>
-            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button
+            className="btn btn-sm btn-border bg-light text-dark"
+            onClick={handleCloseModal}
+          >
             Close
           </Button>
-          <Button variant="primary" onClick={handleUploadImage}>
+          <Button className="btn btn-button btn-sm" onClick={handleUploadImage}>
             Update Image
           </Button>
         </Modal.Footer>

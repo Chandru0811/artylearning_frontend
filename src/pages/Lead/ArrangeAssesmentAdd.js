@@ -7,22 +7,32 @@ import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 // const validationSchema = Yup.object({});
 
-function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll}) {
-  const [show, setShow] = useState(false);
+function ArrangeAssesmentAdd({
+  leadId,
+  onSuccess,
+  centerId,
+  studentNames,
+  setAll,
+  showDialog,
+  handleShow,
+  handleClose,
+  centerDatas
+}) {
+  
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [centerData, setCenterData] = useState(null);
+  const [centerData, setCenterData] = useState(centerDatas);
   const navigate = useNavigate();
   // console.log("Lead Id:", leadId);
   // console.log("Centre ID :", centerId);
   // console.log("Student Name :", studentNames);
-
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-  };
 
   const fetchCenterData = async () => {
     try {
@@ -31,10 +41,6 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
     } catch (error) {
       toast.error(error);
     }
-  };
-  const handleShow = () => {
-    fetchCenterData();
-    setShow(true);
   };
 
   const getCurrentDate = () => {
@@ -67,7 +73,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
         leadId: leadId,
         assessment: values.assessment,
         assessmentDate: values.assessmentDate,
-        time:values.time,
+        time: values.time,
         remarks: values.remarks,
       };
       console.log("Payload:", payload);
@@ -83,7 +89,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
           }
         );
         if (response.status === 201) {
-          onSuccess();
+          // onSuccess();
           handleClose();
           setAll();
           toast.success("Arranging Assessment Created Successfully");
@@ -105,7 +111,7 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
           toast.error(response.data.message);
         }
       } catch (error) {
-        toast.error(error);
+        toast.error(error?.response?.message);
       } finally {
         setLoadIndicator(false);
       }
@@ -114,24 +120,25 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
 
   return (
     <>
-      <li>
+      {/* <li>
         <button className="dropdown-item" onClick={handleShow}>
           Assessment Arranged
         </button>
-      </li>
+      </li> */}
 
-      <Modal show={show} size="lg" onHide={handleClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">
-            Leads Assessment Booking
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-           <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+      <Dialog open={showDialog} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle className="headColor">
+          Leads Assessment Booking
+        </DialogTitle>
+        <DialogContent>
+          <form
+            onSubmit={formik.handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !formik.isSubmitting) {
+                e.preventDefault(); // Prevent default form submission
+              }
+            }}
+          >
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <label htmlFor="centerId" className="form-label">
@@ -193,7 +200,6 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
                 </label>
                 <input
                   type="date"
-
                   className="form-control"
                   id="assessmentDate"
                   name="assessmentDate"
@@ -206,7 +212,6 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
                 </label>
                 <input
                   type="time"
- 
                   className="form-control"
                   id="time"
                   name="time"
@@ -250,8 +255,8 @@ function ArrangeAssesmentAdd({ leadId, onSuccess, centerId, studentNames ,setAll
               </button>
             </div>
           </form>
-        </Modal.Body>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -51,6 +51,7 @@ const PersonalAdd = forwardRef(
         confirmPassword: formData.confirmPassword,
         idNo: formData.idNo,
         citizenship: formData.citizenship,
+        countryId: formData.countryId,
         nationality: formData.nationality || "",
         nationalityId: formData.nationalityId || "",
         file: null || "",
@@ -81,6 +82,7 @@ const PersonalAdd = forwardRef(
           formData.append("citizenship", values.citizenship);
           formData.append("shortIntroduction", values.shortIntroduction);
           formData.append("gender", values.gender);
+          formData.append("countryId", nationalityName.countryId);
           formData.append("nationality", nationalityName.nationality);
           formData.append("nationalityId", values.nationalityId);
           formData.append("file", values.file);
@@ -264,6 +266,31 @@ const PersonalAdd = forwardRef(
                     <small>{formik.errors.idNo}</small>
                   </div>
                 )}
+              </div>
+              <div className="col-md-6 col-12 mb-2 mt-3">
+                <label>Country</label>
+                <span className="text-danger">*</span>
+                <select
+                  className="form-select"
+                  name="countryId"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.countryId}
+                >
+                  <option selected></option>
+                  {nationalityData &&
+                    nationalityData.map((countryId) => (
+                      <option key={countryId.id} value={countryId.id}>
+                        {countryId.country}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.countryId &&
+                  formik.errors.countryId && (
+                    <div className="error text-danger">
+                      <small>{formik.errors.countryId}</small>
+                    </div>
+                  )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Nationality</label>

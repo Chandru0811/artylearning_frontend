@@ -4,7 +4,13 @@ import { FaEye } from "react-icons/fa";
 import business from "../../../assets/clientimage/business.png";
 import gmail from "../../../assets/clientimage/gmail.png";
 import telephone from "../../../assets/clientimage/telephone.png";
-import { Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
@@ -108,7 +114,12 @@ function CMSContactView({ id }) {
           </div>
         </DialogContent>
         <DialogActions>
-          <button className="btn btn-primary" onClick={handleClose}>
+          <button
+            type="button"
+            className="btn btn-border btn-sm"
+            style={{ fontSize: "12px" }}
+            onClick={handleClose}
+          >
             Close
           </button>
         </DialogActions>

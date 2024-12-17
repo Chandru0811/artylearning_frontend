@@ -6,6 +6,12 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import { MdOutlineAttachMoney } from "react-icons/md";
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 
 function AddRegister({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -100,22 +106,19 @@ function AddRegister({ id, onSuccess }) {
 
   return (
     <>
-      <button
-        style={{ whiteSpace: "nowrap" }}
-        className="btn btn-sm btn-normal text-start"
+       <p
+        className="text-start mb-0"
+        style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-        <MdOutlineAttachMoney /> &nbsp;&nbsp;Add Registration Fees
-      </button>
+        Add Registration Fees
+      </p>
 
-      <Modal
-        show={show}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        onHide={handleClose}
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={show}
+        onClose={handleClose} 
+        maxWidth="md"
+        fullWidth
       >
         <form
           onSubmit={formik.handleSubmit}
@@ -125,12 +128,10 @@ function AddRegister({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <p className="headColor">Add Centre Registration Fees</p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+          <DialogTitle>
+            <p className="headColor">Add Centre Registration Fees</p>
+          </DialogTitle>
+          <DialogContent>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <label>
@@ -220,8 +221,8 @@ function AddRegister({ id, onSuccess }) {
                 )}
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer className="mt-3">
+          </DialogContent>
+          <DialogActions className="mt-3">
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
@@ -241,9 +242,9 @@ function AddRegister({ id, onSuccess }) {
               )}
               Submit
             </Button>
-          </Modal.Footer>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

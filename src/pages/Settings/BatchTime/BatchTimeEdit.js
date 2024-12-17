@@ -6,13 +6,14 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
 } from "@mui/material";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlineModeEdit } from "react-icons/md";
-
+import CloseIcon from "@mui/icons-material/Close";
 function BatchTimeEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -143,7 +144,16 @@ function BatchTimeEdit({ id, onSuccess }) {
         fullWidth
         aria-labelledby="batch-time-edit-dialog"
       >
-        <DialogTitle className="headColor">Batch Time Edit</DialogTitle>
+        <DialogTitle className="headColor">
+          Batch Time Edit{" "}
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            style={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -227,13 +237,14 @@ function BatchTimeEdit({ id, onSuccess }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button
+            <button
               type="button"
-              className="btn btn-sm btn-border bg-light text-dark"
+              className="btn btn-border btn-sm"
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
-            </Button>
+            </button>
             <Button
               type="submit"
               className="btn btn-button btn-sm"

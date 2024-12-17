@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import api from "../../config/URL";
+import { Link } from "react-router-dom";
 
 function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
   const { teacherId, startDate } = teacherDetail || {};
@@ -223,7 +224,15 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                             item.details.students.length > 0 ? (
                               item.details.students.map((student) => (
                                 <li key={student.id}>
-                                  {student.studentName} ({student.uniqueId})
+                                  <Link
+                                    to={`/student/view/${student.id}`}
+                                    style={{
+                                      textDecoration: "none",
+                                      color: "inherit",
+                                    }}
+                                  >
+                                    {student.studentName} ({student.uniqueId})
+                                  </Link>
                                 </li>
                               ))
                             ) : (
@@ -242,7 +251,10 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button className="btn btn-sm btn-border bg-light text-dark" onClick={onClose}>
+        <Button
+          className="btn btn-sm btn-border bg-light text-dark"
+          onClick={onClose}
+        >
           Close
         </Button>
       </Modal.Footer>
