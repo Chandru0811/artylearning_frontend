@@ -57,7 +57,7 @@ function ClassEdit() {
       endTime: "",
       day: "",
       teacher: "",
-      classRoome: "",
+      classId: "",
       remark: "",
       updatedBy: userName,
     },
@@ -127,8 +127,8 @@ function ClassEdit() {
 
   const fetchClassRoom = async (centerId) => {
     try {
-      const classRoom = await fetchAllClassRoomWithCenterIds(centerId);
-      setClassRoomData(classRoom);
+      const classId = await fetchAllClassRoomWithCenterIds(centerId);
+      setClassRoomData(classId);
     } catch (error) {
       toast.error(error.message);
     }
@@ -137,7 +137,7 @@ function ClassEdit() {
   const handleCenterChange = (event) => {
     const center = event.target.value;
     formik.setFieldValue("centerId", center);
-    formik.setFieldValue("classRoom", "");
+    formik.setFieldValue("classId", "");
     formik.setFieldValue("userId", ""); // Reset teacher/userId
     setCourseData(null);
     setClassRoomData(null);
@@ -660,28 +660,28 @@ function ClassEdit() {
               <div class="col-md-6 col-12 mb-4">
                 <label>Class Room</label>
                 <select
-                  {...formik.getFieldProps("classRoom")}
+                  {...formik.getFieldProps("classId")}
                   className={`form-select  ${
-                    formik.touched.classRoom && formik.errors.classRoom
+                    formik.touched.classId && formik.errors.classId
                       ? "is-invalid"
                       : ""
                   }`}
-                  name="classRoom"
+                  name="classId"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.classRoom}
+                  value={formik.values.classId}
                 >
                   <option></option>
                   {classRoomData &&
-                    classRoomData.map((classRoom) => (
-                      <option key={classRoom.id} value={classRoom.id}>
-                        {classRoom.classRoomName}
+                    classRoomData.map((classId) => (
+                      <option key={classId.id} value={classId.id}>
+                        {classId.classRoomName}
                       </option>
                     ))}
                 </select>
-                {formik.touched.classRoom && formik.errors.classRoom && (
+                {formik.touched.classId && formik.errors.classId && (
                   <div className="invalid-feedback">
-                    {formik.errors.classRoom}
+                    {formik.errors.classId}
                   </div>
                 )}
               </div>
