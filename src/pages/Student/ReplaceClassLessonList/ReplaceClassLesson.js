@@ -2,21 +2,22 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import api from "../../../config/URL";
-import {
-  ThemeProvider,
-  createTheme,
-  IconButton,
-} from "@mui/material";
+import { ThemeProvider, createTheme, IconButton } from "@mui/material";
+import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../../List/CenterList";
+import fetchAllCoursesWithIdsC from "../../List/CourseListByCenter";
 
 const ReplaceClassLesson = () => {
   const [filters, setFilters] = useState({
-    centerName: "",
+    centerId: "",
     studentName: "",
-    courseName: "",
     studentUniqueId: "",
+    courseId: "",
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [centerData, setCenterData] = useState([]);
+  const [courseData, setCourseData] = useState([]);
 
   const columns = useMemo(
     () => [
@@ -38,24 +39,60 @@ const ReplaceClassLesson = () => {
         size: 20,
         Cell: ({ cell }) => <IconButton></IconButton>,
       },
-      { accessorKey: "centerNames", enableHiding: false, header: "Centre Name" },
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "APPROVED" ? (
+            <span className="badge bg-success fw-light">Approved</span>
+          ) : row.original.status === "REJECTED" ? (
+            <span className="badge bg-danger fw-light">Rejected</span>
+          ) : (
+            <span className="badge bg-warning fw-light">Pending</span>
+          ),
+      },
+      {
+        accessorKey: "centerNames",
+        enableHiding: false,
+        header: "Centre Name",
+      },
       {
         accessorKey: "studentName",
         enableHiding: false,
         header: "Student Name",
       },
-      { accessorKey: "course", header: "Course", enableHiding: false, size: 40 },
-      { accessorKey: "studentUniqueId", header: "Student Unique Id", enableHiding: false, size: 40 },
+      {
+        accessorKey: "course",
+        header: "Course",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        accessorKey: "studentUniqueId",
+        header: "Student Unique Id",
+        enableHiding: false,
+        size: 40,
+      },
       { accessorKey: "month", header: "Month", enableHiding: false, size: 40 },
-      { accessorKey: "classListing", header: "Class Listing", enableHiding: false, size: 40 },
-      { accessorKey: "classDate", header: "Class Date", enableHiding: false, size: 40 },
+      {
+        accessorKey: "classListing",
+        header: "Class Listing",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        accessorKey: "classDate",
+        header: "Class Date",
+        enableHiding: false,
+        size: 40,
+      },
       {
         accessorKey: "classCode",
         header: "Class Code",
         enableHiding: false,
         size: 50,
       },
-      { accessorKey: "status", enableHiding: false, header: "Status" },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -80,8 +117,14 @@ const ReplaceClassLesson = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const queryParams = new URLSearchParams(filters).toString();
-      const response = await api.get(`/getAllStudentReplacementClass?${queryParams}`);
+      const filteredFilters = Object.fromEntries(
+        Object.entries(filters).filter(([key, value]) => value !== "")
+      );
+
+      const queryParams = new URLSearchParams(filteredFilters).toString();
+      const response = await api.get(
+        `/getReplacementWithCustomInfo?${queryParams}`
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -92,6 +135,34 @@ const ReplaceClassLesson = () => {
 
   useEffect(() => {
     fetchData();
+  }, [filters]);
+
+  const getCenter = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getCenter();
+  }, []);
+
+  const fetchListData = async (centerId) => {
+    try {
+      const courseDatas = await fetchAllCoursesWithIdsC(centerId);
+      setCourseData(courseDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (filters.centerId) {
+      fetchListData(filters.centerId);
+    }
   }, [filters]);
 
   // const handleStatusChange = async (id, newStatus) => {
@@ -170,10 +241,10 @@ const ReplaceClassLesson = () => {
 
   const clearFilter = () => {
     setFilters({
-      centerName: "",
+      centerId: "",
       studentName: "",
-      courseName: "",
       studentUniqueId: "",
+      courseId: "",
     });
   };
 
@@ -204,34 +275,45 @@ const ReplaceClassLesson = () => {
         >
           <span className="text-muted">
             This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>Replace Class Lesson List</strong>
+            <strong style={{ color: "#287f71" }}>
+              Replace Class Lesson List
+            </strong>
           </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="centerName"
-                value={filters.centerName}
+              <select
+                className="form-select form-select-sm center_list"
+                name="centerId"
+                style={{ width: "100%" }}
                 onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Center Name"
-                autoComplete="off"
-              />
+                value={filters.centerId}
+              >
+                <option value="">Select Center</option>
+                {centerData?.map((center) => (
+                  <option key={center.id} value={center.id} selected>
+                    {center.centerNames}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="courseName"
-                value={filters.courseName}
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                name="courseId"
                 onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Course"
-                autoComplete="off"
-              />
+                value={filters.courseId}
+              >
+                <option selected>Select a Course</option>
+                {courseData &&
+                  courseData.map((courseId) => (
+                    <option key={courseId.id} value={courseId.id}>
+                      {courseId.courseNames}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input

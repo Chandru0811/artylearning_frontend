@@ -59,6 +59,19 @@ const Invoice = () => {
         ),
       },
       {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "APPROVED" ? (
+            <span className="badge bg-success fw-light">Approved</span>
+          ) : row.original.status === "REJECTED" ? (
+            <span className="badge bg-danger fw-light">Rejected</span>
+          ) : (
+            <span className="badge bg-warning fw-light">Pending</span>
+          ),
+      },
+      {
         accessorKey: "courseData",
         enableHiding: false,
         header: "Course",
@@ -103,7 +116,6 @@ const Invoice = () => {
       { accessorKey: "noOfLessons", header: "Number Of Lesson" },
       { accessorKey: "studentNames", header: "Student" },
       { accessorKey: "packageNames", header: "Package" },
-      { accessorKey: "status", header: "Status" },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
