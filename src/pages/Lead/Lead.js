@@ -13,7 +13,7 @@ import { useFormik } from "formik";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircle } from "react-icons/io";
 import GlobalDelete from "../../components/common/GlobalDelete";
-
+// import { Dropdown, Button } from "react-bootstrap";
 import { MaterialReactTable } from "material-react-table";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
@@ -22,6 +22,9 @@ import {
   Menu,
   MenuItem,
   IconButton,
+  Popover,
+  Button,
+  Box,
 } from "@mui/material";
 
 const Lead = () => {
@@ -31,8 +34,11 @@ const Lead = () => {
   // console.log("Lead All Datas", datas);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
   const [newStatus, setNewStatus] = useState("");
   const [selectedId, setSelectedId] = useState("");
+  const [selectedRow, setSelectedRow] = useState("");
   const [activeButton, setActiveButton] = useState("All");
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
@@ -48,6 +54,22 @@ const Lead = () => {
     leadStatus: "ALL",
   });
 
+  const handleShow = () => {
+    // fetchCenterData();
+    setShowDialog(true);
+  };
+  const handleClose = () => {
+    // fetchCenterData();
+    setShowDialog(false);
+  };
+  const handleEditShowDialog = () => {
+    // fetchCenterData();
+    setShowEditDialog(true);
+  };
+  const handleEditCloseDialog = () => {
+    setShowEditDialog(false);
+    // formik.resetForm();
+  };
   // console.log("object", filters);
   const fetchData = async () => {
     try {
@@ -76,24 +98,45 @@ const Lead = () => {
     fetchData();
   }, []);
 
-  const handleStatusChange = async (id, status) => {
+  const handleStatusChange = async (row, status) => {
+    setSelectedRow(row);
     let message = "Are you sure want to change the lead status?";
     if (status === "DROP") {
       message = "Are you sure want to drop this lead?";
+      setConfirmationMessage(message);
+      setShowModal(true);
     } else if (status === "KIV") {
       message = "Are you sure want to KIV this lead?";
+      setConfirmationMessage(message);
+      setShowModal(true);
     } else if (status === "NEW_WAITLIST") {
       message = "Are you sure want to make this lead New/Waitlist?";
+      console.log("object", selectedRow);
+      setConfirmationMessage(message);
+      setShowModal(true);
     } else if (status === "WAITING_FOR_PAYMENT") {
       message = "Are you sure want to mark this lead as Waiting For Payment?";
+      setConfirmationMessage(message);
+      setShowModal(true);
     } else if (status === "CONFIRMED") {
       message = "Are you sure want to confirm this lead?";
+    } else if (status === "ARRANGING_ASSESSMENT") {
+      console.log("object", selectedRow);
+      handleShow();
+    } else if (status === "CONFIRMED") {
+      navigate(`/student/add?LeadId=${row.id}&LeadStatus=CONFIRMED`);
+    } else if (status === "Do_Assessment") {
+      navigate(`/lead/lead/assessment/${row.id}`);
+    } else if (status === "EDIT_DO_ASSESSMENT") {
+      navigate(`/lead/lead/assessment/${row.id}?mode=edit`);
+    } else if (status === "ENROLLED") {
+      navigate(`/student/add?LeadId=${row.id}&LeadStatus=ENROLLED`)
+    }else if (status === "Assessment_Edit") {
+      handleEditShowDialog()
     }
 
-    setConfirmationMessage(message);
-    setShowModal(true);
     setNewStatus(status);
-    setSelectedId(id);
+    setSelectedId(row.id);
   };
 
   const handleFormSubmit = async () => {
@@ -105,10 +148,8 @@ const Lead = () => {
       if (response.status === 200) {
         toast.success("Lead Status Updated");
         setShowModal(false);
-        // formik.resetForm();
         ResetFilter();
         getLeadData();
-        // refreshData();
       } else {
         toast.error(response.data.message);
       }
@@ -171,7 +212,6 @@ const Lead = () => {
 
   useEffect(() => {
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters.centerId, filters.subjectId, filters.leadStatus]);
 
   const ResetFilter = () => {
@@ -235,6 +275,502 @@ const Lead = () => {
         ),
       },
       {
+        accessorKey: "leadStatus",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) => (
+          <div
+            style={{
+              position: "relative",
+              display: "inline-block",
+              width: "100%",
+            }}
+          >
+            <span
+              style={{
+                position: "absolute",
+                left: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+                fontSize: "16px",
+                color: "#fff",
+                background: "black",
+              }}
+            >
+              {/* {row.original.leadStatus} */}
+              {/* <BsThreeDotsVertical /> */}
+            </span>
+            {row.original.leadStatus === "CONFIRMED" ? (
+              <button
+                className={`btn btn-sm leadStatus text-bg-success`}
+                type="button"
+              >
+                <span
+                  className="text-white "
+                  style={{
+                    textDecoration: "none",
+                    cursor: "default",
+                  }}
+                >
+                  Confirmed
+                </span>
+              </button>
+            ) : row.original.leadStatus === "ENROLLED" ? (
+              <button
+                className={`btn btn-sm leadStatus text-bg-success`}
+                type="button"
+                style={{ cursor: "default" }}
+              >
+                <span className="text-white " style={{ textWrap: "nowrap" }}>
+                  Enrolled
+                </span>
+              </button>
+            ) : (
+              <select
+                value={row.original.leadStatus}
+                onChange={(e) => {
+                  handleStatusChange(row.original, e.target.value);
+                }}
+                className="form-control"
+                style={{
+                  padding: "4px 7px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  appearance: "none",
+                  textIndent: "20px",
+                  color: "#fff",
+                  fontSize: "10px",
+                  backgroundColor: `${
+                    row.original.leadStatus === "NEW_WAITLIST"
+                      ? "#0d6efd"
+                      : row.original.leadStatus === "KIV"
+                      ? "#6c757d"
+                      : row.original.leadStatus === "WAITING_FOR_PAYMENT"
+                      ? "#0d6efd"
+                      : row.original.leadStatus === "ARRANGING_ASSESSMENT"
+                      ? "#ffd107"
+                      : row.original.leadStatus === "ASSESSMENT_DONE"
+                      ? "#0dcaf0"
+                      : row.original.leadStatus === "DROP"
+                      ? "#c42d33"
+                      : ""
+                  }`,
+                  minWidth: "auto",
+                }}
+              >
+                {row.original.leadStatus === ("NEW_WAITLIST" || "DROP") ? (
+                  <>
+                    <option
+                      value="NEW_WAITLIST"
+                      hidden
+                      disabled={row.original.leadStatus === "NEW_WAITLIST"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      New / Waitlist
+                    </option>
+                    <option
+                      value="ARRANGING_ASSESSMENT"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Assessment Add
+                    </option>
+                    <option
+                      value="KIV"
+                      disabled={row.original.leadStatus === "KIV"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      KIV
+                    </option>
+                    <option
+                      value="WAITING_FOR_PAYMENT"
+                      disabled={
+                        row.original.leadStatus === "WAITING_FOR_PAYMENT"
+                      }
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Waiting for Payment
+                    </option>
+                    <option
+                      value="CONFIRMED"
+                      disabled={row.original.leadStatus === "CONFIRMED"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Confirmed
+                    </option>
+                    <option
+                      value="DROP"
+                      disabled={row.original.leadStatus === "DROP"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Drop
+                    </option>
+                  </>
+                ) : row.original.leadStatus === "ARRANGING_ASSESSMENT" ? (
+                  <>
+                    <option
+                      value="ARRANGING_ASSESSMENT"
+                      hidden
+                      disabled={
+                        row.original.leadStatus === "ARRANGING_ASSESSMENT"
+                      }
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Assessment Arranged
+                    </option>
+                    <option
+                      value="NEW_WAITLIST"
+                      disabled={row.original.leadStatus === "NEW_WAITLIST"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      New / Waitlist
+                    </option>
+                    {row.original?.assessmentArrange?.lenght > 0 &&
+                    new Date(
+                      row.original?.assessmentArrange[0]?.assessmentDate
+                    ) === new Date().toDateString() ? (
+                      <option
+                        value="Do_Assessment"
+                        style={{
+                          backgroundColor: "white",
+                          padding: "10px",
+                          color: "#000",
+                        }}
+                      >
+                        Do Assessment
+                      </option>
+                    ) : (
+                     ""
+                    )}
+                     <option
+                        value="Assessment_Edit"
+                        style={{
+                          backgroundColor: "white",
+                          padding: "10px",
+                          color: "#000",
+                        }}
+                      >
+                        Assessment Edit
+                      </option>
+                    <option
+                      value="DROP"
+                      disabled={row.original.leadStatus === "DROP"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Drop
+                    </option>
+                  </>
+                ) : row.original.leadStatus === "KIV" ? (
+                  <>
+                    <option
+                      value="KIV"
+                      hidden
+                      disabled={row.original.leadStatus === "KIV"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      KIV
+                    </option>
+                    <option
+                      value="NEW_WAITLIST"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      New / Waitlist
+                    </option>
+                    <option
+                      value="ARRANGING_ASSESSMENT"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Assessment Add
+                    </option>
+                    <option
+                      value="WAITING_FOR_PAYMENT"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Waiting For Payment
+                    </option>
+                    <option
+                      value="CONFIRMED"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Confirmed
+                    </option>
+                    <option
+                      value="DROP"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Drop
+                    </option>
+                  </>
+                ) : row.original.leadStatus === "ASSESSMENT_DONE" ? (
+                  <>
+                    <option
+                      value="ASSESSMENT_DONE"
+                      hidden
+                      disabled={row.original.leadStatus === "ASSESSMENT_DONE"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Assessment Done
+                    </option>
+                    <option
+                      value="NEW_WAITLIST"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      New / Waitlist
+                    </option>
+                    <option
+                      value="EDIT_DO_ASSESSMENT"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                     Edit Do Assessment
+                    </option>
+                    <option
+                      value="KIV"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      KIV
+                    </option>
+                    <option
+                      value="ENROLLED"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Enrolled
+                    </option>
+                    <option
+                      value="DROP"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Drop
+                    </option>
+                  </>
+                ) : row.original.leadStatus === "WAITING_FOR_PAYMENT" ? (
+                  <>
+                    <option
+                      value="WAITING_FOR_PAYMENT"
+                      hidden
+                      disabled={
+                        row.original.leadStatus === "WAITING_FOR_PAYMENT"
+                      }
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Waiting For Payment
+                    </option>
+                    <option
+                      value="NEW_WAITLIST"
+                      disabled={row.original.leadStatus === "NEW_WAITLIST"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      New / Waitlist
+                    </option>
+                    <option
+                      value="ARRANGING_ASSESSMENT"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Assessment Add
+                    </option>
+                    <option
+                      value="KIV"
+                      disabled={row.original.leadStatus === "KIV"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      KIV
+                    </option>
+                    <option
+                      value="CONFIRMED"
+                      disabled={row.original.leadStatus === "CONFIRMED"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Confirmed
+                    </option>
+                    <option
+                      value="DROP"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Drop
+                    </option>
+                  </>
+                ) : (
+                  <>
+                    <option
+                      value="NEW_WAITLIST"
+                      disabled={row.original.leadStatus === "NEW_WAITLIST"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      New / Waitlist
+                    </option>
+                    <option
+                      value="ARRANGING_ASSESSMENT"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Assessment Add
+                    </option>
+                    <option
+                      value="KIV"
+                      disabled={row.original.leadStatus === "KIV"}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      KIV
+                    </option>
+                    <option
+                      value="WAITING_FOR_PAYMENT"
+                      disabled={
+                        row.original.leadStatus === "WAITING_FOR_PAYMENT"
+                      }
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Waiting for Payment
+                    </option>
+                    <option
+                      value="CONFIRMED"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Confirmed
+                    </option>
+                    <option
+                      value="DROP"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Drop
+                    </option>
+                  </>
+                )}
+              </select>
+            )}
+          </div>
+        ),
+      },
+      {
         header: "Centre Name",
         accessorKey: "centreName",
         enableHiding: false,
@@ -257,83 +793,7 @@ const Lead = () => {
         enableHiding: false,
       },
       { accessorKey: "parentName", enableHiding: false, header: "Parent Name" },
-      {
-        accessorKey: "leadStatus",
-        enableHiding: false,
-        header: "Status",
-        Cell: ({ row }) => (
-          <div
-            style={{
-              position: "relative",
-              display: "inline-block",
-              width: "100%",
-            }}
-          >
-            <span
-              style={{
-                position: "absolute",
-                left: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                pointerEvents: "none",
-                fontSize: "16px",
-                color: "#fff",
-              }}
-            >
-              {row.original.leadStatus}
-              {/* <BsThreeDotsVertical /> */}
-            </span>
-            <select
-              // value={selectedValue}
-              // onChange={(e) =>
-              //   handleSelectChange(e.target.value, row.original.id)
-              // }
-              className="form-control"
-              style={{
-                padding: "4px 10px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                width: "36px",
-                appearance: "none",
-                textIndent: "20px",
-                color: "#fff",
-                backgroundColor: "#287f71",
-              }}
-            >
-              <option
-                value="basics"
-                style={{
-                  backgroundColor: "white",
-                  padding: "10px",
-                  color: "#000", // Ensuring text is visible on a white background
-                }}
-              >
-                <MdOutlineModeEdit /> Add Registration
-              </option>
-              <option
-                value="basic"
-                style={{
-                  backgroundColor: "white",
-                  padding: "10px",
-                  color: "#000",
-                }}
-              >
-                Editor
-              </option>
-              <option
-                value="admin"
-                style={{
-                  backgroundColor: "white",
-                  padding: "10px",
-                  color: "#000",
-                }}
-              >
-                Admin Admin &nbsp;
-              </option>
-            </select>
-          </div>
-        ),
-      },
+
       { accessorKey: "address", header: "  Sounds of a-z" },
       { accessorKey: "invoiceNotes", header: "Invoice Notes" },
       { accessorKey: "openingDate", header: "Opening Date" },
@@ -655,6 +1115,29 @@ const Lead = () => {
           </div>
         </Modal.Body>
       </Modal>
+      <ArrangeAssesmentAdd
+        leadId={selectedRow.id}
+        onSuccess={getLeadData}
+        centerId={selectedRow.centerId}
+        studentNames={selectedRow.studentName}
+        setAll={ResetFilter}
+        showDialog={showDialog}
+        handleShow={handleShow}
+        handleClose={handleClose}
+        centerDatas={centerData}
+      />
+      <ArrangeAssesmentEdit
+        leadId={selectedRow.id}
+        arrangeAssesmentId={selectedRow?.assessmentArrange > 0 ?selectedRow?.assessmentArrange[0]?.id :0}
+        onSuccess={getLeadData}
+        centerId={selectedRow.centerId}
+        studentNames={selectedRow.studentName}
+        setAll={ResetFilter}
+        showDialog={showEditDialog}
+        handleShow={handleEditShowDialog}
+        handleClose={handleEditCloseDialog}
+        centerDatas={centerData}
+      />
     </div>
   );
 };
