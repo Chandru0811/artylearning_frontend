@@ -39,12 +39,17 @@ function Calendar() {
       end: item.endDate,
       className: "custom-event", // Custom class for styling events
       extendedProps: {
-        teacher: item.teacherName,
+        id: item.id,
+        teacherName: item.teacherName,
         centerName: item.centerName,
-        batchId: item.batchId,
+        centerId: item.centerId,
+        classId: item.classId,
+        teacherId: item.teacherId,
+        availableSlotCount: item.availableSlotCount,
+        batch: item.batch,
         className: item.className,
         courseId: item.courseId,
-        slots: item.availableSlotCount,
+        startDate: item.startDate,   
       },
     }));
     setEvents(filteredEvents);
@@ -108,7 +113,7 @@ function Calendar() {
   };
 
   useEffect(() => {
-    // SearchShedule();
+    SearchShedule();
     fetchData();
   }, []);
 
@@ -123,12 +128,16 @@ function Calendar() {
     const selectedEventDetails = {
       id: id,
       title: title,
-      teacher: extendedProps.teacherName,
+      teacherName: extendedProps.teacherName,
       centerName: extendedProps.centerName,
-      slots: extendedProps.availableSlotCount,
-      batchId: extendedProps.batchId,
+      centerId: extendedProps.centerId,
+      classId: extendedProps.classId,
+      teacherId: extendedProps.teacherId,
+      availableSlotCount: extendedProps.availableSlotCount,
+      batch: extendedProps.batch,
       className: extendedProps.className,
       courseId: extendedProps.courseId,
+      startDate: extendedProps.startDate,   
     };
     // Log the selected event details
     console.log("Selected Event Details:", selectedEventDetails);
@@ -199,7 +208,6 @@ function Calendar() {
             </select>
           </div>
         </div>
-
         <div className="col-md-3 col-12">
           <div className="form-group mb-0 ms-2 mb-1">
             <select
@@ -231,7 +239,7 @@ function Calendar() {
               placeholder="Date"
             />
           </div>
-          <div className="form-group mb-0 ms-2 mb-1 ">
+          {/* <div className="form-group mb-0 ms-2 mb-1 "> */}
             <button type="button" className="btn btn-sm btn-border me-2" onClick={clearFilters}>
               Clear
             </button>
@@ -247,7 +255,7 @@ function Calendar() {
             >
               Search
             </button>
-          </div>
+          {/* </div> */}
         </div>
       </div>
 
@@ -303,12 +311,12 @@ function Calendar() {
               }}
               eventClick={handleEventClick} // Capture event click
               eventContent={(info) => {
-                const { teacher, centerName, slots } = info.event.extendedProps;
+                const { teacherName, centerName, availableSlotCount } = info.event.extendedProps;
                 return (
                   <div className="p-2">
-                    <div>👨‍🏫 Teacher: {teacher}</div>
+                    <div>👨‍🏫 Teacher: {teacherName}</div>
                     <div>🏢 Center: {centerName}</div>
-                    <div>🕒 Available Slots: {slots}</div>
+                    <div>🕒 Available Slots: {availableSlotCount}</div>
                   </div>
                 );
               }}
@@ -316,9 +324,13 @@ function Calendar() {
             {/* Pass the selected ID and modal visibility status */}
             <ScheduleTeacherDetails
               id={selectedId}
-              teacherDetails={selectedEvent} // Pass the selected event data
-              showViewModal={showViewModal} // Modal visibility
-              onClose={closeModal} // Close modal handler
+              teacherDetail={{
+                ...selectedEvent,
+                teacherId: selectedEvent?.teacherId, 
+                startDate: selectedEvent?.startDate, 
+              }}
+              showViewModal={showViewModal} 
+              onClose={closeModal}
             />
           </div>
         </>
