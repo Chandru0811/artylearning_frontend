@@ -97,7 +97,7 @@ function EditClass({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn" onClick={handleShow}>
+      <button type="button" className="btn" onClick={handleShow}>
         <FaEdit />
       </button>
 
