@@ -55,6 +55,31 @@ const Level = () => {
           </IconButton>
         ),
       },
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "ACTIVE" ||
+          row.original.status === "active" ||
+          row.original.status === "Active" ? (
+            <span
+              className="badge badges-Green fw-light"
+              // style={{ backgroundColor: "#287f71" }}
+            >
+              Active
+            </span>
+          ) : row.original.status === "In Active" ||
+            row.original.status === "Inactive" ||
+            row.original.status === "string" ? (
+            <span
+              className="badge badges-orange fw-light"
+              // style={{ backgroundColor: "#eb862a" }}
+            >
+              In Active
+            </span>
+          ) : null,
+      },
       { accessorKey: "level", enableHiding: false, header: "Level" },
       {
         accessorKey: "levelCode",
@@ -66,31 +91,7 @@ const Level = () => {
         enableHiding: false,
         header: "Subject Id",
       },
-      {
-        accessorKey: "status",
-        enableHiding: false,
-        header: "Status",
-        Cell: ({ row }) =>
-          row.original.status === "ACTIVE" ||
-          row.original.status === "active" ||
-          row.original.status === "Active" ? (
-            <span
-              className="badge text-light fw-light"
-              style={{ backgroundColor: "#287f71" }}
-            >
-              Active
-            </span>
-          ) : row.original.status === "In Active" ||
-            row.original.status === "Inactive" ||
-            row.original.status === "string" ? (
-            <span
-              className="badge text-light fw-light"
-              style={{ backgroundColor: "#eb862a" }}
-            >
-              In Active
-            </span>
-          ) : null,
-      },
+
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -287,9 +288,9 @@ const Level = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/level/view/${selectedId}`)}>
+              {/* <MenuItem onClick={() => navigate(`/level/view/${selectedId}`)}>
                 View
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem>
                 <LevelEdit onSuccess={fetchData} id={selectedId} />
               </MenuItem>

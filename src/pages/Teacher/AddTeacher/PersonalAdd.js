@@ -82,7 +82,7 @@ const PersonalAdd = forwardRef(
           formData.append("citizenship", values.citizenship);
           formData.append("shortIntroduction", values.shortIntroduction);
           formData.append("gender", values.gender);
-          formData.append("countryId", nationalityName.countryId);
+          formData.append("countryId", values.countryId);
           formData.append("nationality", nationalityName.nationality);
           formData.append("nationalityId", values.nationalityId);
           formData.append("file", values.file);

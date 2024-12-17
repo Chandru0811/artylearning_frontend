@@ -284,7 +284,7 @@ const StaffPersonalAdd = forwardRef(
                   <option selected></option>
                   {nationalityData &&
                     nationalityData.map((nationalityId) => (
-                      <option key={nationalityId.id} value={nationalityId.country}>
+                      <option key={nationalityId.id} value={nationalityId.id}>
                         {nationalityId.country}
                       </option>
                     ))}
