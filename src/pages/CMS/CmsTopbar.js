@@ -184,7 +184,7 @@ const ContactSection = () => {
               {storedScreens?.headerPublish && (
                 <button
                   type="button"
-                  className="btn btn-sm btn-outline-danger border ms-2"
+                  className="btn btn-sm custom-outline-danger border ms-2"
                   onClick={PublishHeaderSection}
                 >
                   Publish

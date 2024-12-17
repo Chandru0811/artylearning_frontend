@@ -39,12 +39,17 @@ function Calendar() {
       end: item.endDate,
       className: "custom-event", // Custom class for styling events
       extendedProps: {
-        teacher: item.teacherName,
+        id: item.id,
+        teacherName: item.teacherName,
         centerName: item.centerName,
-        batchId: item.batchId,
+        centerId: item.centerId,
+        classId: item.classId,
+        teacherId: item.teacherId,
+        availableSlotCount: item.availableSlotCount,
+        batch: item.batch,
         className: item.className,
         courseId: item.courseId,
-        slots: item.availableSlotCount,
+        startDate: item.startDate,
       },
     }));
     setEvents(filteredEvents);
@@ -53,18 +58,20 @@ function Calendar() {
   const SearchShedule = async () => {
     try {
       setLoading(true);
-  
+
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
-      
+
       // Loop through the filters and add key-value pairs if they have a value
       for (let key in filters) {
         if (filters[key]) {
           queryParams.append(key, filters[key]);
         }
       }
-  
-      const response = await api.get(`/getAllScheduleInfo?${queryParams.toString()}`);
+
+      const response = await api.get(
+        `/getAllScheduleInfo?${queryParams.toString()}`
+      );
       setData(response.data);
       processEventData(response.data);
     } catch (error) {
@@ -108,7 +115,7 @@ function Calendar() {
   };
 
   useEffect(() => {
-    // SearchShedule();
+    SearchShedule();
     fetchData();
   }, []);
 
@@ -123,12 +130,16 @@ function Calendar() {
     const selectedEventDetails = {
       id: id,
       title: title,
-      teacher: extendedProps.teacherName,
+      teacherName: extendedProps.teacherName,
       centerName: extendedProps.centerName,
-      slots: extendedProps.availableSlotCount,
-      batchId: extendedProps.batchId,
+      centerId: extendedProps.centerId,
+      classId: extendedProps.classId,
+      teacherId: extendedProps.teacherId,
+      availableSlotCount: extendedProps.availableSlotCount,
+      batch: extendedProps.batch,
       className: extendedProps.className,
       courseId: extendedProps.courseId,
+      startDate: extendedProps.startDate,
     };
     // Log the selected event details
     console.log("Selected Event Details:", selectedEventDetails);
@@ -161,93 +172,92 @@ function Calendar() {
 
   return (
     <div className="container card my-2 py-2">
-      <div className="row p-1">
-        <div className="col-md-3 col-12">
-          <div className="form-group mb-0 ms-2 mb-1">
-            <select
-              className="form-select form-select-sm center_list"
-              name="centerId"
-              style={{ width: "100%" }}
-              onChange={handleFilterChange}
-              value={filters.centerId}
-            >
-              <option value="">Select Center</option>
-              {centerData?.map((center) => (
-                <option key={center.id} value={center.id} selected>
-                  {center.centerNames}
+      <div className="d-flex gap-2 align-items-center pb-3">
+        <div className="form-group mb-0 ms-2 mb-1">
+          <select
+            className="form-select form-select-sm center_list"
+            name="centerId"
+            style={{ width: "100%" }}
+            onChange={handleFilterChange}
+            value={filters.centerId}
+          >
+            <option value="">Select Center</option>
+            {centerData?.map((center) => (
+              <option key={center.id} value={center.id} selected>
+                {center.centerNames}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group mb-0 ms-2 mb-1">
+          <select
+            className="form-select form-select-sm center_list"
+            style={{ width: "100%" }}
+            name="courseId"
+            onChange={handleFilterChange}
+            value={filters.courseId}
+          >
+            <option selected>Select a Course</option>
+            {courseData &&
+              courseData.map((courseId) => (
+                <option key={courseId.id} value={courseId.id}>
+                  {courseId.courseNames}
                 </option>
               ))}
-            </select>
-          </div>
-        </div>
-        <div className="col-md-3 col-12">
-          <div className="form-group mb-0 ms-2 mb-1">
-            <select
-              className="form-select form-select-sm center_list"
-              style={{ width: "100%" }}
-              name="courseId"
-              onChange={handleFilterChange}
-              value={filters.courseId}
-            >
-              <option selected>Select a Course</option>
-              {courseData &&
-                courseData.map((courseId) => (
-                  <option key={courseId.id} value={courseId.id}>
-                    {courseId.courseNames}
-                  </option>
-                ))}
-            </select>
-          </div>
+          </select>
         </div>
 
-        <div className="col-md-3 col-12">
-          <div className="form-group mb-0 ms-2 mb-1">
-            <select
-              className="form-select form-select-sm center_list"
-              name="teacherId"
-              style={{ width: "100%" }}
-              value={filters.teacherId}
-              onChange={handleFilterChange}
-            >
-              <option selected>Select a Teacher</option>
-              {teacherData &&
-                teacherData.map((teacher) => (
-                  <option key={teacher.id} value={teacher.id}>
-                    {teacher.teacherNames}
-                  </option>
-                ))}
-            </select>
-          </div>
+        <div className="form-group mb-0 ms-2 mb-1">
+          <select
+            className="form-select form-select-sm center_list"
+            name="teacherId"
+            style={{ width: "100%" }}
+            value={filters.teacherId}
+            onChange={handleFilterChange}
+          >
+            <option selected>Select a Teacher</option>
+            {teacherData &&
+              teacherData.map((teacher) => (
+                <option key={teacher.id} value={teacher.id}>
+                  {teacher.teacherNames}
+                </option>
+              ))}
+          </select>
         </div>
-        <div className="col-md-3 col-12">
-          <div className="form-group mb-0 ms-2 mb-1">
-            <input
-              type="date"
-              className="form-control form-control-sm center_list"
-              style={{ width: "160px" }}
-              name="date"
-              value={filters.date}
-              onChange={handleFilterChange}
-              placeholder="Date"
-            />
-          </div>
-          <div className="form-group mb-0 ms-2 mb-1 ">
-            <button type="button" className="btn btn-sm btn-border me-2" onClick={clearFilters}>
-              Clear
-            </button>
 
-            <button
-              type="button"
-              className="btn btn-sm text-white"
-              style={{
-                fontWeight: "600px !important",
-                background: "#eb862a",
-              }}
-              onClick={SearchShedule}
-            >
-              Search
-            </button>
-          </div>
+        <div className="form-group mb-0 ms-2 mb-1">
+          <input
+            type="date"
+            className="form-control form-control-sm center_list"
+            style={{ width: "160px" }}
+            name="date"
+            value={filters.date}
+            onChange={handleFilterChange}
+            placeholder="Date"
+          />
+        </div>
+
+        <div className="form-group mb-0 ms-2 mb-1 ">
+          <button
+            type="button"
+            className="btn btn-sm btn-border me-2"
+            onClick={clearFilters}
+          >
+            Clear
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-sm text-white"
+            style={{
+              fontWeight: "600px !important",
+              background: "#eb862a",
+            }}
+            onClick={SearchShedule}
+          >
+            Search
+          </button>
         </div>
       </div>
 
@@ -303,12 +313,13 @@ function Calendar() {
               }}
               eventClick={handleEventClick} // Capture event click
               eventContent={(info) => {
-                const { teacher, centerName, slots } = info.event.extendedProps;
+                const { teacherName, centerName, availableSlotCount } =
+                  info.event.extendedProps;
                 return (
                   <div className="p-2">
-                    <div>👨‍🏫 Teacher: {teacher}</div>
+                    <div>👨‍🏫 Teacher: {teacherName}</div>
                     <div>🏢 Center: {centerName}</div>
-                    <div>🕒 Available Slots: {slots}</div>
+                    <div>🕒 Available Slots: {availableSlotCount}</div>
                   </div>
                 );
               }}
@@ -316,9 +327,13 @@ function Calendar() {
             {/* Pass the selected ID and modal visibility status */}
             <ScheduleTeacherDetails
               id={selectedId}
-              teacherDetails={selectedEvent} // Pass the selected event data
-              showViewModal={showViewModal} // Modal visibility
-              onClose={closeModal} // Close modal handler
+              teacherDetail={{
+                ...selectedEvent,
+                teacherId: selectedEvent?.teacherId,
+                startDate: selectedEvent?.startDate,
+              }}
+              showViewModal={showViewModal}
+              onClose={closeModal}
             />
           </div>
         </>

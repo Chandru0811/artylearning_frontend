@@ -7,6 +7,12 @@ import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { FaEdit } from "react-icons/fa";
 import api from "../../config/URL";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 import { MdOutlineModeEdit } from "react-icons/md";
 
 function ReferalFeesEdit({ id, onSuccess }) {
@@ -42,7 +48,7 @@ function ReferalFeesEdit({ id, onSuccess }) {
       centerId: "",
       effectiveDate: "",
       referralFee: "",
-      status:""
+      status: "",
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -116,19 +122,26 @@ function ReferalFeesEdit({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <MdOutlineModeEdit /> Edit
+      <button
+        onClick={handleShow}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
+      >
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
       </button>
 
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <Dialog
+        open={show}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="md"
+        disableBackdropClick={isModified}
+        disableEscapeKeyDown={isModified}
       >
+        <DialogTitle className="headColor">Edit Referal Fees</DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -137,10 +150,7 @@ function ReferalFeesEdit({ id, onSuccess }) {
             }
           }}
         >
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Referal Fees</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row py-4">
                 <div class="col-md-6 col-12 mb-4">
@@ -172,8 +182,6 @@ function ReferalFeesEdit({ id, onSuccess }) {
                     </div>
                   )}
                 </div>
-
-                {/* Effective Date */}
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Effective Date<span className="text-danger">*</span>
@@ -195,8 +203,6 @@ function ReferalFeesEdit({ id, onSuccess }) {
                       </div>
                     )}
                 </div>
-
-                {/* Referral Fee */}
                 <div className="col-md-6 col-12">
                   <label className="form-label">
                     Referal Fee<span className="text-danger">*</span>
@@ -216,7 +222,6 @@ function ReferalFeesEdit({ id, onSuccess }) {
                     </div>
                   )}
                 </div>
-
                 <div class="col-md-6 col-12 mb-4">
                   <lable className="form-label">
                     Status<span class="text-danger">*</span>
@@ -244,16 +249,17 @@ function ReferalFeesEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer>
+          </DialogContent>
+          <DialogActions>
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
             >
               Cancel
             </Button>
-            <Button
+            <button
               type="submit"
+              onSubmit={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >
@@ -264,10 +270,10 @@ function ReferalFeesEdit({ id, onSuccess }) {
                 ></span>
               )}
               Update
-            </Button>
-          </Modal.Footer>
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

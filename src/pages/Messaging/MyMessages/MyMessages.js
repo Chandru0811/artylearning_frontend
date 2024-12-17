@@ -1,86 +1,133 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import MyMessagesAdd from "./MyMessagesAdd";
 import api from "../../../config/URL";
 import Delete from "../../../components/common/Delete";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { createTheme, IconButton, Menu, MenuItem } from "@mui/material";
+import { ThemeProvider } from "react-bootstrap";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const MyMessages = () => {
-  const tableRef = useRef(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const id = localStorage.getItem("userId");
   const userName = localStorage.getItem("userName");
-
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getData = async () => {
-      if (userName === "SMS_BRANCH_ADMIN") {
-        try {
-          const response = await api.get(`/getAllMessagesByAdminId/${id}`);
-          setDatas(response.data);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        try {
-          const response = await api.get(`/getAllMessagesByTeacherId/${id}`);
-          setDatas(response.data);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        } finally {
-          setLoading(false);
-        }
+  const getData = async () => {
+    if (userName === "SMS_BRANCH_ADMIN") {
+      try {
+        const response = await api.get(`/getAllMessagesByAdminId/${id}`);
+        setDatas(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
-    };
+    } else {
+      try {
+        const response = await api.get(`/getAllMessagesByTeacherId/${id}`);
+        setDatas(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {
     getData();
   }, []);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "senderName",
+        enableHiding: false,
+        header: "Student Name",
+        size: 20,
+      },
+      {
+        accessorKey: "receiverName",
+        enableHiding: false,
+        header: "Receiver Name",
+        size: 20,
+      },
+      {
+        accessorKey: "message",
+        enableHiding: false,
+        header: "Message",
+        size: 20,
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get(`/getAllMessagesByTeacherId/${id}`);
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div>
@@ -105,7 +152,7 @@ const MyMessages = () => {
         </ol>
         <div className="my-3 d-flex justify-content-end">
           {storedScreens?.messagingCreate && (
-            <MyMessagesAdd onSuccess={refreshData} />
+            <MyMessagesAdd onSuccess={getData} />
           )}
         </div>
         {loading ? (
@@ -119,52 +166,51 @@ const MyMessages = () => {
             </div>
           </div>
         ) : (
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
-                <th scope="col">Student Name</th>
-                <th scope="col">Receiver Name</th>
-                <th scope="col">Message</th>
-                <th scope="col">Created Date</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(datas) &&
-                datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{data.senderName}</td>
-                    <td>{data.receiverName}</td>
-                    <td>{data.message}</td>
-                    <td>{data.createdAt.substring(0, 10)}</td>
-                    <td>
-                      <div className="d-flex">
-                        {/* {storedScreens?.messagingRead && ( */}
-                        <Link to={`/messaging/view/${data.senderId}`}>
-                          <button className="btn btn-sm">
-                            <FaEye />
-                          </button>
-                        </Link>
-                        {/* )}  */}
-                        {/* {storedScreens?.levelUpdate && (
-                          <LevelEdit id={data.id} onSuccess={refreshData} />
-                        )} */}
-                        {/* {storedScreens?.levelDelete && ( */}
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteMessage/${data.id}`}
-                        />
-                        {/* )} */}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <Link to={`/messaging/view/${selectedId}`}>
+                  <button className="btn btn-sm">
+                    <FaEye /> View
+                  </button>
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteMessage/${selectedId}`}
+                  onDeleteSuccess={getData}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

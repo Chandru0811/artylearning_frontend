@@ -77,7 +77,7 @@ export default function CmsCourseEdit() {
               </button>
             )} */}
             <Link to={"/cms/CmsCourses"}>
-              <button className="btn btn-sm btn-outline-danger border ms-2">
+              <button className="btn btn-sm  border ms-2">
                 Back
               </button>
             </Link>

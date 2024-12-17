@@ -1,44 +1,67 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap"; // Example using react-bootstrap
+import { Modal, Button } from "react-bootstrap";
+import api from "../../config/URL";
+import { Link } from "react-router-dom";
 
-function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
-  const [data, setData] = useState([]);
-  const [teacherDetails, setTeacherDetails] = useState(null);
+function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
+  const { teacherId, startDate } = teacherDetail || {};
+  const [teacherDetails, setTeacherDetails] = useState([]); // To store API response
   const [activeTab, setActiveTab] = useState(""); // To manage active tab
-  console.log("Id:", id);
-
-  // Hardcoded data for the teacher schedule and details
-  const hardcodedDetails = [
-    {
-      time: "2:30 PM",
-      details: [
-        { lesson: "Math", teacher: "John Doe", duration: "1 hour" },
-        { lesson: "Science", teacher: "Jane Smith", duration: "1 hour" },
-      ],
-    },
-    {
-      time: "3:30 PM",
-      details: [
-        { lesson: "History", teacher: "Mary Johnson", duration: "1 hour" },
-        { lesson: "English", teacher: "Mike Brown", duration: "1 hour" },
-      ],
-    },
-    {
-      time: "5:00 PM",
-      details: [
-        { lesson: "Geography", teacher: "Sarah Lee", duration: "1 hour" },
-        { lesson: "Physics", teacher: "David Wilson", duration: "1 hour" },
-      ],
-    },
-  ];
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(""); // Error state
 
   useEffect(() => {
-    // Simulate fetching data and setting the default tab if available
-    if (hardcodedDetails.length > 0) {
-      setTeacherDetails(hardcodedDetails);
-      setActiveTab(hardcodedDetails[0].time); // Set the first tab as active by default
-    }
-  }, []);
+    if (!teacherId || !startDate) return; // Prevent API call if data is incomplete
+
+    const fetchScheduleDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get(
+          `/getAllSpecificTeacherScheduleInfo/${teacherId}?date=${startDate}`
+        );
+
+        if (response && response.data.length > 0) {
+          setTeacherDetails(response.data);
+          setActiveTab(response.data[0]?.batchTime || ""); // Set the first batch as active
+        } else {
+          setError("No schedule data found.");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Failed to fetch schedule data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchScheduleDetails();
+  }, [teacherId, startDate]);
+
+  if (loading) {
+    return (
+      <Modal show={showViewModal} onHide={onClose} size="lg" centered>
+        <Modal.Header closeButton>
+          <Modal.Title className="fs-5 fw-medium">Schedule Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Loading...</p>
+        </Modal.Body>
+      </Modal>
+    );
+  }
+
+  if (error) {
+    return (
+      <Modal show={showViewModal} onHide={onClose} size="lg" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Schedule Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{error}</p>
+        </Modal.Body>
+      </Modal>
+    );
+  }
 
   return (
     <Modal show={showViewModal} onHide={onClose} size="lg" centered>
@@ -46,245 +69,176 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
         <Modal.Title>Schedule Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* Check if teacherDetails data is available */}
-        {teacherDetails &&
-        Array.isArray(teacherDetails) &&
-        teacherDetails.length > 0 ? (
+        {teacherDetails.length > 0 ? (
           <>
-            {/* Dynamic Tabs based on hardcodedDetails */}
-            <ul className="nav nav-tabs" style={{ justifyContent: "start" }}>
+            {/* Tabs Navigation */}
+            <ul className="nav nav-active-tabs">
               {teacherDetails.map((item) => (
-                <li className="nav-item" key={item.time}>
+                <li className="nav-item" key={item.batchTime}>
                   <button
                     className={`nav-link ${
-                      activeTab === item.time ? "active" : ""
+                      activeTab === item.batchTime ? "active" : ""
                     }`}
-                    onClick={() => setActiveTab(item.time)}
-                    // style={{
-                    //   borderTop:
-                    //     activeTab === item.time
-                    //       ? "3px solid #287f71"
-                    //       : "none",
-                    //   borderRadius: "0px",
-                    // }}
+                    onClick={() => setActiveTab(item.batchTime)}
                     style={{
                       borderTop:
-                        activeTab === item.time ? "3px solid #287f71" : "none",
-                      borderRadius: "0px",
-                      color: activeTab === item.time ? "orange" : "inherit",
+                        activeTab === item.batchTime
+                          ? "3px solid #287f71"
+                          : "none",
+                      color:
+                        activeTab === item.batchTime ? "orange" : "inherit",
                     }}
                   >
-                    {item.time}
+                    {item.batchTime}
                   </button>
                 </li>
               ))}
             </ul>
 
             {/* Tab Content */}
-            <div className="tab-content mt-2">
+            <div className="tab-content mt-3">
               {teacherDetails.map(
                 (item) =>
-                  activeTab === item.time && (
-                    <div key={item.time}>
-                      {/* <table className="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>Lesson</th>
-                            <th>Teacher</th>
-                            <th>Duration</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {item.details.map((detail, index) => (
-                            <tr key={index}>
-                              <td>{detail.lesson}</td>
-                              <td>{detail.teacher}</td>
-                              <td>{detail.duration}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table> */}
-                      <div
-                        className="container py-4 "
-                        style={{ fontSize: "0.85rem" }}
-                      >
-                        <div className="row">
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Start Date</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.centerName}</p>
-                              </div>
+                  activeTab === item.batchTime && (
+                    <div
+                      key={item.batchTime}
+                      className="container py-4"
+                      style={{ fontSize: "0.85rem" }}
+                    >
+                      {/* Details Content */}
+                      <div className="row">
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Start Date</p>
                             </div>
-                          </div>
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">
-                                  Lesson Outline Set Effective Start Date
-                                </p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.course}</p>
-                              </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.startDate || "--"}</p>
                             </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Class Id</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.className}</p>
-                              </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">End Date</p>
                             </div>
-                          </div>
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Effective Start Date</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.teacher}</p>
-                              </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.endDate || "--"}</p>
                             </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Lesson No</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.days}</p>
-                              </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Class Id</p>
                             </div>
-                          </div>
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">End Date</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.classRoom}</p>
-                              </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.classUniqueId || "--"}</p>
                             </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Teacher</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.startDate}</p>
-                              </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Lesson No</p>
                             </div>
-                          </div>
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">End Date</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.endDate}</p>
-                              </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.lessonNo || "--"}</p>
                             </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">First Lesson</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.startDate}</p>
-                              </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Available Slot</p>
                             </div>
-                          </div>
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Class Venue</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.endDate}</p>
-                              </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.availableSlot || "--"}</p>
                             </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Last lesson</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.startDate}</p>
-                              </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Teacher</p>
                             </div>
-                          </div>
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Assistant Teacher</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.endDate}</p>
-                              </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.teacherName || "--"}</p>
                             </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Available Slot</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.startDate}</p>
-                              </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">First Lesson</p>
                             </div>
-                          </div>
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">No of Students</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.endDate}</p>
-                              </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.firstLesson || "--"}</p>
                             </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Remarks</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.startDate}</p>
-                              </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Last lesson</p>
+                            </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.classVenue || "--"}</p>
                             </div>
                           </div>
-                          <div className="col-md-6 col-12 mb-2">
-                            <div className="row">
-                              <div className="col-5">
-                                <p className="">Students</p>
-                              </div>
-                              <div className="col-7">
-                                <p>:&nbsp;{data.endDate}</p>
-                              </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">No of Students</p>
+                            </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.noOfStudents || "--"}</p>
                             </div>
                           </div>
+                        </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Remarks</p>
+                            </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.remarks || "--"}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-12 mb-2">
+                          Students:
+                          <ol>
+                            {item.details.students &&
+                            item.details.students.length > 0 ? (
+                              item.details.students.map((student) => (
+                                <li key={student.id}>
+                                  <Link
+                                    to={`/student/view/${student.id}`}
+                                    style={{
+                                      textDecoration: "none",
+                                      color: "inherit",
+                                    }}
+                                  >
+                                    {student.studentName} ({student.uniqueId})
+                                  </Link>
+                                </li>
+                              ))
+                            ) : (
+                              <p>No Students</p>
+                            )}
+                          </ol>
                         </div>
                       </div>
                     </div>
@@ -297,7 +251,10 @@ function ScheduleTeacherDetails({ id, showViewModal, onClose }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button
+          className="btn btn-sm btn-border bg-light text-dark"
+          onClick={onClose}
+        >
           Close
         </Button>
       </Modal.Footer>

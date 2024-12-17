@@ -1,103 +1,124 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../../components/common/Delete";
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 import api from "../../../config/URL";
-import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
 
 const Deduction = () => {
-  const tableRef = useRef(null);
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   console.log(datas);
   const [loading, setLoading] = useState(true);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [extraData, setExtraData] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllUserDeduction");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      }
-    };
-    getData();
-  }, []);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      {
+        accessorKey: "employeeName",
+        enableHiding: false,
+        header: "Employee Name",
+      },
+      {
+        accessorKey: "deductionName",
+        enableHiding: false,
+        header: "Deduction Name",
+      },
+      {
+        accessorKey: "deductionAmount",
+        enableHiding: false,
+        header: "Deduction Amount",
+      },
+      { accessorKey: "deductionMonth", header: "Deduction Month" },
+      { accessorKey: "totalDeductionAmount", header: "Total Deduction Amount" },
+      { accessorKey: "userId", header: "User Id" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const getData = async () => {
     try {
       const response = await api.get("/getAllUserDeduction");
       setDatas(response.data);
-      initializeDataTable();
+      setLoading(false);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data ", error);
     }
-    setLoading(false);
   };
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/deduction/list/${id}`); // Navigate to the index page when a row is clicked
-  };
-
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+    getData();
+  }, []);
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div className="container-fluid my-4 center">
@@ -161,114 +182,54 @@ const Deduction = () => {
           </div>
         ) : (
           <div>
-            <div
-              style={{ minHeight: "60vh" }}
-              className="table-responsive py-2"
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    leaveReason: true,
+                    leaveType: true,
+                    leaveTypeId: false,
+                    noOfDays: true,
+                    requestDate: true,
+                    userId: false,
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
             >
-              <table
-                style={{ width: "100%" }}
-                ref={tableRef}
-                className="display"
+              <MenuItem
+                onClick={() => navigate(`/deduction/list/${selectedId}`)}
               >
-                <thead>
-                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                    <th className="text-muted" scope="col">
-                      S No
-                    </th>
-                    <th className="text-center text-muted"></th>
-                    <th className="text-muted" scope="col">
-                      Centre Name
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Employee Name
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Deduction Name
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Deduction Amount
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(datas) &&
-                    datas.map((data, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        <th scope="row" className="text-center">
-                          {index + 1}
-                        </th>
-                        <td>
-                          <div className="d-flex justify-content-center align-items-center">
-                            {storedScreens?.deductionCreate && (
-                              <div className="dropdown">
-                                <button
-                                  className="btn btn-button btn-sm dropdown-toggle"
-                                  type="button"
-                                  id="dropdownMenuButton"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <IoIosAddCircle
-                                    className="text-light"
-                                    style={{ fontSize: "16px" }}
-                                  />
-                                </button>
-                                <ul
-                                  className="dropdown-menu"
-                                  aria-labelledby="dropdownMenuButton"
-                                >
-                                  <li>
-                                    {storedScreens?.deductionUpdate && (
-                                      <Link to={`/deduction/edit/${data.id}`}>
-                                        <button
-                                          style={{
-                                            whiteSpace: "nowrap",
-                                            width: "100%",
-                                          }}
-                                          className="btn btn-sm btn-normal text-start"
-                                        >
-                                          <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                                        </button>
-                                      </Link>
-                                    )}
-                                  </li>
-                                  <li>
-                                    {storedScreens?.deductionDelete && (
-                                      <span>
-                                        <Delete
-                                          onSuccess={refreshData}
-                                          path={`/deleteUserDeduction/${data.id}`}
-                                        />{" "}
-                                      </span>
-                                    )}
-                                  </li>
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.centerName}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.employeeName}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.deductionName}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.deductionAmount}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+                View
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate(`/deduction/edit/${selectedId}`)}
+              >
+                Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteUserDeduction/${selectedId}`}
+                  onDeleteSuccess={getData}
+                />
+              </MenuItem>
+            </Menu>
           </div>
         )}
       </div>

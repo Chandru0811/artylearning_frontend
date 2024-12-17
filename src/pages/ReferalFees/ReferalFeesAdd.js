@@ -99,7 +99,7 @@ function ReferalFeesAdd({ onSuccess }) {
 
   return (
     <>
-      <div className="d-flex justify-content-end mb-3">
+      <div className="d-flex justify-content-end mb-3 me-3">
         <button
           type="button"
           className="btn btn-button btn-sm"
@@ -126,7 +126,7 @@ function ReferalFeesAdd({ onSuccess }) {
           }}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Add Referal Fees</Modal.Title>
+            <Modal.Title className="headColor">Add Referal Fees</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="container">

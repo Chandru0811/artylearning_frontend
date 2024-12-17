@@ -149,7 +149,7 @@ function CmsCourseAdd() {
               {/* )} */}
               <Link to={"/cms/CmsCourses"}>
                 <button
-                  className="btn btn-sm btn-outline-danger border ms-2 p-2"
+                  className="btn btn-sm custom-outline-danger border ms-2 p-2"
                   type="button"
                 >
                   Back

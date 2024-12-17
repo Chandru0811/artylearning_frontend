@@ -1,37 +1,142 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../../components/common/Delete";
-import api from "../../../config/URL";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { MaterialReactTable } from "material-react-table";
 import { toast } from "react-toastify";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
+import api from "../../../config/URL";
 
 const Payroll = () => {
-  const tableRef = useRef(null);
+  const [filters, setFilters] = useState({
+    centerName: "",
+    employeeName: "",
+    roll: "",
+  });
   const navigate = useNavigate();
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
+  const [allData, setAllData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
-  const [extraData, setExtraData] = useState(false);
-  const [centerName, setCenterName] = useState("");
-  const [employeeName, setEmployeeName] = useState("");
-  const [roll, setRoll] = useState("");
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const clearFilters = () => {
-    setCenterName("");
-    setEmployeeName("");
-    setRoll("");
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
+      {
+        accessorKey: "employeeName",
+        enableHiding: false,
+        header: "Employee Name",
+      },
+      {
+        accessorKey: "netPay",
+        enableHiding: false,
+        header: "Net Pay",
+      },
+      {
+        accessorKey: "userRole",
+        enableHiding: false,
+        header: "Role",
+      },
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "APPROVED" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#287f71" }}
+            >
+              Approved
+            </span>
+          ) : row.original.status === "PENDING" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#eb862a" }}
+            >
+              Pending
+            </span>
+          ) : row.original.status === "REJECTED" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#ed1a1a" }}
+            >
+              Rejected
+            </span>
+          ) : null,
+      },
+      { accessorKey: "bonus", header: "Bonus" },
+      { accessorKey: "cpfContributions", header: "Cpf Contributions" },
+      { accessorKey: "deductionAmount", header: "Deduction Amount" },
+      { accessorKey: "grossPay", header: "Gross Pay" },
+      { accessorKey: "hourlyId", header: "Hourly Id" },
+      { accessorKey: "payrollMonth", header: "Payroll Month" },
+      { accessorKey: "payrollType", header: "Payroll Type" },
+      { accessorKey: "sdl", header: "sdl" },
+      { accessorKey: "shgContribution", header: "Shg Contribution" },
+      { accessorKey: "freelanceCount", header: "Freelance Count" },
+      { accessorKey: "userId", header: "User Id" },
+      { accessorKey: "year", header: "Year" },
+      { accessorKey: "startDate", header: "Start Date" },
+      { accessorKey: "endDate", header: "End Date" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-    $(tableRef.current).DataTable().search("").draw();
-  };
-
-  const fetchData = async () => {
+  const getCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
@@ -40,87 +145,105 @@ const Payroll = () => {
     }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("getAllUserPayroll");
-        setDatas(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      }
-    };
-    getData();
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const fetchData = async () => {
     try {
       const response = await api.get("getAllUserPayroll");
+      setAllData(response.data);
       setDatas(response.data);
-      // initializeDataTable(); // Reinitialize DataTable after successful data update
+      setLoading(false);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data ", error);
     }
-    setLoading(false);
-  };
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/payrolladmin/view/${id}`);
   };
 
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+    fetchData();
+    getCenterData();
+  }, []);
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  useEffect(() => {
+    const filteredData = allData.filter((item) => {
+      const centerNameMatch = filters.centerName
+        ? item.centerName
+            ?.toLowerCase()
+            .includes(filters.centerName.toLowerCase())
+        : true;
+
+      const employeeNameMatch = filters.employeeName
+        ? item.employeeName
+            ?.toLowerCase()
+            .includes(filters.employeeName.toLowerCase())
+        : true;
+
+      const rollMatch = filters.roll
+        ? item.roll?.toLowerCase().includes(filters.roll.toLowerCase())
+        : true;
+
+      return centerNameMatch && employeeNameMatch && rollMatch;
+    });
+
+    setDatas(filteredData);
+  }, [filters, allData]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: value,
+    }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      centerName: "",
+      employeeName: "",
+      roll: "",
+    });
+    setDatas(allData);
+  };
+
+  useEffect(() => {
+    const filteredData = allData.filter((item) => {
+      const centerNameMatch = filters.centerName
+        ? item.centerName
+            ?.toLowerCase()
+            .includes(filters.centerName.toLowerCase())
+        : true;
+
+      const employeeNameMatch = filters.employeeName
+        ? item.employeeName
+            ?.toLowerCase()
+            .includes(filters.employeeName.toLowerCase())
+        : true;
+
+      const rollMatch = filters.roll
+        ? item.userRole?.toLowerCase().includes(filters.roll.toLowerCase())
+        : true;
+
+      return centerNameMatch && employeeNameMatch && rollMatch;
+    });
+
+    setDatas(filteredData);
+  }, [filters, allData]);
+
+  const handleMenuClose = () => setMenuAnchor(null);
+
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -166,12 +289,9 @@ const Payroll = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Centre Name"
-                value={centerName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCenterName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                name="centerName"
+                value={filters.centerName}
+                onChange={handleFilterChange}
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -180,12 +300,9 @@ const Payroll = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Employee Name"
-                value={employeeName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setEmployeeName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                name="employeeName"
+                value={filters.employeeName}
+                onChange={handleFilterChange}
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
@@ -194,12 +311,9 @@ const Payroll = () => {
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Roll"
-                value={roll}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setRoll(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                name="roll"
+                value={filters.roll}
+                onChange={handleFilterChange}
               />
             </div>
 
@@ -207,7 +321,7 @@ const Payroll = () => {
               <button
                 type="button"
                 className="btn btn-sm btn-border"
-                onClick={clearFilters}
+                onClick={clearFilter}
               >
                 Clear
               </button>
@@ -236,185 +350,50 @@ const Payroll = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive py-2">
-            <table style={{ width: "100%" }} ref={tableRef} className="display">
-              <thead>
-                <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th scope="col">S No</th>
-                  <th className="text-center text-muted"></th>
-                  <th scope="col">Centre Name</th>
-                  <th scope="col">Emplopee Name</th>
-                  <th scope="col">Net Pay</th>
-                  <th scope="col">Role</th>
-                  <th scope="col">Status</th>
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedAt
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedAt
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr
-                    key={index}
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    <th scope="row">{index + 1}</th>
-                    <td>
-                      <div className="d-flex justify-content-center align-items-center">
-                        {storedScreens?.centerListingCreate && (
-                          <div className="dropdown">
-                            <button
-                              className="btn btn-button btn-sm dropdown-toggle"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              <IoIosAddCircle
-                                className="text-light"
-                                style={{ fontSize: "16px" }}
-                              />
-                            </button>
-                            <ul
-                              className="dropdown-menu"
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <li>
-                                {storedScreens?.payrollUpdate && (
-                                  <Link to={`/payrolladmin/edit/${data.id}`}>
-                                    <button
-                                      style={{
-                                        whiteSpace: "nowrap",
-                                        width: "100%",
-                                      }}
-                                      className="btn btn-sm btn-normal text-start"
-                                    >
-                                      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                                    </button>
-                                  </Link>
-                                )}
-                              </li>
-                              <li>
-                                {storedScreens?.payrollDelete && (
-                                  <span>
-                                    <Delete
-                                      onSuccess={refreshData}
-                                      path={`/deleteUserPayroll/${data.id}`}
-                                    />{" "}
-                                  </span>
-                                )}
-                              </li>
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {centerData &&
-                        centerData.map((center) =>
-                          parseInt(data.centerId) === center.id
-                            ? center.centerNames || "--"
-                            : ""
-                        )}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.employeeName}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.netPay}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.userRole}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.status === "APPROVED" ? (
-                        <span className="badge badges-Green">Approved</span>
-                      ) : data.status === "PENDING" ? (
-                        <span className="badge badges-Yellow">Pending</span>
-                      ) : (
-                        <span className="badge badges-Red">Rejected</span>
-                      )}
-                    </td>
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.createdBy}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {extractDate(data.createdAt)}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {data.updatedBy}
-                      </td>
-                    )}
-                    {extraData && (
-                      <td onClick={() => handleRowClick(data.id)}>
-                        {extractDate(data.updatedAt)}
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem
+                onClick={() => navigate(`/payrolladmin/view/${selectedId}`)}
+              >
+                View
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate(`/payrolladmin/edit/${selectedId}`)}
+              >
+                Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteUserPayroll/${selectedId}`}
+                  onDeleteSuccess={fetchData}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

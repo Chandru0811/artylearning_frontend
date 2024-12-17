@@ -35,7 +35,7 @@ const NewTable1 = () => {
   const navigate = useNavigate();
 
   const handleSelectChange = (value, id) => {
-    setSelectedValue(value)
+    setSelectedValue(value);
     if (value === "basic") {
       setShowModal(true);
       setSelectedId(id);
@@ -44,7 +44,7 @@ const NewTable1 = () => {
 
   const handelClose = () => {
     setShowModal(false);
-    setSelectedValue("")
+    setSelectedValue("");
   };
 
   const columns = useMemo(
@@ -60,81 +60,34 @@ const NewTable1 = () => {
         ),
       },
       {
-        accessorKey: "id",
+        accessorKey: "lead_status",
         enableHiding: false,
-        header: "",
-        size: 40,
-        Cell: ({ row }) => (
-          <div
-            style={{
-              position: "relative",
-              display: "inline-block",
-              width: "100%",
-            }}
-          >
+        header: "Lead Status",
+        Cell: ({ row }) =>
+          row.original.lead_status === "Processed" ? (
             <span
-              style={{
-                position: "absolute",
-                left: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                pointerEvents: "none",
-                fontSize: "16px",
-                color: "#fff",
-              }}
+              className="badge bg-info py-2"
+              style={{ color: "#1f1f1f !important" }}
             >
-              <BsThreeDotsVertical />
+              Processed
             </span>
-            <select
-              value={selectedValue}
-              onChange={(e) =>
-                handleSelectChange(e.target.value, row.original.id)
-              }
-              className="form-control"
-              style={{
-                padding: "4px 10px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                width: "36px",
-                appearance: "none",
-                textIndent: "20px",
-                color: "#fff",
-                backgroundColor: "#287f71",
-              }}
-            >
-              <option
-                value="basics"
-                style={{
-                  backgroundColor: "white",
-                  padding: "10px",
-                  color: "#000", // Ensuring text is visible on a white background
-                }}
-              >
-                <MdOutlineModeEdit /> Add Registration
-              </option>
-              <option
-                value="basic"
-                style={{
-                  backgroundColor: "white",
-                  padding: "10px",
-                  color: "#000",
-                }}
-              >
-                Editor
-              </option>
-              <option
-                value="admin"
-                style={{
-                  backgroundColor: "white",
-                  padding: "10px",
-                  color: "#000",
-                }}
-              >
-                Admin Admin &nbsp;
-              </option>
-            </select>
-          </div>
-        ),
+          ) : row.original.lead_status === "Contacted" ? (
+            <span className="badge bg-primary py-2 ">Contacted</span>
+          ) : row.original.lead_status === "Qualified" ? (
+            <span className="badge bg-success py-2">Qualified</span>
+          ) : row.original.lead_status === "Negotiation" ? (
+            <span className="badge bg-warning py-2">Negotiation</span>
+          ) : row.original.lead_status === "Closed" ? (
+            <span className="badge bg-danger py-2">Closed</span>
+          ) : row.original.lead_status === "Win" ? (
+            <span className="badge bg-success py-2">Win</span>
+          ) : row.original.lead_status === "Junk" ? (
+            <span className="badge bg-warning py-2">Junk</span>
+          ) : row.original.lead_status === "Lost" ? (
+            <span className="badge bg-danger  py-2">Lost</span>
+          ) : (
+            <span className="badge bg-warning fw-light ">Pending</span>
+          ),
       },
       { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
@@ -401,7 +354,12 @@ const NewTable1 = () => {
           </ThemeProvider>
         )}
       </div>
-      <AddRegister id={selectedId} onSuccess="test" show={showModal}  handelClose={handelClose}/>
+      <AddRegister
+        id={selectedId}
+        onSuccess="test"
+        show={showModal}
+        handelClose={handelClose}
+      />
     </div>
   );
 };

@@ -43,7 +43,7 @@ export default function CmsChinesh() {
           <div className="col-md-6 col-12 d-flex justify-content-end">
             {storedScreens?.chineseCoursePublish && (
               <button
-                className="btn btn-sm btn-outline-danger border ms-2"
+                className="btn btn-sm custom-outline-danger border ms-2"
                 onClick={handelPublishEnglishCourse}
               >
                 Publish

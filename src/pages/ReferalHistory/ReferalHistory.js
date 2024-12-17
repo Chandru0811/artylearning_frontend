@@ -1,80 +1,145 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../config/URL";
+import { MaterialReactTable } from "material-react-table";
+import { ThemeProvider, createTheme, IconButton } from "@mui/material";
 
 const ReferalHistory = () => {
-  const tableRef = useRef(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [datas, setDatas] = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getreferlHistoryData = async () => {
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 10,
+        Cell: ({ cell }) => <IconButton></IconButton>,
+      },
+      {
+        accessorKey: "referByStudent",
+        enableHiding: false,
+        header: "Refer By Student",
+      },
+      {
+        accessorKey: "referByParent",
+        enableHiding: false,
+        header: "Refer By Parent",
+      },
+      {
+        accessorKey: "studentName",
+        header: "Student Name",
+        enableHiding: false,
+        size: 40,
+      },
+      {
+        accessorKey: "enrollDate",
+        header: "Enroll Date",
+        enableHiding: false,
+        size: 50,
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      { accessorKey: "attendance", enableHiding: false, header: "Attendance" },
+      {
+        accessorKey: "referralFee",
+        enableHiding: false,
+        header: "Referal Fee",
+      },
+      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const fetchData = async () => {
     try {
-      const params = {};
-
-      // if (centerId) params.centerId = centerId;
-      // if (centerCode) params.centerCode = centerCode;
-      // if (email) params.email = email;
-      // if (centerManager) params.centerManager = centerManager;
-      // const queryParams = new URLSearchParams(params).toString();
-      // const response = await api.get(`/getCenterWithCustomInfo?${queryParams}`);
-      const response = await api.get(`/getAllReferralHistory`);
-      setDatas(response.data);
-      setLoading(false);
+      setLoading(true);
+      const response = await api.get("/getAllReferralHistory");
+      setData(response.data);
     } catch (error) {
-      toast.error("Error Fetching Data : ", error);
-    }
-  };
-
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) return;
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      $(tableRef.current).DataTable().destroy(true);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
-
-  useEffect(() => {
-    // if (centerId !== undefined && centerId !== "") {
-      getreferlHistoryData();
-    // }
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", 
+              opacity: 1, 
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", 
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
+    },
+  });
 
   return (
-    <div className="container my-4">
+    <div className="container-fluid px-2 my-4 center">
       <ol
-        className="breadcrumb"
+        className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -84,58 +149,60 @@ const ReferalHistory = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Referal Management
+          &nbsp;Referal Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Referal History
+          &nbsp;Referal History
         </li>
       </ol>
-      <div className="mb-3 d-flex justify-content-end"></div>
-      {loading ? (
-        <div className="loader-container">
-          <div className="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <span className="text-muted">
+            This database shows the list of{" "}
+            <strong style={{ color: "#287f71" }}>Referal History</strong>
+          </span>
+        </div>
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="table-responsive">
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col">S No</th>
-                <th scope="col">Refer By Student</th>
-                <th scope="col">Refer By Parent</th>
-                <th scope="col">Student Name</th>
-                <th scope="col">Enroll Date</th>
-                <th scope="col">Attendance</th>
-                <th scope="col">Referal Fee</th>
-                <th scope="col">Created By</th>
-                <th scope="col">Created At</th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas?.map((data, index) => (
-                <tr key={data.id}>
-                  <td>{index + 1}</td>
-                  <td>{data.referByStudent}</td>
-                  <td>{data.referByParent}</td>
-                  <td>{data.studentName}</td>
-                  <td>{data.enrollDate?.substring(0,10)}</td>
-                  <td>{data.attendance}</td>
-                  <td>{data.referralFee}</td>
-                  <td>{data.createdBy}</td>
-                  <td>{data.createdAt?.substring(0,10)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+        ) : (
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: true,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+          </>
+        )}
+      </div>
     </div>
   );
 };
