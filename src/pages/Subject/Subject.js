@@ -6,7 +6,7 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SubjectAdd from "./SubjectAdd";
 import SubjectEdit from "./SubjectEdit";
 import api from "../../config/URL";
@@ -20,6 +20,7 @@ const Subject = () => {
     subject: "",
     code: "",
   });
+  const navigate = useNavigate();
   const [allData, setAllData] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +69,26 @@ const Subject = () => {
         accessorKey: "status",
         enableHiding: false,
         header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "ACTIVE" ||
+          row.original.status === "active" ||
+          row.original.status === "Active" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#287f71" }}
+            >
+              Active
+            </span>
+          ) : row.original.status === "In Active" ||
+            row.original.status === "Inactive" ||
+            row.original.status === "string" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#eb862a" }}
+            >
+              In Active
+            </span>
+          ) : null,
       },
       { accessorKey: "createdBy", header: "Created By" },
       {
@@ -273,6 +294,9 @@ const Subject = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
+              <MenuItem onClick={() => navigate(`/subject/view/${selectedId}`)}>
+                View
+              </MenuItem>
               <MenuItem>
                 <SubjectEdit onSuccess={fetchData} id={selectedId} />
               </MenuItem>
