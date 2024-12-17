@@ -9,8 +9,13 @@ import { FaEye, FaEdit } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import { createTheme, IconButton, Menu, MenuItem } from "@mui/material";
-import { ThemeProvider } from "react-bootstrap";
+import {
+  createTheme,
+  IconButton,
+  Menu,
+  MenuItem,
+  ThemeProvider,
+} from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../components/common/GlobalDelete";
 
