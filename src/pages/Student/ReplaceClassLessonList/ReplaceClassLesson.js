@@ -1,163 +1,186 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
-import Delete from "../../../components/common/Delete";
-import { SCREENS } from "../../../config/ScreenFilter";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { MaterialReactTable } from "material-react-table";
 import api from "../../../config/URL";
-import { toast } from "react-toastify";
-import fetchAllCentersWithIds from "../../List/CenterList";
+import {
+  ThemeProvider,
+  createTheme,
+  IconButton,
+} from "@mui/material";
 
 const ReplaceClassLesson = () => {
-  const tableRef = useRef(null);
-  const { centerId } = useParams();
-  const navigate = useNavigate();
+  const [filters, setFilters] = useState({
+    centerName: "",
+    studentName: "",
+    courseName: "",
+    studentUniqueId: "",
+  });
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [datas, setDatas] = useState([]);
-  const [centerData, setCenterData] = useState(null);
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [centerName, setCenterName] = useState("");
-  const [studentName, setStudentName] = useState("");
-  const [courseName, setCourseName] = useState("");
-
-  const clearFilters = () => {
-    setCenterName("");
-    setStudentName("");
-    setCourseName("");
-
-    $(tableRef.current).DataTable().search("").draw();
-  };
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => <IconButton></IconButton>,
+      },
+      { accessorKey: "centerNames", enableHiding: false, header: "Centre Name" },
+      {
+        accessorKey: "studentName",
+        enableHiding: false,
+        header: "Student Name",
+      },
+      { accessorKey: "course", header: "Course", enableHiding: false, size: 40 },
+      { accessorKey: "studentUniqueId", header: "Student Unique Id", enableHiding: false, size: 40 },
+      { accessorKey: "month", header: "Month", enableHiding: false, size: 40 },
+      { accessorKey: "classListing", header: "Class Listing", enableHiding: false, size: 40 },
+      { accessorKey: "classDate", header: "Class Date", enableHiding: false, size: 40 },
+      {
+        accessorKey: "classCode",
+        header: "Class Code",
+        enableHiding: false,
+        size: 50,
+      },
+      { accessorKey: "status", enableHiding: false, header: "Status" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        enableHiding: false,
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
   const fetchData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
+      setLoading(true);
+      const queryParams = new URLSearchParams(filters).toString();
+      const response = await api.get(`/getAllStudentReplacementClass?${queryParams}`);
+      setData(response.data);
     } catch (error) {
-      toast.error(error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllStudentReplacementClass");
-        setDatas(
-          response.data.map((data) => ({
-            ...data,
-            status: data.status || "Pending",
-          }))
-        ); // Default to "Pending" if no status
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetch Data", error);
-      }
-    };
-    getData();
     fetchData();
-  }, []);
+  }, [filters]);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  // const handleStatusChange = async (id, newStatus) => {
+  //   try {
+  //     const response = await api.put(
+  //       `/updateStatus/${id}?id=${id}&leaveStatus=${newStatus}`,
+  //       { headers: { "Content-Type": "application/json" } }
+  //     );
+  //     if (response.status === 200) {
+  //       toast.success("Status updated successfully");
+  //       setDatas((prevDatas) =>
+  //         prevDatas.map((data) =>
+  //           data.id === id ? { ...data, status: newStatus } : data
+  //         )
+  //       );
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     if (error.response?.status === 409) {
+  //       toast.warning(error?.response?.data?.message);
+  //     } else {
+  //       toast.error(error?.response?.data?.message);
+  //     }
+  //   }
+  // };
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) return;
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      centerName: "",
+      studentName: "",
+      courseName: "",
+      studentUniqueId: "",
     });
   };
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllStudentReplacementClass");
-      setDatas(
-        response.data.map((data) => ({
-          ...data,
-          status: data.status || "Pending",
-        }))
-      );
-      initializeDataTable();
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
-
-  const handleStatusChange = async (id, newStatus) => {
-    try {
-      const response = await api.put(
-        `/updateStatus/${id}?id=${id}&leaveStatus=${newStatus}`,
-        { headers: { "Content-Type": "application/json" } }
-      );
-      if (response.status === 200) {
-        toast.success("Status updated successfully");
-        setDatas((prevDatas) =>
-          prevDatas.map((data) =>
-            data.id === id ? { ...data, status: newStatus } : data
-          )
-        );
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      if (error.response?.status === 409) {
-        toast.warning(error?.response?.data?.message);
-      } else {
-        toast.error(error?.response?.data?.message);
-      }
-    }
-  };
-
-  const getBadgeColor = (status) => {
-    switch (status) {
-      case "APPROVED":
-        return "btn-success";
-      case "REJECTED":
-        return "btn-danger";
-      case "PENDING":
-        return "btn-warning";
-      default:
-        return "btn-secondary";
-    }
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/replaceclasslesson/view/${id}`);
-  };
-
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
-
   return (
-    <div className="container my-4">
+    <div className="container-fluid px-2 my-4 center">
       <ol
-        className="breadcrumb my-3 px-1"
+        className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -167,81 +190,78 @@ const ReplaceClassLesson = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          Student Management
+          &nbsp;Student Management
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Replace Class Lesson List
+          &nbsp;Replace Class Lesson List
         </li>
       </ol>
-
       <div className="card">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
-            </div>
-            <span class="me-2 text-muted">
-              This database shows the list of{" "}
-              <span className="bold" style={{ color: "#287f71" }}>
-                Replace Class Lesson List
-              </span>
-            </span>
-          </div>
+          <span className="text-muted">
+            This database shows the list of{" "}
+            <strong style={{ color: "#287f71" }}>Replace Class Lesson List</strong>
+          </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="centerName"
+                value={filters.centerName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Centre Name"
-                value={centerName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCenterName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                placeholder="Center Name"
+                autoComplete="off"
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Student Name"
-                value={studentName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setStudentName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
+                name="courseName"
+                value={filters.courseName}
+                onChange={handleFilterChange}
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
                 placeholder="Course"
-                value={courseName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCourseName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
+                autoComplete="off"
               />
             </div>
-
-            <div className="form-group mb-0 ms-2 mb-1 ">
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="studentUniqueId"
+                value={filters.studentUniqueId}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Student Unique Id"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="studentName"
+                value={filters.studentName}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Student Name"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-2 ms-2">
               <button
                 type="button"
+                onClick={clearFilter}
                 className="btn btn-sm btn-border"
-                onClick={clearFilters}
               >
                 Clear
               </button>
@@ -259,109 +279,30 @@ const ReplaceClassLesson = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive py-2">
-            <table style={{ width: "100%" }} ref={tableRef} className="display">
-              <thead>
-                <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th className="text-muted" scope="col">
-                    S No
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Centre Name
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Student Name
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Course
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Class Code
-                  </th>
-                  <th className="text-muted" scope="col">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {datas.map((data, index) => (
-                  <tr
-                    key={index}
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    <th scope="row">{index + 1}</th>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {centerData &&
-                        centerData.map((center) =>
-                          parseInt(data.centerId) === center.id
-                            ? center.centerNames || "--"
-                            : ""
-                        )}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.studentName}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.course}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      {data.classCode}
-                    </td>
-                    <td onClick={() => handleRowClick(data.id)}>
-                      <div className="dropdown">
-                        <button
-                          className={`btn btn-sm leadStatus ${getBadgeColor(
-                            data.status
-                          )}`}
-                          type="button"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <span className="text-white fw-bold">
-                            {data.status}
-                          </span>
-                        </button>
-                        <ul className="dropdown-menu">
-                          <li>
-                            <button
-                              className="dropdown-item"
-                              onClick={() =>
-                                handleStatusChange(data.id, "APPROVED")
-                              }
-                            >
-                              Approved
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              className="dropdown-item"
-                              onClick={() =>
-                                handleStatusChange(data.id, "REJECTED")
-                              }
-                            >
-                              Rejected
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              className="dropdown-item"
-                              onClick={() =>
-                                handleStatusChange(data.id, "PENDING")
-                              }
-                            >
-                              Pending
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: true,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+          </>
         )}
       </div>
     </div>
