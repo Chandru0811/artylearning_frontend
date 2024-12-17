@@ -117,16 +117,20 @@ const Document = () => {
     fetchCenterManagerData();
   }, []);
 
-  useEffect(() => {
-    const getData = async () => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
       const response = await api.get("/getAllDocumentFolder");
       setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
       setLoading(false);
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {}, [filters]);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [filters]);
 
   const theme = createTheme({
     components: {
@@ -331,7 +335,7 @@ const Document = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <DocumentEdit id={data.id} />
+                <DocumentEdit onSuccess={fetchData} id={selectedId} />
               </MenuItem>
             </Menu>
           </>

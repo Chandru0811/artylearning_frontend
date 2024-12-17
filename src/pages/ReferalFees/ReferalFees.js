@@ -69,6 +69,7 @@ const ReferalFees = () => {
         enableHiding: false,
         size: 40,
       },
+      { accessorKey: "status", enableHiding: false, header: "Status" },
       { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
       {
         accessorKey: "createdDate",
@@ -109,7 +110,7 @@ const ReferalFees = () => {
     fetchCenterManagerData();
   }, []);
 
-  const getData = async () => {
+  const fetchData = async () => {
     try {
       const response = await api.get("/getAllReferralFees");
       setData(response.data);
@@ -120,7 +121,7 @@ const ReferalFees = () => {
   };
 
   useEffect(() => {
-    getData();
+    fetchData();
   }, []);
 
   const theme = createTheme({
@@ -206,7 +207,7 @@ const ReferalFees = () => {
               </button>
             </div>
           </div>
-          <ReferalFeesAdd onSuccess={getData} />
+          <ReferalFeesAdd onSuccess={fetchData} />
         </div>
         {loading ? (
           <div className="loader-container">
@@ -257,11 +258,11 @@ const ReferalFees = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <ReferalFeesEdit id={data.id} onSuccess={getData} />
+              <ReferalFeesEdit id={selectedId} onSuccess={fetchData} />
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteReferralFees/${selectedId}`}
-                  onDeleteSuccess={getData}
+                  onDeleteSuccess={fetchData}
                 />
               </MenuItem>
             </Menu>

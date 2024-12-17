@@ -1012,6 +1012,12 @@ input.searchInputG:hover {
   display: block;
 }
 
+.nav-active-tabs {
+  border-width: 1px !important;
+  align-items: center;
+  justify-content: left;
+}
+
 /* data table */
 tbody,
 td,

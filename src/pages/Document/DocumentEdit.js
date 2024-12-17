@@ -3,15 +3,21 @@ import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
 import { MdOutlineModeEdit } from "react-icons/md";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 
 function DocumentEdit({ id, onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -26,10 +32,9 @@ function DocumentEdit({ id, onSuccess }) {
       folderName: "",
       updatedBy: userName,
     },
-    validationSchema: validationSchema, // Assign the validation schema
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      // console.log(values);
       try {
         const response = await api.put(
           `/updateDocumentFoldersWithAws/${id}`,
@@ -53,6 +58,20 @@ function DocumentEdit({ id, onSuccess }) {
         setLoadIndicator(false);
       }
     },
+    enableReinitialize: true,
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      if (
+        Object.values(values).some(
+          (value) => typeof value === "string" && value.trim() !== ""
+        )
+      ) {
+        setIsModified(true);
+      } else {
+        setIsModified(false);
+      }
+    },
   });
 
   useEffect(() => {
@@ -71,28 +90,34 @@ function DocumentEdit({ id, onSuccess }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-      <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-      </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
+      <button
+        onClick={handleShow}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
+        className="btn btn-sm btn-normal text-start"
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Document</Modal.Title>
-        </Modal.Header>
+        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+      </button>
+      <Dialog
+        open={show}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="md"
+        disableBackdropClick={isModified}
+        disableEscapeKeyDown={isModified}
+      >
+        <DialogTitle className="headColor">Edit Document</DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
+              e.preventDefault();
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row py-4">
                 <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
@@ -118,16 +143,17 @@ function DocumentEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer>
+          </DialogContent>
+          <DialogActions>
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
             >
               Cancel
             </Button>
-            <Button
+            <button
               type="submit"
+              onSubmit={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >
@@ -138,89 +164,12 @@ function DocumentEdit({ id, onSuccess }) {
                 ></span>
               )}
               Update
-            </Button>
-          </Modal.Footer>
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }
 
 export default DocumentEdit;
-
-// import React from "react";
-// import { useEffect } from "react";
-// import { Link } from "react-router-dom";
-// import { useFormik } from "formik";
-// import * as Yup from "yup";
-// import DocImg from "../../assets/images/DocumentImage.png";
-
-// function DocumentEdit() {
-//   const validationSchema = Yup.object({
-//     folderName: Yup.string().required("*Folder Name is required"),
-//   });
-//   const formik = useFormik({
-//     initialValues: {
-//       folderName: "",
-//     },
-//     validationSchema: validationSchema,
-//     onSubmit: (values) => {
-//       console.log(values);
-//     },
-//   });
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       formik.setValues({
-//         folderName: "Chen Xing Kai",
-//       });
-//     };
-
-//     fetchData();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
-
-//   return (
-//     <div className="container">
-//        <form onSubmit={formik.handleSubmit} >
-//         <div className="my-3 d-flex justify-content-end align-items-end  mb-5">
-//           <Link to="/document">
-//             <button type="button " className="btn btn-sm btn-border   ">
-//               Back
-//             </button>
-//           </Link>
-//           &nbsp;&nbsp;
-//           <button type="submit" className="btn btn-button btn-sm ">
-//             Save
-//           </button>
-//         </div>
-//         <div className="container">
-//           <div className="row py-4">
-//             <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
-//               <label>
-//                 Folder Name<span class="text-danger">*</span>
-//               </label>
-//               <input
-//                 name="folderName"
-//                 class="form-control "
-//                 type="text"
-//                 className={`form-control  ${
-//                   formik.touched.folderName && formik.errors.folderName
-//                     ? "is-invalid"
-//                     : ""
-//                 }`}
-//                 {...formik.getFieldProps("folderName")}
-//               />
-//               {formik.touched.folderName && formik.errors.folderName && (
-//                 <div className="invalid-feedback">
-//                   {formik.errors.folderName}
-//                 </div>
-//               )}
-//             </div>
-//           </div>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default DocumentEdit;
