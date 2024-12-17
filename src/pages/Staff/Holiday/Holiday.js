@@ -1,25 +1,91 @@
-import React, { useEffect, useRef, useState } from "react";
-import $ from "jquery";
-import "datatables.net-dt";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../../components/common/Delete";
-import api from "../../../config/URL";
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import { MdOutlineModeEdit, MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Holiday = () => {
-  const tableRef = useRef(null);
-  // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  // console.log("Screens : ", SCREENS);
-  const [datas, setDatas] = useState([]);
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  console.log("Leave Data:", data);
+  const id = localStorage.getItem("userId");
   const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [extraData, setExtraData] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      {
+        accessorKey: "holidayName",
+        enableHiding: false,
+        header: "Holiday Name",
+      },
+      {
+        accessorKey: "startDate",
+        enableHiding: false,
+        header: "Start Date",
+      },
+      { accessorKey: "endDate", header: "End Date" },
+      { accessorKey: "holidayDescription", header: "Holiday Description" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
   const fetchData = async () => {
     try {
@@ -34,7 +100,7 @@ const Holiday = () => {
     const getData = async () => {
       try {
         const response = await api.get("/getAllUserHoliday");
-        setDatas(response.data);
+        setData(response.data);
         setLoading(false);
       } catch (error) {
         toast.error("Error Fetching Data : ", error);
@@ -44,74 +110,23 @@ const Holiday = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllUserHoliday");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
-
-  const handleRowClick = (id) => {
-    navigate(`/holiday/list/${id}`); // Navigate to the index page when a row is clicked
-  };
-
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
     <div className="container-fluid my-4 center">
@@ -175,113 +190,50 @@ const Holiday = () => {
           </div>
         ) : (
           <div>
-            <div
-              style={{ minHeight: "60vh" }}
-              className="table-responsive py-2"
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={data}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    leaveReason: true,
+                    leaveType: true,
+                    leaveTypeId: false,
+                    noOfDays: true,
+                    requestDate: true,
+                    userId: false,
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
             >
-              <table
-                style={{ width: "100%" }}
-                ref={tableRef}
-                className="display"
-              >
-                <thead>
-                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                    <th className="text-muted" scope="col">
-                      S No
-                    </th>
-                    <th className="text-center text-muted"></th>
-                    <th className="text-muted" scope="col">
-                      Centre Name
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Holiday Name
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Start Date
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(datas) &&
-                    datas.map((data, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        <th scope="row" className="text-center">
-                          {index + 1}
-                        </th>
-                        <td>
-                          <div className="d-flex justify-content-center align-items-center">
-                            {storedScreens?.holidayCreate && (
-                              <div className="dropdown">
-                                <button
-                                  className="btn btn-button btn-sm dropdown-toggle"
-                                  type="button"
-                                  id="dropdownMenuButton"
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <IoIosAddCircle
-                                    className="text-light"
-                                    style={{ fontSize: "16px" }}
-                                  />
-                                </button>
-                                <ul
-                                  className="dropdown-menu"
-                                  aria-labelledby="dropdownMenuButton"
-                                >
-                                  <li>
-                                    {storedScreens?.holidayUpdate && (
-                                      <Link to={`/holiday/edit/${data.id}`}>
-                                        <button
-                                          style={{
-                                            whiteSpace: "nowrap",
-                                            width: "100%",
-                                          }}
-                                          className="btn btn-sm btn-normal text-start"
-                                        >
-                                          <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                                        </button>
-                                      </Link>
-                                    )}
-                                  </li>
-                                  <li>
-                                    {storedScreens?.holidayDelete && (
-                                      <span>
-                                        <Delete
-                                          onSuccess={refreshData}
-                                          path={`/deleteUserHoliday/${data.id}`}
-                                        />{" "}
-                                      </span>
-                                    )}
-                                  </li>
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {centerData &&
-                            centerData.map((centerId) =>
-                              parseInt(data.centerId) === centerId.id
-                                ? centerId.centerNames || "--"
-                                : ""
-                            )}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.holidayName}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.startDate.substring(0, 10)}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+              <MenuItem onClick={() => navigate(`/holiday/list/${selectedId}`)}>
+                View
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/holiday/edit/${selectedId}`)}>
+                Edit
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteUserHoliday/${selectedId}`}
+                  onDeleteSuccess={fetchData}
+                />
+              </MenuItem>
+            </Menu>
           </div>
         )}
       </div>

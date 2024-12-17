@@ -11,18 +11,14 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
-import fetchAllCentersWithIds from "../../List/CenterList";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const LeaveAdmin = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   console.log("Leave Data:", data);
-  const id = localStorage.getItem("userId");
   const [loading, setLoading] = useState(true);
   const [leaveTypeData, setLeaveTypeData] = useState([]);
-  const [centerData, setCenterData] = useState(null);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -98,36 +94,27 @@ const LeaveAdmin = () => {
     []
   );
 
-  const fetchData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
   const fetchLeaveType = async () => {
     try {
       const response = await api.get(`getAllLeaveSetting`);
-      setLeaveTypeData(response.data); // Assuming response.data is an array
+      setLeaveTypeData(response.data);
     } catch (error) {
       toast.error(error.message);
     }
   };
 
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllUserLeaveRequests");
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllUserLeaveRequests");
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
     getData();
-    fetchData();
     fetchLeaveType();
   }, []);
 
@@ -242,7 +229,7 @@ const LeaveAdmin = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteUserLeaveRequest/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getData}
                 />
               </MenuItem>
             </Menu>
