@@ -1,103 +1,123 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import api from "../../../config/URL";
-import Delete from "../../../components/common/Delete";
-import { IoIosAddCircle } from "react-icons/io";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import {
+  createTheme,
+  IconButton,
+  Menu,
+  MenuItem,
+  ThemeProvider,
+} from "@mui/material";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const OtherMessages = () => {
-  const tableRef = useRef(null);
-  // const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const loginAdminId = localStorage.getItem("loginUserId");
-  const userId = localStorage.getItem("userId");
-  const [centerName, setCenterName] = useState("");
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  console.log("selectedMessage", selectedMessage);
   const navigate = useNavigate();
 
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllMessagesOnlyTeachers`);
+      setDatas(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllMessagesOnlyTeachers`);
-        setDatas(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     getData();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        size: 20,
+        Cell: ({ row }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedMessage(row.original);
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "senderName",
+        header: "Sender Name",
+        size: 20,
+      },
+      {
+        accessorKey: "receiverName",
+        header: "Receiver Name",
+        size: 20,
+      },
+      {
+        accessorKey: "message",
+        header: "Message",
+        size: 20,
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+    ],
+    []
+  );
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: 1 }],
-    });
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleMenuClose = () => setMenuAnchor(null);
+
+  const handleViewClick = () => {
+    navigate(
+      `/othermessaging/view/${selectedMessage.receiverId}?senderId=${selectedMessage.senderId}`
+    );
   };
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllMessagesOnlyTeachers");
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
-  const clearFilters = () => {
-    setCenterName("");
-    $(tableRef.current).DataTable().search("").draw();
-  };
-
-  const handleRowClick = (receiverId, senderId) => {
-    navigate(`/othermessaging/view/${receiverId}?senderId=${senderId}`);
-  };
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
   return (
     <div>
       <div className="container my-3">
-        <ol
-          className="breadcrumb my-3 px-1"
-          style={{ listStyle: "none", padding: 0, margin: 0 }}
-        >
+        <ol className="breadcrumb my-3 px-1">
           <li>
             <Link to="/" className="custom-breadcrumb">
               Home
@@ -108,58 +128,25 @@ const OtherMessages = () => {
             Messaging
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            Other Messages
-          </li>
+          <li className="breadcrumb-item active">Other Messages</li>
         </ol>
         <div className="card">
           <div
             className="mb-3 d-flex justify-content-between align-items-center p-1"
             style={{ background: "#f5f7f9" }}
           >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
-              </div>
-              <span class="me-2 text-muted">
+            <div className="d-flex align-items-center">
+              <span className="me-2 text-muted">
                 This database shows the list of{" "}
                 <span className="bold" style={{ color: "#287f71" }}>
-                  Other Message
+                  Other Messages
                 </span>
               </span>
             </div>
           </div>
-          <div className="mb-3 d-flex justify-content-between">
-            <div className="individual_fliters d-lg-flex ">
-              <div className="form-group mb-0 ms-2 mb-1">
-                <input
-                  type="text"
-                  className="form-control form-control-sm center_list"
-                  style={{ width: "160px" }}
-                  placeholder="From"
-                  value={centerName}
-                  onChange={(e) => {
-                    const searchValue = e.target.value.toLowerCase();
-                    setCenterName(e.target.value);
-                    $(tableRef.current).DataTable().search(searchValue).draw();
-                  }}
-                />
-              </div>
-
-              <div className="form-group mb-0 ms-2 mb-1 ">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-border"
-                  onClick={clearFilters}
-                >
-                  Clear
-                </button>
-              </div>
-            </div>
-          </div>
           {loading ? (
             <div className="loader-container">
-              <div class="loading">
+              <div className="loading">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -168,88 +155,44 @@ const OtherMessages = () => {
               </div>
             </div>
           ) : (
-            <table ref={tableRef} className="display">
-              <thead>
-                <tr>
-                  <th scope="" style={{ whiteSpace: "nowrap" }}>
-                    S No
-                  </th>
-                  <th scope=""></th>
-                  <th scope="col">Student Name</th>
-                  <th scope="col">Receiver Name</th>
-                  <th scope="col">Message</th>
-                  <th scope="col">Created Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(datas && Array.isArray(datas) ? datas : []).map(
-                  (data, index) => (
-                    <tr key={index}>
-                      <th scope="row">{index + 1}</th>
-                      <td className="text-center">
-                        <div className="d-flex justify-content-center align-items-center">
-                          <div className="dropdown">
-                            <button
-                              className="btn btn-button btn-sm"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              <IoIosAddCircle
-                                className="text-light"
-                                style={{ fontSize: "16px" }}
-                              />
-                            </button>
-                            <ul
-                              className="dropdown-menu"
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <li>
-                                <Delete
-                                  onSuccess={refreshData}
-                                  path={`/deleteMessage/${data.id}`}
-                                />
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </td>
-                      <td
-                        onClick={() =>
-                          handleRowClick(data.receiverId, data.senderId)
-                        }
-                      >
-                        {data.senderName}
-                      </td>
-                      <td
-                        onClick={() =>
-                          handleRowClick(data.receiverId, data.senderId)
-                        }
-                      >
-                        {data.receiverName}
-                      </td>
-                      <td
-                        onClick={() =>
-                          handleRowClick(data.receiverId, data.senderId)
-                        }
-                      >
-                        {data.message}
-                      </td>
-                      <td
-                        onClick={() =>
-                          handleRowClick(data.receiverId, data.senderId)
-                        }
-                      >
-                        {data.createdAt.substring(0, 10)}
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-            </table>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+              />
+            </ThemeProvider>
           )}
         </div>
+        <Menu
+          id="action-menu"
+          anchorEl={menuAnchor}
+          open={Boolean(menuAnchor)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={() => handleViewClick()}>
+            <button className="btn btn-sm">
+              <FaEye /> View
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <GlobalDelete
+              path={`/deleteMessage/${selectedMessage?.id}`}
+              onDeleteSuccess={getData}
+            />
+          </MenuItem>
+        </Menu>
       </div>
     </div>
   );

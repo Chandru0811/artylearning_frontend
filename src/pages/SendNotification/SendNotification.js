@@ -1,7 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import SendNotificationAdd from "./SendNotificationAdd";
 import SendNotificationEdit from "./SendNotificationEdit";
 import api from "../../config/URL";
@@ -11,94 +8,120 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEdit } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { createTheme, IconButton, Menu, MenuItem } from "@mui/material";
+import { ThemeProvider } from "react-bootstrap";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../components/common/GlobalDelete";
 
 const SendNotification = () => {
-  const tableRef = useRef(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState([]);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [centerName, setCenterName] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
-  useEffect(() => {
-    console.log({
-      centerName,
-    });
-  }, [centerName]);
-
-  const clearFilters = () => {
-    setCenterName("");
-    $(tableRef.current).DataTable().search("").draw();
-  };
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllSmsPushNotifications");
-        setDatas(response.data);
-        console.log("message", response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: 1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const getData = async () => {
     try {
       const response = await api.get("/getAllSmsPushNotifications");
       setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      console.log("message", response.data);
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
-  const handleRowClick = (id) => {
-    navigate(`/sendnotification/view/${id}`); 
   };
 
-    useEffect(() => {
-      if (tableRef.current) {
-        const rows = tableRef.current.querySelectorAll("tr.odd");
-        rows.forEach((row) => {
-          row.classList.remove("odd");
-        });
-        const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-        thElements.forEach((th) => th.classList.remove("sorting_1"));
-      }
-    }, [datas]);
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const handleRowClick = (id) => {
+    navigate(`/sendnotification/view/${id}`);
+  };
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "messageTitle",
+        enableHiding: false,
+        header: "Event Name",
+        size: 20,
+      },
+      {
+        accessorKey: "messageDescription",
+        enableHiding: false,
+        header: "Message",
+        size: 20,
+      },
+      {
+        accessorKey: "datePosted",
+        enableHiding: false,
+        header: "Created At",
+        size: 20,
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleMenuClose = () => setMenuAnchor(null);
+
   return (
     <div className="container my-4">
       <ol
@@ -137,33 +160,7 @@ const SendNotification = () => {
             </span>
           </div>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
-            <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="From"
-                value={centerName}
-                onChange={(e) => {
-                  const searchValue = e.target.value.toLowerCase();
-                  setCenterName(e.target.value);
-                  $(tableRef.current).DataTable().search(searchValue).draw();
-                }}
-              />
-            </div>
-
-            <div className="form-group mb-0 ms-2 mb-1 ">
-              <button
-                type="button"
-                className="btn btn-sm btn-border"
-                onClick={clearFilters}
-              >
-                Clear
-              </button>
-            </div>
-          </div>
+        <div className="mb-3 d-flex justify-content-end">
           <div className="me-2">
             {storedScreens?.sendNotificationCreate && (
               <Link to="/sendNotification/add">
@@ -185,70 +182,58 @@ const SendNotification = () => {
             </div>
           </div>
         ) : (
-          <div className="table-responsive">
-            <table ref={tableRef} className="display">
-              <thead>
-                <tr>
-                  <th scope="col">S No</th>
-                  <th scope=""></th>
-                  <th scope="col">Event Name</th>
-                  <th scope="col">Message</th>
-                  <th scope="col">Created At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.isArray(datas) &&
-                  datas.map((data, index) => (
-                    <tr key={index}>
-                      <th scope="row">{index + 1}</th>
-                      <td className="text-center">
-                        <div className="d-flex justify-content-center align-items-center">
-                          <div className="dropdown">
-                            <button
-                              className="btn btn-button btn-sm"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              <IoIosAddCircle
-                                className="text-light"
-                                style={{ fontSize: "16px" }}
-                              />
-                            </button>
-                            <ul
-                              className="dropdown-menu"
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <li>
-                                {storedScreens?.sendNotificationUpdate && (
-                                  <Link
-                                    to={`/sendNotification/edit/${data.id}`}
-                                  >
-                                    <button className="btn btn-sm">
-                                    <MdOutlineModeEdit /> Edit
-                                    </button>
-                                  </Link>
-                                )}
-                              </li>
-                              <li>
-                                <Delete
-                                  onSuccess={refreshData}
-                                  path={`/deleteSmsPushNotifications/${data.id}`}
-                                />
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </td>
-                      <td onClick={() => handleRowClick(data.id)}>{data.messageTitle}</td>
-                      <td onClick={() => handleRowClick(data.id)}>{data.messageDescription}</td>
-                      <td onClick={() => handleRowClick(data.id)}>{data.datePosted}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <Link to={`/sendNotification/view/${selectedId}`}>
+                  <button className="btn btn-sm">
+                    <FaEye /> View
+                  </button>
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link to={`/sendNotification/edit/${selectedId}`}>
+                  <button className="btn btn-sm">
+                    <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+                  </button>
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteSmsPushNotifications/${selectedId}`}
+                  onDeleteSuccess={getData}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

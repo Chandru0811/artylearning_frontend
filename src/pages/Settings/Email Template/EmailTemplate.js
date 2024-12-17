@@ -1,99 +1,132 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Delete from "../../../components/common/Delete";
 import EmailTemplateEdit from "./EmailTemplateEdit";
 import EmailTemplateAdd from "./EmailTemplateAdd";
 import api from "../../../config/URL";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosAddCircle } from "react-icons/io";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import { createTheme, IconButton, Menu, MenuItem } from "@mui/material";
+import { ThemeProvider } from "react-bootstrap";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const EmailTemplate = () => {
-  const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
 
-  useEffect(() => {
-    const table = $(tableRef.current).DataTable({
-      responsive: true,
-    });
-
-    return () => {
-      table.destroy();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const getData = async () => {
     try {
       const response = await api.get("/getAllEmailTemplates");
       setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllEmailTemplates");
-        setDatas(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     getData();
   }, []);
 
-  const handleRowClick = (id) => {
-    navigate(`/emailTemplate`); // Navigate to the index page when a row is clicked
-  };
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "subject",
+        enableHiding: false,
+        header: "Subject",
+        size: 20,
+      },
+      {
+        accessorKey: "description",
+        enableHiding: false,
+        header: "Description",
+        size: 20,
+        Cell: ({ cell }) => {
+          const content = cell.getValue(); // Assuming cell.getValue() fetches the raw description HTML.
+          return (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: content || "<p>No Description Available</p>",
+              }}
+              style={{
+                maxHeight: "100px", // Add styling to limit the height, if necessary.
+                overflow: "hidden", // Ensure overflow handling.
+                textOverflow: "ellipsis",
+              }}
+            />
+          );
+        },
+      },
 
-  useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
+
+  const handleMenuClose = () => setMenuAnchor(null);
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -154,91 +187,41 @@ const EmailTemplate = () => {
             </div>
           </div>
         ) : (
-          <div>
-            <div className="table-responsive py-2">
-              <table
-                style={{ width: "100%" }}
-                ref={tableRef}
-                className="display"
-              >
-                <thead>
-                  <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                    <th className="text-muted" scope="col">
-                      S No
-                    </th>
-                    <th className="text-center text-muted"></th>
-                    <th className="text-muted" scope="col">
-                      Subject
-                    </th>
-                    <th className="text-muted" scope="col">
-                      Description
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.isArray(datas) &&
-                    datas.map((data, index) => (
-                      <tr
-                        key={index}
-                        style={{
-                          // backgroundColor: "#fff !important",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <th scope="row" className="text-center">
-                          {index + 1}
-                        </th>
-                        <td>
-                          <div className="d-flex justify-content-center align-items-center">
-                            {/* {storedScreens?.centerListingCreate && ( */}
-                            <div className="dropdown">
-                              <button
-                                className="btn btn-button btn-sm dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                              >
-                                <IoIosAddCircle
-                                  className="text-light"
-                                  style={{ fontSize: "16px" }}
-                                />
-                              </button>
-                              <ul
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuButton"
-                              >
-                                <li>
-                                  <EmailTemplateEdit
-                                    id={data.id}
-                                    onSuccess={refreshData}
-                                  />
-                                </li>
-                              </ul>
-                            </div>
-                            {/* )} */}
-                          </div>
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.subject}
-                        </td>
-                        <td onClick={() => handleRowClick(data.id)}>
-                          {data.description ? (
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: data.description,
-                              }}
-                            />
-                          ) : (
-                            "No description available"
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <EmailTemplateEdit onSuccess={getData} id={selectedId} />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>
