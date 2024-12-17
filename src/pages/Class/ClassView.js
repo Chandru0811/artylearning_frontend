@@ -232,7 +232,7 @@ function ClassView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data?.classRoom || ""}
+                    : {data?.classRoomName || ""}
                   </p>
                 </div>
               </div>

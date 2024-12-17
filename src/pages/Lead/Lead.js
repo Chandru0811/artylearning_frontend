@@ -118,8 +118,6 @@ const Lead = () => {
       message = "Are you sure want to mark this lead as Waiting For Payment?";
       setConfirmationMessage(message);
       setShowModal(true);
-    } else if (status === "CONFIRMED") {
-      message = "Are you sure want to confirm this lead?";
     } else if (status === "ARRANGING_ASSESSMENT") {
       console.log("object", selectedRow);
       handleShow();
@@ -130,9 +128,9 @@ const Lead = () => {
     } else if (status === "EDIT_DO_ASSESSMENT") {
       navigate(`/lead/lead/assessment/${row.id}?mode=edit`);
     } else if (status === "ENROLLED") {
-      navigate(`/student/add?LeadId=${row.id}&LeadStatus=ENROLLED`)
-    }else if (status === "Assessment_Edit") {
-      handleEditShowDialog()
+      navigate(`/student/add?LeadId=${row.id}&LeadStatus=ENROLLED`);
+    } else if (status === "Assessment_Edit") {
+      handleEditShowDialog();
     }
 
     setNewStatus(status);
@@ -279,31 +277,10 @@ const Lead = () => {
         enableHiding: false,
         header: "Status",
         Cell: ({ row }) => (
-          <div
-            style={{
-              position: "relative",
-              display: "inline-block",
-              width: "100%",
-            }}
-          >
-            <span
-              style={{
-                position: "absolute",
-                left: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                pointerEvents: "none",
-                fontSize: "16px",
-                color: "#fff",
-                background: "black",
-              }}
-            >
-              {/* {row.original.leadStatus} */}
-              {/* <BsThreeDotsVertical /> */}
-            </span>
+          <div className="d-flex justify-content-center">
             {row.original.leadStatus === "CONFIRMED" ? (
               <button
-                className={`btn btn-sm leadStatus text-bg-success`}
+                className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
                 type="button"
               >
                 <span
@@ -318,7 +295,7 @@ const Lead = () => {
               </button>
             ) : row.original.leadStatus === "ENROLLED" ? (
               <button
-                className={`btn btn-sm leadStatus text-bg-success`}
+                className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
                 type="button"
                 style={{ cursor: "default" }}
               >
@@ -332,9 +309,9 @@ const Lead = () => {
                 onChange={(e) => {
                   handleStatusChange(row.original, e.target.value);
                 }}
-                className="form-control"
+                className="form-control d-flex justify-content-center"
                 style={{
-                  padding: "4px 7px",
+                  padding: "4px 3px",
                   borderRadius: "4px",
                   border: "1px solid #ccc",
                   appearance: "none",
@@ -356,7 +333,10 @@ const Lead = () => {
                       ? "#c42d33"
                       : ""
                   }`,
-                  minWidth: "auto",
+                  textAlign: "center",
+                  textIndent: "0", 
+                  lineHeight: "20px",
+                  maxWidth: "max-content",
                 }}
               >
                 {row.original.leadStatus === ("NEW_WAITLIST" || "DROP") ? (
@@ -377,7 +357,7 @@ const Lead = () => {
                       value="ARRANGING_ASSESSMENT"
                       style={{
                         backgroundColor: "white",
-                        padding: "10px",
+                        padding: "10px 15px ",
                         color: "#000",
                       }}
                     >
@@ -409,7 +389,6 @@ const Lead = () => {
                     </option>
                     <option
                       value="CONFIRMED"
-                      disabled={row.original.leadStatus === "CONFIRMED"}
                       style={{
                         backgroundColor: "white",
                         padding: "10px",
@@ -472,18 +451,18 @@ const Lead = () => {
                         Do Assessment
                       </option>
                     ) : (
-                     ""
+                      ""
                     )}
-                     <option
-                        value="Assessment_Edit"
-                        style={{
-                          backgroundColor: "white",
-                          padding: "10px",
-                          color: "#000",
-                        }}
-                      >
-                        Assessment Edit
-                      </option>
+                    <option
+                      value="Assessment_Edit"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Assessment Edit
+                    </option>
                     <option
                       value="DROP"
                       disabled={row.original.leadStatus === "DROP"}
@@ -593,7 +572,7 @@ const Lead = () => {
                         color: "#000",
                       }}
                     >
-                     Edit Do Assessment
+                      Edit Do Assessment
                     </option>
                     <option
                       value="KIV"
@@ -785,7 +764,8 @@ const Lead = () => {
         accessorKey: "dateOfBirth",
         header: "Date Of Birth",
         enableHiding: false,
-        size: 40,
+        Cell: ({ cell }) =>
+          cell.getValue()?.substring(0, 10)?.split("").reverse().join(""),
       },
       {
         header: "Subject",
@@ -1057,7 +1037,7 @@ const Lead = () => {
                 onClose={handleMenuClose}
               >
                 <MenuItem
-                  onClick={() => navigate(`/center/view/${selectedId}`)}
+                  onClick={() => navigate(`/lead/lead/view/${selectedId}`)}
                 >
                   View
                 </MenuItem>
@@ -1105,7 +1085,7 @@ const Lead = () => {
                 Cancel
               </button>
               <button
-                style={{ background: "#fa0101" }}
+                style={{ background: "#eb862a" }}
                 className="btn btn-sm text-white"
                 onClick={handleFormSubmit}
               >
@@ -1128,7 +1108,11 @@ const Lead = () => {
       />
       <ArrangeAssesmentEdit
         leadId={selectedRow.id}
-        arrangeAssesmentId={selectedRow?.assessmentArrange > 0 ?selectedRow?.assessmentArrange[0]?.id :0}
+        arrangeAssesmentId={
+          selectedRow?.assessmentArrange?.length > 0
+            ? selectedRow?.assessmentArrange[0]?.id
+            : 0
+        }
         onSuccess={getLeadData}
         centerId={selectedRow.centerId}
         studentNames={selectedRow.studentName}

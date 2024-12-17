@@ -352,12 +352,7 @@ const Center = () => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              <MenuItem onClick={() => navigate(`/center/view/${selectedId}`)}>
-                View
-              </MenuItem>
-              <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)}>
-                Edit
-              </MenuItem>
+              
               <MenuItem >
                 <AddRegister id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
               </MenuItem>
@@ -369,6 +364,12 @@ const Center = () => {
               </MenuItem>
               <MenuItem >
                 <AddBreak id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/center/view/${selectedId}`)}>
+                View
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)}>
+                Edit
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

@@ -15,12 +15,12 @@ import {
 } from "@mui/material";
 // const validationSchema = Yup.object({});
 
-function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId ,setAll,studentNames,showDialog,handleShow,handleClose,centerDatas}) {
+function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId ,setAll,studentNames,showDialog,handleShow,handleClose}) {
   
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setCenterData] = useState(null);
   const navigate = useNavigate();
-  console.log("Arrange Assesment Id:", arrangeAssesmentId);
+  // console.log("Arrange Assesment Id:", arrangeAssesmentId);
   // console.log("Centre ID :", centerId);
   // console.log("Student Name :", studentNames);
 
@@ -38,17 +38,18 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
     try {
       const response = await api.get(`/getAssessmentById/${arrangeAssesmentId}`);
       formik.setValues(response.data);
-      console.log("getAssessmentById",response.data);
+      // console.log("getAssessmentById",response.data);
     } catch (error) {
       toast.error("Error Fetching Data");
     }
   };
+
   useEffect(()=>{
     fetchCenterData()
     if(arrangeAssesmentId){
       handleFetch();
     }
-  },[])
+  },[showDialog])
   const formik = useFormik({
     initialValues: {
       centerId: centerId || "",
@@ -71,7 +72,7 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
         remarks: values.remarks,
         leadId: leadId
       };
-      console.log("Payload:", payload);
+      // console.log("Payload:", payload);
       setLoadIndicator(true);
       try {
         const response = await api.put(
@@ -115,7 +116,6 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
       }
     },
   });
-
  
 
   return (

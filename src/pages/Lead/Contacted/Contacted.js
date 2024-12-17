@@ -160,7 +160,7 @@ const Level = () => {
             </span>
           </div>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
+        {/* <div className="mb-3 d-flex justify-content-between">
           <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
@@ -211,7 +211,7 @@ const Level = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -264,16 +264,16 @@ const Level = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/center/view/${selectedId}`)}>
+              {/* <MenuItem onClick={() => navigate(`/view/${selectedId}`)}>
                 View
               </MenuItem>
-              <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)}>
+              <MenuItem onClick={() => navigate(`/edit/${selectedId}`)}>
                 Edit
-              </MenuItem>
+              </MenuItem> */}
               {storedScreens?.centerListingDelete && (
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteCenter/${selectedId}`}
+                  path={`/deleteContactUs/${selectedId}`}
                   onDeleteSuccess={getData}
                 />
               </MenuItem>)}

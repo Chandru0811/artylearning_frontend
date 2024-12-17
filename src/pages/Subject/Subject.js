@@ -59,12 +59,6 @@ const Subject = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "subject", enableHiding: false, header: "Subject" },
-      {
-        accessorKey: "code",
-        enableHiding: false,
-        header: "Subject Code",
-      },
       {
         accessorKey: "status",
         enableHiding: false,
@@ -74,8 +68,8 @@ const Subject = () => {
           row.original.status === "active" ||
           row.original.status === "Active" ? (
             <span
-              className="badge text-light fw-light"
-              style={{ backgroundColor: "#287f71" }}
+              className="badge badges-Green fw-light"
+              // style={{ backgroundColor: "#287f71" }}
             >
               Active
             </span>
@@ -83,13 +77,20 @@ const Subject = () => {
             row.original.status === "Inactive" ||
             row.original.status === "string" ? (
             <span
-              className="badge text-light fw-light"
-              style={{ backgroundColor: "#eb862a" }}
+              className="badge badges-orange fw-light"
+              // style={{ backgroundColor: "#eb862a" }}
             >
               In Active
             </span>
           ) : null,
       },
+      { accessorKey: "subject", enableHiding: false, header: "Subject" },
+      {
+        accessorKey: "code",
+        enableHiding: false,
+        header: "Subject Code",
+      },
+   
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -294,9 +295,9 @@ const Subject = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/subject/view/${selectedId}`)}>
+              {/* <MenuItem onClick={() => navigate(`/subject/view/${selectedId}`)}>
                 View
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem>
                 <SubjectEdit onSuccess={fetchData} id={selectedId} />
               </MenuItem>
