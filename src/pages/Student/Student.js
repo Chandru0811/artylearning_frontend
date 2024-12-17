@@ -28,8 +28,9 @@ const Student = () => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const centerIDLocal = localStorage.getItem("selectedCenterId");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
+  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const columns = useMemo(
     () => [
       {
@@ -92,10 +93,9 @@ const Student = () => {
         enableHiding: false,
       },
       {
-        accessorKey: "age",
-        header: "Age",
-        enableHiding: false,
-        size: 50,
+        accessorKey: "parentPrimaryMobileNumber",
+        header: "Parent Mobile",
+        enableHiding: false
       },
       {
         accessorKey: "gender",
@@ -106,14 +106,18 @@ const Student = () => {
       {
         accessorKey: "allowMagazine",
         header: "Allow Magazine",
-        enableHiding: false,
         size: 30,
+        Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
       },
       {
         accessorKey: "allowSocialMedia",
         header: "Allow Social Media",
-        enableHiding: false,
         size: 30,
+        Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
+      },
+      {
+        accessorKey: "age",
+        header: "Age",
       },
       {
         accessorKey: "studentChineseName",
@@ -126,7 +130,6 @@ const Student = () => {
       {
         accessorKey: "dateOfBirth",
         header: "Date of Birth",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "schoolType",
@@ -159,17 +162,89 @@ const Student = () => {
     ],
     []
   );
-  
-  const fetchData = async () => {
+
+  // const fetchStudentData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     // Dynamically construct query parameters based on filters
+  //     const queryParams = new URLSearchParams();
+  //     // Loop through the filters and add key-value pairs if they have a value
+  //     for (let key in filters) {
+  //       if (filters[key]) {
+  //         queryParams.append(key, filters[key]);
+  //       }
+  //     }
+  //     const response = await api.get(
+  //       `/getStudentWithCustomInfo?${queryParams.toString()}`
+  //     );
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const fetchStudentData = async () => {
     try {
       setLoading(true);
-      const queryParams = new URLSearchParams(filters).toString();
-      const response = await api.get(`/getStudentWithCustomInfo?${queryParams}`);
+      // Dynamically construct query parameters based on filters
+      const queryParams = new URLSearchParams();
+  
+      // // Always include the centerId filter by default
+      // if (filters.centerId) {
+      //   queryParams.append("centerId", filters.centerId);
+      // } else if (centerIDLocal && centerIDLocal !== "undefined") {
+      //   // Use centerIDLocal from localStorage if filters.centerId is empty
+      //   queryParams.append("centerId", centerIDLocal);
+      // }
+
+      if (!isClearFilterClicked) {
+        if (filters.centerId) {
+          queryParams.append("centerId", filters.centerId);
+        } else if (centerIDLocal && centerIDLocal !== "undefined") {
+          queryParams.append("centerId", centerIDLocal);
+        }
+      }
+  
+      // Loop through other filters and add key-value pairs if they have a value
+      for (let key in filters) {
+        if (filters[key] && key !== "centerId") {
+          queryParams.append(key, filters[key]);
+        }
+      }
+  
+      const response = await api.get(
+        `/getStudentWithCustomInfo?${queryParams.toString()}`
+      );
+  
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
+      setIsClearFilterClicked(false);
+    }
+  };
+
+  
+  const fetchCenterData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerIDLocal,
+        }));
+      } else if (centerData !== null && centerData.length > 0) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
     }
   };
 
@@ -217,26 +292,20 @@ const Student = () => {
     },
   });
 
-  const fetchCenterData = async () => {
-    try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCenterData();
-  }, []);
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data
+    };
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    fetchStudentData();
   }, [filters]);
 
   const clearFilter = () => {
@@ -247,6 +316,7 @@ const Student = () => {
       email: "",
       mobileNumber: "",
     });
+    setIsClearFilterClicked(true);
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
@@ -405,6 +475,7 @@ const Student = () => {
                 initialState={{
                   columnVisibility: {
                     studentChineseName: false,
+                    age: false,
                     dateOfBirth: false,
                     medicalCondition: false,
                     schoolType: false,
@@ -446,7 +517,7 @@ const Student = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteCenter/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={fetchStudentData}
                 />
               </MenuItem>
             </Menu>
