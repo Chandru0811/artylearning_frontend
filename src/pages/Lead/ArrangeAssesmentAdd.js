@@ -23,12 +23,11 @@ function ArrangeAssesmentAdd({
   setAll,
   showDialog,
   handleShow,
-  handleClose,
-  centerDatas
+  handleClose
 }) {
   
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [centerData, setCenterData] = useState(centerDatas);
+  const [centerData, setCenterData] = useState(null);
   const navigate = useNavigate();
   // console.log("Lead Id:", leadId);
   // console.log("Centre ID :", centerId);
@@ -42,7 +41,11 @@ function ArrangeAssesmentAdd({
       toast.error(error);
     }
   };
-
+useEffect(()=>{
+  if(showDialog){
+    fetchCenterData()
+  }
+},[])
   const getCurrentDate = () => {
     const date = new Date();
     return date.toISOString().split("T")[0]; // Format: YYYY-MM-DD
