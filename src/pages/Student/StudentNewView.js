@@ -184,6 +184,26 @@ function StudentNewView() {
     }
   };
 
+  const studentData = [];
+
+  if (data.studentCourseDetailModels) {
+    data.studentCourseDetailModels.map((std) => {
+      studentData.push({
+        status: std.status,
+        centerName: std.centerName,
+        course: std.course,
+        classId: std.classId,
+        teacher: std.teacher,
+        startTime: std.startTime,
+        endTime: std.endTime,
+        startDate: std.startDate,
+        endDate: std.endDate,
+      });
+    });
+  }
+
+  console.log("studentData:", studentData);
+
   return (
     <section className="p-3">
       <ol
@@ -776,7 +796,9 @@ function StudentNewView() {
                   </li>
                 </ul>
                 {/* Table for TabA */}
-                {subActiveTab === "tabA" && <StudentViewCourse />}
+                {subActiveTab === "tabA" && (
+                  <StudentViewCourse data={studentData} />
+                )}
               </>
             )}
 

@@ -1,60 +1,123 @@
-import React, { useEffect, useRef } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useMemo, useState, useEffect } from "react";
+import { ThemeProvider, createTheme } from "@mui/material";
+import { MaterialReactTable } from "material-react-table";
 
-const StudentViewCourse = () => {
-  const tableRef = useRef(null);
+const StudentViewCourse = ({ data }) => {
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        size: 50,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "Pending" ||
+          row.original.status === "pending" ||
+          row.original.status === "PENDING" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#eb862a" }}
+            >
+              Pending
+            </span>
+          ) : row.original.status !== "pending" ||
+            row.original.status !== "pending" ||
+            row.original.status !== "pending" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#287f71" }}
+            >
+              Active
+            </span>
+          ) : null,
+      },
+      { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
+      {
+        accessorKey: "course",
+        enableHiding: false,
+        header: "Course",
+      },
+      {
+        accessorKey: "classId",
+        enableHiding: false,
+        size: 50,
+        header: "Class Code",
+      },
+      {
+        accessorKey: "teacher",
+        enableHiding: false,
+        header: "Teacher",
+      },
+      {
+        accessorKey: "startDate",
+        enableHiding: false,
+        size: 50,
+        header: "Start Date",
+      },
+      {
+        accessorKey: "endDate",
+        enableHiding: false,
+        size: 50,
+        header: "End Date",
+      },
+      { accessorKey: "startTime", header: "Start Time" },
+      { accessorKey: "endTime", header: "End Time" },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    const table = $(tableRef.current).DataTable({
-      responsive: true,
-    });
-
-    return () => {
-      table.destroy();
-    };
-  }, []);
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
 
   return (
-    <div className="container my-3">
-      <table ref={tableRef} className="display">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Status</th>
-            <th scope="col">Center</th>
-            <th scope="col">Course</th>
-            <th scope="col">Class Code</th>
-            <th scope="col">Class Listing</th>
-            <th scope="col">Teacher</th>
-            <th scope="col">Start Time</th>
-            <th scope="col">End Time</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">Duration in Class</th>
-            <th scope="col">Attendance</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <>
+      <ThemeProvider theme={theme}>
+        <MaterialReactTable
+          columns={columns}
+          data={data}
+          enableColumnActions={false}
+          enableDensityToggle={false}
+          enableFullScreenToggle={false}
+          initialState={{
+            columnVisibility: {
+              createdBy: false,
+              createdAt: false,
+              updatedBy: false,
+              updatedAt: false,
+            },
+          }}
+        />
+      </ThemeProvider>
+    </>
   );
 };
 
