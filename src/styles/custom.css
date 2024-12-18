@@ -911,7 +911,6 @@ input.searchInputG:hover {
   color: black !important;
   font-size: 14px !important;
 }
-
 .calendar tbody {
   background-color: #ffffff;
 }
@@ -1019,14 +1018,14 @@ input.searchInputG:hover {
 }
 
 /* data table */
-tbody,
+/* tbody,
 td,
 tfoot,
 th,
 thead,
-tr {
-  border-top: 1px solid #808080;
-}
+th {
+  border-top: 1px solid #e31010;
+} */
 
 .dataTables_wrapper .dataTables_length {
   padding-left: 20px !important;
@@ -1053,9 +1052,9 @@ table.dataTable.display > tbody > tr > th {
   padding: 15px 20px !important;
 }
 
-tbody, td, tfoot, th, thead, tr {
+/* tbody, td, tfoot, th, thead, tr {
   border-top: none !important;
-}
+} */
 .breadcrumb-separator {
   margin-left: 0.5rem; 
   margin-right: 0.5rem; 
@@ -1077,4 +1076,16 @@ tbody, td, tfoot, th, thead, tr {
 .custom-outline-danger:hover {
   background-color: #eb862a !important;
   color: #fff !important; 
+}
+
+/* table */
+.css-11yrv3u-MuiTableRow-root td {
+  padding: 7px 20px !important;
+  font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' !important;
+}
+.css-1ule0da-MuiTableRow-root th {
+  background-color: #ffffff !important;
+  font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' !important;
+  border-top: 1px solid#b5b5b5 !important;
+  border-bottom: 1px solid#b5b5b5 !important;
 }

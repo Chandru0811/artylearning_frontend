@@ -112,7 +112,7 @@ function EmailTemplateEdit({ id, onSuccess }) {
         className="btn btn-sm btn-normal text-start"
         onClick={handleOpen}
       >
-        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+        Edit
       </button>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <form onSubmit={formik.handleSubmit}>

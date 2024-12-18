@@ -51,6 +51,7 @@ const Teacher = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -79,13 +80,12 @@ const Teacher = () => {
       },
       { accessorKey: "email", enableHiding: false, header: "Email" },
       { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
+      { accessorKey: "role", enableHiding: false, header: "Role" },
       {
         accessorKey: "updatedBy",
-        enableHiding: false,
         header: "Updated By",
         Cell: ({ cell }) => cell.getValue() || "",
       },
-      { accessorKey: "role", enableHiding: false, header: "Role" },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -298,6 +298,10 @@ const Teacher = () => {
                     zipCode: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/teacher/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -307,9 +311,6 @@ const Teacher = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/teacher/view/${selectedId}`)}>
-                View
-              </MenuItem>
               <MenuItem onClick={() => navigate(`/teacher/edit/${selectedId}`)}>
                 Edit
               </MenuItem>

@@ -178,7 +178,7 @@ const ContactSection = () => {
         <div className="container cms-header shadow-sm py-2">
           <div className="row p-1">
             <div className="col-md-6 col-12">
-              <h4>Header</h4>
+              <h4 className="headColor">Header</h4>
             </div>
             <div className="col-md-6 col-12 d-flex justify-content-end">
               {storedScreens?.headerPublish && (

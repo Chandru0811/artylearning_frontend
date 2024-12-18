@@ -42,6 +42,7 @@ const Deduction = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -192,8 +193,8 @@ const Deduction = () => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
-                    leaveReason: true,
-                    leaveType: true,
+                    totalDeductionAmount: false,
+                    deductionMonth: false,
                     leaveTypeId: false,
                     noOfDays: true,
                     requestDate: true,
@@ -204,6 +205,10 @@ const Deduction = () => {
                     updatedAt: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/deduction/list/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -213,11 +218,6 @@ const Deduction = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/deduction/list/${selectedId}`)}
-              >
-                View
-              </MenuItem>
               <MenuItem
                 onClick={() => navigate(`/deduction/edit/${selectedId}`)}
               >

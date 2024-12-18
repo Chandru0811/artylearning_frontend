@@ -104,7 +104,7 @@ function CMSProductsItemEdit({ id, getData }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleOpen}>
-        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+        Edit
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle className="headColor">Edit Product Item  <IconButton

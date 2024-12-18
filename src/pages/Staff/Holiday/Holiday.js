@@ -46,6 +46,7 @@ const Holiday = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -206,12 +207,18 @@ const Holiday = () => {
                     noOfDays: true,
                     requestDate: true,
                     userId: false,
+                    endDate: false,
+                    holidayDescription: false,
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/holiday/list/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -221,9 +228,6 @@ const Holiday = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/holiday/list/${selectedId}`)}>
-                View
-              </MenuItem>
               <MenuItem onClick={() => navigate(`/holiday/edit/${selectedId}`)}>
                 Edit
               </MenuItem>

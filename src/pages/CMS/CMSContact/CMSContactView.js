@@ -37,7 +37,7 @@ function CMSContactView({ id }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleOpen}>
-        <FaEye /> View
+         View
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle className="headColor">
