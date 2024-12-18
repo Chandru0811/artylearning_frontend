@@ -64,7 +64,7 @@ function Delete({ onSuccess, path, staffmsg, teachermsg }) {
 
   return (
     <>
-      <button
+      <button type="button"
         style={{
           whiteSpace: "nowrap",
         }}
