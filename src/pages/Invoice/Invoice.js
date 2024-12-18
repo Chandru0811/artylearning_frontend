@@ -50,6 +50,7 @@ const Invoice = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -64,11 +65,11 @@ const Invoice = () => {
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "APPROVED" ? (
-            <span className="badge bg-success fw-light">Approved</span>
+            <span className="badge badges-Green fw-light">Approved</span>
           ) : row.original.status === "REJECTED" ? (
-            <span className="badge bg-danger fw-light">Rejected</span>
+            <span className="badge badges-danger fw-light">Rejected</span>
           ) : (
-            <span className="badge bg-warning fw-light">Pending</span>
+            <span className="badge badges-orange fw-light">Pending</span>
           ),
       },
       {
@@ -98,7 +99,7 @@ const Invoice = () => {
       },
       { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
       {
-        accessorKey: "studentUnickId",
+        accessorKey: "studentId",
         enableHiding: false,
         header: "Student ID",
       },
@@ -336,10 +337,10 @@ const Invoice = () => {
                     zipCode: false,
                   },
                 }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/invoice/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
