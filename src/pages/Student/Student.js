@@ -165,42 +165,11 @@ const Student = () => {
     []
   );
 
-  // const fetchStudentData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     // Dynamically construct query parameters based on filters
-  //     const queryParams = new URLSearchParams();
-  //     // Loop through the filters and add key-value pairs if they have a value
-  //     for (let key in filters) {
-  //       if (filters[key]) {
-  //         queryParams.append(key, filters[key]);
-  //       }
-  //     }
-  //     const response = await api.get(
-  //       `/getStudentWithCustomInfo?${queryParams.toString()}`
-  //     );
-  //     setData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const fetchStudentData = async () => {
     try {
       setLoading(true);
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
-
-      // // Always include the centerId filter by default
-      // if (filters.centerId) {
-      //   queryParams.append("centerId", filters.centerId);
-      // } else if (centerIDLocal && centerIDLocal !== "undefined") {
-      //   // Use centerIDLocal from localStorage if filters.centerId is empty
-      //   queryParams.append("centerId", centerIDLocal);
-      // }
-
       if (!isClearFilterClicked) {
         if (filters.centerId) {
           queryParams.append("centerId", filters.centerId);
@@ -514,7 +483,7 @@ const Student = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteCenter/${selectedId}`}
+                  path={`/deleteStudentDetail/${selectedId}`}
                   onDeleteSuccess={fetchStudentData}
                 />
               </MenuItem>

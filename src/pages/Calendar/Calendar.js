@@ -11,6 +11,8 @@ import ScheduleTeacherDetails from "./ScheduleTeacherDetails";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllCentersWithIds from "../List/CenterList";
+import { FaChalkboardUser } from "react-icons/fa6";
+import { BsBuildings } from "react-icons/bs";
 
 function Calendar() {
   const [data, setData] = useState([]);
@@ -317,9 +319,9 @@ function Calendar() {
                   info.event.extendedProps;
                 return (
                   <div className="p-2 border-bottom">
-                    <div>👨‍🏫 Teacher: {teacherName}</div>
-                    <div>🏢 Center: {centerName}</div>
-                    <div>🕒 Available Slots: {availableSlotCount}</div>
+                    <div className="p-1"><FaChalkboardUser className="me-1"/> Teacher: {teacherName}</div>
+                    
+                    <div className="p-1"><BsBuildings className="me-1"/> Centre: {centerName}</div>
                   </div>
                 );
               }}

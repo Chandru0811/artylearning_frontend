@@ -37,6 +37,15 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
     fetchScheduleDetails();
   }, [teacherId, startDate]);
 
+  const convertTo12HourFormat = (time) => {
+    // Assuming time format is 'HH:mm' or already 'hh:mm AM/PM'
+    const [hours, minutes] = time.split(':');
+    let hour = parseInt(hours, 10);
+    const suffix = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12; // Convert 0 -> 12 for 12AM, and keep 12PM as is
+    return `${hour}:${minutes} ${suffix}`;
+  };
+
   if (loading) {
     return (
       <Modal show={showViewModal} onHide={onClose} size="lg" centered>
@@ -89,7 +98,8 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         activeTab === item.batchTime ? "orange" : "inherit",
                     }}
                   >
-                    {item.batchTime}
+                    {/* {item.batchTime} */}
+                    {convertTo12HourFormat(item.batchTime)} {/* Use the helper function */}
                   </button>
                 </li>
               ))}
@@ -132,7 +142,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">Class Id</p>
+                              <p className="">Class Code</p>
                             </div>
                             <div className="col-7">
                               <p>:&nbsp;{item.details.classUniqueId || "--"}</p>

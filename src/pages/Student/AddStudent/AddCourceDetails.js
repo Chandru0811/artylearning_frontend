@@ -30,13 +30,13 @@ const AddcourseDetail = forwardRef(
 
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [batchData, setBatchData] = useState(null);
     const [selectedRow, setSelectedRow] = useState(formData.id); // Add state for selected row
     const [selectedRowData, setSelectedRowData] = useState({}); // State for selected row data
-    const userName  = localStorage.getItem('userName');
-    console.log("selectedRow",selectedRow)
-    console.log("selectedRowData",selectedRowData)
-    console.log("FormData",formData)
+    const userName = localStorage.getItem("userName");
+    console.log("selectedRow", selectedRow);
+    console.log("selectedRowData", selectedRowData);
+    console.log("FormData", formData);
 
     const formik = useFormik({
       initialValues: {
@@ -69,7 +69,6 @@ const AddcourseDetail = forwardRef(
           teacher: selectedRowData.teacher,
           userId: selectedRowData.userId,
           createdBy: userName,
-
         };
         console.log("Course Payload Data:", payload);
         try {
@@ -136,7 +135,10 @@ const AddcourseDetail = forwardRef(
       }
 
       try {
-        const response = await api.get(`/getAllScheduleTeachers/${formData.centerId}`, { params });
+        const response = await api.get(
+          `/getAllScheduleTeachers/${formData.centerId}`,
+          { params }
+        );
         setDatas(response.data);
         initializeDataTable();
       } catch (error) {
@@ -144,6 +146,65 @@ const AddcourseDetail = forwardRef(
       } finally {
         setLoading(false);
       }
+    };
+
+    const fetchBatchandTeacherData = async (day) => {
+      try {
+        const response = await api.get(
+          `getTeacherWithBatchListByDay?day=${day}`
+        );
+        setBatchData(response.data.batchList);
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+
+    useEffect(() => {
+      if (formik.values.days) {
+        fetchBatchandTeacherData(formik.values.days);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formik.values.days]);
+
+
+    const formatTo12Hour = (time) => {
+      const [hours, minutes] = time.split(":");
+      let period = "AM";
+      let hour = parseInt(hours, 10);
+  
+      if (hour === 0) {
+        hour = 12;
+      } else if (hour >= 12) {
+        period = "PM";
+        if (hour > 12) hour -= 12;
+      }
+  
+      return `${hour}:${minutes} ${period}`;
+    };
+
+    
+    const normalizeTime = (time) => {
+      if (time.includes("AM") || time.includes("PM")) {
+        return time;
+      }
+  
+      return formatTo12Hour(time);
+    };
+
+    const convertTo24Hour = (time) => {
+      const [timePart, modifier] = time.split(" ");
+      let [hours, minutes] = timePart.split(":").map(Number);
+  
+      if (modifier === "PM" && hours < 12) {
+        hours += 12;
+      } else if (modifier === "AM" && hours === 12) {
+        hours = 0;
+      }
+  
+      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+        2,
+        "0"
+      )}`;
     };
 
     useEffect(() => {
@@ -177,13 +238,13 @@ const AddcourseDetail = forwardRef(
     const handleRowSelect = (data) => {
       if (data.availableSlots === 0) {
         toast.error("Class is Full");
-        return; 
+        return;
       }
       setSelectedRow(data.id);
       setSelectedRowData(data);
       console.log("Selected Row Data:", data);
       console.log("Selected Row Data Valuess are:", selectedRowData);
-      setFormData((prev) => ({ ...prev, coursesData: data })); 
+      setFormData((prev) => ({ ...prev, coursesData: data }));
 
       if (data.startDate && data.endDate) {
         const days = calculateDays(data.startDate, data.endDate, data.days);
@@ -197,7 +258,7 @@ const AddcourseDetail = forwardRef(
       const start = new Date(startDate);
       const end = new Date(endDate);
       const days = [];
-    
+
       // Mapping selected day string to its corresponding numeric value
       const dayMapping = {
         SUNDAY: 0,
@@ -208,9 +269,9 @@ const AddcourseDetail = forwardRef(
         FRIDAY: 5,
         SATURDAY: 6,
       };
-    
+
       const targetDay = dayMapping[selectedDay.toUpperCase()];
-    
+
       for (
         let date = new Date(start);
         date <= end;
@@ -223,15 +284,15 @@ const AddcourseDetail = forwardRef(
           });
         }
       }
-    
+
       return days;
     };
 
-    useEffect(()=>{
-      if(formData.coursesData){
-       handleRowSelect(formData.coursesData) 
+    useEffect(() => {
+      if (formData.coursesData) {
+        handleRowSelect(formData.coursesData);
       }
-    },[formData.coursesData])
+    }, [formData.coursesData]);
 
     useImperativeHandle(ref, () => ({
       CourseDetail: formik.handleSubmit,
@@ -304,15 +365,20 @@ const AddcourseDetail = forwardRef(
                       id="batchId"
                       name="batchId"
                     >
-                      <option value="" disabled selected>
-                        Select Batch Time
-                      </option>
-                      <option value="1">2:30 pm</option>
-                      <option value="2">3:30 pm</option>
-                      <option value="3">5:00 pm</option>
-                      <option value="4">7:00 pm</option>
-                      <option value="5">12:00 pm</option>
-                      <option value="6">1:00 pm</option>
+                      {batchData &&
+                    batchData.map((time) => {
+                      const displayTime = normalizeTime(time);
+                      const valueTime =
+                        time.includes("AM") || time.includes("PM")
+                          ? convertTo24Hour(time)
+                          : time;
+
+                      return (
+                        <option key={time} value={valueTime}>
+                          {displayTime}
+                        </option>
+                      );
+                    })}
                     </select>
                     <button
                       type="button"

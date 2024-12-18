@@ -86,7 +86,7 @@ export default function InvoiceAdd() {
       invoicePeriodTo: "",
       invoicePeriodFrom: "",
       receiptAmount: "",
-      creditAdviceOffset: "",
+      creditAdviceOffset: "" || 0.0,
       gst: "",
       totalAmount: "",
       invoiceItems: [
@@ -118,7 +118,7 @@ export default function InvoiceAdd() {
             invoicePeriodFrom: values.invoicePeriodFrom,
             invoicePeriodTo: values.invoicePeriodTo,
             gst: parseFloat(values.gst), // Ensure numerical values are parsed correctly
-            creditAdviceOffset: parseFloat(values.creditAdviceOffset), // Ensure numerical values are parsed correctly
+            creditAdviceOffset: parseFloat(values.creditAdviceOffset || 0.0), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
             remark: values.remark,
             receiptAmount: parseFloat(values.receiptAmount), // Ensure numerical values are parsed correctly
@@ -238,7 +238,7 @@ export default function InvoiceAdd() {
   };
 
   const handleStudentChange = (event) => {
-    console.log("Event", event);
+    // console.log("Event", event);
     formik.setFieldValue("student", event);
   };
 
@@ -249,9 +249,9 @@ export default function InvoiceAdd() {
 
   useEffect(() => {
     const fetchStudentData = async () => {
-      console.log("Formik student name", formik.values.student);
-      console.log("Tax", taxData);
-      console.log("Course", courseData);
+      // console.log("Formik student name", formik.values.student);
+      // console.log("Tax", taxData);
+      // console.log("Course", courseData);
       if (!formik.values.student) return;
 
       try {
@@ -277,7 +277,7 @@ export default function InvoiceAdd() {
             const response1 = await api.get(
               `/getLatestCenterRegistrationByCenterId/${centerId}`
             );
-            console.log("Response 1:", response1.data);
+            // console.log("Response 1:", response1.data);
 
             const selectedTax = taxData.find(
               (tax) => parseInt(response1.data.taxId) === tax.id
@@ -306,27 +306,27 @@ export default function InvoiceAdd() {
             const response2 = await api.get(
               `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
             );
-            console.log("Response 2:", response2.data.taxType);
+            // console.log("Response 2:", response2.data.taxType);
 
             const selectedTax = taxData.find(
               (tax) => parseInt(response2.data.taxType) === tax.id
             );
-            console.log("selectedTax:", selectedTax);
+            // console.log("selectedTax:", selectedTax);
             const selectedCourse = courseData.find(
               (course) => parseInt(response2.data.courseId) === course.id
             );
-            console.log("selectedCourse:", selectedCourse);
+            // console.log("selectedCourse:", selectedCourse);
 
             const itemsName = selectedCourse ? selectedCourse.courseNames : "";
-            console.log("itemsName:", itemsName);
+            // console.log("itemsName:", itemsName);
             const gstRate = selectedTax ? selectedTax.rate : 0;
-            console.log("gstRate:", gstRate);
+            // console.log("gstRate:", gstRate);
             const amount = response2.data.weekdayFee || 0;
-            console.log("amount:", amount);
+            // console.log("amount:", amount);
             const gstAmount = (amount * gstRate) / 100 || 0;
-            console.log("gstAmount:", gstAmount);
+            // console.log("gstAmount:", gstAmount);
             const amountBeforeGST = amount - gstAmount || 0;
-            console.log("amountBeforeGST:", amountBeforeGST);
+            // console.log("amountBeforeGST:", amountBeforeGST);
 
             invoiceItems.push({
               item: itemsName,
@@ -335,7 +335,7 @@ export default function InvoiceAdd() {
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
               totalAmount: isNaN(amount) ? 0 : amount,
             });
-            console.log("Course Fee Function is Executed Successfully");
+            // console.log("Course Fee Function is Executed Successfully");
           } catch (error) {
             console.error("Error fetching course fees:", error);
           }
@@ -348,7 +348,7 @@ export default function InvoiceAdd() {
             const response3 = await api.get(
               `/getLatestCourseDepositFeesByCourseId/${courseId}`
             );
-            console.log("Response 3:", response3.data);
+            // console.log("Response 3:", response3.data);
 
             const selectedTax = taxData.find(
               (tax) => parseInt(response3.data.taxType) === tax.id
@@ -414,16 +414,6 @@ export default function InvoiceAdd() {
       const selectedPackageDetails = packageData.find(
         (pkg) => pkg.id === parseInt(selectedPackage)
       );
-      // if (selectedPackageDetails) {
-      //   // Update the lessons options based on the number of lessons in the selected package
-      //   const lessons = Array.from(
-      //     { length: selectedPackageDetails.noOfLesson },
-      //     (_, i) => i + 1
-      //   );
-      //   setLessonsOptions(lessons);
-      // } else {
-      //   setLessonsOptions([]); // Reset if no valid package is selected
-      // }
       if (selectedPackageDetails) {
         const lessonsArray = [selectedPackageDetails.noOfLesson];
         setLessonsOptions(lessonsArray);
@@ -516,8 +506,11 @@ export default function InvoiceAdd() {
       if (studentID) {
         try {
           const response = await api.get(`/getAllStudentById/${studentID}`);
+          const referralDetails = await api.get(`/getAvailableCreditAdviseOffset?studentId=${studentID}`);
           const studentData = response.data;
-          console.log("Student Data:", studentData);
+          const referralAmount = referralDetails.data.overallTotalForFee;
+          // console.log("Student Data:", studentData);
+          console.log("Referral Amount:", referralAmount);
 
           // Uncomment and update this section if you want to set values in a form
           formik.setValues({
@@ -534,7 +527,7 @@ export default function InvoiceAdd() {
             invoicePeriodTo: "",
             invoicePeriodFrom: "",
             receiptAmount: "",
-            creditAdviceOffset: "",
+            creditAdviceOffset: referralAmount || 0.0,
             gst: "",
             totalAmount: "",
           });
@@ -573,28 +566,49 @@ export default function InvoiceAdd() {
   };
 
   useEffect(() => {
-    // Calculate total Item Amounts
-    const totalItemAmount = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item?.itemAmount || 0),
-      0
-    );
-    formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
-
-    // Calculate total Gst
-    const totalGst = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item?.gstAmount || 0),
-      0
-    );
-    formik.setFieldValue("gst", totalGst.toFixed(2));
-
-    // Calculate total Amount
-    const totalAmount = formik.values.invoiceItems.reduce(
-      (total, item) => total + parseFloat(item?.totalAmount || 0),
-      0
-    );
-    formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
-  }, [formik.values.invoiceItems]);
-
+    const fetchReferralDetails = async () => {
+      let overAllAmount = 0; // Default fallback value
+  
+      if (studentID) {
+        try {
+          const referralDetails = await api.get(
+            `/getAvailableCreditAdviseOffset?studentId=${studentID}`
+          );
+          overAllAmount = parseFloat(referralDetails.data.overallTotalForFee || 0); // Ensure it's a number
+          console.log("Referral Amount from API:", overAllAmount);
+        } catch (error) {
+          console.error("Error fetching referral details. Using fallback overAllAmount:", error);
+        }
+      }
+  
+      // Log the value of overAllAmount for debugging
+      console.log("Final overAllAmount used:", overAllAmount);
+  
+      // Calculate total GST
+      const totalGst = formik.values.invoiceItems.reduce(
+        (total, item) => total + parseFloat(item?.gstAmount || 0),
+        0
+      );
+      formik.setFieldValue("gst", totalGst.toFixed(2));
+  
+      // Calculate total Amount (sum of invoice items)
+      const totalAmount = formik.values.invoiceItems.reduce(
+        (total, item) => total + parseFloat(item?.totalAmount || 0),
+        0
+      );
+  
+      // If overAllAmount is not valid, ensure totalAmount remains unchanged
+      const CreditOffsetAmount = totalAmount - (overAllAmount || 0); // Graceful fallback
+      console.log("Credit Offset Amount:", CreditOffsetAmount);
+  
+      // Set the calculated value in Formik
+      formik.setFieldValue("totalAmount", CreditOffsetAmount.toFixed(2));
+    };
+  
+    fetchReferralDetails();
+  }, [formik.values.invoiceItems, studentID]);
+  
+  
   return (
     <div className="container-fluid">
       <ol
@@ -978,18 +992,6 @@ export default function InvoiceAdd() {
                     Number of Lesson
                   </label>
                   <br />
-                  {/* <select
-                  name="noOfLessons"
-                  {...formik.getFieldProps("noOfLessons")}
-                  class="form-select "
-                  aria-label="Default select example"
-                >
-                  {lessonsOptions.map((lesson, index) => (
-                    <option key={index} value={lesson}>
-                      {lesson}
-                    </option>
-                  ))}
-                </select> */}
                   <input
                     id="noOfLessons"
                     name="noOfLessons"
@@ -1031,8 +1033,6 @@ export default function InvoiceAdd() {
                           <span className="text-danger">*</span>
                         </th>
                         <th>
-                          {/* Total Amount (Inc GST)
-                        <span className="text-danger">*</span> */}
                         </th>
                       </tr>
                     </thead>
@@ -1158,17 +1158,6 @@ export default function InvoiceAdd() {
                                 Delete
                               </button>
                             )}
-                            {/* <input
-                            {...formik.getFieldProps(
-                              `invoiceItems[${index}].totalAmount`
-                            )}
-                            className="form-control"
-                            type="text"
-                            style={{ width: "80%" }}
-                            onChange={(e) =>
-                              handelTotalAmountChange(index, e.target.value)
-                            }
-                          /> */}
                           </td>
                         </tr>
                       ))}
@@ -1180,15 +1169,6 @@ export default function InvoiceAdd() {
 
             <div className="row mt-3">
               <div className="col-12 text-end mt-3">
-                {/* {rows.length > 1 && (
-                <button
-                  type="button"
-                  className="btn btn-sm mx-2 text-danger border-danger bg-white"
-                  onClick={() => handleRowDelete(rows.length - 1)}
-                >
-                  Delete
-                </button>
-              )} */}
                 <button
                   className="btn btn-sm btn-danger me-2"
                   type="button"
@@ -1200,6 +1180,7 @@ export default function InvoiceAdd() {
                 </button>
               </div>
               <div className="col-lg-6 col-md-6 col-12"></div>
+
               <div className="col-lg-6 col-md-6 col-12">
                 <div className="">
                   <div className="text-start mt-3">
@@ -1243,24 +1224,6 @@ export default function InvoiceAdd() {
                   </div>
                 </div>
               </div>
-              {/* <div className="col-12 text-end  mt-3">
-                <Link to="/invoice">
-                  <button className="btn btn-sm btn-border mx-2">Cancel</button>
-                </Link>
-                <button
-                  type="submit"
-                  className="btn btn-sm btn-button mx-2"
-                  disabled={loadIndicator}
-                >
-                  {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  Generate
-                </button>
-              </div> */}
             </div>
           </div>
         </div>
