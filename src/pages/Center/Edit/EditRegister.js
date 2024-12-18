@@ -143,7 +143,11 @@ function EditRegisteration({ id, onSuccess }) {
 
   return (
     <>
-      <button type="button" className="btn" onClick={handleShow}>
+      <button type="button"
+        style={{
+          whiteSpace: "nowrap",
+        }}
+        className="btn btn-normal text-start" onClick={handleShow}>
         <FaEdit />
       </button>
 

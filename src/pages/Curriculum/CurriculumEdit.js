@@ -2,11 +2,16 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { useFormik } from "formik";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import { FaEdit } from "react-icons/fa";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 
 function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
   const [show, setShow] = useState(false);
@@ -89,28 +94,32 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
       const response = await api.get(`/getAllCourseCurriculumCodesById/${id}`);
       formik.setValues(response.data);
     };
-
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (show) {
+      getData();
+    }
+  }, [show]);
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
-      </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <span
+        onClick={handleShow}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+        }}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Curriculum</Modal.Title>
-        </Modal.Header>
+        Edit
+      </span>
+      <Dialog
+        open={show}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="md"
+        disableBackdropClick={isModified}
+        disableEscapeKeyDown={isModified}
+      >
+          <DialogTitle className="headColor">Edit Curriculum</DialogTitle>
+       
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -119,7 +128,7 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
             }
           }}
         >
-          <Modal.Body>
+          <DialogContent>
             <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
@@ -231,7 +240,7 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer>
+            <DialogActions>
               <Button
                 className="btn btn-sm btn-border bg-light text-dark"
                 onClick={handleClose}
@@ -247,10 +256,10 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
                 )}
                 Update
               </Button>
-            </Modal.Footer>
-          </Modal.Body>
+            </DialogActions>
+          </DialogContent>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

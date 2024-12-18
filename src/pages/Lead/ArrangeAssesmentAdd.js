@@ -30,7 +30,7 @@ function ArrangeAssesmentAdd({
   const [centerData, setCenterData] = useState(null);
   const navigate = useNavigate();
   // console.log("Lead Id:", leadId);
-  // console.log("Centre ID :", centerId);
+  // console.log("Centre ID :", centerId); 
   // console.log("Student Name :", studentNames);
 
   const fetchCenterData = async () => {
@@ -120,7 +120,12 @@ useEffect(()=>{
       }
     },
   });
-
+useEffect(()=>{
+if(centerId &&showDialog){
+  formik.setFieldValue("centerId",centerId)
+  formik.setFieldValue("studentName",studentNames)
+}
+},[showDialog])
   return (
     <>
       {/* <li>

@@ -68,6 +68,7 @@ const SendNotification = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation(); // Prevent the row click event
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -204,10 +205,10 @@ const SendNotification = () => {
                     updatedAt: false,
                   },
                 }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/sendNotification/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -218,17 +219,19 @@ const SendNotification = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <Link to={`/sendNotification/view/${selectedId}`}>
-                  <button className="btn btn-sm">
-                    <FaEye /> View
-                  </button>
-                </Link>
+                {/* <Link
+                  to={`/sendNotification/view/${selectedId}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  View
+                </Link> */}
               </MenuItem>
               <MenuItem>
-                <Link to={`/sendNotification/edit/${selectedId}`}>
-                  <button className="btn btn-sm">
-                    <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-                  </button>
+                <Link
+                  to={`/sendNotification/edit/${selectedId}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Edit
                 </Link>
               </MenuItem>
               <MenuItem>

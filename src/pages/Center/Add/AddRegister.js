@@ -13,13 +13,14 @@ import {
   DialogContent,
 } from "@mui/material";
 
-function AddRegister({ id, onSuccess }) {
+function AddRegister({ id, onSuccess ,handleMenuClose}) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
+    handleMenuClose()
     formik.resetForm();
     setShow(false);
   };

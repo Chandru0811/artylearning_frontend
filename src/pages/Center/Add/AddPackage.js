@@ -12,12 +12,13 @@ import {
   DialogTitle,
   DialogContent,
 } from "@mui/material";
-function AddPackage({ id, onSuccess }) {
+function AddPackage({ id, onSuccess,handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
+    handleMenuClose()
     formik.resetForm();
     setShow(false);
   };
