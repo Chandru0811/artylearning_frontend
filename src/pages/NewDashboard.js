@@ -328,7 +328,7 @@ function NewDashboard() {
             style={{ borderRadius: "10px" }}
           >
             <div className="d-flex justify-content-between">
-              <h6 className="card-title">Revenue Over Time</h6>
+              <h6 className="card-title">Leads Trend</h6>
               <i className="fas fa-ellipsis-h"></i> {/* Triple dot icon */}
             </div>
             <ApexCharts
@@ -345,14 +345,14 @@ function NewDashboard() {
             style={{ borderRadius: "10px" }}
           >
             <div className="d-flex justify-content-between">
-              <h6 className="card-title">Product Sales Comparison</h6>
+              <h6 className="card-title">Capacity Status</h6>
             </div>
             <div className="d-flex justify-content-between">
               <p className="text-secondary m-1" style={{ fontSize: "14px" }}>
                 Arty Learning @ HG
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
-              {progressValue1}%
+                {progressValue1}%
               </span>
             </div>
             <div className="progress mb-3" style={{ height: "7px" }}>
@@ -361,7 +361,10 @@ function NewDashboard() {
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: `${progressValue1}%`, backgroundColor: "#287F71" }}
+                style={{
+                  width: `${progressValue1}%`,
+                  backgroundColor: "#287F71",
+                }}
                 aria-valuenow="25"
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -372,14 +375,17 @@ function NewDashboard() {
                 Arty Learning @ AMK
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
-              {progressValue2}%
+                {progressValue2}%
               </span>
             </div>
             <div className="progress mb-3" style={{ height: "7px" }}>
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: `${progressValue2}%`, backgroundColor: "#287F71" }}
+                style={{
+                  width: `${progressValue2}%`,
+                  backgroundColor: "#287F71",
+                }}
                 aria-valuenow="50"
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -390,14 +396,17 @@ function NewDashboard() {
                 Arty Learning @ BB
               </p>
               <span style={{ fontSize: "13px" }} className="fw-bold">
-              {progressValue3}%
+                {progressValue3}%
               </span>
             </div>
             <div className="progress mb-3" style={{ height: "7px" }}>
               <div
                 className="progress-bar"
                 role="progressbar"
-                style={{ width: `${progressValue3}%`, backgroundColor: "#287F71" }}
+                style={{
+                  width: `${progressValue3}%`,
+                  backgroundColor: "#287F71",
+                }}
                 aria-valuenow="70"
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -411,7 +420,7 @@ function NewDashboard() {
             style={{ borderRadius: "10px" }}
           >
             <div className="d-flex justify-content-between">
-              <h6 className="card-title">Revenue Growth</h6>
+              <h6 className="card-title">Revenue Report</h6>
             </div>
             <ApexCharts
               options={lineChartOptions1}
@@ -427,7 +436,7 @@ function NewDashboard() {
             style={{ borderRadius: "10px" }}
           >
             <div className="d-flex justify-content-between">
-              <h6 className="card-title">Registered Users</h6>
+              <h6 className="card-title">Total Capacity</h6>
               <i className="fas fa-ellipsis-h"></i>
             </div>
             <ApexCharts
