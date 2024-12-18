@@ -282,6 +282,17 @@ const Document = () => {
                 </button>
               </div>
             </div>
+            {/* {storedScreens?.centerListingCreate && ( */}
+            <Link to="/document/add">
+              <button
+                type="button"
+                className="btn btn-button btn-sm me-2"
+                style={{ fontWeight: "600px !important" }}
+              >
+                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+              </button>
+            </Link>
+            {/* )} */}
           </div>
         </div>
         {loading ? (

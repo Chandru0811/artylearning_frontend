@@ -337,6 +337,10 @@ const ContractEdit = forwardRef(
               salaryStartDate:
                 contractData.salaryStartDate?.substring(0, 10) || "",
               updatedBy: userName,
+              userContractEndDate: contractData?.userContractEndDate?.slice(
+                0,
+                10
+              ),
               userContractStartDate:
                 contractData.userContractStartDate.slice(0, 10) ||
                 contractData.contractDate.slice(0, 10),

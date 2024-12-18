@@ -13,7 +13,7 @@ function Payslip() {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [data, setData] = useState({});
   const userId = localStorage.getItem("userId");
-  console.log("kishore", data);
+  // console.log("kishore", data);
   const table1Ref = useRef();
   const [loading, setLoading] = useState(true);
 
@@ -476,7 +476,7 @@ function Payslip() {
                             </p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: 24-04-2000</p>
+                            <p>:{data.dob ||"--"}</p>
                           </dvi>
                         </div>
                       </div>
@@ -488,7 +488,7 @@ function Payslip() {
                             </p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: 23456</p>
+                            <p>: {data.nric || "--"}</p>
                           </dvi>
                         </div>
                         <div className="row">
@@ -498,7 +498,7 @@ function Payslip() {
                             </p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: 01 Nov 2024 to 30 Nov 2024</p>
+                            <p>: {data.payPeriod || "--"}</p>
                           </dvi>
                         </div>
                       </div>
@@ -507,15 +507,16 @@ function Payslip() {
                     <div className="content-section">
                       <div className="row " style={{ minHeight: "20rem" }}>
                         <div className="col-6 d-flex flex-column justify-content-between">
-                          <p>
+                          <p className="d-flex justify-content-between">
                             <strong>BASIC PAY</strong>
+                            <p>{data.basicSalary ||"--"}</p>
                           </p>
                           <div className="row ">
                             <dvi className="col-4">
-                              <p>EMPLOYER CPF &nbsp; &nbsp; :</p>
+                              <p>EMPLOYER CPF &nbsp; &nbsp; : {data.cpfContribution ||"--"}</p>
                             </dvi>
                             <dvi className="col-8 text-center">
-                              <p> SGD</p>
+                              <p> SGD </p>
                             </dvi>
                           </div>
                         </div>
@@ -544,7 +545,7 @@ function Payslip() {
                             <p>Gross Wages</p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: SGD</p>
+                            <p>: {data.basicSalary}</p>
                           </dvi>
                         </div>
                         <div className="row">
@@ -567,7 +568,7 @@ function Payslip() {
                             <p>Nett Wages</p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: SGD</p>
+                            <p>: {data.netPay ||"--"}</p>
                           </dvi>
                         </div>
                         <div className="row">
@@ -575,7 +576,7 @@ function Payslip() {
                             <p>CPF Wages</p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: SGD</p>
+                            <p>: {data.cpfContribution ||"--"}</p>
                           </dvi>
                         </div>
                         <div className="row">

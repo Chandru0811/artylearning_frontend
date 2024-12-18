@@ -182,7 +182,7 @@ const PersonalEdit = forwardRef(
           formik.setValues({
             ...response.data,
             dateOfBirth: dateOfBirth,
-            shortIntroduction: formData.shortIntroduction || "",
+            // shortIntroduction: formData.shortIntroduction || "",
           });
         } catch (error) {
           console.error("Error fetching data:", error);
