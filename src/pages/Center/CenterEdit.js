@@ -89,6 +89,7 @@ function CenterEdit() {
       bankAccountName: "",
       invoiceNotes: "",
       file: null,
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {

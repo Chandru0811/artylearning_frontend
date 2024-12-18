@@ -166,16 +166,16 @@ const Course = () => {
     }
   };
 
-  useEffect(() => {
-    if (centerData.length > 0) {
-      const defaultCenterId = centerData[0].id;
-      setCenterId(defaultCenterId);
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        centerId: defaultCenterId,
-      }));
-    }
-  }, [centerData]);
+  // useEffect(() => {
+  //   if (centerData.length > 0) {
+  //     const defaultCenterId = centerData[0].id;
+  //     setCenterId(defaultCenterId);
+  //     setFilters((prevFilters) => ({
+  //       ...prevFilters,
+  //       centerId: defaultCenterId,
+  //     }));
+  //   }
+  // }, [centerData]);
 
   const fetchSubData = async () => {
     try {
@@ -278,6 +278,7 @@ const Course = () => {
                 name="centerId"
                 value={filters.centerId}
               >
+                <option value="">All Center</option>
                 {centerData?.map((center) => (
                   <option key={center.id} value={center.id}>
                     {center.centerNames}
@@ -353,6 +354,12 @@ const Course = () => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
+                    colorCode: false,
+                    description: false,
+                    durationInHrs: false,
+                    replacementLessonStudentBuffer: false,
+                    durationInMins: false,
+                    classReplacementAllowed: false,
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,

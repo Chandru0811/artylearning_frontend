@@ -19,7 +19,8 @@ function Edit({ id, onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
-
+  const userName = localStorage.getItem("userName");
+  
   const fetchData = async () => {
     try {
       const subject = await fetchAllSubjectsWithIds();
@@ -50,6 +51,7 @@ function Edit({ id, onSuccess }) {
       levelCode: "",
       status: "",
       subjectId: "",
+      updatedBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
