@@ -1095,3 +1095,10 @@ table.dataTable.display > tbody > tr > th {
 .css-11yrv3u-MuiTableRow-root:hover td:after{
   background-color: #f7f7f7 !important;
 }
+
+.fc-h-event .fc-event-main{
+  color: #b5b5b5 !important;
+  border: 1px solid #b5b5b5 !important;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
