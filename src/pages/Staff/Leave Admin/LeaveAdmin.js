@@ -43,6 +43,7 @@ const LeaveAdmin = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -50,6 +51,19 @@ const LeaveAdmin = () => {
             <MoreVertIcon />
           </IconButton>
         ),
+      },
+      {
+        accessorKey: "leaveStatus",
+        enableHiding: false,
+        header: "Leave Status",
+        Cell: ({ row }) =>
+          row.original.leaveStatus === "Approved" ||
+          row.original.leaveStatus === "APPROVED" ? (
+            <span className="badge badges-Green fw-light">Approved</span>
+          ) : row.original.leaveStatus === "Pending" ||
+            row.original.leaveStatus === "PENDING" ? (
+            <span className="badge badges-orange fw-light">Pending</span>
+          ) : null,
       },
       { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
@@ -61,11 +75,6 @@ const LeaveAdmin = () => {
         accessorKey: "leaveType",
         enableHiding: false,
         header: "Leave Type",
-      },
-      {
-        accessorKey: "leaveStatus",
-        enableHiding: false,
-        header: "Leave Status",
       },
       { accessorKey: "approverName", header: "Approver Name" },
       { accessorKey: "fromDate", header: "From Date" },
@@ -195,11 +204,13 @@ const LeaveAdmin = () => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
-                    leaveReason: true,
-                    leaveType: true,
+                    leaveReason: false,
+                    approverName: false,
+                    fromDate: false,
+                    leaveType: false,
                     leaveTypeId: false,
-                    noOfDays: true,
-                    requestDate: true,
+                    noOfDays: false,
+                    requestDate: false,
                     userId: false,
                     createdBy: false,
                     createdAt: false,
@@ -207,6 +218,11 @@ const LeaveAdmin = () => {
                     updatedAt: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () =>
+                    navigate(`/leaveadmin/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -216,11 +232,6 @@ const LeaveAdmin = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/leaveadmin/view/${selectedId}`)}
-              >
-                View
-              </MenuItem>
               <MenuItem
                 onClick={() => navigate(`/leaveadmin/edit/${selectedId}`)}
               >

@@ -212,7 +212,7 @@ function EditBreak({ id, onSuccess }) {
             </Button>
             <Button
               type="button"
-              onSubmit={formik.handleSubmit}
+              onClick={formik.handleSubmit}
               className="btn btn-button btn-sm"
               disabled={loadIndicator}
             >

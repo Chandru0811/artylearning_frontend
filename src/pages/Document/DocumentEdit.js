@@ -90,21 +90,20 @@ function DocumentEdit({ id, onSuccess }) {
 
   return (
     <>
-      <button
+      <span
         onClick={handleShow}
         style={{
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="btn btn-sm btn-normal text-start"
       >
-        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
-      </button>
+        Edit
+      </span>
       <Dialog
         open={show}
         onClose={handleClose}
         fullWidth
-        maxWidth="md"
+        maxWidth="sm"
         disableBackdropClick={isModified}
         disableEscapeKeyDown={isModified}
       >
@@ -120,7 +119,7 @@ function DocumentEdit({ id, onSuccess }) {
           <DialogContent>
             <div className="container">
               <div className="row py-4">
-                <div class="col-md-6 col-12 mb-4 d-flex flex-column justify-content-end">
+                <div class="col-12 mb-4 d-flex flex-column justify-content-end">
                   <label>
                     Folder Name<span class="text-danger">*</span>
                   </label>

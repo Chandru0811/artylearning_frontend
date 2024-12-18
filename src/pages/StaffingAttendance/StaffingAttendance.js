@@ -40,7 +40,7 @@ const StaffingAttendance = () => {
         header: "S.NO",
         enableSorting: true,
         enableHiding: false,
-        size: 40,
+        size: 20,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
@@ -54,6 +54,7 @@ const StaffingAttendance = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -62,20 +63,39 @@ const StaffingAttendance = () => {
           </IconButton>
         ),
       },
+      {
+        accessorKey: "attendanceStatus",
+        enableHiding: false,
+        header: "Status",
+        size: 30,
+        Cell: ({ row }) =>
+          row.original.attendanceStatus === "Present" ||
+          row.original.attendanceStatus === "PRESENT" ? (
+            <span className="badge badges-Green fw-light">Present</span>
+          ) : row.original.attendanceStatus === "Absent" ||
+            row.original.attendanceStatus === "ABSENT" ? (
+            <span className="badge badges-orange fw-light">Absent</span>
+          ) : null,
+      },
       { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "employeeName",
         enableHiding: false,
         header: "Employee Name",
       },
-      { accessorKey: "checkIn", enableHiding: false, header: "Check In" },
-      { accessorKey: "checkOut", enableHiding: false, header: "Check Out" },
-      { accessorKey: "date", enableHiding: false, header: "Date" },
       {
-        accessorKey: "attendanceStatus",
+        accessorKey: "checkIn",
+        size: 30,
         enableHiding: false,
-        header: "Status",
+        header: "Check In",
       },
+      {
+        accessorKey: "checkOut",
+        size: 30,
+        enableHiding: false,
+        header: "Check Out",
+      },
+      { accessorKey: "date", enableHiding: false, header: "Date" },
       { accessorKey: "attendanceRemark", header: "Attendance Remark" },
       { accessorKey: "modeOfWorking", header: "Mode Of Working" },
       { accessorKey: "userId", header: "User Id" },
@@ -212,6 +232,12 @@ const StaffingAttendance = () => {
                     bankAccountNumber: false,
                     bankBranch: false,
                     bankName: false,
+                    attendanceRemark: false,
+                    modeOfWorking: false,
+                    userId: false,
+                    userRole: false,
+                    otEndTime: false,
+                    otStartTime: false,
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
@@ -222,10 +248,11 @@ const StaffingAttendance = () => {
                     zipCode: false,
                   },
                 }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () =>
+                    navigate(`/staffing/attendance/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -235,13 +262,6 @@ const StaffingAttendance = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() =>
-                  navigate(`/staffing/attendance/view/${selectedId}`)
-                }
-              >
-                View
-              </MenuItem>
               <MenuItem
                 onClick={() =>
                   navigate(`/staffing/attendance/edit/${selectedId}`)

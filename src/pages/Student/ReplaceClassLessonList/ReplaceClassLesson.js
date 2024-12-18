@@ -32,17 +32,10 @@ const ReplaceClassLesson = () => {
         ),
       },
       {
-        accessorKey: "id",
-        header: "",
-        enableHiding: false,
-        enableSorting: false,
-        size: 20,
-        Cell: ({ cell }) => <IconButton></IconButton>,
-      },
-      {
         accessorKey: "status",
         enableHiding: false,
         header: "Status",
+        size: 50,
         Cell: ({ row }) =>
           row.original.status === "APPROVED" ? (
             <span className="badge bg-success fw-light">Approved</span>
@@ -374,14 +367,10 @@ const ReplaceClassLesson = () => {
                   columnVisibility: {
                     createdBy: false,
                     createdAt: false,
-                    updatedBy: true,
+                    updatedBy: false,
                     updatedAt: false,
                   },
                 }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
               />
             </ThemeProvider>
           </>

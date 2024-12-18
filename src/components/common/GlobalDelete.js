@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Dialog, DialogActions, DialogTitle, Slide } from "@mui/material";
-import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 
@@ -9,19 +8,27 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-function GlobalDelete({ path, onDeleteSuccess }) {
+function GlobalDelete({ path, onDeleteSuccess, onOpen }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  // useEffect(() => {
+  //   if (deleteDialogOpen && typeof onOpen === "function") {
+  //     console.log("Dialog opened, calling onOpen");
+  //     onOpen(); // Only call onOpen when dialog is open
+  //   }
+  // }, [deleteDialogOpen, onOpen]);
 
   // Handle dialog open
   const handleOpenDialog = () => {
     setDeleteDialogOpen(true);
-    document.body.style.overflow = "hidden"; // Lock scrolling
+    document.body.style.overflow = "hidden";
   };
 
   // Handle dialog close
   const handleCloseDialog = () => {
+    if (typeof onOpen === "function") onOpen();
     setDeleteDialogOpen(false);
-    document.body.style.overflow = ""; // Reset scrolling
+    document.body.style.overflow = "";
   };
 
   const handleDelete = async () => {
@@ -30,6 +37,7 @@ function GlobalDelete({ path, onDeleteSuccess }) {
       if (response.status === 200 || response.status === 201) {
         toast.success(response.data.message);
         onDeleteSuccess();
+        if (typeof onOpen === "function") onOpen();
       }
     } catch (error) {
       if (error?.response?.status === 409) {
@@ -38,7 +46,7 @@ function GlobalDelete({ path, onDeleteSuccess }) {
         toast.error("An error occurred while deleting the record.");
       }
     } finally {
-      handleCloseDialog();
+      handleCloseDialog(); // Close the dialog after deletion
     }
   };
 

@@ -51,6 +51,7 @@ const Subject = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -252,7 +253,7 @@ const Subject = () => {
           {storedScreens?.subjectCreate && (
             <div className="d-flex justify-content-end align-items-center me-2">
               <span>
-                <SubjectAdd />
+                <SubjectAdd onSuccess={fetchData}/>
               </span>
             </div>
           )}
@@ -298,13 +299,14 @@ const Subject = () => {
               {/* <MenuItem onClick={() => navigate(`/subject/view/${selectedId}`)}>
                 View
               </MenuItem> */}
-              <MenuItem>
-                <SubjectEdit onSuccess={fetchData} id={selectedId} />
+              <MenuItem >
+                <SubjectEdit onSuccess={fetchData} id={selectedId} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteCourseSubject/${selectedId}`}
                   onDeleteSuccess={fetchData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

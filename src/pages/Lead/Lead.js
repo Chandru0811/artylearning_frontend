@@ -264,6 +264,7 @@ const Lead = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -277,7 +278,7 @@ const Lead = () => {
         enableHiding: false,
         header: "Status",
         Cell: ({ row }) => (
-          <div className="d-flex justify-content-center">
+          <div className="d-flex justify-content-start">
             {row.original.leadStatus === "CONFIRMED" ? (
               <button
                 className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
@@ -306,6 +307,7 @@ const Lead = () => {
             ) : (
               <select
                 value={row.original.leadStatus}
+                onClick={(e)=>{e.stopPropagation();}}
                 onChange={(e) => {
                   handleStatusChange(row.original, e.target.value);
                 }}
@@ -334,7 +336,7 @@ const Lead = () => {
                       : ""
                   }`,
                   textAlign: "center",
-                  textIndent: "0", 
+                  textIndent: "0",
                   lineHeight: "20px",
                   maxWidth: "max-content",
                 }}
@@ -820,7 +822,7 @@ const Lead = () => {
     },
   });
 
-  const handleMenuClose = () => setMenuAnchor(null);
+  const handleMenuClose = () => {setMenuAnchor(null);console.log("null")}
   return (
     <div>
       <div className="container my-4 center">
@@ -1023,10 +1025,11 @@ const Lead = () => {
                       zipCode: false,
                     },
                   }}
-                  // muiTableBodyRowProps={({ row }) => ({
-                  //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                  //   style: { cursor: "pointer" },
-                  // })}
+                  muiTableBodyRowProps={({ row }) => ({
+                    onClick: () =>
+                      navigate(`/lead/lead/view/${row.original.id}`),
+                    style: { cursor: "pointer" },
+                  })}
                 />
               </ThemeProvider>
 
@@ -1049,10 +1052,11 @@ const Lead = () => {
                   </MenuItem>
                 )}
                 {storedScreens?.centerListingDelete && (
-                  <MenuItem>
+                  <MenuItem >
                     <GlobalDelete
-                      path={`/deleteCenter/${selectedId}`}
+                      path={`/deleteLeadInfo/${selectedId}`}
                       onDeleteSuccess={getLeadData}
+                      onOpen={handleMenuClose}
                     />
                   </MenuItem>
                 )}
