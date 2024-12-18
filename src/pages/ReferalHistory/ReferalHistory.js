@@ -20,14 +20,6 @@ const ReferalHistory = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      // {
-      //   accessorKey: "id",
-      //   header: "",
-      //   enableHiding: false,
-      //   enableSorting: false,
-      //   size: 10,
-      //   Cell: ({ cell }) => <IconButton></IconButton>,
-      // },
       {
         accessorKey: "referByStudent",
         enableHiding: false,

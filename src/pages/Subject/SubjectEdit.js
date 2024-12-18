@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
 
-function SubjectEdit({ id, onSuccess ,handleMenuClose}) {
+function SubjectEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
@@ -19,7 +19,7 @@ function SubjectEdit({ id, onSuccess ,handleMenuClose}) {
 
   const handleClose = () => {
     setShow(false);
-    handleMenuClose()
+    handleMenuClose();
     formik.resetForm();
   };
 

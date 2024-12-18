@@ -53,6 +53,7 @@ const OtherMessages = () => {
         Cell: ({ row }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation(); // Prevent the row click event
               setMenuAnchor(e.currentTarget);
               setSelectedMessage(row.original);
             }}
@@ -108,9 +109,16 @@ const OtherMessages = () => {
 
   const handleMenuClose = () => setMenuAnchor(null);
 
-  const handleViewClick = () => {
+  // const handleViewClick = () => {
+  //   navigate(
+  //     `/othermessaging/view/${selectedMessage.receiverId}?senderId=${selectedMessage.senderId}`
+  //   );
+  // };
+
+  const handleRowClick = (row) => {
+    setSelectedMessage(row.original); // Set selectedMessage dynamically
     navigate(
-      `/othermessaging/view/${selectedMessage.receiverId}?senderId=${selectedMessage.senderId}`
+      `/othermessaging/view/${row.original.receiverId}?senderId=${row.original.senderId}`
     );
   };
 
@@ -171,6 +179,10 @@ const OtherMessages = () => {
                     updatedAt: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => handleRowClick(row), // Pass the row object to the function
+                  style: { cursor: "pointer" }, // Add pointer cursor for better UX
+                })}
               />
             </ThemeProvider>
           )}
@@ -181,11 +193,7 @@ const OtherMessages = () => {
           open={Boolean(menuAnchor)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={() => handleViewClick()}>
-            <button className="btn btn-sm">
-              <FaEye /> View
-            </button>
-          </MenuItem>
+          {/* <MenuItem onClick={() => handleViewClick()}>View</MenuItem> */}
           <MenuItem>
             <GlobalDelete
               path={`/deleteMessage/${selectedMessage?.id}`}

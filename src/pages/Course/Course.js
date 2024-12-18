@@ -57,6 +57,7 @@ const Course = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -366,6 +367,10 @@ const Course = () => {
                     updatedAt: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/course/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
             <Menu
@@ -391,9 +396,9 @@ const Course = () => {
               >
                 Curriculum Outlet
               </MenuItem>
-              <MenuItem onClick={() => navigate(`/course/view/${selectedId}`)}>
+              {/* <MenuItem onClick={() => navigate(`/course/view/${selectedId}`)}>
                 View
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={() => navigate(`/course/edit/${selectedId}`)}>
                 Edit
               </MenuItem>

@@ -10,22 +10,18 @@ import {
   IconButton,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
 import ReferalFeesAdd from "./ReferalFeesAdd";
 import ReferalFeesEdit from "./ReferalFeesEdit";
 
 const ReferalFees = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const [filters, setFilters] = useState({
     centerName: "",
   });
-  const [centerManagerData, setCenterManagerData] = useState([]);
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const [menuAnchor, setMenuAnchor] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
 
   const columns = useMemo(
     () => [
@@ -62,9 +58,9 @@ const ReferalFees = () => {
         header: "Status",
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ? (
-            <span className="badge bg-success fw-light">Active</span>
+            <span className="badge badges-Green fw-light">Active</span>
           ) : (
-            <span className="badge bg-danger fw-light">Inactive</span>
+            <span className="badge badges-Red fw-light">Inactive</span>
           ),
       },
       { accessorKey: "center", enableHiding: false, header: "Centre Name" },
@@ -106,19 +102,6 @@ const ReferalFees = () => {
     ],
     []
   );
-
-  const fetchCenterManagerData = async () => {
-    try {
-      const centerManagerData = await fetchAllCentreManager();
-      setCenterManagerData(centerManagerData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCenterManagerData();
-  }, []);
 
   const fetchData = async () => {
     try {
@@ -268,7 +251,9 @@ const ReferalFees = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <ReferalFeesEdit id={selectedId} onSuccess={fetchData} />
+              <MenuItem>
+                <ReferalFeesEdit id={selectedId} onSuccess={fetchData} />
+              </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteReferralFees/${selectedId}`}

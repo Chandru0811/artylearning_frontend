@@ -1,106 +1,140 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-// import { Link } from "react-router-dom";
-// import { FaEye, FaEdit } from "react-icons/fa";
-import Delete from "../../../components/common/Delete";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import GlobalDelete from "../../../components/common/GlobalDelete";
+import { MaterialReactTable } from "material-react-table";
 import api from "../../../config/URL";
-// import { SCREENS } from "../../../config/ScreenFilter";
 import CurriculumOutletAdd from "./CurriculumOutletAdd";
 import CurriculumOutletEdit from "./CurriculumOutletEdit";
-import { Link, useParams } from "react-router-dom";
-import { FaFileInvoice } from "react-icons/fa";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { MdViewColumn } from "react-icons/md";
 
 function CurriculumOutlet() {
   const { id } = useParams();
-  const tableRef = useRef(null);
+  const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [extraData, setExtraData] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getCurriculumOutLetByCourseId/${id}`);
-        if (response.status === 200) {
-          setDatas(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-  }, []);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 30,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "ACTIVE" ||
+          row.original.status === "active" ||
+          row.original.status === "Active" ? (
+            <span className="badge badges-Green fw-light">Active</span>
+          ) : row.original.status === "INACTIVE" ||
+            row.original.status === "Inactive" ||
+            row.original.status === "string" ? (
+            <span className="badge badges-orange fw-light">In Active</span>
+          ) : null,
+      },
+      {
+        accessorKey: "effectiveDate",
+        enableHiding: false,
+        header: "Effective Date",
+      },
+      {
+        accessorKey: "name",
+        enableHiding: false,
+        header: "Title",
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  const handleMenuClose = () => setMenuAnchor(null);
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+    },
+  });
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const getData = async () => {
     try {
       const response = await api.get(`/getCurriculumOutLetByCourseId/${id}`);
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      if (response.status === 200) {
+        setDatas(response.data);
+      }
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data ", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
   };
 
   useEffect(() => {
-    if (tableRef.current) {
-      const rows = tableRef.current.querySelectorAll("tr.odd");
-      rows.forEach((row) => {
-        row.classList.remove("odd");
-      });
-      const thElements = tableRef.current.querySelectorAll("tr th.sorting_1");
-      thElements.forEach((th) => th.classList.remove("sorting_1"));
-    }
-  }, [datas]);
+    getData();
+  }, []);
 
   return (
     <div className="container-fluid">
@@ -145,7 +179,7 @@ function CurriculumOutlet() {
             </span>
           </div>
           <span>
-            <CurriculumOutletAdd onSuccess={refreshData} />
+            <CurriculumOutletAdd onSuccess={getData} />
           </span>
         </div>
         {loading ? (
@@ -159,142 +193,54 @@ function CurriculumOutlet() {
             </div>
           </div>
         ) : (
-          <div className="table-responsive py-2">
-            <table style={{ width: "100%" }} ref={tableRef} className="display">
-              <thead>
-                <tr className="text-center" style={{ background: "#f5f7f9" }}>
-                  <th scope="col">S No</th>
-                  <th scope="col">Effective Date</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Status</th>
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      CreatedAt
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedBy
-                    </th>
-                  )}
-                  {extraData && (
-                    <th
-                      scope="col"
-                      class="sorting"
-                      tabindex="0"
-                      aria-controls="DataTables_Table_0"
-                      rowspan="1"
-                      colspan="1"
-                      aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                      style={{ width: "92px" }}
-                    >
-                      UpdatedAt
-                    </th>
-                  )}
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.isArray(datas) &&
-                  datas?.map((data, index) => (
-                    <tr key={index}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{data.effectiveDate}</td>
-                      <td>{data.name}</td>
-                      <td>
-                        {data.status === "ACTIVE" ? (
-                          <span className="badge badges-Green">Active</span>
-                        ) : (
-                          <span className="badge badges-Red">Inactive</span>
-                        )}
-                      </td>
-                      {extraData && <td>{data.createdBy}</td>}
-                      {extraData && <td>{extractDate(data.createdAt)}</td>}
-                      {extraData && <td>{data.updatedBy}</td>}
-                      {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                      <td className="d-flex">
-                        {/* {storedScreens?.courseRead && (
-                    <CurriculumOutletView
-                      id={data.id}
-                      onSuccess={refreshData}
-                    />
-                  )} */}
-                        {storedScreens?.courseUpdate && (
-                          <CurriculumOutletEdit
-                            id={data.id}
-                            courseId={id}
-                            onSuccess={refreshData}
-                          />
-                        )}
-                        {/* {storedScreens?.curriculumIndex && (
-                                        <OverlayTrigger
-                                            placement="top"
-                                            overlay={<Tooltip id="tooltip-top">Curriculum</Tooltip>}
-                                        >
-                                            
-                                        </OverlayTrigger>
-                                    )} */}
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip id="tooltip-top">
-                              Course Curriculum
-                            </Tooltip>
-                          }
-                        >
-                          <Link
-                            to={`/course/curriculumoutlet/curriculum/${data.id}?courseId=${id}`}
-                          >
-                            <button className="btn btn-sm">
-                              <FaFileInvoice />
-                            </button>
-                          </Link>
-                        </OverlayTrigger>
-
-                        {storedScreens?.courseDelete && (
-                          <Delete
-                            onSuccess={refreshData}
-                            path={`/deleteCurriculumOutLet/${data.id}`}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+              />
+            </ThemeProvider>
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem
+                onClick={() =>
+                  navigate(
+                    `/course/curriculumoutlet/curriculum/${selectedId}?courseId=${selectedId}`
+                  )
+                }
+              >
+                Course Curriculum
+              </MenuItem>
+              <CurriculumOutletEdit
+                onSuccess={getData}
+                id={selectedId}
+                handleMenuClose={handleMenuClose}
+              />
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteCourse/${selectedId}`}
+                  onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
     </div>

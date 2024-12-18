@@ -329,7 +329,7 @@ const Staff = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteStaff/${selectedId}`}
+                  path={`/deleteUser/${selectedId}`}
                   onDeleteSuccess={fetchData}
                 />
               </MenuItem>
