@@ -95,7 +95,7 @@ const Student = () => {
       {
         accessorKey: "parentPrimaryMobileNumber",
         header: "Parent Mobile",
-        enableHiding: false
+        enableHiding: false,
       },
       {
         accessorKey: "gender",
@@ -106,12 +106,14 @@ const Student = () => {
       {
         accessorKey: "allowMagazine",
         header: "Allow Magazine",
+        enableHiding: false,
         size: 30,
         Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
       },
       {
         accessorKey: "allowSocialMedia",
         header: "Allow Social Media",
+        enableHiding: false,
         size: 30,
         Cell: ({ cell }) => (cell.getValue() ? "Yes" : "No"),
       },
@@ -190,7 +192,7 @@ const Student = () => {
       setLoading(true);
       // Dynamically construct query parameters based on filters
       const queryParams = new URLSearchParams();
-  
+
       // // Always include the centerId filter by default
       // if (filters.centerId) {
       //   queryParams.append("centerId", filters.centerId);
@@ -206,18 +208,18 @@ const Student = () => {
           queryParams.append("centerId", centerIDLocal);
         }
       }
-  
+
       // Loop through other filters and add key-value pairs if they have a value
       for (let key in filters) {
         if (filters[key] && key !== "centerId") {
           queryParams.append(key, filters[key]);
         }
       }
-  
+
       const response = await api.get(
         `/getStudentWithCustomInfo?${queryParams.toString()}`
       );
-  
+
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -227,7 +229,6 @@ const Student = () => {
     }
   };
 
-  
   const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -494,10 +495,10 @@ const Student = () => {
                     remark: false,
                   },
                 }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/student/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -508,9 +509,6 @@ const Student = () => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              <MenuItem onClick={() => navigate(`/student/view/${selectedId}`)}>
-                View
-              </MenuItem>
               <MenuItem onClick={() => navigate(`/student/edit/${selectedId}`)}>
                 Edit
               </MenuItem>

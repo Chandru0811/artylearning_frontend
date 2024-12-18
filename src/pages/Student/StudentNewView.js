@@ -438,7 +438,7 @@ function StudentNewView() {
                   ))}
               </div>
             </div> */}
-            <div className="card">
+            <div className="card mb-3">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
                   Account Activate/Deactivate
@@ -473,53 +473,6 @@ function StudentNewView() {
                     <span>-</span>
                   </li>
                 </ul>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-3 col-12 mb-3">
-            <div className="card mb-3">
-              <div className="withBorder">
-                <p className="fw-medium ms-3 my-2">
-                  <FaUsers size={20} />
-                  &nbsp;&nbsp;Family
-                </p>
-                <p className="stdSettings mb-0 me-2">
-                  <FaPlus /> Parents/Guardians Info
-                </p>
-                <p className="stdSettings mt-1 mb-0 me-2">
-                  <FaPlus /> Change Main Contact
-                </p>
-                <p className="stdSettings my-1 me-2">
-                  <FaPlus /> Student Relation
-                </p>
-              </div>
-              <div style={{ padding: "10px" }}>
-                <hr className="mt-0 mb-2" />
-                {data.studentParentsDetails &&
-                  data.studentParentsDetails.length > 0 &&
-                  data.studentParentsDetails.map((parent) => (
-                    <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                      <p className="m-0 " style={{ color: "#287f71" }}>
-                        {parent.primaryContact === true
-                          ? "Primary Contact"
-                          : ""}
-                      </p>
-                      <li className="stdList">
-                        <p className="m-0">
-                          <b>Name</b>
-                          <span>{parent.parentName || "--"}</span>
-                        </p>
-                        <p className="m-0">
-                          <b>Mobile No</b>
-                          <span>{parent.mobileNumber || "--"}</span>
-                        </p>
-                        <p className="m-0">
-                          <b>Email</b>
-                          <span>{parent.email || "--"}</span>
-                        </p>
-                      </li>
-                    </ul>
-                  ))}
               </div>
             </div>
             <div className="card mb-3">
@@ -570,6 +523,54 @@ function StudentNewView() {
                 </ul>
               </div>
             </div>
+          </div>
+          <div className="col-md-3 col-12 mb-3">
+            <div className="card mb-3">
+              <div className="withBorder">
+                <p className="fw-medium ms-3 my-2">
+                  <FaUsers size={20} />
+                  &nbsp;&nbsp;Family
+                </p>
+                {/* <p className="stdSettings mb-0 me-2">
+                  <FaPlus /> Parents/Guardians Info
+                </p>
+                <p className="stdSettings mt-1 mb-0 me-2">
+                  <FaPlus /> Change Main Contact
+                </p>
+                <p className="stdSettings my-1 me-2">
+                  <FaPlus /> Student Relation
+                </p> */}
+              </div>
+              <div style={{ padding: "10px" }}>
+                <hr className="mt-0 mb-2" />
+                {data.studentParentsDetails &&
+                  data.studentParentsDetails.length > 0 &&
+                  data.studentParentsDetails.map((parent) => (
+                    <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                      <p className="m-0 " style={{ color: "#287f71" }}>
+                        {parent.primaryContact === true
+                          ? "Primary Contact"
+                          : ""}
+                      </p>
+                      <li className="stdList">
+                        <p className="m-0">
+                          <b>Name</b>
+                          <span>{parent.parentName || "--"}</span>
+                        </p>
+                        <p className="m-0">
+                          <b>Mobile No</b>
+                          <span>{parent.mobileNumber || "--"}</span>
+                        </p>
+                        <p className="m-0">
+                          <b>Email</b>
+                          <span>{parent.email || "--"}</span>
+                        </p>
+                      </li>
+                    </ul>
+                  ))}
+              </div>
+            </div>
+
             <div className="card">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
@@ -743,7 +744,7 @@ function StudentNewView() {
               </button>
             </li>
             <li className="nav-item">
-              <button
+              {/* <button
                 className={`nav-link ${activeTab === "tab2" ? "active" : ""}`}
                 onClick={() => handleMainTabClick("tab2")}
                 style={{
@@ -753,7 +754,7 @@ function StudentNewView() {
                 }}
               >
                 Account Summary
-              </button>
+              </button> */}
             </li>
             <li className="nav-item">
               <button

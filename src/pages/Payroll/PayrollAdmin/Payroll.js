@@ -50,6 +50,7 @@ const Payroll = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -57,22 +58,6 @@ const Payroll = () => {
             <MoreVertIcon />
           </IconButton>
         ),
-      },
-      { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
-      {
-        accessorKey: "employeeName",
-        enableHiding: false,
-        header: "Employee Name",
-      },
-      {
-        accessorKey: "netPay",
-        enableHiding: false,
-        header: "Net Pay",
-      },
-      {
-        accessorKey: "userRole",
-        enableHiding: false,
-        header: "Role",
       },
       {
         accessorKey: "status",
@@ -101,6 +86,22 @@ const Payroll = () => {
               Rejected
             </span>
           ) : null,
+      },
+      { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
+      {
+        accessorKey: "employeeName",
+        enableHiding: false,
+        header: "Employee Name",
+      },
+      {
+        accessorKey: "netPay",
+        enableHiding: false,
+        header: "Net Pay",
+      },
+      {
+        accessorKey: "userRole",
+        enableHiding: false,
+        header: "Role",
       },
       { accessorKey: "bonus", header: "Bonus" },
       { accessorKey: "cpfContributions", header: "Cpf Contributions" },
@@ -361,12 +362,31 @@ const Payroll = () => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
+                    bonus: false,
+                    cpfContributions: false,
+                    deductionAmount: false,
+                    grossPay: false,
+                    hourlyId: false,
+                    payrollMonth: false,
+                    payrollType: false,
+                    sdl: false,
+                    shgContribution: false,
+                    freelanceCount: false,
+                    userId: false,
+                    year: false,
+                    startDate: false,
+                    endDate: false,
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () =>
+                    navigate(`/payrolladmin/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -376,11 +396,6 @@ const Payroll = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem
-                onClick={() => navigate(`/payrolladmin/view/${selectedId}`)}
-              >
-                View
-              </MenuItem>
               <MenuItem
                 onClick={() => navigate(`/payrolladmin/edit/${selectedId}`)}
               >
