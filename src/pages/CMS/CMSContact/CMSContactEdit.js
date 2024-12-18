@@ -88,7 +88,7 @@ function CMSContactEdit({ id, onSuccess }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleOpen}>
-        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+        Edit
       </button>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle className="headColor">

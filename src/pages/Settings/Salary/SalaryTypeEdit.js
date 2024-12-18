@@ -94,7 +94,7 @@ function SalaryEdit({ id, onSuccess }) {
         className="btn btn-sm btn-normal text-start"
         onClick={handleShow}
       >
-        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+        Edit
       </button>
 
       <Dialog

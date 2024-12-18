@@ -228,7 +228,7 @@ const Tax = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem>
+              <MenuItem onClick={()=>handleMenuClose()}>
                 <TaxEdit onSuccess={getData} id={selectedId} />
               </MenuItem>
               <MenuItem>

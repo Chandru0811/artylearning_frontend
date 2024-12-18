@@ -94,7 +94,7 @@ function CMSBlogEdit({ id, onSuccess }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleShow}>
-        <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+        Edit
       </button>
 
       <Dialog open={show} onClose={handleClose} fullWidth maxWidth="md">
