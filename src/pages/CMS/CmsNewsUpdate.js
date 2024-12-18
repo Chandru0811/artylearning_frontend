@@ -140,7 +140,7 @@ const CmsNewsUpdate = () => {
         </ol>
         <div className="row p-1">
           <div className="col-md-6 col-12">
-            <h4>News & Updates</h4>
+            <h4 className="headColor">News & Updates</h4>
           </div>
           <div className="col-md-6 col-12 d-flex justify-content-end">
             {storedScreens?.newsUpdatesPublish && (

@@ -79,7 +79,7 @@ function LeaveAdd({ onSuccess }) {
           &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
         </button>
       </div>
-      <Modal show={show} size="lg" onHide={handleClose} centered
+      <Modal show={show} size="md" onHide={handleClose} centered
        backdrop={isModified ? "static" : true} 
        keyboard={isModified ? false : true} >
         <Modal.Header closeButton>
@@ -93,7 +93,7 @@ function LeaveAdd({ onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row">
-                <div className="col-md-6 col-12 mb-2">
+                <div className="col-12 mb-2">
                   <label className="form-label">
                     Leave Type<span className="text-danger">*</span>
                   </label>

@@ -1,29 +1,29 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../../List/SubjectList";
 
-function CurriculumOutletEdit({ id, onSuccess, courseId }) {
-  const [show, setShow] = useState(false);
+function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
+  const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const userName = localStorage.getItem("userName");
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
-    setShow(false);
-    setSubjectData(null);
+    setOpen(false);
+    handleMenuClose();
   };
-  const handleShow = () => {
+
+  const handleOpen = () => {
     fetchData();
-    setShow(true);
-    setIsModified(false);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -54,7 +54,6 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
       values.courseId = courseId;
       try {
@@ -107,128 +106,122 @@ function CurriculumOutletEdit({ id, onSuccess, courseId }) {
     };
 
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
-      </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <span
+        onClick={handleOpen}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+          cursor: "pointer",
+        }}
+        className="ps-2"
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">
-            Edit Curriculum Outlet
-          </Modal.Title>
-        </Modal.Header>
+        &nbsp;&nbsp;&nbsp;Edit
+      </span>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="sm"
+        disableBackdropClick={isModified}
+        disableEscapeKeyDown={isModified}
+      >
+        <DialogTitle>Edit Curriculum Outlet</DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
+              e.preventDefault();
             }
           }}
         >
-          <Modal.Body>
-            <div className="container">
-              <div className="row py-4">
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Name<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.name && formik.errors.name
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("name")}
-                  />
-                  {formik.touched.name && formik.errors.name && (
-                    <div className="invalid-feedback">{formik.errors.name}</div>
-                  )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Effective Date<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    className={`form-control  ${
-                      formik.touched.effectiveDate &&
-                      formik.errors.effectiveDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("effectiveDate")}
-                  />
-                  {formik.touched.effectiveDate &&
-                    formik.errors.effectiveDate && (
-                      <div className="invalid-feedback">
-                        {formik.errors.effectiveDate}
-                      </div>
-                    )}
-                </div>
-
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Status<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    {...formik.getFieldProps("status")}
-                    class={`form-select  ${
-                      formik.touched.status && formik.errors.status
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    aria-label="Default select example"
-                  >
-                    <option selected></option>
-                    <option value="ACTIVE">Active</option>
-                    <option value="INACTIVE">Inactive</option>
-                  </select>
-                  {formik.touched.status && formik.errors.status && (
-                    <div className="invalid-feedback">
-                      {formik.errors.status}
-                    </div>
-                  )}
-                </div>
-              </div>
+          <DialogContent>
+            <div className="form-group mb-3">
+              <label htmlFor="name">
+                Name <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                className={`form-control ${
+                  formik.touched.name && formik.errors.name ? "is-invalid" : ""
+                }`}
+                {...formik.getFieldProps("name")}
+              />
+              {formik.touched.name && formik.errors.name && (
+                <div className="invalid-feedback">{formik.errors.name}</div>
+              )}
             </div>
-            <Modal.Footer>
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
+
+            <div className="form-group mb-3">
+              <label htmlFor="effectiveDate">
+                Effective Date <span className="text-danger">*</span>
+              </label>
+              <input
+                type="date"
+                id="effectiveDate"
+                className={`form-control ${
+                  formik.touched.effectiveDate && formik.errors.effectiveDate
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("effectiveDate")}
+              />
+              {formik.touched.effectiveDate && formik.errors.effectiveDate && (
+                <div className="invalid-feedback">
+                  {formik.errors.effectiveDate}
+                </div>
+              )}
+            </div>
+
+            <div className="form-group mb-3">
+              <label htmlFor="status">
+                Status <span className="text-danger">*</span>
+              </label>
+              <select
+                id="status"
+                className={`form-control ${
+                  formik.touched.status && formik.errors.status
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("status")}
               >
-                Cancel
-              </Button>
-              <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
+                <option value="">Select Status</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
+              {formik.touched.status && formik.errors.status && (
+                <div className="invalid-feedback">{formik.errors.status}</div>
+              )}
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }

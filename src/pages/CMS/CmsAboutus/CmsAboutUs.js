@@ -117,7 +117,7 @@ function CmsAboutUs() {
           </ol>
           <div className="row p-1">
             <div className="col-md-6 col-12">
-              <h4>About Us</h4>
+              <h4 className="headColor">About Us</h4>
             </div>
             <div className="col-md-6 col-12 d-flex justify-content-end">
               {storedScreens?.aboutIndex && (

@@ -85,7 +85,7 @@ function Header() {
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <div className="navWrapper">
+              <div className="navWrapper ms-5">
                 <Nav className="justify-content-center align-items-center flex-grow-1 pe-3 navMenu">
                   <Nav.Link
                     as={NavLink}
@@ -165,11 +165,11 @@ function Header() {
                   </Nav.Link>
                 </Nav>
               </div>
-              <Link to={"/login"}>
+              {/* <Link to={"/login"}>
                 <button onClick={handleClick} className="donateBtnHeader">
                   Login
                 </button>
-              </Link>
+              </Link> */}
             </Offcanvas.Body>
           </Navbar.Offcanvas>
         </Container>

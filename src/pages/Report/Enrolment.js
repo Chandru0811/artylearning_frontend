@@ -174,6 +174,26 @@ function Datatable2() {
     }
   }, [selectedType, selectedDay, selectedCenterId]);
 
+  // const options = {
+  //   chart: {
+  //     type: "bar",
+  //     height: 350,
+  //     stacked: true,
+  //     stackType: "100%",
+  //   },
+  //   xaxis: {
+  //     categories: chartData?.labels,
+  //   },
+  //   fill: {
+  //     opacity: 1,
+  //   },
+  //   legend: {
+  //     position: "right",
+  //     offsetX: 0,
+  //     offsetY: 50,
+  //   },
+  // };
+
   const options = {
     chart: {
       type: "bar",
@@ -185,7 +205,12 @@ function Datatable2() {
       categories: chartData?.labels,
     },
     fill: {
-      opacity: 1,
+      type: "gradient", // Set the fill type to gradient
+      gradient: {
+        type: "vertical", 
+        gradientToColors: ["#4286F5", "#EC5040"],
+        stops: [50, 50],
+      },
     },
     legend: {
       position: "right",
@@ -193,6 +218,7 @@ function Datatable2() {
       offsetY: 50,
     },
   };
+  
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">

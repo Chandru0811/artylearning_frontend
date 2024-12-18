@@ -189,10 +189,10 @@ const CMSBlog = () => {
             </span>
           </div>
         </div>
-        <div className="container cms-header shadow-sm py-2 mb-4">
+        <div className="container">
           <div className="row p-1">
             <div className="col-md-6 col-12">
-              <h4>Blogs</h4>
+              {/* <h4>Blogs</h4> */}
             </div>
             <div className="col-md-6 col-12 d-flex justify-content-end">
               {storedScreens?.testimonialCreate && (

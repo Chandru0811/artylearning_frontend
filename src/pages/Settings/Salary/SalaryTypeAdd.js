@@ -80,7 +80,7 @@ function SalaryTypeAdd({ onSuccess }) {
       </div>
       <Modal
         show={show}
-        size="lg"
+        size="md"
         onHide={handleClose}
         centered
         backdrop={isModified ? "static" : true}
@@ -100,7 +100,7 @@ function SalaryTypeAdd({ onSuccess }) {
           <Modal.Body>
             <div className="container">
               <div className="row">
-                <div className="col-md-6 col-12 mb-2">
+                <div className="col-12 mb-2">
                   <label className="form-label">
                     Salary Type<span className="text-danger">*</span>
                   </label>

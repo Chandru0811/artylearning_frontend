@@ -46,6 +46,7 @@ const Staff = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -104,7 +105,7 @@ const Staff = () => {
 
         header: "User Unique Id",
       },
-      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+      { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
         header: "Created At",
@@ -293,23 +294,27 @@ const Staff = () => {
                     gender: true,
                     role: true,
                     contactNumber: true,
-                    citizenship: true,
-                    centerId: true,
-                    dateOfBirth: true,
-                    idNo: true,
-                    idType: true,
-                    idTypeId: true,
-                    userUniqueId: true,
-                    createdBy: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    updatedBy: true,
+                    citizenship: false,
+                    centerId: false,
+                    dateOfBirth: false,
+                    idNo: false,
+                    idType: false,
+                    idTypeId: false,
+                    userUniqueId: false,
+                    createdBy: false,
+                    createdAt: false,
+                    updatedAt: false,
+                    updatedBy: false,
                   },
                   columnFilters: [
                     { id: "teacherId", value: filters.staffId },
                     { id: "teacherName", value: filters.staffName },
                   ],
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/staff/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -319,9 +324,6 @@ const Staff = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/staff/view/${selectedId}`)}>
-                View
-              </MenuItem>
               <MenuItem onClick={() => navigate(`/staff/edit/${selectedId}`)}>
                 Edit
               </MenuItem>

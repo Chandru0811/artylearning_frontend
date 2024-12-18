@@ -37,7 +37,7 @@ function Calendar() {
       title: `${item.teacher} @ ${item.centerName}`,
       start: item.startDate,
       end: item.endDate,
-      className: "custom-event", // Custom class for styling events
+      // className: "custom-event",
       extendedProps: {
         id: item.id,
         teacherName: item.teacherName,
@@ -172,7 +172,7 @@ function Calendar() {
 
   return (
     <div className="container card my-2 py-2">
-      <div className="d-flex gap-2 align-items-center pb-3">
+      <div className="d-flex justify-content-between align-items-center pb-3">
         <div className="form-group mb-0 ms-2 mb-1">
           <select
             className="form-select form-select-sm center_list"
@@ -230,7 +230,7 @@ function Calendar() {
           <input
             type="date"
             className="form-control form-control-sm center_list"
-            style={{ width: "160px" }}
+            style={{ width: "140px" }}
             name="date"
             value={filters.date}
             onChange={handleFilterChange}
@@ -316,7 +316,7 @@ function Calendar() {
                 const { teacherName, centerName, availableSlotCount } =
                   info.event.extendedProps;
                 return (
-                  <div className="p-2">
+                  <div className="p-2 border-bottom">
                     <div>👨‍🏫 Teacher: {teacherName}</div>
                     <div>🏢 Center: {centerName}</div>
                     <div>🕒 Available Slots: {availableSlotCount}</div>

@@ -1,9 +1,16 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
@@ -19,13 +26,11 @@ const validationSchema = Yup.object({
 });
 
 function CourseFeesEdit({ id, onSuccess }) {
-  console.log("object", id);
-  const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
   const userName = localStorage.getItem("userName");
-  const [isModified, setIsModified] = useState(false);
 
   const fetchPackageData = async () => {
     try {
@@ -46,16 +51,14 @@ function CourseFeesEdit({ id, onSuccess }) {
   };
 
   const handleClose = () => {
-    setShow(false);
-    // formik.resetForm();
+    setOpen(false);
     setPackageData(null);
   };
 
   const handleShow = () => {
     fetchPackageData();
     fetchTaxData();
-    setShow(true);
-    setIsModified(false);
+    setOpen(true);
   };
 
   const formik = useFormik({
@@ -69,11 +72,9 @@ function CourseFeesEdit({ id, onSuccess }) {
       status: "",
       updatedBy: userName,
     },
-    validationSchema: validationSchema, // Assign the validation schema
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
-
       try {
         const response = await api.put(`/updateCourseFees/${id}`, values, {
           headers: {
@@ -94,19 +95,6 @@ function CourseFeesEdit({ id, onSuccess }) {
       }
     },
     enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: true,
-    validate: (values) => {
-      if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
-      ) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
-    },
   });
 
   useEffect(() => {
@@ -120,212 +108,167 @@ function CourseFeesEdit({ id, onSuccess }) {
     };
 
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    fetchTaxData();
-    fetchPackageData();
-  }, [show]);
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
-      </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <span
+        onClick={handleShow}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+          cursor: "pointer",
+        }}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Course Fees</Modal.Title>
-        </Modal.Header>
-        <form
-          onSubmit={formik.handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
-          }}
-        >
-          <Modal.Body>
+        &nbsp;&nbsp;&nbsp;Edit
+      </span>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
+        <DialogTitle>Edit Course Fees</DialogTitle>
+        <form onSubmit={formik.handleSubmit}>
+          <DialogContent>
             <div className="container">
-              <div className="row py-4">
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Effective Date<span className="text-danger">*</span>
-                  </label>
-                  <input
+              <div className="row">
+                <div className="col-md-6 col-12 mb-3">
+                  <TextField
+                    label="Effective Date"
                     type="date"
-                    className={`form-control  ${
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    {...formik.getFieldProps("effectiveDate")}
+                    error={
+                      formik.touched.effectiveDate &&
+                      Boolean(formik.errors.effectiveDate)
+                    }
+                    helperText={
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("effectiveDate")}
+                    }
                   />
-                  {formik.touched.effectiveDate &&
-                    formik.errors.effectiveDate && (
-                      <div className="invalid-feedback">
-                        {formik.errors.effectiveDate}
-                      </div>
-                    )}
-                </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Package<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    {...formik.getFieldProps("packageId")}
-                    class={`form-select  ${
-                      formik.touched.packageId && formik.errors.packageId
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    id="packageId"
-                    name="packageId"
-                  >
-                    <option value="" disabled selected>
-                      Select Package
-                    </option>
-                    {packageData &&
-                      packageData.map((packages) => (
-                        <option key={packages.id} value={packages.id}>
-                          {packages.packageNames}
-                        </option>
-                      ))}
-                  </select>
-                  {formik.touched.packageId && formik.errors.packageId && (
-                    <div className="invalid-feedback">
-                      {formik.errors.packageId}
-                    </div>
-                  )}
                 </div>
 
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Weekday Fee<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.weekdayFee && formik.errors.weekdayFee
-                        ? "is-invalid"
-                        : ""
-                    }`}
+                <div className="col-md-6 col-12 mb-3">
+                  <FormControl fullWidth>
+                    <InputLabel>Package</InputLabel>
+                    <Select
+                      {...formik.getFieldProps("packageId")}
+                      error={
+                        formik.touched.packageId &&
+                        Boolean(formik.errors.packageId)
+                      }
+                    >
+                      <MenuItem value="">
+                        <em>Select Package</em>
+                      </MenuItem>
+                      {packageData &&
+                        packageData.map((packages) => (
+                          <MenuItem key={packages.id} value={packages.id}>
+                            {packages.packageNames}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                    {formik.touched.packageId && formik.errors.packageId && (
+                      <div style={{ color: "red", fontSize: "0.8rem" }}>
+                        {formik.errors.packageId}
+                      </div>
+                    )}
+                  </FormControl>
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <TextField
+                    label="Weekday Fee"
+                    fullWidth
                     {...formik.getFieldProps("weekdayFee")}
+                    error={
+                      formik.touched.weekdayFee &&
+                      Boolean(formik.errors.weekdayFee)
+                    }
+                    helperText={
+                      formik.touched.weekdayFee && formik.errors.weekdayFee
+                    }
                   />
-                  {formik.touched.weekdayFee && formik.errors.weekdayFee && (
-                    <div className="invalid-feedback">
-                      {formik.errors.weekdayFee}
-                    </div>
-                  )}
                 </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    WeekEnd Fee<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className={`form-control  ${
-                      formik.touched.weekendFee && formik.errors.weekendFee
-                        ? "is-invalid"
-                        : ""
-                    }`}
+
+                <div className="col-md-6 col-12 mb-3">
+                  <TextField
+                    label="Weekend Fee"
+                    fullWidth
                     {...formik.getFieldProps("weekendFee")}
+                    error={
+                      formik.touched.weekendFee &&
+                      Boolean(formik.errors.weekendFee)
+                    }
+                    helperText={
+                      formik.touched.weekendFee && formik.errors.weekendFee
+                    }
                   />
-                  {formik.touched.weekendFee && formik.errors.weekendFee && (
-                    <div className="invalid-feedback">
-                      {formik.errors.weekendFee}
-                    </div>
-                  )}
                 </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Tax Type<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className={`form-select  ${
-                      formik.touched.taxType && formik.errors.taxType
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("taxType")}
-                    style={{ width: "100%" }}
-                  >
-                    <option value=""></option>
-                    {taxData &&
-                      taxData.map((tax) => (
-                        <option key={tax.id} value={tax.id}>
-                          {tax.taxType}
-                        </option>
-                      ))}
-                  </select>
-                  {formik.touched.taxType && formik.errors.taxType && (
-                    <div className="invalid-feedback">
-                      {formik.errors.taxType}
-                    </div>
-                  )}
+
+                <div className="col-md-6 col-12 mb-3">
+                  <FormControl fullWidth>
+                    <InputLabel>Tax Type</InputLabel>
+                    <Select
+                      {...formik.getFieldProps("taxType")}
+                      error={
+                        formik.touched.taxType && Boolean(formik.errors.taxType)
+                      }
+                    >
+                      <MenuItem value="">
+                        <em>Select Tax Type</em>
+                      </MenuItem>
+                      {taxData &&
+                        taxData.map((tax) => (
+                          <MenuItem key={tax.id} value={tax.id}>
+                            {tax.taxType}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                    {formik.touched.taxType && formik.errors.taxType && (
+                      <div style={{ color: "red", fontSize: "0.8rem" }}>
+                        {formik.errors.taxType}
+                      </div>
+                    )}
+                  </FormControl>
                 </div>
-                <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Status<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className={`form-select  ${
-                      formik.touched.status && formik.errors.status
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    {...formik.getFieldProps("status")}
-                    style={{ width: "100%" }}
-                  >
-                    <option value=""></option>
-                    <option value="ACTIVE">Active</option>
-                    <option value="INACTIVE">Inactive</option>
-                  </select>
-                  {formik.touched.status && formik.errors.status && (
-                    <div className="invalid-feedback">
-                      {formik.errors.status}
-                    </div>
-                  )}
+
+                <div className="col-md-6 col-12 mb-3">
+                  <FormControl fullWidth>
+                    <InputLabel>Status</InputLabel>
+                    <Select
+                      {...formik.getFieldProps("status")}
+                      error={
+                        formik.touched.status && Boolean(formik.errors.status)
+                      }
+                    >
+                      <MenuItem value="">
+                        <em>Select Status</em>
+                      </MenuItem>
+                      <MenuItem value="ACTIVE">Active</MenuItem>
+                      <MenuItem value="INACTIVE">Inactive</MenuItem>
+                    </Select>
+                    {formik.touched.status && formik.errors.status && (
+                      <div style={{ color: "red", fontSize: "0.8rem" }}>
+                        {formik.errors.status}
+                      </div>
+                    )}
+                  </FormControl>
                 </div>
               </div>
             </div>
-            <Modal.Footer>
-              <Button
-                type="button"
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Submit
-              </Button>
-              {/* <Button variant="danger" type="submit">
-                Submit
-              </Button> */}
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-button btn-sm">
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }
