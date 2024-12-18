@@ -16,8 +16,22 @@ const validationSchema = Yup.object({
   courseCode: Yup.string().required("*Course Code is required"),
   subjectId: Yup.string().required("*Select the Subject"),
   levelId: Yup.string().required("*Select the Level"),
-  minClassSize: Yup.number().typeError("*Must be a Number"),
-  maxClassSize: Yup.number().typeError("*Must be a Number"),
+  minClassSize: Yup.number()
+    .typeError("*Must be a Number")
+    .min(1, "*Must be greater than 0")
+    .required("*Minimum Class Size is required"),
+  maxClassSize: Yup.number()
+    .typeError("*Must be a Number")
+    .min(1, "*Must be greater than 0")
+    .test(
+      "is-greater",
+      "*Maximum Class Size must be greater than Minimum Class Size",
+      function (value) {
+        const { minClassSize } = this.parent;
+        return value >= minClassSize;
+      }
+    )
+    .required("*Maximum Class Size is required"),
   courseType: Yup.string().required("*Select the Course Type"),
   durationInHrs: Yup.string().required("*Select the Duration In Hrs"),
   durationInMins: Yup.string().required("*Select the Duration In Mins"),
@@ -255,8 +269,8 @@ function CourseAdd({ onSuccess }) {
                 )}
               </div>
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Color Code</lable>
-                <div className="input-group mb-3">
+                <lable className="form-label">Color Code</lable>
+                <div className="input-group mt-2 mb-3">
                   <div className="input-group-text inputGroup">
                     <input
                       type="color"
@@ -359,7 +373,7 @@ function CourseAdd({ onSuccess }) {
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
-                  Course Code<span className="text-danger">*</span>
+                  Course Code <span className="text-danger">*</span>
                 </lable>
                 <div className="input-group mb-3">
                   <input
@@ -382,7 +396,9 @@ function CourseAdd({ onSuccess }) {
 
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Max Class Size</lable>
+                <lable className="form-lable">
+                  Max Class Size <span className="text-danger">*</span>
+                </lable>
                 <input
                   type="text"
                   className={`form-control  ${
@@ -421,7 +437,9 @@ function CourseAdd({ onSuccess }) {
             </div>
             <div className="row mt-3">
               <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">Min Class Size</lable>
+                <lable className="form-lable">
+                  Min Class Size <span className="text-danger">*</span>
+                </lable>
                 <input
                   type="text"
                   className={`form-control  ${
@@ -485,17 +503,17 @@ function CourseAdd({ onSuccess }) {
                     className="form-select iconInput "
                     aria-label="Default select example"
                   >
-                  <option></option>
-                  <option value="01">01</option>
-                  <option value="02">02</option>
-                  <option value="03">03</option>
-                  <option value="04">04</option>
-                  <option value="05">05</option>
-                  <option value="06">06</option>
-                  <option value="07">07</option>
-                  <option value="08">08</option>
-                  <option value="09">09</option>
-                  <option value="10">10</option>
+                    <option></option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
                   </select>
                 </div>
                 {formik.errors.durationInHrs &&

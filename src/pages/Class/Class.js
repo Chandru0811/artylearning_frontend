@@ -56,6 +56,7 @@ const Class = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -179,17 +180,14 @@ const Class = () => {
       classType: "",
     });
     getClassData();
-    // $(tableRef.current).DataTable().search("").draw();
   };
 
   useEffect(() => {
     fetchData(); // Fetch the center manager data as well
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     getClassData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const fetchListData = async (centerId) => {
@@ -259,7 +257,7 @@ const Class = () => {
                 onChange={handleFilterChange}
                 value={filters.centerId}
               >
-                <option value="">Select Center</option>
+                <option value="">All Center</option>
                 {centerData?.map((center) => (
                   <option key={center.id} value={center.id} selected>
                     {center.centerNames}
@@ -392,10 +390,10 @@ const Class = () => {
                   },
                 }}
 
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/class/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 
@@ -405,9 +403,9 @@ const Class = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/class/view/${selectedId}`)}>
+              {/* <MenuItem onClick={() => navigate(`/class/view/${selectedId}`)}>
                 View
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={() => navigate(`/class/edit/${selectedId}`)}>
                 Edit
               </MenuItem>
@@ -415,6 +413,7 @@ const Class = () => {
                 <GlobalDelete
                   path={`/deleteCourseClassListing/${selectedId}`}
                   onDeleteSuccess={getClassData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

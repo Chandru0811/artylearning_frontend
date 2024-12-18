@@ -952,18 +952,21 @@ input.searchInputG:hover {
   box-shadow: none;
 }
 
-.custom-event {
-  background-color: #eb862a;
-  color: white;
-  padding: 5px;
-  border-radius: 10px;
-  margin: 5px 2px;
+.fc-theme-standard .fc-popover-header{
+  background-color: #f3fdff !important;
+  color: #757575 !important;
 }
 
 .fc-theme-standard .fc-popover {
   background: var(--fc-page-bg-color);
   border: 1px solid var(--fc-border-color);
   z-index: 10 !important;
+  border-radius: 7px;
+}
+
+.fc-event.fc-event-draggable, .fc-event[href]{
+  background-color: white;
+  color: #676666 !important;
 }
 
 .fc th {
@@ -1088,4 +1091,7 @@ table.dataTable.display > tbody > tr > th {
   font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' !important;
   border-top: 1px solid#b5b5b5 !important;
   border-bottom: 1px solid#b5b5b5 !important;
+}
+.css-11yrv3u-MuiTableRow-root:hover td:after{
+  background-color: #f7f7f7 !important;
 }

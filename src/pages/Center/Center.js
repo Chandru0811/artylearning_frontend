@@ -355,19 +355,16 @@ const Center = () => {
             >
               
               <MenuItem >
-                <AddRegister id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
+                <AddRegister id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem >
-                <AddClass id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
+                <AddClass id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem >
-                <AddPackage id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
+                <AddPackage id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem >
-                <AddBreak id={selectedId} onSuccess={()=>{fetchData();handleMenuClose();}}/>
-              </MenuItem>
-              <MenuItem onClick={() => navigate(`/center/view/${selectedId}`)}>
-                View
+                <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)}>
                 Edit
@@ -375,7 +372,8 @@ const Center = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteCenter/${selectedId}`}
-                  onDeleteSuccess={()=>{fetchData();handleMenuClose();}}
+                  onDeleteSuccess={fetchData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

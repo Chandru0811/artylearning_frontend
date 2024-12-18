@@ -47,6 +47,7 @@ const Level = () => {
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {
+              e.stopPropagation();
               setMenuAnchor(e.currentTarget);
               setSelectedId(cell.getValue());
             }}
@@ -279,6 +280,10 @@ const Level = () => {
                     updatedAt: false,
                   },
                 }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () => navigate(`/level/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
               />
             </ThemeProvider>
 
@@ -292,12 +297,13 @@ const Level = () => {
                 View
               </MenuItem> */}
               <MenuItem>
-                <LevelEdit onSuccess={fetchData} id={selectedId} />
+                <LevelEdit onSuccess={fetchData} id={selectedId}  handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteCourseSubject/${selectedId}`}
+                  path={`/deleteCourseLevel/${selectedId}`}
                   onDeleteSuccess={fetchData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

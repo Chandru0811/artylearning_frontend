@@ -1,27 +1,40 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useEffect, useMemo, useState } from "react";
 import CurriculumAdd from "./CurriculumAdd";
 import CurriculumEdit from "./CurriculumEdit";
 import Delete from "../../components/common/Delete";
 import api from "../../config/URL";
-import { useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import fetchAllCoursesWithIds from "../List/CourseList";
 import { toast } from "react-toastify";
 import { MdViewColumn } from "react-icons/md";
 
+import { MaterialReactTable } from "material-react-table";
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
+import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Curriculum = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const courseId = searchParams.get("courseId");
-  const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [courseData, setCourseData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [extraData, setExtraData] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -32,248 +45,284 @@ const Curriculum = () => {
     }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(
-          `/getCourseCurriculumCodeCurriculumOutLetId/${id}`
-        );
-        if (response.status === 200) {
-          setDatas(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching data ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-    fetchData();
-  }, [id]);
-
-  useEffect(() => {
-    const table = $(tableRef.current).DataTable();
-
-    return () => {
-      table.destroy();
-    };
-  }, [loading]);
-
- 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
-
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [
-        { orderable: false, targets: -1 }
-      ],
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
+  const getData = async () => {
     try {
       const response = await api.get(
         `/getCourseCurriculumCodeCurriculumOutLetId/${id}`
       );
-      setDatas(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
+      if (response.status === 200) {
+        setDatas(response.data);
+      }
     } catch (error) {
-      console.error("Error refreshing data:", error);
+      console.error("Error fetching data ", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+  useEffect(() => {
+    getData();
+    fetchData();
+  }, [id]);
 
-  const handleDataShow = () => {
-    if (!loading) {
-      setExtraData(!extraData);
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  };
-  const extractDate = (dateString) => {
-    if (!dateString) return ""; // Handle null or undefined date strings
-    return dateString.substring(0, 10); // Extracts the date part in "YYYY-MM-DD"
-  };
+  // ===New Table
 
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
+        ),
+      },
+      {
+        accessorKey: "status",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.status === "ACTIVE" ||
+          row.original.status === "active" ||
+          row.original.status === "Active" ? (
+            <span
+              className="badge badges-Green fw-light"
+              // style={{ backgroundColor: "#287f71" }}
+            >
+              Active
+            </span>
+          ) : row.original.status === "In Active" ||
+            row.original.status === "Inactive" ||
+            row.original.status === "string" ? (
+            <span
+              className="badge badges-orange fw-light"
+              // style={{ backgroundColor: "#eb862a" }}
+            >
+              In Active
+            </span>
+          ) : null,
+      },
+      { accessorKey: "lessonNo", enableHiding: false, header: "Lesson No" },
+      {
+        accessorKey: "curriculumCode",
+        enableHiding: false,
+        header: "Curriculum Code",
+      },
+      {
+        accessorKey: "curriculumNo",
+        header: "Curriculum Number",
+        enableHiding: false,
+        size: 50,
+      },
+      {
+        accessorKey: "description",
+        enableHiding: false,
+        header: "Description",
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const handleMenuClose = () => setMenuAnchor(null);
   return (
-    <div className="container my-4">
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+    <div className="container-fluid">
+      <ol
+        className="breadcrumb my-3 px-2"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          Course Management
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to="/course" className="custom-breadcrumb">
+            Course
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          <Link to={`course/curriculumoutlet/${id}`} className="custom-breadcrumb"> 
+          Curriculum Outlet
+          </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Curriculum
+        </li>
+      </ol>
+      <div className="card">
+        <div
+          style={{ background: "#f5f7f9" }}
+          className="d-flex justify-content-between align-items-center px-2"
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Curriculum
+              </span>
+            </span>
           </div>
+          {storedScreens?.curriculumCreate && (
+            <span>
+              <CurriculumAdd
+                onSuccess={getData}
+                curriculumOutletId={id}
+                courseId={courseId}
+              />
+            </span>
+          )}
         </div>
-      ) : (
-        <>
-          
-           {storedScreens?.curriculumCreate && (
-
-<div className="d-flex justify-content-end align-items-center">
-     <span>
-     <CurriculumAdd
-              onSuccess={refreshData}
-              curriculumOutletId={id}
-              courseId={courseId}
-            />     </span>
-     {/* } */}
-    {/* <p className="mb-4">        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-
-   {extraData?"Hide":'Show'}
-   <MdViewColumn className="fs-4 text-secondary"/>
-
- </button> </p> */}
- </div>
-     )}
-          <div className="table-responsive">
-            <table ref={tableRef} className="display">
-              <thead>
-                <tr>
-                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                    S No
-                  </th>
-                  {/* <th scope="col">Course</th> */}
-                  <th scope="col">Lesson No.</th>
-                  <th scope="col">Curriculum Code</th>
-                  <th scope="col">Curriculum Number</th>
-                  {/* <th scope="col">Description</th> */}
-                  <th scope="col">Status</th>
-                  {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="CreatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  CreatedAt
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedBy: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedBy
-                </th>
-              )}
-              {extraData && (
-                <th
-                  scope="col"
-                  class="sorting"
-                  tabindex="0"
-                  aria-controls="DataTables_Table_0"
-                  rowspan="1"
-                  colspan="1"
-                  aria-label="UpdatedAt: activate to sort column ascending: activate to sort column ascending"
-                  style={{ width: "92px" }}
-                >
-                  UpdatedAt
-                </th>
-              )}
-                  <th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.isArray(datas) && datas.map((data, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    {/* <td>
-                    {courseData &&
-                      courseData.map((course) =>
-                        parseInt(data.courseId) === course.id
-                          ? course.courseNames || "--"
-                          : ""
-                      )}
-                  </td> */}
-                    <td>{data.lessonNo}</td>
-                    <td>{data.curriculumCode}</td>
-                    <td>{data.curriculumNo}</td>
-                    {/* <td>{data.description}</td> */}
-                    <td>
-                      <td>
-                        {data.status === "ACTIVE" ? (
-                          <span className="badge badges-Green">Active</span>
-                        ) : (
-                          <span className="badge badges-Red">Inactive</span>
-                        )}
-                      </td>
-                    </td>
-                    {extraData && <td>{data.createdBy}</td>}
-                  {extraData && <td>{extractDate(data.createdAt)}</td>}
-                  {extraData && <td>{data.updatedBy}</td>}
-                  {extraData && <td>{extractDate(data.updatedAt)}</td>}
-                    <td>
-                      {storedScreens?.curriculumUpdate && (
-                        <CurriculumEdit
-                          id={data.id}
-                          curriculumOutletId={id}
-                          onSuccess={refreshData}
-                        />
-                      )}
-                      {storedScreens?.curriculumDelete && (
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteCourseCurriculumCode/${data.id}`}
-                        />
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-        </>
-      )}
+        ) : (
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdAt: false,
+                    createdBy: false,
+                    updatedAt: false,
+                    updatedBy: false,
+                  },
+                }}
+                // muiTableBodyRowProps={({ row }) => ({
+                //   onClick: () =>
+                //     navigate(`/center/view/${row.original.id}`),
+                //   style: { cursor: "pointer" },
+                // })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+              disableScrollLock
+            >
+              <MenuItem>
+                {storedScreens?.curriculumUpdate && (
+                  <CurriculumEdit
+                    id={selectedId}
+                    curriculumOutletId={id}
+                    onSuccess={getData}
+                  />
+                )}
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteCourseCurriculumCode/${selectedId}`}
+                  onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
+                />
+              </MenuItem>
+            </Menu>
+          </>
+        )}
+      </div>
     </div>
   );
 };

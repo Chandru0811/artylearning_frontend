@@ -13,12 +13,13 @@ import {
   DialogContent,
 } from "@mui/material";
 
-function AddBreak({ id, onSuccess }) {
+function AddBreak({ id, onSuccess,handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
+    handleMenuClose()
     formik.resetForm();
     setShow(false);
   };

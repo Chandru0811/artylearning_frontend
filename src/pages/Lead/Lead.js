@@ -281,6 +281,8 @@ const Lead = () => {
           <div className="d-flex justify-content-start">
             {row.original.leadStatus === "CONFIRMED" ? (
               <button
+              onClick={(e) => {
+                e.stopPropagation();}}
                 className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
                 type="button"
               >
@@ -295,7 +297,8 @@ const Lead = () => {
                 </span>
               </button>
             ) : row.original.leadStatus === "ENROLLED" ? (
-              <button
+              <button onClick={(e) => {
+                e.stopPropagation();}}
                 className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
                 type="button"
                 style={{ cursor: "default" }}
@@ -775,7 +778,6 @@ const Lead = () => {
         enableHiding: false,
       },
       { accessorKey: "parentName", enableHiding: false, header: "Parent Name" },
-
       { accessorKey: "address", header: "  Sounds of a-z" },
       { accessorKey: "invoiceNotes", header: "Invoice Notes" },
       { accessorKey: "openingDate", header: "Opening Date" },
@@ -1039,11 +1041,11 @@ const Lead = () => {
                 open={Boolean(menuAnchor)}
                 onClose={handleMenuClose}
               >
-                <MenuItem
+                {/* <MenuItem
                   onClick={() => navigate(`/lead/lead/view/${selectedId}`)}
                 >
                   View
-                </MenuItem>
+                </MenuItem> */}
                 {storedScreens?.leadListingUpdate && (
                   <MenuItem
                     onClick={() => navigate(`/lead/lead/edit/${selectedId}`)}

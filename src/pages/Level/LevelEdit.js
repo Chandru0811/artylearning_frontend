@@ -14,7 +14,7 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 
-function Edit({ id, onSuccess }) {
+function Edit({ id, onSuccess,handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
@@ -93,6 +93,7 @@ function Edit({ id, onSuccess }) {
   });
 
   const handleClose = () => {
+    handleMenuClose()
     formik.resetForm();
     setOpen(false);
     setSubjectData(null);
