@@ -1,12 +1,15 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import Button from "@mui/material/Button";
 import * as Yup from "yup";
-import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import api from "../../../config/URL";
 
 const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),
@@ -15,22 +18,22 @@ const validationSchema = Yup.object({
   status: Yup.string().required("*Status is required"),
 });
 
-function CourseFeesEdit({ id, onSuccess }) {
-  const [show, setShow] = useState(false);
+function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
+  const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const userName = localStorage.getItem("userName");
-  const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
-    setShow(false);
+    setOpen(false);
+    handleMenuClose();
   };
 
-  const handleShow = () => {
-    setShow(true);
+  const handleOpen = () => {
+    setOpen(true);
     fetchTaxData();
-    setIsModified(false);
   };
+
   const fetchTaxData = async () => {
     try {
       const response = await api.get("getAllTaxSetting");
@@ -48,9 +51,8 @@ function CourseFeesEdit({ id, onSuccess }) {
       status: "",
       updatedBy: userName,
     },
-    validationSchema: validationSchema, // Assign the validation schema
+    validationSchema: validationSchema,
     onSubmit: async (values) => {
-      // console.log(values);
       setLoadIndicator(true);
 
       try {
@@ -77,19 +79,6 @@ function CourseFeesEdit({ id, onSuccess }) {
       }
     },
     enableReinitialize: true,
-    validateOnChange: true,
-    validateOnBlur: true,
-    validate: (values) => {
-      if (
-        Object.values(values).some(
-          (value) => typeof value === "string" && value.trim() !== ""
-        )
-      ) {
-        setIsModified(true);
-      } else {
-        setIsModified(false);
-      }
-    },
   });
 
   useEffect(() => {
@@ -103,39 +92,25 @@ function CourseFeesEdit({ id, onSuccess }) {
     };
 
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    fetchTaxData();
-  }, [show]);
+  }, [id]);
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
-        <FaEdit />
-      </button>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        backdrop={isModified ? "static" : true}
-        keyboard={isModified ? false : true}
+      <span
+        onClick={handleOpen}
+        style={{
+          whiteSpace: "nowrap",
+          width: "100%",
+          cursor: "pointer",
+        }}
       >
-        <Modal.Header closeButton>
-          <Modal.Title className="headColor">Edit Course Deposit</Modal.Title>
-        </Modal.Header>
-        <form
-          onSubmit={formik.handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
-          }}
-        >
-          <Modal.Body>
+        &nbsp;&nbsp;&nbsp;Edit
+      </span>
+
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+        <DialogTitle>Edit Course Deposit</DialogTitle>
+        <form onSubmit={formik.handleSubmit}>
+          <DialogContent>
             <div className="container">
               <div className="row py-4">
                 <div className="col-md-6 col-12 mb-2">
@@ -144,7 +119,7 @@ function CourseFeesEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="date"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.effectiveDate &&
                       formik.errors.effectiveDate
                         ? "is-invalid"
@@ -165,7 +140,7 @@ function CourseFeesEdit({ id, onSuccess }) {
                   </label>
                   <input
                     type="text"
-                    className={`form-control  ${
+                    className={`form-control ${
                       formik.touched.depositFees && formik.errors.depositFees
                         ? "is-invalid"
                         : ""
@@ -183,21 +158,19 @@ function CourseFeesEdit({ id, onSuccess }) {
                     Tax Type<span className="text-danger">*</span>
                   </label>
                   <select
-                    className={`form-select  ${
+                    className={`form-control ${
                       formik.touched.taxType && formik.errors.taxType
                         ? "is-invalid"
                         : ""
                     }`}
                     {...formik.getFieldProps("taxType")}
-                    style={{ width: "100%" }}
                   >
                     <option value=""></option>
-                    {taxData &&
-                      taxData.map((tax) => (
-                        <option key={tax.id} value={tax.id}>
-                          {tax.taxType}
-                        </option>
-                      ))}
+                    {taxData.map((tax) => (
+                      <option key={tax.id} value={tax.id}>
+                        {tax.taxType}
+                      </option>
+                    ))}
                   </select>
                   {formik.touched.taxType && formik.errors.taxType && (
                     <div className="invalid-feedback">
@@ -210,13 +183,12 @@ function CourseFeesEdit({ id, onSuccess }) {
                     Status<span className="text-danger">*</span>
                   </label>
                   <select
-                    className={`form-select  ${
+                    className={`form-control ${
                       formik.touched.status && formik.errors.status
                         ? "is-invalid"
                         : ""
                     }`}
                     {...formik.getFieldProps("status")}
-                    style={{ width: "100%" }}
                   >
                     <option value=""></option>
                     <option value="ACTIVE">Active</option>
@@ -230,31 +202,20 @@ function CourseFeesEdit({ id, onSuccess }) {
                 </div>
               </div>
             </div>
-            <Modal.Footer>
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <button
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
+          </DialogContent>
+          <DialogActions>
+            <button
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-button btn-sm">
+              Update
+            </button>
+          </DialogActions>
         </form>
-      </Modal>
+      </Dialog>
     </>
   );
 }
