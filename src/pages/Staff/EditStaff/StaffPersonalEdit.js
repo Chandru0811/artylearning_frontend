@@ -20,6 +20,8 @@ const validationSchema = Yup.object().shape({
   idNo: Yup.string().required("*Id No is required"),
   nationalityId: Yup.string().required("*Nationality is required"),
   citizenship: Yup.string().required("*Citizenship is required"),
+  status: Yup.string().required("*Status is required"),
+
   // file: Yup.string().required("*Photo is required!"),
 });
 const StaffPersonalEdit = forwardRef(
@@ -47,6 +49,7 @@ const StaffPersonalEdit = forwardRef(
         countryId: formData.countryId || "",
         nationality: formData.nationality || "",
         nationalityId: formData.nationalityId || "",
+        status: formData.status || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -57,7 +60,7 @@ const StaffPersonalEdit = forwardRef(
           nationalityName = nationalityData.find(
             (prv) => prv.id === parseInt(data.nationalityId)
           );
-          data.nationality = nationalityName.citizenship
+        data.nationality = nationalityName.citizenship;
 
         try {
           const response = await api.put(
@@ -333,6 +336,29 @@ const StaffPersonalEdit = forwardRef(
                 {formik.touched.citizenship && formik.errors.citizenship && (
                   <div className="error text-danger">
                     <small>{formik.errors.citizenship}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+              <div class="form-group col-sm">
+                <label>Status</label>
+                <span className="text-danger">*</span>
+                <select
+                  type="text"
+                  class="form-select"
+                  name="status"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.status}
+                >
+                  <option value=""></option>
+                  <option value={"ACTIVE"}>Active</option>
+                  <option value={"INACTIVE"}>Inactive</option>
+                </select>
+                {formik.touched.status && formik.errors.status && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.status}</small>
                   </div>
                 )}
               </div>

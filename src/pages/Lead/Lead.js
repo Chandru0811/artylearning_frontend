@@ -42,7 +42,7 @@ const Lead = () => {
   const [activeButton, setActiveButton] = useState("All");
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
+const centerIDLocal = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);

@@ -28,7 +28,7 @@ const Course = () => {
   const [subjectData, setSubjectData] = useState(null);
   const [levelData, setLevelData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const centerLocalId = localStorage.getItem("centerId");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState([]);
   const [centerId, setCenterId] = useState("");
   const [code, setCode] = useState("");
@@ -119,21 +119,21 @@ const Course = () => {
         accessorKey: "classReplacementAllowed",
         header: "Class Replacement Allowed",
         Cell: ({ row }) =>
-          row.original.classReplacementAllowed  ? (
+          row.original.classReplacementAllowed ? (
             <span
               className=""
               // style={{ backgroundColor: "#287f71" }}
             >
               Yes
             </span>
-          ) :  (
+          ) : (
             <span
               className=""
               // style={{ backgroundColor: "#eb862a" }}
             >
-            No
+              No
             </span>
-          ) ,
+          ),
       },
       {
         accessorKey: "createdBy",
@@ -176,16 +176,23 @@ const Course = () => {
         if (filters[key] && key !== "centerId") {
           queryParams.append(key, filters[key]);
         }
-      };
+      }
       const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
       setData(response.data);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
-    }finally{
+    } finally {
       setLoading(false);
-
+      setIsClearFilterClicked(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -234,7 +241,6 @@ const Course = () => {
   };
 
   useEffect(() => {
-    fetchCenterData();
     fetchSubData();
   }, []);
 
@@ -293,7 +299,7 @@ const Course = () => {
       courseName: "",
       courseCode: "",
     });
-    setIsClearFilterClicked(true)
+    setIsClearFilterClicked(true);
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
@@ -352,7 +358,6 @@ const Course = () => {
                 name="centerId"
                 value={filters.centerId}
               >
-                <option value="">All Center</option>
                 {centerData?.map((center) => (
                   <option key={center.id} value={center.id}>
                     {center.centerNames}

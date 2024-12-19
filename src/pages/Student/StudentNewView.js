@@ -72,6 +72,7 @@ function StudentNewView() {
         setResponseMessage(imageResponse.data.message);
         setProfileImage(null);
         handleCloseModal();
+        getData()
       }
       toast.success(
         imageResponse.data.message || "Image Updated successfully!"
@@ -92,24 +93,24 @@ function StudentNewView() {
       toast.error(error);
     }
   };
+ const getData = async () => {
+   try {
+     const response = await api.get(`/getAllStudentById/${id}`);
+     setData(response.data);
+     console.log("responseData", response.data);
+     const primaryParent = response.data.studentParentsDetails.find(
+       (parent) => parent.primaryContact === true
+     );
+     const email = primaryParent ? primaryParent.email : null;
 
+     setPassword(email);
+     console.log("StudentDetails", response.data);
+   } catch (error) {
+     console.error("Error fetching data:", error);
+   }
+ };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllStudentById/${id}`);
-        setData(response.data);
-        console.log("responseData", response.data);
-        const primaryParent = response.data.studentParentsDetails.find(
-          (parent) => parent.primaryContact === true
-        );
-        const email = primaryParent ? primaryParent.email : null;
-
-        setPassword(email);
-        console.log("StudentDetails", response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+   
     getData();
     fetchData();
   }, [id]);

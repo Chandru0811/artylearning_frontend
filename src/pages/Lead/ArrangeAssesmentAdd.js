@@ -42,9 +42,10 @@ function ArrangeAssesmentAdd({
     }
   };
   useEffect(() => {
-    if (showDialog) {
+    if (showDialog && centerId) {
+        formik.setValues({...formik.values,centerId:centerId,studentName:studentNames})
+      }
       fetchCenterData();
-    }
   }, []);
   const getCurrentDate = () => {
     const date = new Date();
@@ -122,13 +123,11 @@ function ArrangeAssesmentAdd({
     },
   });
   
-  useEffect(() => {
-    // console.log("object", centerId);
-    if (centerId && showDialog) {
-      formik.setValues({...formik.values,centerId:centerId,studentName:studentNames})
-      // console.log("object", formik.values);
-    }
-  }, [showDialog, centerId]);
+  // useEffect(() => {
+  //   // console.log("object", centerId);
+   
+  // }, [showDialog, centerId]);
+  // console.log("object", formik.values);
 
   return (
     <>

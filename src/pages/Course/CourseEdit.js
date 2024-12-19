@@ -272,7 +272,7 @@ function CourseEdit() {
               </button>
             </div>
           </div>
-          <div className="container-fluid px-4">
+          <div className="container-fluid courseAdd px-4">
             <div className="row">
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">

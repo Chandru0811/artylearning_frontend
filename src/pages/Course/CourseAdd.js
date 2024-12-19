@@ -239,7 +239,7 @@ function CourseAdd({ onSuccess }) {
               </button>
             </div>
           </div>
-          <div className="container-fluid course-add px-4">
+          <div className="container-fluid courseAdd px-4">
             <div className="row">
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
@@ -285,7 +285,7 @@ function CourseAdd({ onSuccess }) {
                   </div>
                   <input
                     type="text"
-                    className={`form-control iconInput`}
+                    className={`form-control `}
                     value={formik.values.colorCode}
                     onClick={handleColorPickerClick}
                     onChange={(e) =>

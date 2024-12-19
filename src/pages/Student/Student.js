@@ -28,6 +28,7 @@ const Student = () => {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [centerId, setCenterId] = useState("");
   const centerIDLocal = localStorage.getItem("selectedCenterId");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
@@ -337,10 +338,18 @@ const Student = () => {
                 name="centerId"
                 style={{ width: "100%" }}
                 value={filters.centerId}
-                onChange={handleFilterChange}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setFilters((prevFilters) => ({
+                    ...prevFilters,
+                    centerId: value,
+                  }));
+                  setCenterId(value);
+                }}
               >
+                <option value="">All Center</option>
                 {centerData?.map((center) => (
-                  <option key={center.id} value={center.id} selected>
+                  <option key={center.id} value={center.id}>
                     {center.centerNames}
                   </option>
                 ))}

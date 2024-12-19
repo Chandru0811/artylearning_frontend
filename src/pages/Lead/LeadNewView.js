@@ -90,9 +90,9 @@ function LeadNewView() {
     : [];
 
   return (
-    <div>
+    <div className="container-fluid ">
       <ol
-        className="breadcrumb my-3"
+        className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -272,7 +272,7 @@ function LeadNewView() {
                   </li>
                   <li className="stdList">
                     <b> Mother's Monthly Income</b>
-                    <span> {data.monthlyIncomeOfMother || "--"}</span>
+                    <span> {data.monthlyIncomeOfMother?.split("_").join(" ") || "--"}</span>
                   </li>
                   <li className="stdList">
                     <b> Mother's Email Address</b>
@@ -312,7 +312,7 @@ function LeadNewView() {
                   </li>
                   <li className="stdList">
                     <b> Father's Monthly Income</b>
-                    <span> {data.monthlyIncomeOfFather || "--"}</span>
+                    <span> {data.monthlyIncomeOfFather?.split("_").join(" ") || "--"}</span>
                   </li>
                   <li className="stdList">
                     <b> Father's Email Address</b>

@@ -26,10 +26,11 @@ const validationSchema = Yup.object().shape({
   // shortIntroduction: Yup.string().required("*Short Introduction is required!"),
   gender: Yup.string().required("*Gender is required"),
   file: Yup.string().required("*Photo is required"),
-  password: Yup
-  .string()
-  .matches(/^\S*$/, "*Password must not contain spaces.")
-  .required("*Enter the valid Password"),
+  status: Yup.string().required("*Status is required"),
+
+  password: Yup.string()
+    .matches(/^\S*$/, "*Password must not contain spaces.")
+    .required("*Enter the valid Password"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "*Passwords must match")
     .required("*Confirm Password is required"),
@@ -57,6 +58,7 @@ const PersonalAdd = forwardRef(
         file: null || "",
         shortIntroduction: formData.shortIntroduction,
         gender: formData.gender,
+        status: formData.status || "",
         createdBy: userName,
       },
       validationSchema: validationSchema,
@@ -85,6 +87,7 @@ const PersonalAdd = forwardRef(
           formData.append("countryId", values.countryId);
           formData.append("nationality", nationalityName.nationality);
           formData.append("nationalityId", values.nationalityId);
+          formData.append("status", values.status);
           formData.append("file", values.file);
 
           const response = await api.post(
@@ -285,12 +288,11 @@ const PersonalAdd = forwardRef(
                       </option>
                     ))}
                 </select>
-                {formik.touched.countryId &&
-                  formik.errors.countryId && (
-                    <div className="error text-danger">
-                      <small>{formik.errors.countryId}</small>
-                    </div>
-                  )}
+                {formik.touched.countryId && formik.errors.countryId && (
+                  <div className="error text-danger">
+                    <small>{formik.errors.countryId}</small>
+                  </div>
+                )}
               </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>Nationality</label>
@@ -393,10 +395,11 @@ const PersonalAdd = forwardRef(
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter password"
-                      className={`form-control ${formik.touched.password && formik.errors.password
+                      className={`form-control ${
+                        formik.touched.password && formik.errors.password
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       style={{
                         borderRadius: "3px",
                         borderRight: "none",
@@ -431,11 +434,12 @@ const PersonalAdd = forwardRef(
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Enter confirm password"
-                      className={`form-control ${formik.touched.confirmPassword &&
-                          formik.errors.confirmPassword
+                      className={`form-control ${
+                        formik.touched.confirmPassword &&
+                        formik.errors.confirmPassword
                           ? "is-invalid"
                           : ""
-                        }`}
+                      }`}
                       style={{
                         borderRadius: "3px",
                         borderRight: "none",
@@ -509,7 +513,30 @@ const PersonalAdd = forwardRef(
                   </div>
                 ) : null}
               </div>
-              <div className="col-md-6 col-12 mb-2 mt-3">
+              <div class="col-md-6 col-12 mb-3">
+                <div class="form-group col-sm">
+                  <label>Status</label>
+                  <span className="text-danger">*</span>
+                  <select
+                    type="text"
+                    class="form-select"
+                    name="status"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.status}
+                  >
+                    <option value=""></option>
+                    <option value={"ACTIVE"}>Active</option>
+                    <option value={"INACTIVE"}>Inactive</option>
+                  </select>
+                  {formik.touched.status && formik.errors.status && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.status}</small>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-2">
                 <label>Role</label>
                 <span className="text-danger">*</span>
                 <select
