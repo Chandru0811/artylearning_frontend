@@ -145,16 +145,16 @@ const StaffingAttendance = () => {
     []
   );
 
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllUserAttendances");
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllUserAttendances");
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
     getData();
     fetchData();
   }, []);
@@ -319,7 +319,7 @@ const StaffingAttendance = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteUserAttendance/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>
