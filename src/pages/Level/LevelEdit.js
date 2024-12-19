@@ -14,13 +14,13 @@ import api from "../../config/URL";
 import { toast } from "react-toastify";
 import fetchAllSubjectsWithIds from "../List/SubjectList";
 
-function Edit({ id, onSuccess,handleMenuClose }) {
+function Edit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
   const userName = localStorage.getItem("userName");
-  
+
   const fetchData = async () => {
     try {
       const subject = await fetchAllSubjectsWithIds();
@@ -93,7 +93,7 @@ function Edit({ id, onSuccess,handleMenuClose }) {
   });
 
   const handleClose = () => {
-    handleMenuClose()
+    handleMenuClose();
     formik.resetForm();
     setOpen(false);
     setSubjectData(null);
@@ -192,6 +192,7 @@ function Edit({ id, onSuccess,handleMenuClose }) {
                     Level<span className="text-danger">*</span>
                   </label>
                   <input
+                  onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control  ${
                       formik.touched.level && formik.errors.level
@@ -211,6 +212,7 @@ function Edit({ id, onSuccess,handleMenuClose }) {
                     Level Code<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control  ${
                       formik.touched.levelCode && formik.errors.levelCode

@@ -257,7 +257,11 @@ function CurriculumAdd({ onSuccess, curriculumOutletId, courseId }) {
               >
                 Cancel
               </Button>
-              <Button variant="danger" type="submit" disabled={loadIndicator}>
+              <Button
+                type="submit"
+                className="btn btn-button btn-sm"
+                disabled={loadIndicator}
+              >
                 {loadIndicator && (
                   <span
                     className="spinner-border spinner-border-sm me-2"

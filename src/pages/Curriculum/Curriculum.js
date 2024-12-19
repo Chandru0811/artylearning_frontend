@@ -170,30 +170,29 @@ const Curriculum = () => {
           },
         },
       },
-      // Switch (Toggle button) customization
       MuiSwitch: {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0", // Track color when disabled
-              opacity: 1, // Ensures no opacity reduction
+              backgroundColor: "#f5e1d0", 
+              opacity: 1, 
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a", // Thumb (circle) color when disabled
+              color: "#eb862a", 
             },
           },
           track: {
-            backgroundColor: "#e0e0e0", // Default track color
+            backgroundColor: "#e0e0e0",
           },
           thumb: {
-            color: "#eb862a", // Default thumb color
+            color: "#eb862a",
           },
           switchBase: {
             "&.Mui-checked": {
-              color: "#eb862a", // Thumb color when checked
+              color: "#eb862a", 
             },
             "&.Mui-checked + .MuiSwitch-track": {
-              backgroundColor: "#eb862a", // Track color when checked
+              backgroundColor: "#eb862a",
             },
           },
         },
@@ -309,6 +308,7 @@ const Curriculum = () => {
                     id={selectedId}
                     curriculumOutletId={id}
                     onSuccess={getData}
+                    handleMenuClose={handleMenuClose}
                   />
                 )}
               </MenuItem>

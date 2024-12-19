@@ -96,16 +96,15 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <span
+      <span 
         onClick={handleOpen}
         style={{
           whiteSpace: "nowrap",
-          width: "100%",
-          cursor: "pointer",
+          width: "100% !important",
         }}
       >
-        &nbsp;&nbsp;&nbsp;Edit
-      </span>
+        Edit
+      </span> 
 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle>Edit Course Deposit</DialogTitle>
@@ -140,6 +139,7 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
                   </label>
                   <input
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control ${
                       formik.touched.depositFees && formik.errors.depositFees
                         ? "is-invalid"
@@ -204,7 +204,7 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <button
+            <button type="button"
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
             >

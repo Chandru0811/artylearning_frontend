@@ -93,6 +93,7 @@ function CourseEdit() {
       console.log(values);
       const updatedValues = {
         ...values,
+        updatedBy: userName,
         minClassSize: values.minClassSize === "" ? 0 : values.minClassSize,
         maxClassSize: values.maxClassSize === "" ? 0 : values.maxClassSize,
       };

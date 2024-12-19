@@ -142,12 +142,12 @@ function ArrangeAssesmentEdit({ leadId, arrangeAssesmentId, onSuccess, centerId 
                 <label htmlFor="centerId" className="form-label">
                   Centre Name
                 </label>
-                <input
+                {/* <input
                   type="hidden"
                   name="centerId"
                   value={formik.values.centerId}
                   {...formik.getFieldProps("centerId")}
-                />
+                /> */}
                 <select
                   className="form-control"
                   value={formik.values.centerId}

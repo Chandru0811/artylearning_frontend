@@ -13,13 +13,13 @@ import {
   DialogContent,
 } from "@mui/material";
 
-function AddClass({ id, onSuccess,handleMenuClose }) {
+function AddClass({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
-    handleMenuClose()
+    handleMenuClose();
     formik.resetForm();
     setShow(false);
   };
@@ -92,20 +92,15 @@ function AddClass({ id, onSuccess,handleMenuClose }) {
 
   return (
     <>
-       <p
+      <p
         className="text-start mb-0"
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >
-      Add Classroom
+        Add Classroom
       </p>
 
-      <Dialog
-        open={show}
-        onClose={handleClose} 
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -114,9 +109,9 @@ function AddClass({ id, onSuccess,handleMenuClose }) {
             }
           }}
         >
-            <DialogTitle>
-              <p className="headColor">Add Classroom</p>
-            </DialogTitle>
+          <DialogTitle>
+            <p className="headColor">Add Classroom</p>
+          </DialogTitle>
           <DialogContent>
             <div className="row">
               <div class="col-md-6 col-12 mb-2">
@@ -126,6 +121,7 @@ function AddClass({ id, onSuccess,handleMenuClose }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control   ${
                       formik.touched.classRoomName &&
                       formik.errors.classRoomName
@@ -148,6 +144,7 @@ function AddClass({ id, onSuccess,handleMenuClose }) {
                 </lable>
                 <input
                   type="text"
+                  onKeyDown={(e) => e.stopPropagation()}
                   className={`form-control   ${
                     formik.touched.classRoomCode && formik.errors.classRoomCode
                       ? "is-invalid"
@@ -194,6 +191,7 @@ function AddClass({ id, onSuccess,handleMenuClose }) {
                   Capacity<span class="text-danger">*</span>
                 </lable>
                 <input
+                  onKeyDown={(e) => e.stopPropagation()}
                   type="text"
                   pattern="^\d+$"
                   className={`form-control   ${
@@ -212,6 +210,7 @@ function AddClass({ id, onSuccess,handleMenuClose }) {
               <div className="form-floating">
                 <lable>Description</lable>
                 <textarea
+                onKeyDown={(e) => e.stopPropagation()}
                   className="form-control p-1"
                   {...formik.getFieldProps("description")}
                   placeholder=""

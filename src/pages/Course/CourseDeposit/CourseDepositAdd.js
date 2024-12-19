@@ -10,7 +10,9 @@ import { Link, useParams } from "react-router-dom";
 
 const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),
-  depositFees: Yup.string().required("*Deposit Fees Code is required"),
+  depositFees: Yup.number()
+      .typeError("*Must be a Number")
+      .required("*Deposit Fees Code is required"),
   taxType: Yup.string().required("*TaxType is required"),
   status: Yup.string().required("*Status is required"),
 });
