@@ -28,12 +28,13 @@ const Class = () => {
   });
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const centerLocalId = localStorage.getItem("selectedCenterId");
+  const centerIDLocal = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState([]);
   const [courseData, setCourseData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -159,28 +160,45 @@ const Class = () => {
 
   const getClassData = async () => {
     try {
-      const filteredFilters = Object.fromEntries(
-        Object.entries(filters).filter(([key, value]) => value !== "")
-      );
+      setLoading(true);
+      // Dynamically construct query parameters based on filters
+      const queryParams = new URLSearchParams();
+      if (!isClearFilterClicked) {
+        if (filters.centerId) {
+          queryParams.append("centerId", filters.centerId);
+        } else if (centerIDLocal && centerIDLocal !== "undefined") {
+          queryParams.append("centerId", centerIDLocal);
+        }
+      }
 
-      const queryParams = new URLSearchParams(filteredFilters).toString();
-      const response = await api.get(`/getClassWithCustomInfo?${queryParams}`);
+      // Loop through other filters and add key-value pairs if they have a value
+      for (let key in filters) {
+        if (filters[key] && key !== "centerId") {
+          queryParams.append(key, filters[key]);
+        }
+      }
+
+      const response = await api.get(
+        `/getClassWithCustomInfo?${queryParams.toString()}`
+      );
       setDatas(response.data);
-      setLoading(false);
     } catch (error) {
       toast.error("Error Fetching Data : ", error);
+    } finally {
+      setLoading(false);
+      setIsClearFilterClicked(false);
     }
   };
 
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      if (centerLocalId !== null && centerLocalId !== "undefined") {
+      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
         setFilters((prevFilters) => ({
           ...prevFilters,
-          centerId: centerLocalId,
+          centerId: centerIDLocal,
         }));
-        fetchListData(centerLocalId);
+        fetchListData(centerIDLocal);
       } else if (centerData !== null && centerData.length > 0) {
         setFilters((prevFilters) => ({
           ...prevFilters,
@@ -208,12 +226,15 @@ const Class = () => {
       classType: "",
     });
     getClassData();
+    setIsClearFilterClicked(true);
   };
-
-  useEffect(() => {
-    fetchData(); // Fetch the center manager data as well
+ useEffect(() => {
+    const fetchDatas = async () => {
+      await fetchData(); // Fetch center data
+    };
+    fetchDatas();
   }, []);
-
+  
   useEffect(() => {
     getClassData();
   }, [filters]);
@@ -285,7 +306,6 @@ const Class = () => {
                 onChange={handleFilterChange}
                 value={filters.centerId}
               >
-                <option value="">All Center</option>
                 {centerData?.map((center) => (
                   <option key={center.id} value={center.id} selected>
                     {center.centerNames}
@@ -417,7 +437,6 @@ const Class = () => {
                     updatedAt: false,
                   },
                 }}
-
                 muiTableBodyRowProps={({ row }) => ({
                   onClick: () => navigate(`/class/view/${row.original.id}`),
                   style: { cursor: "pointer" },

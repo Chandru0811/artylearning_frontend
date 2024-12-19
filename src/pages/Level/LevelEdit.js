@@ -56,7 +56,7 @@ function Edit({ id, onSuccess, handleMenuClose }) {
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
-
+       values.updatedBy= userName;
       try {
         const response = await api.put(`/updateCourseLevel/${id}`, values, {
           headers: {

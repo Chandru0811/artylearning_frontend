@@ -45,6 +45,7 @@ function SubjectEdit({ id, onSuccess, handleMenuClose }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      values.updatedBy= userName;
       try {
         const response = await api.put(`/updateCourseSubject/${id}`, values, {
           headers: {
