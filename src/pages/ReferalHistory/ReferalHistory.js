@@ -7,6 +7,11 @@ import { ThemeProvider, createTheme, IconButton } from "@mui/material";
 const ReferalHistory = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    referByStudent: "",
+    referByParent: "",
+    studentName: "",
+  });
 
   const columns = useMemo(
     () => [
@@ -49,10 +54,15 @@ const ReferalHistory = () => {
         size: 50,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
-     
-        { accessorKey: "attendance", enableHiding: false, header: "Attendance" ,   size: 30,},
-     
-      { accessorKey: "createdBy",header: "Created By" },
+
+      {
+        accessorKey: "attendance",
+        enableHiding: false,
+        header: "Attendance",
+        size: 30,
+      },
+
+      { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
         header: "Created At",
@@ -105,11 +115,11 @@ const ReferalHistory = () => {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0", 
-              opacity: 1, 
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
           },
           track: {
@@ -130,6 +140,19 @@ const ReferalHistory = () => {
       },
     },
   });
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  };
+
+  const clearFilter = () => {
+    setFilters({
+      referByStudent: "",
+      referByParent: "",
+      studentName: "",
+    });
+  };
 
   return (
     <div className="container-fluid px-2 my-4 center">
@@ -160,6 +183,55 @@ const ReferalHistory = () => {
             This database shows the list of{" "}
             <strong style={{ color: "#287f71" }}>Referal History</strong>
           </span>
+        </div>
+        <div className="mb-3 d-flex justify-content-between">
+          {/* <div className="individual_fliters d-lg-flex ">
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="referByStudent"
+                value={filters.referByStudent}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Refer By Student"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="referByParent"
+                value={filters.referByParent}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Refer By Parent"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <input
+                type="text"
+                name="studentName"
+                value={filters.studentName}
+                onChange={handleFilterChange}
+                className="form-control form-control-sm center_list"
+                style={{ width: "160px" }}
+                placeholder="Student Name"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group mb-2 ms-2">
+              <button
+                type="button"
+                onClick={clearFilter}
+                className="btn btn-sm btn-border"
+              >
+                Clear
+              </button>
+            </div>
+          </div> */}
         </div>
         {loading ? (
           <div className="loader-container">

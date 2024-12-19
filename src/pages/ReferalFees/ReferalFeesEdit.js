@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
-import { FaEdit } from "react-icons/fa";
 import api from "../../config/URL";
 import {
   Dialog,
@@ -13,25 +11,13 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { MdOutlineModeEdit } from "react-icons/md";
 
-function ReferalFeesEdit({ id, onSuccess }) {
-  const [show, setShow] = useState(false);
+function ReferalFeesEdit({ id, onSuccess, onOpen }) {
   const [centerData, setCenterData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
-
-  const handleClose = () => {
-    setShow(false);
-    formik.resetForm();
-  };
-
-  const handleShow = () => {
-    fetchData();
-    getData();
-    setShow(true);
-    setIsModified(false);
-  };
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const userName = localStorage.getItem("userName");
 
   const validationSchema = yup.object().shape({
     centerId: yup.string().required("*Centre is required"),
@@ -49,6 +35,7 @@ function ReferalFeesEdit({ id, onSuccess }) {
       effectiveDate: "",
       referralFee: "",
       status: "",
+      updatedBy: userName,
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -63,7 +50,7 @@ function ReferalFeesEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+          handleCloseDialog();
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -89,6 +76,18 @@ function ReferalFeesEdit({ id, onSuccess }) {
       }
     },
   });
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+    getData();
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleCloseDialog = () => {
+    if (typeof onOpen === "function") onOpen();
+    setDialogOpen(false);
+    document.body.style.overflow = "";
+  };
 
   const fetchData = async () => {
     try {
@@ -123,7 +122,7 @@ function ReferalFeesEdit({ id, onSuccess }) {
   return (
     <>
       <span
-        onClick={handleShow}
+        onClick={handleOpenDialog}
         style={{
           whiteSpace: "nowrap",
           width: "100%",
@@ -133,8 +132,8 @@ function ReferalFeesEdit({ id, onSuccess }) {
       </span>
 
       <Dialog
-        open={show}
-        onClose={handleClose}
+        open={dialogOpen}
+        onClose={handleCloseDialog}
         fullWidth
         maxWidth="md"
         disableBackdropClick={isModified}
@@ -214,6 +213,7 @@ function ReferalFeesEdit({ id, onSuccess }) {
                         : ""
                     }`}
                     {...formik.getFieldProps("referralFee")}
+                    onKeyDown={(e) => e.stopPropagation()}
                   />
                   {formik.touched.referralFee && formik.errors.referralFee && (
                     <div className="invalid-feedback">
@@ -238,7 +238,7 @@ function ReferalFeesEdit({ id, onSuccess }) {
                   >
                     <option selected></option>
                     <option value="ACTIVE">Active</option>
-                    <option value="INACTIVE">INactive</option>
+                    <option value="INACTIVE">Inactive</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="invalid-feedback">
@@ -252,7 +252,7 @@ function ReferalFeesEdit({ id, onSuccess }) {
           <DialogActions>
             <Button
               className="btn btn-sm btn-border bg-light text-dark"
-              onClick={handleClose}
+              onClick={handleCloseDialog}
             >
               Cancel
             </Button>
