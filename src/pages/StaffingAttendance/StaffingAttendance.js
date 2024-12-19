@@ -320,7 +320,7 @@ const StaffingAttendance = () => {
                 <GlobalDelete
                   path={`/deleteUserAttendance/${selectedId}`}
                   onDeleteSuccess={fetchData}
-                  handleMenuClose={handleMenuClose}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

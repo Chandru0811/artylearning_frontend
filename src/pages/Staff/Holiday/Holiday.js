@@ -262,7 +262,7 @@ const Holiday = () => {
                 <GlobalDelete
                   path={`/deleteUserHoliday/${selectedId}`}
                   onDeleteSuccess={fetchData}
-                  handleMenuClose={handleMenuClose}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

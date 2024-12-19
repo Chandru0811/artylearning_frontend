@@ -358,7 +358,7 @@ const Teacher = () => {
                 <GlobalDelete
                   path={`/deleteUser/${selectedId}`}
                   onDeleteSuccess={fetchData}
-                  handleMenuClose={handleMenuClose}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

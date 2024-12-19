@@ -432,7 +432,7 @@ const Payroll = () => {
                 <GlobalDelete
                   path={`/deleteUserPayroll/${selectedId}`}
                   onDeleteSuccess={fetchData}
-                  handleMenuClose={handleMenuClose}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

@@ -368,7 +368,7 @@ const Staff = () => {
                 <GlobalDelete
                   path={`/deleteUser/${selectedId}`}
                   onDeleteSuccess={fetchData}
-                  handleMenuClose={handleMenuClose}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

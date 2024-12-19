@@ -254,7 +254,7 @@ const Deduction = () => {
                 <GlobalDelete
                   path={`/deleteUserDeduction/${selectedId}`}
                   onDeleteSuccess={getData}
-                  handleMenuClose={handleMenuClose}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>
