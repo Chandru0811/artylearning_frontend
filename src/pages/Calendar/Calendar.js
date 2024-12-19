@@ -296,7 +296,11 @@ function Calendar() {
               eventStartEditable={false}
               selectable={true}
               selectMirror={true}
-              dayMaxEvents={true}
+              dayMaxEventRows={2} // Show only one event by default per row
+              dayMaxEvents={true} // Enable collapsing events
+              moreLinkContent={(args) => (
+                <span className="p-2" style={{backgroundColor:"#ddebec",borderRadius:"5px"}}>{args.num}</span>
+              )}
               buttonText={{
                 today: "Today",
               }}
