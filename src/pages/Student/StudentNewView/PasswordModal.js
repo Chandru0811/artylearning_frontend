@@ -12,6 +12,8 @@ function PasswordModal({password}) {
   const [show, setShow] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
 
   const handleClose = () => {
     formik.resetForm();
@@ -47,6 +49,7 @@ function PasswordModal({password}) {
       formData.append("confirmPassword", values.confirmPassword);
 
       try {
+        setLoadIndicator(true);
         const response = await api.post(`/changePasswordForAdmin`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -63,6 +66,8 @@ function PasswordModal({password}) {
       } catch (error) {
         // toast.warning("Error changing password");
         toast.error(error.data.message);
+      }finally{
+        setLoadIndicator(false);
       }
     },
   });
@@ -150,7 +155,17 @@ function PasswordModal({password}) {
             >
               Cancel
             </Button>
-            <Button type="submit" className="btn btn-button btn-sm">
+            <Button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
               Update
             </Button>
           </Modal.Footer>

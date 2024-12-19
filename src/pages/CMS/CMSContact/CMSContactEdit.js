@@ -94,9 +94,9 @@ function CMSContactEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleOpen}>
+      <p className="text-start" onClick={handleOpen}>
         Edit
-      </button>
+      </p>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle className="headColor">
           Edit Contact{" "}

@@ -104,9 +104,9 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleOpen}>
+      <p className="text-start" onClick={handleOpen}>
         Edit
-      </button>
+      </p>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle className="headColor">
           Edit Product Item{" "}

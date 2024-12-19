@@ -14,6 +14,7 @@ function ChangePassword({ onLogout }) {
   // const [oldPassword, setOldPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const email = localStorage.getItem("email")
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const togglePasswordVisibility = (type) => {
     if (type === "new") setShowPassword(!showPassword);
@@ -49,6 +50,7 @@ function ChangePassword({ onLogout }) {
       formData.append("confirmPassword", values.confirmPassword);
 
       try {
+        setLoadIndicator(true);
         const response = await api.post(`/changePasswordForAdmin`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -65,6 +67,8 @@ function ChangePassword({ onLogout }) {
       } catch (error) {
         // toast.warning("Error changing password");
         toast.error(error.data.message);
+      }finally{
+        setLoadIndicator(false)
       }
     },
   });
@@ -170,9 +174,19 @@ function ChangePassword({ onLogout }) {
               </div>
             </Form.Group>
             <div className="d-flex justify-content-end">
-              <Button type="submit" className="btn btn-button btn-sm">
-                Save
-              </Button>
+            <Button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Submit
+            </Button>
             </div>
           </Form>
         </Modal.Body>

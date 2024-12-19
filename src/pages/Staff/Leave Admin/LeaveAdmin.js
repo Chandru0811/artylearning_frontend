@@ -63,8 +63,12 @@ const LeaveAdmin = () => {
           ) : row.original.leaveStatus === "Pending" ||
             row.original.leaveStatus === "PENDING" ? (
             <span className="badge badges-orange fw-light">Pending</span>
+          ) : row.original.leaveStatus === "Rejected" ||
+            row.original.leaveStatus === "REJECTED" ? (
+            <span className="badge badges-red fw-light">Rejected</span>
           ) : null,
       },
+
       { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "employeeName",

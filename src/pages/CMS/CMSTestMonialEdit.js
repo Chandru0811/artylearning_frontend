@@ -98,9 +98,9 @@ function CMSTestMonialEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
+      <p className="text-start" onClick={handleShow}>
         Edit
-      </button>
+      </p>
 
       <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
         <form onSubmit={formik.handleSubmit}>
