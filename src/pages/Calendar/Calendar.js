@@ -292,7 +292,8 @@ function Calendar() {
               }}
               height="90vh"
               events={events}
-              editable={true}
+              editable={false}
+              eventStartEditable={false}
               selectable={true}
               selectMirror={true}
               dayMaxEvents={true}
@@ -318,10 +319,10 @@ function Calendar() {
                 const { teacherName, centerName, availableSlotCount } =
                   info.event.extendedProps;
                 return (
-                  <div className="p-2 border-bottom">
-                    <div className="p-1"><FaChalkboardUser className="me-1"/> Teacher: {teacherName}</div>
+                  <div className="popover-text-wrapper p-2 border-bottom">
+                    <div className="p-1 text-wrap"><FaChalkboardUser className="me-1"/> Teacher: {teacherName}</div>
                     
-                    <div className="p-1"><BsBuildings className="me-1"/> Centre: {centerName}</div>
+                    <div className="p-1 text-wrap"><BsBuildings className="me-1"/> Centre: {centerName}</div>
                   </div>
                 );
               }}

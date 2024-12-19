@@ -957,16 +957,32 @@ input.searchInputG:hover {
   color: #757575 !important;
 }
 
+.fc-h-event .fc-event-main{
+  color: #666464 !important;
+  border: 1px solid #b5b5b5 !important;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.popover-text-wrapper {
+  max-width: 200px; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: normal; 
+  word-wrap: break-word; 
+  word-break: break-word; 
+}
+
 .fc-theme-standard .fc-popover {
   background: var(--fc-page-bg-color);
   border: 1px solid var(--fc-border-color);
   z-index: 10 !important;
-  border-radius: 7px;
+  border-radius: 7px !important;
 }
 
 .fc-event.fc-event-draggable, .fc-event[href]{
   background-color: white;
-  color: #676666 !important;
+  color: #565555 !important;
 }
 
 .fc th {
@@ -1097,10 +1113,5 @@ table.dataTable.display > tbody > tr > th {
   border-bottom: 1px solid#b5b5b5 !important;
 }
 
-.fc-h-event .fc-event-main{
-  color: #b5b5b5 !important;
-  border: 1px solid #b5b5b5 !important;
-  border-radius: 5px;
-  margin-bottom: 5px;
-}
+
 
