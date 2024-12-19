@@ -42,7 +42,7 @@ const Lead = () => {
   const [activeButton, setActiveButton] = useState("All");
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-const centerIDLocal = localStorage.getItem("selectedCenterId");
+  const centerIDLocal = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState(null);
   const [subjectData, setSubjectData] = useState(null);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -277,8 +277,9 @@ const centerIDLocal = localStorage.getItem("selectedCenterId");
           <div className="d-flex justify-content-start">
             {row.original.leadStatus === "CONFIRMED" ? (
               <button
-              onClick={(e) => {
-                e.stopPropagation();}}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
                 type="button"
               >
@@ -293,8 +294,10 @@ const centerIDLocal = localStorage.getItem("selectedCenterId");
                 </span>
               </button>
             ) : row.original.leadStatus === "ENROLLED" ? (
-              <button onClick={(e) => {
-                e.stopPropagation();}}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
                 type="button"
                 style={{ cursor: "default" }}
@@ -306,7 +309,9 @@ const centerIDLocal = localStorage.getItem("selectedCenterId");
             ) : (
               <select
                 value={row.original.leadStatus}
-                onClick={(e)=>{e.stopPropagation();}}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 onChange={(e) => {
                   handleStatusChange(row.original, e.target.value);
                 }}
@@ -318,7 +323,7 @@ const centerIDLocal = localStorage.getItem("selectedCenterId");
                   appearance: "none",
                   textIndent: "20px",
                   color: "#fff",
-                  cursor:"pointer",
+                  cursor: "pointer",
                   fontSize: "10px",
                   backgroundColor: `${
                     row.original.leadStatus === "NEW_WAITLIST"
@@ -361,7 +366,7 @@ const centerIDLocal = localStorage.getItem("selectedCenterId");
                         backgroundColor: "white",
                         padding: "10px 15px ",
                         color: "#000",
-                        cursor:"pointer",
+                        cursor: "pointer",
                       }}
                     >
                       Assessment Add
@@ -439,23 +444,18 @@ const centerIDLocal = localStorage.getItem("selectedCenterId");
                     >
                       New / Waitlist
                     </option>
-                    {row.original?.assessmentArrange?.lenght > 0 &&
-                    new Date(
-                      row.original?.assessmentArrange[0]?.assessmentDate
-                    ) === new Date().toDateString() ? (
-                      <option
-                        value="Do_Assessment"
-                        style={{
-                          backgroundColor: "white",
-                          padding: "10px",
-                          color: "#000",
-                        }}
-                      >
-                        Do Assessment
-                      </option>
-                    ) : (
-                      ""
-                    )}
+
+                    <option
+                      value="Do_Assessment"
+                      style={{
+                        backgroundColor: "white",
+                        padding: "10px",
+                        color: "#000",
+                      }}
+                    >
+                      Do Assessment
+                    </option>
+
                     <option
                       value="Assessment_Edit"
                       style={{
@@ -850,7 +850,7 @@ const centerIDLocal = localStorage.getItem("selectedCenterId");
     },
   });
 
-  const handleMenuClose = () => setMenuAnchor(null)
+  const handleMenuClose = () => setMenuAnchor(null);
   return (
     <div>
       <div className="container my-4 center">
@@ -1080,13 +1080,13 @@ const centerIDLocal = localStorage.getItem("selectedCenterId");
                   </MenuItem>
                 )}
                 {/* {storedScreens?.centerListingDelete && ( */}
-                  <MenuItem >
-                    <GlobalDelete
-                      path={`/deleteLeadInfo/${selectedId}`}
-                      onDeleteSuccess={getLeadData}
-                      onOpen={handleMenuClose}
-                    />
-                  </MenuItem>
+                <MenuItem>
+                  <GlobalDelete
+                    path={`/deleteLeadInfo/${selectedId}`}
+                    onDeleteSuccess={getLeadData}
+                    onOpen={handleMenuClose}
+                  />
+                </MenuItem>
                 {/* )} */}
               </Menu>
             </>
