@@ -575,6 +575,7 @@ tbody tr td {
   width: fit-content !important;
   padding: 5px;
   border-radius: 10px;
+  border: 1px solid #f4f3f3;
   background-color: #fff;
 }
 
@@ -1126,11 +1127,11 @@ table.dataTable.display > tbody > tr > th {
 }
 
 .badges-red {
-  background-color: #fc2b39 !important; 
+  background-color: #fc2b39 !important;
   font-weight: 400;
   border-radius: 3px;
 }
 
-.course-add .rmsc .dropdown-container{
+.course-add .rmsc .dropdown-container {
   height: 37.6px !important;
 }
