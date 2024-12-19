@@ -114,13 +114,11 @@ function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
         onClick={handleOpen}
         style={{
           whiteSpace: "nowrap",
-          width: "100%",
-          cursor: "pointer",
+          width: "100% !important",
         }}
-        className="ps-2"
       >
-        &nbsp;&nbsp;&nbsp;Edit
-      </span>
+        Edit
+      </span> 
       <Dialog
         open={open}
         onClose={handleClose}
@@ -146,6 +144,7 @@ function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
               <input
                 type="text"
                 id="name"
+                onKeyDown={(e) => e.stopPropagation()}
                 className={`form-control ${
                   formik.touched.name && formik.errors.name ? "is-invalid" : ""
                 }`}
@@ -200,7 +199,7 @@ function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <button
+            <button type="button"
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
             >

@@ -209,12 +209,13 @@ const Shg = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <ShgEdit onSuccess={getData} id={selectedId} />
+                <ShgEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteSHGSetting/${selectedId}`}
                   onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

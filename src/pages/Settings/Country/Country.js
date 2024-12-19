@@ -217,12 +217,13 @@ const Country = () => {
             onClose={handleMenuClose}
           >
             <MenuItem>
-              <CountryEdit onSuccess={getData} id={selectedId} />
+              <CountryEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
             </MenuItem>
             <MenuItem>
               <GlobalDelete
                 path={`/deleteCountrySetting/${selectedId}`}
                 onDeleteSuccess={getData}
+                onOpen={handleMenuClose}
               />
             </MenuItem>
           </Menu>

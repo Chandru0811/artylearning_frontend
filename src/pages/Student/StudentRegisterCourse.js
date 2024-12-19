@@ -46,6 +46,7 @@ function StudentRegisterCourse() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const centerId = searchParams.get("centerId");
+  const [batchData, setBatchData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -264,6 +265,61 @@ function StudentRegisterCourse() {
     return days;
   };
 
+  const fetchBatchandTeacherData = async (day) => {
+    try {
+      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+      setBatchData(response.data.batchList);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (formik.values.days) {
+      fetchBatchandTeacherData(formik.values.days);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.days]);
+
+  const formatTo12Hour = (time) => {
+    const [hours, minutes] = time.split(":");
+    let period = "AM";
+    let hour = parseInt(hours, 10);
+
+    if (hour === 0) {
+      hour = 12;
+    } else if (hour >= 12) {
+      period = "PM";
+      if (hour > 12) hour -= 12;
+    }
+
+    return `${hour}:${minutes} ${period}`;
+  };
+
+  const normalizeTime = (time) => {
+    if (time.includes("AM") || time.includes("PM")) {
+      return time;
+    }
+
+    return formatTo12Hour(time);
+  };
+
+  const convertTo24Hour = (time) => {
+    const [timePart, modifier] = time.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+
+    if (modifier === "PM" && hours < 12) {
+      hours += 12;
+    } else if (modifier === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
   return (
     <div className="container-fluid">
       <ol
@@ -288,12 +344,12 @@ function StudentRegisterCourse() {
         </li>
         <li>
           <Link to={`/student/view/${id}`} className="custom-breadcrumb">
-            &nbsp;Studnet View
+            &nbsp;student View
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Studnet Course Detail
+          &nbsp;student Course Detail
         </li>
       </ol>
       <form
@@ -420,29 +476,21 @@ function StudentRegisterCourse() {
                   id="batchId"
                   name="batchId"
                 >
-                  <option value="" disabled selected>
-                    Select Batch Time
-                  </option>
-                  {formik.values.days === "SUNDAY" ||
-                  formik.values.days === "SATURDAY" ? (
-                    <>
-                      <option value="1">9:00 am</option>
-                      <option value="2">10:30 am</option>
-                      <option value="3">12:00 pm</option>
-                      <option value="4">1:30 pm</option>
-                      <option value="5">3:00 pm</option>
-                      <option value="6">4:30 pm</option>
-                      <option value="7">6:00 pm</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="1">2:30 pm</option>
-                      <option value="2">3:30 pm</option>
-                      <option value="3">5:00 pm</option>
-                      <option value="4">7:00 pm</option>
-                      <option value="5">8:30 pm</option>
-                    </>
-                  )}
+                  <option value="">Select Batch</option>
+                  {batchData &&
+                    batchData.map((time) => {
+                      const displayTime = normalizeTime(time);
+                      const valueTime =
+                        time.includes("AM") || time.includes("PM")
+                          ? convertTo24Hour(time)
+                          : time;
+
+                      return (
+                        <option key={time} value={valueTime}>
+                          {displayTime}
+                        </option>
+                      );
+                    })}
                 </select>
                 <button
                   type="button"

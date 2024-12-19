@@ -93,6 +93,7 @@ function CourseEdit() {
       console.log(values);
       const updatedValues = {
         ...values,
+        updatedBy: userName,
         minClassSize: values.minClassSize === "" ? 0 : values.minClassSize,
         maxClassSize: values.maxClassSize === "" ? 0 : values.maxClassSize,
       };
@@ -271,7 +272,7 @@ function CourseEdit() {
               </button>
             </div>
           </div>
-          <div className="container-fluid px-4">
+          <div className="container-fluid courseAdd px-4">
             <div className="row">
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">

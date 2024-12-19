@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
   citizenship: Yup.string().required("*Citizenship is required"),
 });
 
-function CountryEdit({ id, onSuccess }) {
+function CountryEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
@@ -53,7 +53,7 @@ function CountryEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -61,6 +61,7 @@ function CountryEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error.message || "An error occurred");
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -81,6 +82,7 @@ function CountryEdit({ id, onSuccess }) {
   });
 
   const handleClose = () => {
+    handleMenuClose();
     setOpen(false);
     setIsModified(false);
   };
@@ -128,6 +130,7 @@ function CountryEdit({ id, onSuccess }) {
                     Country<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.country && formik.errors.country
@@ -148,6 +151,7 @@ function CountryEdit({ id, onSuccess }) {
                     Nationality<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.nationality && formik.errors.nationality
@@ -168,6 +172,7 @@ function CountryEdit({ id, onSuccess }) {
                     Citizenship<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.citizenship && formik.errors.citizenship

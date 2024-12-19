@@ -19,7 +19,7 @@ const validationSchema = Yup.object({
   salaryType: Yup.string().required("*Salary Type is required"),
 });
 
-function SalaryEdit({ id, onSuccess }) {
+function SalaryEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
@@ -50,7 +50,7 @@ function SalaryEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -58,6 +58,7 @@ function SalaryEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error);
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -77,7 +78,10 @@ function SalaryEdit({ id, onSuccess }) {
     },
   });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);
+  };
   const handleShow = () => {
     setShow(true);
     setIsModified(false);
@@ -133,6 +137,7 @@ function SalaryEdit({ id, onSuccess }) {
                     Salary Type<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control  ${
                       formik.touched.salaryType && formik.errors.salaryType

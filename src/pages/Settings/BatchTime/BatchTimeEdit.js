@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlineModeEdit } from "react-icons/md";
 import CloseIcon from "@mui/icons-material/Close";
-function BatchTimeEdit({ id, onSuccess }) {
+function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
@@ -49,7 +49,7 @@ function BatchTimeEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -57,6 +57,7 @@ function BatchTimeEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error);
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -76,7 +77,10 @@ function BatchTimeEdit({ id, onSuccess }) {
     },
   });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);
+  };
 
   const handleShow = () => {
     setShow(true);
@@ -170,6 +174,7 @@ function BatchTimeEdit({ id, onSuccess }) {
                     Day<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control  ${
                       formik.touched.batchDay && formik.errors.batchDay
@@ -208,6 +213,7 @@ function BatchTimeEdit({ id, onSuccess }) {
                         </span>
                       </div>
                       <input
+                        onKeyDown={(e) => e.stopPropagation()}
                         type="time"
                         className={`form-control  ${
                           formik.touched.batchTimes?.[index] &&

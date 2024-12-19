@@ -14,13 +14,14 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { MdOutlineModeEdit } from "react-icons/md";
 
-function CMSProductsItemEdit({ id, getData }) {
+function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const userName = localStorage.getItem("userName");
 
   const handleClose = () => {
+    handleMenuClose();
     setOpen(false);
     formik.resetForm();
     setSelectedFile(null); // Clear file state on close
@@ -66,13 +67,13 @@ function CMSProductsItemEdit({ id, getData }) {
         if (response.status === 200) {
           toast.success(response.data.message);
           getData();
-          handleClose();
         } else {
           toast.error(response.data.message || "Update failed.");
         }
       } catch (error) {
         toast.error("Error: " + error.message);
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -107,13 +108,16 @@ function CMSProductsItemEdit({ id, getData }) {
         Edit
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogTitle className="headColor">Edit Product Item  <IconButton
+        <DialogTitle className="headColor">
+          Edit Product Item{" "}
+          <IconButton
             aria-label="close"
             onClick={handleClose}
             style={{ position: "absolute", right: 8, top: 8 }}
           >
             <CloseIcon />
-          </IconButton></DialogTitle>
+          </IconButton>
+        </DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -128,6 +132,7 @@ function CMSProductsItemEdit({ id, getData }) {
                 Upload Image
               </label>
               <input
+                onKeyDown={(e) => e.stopPropagation()}
                 type="file"
                 id="files"
                 name="files"
@@ -171,7 +176,7 @@ function CMSProductsItemEdit({ id, getData }) {
           </DialogContent>
           <DialogActions>
             <button
-            type="button"
+              type="button"
               className="btn btn-border btn-sm"
               style={{ fontSize: "12px" }}
               onClick={handleClose}

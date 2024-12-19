@@ -205,12 +205,13 @@ const IDType = () => {
             onClose={handleMenuClose}
           >
             <MenuItem>
-              <IDTypeEdit onSuccess={getData} id={selectedId} />
+              <IDTypeEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose} />
             </MenuItem>
             <MenuItem>
               <GlobalDelete
                 path={`/deleteIdTypeSetting/${selectedId}`}
                 onDeleteSuccess={getData}
+                onOpen={handleMenuClose}
               />
             </MenuItem>
           </Menu>

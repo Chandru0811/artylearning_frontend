@@ -96,13 +96,41 @@ const StaffingAttendance = () => {
         header: "Check Out",
       },
       { accessorKey: "date", enableHiding: false, header: "Date" },
+      { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        enableHiding: false,
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
       { accessorKey: "attendanceRemark", header: "Attendance Remark" },
-      { accessorKey: "modeOfWorking", header: "Mode Of Working" },
+      {
+        accessorKey: "modeOfWorking",
+        header: "Mode Of Working",
+        Cell: ({ row }) =>
+          row.original.modeOfWorking === "WORK_FROM_HOME" ||
+          row.original.modeOfWorking === "work_from_home" ? (
+            <span>WORK FROM HOME</span>
+          ) : row.original.modeOfWorking === "WORK_FROM_OFFICE" ||
+            row.original.modeOfWorking === "work_from_office" ? (
+            <span>WORK FROM OFFICE</span>
+          ) : null,
+      },
       { accessorKey: "userId", header: "User Id" },
-      { accessorKey: "userRole", header: "User Role" },
+      {
+        accessorKey: "userRole",
+        header: "User Role",
+        Cell: ({ row }) =>
+          row.original.userRole === "SMS_TEACHER" ||
+          row.original.userRole === "sms_teacher" ? (
+            <span>SMS TEACHER</span>
+          ) : row.original.userRole === "CENTER_MANAGER" ||
+            row.original.userRole === "center_manager" ? (
+            <span>CENTER MANAGER</span>
+          ) : null,
+      },
       { accessorKey: "otEndTime", header: "Ot End Time" },
       { accessorKey: "otStartTime", header: "Ot Start Time" },
-      { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
         header: "Created At",
@@ -113,25 +141,20 @@ const StaffingAttendance = () => {
         header: "Updated At",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
       },
-      {
-        accessorKey: "updatedBy",
-        header: "Updated By",
-        Cell: ({ cell }) => cell.getValue() || "",
-      },
     ],
     []
   );
 
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllUserAttendances");
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllUserAttendances");
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
     getData();
     fetchData();
   }, []);
@@ -149,9 +172,35 @@ const StaffingAttendance = () => {
           },
         },
       },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
     },
   });
-
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
@@ -238,9 +287,7 @@ const StaffingAttendance = () => {
                     userRole: false,
                     otEndTime: false,
                     otStartTime: false,
-                    createdBy: false,
                     createdAt: false,
-                    updatedBy: false,
                     updatedAt: false,
                     invoiceNotes: false,
                     openingDate: false,
@@ -272,7 +319,8 @@ const StaffingAttendance = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteUserAttendance/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

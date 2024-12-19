@@ -135,12 +135,12 @@ const StudentEndClass = () => {
         </li>
         <li>
           <Link to={`/student/view/${id}`} className="custom-breadcrumb">
-            &nbsp;Studnet View
+            &nbsp;student View
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Studnet End Class
+          &nbsp;student End Class
         </li>
       </ol>
       <form

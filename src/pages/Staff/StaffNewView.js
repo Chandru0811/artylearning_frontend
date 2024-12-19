@@ -130,22 +130,18 @@ function StaffNewView() {
         </li>
         <li>
           <Link to="/staff" className="custom-breadcrumb">
-          &nbsp;Staff
+            &nbsp;Staff
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-        &nbsp;Staff View
+          &nbsp;Staff View
         </li>
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">
         {/* <PasswordModal /> */}
         <Link to={"/staff"}>
-          <button
-            className="btn btn-border btn-sm me-3"
-          >
-            Back
-          </button>
+          <button className="btn btn-border btn-sm me-3">Back</button>
         </Link>
       </div>
       <div className="container-fluid studentView">
@@ -442,119 +438,119 @@ function StaffNewView() {
             </div>
             {/* {data.role !== "freelancer" && (
               <> */}
-                <div className="card mb-3 mt-3">
-                  <div className="withBorder">
-                    <p className="fw-medium ms-3 my-2">
-                      {/* <FaUsers size={20} /> */}
-                      &nbsp;&nbsp;Salary Information
+            <div className="card mb-3 mt-3">
+              <div className="withBorder">
+                <p className="fw-medium ms-3 my-2">
+                  {/* <FaUsers size={20} /> */}
+                  &nbsp;&nbsp;Salary Information
+                </p>
+              </div>
+              <div style={{ padding: "10px" }}>
+                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                  <li
+                    className="stdList"
+                    style={{ borderTop: "1px solid #ddd" }}
+                  >
+                    <p className="m-0">
+                      <b>Salary</b>
+                      <span>
+                        {data.userSalaryCreationModels &&
+                        data.userSalaryCreationModels.length > 0 &&
+                        data.userSalaryCreationModels[0].salary
+                          ? data.userSalaryCreationModels[0].salary
+                          : "--"}
+                      </span>
                     </p>
-                  </div>
-                  <div style={{ padding: "10px" }}>
-                    <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                      <li
-                        className="stdList"
-                        style={{ borderTop: "1px solid #ddd" }}
-                      >
-                        <p className="m-0">
-                          <b>Salary</b>
-                          <span>
-                            {data.userSalaryCreationModels &&
-                            data.userSalaryCreationModels.length > 0 &&
-                            data.userSalaryCreationModels[0].salary
-                              ? data.userSalaryCreationModels[0].salary
-                              : "--"}
-                          </span>
-                        </p>
-                        <p className="m-0">
-                          <b>Effective Date</b>
-                          <span>
-                            {data.userSalaryCreationModels &&
-                            data.userSalaryCreationModels.length > 0 &&
-                            data.userSalaryCreationModels[0].effectiveDate
-                              ? data.userSalaryCreationModels[0].effectiveDate.substring(
-                                  0,
-                                  10
-                                )
-                              : "--"}
-                          </span>
-                        </p>
-                        <p className="m-0">
-                          <b>Salary Type</b>
-                          <span>
-                            {data.userSalaryCreationModels &&
-                            data.userSalaryCreationModels.length > 0 &&
-                            data.userSalaryCreationModels[0].salaryTypeId
-                              ? findSalaryType(
-                                  data.userSalaryCreationModels[0].salaryTypeId
-                                )
-                              : "--"}
-                          </span>
-                        </p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="card">
-                  <div className="withBorder">
-                    <p className="fw-medium ms-3 my-2">
-                      {/* <FaUsers size={20} /> */}
-                      &nbsp;&nbsp; Leave Information
+                    <p className="m-0">
+                      <b>Effective Date</b>
+                      <span>
+                        {data.userSalaryCreationModels &&
+                        data.userSalaryCreationModels.length > 0 &&
+                        data.userSalaryCreationModels[0].effectiveDate
+                          ? data.userSalaryCreationModels[0].effectiveDate.substring(
+                              0,
+                              10
+                            )
+                          : "--"}
+                      </span>
                     </p>
-                  </div>
-                  <div style={{ padding: "10px" }}>
-                    <hr className="mt-0 mb-2" />
-                    <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                      <li className="stdList pt-0">
-                        <p className="m-0">
-                          <b>Year</b>
-                          <span>
-                            {" "}
-                            {data.userLeaveCreationModels &&
-                            data.userLeaveCreationModels.length > 0 &&
-                            data.userLeaveCreationModels[0].year
-                              ? data.userLeaveCreationModels[0].year.substring(
-                                  0,
-                                  10
-                                )
-                              : "--"}
-                          </span>
-                        </p>
-                        <p className="m-0">
-                          <b>Annual Leave</b>
-                          <span>
-                            {" "}
-                            {data.userLeaveCreationModels &&
-                            data.userLeaveCreationModels.length > 0 &&
-                            data.userLeaveCreationModels[0].annualLeave
-                              ? data.userLeaveCreationModels[0].annualLeave
-                              : "--"}
-                          </span>
-                        </p>
-                        <p className="m-0">
-                          <b>Medical Leave</b>
-                          <span>
-                            {data.userLeaveCreationModels &&
-                            data.userLeaveCreationModels.length > 0 &&
-                            data.userLeaveCreationModels[0].medicalLeave
-                              ? data.userLeaveCreationModels[0].medicalLeave
-                              : "--"}
-                          </span>
-                        </p>
-                        <p className="m-0">
-                          <b>Other Leave</b>
-                          <span>
-                            {data.userLeaveCreationModels &&
-                            data.userLeaveCreationModels.length > 0 &&
-                            data.userLeaveCreationModels[0].otherLeave
-                              ? data.userLeaveCreationModels[0].otherLeave
-                              : "--"}
-                          </span>
-                        </p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              {/* </>
+                    <p className="m-0">
+                      <b>Salary Type</b>
+                      <span>
+                        {data.userSalaryCreationModels &&
+                        data.userSalaryCreationModels.length > 0 &&
+                        data.userSalaryCreationModels[0].salaryTypeId
+                          ? findSalaryType(
+                              data.userSalaryCreationModels[0].salaryTypeId
+                            )
+                          : "--"}
+                      </span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="card">
+              <div className="withBorder">
+                <p className="fw-medium ms-3 my-2">
+                  {/* <FaUsers size={20} /> */}
+                  &nbsp;&nbsp; Leave Information
+                </p>
+              </div>
+              <div style={{ padding: "10px" }}>
+                <hr className="mt-0 mb-2" />
+                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                  <li className="stdList pt-0">
+                    <p className="m-0">
+                      <b>Year</b>
+                      <span>
+                        {" "}
+                        {data.userLeaveCreationModels &&
+                        data.userLeaveCreationModels.length > 0 &&
+                        data.userLeaveCreationModels[0].year
+                          ? data.userLeaveCreationModels[0].year.substring(
+                              0,
+                              10
+                            )
+                          : "--"}
+                      </span>
+                    </p>
+                    <p className="m-0">
+                      <b>Annual Leave</b>
+                      <span>
+                        {" "}
+                        {data.userLeaveCreationModels &&
+                        data.userLeaveCreationModels.length > 0 &&
+                        data.userLeaveCreationModels[0].annualLeave
+                          ? data.userLeaveCreationModels[0].annualLeave
+                          : "--"}
+                      </span>
+                    </p>
+                    <p className="m-0">
+                      <b>Medical Leave</b>
+                      <span>
+                        {data.userLeaveCreationModels &&
+                        data.userLeaveCreationModels.length > 0 &&
+                        data.userLeaveCreationModels[0].medicalLeave
+                          ? data.userLeaveCreationModels[0].medicalLeave
+                          : "--"}
+                      </span>
+                    </p>
+                    <p className="m-0">
+                      <b>Other Leave</b>
+                      <span>
+                        {data.userLeaveCreationModels &&
+                        data.userLeaveCreationModels.length > 0 &&
+                        data.userLeaveCreationModels[0].otherLeave
+                          ? data.userLeaveCreationModels[0].otherLeave
+                          : "--"}
+                      </span>
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            {/* </>
             )} */}
           </div>
           <div className="col-md-3 col-12 mb-3">
@@ -718,7 +714,7 @@ function StaffNewView() {
                   </span>
                 </li>
                 <li className="stdList">
-                  <b>Probation</b>
+                  <b>Probation (Day)</b>
                   <span>
                     {data.userContractCreationModels &&
                     data.userContractCreationModels.length > 0 &&
@@ -797,7 +793,7 @@ function StaffNewView() {
                   </span>
                 </li>
                 <li className="stdList">
-                  <b>Termination Date</b>
+                  <b>Termination Notice (Month)</b>
                   <span>
                     {data.userContractCreationModels &&
                     data.userContractCreationModels.length > 0 &&

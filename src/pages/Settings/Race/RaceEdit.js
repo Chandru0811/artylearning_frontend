@@ -17,7 +17,7 @@ import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-function RaceEdit({ id, onSuccess }) {
+function RaceEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
@@ -32,7 +32,10 @@ function RaceEdit({ id, onSuccess }) {
     }
   };
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);
+  };
   const handleShow = () => {
     setShow(true);
     setIsModified(false);
@@ -59,7 +62,7 @@ function RaceEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -67,6 +70,7 @@ function RaceEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error("An error occurred.");
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -131,6 +135,7 @@ function RaceEdit({ id, onSuccess }) {
                     Race<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control  ${
                       formik.touched.race && formik.errors.race

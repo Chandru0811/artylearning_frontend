@@ -188,7 +188,7 @@ const CMSContact = () => {
             {storedScreens?.contactUsPublish && (
               <button
                 type="button"
-                className="btn custom-outline-danger border"
+                className="btn custom-outline-danger border d-flex align-items-center "
                 onClick={contactPublish}
               >
                 Publish
@@ -239,15 +239,16 @@ const CMSContact = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <CMSContactView id={selectedId} />
+                <CMSContactView id={selectedId} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem>
-                <CMSContactEdit id={selectedId} onSuccess={getCenterData} />
+                <CMSContactEdit id={selectedId} onSuccess={getCenterData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteContactUsSavePublish/${selectedId}`}
                   onDeleteSuccess={getCenterData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

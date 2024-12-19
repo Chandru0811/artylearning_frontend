@@ -28,14 +28,14 @@ const Course = () => {
   const [subjectData, setSubjectData] = useState(null);
   const [levelData, setLevelData] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const centerLocalId = localStorage.getItem("centerId");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState([]);
   const [centerId, setCenterId] = useState("");
   const [code, setCode] = useState("");
   const [course, setCourse] = useState("");
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-
+  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const columns = useMemo(
     () => [
       {
@@ -118,6 +118,27 @@ const Course = () => {
       {
         accessorKey: "classReplacementAllowed",
         header: "Class Replacement Allowed",
+        Cell: ({ row }) =>
+          row.original.classReplacementAllowed ? (
+            <span
+              className=""
+              // style={{ backgroundColor: "#287f71" }}
+            >
+              Yes
+            </span>
+          ) : (
+            <span
+              className=""
+              // style={{ backgroundColor: "#eb862a" }}
+            >
+              No
+            </span>
+          ),
+      },
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+        Cell: ({ cell }) => cell.getValue() || "",
       },
       {
         accessorKey: "createdAt",
@@ -140,30 +161,60 @@ const Course = () => {
 
   const fetchData = async () => {
     try {
-      const queryParams = new URLSearchParams(filters).toString();
+      setLoading(true);
+      const queryParams = new URLSearchParams();
+      if (!isClearFilterClicked) {
+        if (filters.centerId) {
+          queryParams.append("centerId", filters.centerId);
+        } else if (centerLocalId && centerLocalId !== "undefined") {
+          queryParams.append("centerId", centerLocalId);
+        }
+      }
+
+      // Loop through other filters and add key-value pairs if they have a value
+      for (let key in filters) {
+        if (filters[key] && key !== "centerId") {
+          queryParams.append(key, filters[key]);
+        }
+      }
       const response = await api.get(`/getCourseWithCustomInfo?${queryParams}`);
       setData(response.data);
-      setLoading(false);
     } catch (error) {
       toast.error(`Error Fetching Data: ${error.message}`);
+    } finally {
+      setLoading(false);
+      setIsClearFilterClicked(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     fetchData();
   }, [filters]);
 
-  const refreshData = async () => {
+  const fetchCenterData = async () => {
     try {
-      const centers = await fetchAllCentersWithIds();
-      if (centerLocalId) {
-        setCenterId(centerLocalId);
-      } else if (centers.length > 0) {
-        setCenterId(centers[0].id);
+      const centerData = await fetchAllCentersWithIds();
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData !== null && centerData.length > 0) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
       }
-      setCenterData(centers);
+      setCenterData(centerData);
     } catch (error) {
-      toast.error(`Error loading centers: ${error.message}`);
+      toast.error(error);
     }
   };
 
@@ -190,7 +241,6 @@ const Course = () => {
   };
 
   useEffect(() => {
-    refreshData();
     fetchSubData();
   }, []);
 
@@ -204,6 +254,34 @@ const Course = () => {
             fontWeight: "400 !important",
             fontSize: "13px !important",
             textAlign: "center !important",
+          },
+        },
+      },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
           },
         },
       },
@@ -221,6 +299,7 @@ const Course = () => {
       courseName: "",
       courseCode: "",
     });
+    setIsClearFilterClicked(true);
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
@@ -279,7 +358,6 @@ const Course = () => {
                 name="centerId"
                 value={filters.centerId}
               >
-                <option value="">All Center</option>
                 {centerData?.map((center) => (
                   <option key={center.id} value={center.id}>
                     {center.centerNames}

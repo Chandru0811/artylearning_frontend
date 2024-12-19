@@ -72,6 +72,7 @@ function StudentNewView() {
         setResponseMessage(imageResponse.data.message);
         setProfileImage(null);
         handleCloseModal();
+        getData()
       }
       toast.success(
         imageResponse.data.message || "Image Updated successfully!"
@@ -92,24 +93,24 @@ function StudentNewView() {
       toast.error(error);
     }
   };
+ const getData = async () => {
+   try {
+     const response = await api.get(`/getAllStudentById/${id}`);
+     setData(response.data);
+     console.log("responseData", response.data);
+     const primaryParent = response.data.studentParentsDetails.find(
+       (parent) => parent.primaryContact === true
+     );
+     const email = primaryParent ? primaryParent.email : null;
 
+     setPassword(email);
+     console.log("StudentDetails", response.data);
+   } catch (error) {
+     console.error("Error fetching data:", error);
+   }
+ };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(`/getAllStudentById/${id}`);
-        setData(response.data);
-        console.log("responseData", response.data);
-        const primaryParent = response.data.studentParentsDetails.find(
-          (parent) => parent.primaryContact === true
-        );
-        const email = primaryParent ? primaryParent.email : null;
-
-        setPassword(email);
-        console.log("StudentDetails", response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+   
     getData();
     fetchData();
   }, [id]);
@@ -571,8 +572,16 @@ function StudentNewView() {
               </div>
             </div>
 
-            <div className="card">
-              <div className="withBorder">
+            <div className="card overflow-auto" style={{ height: "300px" }}>
+              <div
+                className="withBorder"
+                style={{
+                  position: "sticky",
+                  top: "0px",
+                  zIndex: "999",
+                  background: "#fff",
+                }}
+              >
                 <p className="fw-medium ms-3 my-2">
                   <FaUsers size={20} />
                   &nbsp;&nbsp; Authorized Person

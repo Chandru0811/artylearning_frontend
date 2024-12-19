@@ -15,11 +15,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
-function CMSContactView({ id }) {
+function CMSContactView({ id, handleMenuClose }) {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setOpen(false);
+  };
   const handleOpen = () => {
     setOpen(true);
     getData();
@@ -37,7 +40,7 @@ function CMSContactView({ id }) {
   return (
     <>
       <button className="btn btn-sm" onClick={handleOpen}>
-         View
+        View
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle className="headColor">

@@ -251,12 +251,13 @@ const CMSProductsItem = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <CMSProductsItemEdit getData={getData} id={selectedId} />
+                <CMSProductsItemEdit getData={getData} id={selectedId} handleMenuClose={handleMenuClose} />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteProductImageSaves/${selectedId}`}
                   onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

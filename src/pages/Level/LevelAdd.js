@@ -13,6 +13,7 @@ function LevelAdd({ onSuccess }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [subjectData, setSubjectData] = useState(null);
   const [isModified, setIsModified] = useState(false);
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => {
     setShow(false);
@@ -52,11 +53,12 @@ function LevelAdd({ onSuccess }) {
       levelCode: "",
       status: "",
       subjectId: "",
+      createdBy: userName,
     },
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
-
+      values.createdBy= userName;
       try {
         const response = await api.post("/createCourseLevels", values, {
           headers: {

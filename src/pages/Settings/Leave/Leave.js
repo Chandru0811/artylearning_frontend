@@ -204,12 +204,13 @@ const Leave = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <LeaveEdit onSuccess={getData} id={selectedId} />
+                <LeaveEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteLeaveSetting/${selectedId}`}
                   onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

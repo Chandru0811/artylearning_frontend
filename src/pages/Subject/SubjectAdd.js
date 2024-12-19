@@ -67,6 +67,7 @@ function SubjectAdd({ onSuccess }) {
       //     selectedLevelName = level.levels || "--";
       //   }
       // });
+      values.createdBy= userName;
       try {
         const response = await api.post("/createCourseSubject", values, {
           headers: {

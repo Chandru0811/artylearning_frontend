@@ -13,13 +13,13 @@ import {
   DialogContent,
 } from "@mui/material";
 
-function AddBreak({ id, onSuccess,handleMenuClose }) {
+function AddBreak({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
   const handleClose = () => {
-    handleMenuClose()
+    handleMenuClose();
     formik.resetForm();
     setShow(false);
   };
@@ -90,7 +90,7 @@ function AddBreak({ id, onSuccess,handleMenuClose }) {
   });
   return (
     <>
-       <p
+      <p
         className="text-start mb-0"
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
@@ -98,12 +98,7 @@ function AddBreak({ id, onSuccess,handleMenuClose }) {
         Add Centre Break
       </p>
 
-      <Dialog
-              open={show}
-              onClose={handleClose} 
-              maxWidth="md"
-              fullWidth
-            >
+      <Dialog open={show} onClose={handleClose} maxWidth="md" fullWidth>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -112,9 +107,9 @@ function AddBreak({ id, onSuccess,handleMenuClose }) {
             }
           }}
         >
-            <DialogTitle>
-              <p className="headColor">Add Centre Break</p>
-            </DialogTitle>
+          <DialogTitle>
+            <p className="headColor">Add Centre Break</p>
+          </DialogTitle>
           <DialogContent>
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
@@ -123,6 +118,7 @@ function AddBreak({ id, onSuccess,handleMenuClose }) {
                 </lable>
                 <div className="input-group mb-3">
                   <input
+                  onKeyDown={(e) => e.stopPropagation()}
                     type="data"
                     className={`form-control   ${
                       formik.touched.breakName && formik.errors.breakName

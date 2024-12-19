@@ -239,7 +239,7 @@ function CourseAdd({ onSuccess }) {
               </button>
             </div>
           </div>
-          <div className="container-fluid px-4">
+          <div className="container-fluid courseAdd px-4">
             <div className="row">
               <div className="col-md-6 col-12 mb-4">
                 <label className="form-label">
@@ -261,6 +261,10 @@ function CourseAdd({ onSuccess }) {
                       ? "is-invalid"
                       : ""
                   }`}
+                  style={{
+                    height: "37.6px !important" , // Set the desired height
+                    minHeight: "37.6px", // Ensure the height doesn't shrink
+                  }}
                 />
                 {formik.touched.centerId && formik.errors.centerId && (
                   <div className="invalid-feedback">
@@ -281,7 +285,7 @@ function CourseAdd({ onSuccess }) {
                   </div>
                   <input
                     type="text"
-                    className={`form-control iconInput`}
+                    className={`form-control `}
                     value={formik.values.colorCode}
                     onClick={handleColorPickerClick}
                     onChange={(e) =>
@@ -500,7 +504,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("durationInHrs")}
-                    className="form-select iconInput "
+                    className="form-select  "
                     aria-label="Default select example"
                   >
                     <option></option>
@@ -529,7 +533,7 @@ function CourseAdd({ onSuccess }) {
                 <div className="input-group">
                   <select
                     {...formik.getFieldProps("durationInMins")}
-                    className="form-select iconInput "
+                    className="form-select "
                     aria-label="Default select example"
                   >
                     <option selected></option>

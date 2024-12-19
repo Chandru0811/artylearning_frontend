@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-function AbsentReasonEdit({ id, onSuccess }) {
+function AbsentReasonEdit({ id, onSuccess,handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
@@ -29,7 +29,9 @@ function AbsentReasonEdit({ id, onSuccess }) {
     }
   };
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);}
 
   const handleShow = () => {
     setShow(true);
@@ -58,7 +60,6 @@ function AbsentReasonEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -67,6 +68,7 @@ function AbsentReasonEdit({ id, onSuccess }) {
         toast.error(error);
       } finally {
         setLoadIndicator(false);
+        handleClose();
       }
     },
     enableReinitialize: true,
@@ -129,6 +131,7 @@ function AbsentReasonEdit({ id, onSuccess }) {
                       : ""
                   }`}
                   {...formik.getFieldProps("absentReason")}
+                  onKeyDown={(e) => e.stopPropagation()}
                 />
                 {formik.touched.absentReason && formik.errors.absentReason && (
                   <div className="invalid-feedback">

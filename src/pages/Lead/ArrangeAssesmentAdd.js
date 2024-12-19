@@ -9,10 +9,11 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {
   Dialog,
-  DialogActions,
+  DialogActions,        
   DialogTitle,
   DialogContent,
 } from "@mui/material";
+import Button from "react-bootstrap/Button";
 // const validationSchema = Yup.object({});
 
 function ArrangeAssesmentAdd({
@@ -23,14 +24,13 @@ function ArrangeAssesmentAdd({
   setAll,
   showDialog,
   handleShow,
-  handleClose
+  handleClose,
 }) {
-  
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setCenterData] = useState(null);
   const navigate = useNavigate();
   // console.log("Lead Id:", leadId);
-  // console.log("Centre ID :", centerId); 
+  // console.log("Centre ID :", centerId);
   // console.log("Student Name :", studentNames);
 
   const fetchCenterData = async () => {
@@ -41,11 +41,12 @@ function ArrangeAssesmentAdd({
       toast.error(error);
     }
   };
-useEffect(()=>{
-  if(showDialog){
-    fetchCenterData()
-  }
-},[])
+  useEffect(() => {
+    if (showDialog && centerId) {
+        formik.setValues({...formik.values,centerId:centerId,studentName:studentNames})
+      }
+      fetchCenterData();
+  }, []);
   const getCurrentDate = () => {
     const date = new Date();
     return date.toISOString().split("T")[0]; // Format: YYYY-MM-DD
@@ -93,6 +94,7 @@ useEffect(()=>{
         );
         if (response.status === 201) {
           // onSuccess();
+          formik.resetForm();
           handleClose();
           setAll();
           toast.success("Arranging Assessment Created Successfully");
@@ -120,12 +122,13 @@ useEffect(()=>{
       }
     },
   });
-useEffect(()=>{
-if(centerId &&showDialog){
-  formik.setFieldValue("centerId",centerId)
-  formik.setFieldValue("studentName",studentNames)
-}
-},[showDialog])
+  
+  // useEffect(() => {
+  //   // console.log("object", centerId);
+   
+  // }, [showDialog, centerId]);
+  // console.log("object", formik.values);
+
   return (
     <>
       {/* <li>
@@ -152,12 +155,12 @@ if(centerId &&showDialog){
                 <label htmlFor="centerId" className="form-label">
                   Centre Name
                 </label>
-                <input
+                {/* <input
                   type="hidden"
                   name="centerId"
                   value={formik.values.centerId}
                   {...formik.getFieldProps("centerId")}
-                />
+                /> */}
                 <select
                   className="form-control"
                   value={formik.values.centerId}
@@ -240,17 +243,17 @@ if(centerId &&showDialog){
               </div>
             </div>
 
-            <div className="d-flex justify-content-between align-items-center">
-              <button
+            <div className="d-flex justify-content-end gap-3 align-items-center">
+            <Button
                 type="button"
-                className="btn btn-secondary"
-                onClick={handleClose}
+                className="btn btn-sm btn-border bg-light text-dark"
+                onClick={()=>{handleClose();formik.resetForm();}}
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                className="btn btn-button"
+                className="btn btn-button btn-sm"
                 disabled={loadIndicator}
               >
                 {loadIndicator && (
@@ -260,7 +263,7 @@ if(centerId &&showDialog){
                   ></span>
                 )}
                 Submit
-              </button>
+              </Button>
             </div>
           </form>
         </DialogContent>
