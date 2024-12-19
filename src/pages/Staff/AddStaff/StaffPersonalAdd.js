@@ -22,6 +22,7 @@ const validationSchema = Yup.object().shape({
   countryId: Yup.string().required("*Country is required"),
   nationalityId: Yup.string().required("*Nationality is required"),
   citizenship: Yup.string().required("*Citizenship is required"),
+  status: Yup.string().required("*Status is required"),
   role: Yup.string().required("*Role is required"),
   file: Yup.mixed().required("*Photo is required"),
   password: Yup.string()
@@ -59,6 +60,7 @@ const StaffPersonalAdd = forwardRef(
         nationality: formData.nationality || "",
         citizenship: formData.citizenship || "",
         nationalityId: formData.nationalityId || "",
+        status: formData.status || "",
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
@@ -87,7 +89,7 @@ const StaffPersonalAdd = forwardRef(
           formData.append("citizenship", values.citizenship);
           formData.append("nationality", nationalityName.nationality);
           formData.append("nationalityId", values.nationalityId);
-          formData.append("status", "ACTIVE");
+          formData.append("status", values.status);
           formData.append("createdBy", userName);
 
           const response = await api.post(
@@ -493,6 +495,29 @@ const StaffPersonalAdd = forwardRef(
                 {formik.touched.role && formik.errors.role && (
                   <div className="error text-danger ">
                     <small>{formik.errors.role}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+              <div class="form-group col-sm">
+                <label>Status</label>
+                <span className="text-danger">*</span>
+                <select
+                  type="text"
+                  class="form-select"
+                  name="status"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.status}
+                >
+                  <option value=""></option>
+                  <option value={"ACTIVE"}>Active</option>
+                  <option value={"INACTIVE"}>Inactive</option>
+                </select>
+                {formik.touched.status && formik.errors.status && (
+                  <div className="error text-danger ">
+                    <small>{formik.errors.status}</small>
                   </div>
                 )}
               </div>

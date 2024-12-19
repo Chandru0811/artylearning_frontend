@@ -392,6 +392,29 @@ const PersonalEdit = forwardRef(
                   </div>
                 )}
               </div>
+              <div class="col-md-6 col-12 mb-2 mt-3">
+                <div class="form-group col-sm">
+                  <label>Status</label>
+                  <span className="text-danger">*</span>
+                  <select
+                    type="text"
+                    class="form-select"
+                    name="status"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.status}
+                  >
+                    <option value=""></option>
+                    <option value={"ACTIVE"}>Active</option>
+                    <option value={"INACTIVE"}>Inactive</option>
+                  </select>
+                  {formik.touched.status && formik.errors.status && (
+                    <div className="error text-danger ">
+                      <small>{formik.errors.status}</small>
+                    </div>
+                  )}
+                </div>
+              </div>
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Gender<span className="text-danger">*</span>

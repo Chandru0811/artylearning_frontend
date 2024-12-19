@@ -17,7 +17,8 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const userName = localStorage.getItem("userName");
+  // const userName = localStorage.getItem("userName");
+  const userName = localStorage.getItem("userName") || "SMS_ADMIN";
 
   const validationSchema = yup.object().shape({
     centerId: yup.string().required("*Centre is required"),
