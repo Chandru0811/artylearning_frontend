@@ -406,7 +406,7 @@ const PersonalEdit = forwardRef(
                   >
                     <option value=""></option>
                     <option value={"ACTIVE"}>Active</option>
-                    <option value={"INACTIVE"}>Inactive</option>
+                    <option value={"RESIGNED"}>Resigned</option>
                   </select>
                   {formik.touched.status && formik.errors.status && (
                     <div className="error text-danger ">

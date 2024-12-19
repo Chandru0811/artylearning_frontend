@@ -314,14 +314,15 @@ function TeacherNewView() {
                   </li>
                   <li className="stdList">
                     <b>Status</b>
-                    <span>
+                    {/* <span>
                       {" "}
                       {data.userAccountInfo &&
                       data.userAccountInfo.length > 0 &&
                       data.userAccountInfo[0].status
                         ? data.userAccountInfo[0].status
                         : "--"}
-                    </span>
+                    </span> */}
+                    <span>{data.status}</span>
                   </li>
                   <li className="stdList">
                     <b>End Date</b>
