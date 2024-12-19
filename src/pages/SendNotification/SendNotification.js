@@ -1,13 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import SendNotificationAdd from "./SendNotificationAdd";
-import SendNotificationEdit from "./SendNotificationEdit";
+import React, { useEffect, useMemo, useState } from "react";
 import api from "../../config/URL";
-import Delete from "../../components/common/Delete";
-import SendNotificationView from "./SendNotificationView";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEdit } from "react-icons/fa";
-import { IoIosAddCircle } from "react-icons/io";
-import { MdOutlineModeEdit } from "react-icons/md";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
@@ -24,7 +17,6 @@ const SendNotification = () => {
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState([]);
   const navigate = useNavigate();
-  const [centerName, setCenterName] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
 
@@ -44,9 +36,6 @@ const SendNotification = () => {
     getData();
   }, []);
 
-  const handleRowClick = (id) => {
-    navigate(`/sendnotification/view/${id}`);
-  };
   const columns = useMemo(
     () => [
       {
@@ -120,6 +109,33 @@ const SendNotification = () => {
             fontWeight: "400 !important",
             fontSize: "13px !important",
             textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", 
+              opacity: 1, 
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", 
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", 
+          },
+          thumb: {
+            color: "#eb862a", 
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", 
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", 
+            },
           },
         },
       },
@@ -219,14 +235,6 @@ const SendNotification = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                {/* <Link
-                  to={`/sendNotification/view/${selectedId}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  View
-                </Link> */}
-              </MenuItem>
-              <MenuItem>
                 <Link
                   to={`/sendNotification/edit/${selectedId}`}
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -238,6 +246,7 @@ const SendNotification = () => {
                 <GlobalDelete
                   path={`/deleteSmsPushNotifications/${selectedId}`}
                   onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

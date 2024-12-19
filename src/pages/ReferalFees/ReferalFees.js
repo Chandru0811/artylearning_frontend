@@ -78,7 +78,7 @@ const ReferalFees = () => {
       },
       { accessorKey: "createdBy", enableHiding: false, header: "Created By" },
       {
-        accessorKey: "createdDate",
+        accessorKey: "createdAt",
         enableHiding: false,
         header: "Created Date",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
@@ -86,14 +86,14 @@ const ReferalFees = () => {
       {
         accessorKey: "updatedBy",
         header: "Updated By",
+        enableHiding: false,
         Cell: ({ cell }) => cell.getValue() || "",
       },
-      {
-        accessorKey: "createdAt",
-        header: "Created At",
-        enableHiding: false,
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
-      },
+      // {
+      //   accessorKey: "createdAt",
+      //   header: "Created At",
+      //   Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      // },
       {
         accessorKey: "updatedAt",
         header: "Updated At",
@@ -130,6 +130,33 @@ const ReferalFees = () => {
           },
         },
       },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", 
+              opacity: 1, 
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", 
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", 
+          },
+          thumb: {
+            color: "#eb862a", 
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", 
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", 
+            },
+          },
+        },
+      },
     },
   });
 
@@ -144,7 +171,7 @@ const ReferalFees = () => {
     });
   };
 
-  const handleMenuClose = () => setMenuAnchor(null);
+  const handleMenuClose = () => {setMenuAnchor(null);console.log("null")}
 
   return (
     <div className="container-fluid px-2 my-4 center">
@@ -176,8 +203,8 @@ const ReferalFees = () => {
             <strong style={{ color: "#287f71" }}>Referal Fees</strong>
           </span>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
+        <div className="mb-3 d-flex justify-content-end">
+          {/* <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -199,7 +226,7 @@ const ReferalFees = () => {
                 Clear
               </button>
             </div>
-          </div>
+          </div> */}
           <ReferalFeesAdd onSuccess={fetchData} />
         </div>
         {loading ? (
@@ -224,18 +251,8 @@ const ReferalFees = () => {
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
-                    gst: false,
-                    address: false,
-                    bankAccountName: false,
-                    bankAccountNumber: false,
-                    bankBranch: false,
-                    bankName: false,
-                    createdAt: false,
+                    // createdAt: false,
                     updatedAt: false,
-                    invoiceNotes: false,
-                    openingDate: false,
-                    taxRegistrationNumber: false,
-                    zipCode: false,
                   },
                 }}
                 // muiTableBodyRowProps={({ row }) => ({
@@ -252,12 +269,17 @@ const ReferalFees = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <ReferalFeesEdit id={selectedId} onSuccess={fetchData} />
+                <ReferalFeesEdit
+                  id={selectedId}
+                  onSuccess={fetchData}
+                  onOpen={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteReferralFees/${selectedId}`}
                   onDeleteSuccess={fetchData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

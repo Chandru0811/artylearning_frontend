@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
   parent: Yup.string().required("*Select a parent"),
   studentId: Yup.string().required("*Select a Student"),
   courseId: Yup.string().required("*Select a Course"),
-  schedule: Yup.string().required("*Select a Schedule"),
+  // schedule: Yup.string().required("*Select a Schedule"),
   invoiceDate: Yup.string().required("*Invoice Date is required"),
   dueDate: Yup.string().required("*Due Date is required"),
   packageId: Yup.string().required("*Package is required"),
@@ -595,7 +595,7 @@ export default function InvoiceEdit() {
                 </div>
                 <div className="text-start mt-3">
                   <label htmlFor="" className="mb-1 fw-medium">
-                    Schedule<span class="text-danger">*</span>
+                    Schedule
                   </label>
                   <br />
                   <select

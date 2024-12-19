@@ -193,6 +193,33 @@ const Invoice = () => {
           },
         },
       },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", 
+              opacity: 1, 
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", 
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", 
+          },
+          thumb: {
+            color: "#eb862a", 
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", 
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", 
+            },
+          },
+        },
+      },
     },
   });
 
@@ -209,7 +236,7 @@ const Invoice = () => {
     });
   };
 
-  const handleMenuClose = () => setMenuAnchor(null);
+  const handleMenuClose = () => {setMenuAnchor(null);console.log("null")}
 
   return (
     <div className="container-fluid px-2 my-4 center">
@@ -241,8 +268,8 @@ const Invoice = () => {
             <strong style={{ color: "#287f71" }}>Invoice</strong>
           </span>
         </div>
-        <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
+        <div className="mb-3 d-flex justify-content-end">
+          {/* <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -288,7 +315,7 @@ const Invoice = () => {
                 Clear
               </button>
             </div>
-          </div>
+          </div> */}
           <Link to="/invoice/add">
             <button
               type="button"
@@ -357,6 +384,7 @@ const Invoice = () => {
                 <GlobalDelete
                   path={`/deleteGenerateInvoice/${selectedId}`}
                   onDeleteSuccess={fetchData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>
