@@ -73,27 +73,27 @@ const EmailTemplate = () => {
         header: "Subject",
         size: 20,
       },
-      {
-        accessorKey: "description",
-        enableHiding: false,
-        header: "Description",
-        size: 20,
-        Cell: ({ cell }) => {
-          const content = cell.getValue(); // Assuming cell.getValue() fetches the raw description HTML.
-          return (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: content || "<p>No Description Available</p>",
-              }}
-              style={{
-                maxHeight: "100px", // Add styling to limit the height, if necessary.
-                overflow: "hidden", // Ensure overflow handling.
-                textOverflow: "ellipsis",
-              }}
-            />
-          );
-        },
-      },
+      // {
+      //   accessorKey: "description",
+      //   enableHiding: false,
+      //   header: "Description",
+      //   size: 20,
+      //   Cell: ({ cell }) => {
+      //     const content = cell.getValue(); // Assuming cell.getValue() fetches the raw description HTML.
+      //     return (
+      //       <div
+      //         dangerouslySetInnerHTML={{
+      //           __html: content || "<p>No Description Available</p>",
+      //         }}
+      //         style={{
+      //           maxHeight: "100px", // Add styling to limit the height, if necessary.
+      //           overflow: "hidden", // Ensure overflow handling.
+      //           textOverflow: "ellipsis",
+      //         }}
+      //       />
+      //     );
+      //   },
+      // },
 
       { accessorKey: "createdBy", header: "Created By" },
       {

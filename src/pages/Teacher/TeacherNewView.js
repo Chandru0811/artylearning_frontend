@@ -353,7 +353,29 @@ function TeacherNewView() {
                       {data.userAccountInfo &&
                       data.userAccountInfo.length > 0 &&
                       data.userAccountInfo[0].workingDays
-                        ? data.userAccountInfo[0].workingDays.join(", ")
+                        ? [...data.userAccountInfo[0].workingDays]
+                            .sort(
+                              (a, b) =>
+                                [
+                                  "MONDAY",
+                                  "TUESDAY",
+                                  "WEDNESDAY",
+                                  "THURSDAY",
+                                  "FRIDAY",
+                                  "SATURDAY",
+                                  "SUNDAY",
+                                ].indexOf(a) -
+                                [
+                                  "MONDAY",
+                                  "TUESDAY",
+                                  "WEDNESDAY",
+                                  "THURSDAY",
+                                  "FRIDAY",
+                                  "SATURDAY",
+                                  "SUNDAY",
+                                ].indexOf(b)
+                            )
+                            .join(", ")
                         : "--"}
                     </span>
                   </li>
@@ -418,23 +440,80 @@ function TeacherNewView() {
           <div className="col-md-3 col-12 mb-3">
             <div className="card" style={{ padding: "10px" }}>
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
-                  <b>Resume/Cv</b>
-                  <input
-                    type="file"
-                    className="form-control form-control-sm mt-1"
-                  />
+                <li
+                  className="stdList"
+                  style={{
+                    borderTop: "1px solid #ddd",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <b>Resume/CV</b>
+                  {data.userRequireInformationModels &&
+                  data.userRequireInformationModels.length > 0 &&
+                  data.userRequireInformationModels[0].resume ? (
+                    <>
+                      <span style={{ marginRight: "auto", marginLeft: "10px" }}>
+                        {data.userRequireInformationModels[0].resume
+                          .split("/")
+                          .pop()}
+                      </span>
+                      <a
+                        href={data.userRequireInformationModels[0].resume}
+                        download
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i
+                          className="fas fa-download"
+                          style={{ cursor: "pointer", color: "#007bff" }}
+                        ></i>
+                      </a>
+                    </>
+                  ) : (
+                    <span style={{ marginRight: "auto", marginLeft: "10px" }}>
+                      No file available
+                    </span>
+                  )}
                 </li>
-                <li className="stdList">
+                <li
+                  className="stdList"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
                   <b>Educational Certificates</b>
-                  <input
-                    type="file"
-                    className="form-control form-control-sm mt-1"
-                  />
+                  {data.userRequireInformationModels &&
+                  data.userRequireInformationModels.length > 0 &&
+                  data.userRequireInformationModels[0].educationCertificate ? (
+                    <>
+                      <span style={{ marginRight: "auto", marginLeft: "10px" }}>
+                        {data.userRequireInformationModels[0].educationCertificate
+                          .split("/")
+                          .pop()}
+                      </span>
+                      <a
+                        href={
+                          data.userRequireInformationModels[0]
+                            .educationCertificate
+                        }
+                        download
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i
+                          className="fas fa-download"
+                          style={{ cursor: "pointer", color: "#007bff" }}
+                        ></i>
+                      </a>
+                    </>
+                  ) : (
+                    <span style={{ marginRight: "auto", marginLeft: "10px" }}>
+                      No file available
+                    </span>
+                  )}
                 </li>
-                <button className="btn btn-danger btn-sm mt-2" type="button">
-                  Save
-                </button>
               </ul>
             </div>
             {data.role !== "freelancer" && (
@@ -730,9 +809,29 @@ function TeacherNewView() {
                     {data.userContractCreationModels &&
                     data.userContractCreationModels.length > 0 &&
                     data.userContractCreationModels[0].workingDays
-                      ? data.userContractCreationModels[0].workingDays.join(
-                          ", "
-                        )
+                      ? [...data.userContractCreationModels[0].workingDays]
+                          .sort(
+                            (a, b) =>
+                              [
+                                "MONDAY",
+                                "TUESDAY",
+                                "WEDNESDAY",
+                                "THURSDAY",
+                                "FRIDAY",
+                                "SATURDAY",
+                                "SUNDAY",
+                              ].indexOf(a) -
+                              [
+                                "MONDAY",
+                                "TUESDAY",
+                                "WEDNESDAY",
+                                "THURSDAY",
+                                "FRIDAY",
+                                "SATURDAY",
+                                "SUNDAY",
+                              ].indexOf(b)
+                          )
+                          .join(", ")
                       : "--"}
                   </span>
                 </li>

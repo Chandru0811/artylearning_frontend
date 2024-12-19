@@ -131,16 +131,16 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <button
+      <p
         style={{
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="btn btn-sm btn-normal text-start"
+        className=" text-start"
         onClick={handleShow}
       >
         Edit
-      </button>
+      </p>
       <Dialog
         open={show}
         onClose={handleClose}

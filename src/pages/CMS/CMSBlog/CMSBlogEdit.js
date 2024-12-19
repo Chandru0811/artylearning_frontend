@@ -96,9 +96,9 @@ function CMSBlogEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <button className="btn btn-sm" onClick={handleShow}>
+      <p className="text-start" onClick={handleShow}>
         Edit
-      </button>
+      </p>
 
       <Dialog open={show} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle className="headColor">

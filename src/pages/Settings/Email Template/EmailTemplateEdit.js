@@ -107,16 +107,16 @@ function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <button
+      <p
         style={{
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="btn btn-sm btn-normal text-start"
+        className="text-start"
         onClick={handleOpen}
       >
         Edit
-      </button>
+      </p>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <form onSubmit={formik.handleSubmit}>
           <DialogTitle className="headColor">
