@@ -145,7 +145,7 @@ function OtherMessagesView() {
           Other Messages View
         </li>
       </ol>
-      <div className="card">
+      <div className="card mx-3">
         <div
           className="d-flex px-4 justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
