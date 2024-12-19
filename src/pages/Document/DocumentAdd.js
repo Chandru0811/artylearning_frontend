@@ -16,7 +16,7 @@ const validationSchema = Yup.object({
   course: Yup.string().required("*Course is required"),
   userId: Yup.string().required("*Teacher is required"),
   days: Yup.string().required("*Days is required"),
-  batchId: Yup.string().required("*Batch Time is required"),
+  batchTime: Yup.string().required("*Batch Time is required"),
   classListing: Yup.string().required("*Class Listing is required"),
   folderCategoryListing: Yup.string().required("*FolderCategory is required"),
   date: Yup.string().required("*Date is required"),
@@ -33,6 +33,7 @@ function DocumentAdd() {
   const [userData, setUserData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
+  const [batchData, setBatchData] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -44,7 +45,7 @@ function DocumentAdd() {
       days: "",
       expiredDate: "",
       folderCategoryListing: "group",
-      batchId: "",
+      batchTime: "",
       groupSelect: "",
       studentSelect: "",
       createdBy: userName,
@@ -88,21 +89,7 @@ function DocumentAdd() {
           courseId: values.course,
           classId: values.classListing,
           folderCategory: folderCategory,
-          batchId: values.batchId,
-          batchTime:
-            values.batchId === "5"
-              ? "12:00 pm"
-              : values.batchId === "6"
-              ? "1:00 pm"
-              : values.batchId === "1"
-              ? "2:30 pm"
-              : values.batchId === "2"
-              ? "3:30 pm"
-              : values.batchId === "3"
-              ? "5:00 pm"
-              : values.batchId === "4"
-              ? "7:00 pm"
-              : "",
+          batchTime: values.batchTime,
           date: values.date,
           expiredDate: values.expiredDate, // Calculating expiry date
         };
@@ -238,6 +225,61 @@ function DocumentAdd() {
     fetchStudent(center); // Fetch courses for the selected center
   };
 
+  const fetchBatchandTeacherData = async (day) => {
+    try {
+      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+      setBatchData(response.data.batchList);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (formik.values.days) {
+      fetchBatchandTeacherData(formik.values.days);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.days]);
+
+  const formatTo12Hour = (time) => {
+    const [hours, minutes] = time.split(":");
+    let period = "AM";
+    let hour = parseInt(hours, 10);
+
+    if (hour === 0) {
+      hour = 12;
+    } else if (hour >= 12) {
+      period = "PM";
+      if (hour > 12) hour -= 12;
+    }
+
+    return `${hour}:${minutes} ${period}`;
+  };
+
+  const normalizeTime = (time) => {
+    if (time.includes("AM") || time.includes("PM")) {
+      return time;
+    }
+
+    return formatTo12Hour(time);
+  };
+
+  const convertTo24Hour = (time) => {
+    const [timePart, modifier] = time.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+
+    if (modifier === "PM" && hours < 12) {
+      hours += 12;
+    } else if (modifier === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
   const handleCourseChange = (event) => {
     setClassData(null);
     const course = event.target.value;
@@ -312,6 +354,7 @@ function DocumentAdd() {
               </button>
             </div>
           </div>
+
           <div className="container">
             <div className="row py-4">
               <div class="col-md-6 col-12 mb-4">
@@ -341,6 +384,7 @@ function DocumentAdd() {
                   <div className="invalid-feedback">{formik.errors.center}</div>
                 )}
               </div>
+
               <div class="col-md-6 col-12 mb-4">
                 <lable class="">
                   Course<span class="text-danger">*</span>
@@ -431,20 +475,22 @@ function DocumentAdd() {
                 </label>
                 <select
                   {...formik.getFieldProps("days")}
-                  className={`form-select ${
-                    formik.touched.days && formik.errors.days
-                      ? "is-invalid"
-                      : ""
+                  className={`form-select  ${
+                    formik.touched.days && formik.errors.days ? "is-invalid" : ""
                   }`}
+                  name="days"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.days}
                 >
-                  <option value=""></option>
-                  <option value="SUNDAY">Sunday</option>
+                  <option></option>
                   <option value="MONDAY">Monday</option>
                   <option value="TUESDAY">Tuesday</option>
                   <option value="WEDNESDAY">Wednesday</option>
                   <option value="THURSDAY">Thursday</option>
                   <option value="FRIDAY">Friday</option>
                   <option value="SATURDAY">Saturday</option>
+                  <option value="SUNDAY">Sunday</option>
                 </select>
                 {formik.touched.days && formik.errors.days && (
                   <div className="invalid-feedback">{formik.errors.days}</div>
@@ -456,24 +502,32 @@ function DocumentAdd() {
                   Batch Time<span className="text-danger">*</span>
                 </label>
                 <select
-                  {...formik.getFieldProps("batchId")}
+                  {...formik.getFieldProps("batchTime")}
                   className={`form-select ${
-                    formik.touched.batchId && formik.errors.batchId
+                    formik.touched.batchTime && formik.errors.batchTime
                       ? "is-invalid"
                       : ""
                   }`}
                 >
-                  <option value=""></option>
-                  <option value="5">12:00 pm</option>
-                  <option value="6">1:00 pm</option>
-                  <option value="1">2:30 pm</option>
-                  <option value="2">3:30 pm</option>
-                  <option value="3">5:00 pm</option>
-                  <option value="4">7:00 pm</option>
+                  <option></option>
+                  {batchData &&
+                    batchData.map((time) => {
+                      const displayTime = normalizeTime(time);
+                      const valueTime =
+                        time.includes("AM") || time.includes("PM")
+                          ? convertTo24Hour(time)
+                          : time;
+
+                      return (
+                        <option key={time} value={valueTime}>
+                          {displayTime}
+                        </option>
+                      );
+                    })}
                 </select>
-                {formik.touched.batchId && formik.errors.batchId && (
+                {formik.touched.batchTime && formik.errors.batchTime && (
                   <div className="invalid-feedback">
-                    {formik.errors.batchId}
+                    {formik.errors.batchTime}
                   </div>
                 )}
               </div>

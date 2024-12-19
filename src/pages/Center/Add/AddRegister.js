@@ -160,6 +160,7 @@ function AddRegister({ id, onSuccess ,handleMenuClose}) {
                 </label>
                 <div className="input-group mb-3">
                   <input
+                  onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.amount && formik.errors.amount

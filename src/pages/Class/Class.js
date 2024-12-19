@@ -126,6 +126,34 @@ const Class = () => {
           },
         },
       },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
+          },
+        },
+      },
     },
   });
 
@@ -312,7 +340,7 @@ const Class = () => {
             </div>
           </div>
           <div className="d-flex justify-content-between">
-            <div className="individual_fliters d-lg-flex ">
+            <div className="individual_fliters d-lg-flex mt-2">
               <div className="form-group mb-0 ms-2 mb-1">
                 <select
                   className="form-select form-select-sm center_list"

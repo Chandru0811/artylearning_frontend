@@ -198,7 +198,7 @@ function CurriculumOutletAdd({ onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button
+              <Button 
                 type="button"
                 className="btn btn-sm btn-border bg-light text-dark"
                 onClick={handleClose}

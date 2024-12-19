@@ -25,7 +25,7 @@ const validationSchema = Yup.object({
   status: Yup.string().required("*Status is required"),
 });
 
-function CourseFeesEdit({ id, onSuccess }) {
+function CourseFeesEdit({ id, onSuccess,handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);
@@ -51,6 +51,7 @@ function CourseFeesEdit({ id, onSuccess }) {
   };
 
   const handleClose = () => {
+    handleMenuClose();
     setOpen(false);
     setPackageData(null);
   };
@@ -116,12 +117,11 @@ function CourseFeesEdit({ id, onSuccess }) {
         onClick={handleShow}
         style={{
           whiteSpace: "nowrap",
-          width: "100%",
-          cursor: "pointer",
+          width: "100% !important",
         }}
       >
-        &nbsp;&nbsp;&nbsp;Edit
-      </span>
+        Edit
+      </span> 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
         <DialogTitle>Edit Course Fees</DialogTitle>
         <form onSubmit={formik.handleSubmit}>
@@ -132,6 +132,7 @@ function CourseFeesEdit({ id, onSuccess }) {
                   <TextField
                     label="Effective Date"
                     type="date"
+                    onKeyDown={(e) => e.stopPropagation()}
                     fullWidth
                     InputLabelProps={{ shrink: true }}
                     {...formik.getFieldProps("effectiveDate")}
@@ -178,6 +179,7 @@ function CourseFeesEdit({ id, onSuccess }) {
                   <TextField
                     label="Weekday Fee"
                     fullWidth
+                    onKeyDown={(e) => e.stopPropagation()}
                     {...formik.getFieldProps("weekdayFee")}
                     error={
                       formik.touched.weekdayFee &&
@@ -257,7 +259,7 @@ function CourseFeesEdit({ id, onSuccess }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <button
+            <button type="button"
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
             >

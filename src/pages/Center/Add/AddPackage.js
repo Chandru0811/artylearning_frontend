@@ -98,11 +98,11 @@ function AddPackage({ id, onSuccess,handleMenuClose }) {
       >
         <form
           onSubmit={formik.handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !formik.isSubmitting) {
-              e.preventDefault(); // Prevent default form submission
-            }
-          }}
+          // onKeyDown={(e) => {
+          //   if (e.key === "Enter" && !formik.isSubmitting) {
+          //     e.preventDefault(); // Prevent default form submission
+          //   }
+          // }}
         >
             <DialogTitle>
               <p className="headColor">Add Package</p>
@@ -116,6 +116,7 @@ function AddPackage({ id, onSuccess,handleMenuClose }) {
                 <div class="input-group mb-3">
                   <input
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control   ${
                       formik.touched.packageName && formik.errors.packageName
                         ? "is-invalid"

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
 import api from "../../../config/URL";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
@@ -47,22 +46,6 @@ const OtherMessages = () => {
         ),
       },
       {
-        accessorKey: "id",
-        header: "",
-        size: 20,
-        Cell: ({ row }) => (
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent the row click event
-              setMenuAnchor(e.currentTarget);
-              setSelectedMessage(row.original);
-            }}
-          >
-            <MoreVertIcon />
-          </IconButton>
-        ),
-      },
-      {
         accessorKey: "senderName",
         header: "Sender Name",
         size: 20,
@@ -101,6 +84,33 @@ const OtherMessages = () => {
             fontWeight: "400 !important",
             fontSize: "13px !important",
             textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", 
+              opacity: 1, 
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", 
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", 
+          },
+          thumb: {
+            color: "#eb862a", 
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", 
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", 
+            },
           },
         },
       },
@@ -187,20 +197,21 @@ const OtherMessages = () => {
             </ThemeProvider>
           )}
         </div>
-        <Menu
+        {/* <Menu
           id="action-menu"
           anchorEl={menuAnchor}
           open={Boolean(menuAnchor)}
           onClose={handleMenuClose}
-        >
+        > */}
           {/* <MenuItem onClick={() => handleViewClick()}>View</MenuItem> */}
-          <MenuItem>
+          {/* <MenuItem>
             <GlobalDelete
               path={`/deleteMessage/${selectedMessage?.id}`}
               onDeleteSuccess={getData}
+              onOpen={handleMenuClose}
             />
           </MenuItem>
-        </Menu>
+        </Menu> */}
       </div>
     </div>
   );
