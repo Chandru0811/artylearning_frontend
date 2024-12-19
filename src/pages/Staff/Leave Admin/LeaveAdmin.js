@@ -140,6 +140,33 @@ const LeaveAdmin = () => {
           },
         },
       },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
     },
   });
 
@@ -241,6 +268,7 @@ const LeaveAdmin = () => {
                 <GlobalDelete
                   path={`/deleteUserLeaveRequest/${selectedId}`}
                   onDeleteSuccess={getData}
+                  handleMenuClose={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

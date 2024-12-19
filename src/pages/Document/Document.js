@@ -146,6 +146,33 @@ const Document = () => {
           },
         },
       },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
     },
   });
 
@@ -333,10 +360,6 @@ const Document = () => {
                     zipCode: false,
                   },
                 }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
               />
             </ThemeProvider>
 
@@ -347,7 +370,11 @@ const Document = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <DocumentEdit onSuccess={fetchData} id={selectedId} />
+                <DocumentEdit
+                  onSuccess={fetchData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
             </Menu>
           </>

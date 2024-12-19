@@ -26,42 +26,7 @@ const validationSchema = Yup.object().shape({
 
 const EditEmergencyContact = forwardRef(
   ({ formData, setLoadIndicators, handleNext }, ref) => {
-    // const [rows, setRows] = useState([{}]);
-    const [rows, setRows] = useState([
-      {
-        name: "",
-        emergencyRelation: "",
-        contactNo: "",
-        postalCode: "",
-        emergencyContactAddress: "",
-        files: null,
-      },
-    ]); // Always start with one empty row
     const userName = localStorage.getItem("userName");
-
-    const handleDelete = () => {
-      formik.setFieldValue(
-        "emergencyAuthorizedContactModels",
-        formik.values.emergencyAuthorizedContactModels.slice(0, -1)
-      );
-      setRows((prev) => prev.slice(0, -1));
-    };
-
-    const handleAddRow = () => {
-      const newContactModel = {
-        name: "",
-        emergencyRelation: "",
-        contactNo: "",
-        postalCode: "",
-        emergencyContactAddress: "",
-        files: null,
-      };
-      formik.setFieldValue("emergencyAuthorizedContactModels", [
-        ...formik.values.emergencyAuthorizedContactModels,
-        newContactModel,
-      ]);
-      setRows((prev) => [...prev, {}]);
-    };
 
     const formik = useFormik({
       initialValues: {
@@ -84,88 +49,49 @@ const EditEmergencyContact = forwardRef(
       onSubmit: async (data) => {
         setLoadIndicators(true);
         try {
-          if (data.emergencyContactId !== null) {
-            const formDatas = new FormData();
-            formDatas.append("emergencyContactName", data.emergencyContactName);
-            formDatas.append("emergencyRelation", "Father");
-            formDatas.append("emergencyContactNo", data.emergencyContactNo);
-
-            // Loop through emergencyAuthorizedContactModels and append fields, even if empty
-            if (data.emergencyAuthorizedContactModels.length === 0) {
-              formDatas.append("name", "");
-              formDatas.append("contactNo", "");
-              formDatas.append("authorizedRelation", "");
-              formDatas.append("postalCode", "");
-              formDatas.append("emergencyContactAddress", "");
-              formDatas.append("files", null);
-            } else {
-              data.emergencyAuthorizedContactModels.forEach((contact) => {
-                formDatas.append("name", contact.name || "");
-                formDatas.append("contactNo", contact.contactNo || "");
-                formDatas.append(
-                  "authorizedRelation",
-                  contact.authorizedRelation || ""
-                );
-                formDatas.append("postalCode", contact.postalCode || "");
-                formDatas.append(
-                  "emergencyContactAddress",
-                  contact.emergencyContactAddress || ""
-                );
-                formDatas.append("files", contact.files || null);
-              });
-            }
-
-            const response = await api.put(
-              `/updateEmergencyContactWithEmergencyAuthorizedContact/${data.emergencyContactId}`,
-              formDatas,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
+          const formDatas = new FormData();
+          formDatas.append("emergencyContactName", data.emergencyContactName);
+          formDatas.append("emergencyRelation", " ");
+          formDatas.append("emergencyContactNo", data.emergencyContactNo);
+          data.emergencyAuthorizedContactModels.forEach((contact) => {
+            formDatas.append("name", contact.name);
+            formDatas.append("contactNo", contact.contactNo);
+            formDatas.append("authorizedRelation", contact.authorizedRelation);
+            formDatas.append("postalCode", contact.postalCode);
+            formDatas.append(
+              "emergencyContactAddress",
+              contact.emergencyContactAddress
             );
-            if (response.status === 200) {
-              toast.success(response.data.message);
-              handleNext();
-              fetchData();
-            } else {
-              toast.error(response.data.message);
-            }
+            formDatas.append("files", contact.files);
+          });
+
+          const response =
+            data.emergencyContactId !== null
+              ? await api.put(
+                  `/updateEmergencyContactWithEmergencyAuthorizedContact/${data.emergencyContactId}`,
+                  formDatas,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  }
+                )
+              : await api.post(
+                  `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.id}`,
+                  formDatas,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  }
+                );
+
+          if (response.status === 200 || response.status === 201) {
+            toast.success(response.data.message);
+            handleNext();
+            fetchData();
           } else {
-            const formDatas = new FormData();
-            formDatas.append("emergencyContactName", data.emergencyContactName);
-            formDatas.append("emergencyRelation", " ");
-            formDatas.append("emergencyContactNo", data.emergencyContactNo);
-            data.emergencyAuthorizedContactModels.forEach((contact) => {
-              formDatas.append("name", contact.name);
-              formDatas.append("contactNo", contact.contactNo);
-              formDatas.append(
-                "authorizedRelation",
-                contact.authorizedRelation
-              );
-              formDatas.append("postalCode", contact.postalCode);
-              formDatas.append(
-                "emergencyContactAddress",
-                contact.emergencyContactAddress
-              );
-              formDatas.append("files", contact.files);
-            });
-            const response = await api.post(
-              `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.id}`,
-              formDatas,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            );
-            if (response.status === 201) {
-              toast.success(response.data.message);
-              handleNext();
-              fetchData();
-            } else {
-              toast.error(response.data.message);
-            }
+            toast.error(response.data.message);
           }
         } catch (error) {
           toast.error(error);
@@ -175,6 +101,29 @@ const EditEmergencyContact = forwardRef(
       },
     });
 
+    const handleDelete = () => {
+      if (formik.values.emergencyAuthorizedContactModels.length > 1) {
+        const updatedModels =
+          formik.values.emergencyAuthorizedContactModels.slice(0, -1);
+        formik.setFieldValue("emergencyAuthorizedContactModels", updatedModels);
+      }
+    };
+
+    const handleAddRow = () => {
+      const newContactModel = {
+        name: "",
+        emergencyRelation: "",
+        contactNo: "",
+        postalCode: "",
+        emergencyContactAddress: "",
+        files: null,
+      };
+      formik.setFieldValue("emergencyAuthorizedContactModels", [
+        ...formik.values.emergencyAuthorizedContactModels,
+        newContactModel,
+      ]);
+    };
+
     const fetchData = async () => {
       try {
         const response = await api.get(`/getAllStudentById/${formData.id}`);
@@ -182,24 +131,14 @@ const EditEmergencyContact = forwardRef(
           response.data.studentEmergencyContacts &&
           response.data.studentEmergencyContacts.length > 0
         ) {
+          const contactData = response.data.studentEmergencyContacts[0];
           formik.setValues({
-            ...response.data.studentEmergencyContacts[0],
-            emergencyContactId: response.data.studentEmergencyContacts[0].id,
+            ...contactData,
+            emergencyContactId: contactData.id,
+            emergencyAuthorizedContactModels:
+              contactData.emergencyAuthorizedContactModels || [],
           });
-          setRows(
-            response.data.studentEmergencyContacts[0]
-              .emergencyAuthorizedContactModels
-          );
-          // setData(
-          //   response.data.studentEmergencyContacts[0].emergencyAuthorizedContactModels
-          // );
-          console.log(
-            "AuthorizedContactModels:",
-            response.data.studentEmergencyContacts[0]
-              .emergencyAuthorizedContactModels
-          );
         } else {
-          // If there are no emergency contacts, set default values or handle the case as needed
           formik.setValues({
             emergencyContactId: null,
             emergencyContactName: "",
@@ -212,39 +151,19 @@ const EditEmergencyContact = forwardRef(
                 contactNo: "",
                 postalCode: "",
                 emergencyContactAddress: "",
-                files: null || "",
+                files: null,
               },
             ],
           });
         }
-        setRows([
-          {
-            name: "",
-            emergencyRelation: "",
-            contactNo: "",
-            postalCode: "",
-            emergencyContactAddress: "",
-            files: null,
-          },
-        ]); // Default empty row
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-      // console.log("Emergency Contact ID:", response.data.emergencyContactId);
     };
 
     useEffect(() => {
       fetchData();
     }, [formData.id]);
-
-    // const handleNextStep = () => {
-    //   formik.validateForm().then((errors) => {
-    //     formik.handleSubmit();
-    //     if (Object.keys(errors).length === 0) {
-    //       handleNext();
-    //     }
-    //   });
-    // };
 
     useImperativeHandle(ref, () => ({
       emergencyContact: formik.handleSubmit,
@@ -252,97 +171,82 @@ const EditEmergencyContact = forwardRef(
 
     return (
       <div className="container-fluid">
-        <div className="container-fluid">
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault();
+            }
+          }}
+        >
           <div className="border-0 mb-5">
-            <div className="border-0 my-2">
-              <form
-                onSubmit={formik.handleSubmit}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !formik.isSubmitting) {
-                    e.preventDefault(); // Prevent default form submission
-                  }
-                }}
-              >
-                <div className="border-0 mb-5">
-                  <div className="mb-5">
-                    <div className="border-0 my-2">
-                      <p className="headColor">Emergency Contact</p>
-                      <div className="container py-3">
-                        <div className="row mt-3">
-                          <div className="col-lg-6 col-md-6 col-12">
-                            <div className="text-start mt-4">
-                              <label htmlFor="" className="mb-1 fw-medium">
-                                <small>Emergency Contact Name</small>&nbsp;
-                              </label>
-                              <br />
-                              <input
-                                className="form-control "
-                                type="text"
-                                name="emergencyContactName"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.emergencyContactName}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-lg-6 col-md-6 col-12 px-5">
-                            <div className="text-start mt-4">
-                              <label htmlFor="" className="mb-1 fw-medium">
-                                <small>Emergency Contact No</small>
-                                {/* <span className="text-danger">*</span> */}
-                              </label>
-                              <br />
-                              <input
-                                className="form-control "
-                                type="text"
-                                name="emergencyContactNo"
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                value={formik.values.emergencyContactNo}
-                              />
-                              {formik.touched.emergencyContactNo &&
-                                formik.errors.emergencyContactNo && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {formik.errors.emergencyContactNo}
-                                    </small>
-                                  </div>
-                                )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+            <p className="headColor">Emergency Contact</p>
+            <div className="container py-3">
+              <div className="row mt-3">
+                <div className="col-lg-6 col-md-6 col-12">
+                  <div className="text-start mt-4">
+                    <label className="mb-1 fw-medium">
+                      <small>Emergency Contact Name</small>
+                    </label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="emergencyContactName"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.emergencyContactName}
+                    />
                   </div>
                 </div>
-              </form>
+                <div className="col-lg-6 col-md-6 col-12 px-5">
+                  <div className="text-start mt-4">
+                    <label className="mb-1 fw-medium">
+                      <small>Emergency Contact No</small>
+                    </label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="emergencyContactNo"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.emergencyContactNo}
+                    />
+                    {formik.touched.emergencyContactNo &&
+                      formik.errors.emergencyContactNo && (
+                        <div className="text-danger">
+                          <small>{formik.errors.emergencyContactNo}</small>
+                        </div>
+                      )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="border-0 mb-5">
-            {rows.map((row, index) => (
-              <div className="border-0 mb-5" key={index}>
-                <div className="border-0 my-2">
-                  <form
-                    onSubmit={formik.handleSubmit}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !formik.isSubmitting) {
-                        e.preventDefault(); // Prevent default form submission
-                      }
-                    }}
-                  >
+          <div>
+            <form
+              onSubmit={formik.handleSubmit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !formik.isSubmitting) {
+                  e.preventDefault();
+                }
+              }}
+            >
+              {formik.values.emergencyAuthorizedContactModels.map(
+                (row, index) => (
+                  <div className="border-0 mb-5" key={index}>
                     <p className="headColor">
                       Authorized Person to Take Child from Class
                     </p>
                     <div className="container py-3">
                       <div className="row mt-3">
+                        {/* Left Section */}
                         <div className="col-lg-6 col-md-6 col-12">
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
-                              <small>Name</small>&nbsp;
+                              <small>Name</small>
                             </label>
-                            <br />
                             <input
-                              className="form-control "
+                              className="form-control"
                               type="text"
                               name={`emergencyAuthorizedContactModels[${index}].name`}
                               onChange={formik.handleChange}
@@ -356,22 +260,20 @@ const EditEmergencyContact = forwardRef(
                           </div>
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
-                              <small>Relation</small>&nbsp;
+                              <small>Relation</small>
                             </label>
-                            <br />
                             <select
+                              className="form-select"
                               name={`emergencyAuthorizedContactModels[${index}].authorizedRelation`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              className="form-select "
-                              aria-label=" example"
                               value={
                                 formik.values.emergencyAuthorizedContactModels[
                                   index
                                 ]?.authorizedRelation || ""
                               }
                             >
-                              <option value=""></option>
+                              <option value="">Select Relation</option>
                               <option value="Mother">Mother</option>
                               <option value="Father">Father</option>
                               <option value="Sister">Sister</option>
@@ -380,15 +282,14 @@ const EditEmergencyContact = forwardRef(
                           </div>
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
-                              <small>Emergency Contact Address</small>&nbsp;
+                              <small>Emergency Contact Address</small>
                             </label>
-                            <br />
                             <input
-                              className="form-control "
+                              className="form-control"
                               type="text"
+                              name={`emergencyAuthorizedContactModels[${index}].emergencyContactAddress`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              name={`emergencyAuthorizedContactModels[${index}].emergencyContactAddress`}
                               value={
                                 formik.values.emergencyAuthorizedContactModels[
                                   index
@@ -397,18 +298,19 @@ const EditEmergencyContact = forwardRef(
                             />
                           </div>
                         </div>
+
+                        {/* Right Section */}
                         <div className="col-lg-6 col-md-6 col-12 px-5">
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
-                              <small>Contact No</small>&nbsp;
+                              <small>Contact No</small>
                             </label>
-                            <br />
                             <input
-                              className="form-control "
+                              className="form-control"
                               type="text"
+                              name={`emergencyAuthorizedContactModels[${index}].contactNo`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              name={`emergencyAuthorizedContactModels[${index}].contactNo`}
                               value={
                                 formik.values.emergencyAuthorizedContactModels[
                                   index
@@ -418,15 +320,14 @@ const EditEmergencyContact = forwardRef(
                           </div>
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
-                              <small>Postal Code</small>&nbsp;
+                              <small>Postal Code</small>
                             </label>
-                            <br />
                             <input
-                              className="form-control "
+                              className="form-control"
                               type="text"
+                              name={`emergencyAuthorizedContactModels[${index}].postalCode`}
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              name={`emergencyAuthorizedContactModels[${index}].postalCode`}
                               value={
                                 formik.values.emergencyAuthorizedContactModels[
                                   index
@@ -436,9 +337,8 @@ const EditEmergencyContact = forwardRef(
                           </div>
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
-                              <small>Person Profile</small>&nbsp;
+                              <small>Person Profile</small>
                             </label>
-                            <br />
                             <input
                               className="form-control"
                               type="file"
@@ -452,57 +352,43 @@ const EditEmergencyContact = forwardRef(
                               onBlur={formik.handleBlur}
                               accept=".jpg, .jpeg, .png"
                             />
-                            <div className="my-2 text-center">
-                              {/* <img
-                                src={row.personProfile}
-                                className="img-fluid rounded"
-                                style={{ width: "60%" }}
-                                alt="Parent Signature Img"
-                              ></img> */}
-                              <p className="my-2 d-flex">
-                                {row.personProfile ? (
-                                  <img
-                                    src={row.personProfile}
-                                    alt=""
-                                    style={{ width: "60%" }}
-                                    className="img-fluid rounded"
-                                  />
-                                ) : (
-                                  <></>
-                                )}
-                              </p>
-                            </div>
+                            {row.personProfile && (
+                              <div className="my-2 text-center">
+                                <img
+                                  src={row.personProfile}
+                                  alt="Profile"
+                                  style={{ width: "60%" }}
+                                  className="img-fluid rounded"
+                                />
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
                     </div>
-                  </form>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="row">
-            <div className="col-12 mb-4">
-              <button
-                type="button"
-                onClick={handleAddRow}
-                className="btn btn-border btn-sm"
-              >
-                <i className="bx bx-plus"></i> Add More
-              </button>
-              &nbsp;&nbsp;
-              {rows.length > 1 && (
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className="btn btn-outline-danger"
-                >
-                  Delete
-                </button>
+                  </div>
+                )
               )}
-            </div>
+            </form>
           </div>
-        </div>
+          <button
+            type="button"
+            onClick={handleAddRow}
+            className="btn btn-border btn-sm"
+          >
+            Add More
+          </button>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+          {formik.values.emergencyAuthorizedContactModels.length > 1 && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="btn btn-sm btn-outline-danger"
+            >
+              Delete
+            </button>
+          )}
+        </form>
       </div>
     );
   }

@@ -141,11 +141,7 @@ function TeacherNewView() {
       <div className="d-flex align-items-center justify-content-end mb-4">
         {/* <PasswordModal /> */}
         <Link to={"/teacher"}>
-          <button
-            className="btn btn-border btn-sm me-3"
-          >
-            Back
-          </button>
+          <button className="btn btn-border btn-sm me-3">Back</button>
         </Link>
       </div>
       <div className="container-fluid studentView">
@@ -176,9 +172,9 @@ function TeacherNewView() {
                   </p>
                 </Link>
               )}
-              <p className="stdSettings mt-1 mb-0" onClick={handleGeneratePDF}>
+              {/* <p className="stdSettings mt-1 mb-0" onClick={handleGeneratePDF}>
                 <IoIosSettings /> Student Detail PDF
-              </p>
+              </p> */}
               <hr className="mt-2 mb-0" />
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                 <li className="stdList">
@@ -718,7 +714,7 @@ function TeacherNewView() {
                   </span>
                 </li>
                 <li className="stdList">
-                  <b>Probation</b>
+                  <b>Probation (Day)</b>
                   <span>
                     {data.userContractCreationModels &&
                     data.userContractCreationModels.length > 0 &&
@@ -797,7 +793,7 @@ function TeacherNewView() {
                   </span>
                 </li>
                 <li className="stdList">
-                  <b>Termination Date</b>
+                  <b>Termination Notice (Month)</b>
                   <span>
                     {data.userContractCreationModels &&
                     data.userContractCreationModels.length > 0 &&

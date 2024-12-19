@@ -150,7 +150,7 @@ function StaffingAttendanceView() {
                 </div>
                 <div className="col-6">
                   <p className="text-muted text-sm">
-                    : {data.modeOfWorking || "--"}
+                    : {(data.modeOfWorking || "--").replace(/_/g, " ")}
                   </p>
                 </div>
               </div>

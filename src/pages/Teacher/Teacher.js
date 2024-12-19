@@ -80,23 +80,39 @@ const Teacher = () => {
       },
       { accessorKey: "email", enableHiding: false, header: "Email" },
       { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
-      { accessorKey: "role", enableHiding: false, header: "Role" },
+      {
+        accessorKey: "role",
+        enableHiding: false,
+        header: "Role",
+        Cell: ({ row }) =>
+          row.original.role === "Teacher" ||
+          row.original.role === "teacher" ||
+          row.original.role === "TEACHER" ? (
+            <span className="badge badges-Green fw-light">Teacher</span>
+          ) : row.original.role === "freelancer" ||
+            row.original.role === "free_lancer" ||
+            row.original.role === "FREELANCER" ? (
+            <span className="badge badges-orange fw-light">Freelancer</span>
+          ) : null,
+      },
+      {
+        accessorKey: "createdAt",
+        enableHiding: false,
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        enableHiding: false,
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
       {
         accessorKey: "updatedBy",
         header: "Updated By",
         Cell: ({ cell }) => cell.getValue() || "",
       },
       { accessorKey: "createdBy", header: "Created By" },
-      {
-        accessorKey: "createdAt",
-        header: "Created At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
-      },
-      {
-        accessorKey: "updatedAt",
-        header: "Updated At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
-      },
     ],
     []
   );
@@ -140,9 +156,35 @@ const Teacher = () => {
           },
         },
       },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
     },
   });
-
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({
@@ -289,9 +331,7 @@ const Teacher = () => {
                     bankBranch: false,
                     bankName: false,
                     createdBy: false,
-                    createdAt: false,
                     updatedBy: false,
-                    updatedAt: false,
                     invoiceNotes: false,
                     openingDate: false,
                     taxRegistrationNumber: false,
@@ -318,6 +358,7 @@ const Teacher = () => {
                 <GlobalDelete
                   path={`/deleteUser/${selectedId}`}
                   onDeleteSuccess={fetchData}
+                  handleMenuClose={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

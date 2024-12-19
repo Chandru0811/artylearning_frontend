@@ -288,12 +288,12 @@ function StudentRegisterCourse() {
         </li>
         <li>
           <Link to={`/student/view/${id}`} className="custom-breadcrumb">
-            &nbsp;Studnet View
+            &nbsp;student View
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;Studnet Course Detail
+          &nbsp;student Course Detail
         </li>
       </ol>
       <form

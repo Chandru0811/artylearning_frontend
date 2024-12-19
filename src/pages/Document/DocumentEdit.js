@@ -14,12 +14,15 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-function DocumentEdit({ id, onSuccess }) {
+function DocumentEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    handleMenuClose();
+  };
   const handleShow = () => setShow(true);
   const userName = localStorage.getItem("userName");
 
@@ -127,6 +130,7 @@ function DocumentEdit({ id, onSuccess }) {
                     name="folderName"
                     class="form-control "
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control  ${
                       formik.touched.folderName && formik.errors.folderName
                         ? "is-invalid"
@@ -144,12 +148,13 @@ function DocumentEdit({ id, onSuccess }) {
             </div>
           </DialogContent>
           <DialogActions>
-            <Button
+            <button
+              type="button"
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
             >
               Cancel
-            </Button>
+            </button>
             <button
               type="submit"
               onSubmit={formik.handleSubmit}

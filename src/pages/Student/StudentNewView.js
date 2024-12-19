@@ -571,8 +571,16 @@ function StudentNewView() {
               </div>
             </div>
 
-            <div className="card">
-              <div className="withBorder">
+            <div className="card overflow-auto" style={{ height: "300px" }}>
+              <div
+                className="withBorder"
+                style={{
+                  position: "sticky",
+                  top: "0px",
+                  zIndex: "999",
+                  background: "#fff",
+                }}
+              >
                 <p className="fw-medium ms-3 my-2">
                   <FaUsers size={20} />
                   &nbsp;&nbsp; Authorized Person

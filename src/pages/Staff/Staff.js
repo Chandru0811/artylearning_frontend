@@ -80,6 +80,16 @@ const Staff = () => {
         accessorKey: "role",
         enableHiding: false,
         header: "Role",
+        Cell: ({ row }) =>
+          row.original.role === "staff" ||
+          row.original.role === "Staff" ||
+          row.original.role === "STAFF" ? (
+            <span className="badge badges-Green fw-light">Staff</span>
+          ) : row.original.role === "center_manager" ? (
+            <span className="badge badges-orange fw-light">Center Manager</span>
+          ) : row.original.role === "staff_admin" ? (
+            <span className="badge badges-red fw-light">Staff Admin</span>
+          ) : null,
       },
       {
         accessorKey: "contactNumber",
@@ -151,6 +161,33 @@ const Staff = () => {
             fontWeight: "400 !important",
             fontSize: "13px !important",
             textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
           },
         },
       },
@@ -331,6 +368,7 @@ const Staff = () => {
                 <GlobalDelete
                   path={`/deleteUser/${selectedId}`}
                   onDeleteSuccess={fetchData}
+                  handleMenuClose={handleMenuClose}
                 />
               </MenuItem>
             </Menu>
