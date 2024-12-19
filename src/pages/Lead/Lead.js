@@ -238,10 +238,6 @@ const Lead = () => {
     };
   }, []);
 
-  const handleRowClick = (id) => {
-    navigate(`/lead/lead/view/${id}`);
-  };
-
   // ===new Data table
   const columns = useMemo(
     () => [
@@ -314,7 +310,7 @@ const Lead = () => {
                 onChange={(e) => {
                   handleStatusChange(row.original, e.target.value);
                 }}
-                className="form-control d-flex justify-content-center"
+                className="form-control d-flex justify-content-center "
                 style={{
                   padding: "4px 3px",
                   borderRadius: "4px",
@@ -322,6 +318,7 @@ const Lead = () => {
                   appearance: "none",
                   textIndent: "20px",
                   color: "#fff",
+                  cursor:"pointer",
                   fontSize: "10px",
                   backgroundColor: `${
                     row.original.leadStatus === "NEW_WAITLIST"
@@ -364,6 +361,7 @@ const Lead = () => {
                         backgroundColor: "white",
                         padding: "10px 15px ",
                         color: "#000",
+                        cursor:"pointer",
                       }}
                     >
                       Assessment Add
@@ -821,10 +819,38 @@ const Lead = () => {
           },
         },
       },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
+          },
+        },
+      },
     },
   });
 
-  const handleMenuClose = () => {setMenuAnchor(null);console.log("null")}
+  const handleMenuClose = () => setMenuAnchor(null)
   return (
     <div>
       <div className="container my-4 center">
@@ -1053,7 +1079,7 @@ const Lead = () => {
                     Edit
                   </MenuItem>
                 )}
-                {storedScreens?.centerListingDelete && (
+                {/* {storedScreens?.centerListingDelete && ( */}
                   <MenuItem >
                     <GlobalDelete
                       path={`/deleteLeadInfo/${selectedId}`}
@@ -1061,7 +1087,7 @@ const Lead = () => {
                       onOpen={handleMenuClose}
                     />
                   </MenuItem>
-                )}
+                {/* )} */}
               </Menu>
             </>
           )}

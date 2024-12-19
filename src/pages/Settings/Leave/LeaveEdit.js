@@ -15,7 +15,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "react-bootstrap/Button"; // Keep using Bootstrap's Button for styling
 
-function LeaveEdit({ id, onSuccess }) {
+function LeaveEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
@@ -30,7 +30,10 @@ function LeaveEdit({ id, onSuccess }) {
     }
   };
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);
+  };
   const handleShow = () => {
     setShow(true);
     setIsModified(false);
@@ -57,7 +60,7 @@ function LeaveEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -65,6 +68,7 @@ function LeaveEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error);
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -131,6 +135,7 @@ function LeaveEdit({ id, onSuccess }) {
                     Leave Type<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control  ${
                       formik.touched.leaveType && formik.errors.leaveType

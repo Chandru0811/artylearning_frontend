@@ -15,13 +15,19 @@ import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import CloseIcon from "@mui/icons-material/Close";
 
-function CMSContactEdit({ id, onSuccess }) {
+function CMSContactEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    handleMenuClose();
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    getData();
+    setOpen(true);
+  };
 
   const validationSchema = Yup.object({
     centerName: Yup.string().required("*Centre Name is required"),
@@ -61,7 +67,7 @@ function CMSContactEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -69,6 +75,7 @@ function CMSContactEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error.message);
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -108,6 +115,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">Centre Name</label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.centerName && formik.errors.centerName
@@ -125,6 +133,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">Email</label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.email && formik.errors.email
@@ -142,6 +151,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">Mobile</label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.mobileNo && formik.errors.mobileNo
@@ -177,6 +187,7 @@ function CMSContactEdit({ id, onSuccess }) {
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">Google Address</label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.map && formik.errors.map

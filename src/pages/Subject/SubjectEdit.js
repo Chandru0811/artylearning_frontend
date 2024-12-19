@@ -120,6 +120,7 @@ function SubjectEdit({ id, onSuccess, handleMenuClose }) {
                   </label>
                   <div className="input-group mb-3">
                     <input
+                      onKeyDown={(e) => e.stopPropagation()}
                       type="text"
                       className={`form-control   ${
                         formik.touched.subject && formik.errors.subject
@@ -143,6 +144,7 @@ function SubjectEdit({ id, onSuccess, handleMenuClose }) {
                   <div className="input-group mb-3">
                     <input
                       type="text"
+                      onKeyDown={(e) => e.stopPropagation()}
                       className={`form-control   ${
                         formik.touched.code && formik.errors.code
                           ? "is-invalid"

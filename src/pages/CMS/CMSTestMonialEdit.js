@@ -14,13 +14,16 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { MdOutlineModeEdit } from "react-icons/md";
 
-function CMSTestMonialEdit({ id, onSuccess }) {
+function CMSTestMonialEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const userName = localStorage.getItem("userName");
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   const initialValues = {
@@ -61,6 +64,7 @@ function CMSTestMonialEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error.message);
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -117,6 +121,7 @@ function CMSTestMonialEdit({ id, onSuccess }) {
                   Upload Image
                 </label>
                 <input
+                  onKeyDown={(e) => e.stopPropagation()}
                   type="file"
                   id="parentImage"
                   name="parentImage"
@@ -152,6 +157,7 @@ function CMSTestMonialEdit({ id, onSuccess }) {
                   Parent Name
                 </label>
                 <input
+                  onKeyDown={(e) => e.stopPropagation()}
                   id="parentName"
                   name="parentName"
                   className="form-control"

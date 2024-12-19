@@ -204,12 +204,13 @@ const Race = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <RaceEdit onSuccess={getData} id={selectedId} />
+                <RaceEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteRaceSetting/${selectedId}`}
                   onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

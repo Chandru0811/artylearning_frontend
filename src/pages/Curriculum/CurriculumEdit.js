@@ -13,7 +13,12 @@ import {
   DialogActions,
 } from "@mui/material";
 
-function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
+function CurriculumEdit({
+  id,
+  onSuccess,
+  curriculumOutletId,
+  handleMenuClose,
+}) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
@@ -22,7 +27,10 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
     setShow(true);
     setIsModified(false);
   };
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose()
+    setShow(false);
+  };
   const userName = localStorage.getItem("userName");
 
   const validationSchema = Yup.object({
@@ -118,8 +126,8 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
         disableBackdropClick={isModified}
         disableEscapeKeyDown={isModified}
       >
-          <DialogTitle className="headColor">Edit Curriculum</DialogTitle>
-       
+        <DialogTitle className="headColor">Edit Curriculum</DialogTitle>
+
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -162,6 +170,7 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
                   </label>
                   <input
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     {...formik.getFieldProps("curriculumCode")}
                     className={`form-control  ${
                       formik.touched.curriculumCode &&
@@ -183,6 +192,7 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
                   </label>
                   <input
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     {...formik.getFieldProps("curriculumNo")}
                     className={`form-control  ${
                       formik.touched.curriculumNo && formik.errors.curriculumNo
@@ -225,6 +235,7 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
                   <label className="form-label">Description</label>
                   <textarea
                     type="text"
+                    onKeyDown={(e) => e.stopPropagation()}
                     {...formik.getFieldProps("description")}
                     className={`form-control  ${
                       formik.touched.description && formik.errors.description
@@ -241,22 +252,26 @@ function CurriculumEdit({ id, onSuccess, curriculumOutletId }) {
               </div>
             </div>
             <DialogActions>
-              <Button
-                className="btn btn-sm btn-border bg-light text-dark"
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <Button variant="danger" type="submit" disabled={loadIndicator}>
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                Update
-              </Button>
-            </DialogActions>
+            <button type="button"
+              className="btn btn-sm btn-border bg-light text-dark"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Update
+            </button>
+          </DialogActions>
           </DialogContent>
         </form>
       </Dialog>

@@ -208,12 +208,13 @@ const Salary = () => {
             onClose={handleMenuClose}
           >
             <MenuItem>
-              <SalaryTypeEdit onSuccess={getData} id={selectedId} />
+              <SalaryTypeEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
             </MenuItem>
             <MenuItem>
               <GlobalDelete
                 path={`/deleteSalarySetting/${selectedId}`}
                 onDeleteSuccess={getData}
+                onOpen={handleMenuClose}
               />
             </MenuItem>
           </Menu>

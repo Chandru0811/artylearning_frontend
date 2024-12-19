@@ -77,9 +77,9 @@ const Tax = () => {
         size: 40,
         Cell: ({ row }) =>
           row.original.status === "ACTIVE" ? (
-            <span className="badge badges-Green py-2">ACTIVE</span>
+            <span className="badge badges-Green fw-light">Active</span>
           ) : row.original.status === "INACTIVE" ? (
-            <span className="badge badges-orange py-2">INACTIVE</span>
+            <span className="badge badges-orange fw-light">Inactive</span>
           ) : null,
       },
       {
@@ -228,13 +228,18 @@ const Tax = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={()=>handleMenuClose()}>
-                <TaxEdit onSuccess={getData} id={selectedId} />
+              <MenuItem>
+                <TaxEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteTaxSetting/${selectedId}`}
                   onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

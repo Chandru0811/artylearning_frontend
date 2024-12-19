@@ -119,7 +119,7 @@ function Header({ onLogout }) {
         <div className="offcanvas-body d-flex flex-column">
           <div className="flex-grow-1">
             <div className="text-center">
-              <h3 className="cname_canvas">Atry Learning</h3>
+              <h3 className="cname_canvas">Arty Learning</h3>
             </div>
             <div className="text-center mt-3">
               <i

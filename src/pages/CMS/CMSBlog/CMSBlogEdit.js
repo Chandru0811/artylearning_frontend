@@ -15,13 +15,16 @@ import CloseIcon from "@mui/icons-material/Close";
 import { MdOutlineModeEdit } from "react-icons/md";
 import api from "../../../config/URL";
 
-function CMSBlogEdit({ id, onSuccess }) {
+function CMSBlogEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const userName = localStorage.getItem("userName");
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   const initialValues = {
@@ -98,13 +101,16 @@ function CMSBlogEdit({ id, onSuccess }) {
       </button>
 
       <Dialog open={show} onClose={handleClose} fullWidth maxWidth="md">
-        <DialogTitle className="headColor">Edit Blog  <IconButton
+        <DialogTitle className="headColor">
+          Edit Blog{" "}
+          <IconButton
             aria-label="close"
             onClick={handleClose}
             style={{ position: "absolute", right: 8, top: 8 }}
           >
             <CloseIcon />
-          </IconButton></DialogTitle>
+          </IconButton>
+        </DialogTitle>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <div className="mb-3">
@@ -112,6 +118,7 @@ function CMSBlogEdit({ id, onSuccess }) {
                 Upload Image
               </label>
               <input
+                onKeyDown={(e) => e.stopPropagation()}
                 type="file"
                 id="imagerOne"
                 name="imagerOne"
@@ -146,6 +153,7 @@ function CMSBlogEdit({ id, onSuccess }) {
                 Blog Title
               </label>
               <input
+                onKeyDown={(e) => e.stopPropagation()}
                 type="text"
                 id="title"
                 name="title"
@@ -178,9 +186,9 @@ function CMSBlogEdit({ id, onSuccess }) {
           </DialogContent>
           <DialogActions>
             <button
-            type="button"
+              type="button"
               className="btn btn-border btn-sm"
-              style={{  fontSize: "12px" }}
+              style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel

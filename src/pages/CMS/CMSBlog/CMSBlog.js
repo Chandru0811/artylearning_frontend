@@ -252,12 +252,13 @@ const CMSBlog = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <CMSBlogEdit onSuccess={fetchData} id={selectedId} />
+                <CMSBlogEdit onSuccess={fetchData} id={selectedId} handleMenuClose={handleMenuClose}/>
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteBlogSave/${selectedId}`}
                   onDeleteSuccess={fetchData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

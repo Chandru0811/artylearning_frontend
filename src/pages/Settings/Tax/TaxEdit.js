@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
   status: Yup.string().required("*Status is required"),
 });
 
-function TaxEdit({ id, onSuccess }) {
+function TaxEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
@@ -58,7 +58,7 @@ function TaxEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -66,6 +66,7 @@ function TaxEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error.message);
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -85,7 +86,10 @@ function TaxEdit({ id, onSuccess }) {
     },
   });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setShow(false);
+  };
   const handleShow = () => {
     setShow(true);
     setIsModified(false);
@@ -110,13 +114,16 @@ function TaxEdit({ id, onSuccess }) {
         fullWidth
         maxWidth="md"
       >
-        <DialogTitle className="headColor">Tax Edit  <IconButton
+        <DialogTitle className="headColor">
+          Tax Edit{" "}
+          <IconButton
             aria-label="close"
             onClick={handleClose}
             style={{ position: "absolute", right: 8, top: 8 }}
           >
             <CloseIcon />
-          </IconButton></DialogTitle>
+          </IconButton>
+        </DialogTitle>
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -140,6 +147,7 @@ function TaxEdit({ id, onSuccess }) {
                         : ""
                     }`}
                     {...formik.getFieldProps("taxType")}
+                    onKeyDown={(e) => e.stopPropagation()}
                   />
                   {formik.touched.taxType && formik.errors.taxType && (
                     <div className="invalid-feedback">
@@ -162,6 +170,7 @@ function TaxEdit({ id, onSuccess }) {
                         : ""
                     }`}
                     {...formik.getFieldProps("rate")}
+                    onKeyDown={(e) => e.stopPropagation()}
                   />
                   {formik.touched.rate && formik.errors.rate && (
                     <div className="invalid-feedback">{formik.errors.rate}</div>
@@ -180,6 +189,7 @@ function TaxEdit({ id, onSuccess }) {
                         : ""
                     }`}
                     {...formik.getFieldProps("effectiveDate")}
+                     onKeyDown={(e) => e.stopPropagation()}
                   />
                   {formik.touched.effectiveDate &&
                     formik.errors.effectiveDate && (

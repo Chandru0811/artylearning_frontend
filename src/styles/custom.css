@@ -533,13 +533,13 @@ tbody tr td {
 
 .status-txt:hover {
   color: white !important;
-  background-color: #eb862a!important;
+  background-color: #eb862a !important;
   border: 1px solid #eb862a;
 }
 
 .status-txt.active {
   color: white !important;
-  background-color: #eb862a!important;
+  background-color: #eb862a !important;
   border: 1px solid #eb862a;
 }
 
@@ -555,7 +555,7 @@ tbody tr td {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  background-color: #f0f0f0;
+  background-color: #fff;
 }
 
 .chat-section .messages {
@@ -575,6 +575,7 @@ tbody tr td {
   width: fit-content !important;
   padding: 5px;
   border-radius: 10px;
+  border: 1px solid #f4f3f3;
   background-color: #fff;
 }
 
@@ -840,8 +841,8 @@ tbody tr td {
 .studentView .card .btn-danger,
 .studentView .card .btn-danger:hover,
 .studentView .card .btn-danger.active {
-  background-color: #eb862a!important;
-  border-color: #eb862a!important;
+  background-color: #eb862a !important;
+  border-color: #eb862a !important;
 }
 
 .stdNavTabs .nav-link {
@@ -952,25 +953,26 @@ input.searchInputG:hover {
   box-shadow: none;
 }
 
-.fc-theme-standard .fc-popover-header{
+.fc-theme-standard .fc-popover-header {
   background-color: #f3fdff !important;
   color: #757575 !important;
 }
 
-.fc-h-event .fc-event-main{
+.fc-h-event .fc-event-main {
+  background-color: white;
   color: #666464 !important;
-  border: 1px solid #b5b5b5 !important;
+  border: 1px solid #787777 !important;
   border-radius: 5px;
   margin-bottom: 5px;
 }
 
 .popover-text-wrapper {
-  max-width: 200px; 
-  overflow: hidden; 
+  max-width: 200px;
+  overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal; 
-  word-wrap: break-word; 
-  word-break: break-word; 
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .fc-theme-standard .fc-popover {
@@ -980,7 +982,8 @@ input.searchInputG:hover {
   border-radius: 7px !important;
 }
 
-.fc-event.fc-event-draggable, .fc-event[href]{
+.fc-event.fc-event-draggable,
+.fc-event[href] {
   background-color: white;
   color: #565555 !important;
 }
@@ -1075,43 +1078,60 @@ table.dataTable.display > tbody > tr > th {
   border-top: none !important;
 } */
 .breadcrumb-separator {
-  margin-left: 0.5rem; 
-  margin-right: 0.5rem; 
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 .badges-Green {
-  background-color: #287f71 !important; 
+  background-color: #287f71 !important;
   font-weight: 400;
   border-radius: 3px;
 }
 .badges-orange {
-  background-color: #eb862a !important; 
+  background-color: #eb862a !important;
   font-weight: 400;
   border-radius: 3px;
 }
 .custom-outline-danger {
-  border-color: #eb862a!important; 
+  border-color: #eb862a !important;
   height: 32px;
 }
 .custom-outline-danger:hover {
   background-color: #eb862a !important;
-  color: #fff !important; 
+  color: #fff !important;
 }
 
 /* table */
 
-.MuiTableBody-root tr td{
+.MuiTableBody-root tr td {
   padding: 7px 20px !important;
-  font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' !important;
+  font-family: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important;
 }
-.MuiTableBody-root tr:hover td::after{
+.MuiTableBody-root tr:hover td::after {
   background-color: #f7f7f7 !important;
 }
 .MuiTableHead-root tr th {
- background-color: #ffffff !important;
-  font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' !important;
+  background-color: #ffffff !important;
+  font-family: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important;
   border-top: 1px solid#b5b5b5 !important;
   border-bottom: 1px solid#b5b5b5 !important;
 }
 
+.MuiMenuItem-root {
+  font-family: "Outfit" !important;
+}
 
+.MuiFormLabel-root {
+  font-family: "Outfit" !important;
+}
 
+.badges-red {
+  background-color: #fc2b39 !important;
+  font-weight: 400;
+  border-radius: 3px;
+}
+
+.course-add .rmsc .dropdown-container {
+  height: 37.6px !important;
+}

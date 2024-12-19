@@ -270,13 +270,13 @@ const Level = () => {
               <MenuItem onClick={() => navigate(`/edit/${selectedId}`)}>
                 Edit
               </MenuItem> */}
-              {storedScreens?.centerListingDelete && (
+              {/* {storedScreens?.centerListingDelete && (
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteContactUs/${selectedId}`}
                   onDeleteSuccess={getData}
                 />
-              </MenuItem>)}
+              </MenuItem>)} */}
             </Menu>
           </>
         )}

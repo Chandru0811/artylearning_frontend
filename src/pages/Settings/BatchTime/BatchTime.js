@@ -217,7 +217,7 @@ const BatchTime = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <BatchTimeEdit onSuccess={getData} id={selectedId} />
+                <BatchTimeEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
               </MenuItem>
             </Menu>
           </>

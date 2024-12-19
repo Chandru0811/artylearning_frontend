@@ -223,7 +223,7 @@ const EmailTemplate = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <EmailTemplateEdit onSuccess={getData} id={selectedId} />
+                <EmailTemplateEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
               </MenuItem>
             </Menu>
           </>

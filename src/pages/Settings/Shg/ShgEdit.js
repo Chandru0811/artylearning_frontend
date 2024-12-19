@@ -19,7 +19,7 @@ const validationSchema = Yup.object({
   shgAmount: Yup.string().required("*SHG Amount is required"),
 });
 
-function ShgEdit({ id, onSuccess }) {
+function ShgEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
@@ -51,7 +51,7 @@ function ShgEdit({ id, onSuccess }) {
         });
         if (response.status === 200) {
           onSuccess();
-          handleClose();
+
           toast.success(response.data.message);
         } else {
           toast.error(response.data.message);
@@ -59,6 +59,7 @@ function ShgEdit({ id, onSuccess }) {
       } catch (error) {
         toast.error(error);
       } finally {
+        handleClose();
         setLoadIndicator(false);
       }
     },
@@ -78,7 +79,10 @@ function ShgEdit({ id, onSuccess }) {
     },
   });
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    handleMenuClose();
+    setOpen(false);
+  };
   const handleShow = () => {
     setOpen(true);
     setIsModified(false);
@@ -129,6 +133,7 @@ function ShgEdit({ id, onSuccess }) {
                     SHG Type<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.shgType && formik.errors.shgType
@@ -149,6 +154,7 @@ function ShgEdit({ id, onSuccess }) {
                     SHG Amount<span className="text-danger">*</span>
                   </label>
                   <input
+                    onKeyDown={(e) => e.stopPropagation()}
                     type="text"
                     className={`form-control ${
                       formik.touched.shgAmount && formik.errors.shgAmount

@@ -181,7 +181,7 @@ function Payslip() {
 
   //   doc.save("Payslip.pdf");
   // };
-  
+
   const handleGeneratePDF = async () => {
     // setLoadIndicator(true);
     const pdf = new jsPDF({
@@ -229,11 +229,14 @@ function Payslip() {
             />
           </div>
           <div className="col-md-5 col-12 d-flex justify-content-end mt-4">
-            <button className="btn btn-success mx-2" onClick={handleGeneratePDF}>
+            <button
+              className="btn btn-success mx-2 btn-sm m-2"
+              onClick={handleGeneratePDF}
+            >
               <FaDownload />
             </button>
             <Link to="/">
-              <button className="btn btn-sm btn-border mx-2">Back</button>
+              <button className="btn btn-sm btn-border mx-2 mt-2">Back</button>
             </Link>
           </div>
         </div>
@@ -476,7 +479,7 @@ function Payslip() {
                             </p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>:{data.dob ||"--"}</p>
+                            <p>:{data.dob || "--"}</p>
                           </dvi>
                         </div>
                       </div>
@@ -509,11 +512,14 @@ function Payslip() {
                         <div className="col-6 d-flex flex-column justify-content-between">
                           <p className="d-flex justify-content-between">
                             <strong>BASIC PAY</strong>
-                            <p>{data.basicSalary ||"--"}</p>
+                            <p>{data.basicSalary || "--"}</p>
                           </p>
                           <div className="row ">
                             <dvi className="col-4">
-                              <p>EMPLOYER CPF &nbsp; &nbsp; : {data.cpfContribution ||"--"}</p>
+                              <p>
+                                EMPLOYER CPF &nbsp; &nbsp; :{" "}
+                                {data.cpfContribution || "--"}
+                              </p>
                             </dvi>
                             <dvi className="col-8 text-center">
                               <p> SGD </p>
@@ -565,10 +571,10 @@ function Payslip() {
                       >
                         <div className="row">
                           <dvi className="col-4">
-                            <p>Nett Wages</p>
+                            <p>Net Wages</p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: {data.netPay ||"--"}</p>
+                            <p>: {data.netPay || "--"}</p>
                           </dvi>
                         </div>
                         <div className="row">
@@ -576,7 +582,7 @@ function Payslip() {
                             <p>CPF Wages</p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: {data.cpfContribution ||"--"}</p>
+                            <p>: {data.cpfContribution || "--"}</p>
                           </dvi>
                         </div>
                         <div className="row">

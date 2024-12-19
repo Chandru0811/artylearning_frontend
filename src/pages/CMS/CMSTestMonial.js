@@ -164,98 +164,103 @@ const CMSTestMonail = () => {
       </ol>
 
       <div className="container">
-      <div className="card ">
-        <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
-          style={{ background: "#f5f7f9" }}
-        >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
-            </div>
-            <span class="me-2 text-muted">
-              This database shows the list of{" "}
-              <span className="bold" style={{ color: "#287f71" }}>
-                Testimonial
+        <div className="card ">
+          <div
+            className="mb-3 d-flex justify-content-between align-items-center p-1"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">
+                This database shows the list of{" "}
+                <span className="bold" style={{ color: "#287f71" }}>
+                  Testimonial
+                </span>
               </span>
-            </span>
-          </div>
-        </div>
-        <div className="container">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            {/* <h4>Testimonial</h4> */}
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {storedScreens?.testimonialCreate && (
-              <CMSTestMonialAdd onSuccess={getTestimonial} />
-            )}
-            {storedScreens?.testimonialIndex && (
-              <button
-                onClick={testimonialPublish}
-                className="btn btn-sm custom-outline-danger border ms-2"
-                style={{ whiteSpace: "nowrap" }}
-              >
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-        {loading ? (
-          <div className="loader-container">
-            <div className="loading">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
             </div>
           </div>
-        ) : (
-          <>
-            <ThemeProvider theme={theme}>
-              <MaterialReactTable
-                columns={columns}
-                data={datas}
-                enableColumnActions={false}
-                enableColumnFilters={false}
-                enableDensityToggle={false}
-                enableFullScreenToggle={false}
-                initialState={{
-                  columnVisibility: {
-                    createdBy: false,
-                    createdAt: false,
-                    updatedBy: false,
-                    updatedAt: false,
-                  },
-                }}
-                // muiTableBodyRowProps={({ row }) => ({
-                //   onClick: () => navigate(`/center/view/${row.original.id}`),
-                //   style: { cursor: "pointer" },
-                // })}
-              />
-            </ThemeProvider>
-
-            <Menu
-              id="action-menu"
-              anchorEl={menuAnchor}
-              open={Boolean(menuAnchor)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem>
-                <CMSTestMonialEdit onSuccess={getTestimonial} id={selectedId} />
-              </MenuItem>
-              <MenuItem>
-                <GlobalDelete
-                  path={`/deleteTestimonialSave/${selectedId}`}
-                  onDeleteSuccess={getTestimonial}
+          <div className="container">
+            <div className="row p-1">
+              <div className="col-md-6 col-12">
+                {/* <h4>Testimonial</h4> */}
+              </div>
+              <div className="col-md-6 col-12 d-flex justify-content-end">
+                {storedScreens?.testimonialCreate && (
+                  <CMSTestMonialAdd onSuccess={getTestimonial} />
+                )}
+                {storedScreens?.testimonialIndex && (
+                  <button
+                    onClick={testimonialPublish}
+                    className="btn btn-sm custom-outline-danger border ms-2"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    Publish
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+          {loading ? (
+            <div className="loader-container">
+              <div className="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <ThemeProvider theme={theme}>
+                <MaterialReactTable
+                  columns={columns}
+                  data={datas}
+                  enableColumnActions={false}
+                  enableColumnFilters={false}
+                  enableDensityToggle={false}
+                  enableFullScreenToggle={false}
+                  initialState={{
+                    columnVisibility: {
+                      createdBy: false,
+                      createdAt: false,
+                      updatedBy: false,
+                      updatedAt: false,
+                    },
+                  }}
+                  // muiTableBodyRowProps={({ row }) => ({
+                  //   onClick: () => navigate(`/center/view/${row.original.id}`),
+                  //   style: { cursor: "pointer" },
+                  // })}
                 />
-              </MenuItem>
-            </Menu>
-          </>
-        )}
-      </div>
+              </ThemeProvider>
+
+              <Menu
+                id="action-menu"
+                anchorEl={menuAnchor}
+                open={Boolean(menuAnchor)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem>
+                  <CMSTestMonialEdit
+                    onSuccess={getTestimonial}
+                    id={selectedId}
+                    handleMenuClose={handleMenuClose}
+                  />
+                </MenuItem>
+                <MenuItem>
+                  <GlobalDelete
+                    path={`/deleteTestimonialSave/${selectedId}`}
+                    onDeleteSuccess={getTestimonial}
+                    onOpen={handleMenuClose}
+                  />
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
