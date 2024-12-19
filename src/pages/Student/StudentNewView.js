@@ -439,7 +439,7 @@ function StudentNewView() {
                   ))}
               </div>
             </div> */}
-            <div className="card mb-3">
+            {/* <div className="card mb-3">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
                   Account Activate/Deactivate
@@ -472,6 +472,45 @@ function StudentNewView() {
                   <li className="stdList">
                     <b>Hikvision Status</b>
                     <span>-</span>
+                  </li>
+                </ul>
+              </div>
+            </div> */}
+            <div className="card mb-3">
+              <div className="withBorder">
+                <p className="fw-medium ms-3 my-2">Allow Photos</p>
+              </div>
+              <div style={{ padding: "10px" }}>
+                <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                  {/* <li
+                    className="stdList1"
+                    style={{ borderTop: "1px solid #ddd" }}
+                  >
+                    <div class="dropdown">
+                      <button
+                        class="btn btn-primary btn-sm dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Activate
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a class="dropdown-item" href="#">
+                            Deactivate
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </li> */}
+                  <li className="stdList">
+                    <b>Allow Magazine</b>
+                    <span>{data.allowMagazine ? "Yes" : "No"}</span>
+                  </li>
+                  <li className="stdList">
+                    <b>Allow Social Media</b>
+                    <span>{data.allowSocialMedia ? "Yes" : "No"}</span>
                   </li>
                 </ul>
               </div>
@@ -647,7 +686,7 @@ function StudentNewView() {
                 </ul>
               </div>
             </div>
-            <div className="card mb-3">
+            {/* <div className="card mb-3">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
                   <BiSolidMessageRounded size={20} />
@@ -667,8 +706,8 @@ function StudentNewView() {
                   </li>
                 </ul>
               </div>
-            </div>
-            <div className="card" style={{ padding: "10px" }}>
+            </div> */}
+            {/* <div className="card" style={{ padding: "10px" }}>
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                 <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
                   <b>Upload Assessment Form</b>
@@ -687,6 +726,31 @@ function StudentNewView() {
                 <button className="btn btn-danger btn-sm mt-2" type="button">
                   Save
                 </button>
+              </ul>
+            </div> */}
+            <div className="card" style={{ padding: "10px" }}>
+              <p className="fw-medium ms-3 my-2">Other Details</p>
+              <ul style={{ listStyle: "none", paddingLeft: "0" }}>
+                <li className="stdList">
+                  <b>Age</b>
+                  <span className="">{data.age}</span>
+                </li>
+                <li className="stdList">
+                  <b>Medical Condition</b>
+                  <span className="">{data.medicalCondition}</span>
+                </li>
+                <li className="stdList">
+                  <b>PreAssessment Result</b>
+                  <span className="">{data.preAssessmentResult}</span>
+                </li>
+                <li className="stdList">
+                  <b>Primary Language</b>
+                  <span className="">{data.primaryLanguage}</span>
+                </li>
+                <li className="stdList">
+                  <b>Created At </b>
+                  <span className="">{data?.createdAt?.substring(0, 10)}</span>
+                </li>
               </ul>
             </div>
           </div>
@@ -899,7 +963,9 @@ function StudentNewView() {
               </>
             )}
             {/* Tabs for tab3 */}
-            {activeTab === "tab3" && <ReferralList />}
+            {activeTab === "tab3" && (
+              <ReferralList data={data.referralHistoryModels} />
+            )}
           </div>
         </div>
       </div>
