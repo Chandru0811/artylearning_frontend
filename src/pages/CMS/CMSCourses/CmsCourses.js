@@ -185,32 +185,31 @@ const CmsCourses = () => {
               </span>
             </span>
           </div>
-        </div>,
+        </div>
+        ,
         <div className="container">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            {/* <h4>Courses</h4> */}
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {storedScreens?.testimonialCreate && (
-              <Link to={"/cms/CmsCourses/add"}>
-                <button type="button" className="btn btn-button btn-sm">
-                  Add <i class="bx bx-plus"></i>
+          <div className="row p-1">
+            <div className="col-md-6 col-12">{/* <h4>Courses</h4> */}</div>
+            <div className="col-md-6 col-12 d-flex justify-content-end">
+              {storedScreens?.testimonialCreate && (
+                <Link to={"/cms/CmsCourses/add"}>
+                  <button type="button" className="btn btn-button btn-sm">
+                    Add <i class="bx bx-plus"></i>
+                  </button>
+                </Link>
+              )}
+              {storedScreens?.testimonialIndex && (
+                <button
+                  onClick={coursesPublish}
+                  className="btn btn-sm custom-outline-danger border ms-2"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Publish
                 </button>
-              </Link>
-            )}
-            {storedScreens?.testimonialIndex && (
-              <button
-                onClick={coursesPublish}
-                className="btn btn-sm custom-outline-danger border ms-2"
-                style={{ whiteSpace: "nowrap" }}
-              >
-                Publish
-              </button>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -255,12 +254,13 @@ const CmsCourses = () => {
               <MenuItem
                 onClick={() => navigate(`/cms/CmsCourses/edit/${selectedId}`)}
               >
-                 <MdOutlineModeEdit /> &nbsp;&nbsp;Edit
+                Edit
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteCoursesSavePublish/${selectedId}`}
                   onDeleteSuccess={getAllCourses}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

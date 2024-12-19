@@ -203,12 +203,13 @@ const AbsentReason = () => {
             onClose={handleMenuClose}
           >
             <MenuItem>
-              <AbsentReasonEdit onSuccess={getData} id={selectedId} />
+              <AbsentReasonEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
             </MenuItem>
             <MenuItem>
               <GlobalDelete
                 path={`/deleteAbsentReason/${selectedId}`}
                 onDeleteSuccess={getData}
+                onOpen={handleMenuClose}
               />
             </MenuItem>
           </Menu>

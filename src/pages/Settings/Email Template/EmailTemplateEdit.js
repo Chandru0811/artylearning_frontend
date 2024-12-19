@@ -53,10 +53,11 @@ const formats = [
   "video",
 ];
 
-function EmailTemplateEdit({ id, onSuccess }) {
+function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
+    handleMenuClose();
     formik.resetForm();
     setOpen(false);
   };
@@ -93,6 +94,8 @@ function EmailTemplateEdit({ id, onSuccess }) {
         }
       } catch (e) {
         toast.error(e);
+      } finally {
+        handleClose();
       }
     },
   });
@@ -134,6 +137,7 @@ function EmailTemplateEdit({ id, onSuccess }) {
                   Subject<span className="text-danger">*</span>
                 </label>
                 <input
+                  onKeyDown={(e) => e.stopPropagation()}
                   type="text"
                   className={`form-control ${
                     formik.touched.subject && formik.errors.subject
@@ -167,17 +171,14 @@ function EmailTemplateEdit({ id, onSuccess }) {
           </DialogContent>
           <DialogActions>
             <button
-            type="button"
+              type="button"
               className="btn btn-border btn-sm"
               style={{ fontSize: "12px" }}
               onClick={handleClose}
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="btn btn-button btn-sm"
-            >
+            <button type="submit" className="btn btn-button btn-sm">
               {/* {loadIndicator && (
                 <span
                   className="spinner-border spinner-border-sm me-2"
