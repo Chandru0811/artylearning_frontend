@@ -1082,18 +1082,19 @@ table.dataTable.display > tbody > tr > th {
 }
 
 /* table */
-.css-11yrv3u-MuiTableRow-root td {
+
+.MuiTableBody-root tr td{
   padding: 7px 20px !important;
   font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' !important;
 }
-.css-1ule0da-MuiTableRow-root th {
-  background-color: #ffffff !important;
+.MuiTableBody-root tr:hover td::after{
+  background-color: #f7f7f7 !important;
+}
+.MuiTableHead-root tr th {
+ background-color: #ffffff !important;
   font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' !important;
   border-top: 1px solid#b5b5b5 !important;
   border-bottom: 1px solid#b5b5b5 !important;
-}
-.css-11yrv3u-MuiTableRow-root:hover td:after{
-  background-color: #f7f7f7 !important;
 }
 
 .fc-h-event .fc-event-main{
@@ -1102,3 +1103,4 @@ table.dataTable.display > tbody > tr > th {
   border-radius: 5px;
   margin-bottom: 5px;
 }
+
