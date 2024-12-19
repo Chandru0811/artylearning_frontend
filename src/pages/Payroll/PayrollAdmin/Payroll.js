@@ -338,7 +338,7 @@ const Payroll = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Roll"
+                placeholder="Role"
                 name="roll"
                 value={filters.roll}
                 onChange={handleFilterChange}
