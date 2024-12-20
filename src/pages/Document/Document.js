@@ -217,13 +217,20 @@ const Document = () => {
           className="mb-3 d-flex justify-content-between align-items-center p-1"
           style={{ background: "#f5f7f9" }}
         >
-          <span className="text-muted">
-            This database shows the list of{" "}
-            <strong style={{ color: "#287f71" }}>Document</strong>
-          </span>
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Document
+              </span>
+            </span>
+          </div>
         </div>
         <div className="mb-3">
-          <div className="individual_fliters d-lg-flex ">
+          <div className="individual_fliters d-lg-flex">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -286,7 +293,7 @@ const Document = () => {
             </div>
           </div>
           <div className="d-flex justify-content-between">
-            <div className="individual_fliters d-lg-flex ">
+            <div className="individual_fliters d-lg-flex mt-2">
               <div className="form-group mb-0 ms-2 mb-1">
                 <input
                   type="text"

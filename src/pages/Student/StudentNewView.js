@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IoIosSettings, IoIosMail, IoIosMedkit } from "react-icons/io";
+import { IoIosSettings, IoIosMail } from "react-icons/io";
 import { MdModeEdit } from "react-icons/md";
-import { FaBook, FaUsers, FaPlus } from "react-icons/fa";
+import { FaUsers } from "react-icons/fa";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { BiSolidMessageRounded } from "react-icons/bi";
 import StudentViewCourse from "../../pages/Student/StudentNewView/StudentViewCourse";
 import StudentViewInvoice from "../../pages/Student/StudentNewView/StudentViewInvoice";
 import StudentViewPayment from "../../pages/Student/StudentNewView/StudentViewPayment";
@@ -19,7 +18,6 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import Logo from "../../assets/images/Logo.png";
 import PasswordModal from "./StudentNewView/PasswordModal";
-import AddTaskNoteModal from "./StudentNewView/AddTaskNoteModal";
 import TransferOutModal from "../StudentMovement/TransferOut/TransferOutModal";
 import NoImage from "../../assets/images/no-photo.png";
 import { Modal, Button } from "react-bootstrap";
@@ -40,6 +38,7 @@ function StudentNewView() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [responseMessage, setResponseMessage] = useState("");
+  const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -72,7 +71,7 @@ function StudentNewView() {
         setResponseMessage(imageResponse.data.message);
         setProfileImage(null);
         handleCloseModal();
-        getData()
+        getData();
       }
       toast.success(
         imageResponse.data.message || "Image Updated successfully!"
@@ -93,24 +92,23 @@ function StudentNewView() {
       toast.error(error);
     }
   };
- const getData = async () => {
-   try {
-     const response = await api.get(`/getAllStudentById/${id}`);
-     setData(response.data);
-     console.log("responseData", response.data);
-     const primaryParent = response.data.studentParentsDetails.find(
-       (parent) => parent.primaryContact === true
-     );
-     const email = primaryParent ? primaryParent.email : null;
+  const getData = async () => {
+    try {
+      const response = await api.get(`/getAllStudentById/${id}`);
+      setData(response.data);
+      console.log("responseData", response.data);
+      const primaryParent = response.data.studentParentsDetails.find(
+        (parent) => parent.primaryContact === true
+      );
+      const email = primaryParent ? primaryParent.email : null;
 
-     setPassword(email);
-     console.log("StudentDetails", response.data);
-   } catch (error) {
-     console.error("Error fetching data:", error);
-   }
- };
+      setPassword(email);
+      console.log("StudentDetails", response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
-   
     getData();
     fetchData();
   }, [id]);
@@ -170,6 +168,7 @@ function StudentNewView() {
   };
 
   const handleClick = async () => {
+    setLoadIndicator(true);
     try {
       const response = await api.post(`/resendWelcomeMail`, null, {
         params: { studentId: id },
@@ -182,6 +181,8 @@ function StudentNewView() {
       toast.error(
         error.response?.data?.message || "Failed to resend the welcome mail."
       );
+    } finally {
+      setLoadIndicator(false);
     }
   };
 
@@ -233,10 +234,17 @@ function StudentNewView() {
       </ol>
       <div className="d-flex align-items-center justify-content-end mb-4">
         <button
-          className="btn btn-border btn-sm me-2 stdViewBtn"
+          className="btn btn-border btn-sm me-2 stdViewBtn text-center"
           style={{ padding: "3px 5px", fontSize: "12px" }}
           onClick={handleClick}
+          disabled={loadIndicator}
         >
+          {loadIndicator && (
+            <span
+              className="spinner-border spinner-border-sm me-2"
+              aria-hidden="true"
+            ></span>
+          )}
           <IoIosMail size={18} />
           &nbsp;Resend Welcome Mail
         </button>
@@ -775,7 +783,7 @@ function StudentNewView() {
               Withdraw
             </button> */}
             {storedScreens?.endClassCreate && (
-              <Link to={`/student/view/endClass/${data.id}`}>
+              <Link to={`/student/view/endClass/${data.id}?centerId=${centerId}`}>
                 <button
                   className="btn btn-success btn-sm"
                   type="button"
@@ -987,9 +995,10 @@ function StudentNewView() {
         <hr />
         <h3>Student Details</h3>
         <div className="row mt-3">
-          <div className="mb-2 d-flex col-md-4">
-            <div className=" fw-medium">Centre Name : </div>
+          <div className="d-flex col-md-4">
+            <div className=" fw-medium">Centre Name&nbsp;</div>
             <div className="text-muted">
+              :{" "}
               {centerData &&
                 centerData.map((center) =>
                   parseInt(data.centerId) === center.id
@@ -998,85 +1007,96 @@ function StudentNewView() {
                 )}
             </div>
           </div>
-          <div className="mb-2 d-flex col-md-4">
-            <div className="fw-medium">Student Chinese Name :</div>
-            <div className="text-muted">{data.studentChineseName || "--"}</div>
+          <div className="d-flex col-md-4">
+            <div className="fw-medium">Student Chinese Name&nbsp;</div>
+            <div className="text-muted">
+              : {data.studentChineseName || "--"}
+            </div>
           </div>
-          <div className="mb-2 d-flex col-md-4">
+          <div className="d-flex col-md-4">
             <div className="mb-2 d-flex">
-              <div className="fw-medium">Student Name / as per ID :</div>
-              <div className="text-muted">{data.studentName || "--"}</div>
+              <div className="fw-medium">Student Name / as per ID&nbsp;</div>
+              <div className="text-muted"> : {data.studentName || "--"}</div>
             </div>
           </div>
         </div>
 
-        <div className="row">
+        <div className="row mt-2">
           <div className="col-md-4">
-            <div className="mb-2  d-flex">
-              <div className="fw-medium">Date Of Birth :</div>
+            <div className="mb-2 d-flex">
+              <div className="fw-medium">Date Of Birth&nbsp;</div>
               <div className="text-muted">
-                {data.dateOfBirth ? data.dateOfBirth.substring(0, 10) : "--"}
+                : {data.dateOfBirth ? data.dateOfBirth.substring(0, 10) : "--"}
               </div>
             </div>
           </div>
           <div className="col-md-4">
             <div className="mb-2 d-flex">
-              <div className="fw-medium">Age :</div>
-              <div className="text-muted">{data.age || "--"}</div>
+              <div className="fw-medium">Age&nbsp;</div>
+              <div className="text-muted"> : {data.age || "--"}</div>
             </div>
           </div>
           <div className="col-md-4">
             <div className="mb-2 d-flex">
-              <div className="fw-medium">Gender :</div>
+              <div className="fw-medium">Gender&nbsp;</div>
               <div className="text-muted">
-                {data.gender ? "Male" : "Female"}
+                : {data.gender ? "Male" : "Female"}
               </div>
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row mt-2">
           <div className="col-md-4">
             <div className="mb-2 d-flex ">
-              <div className="fw-medium">Medical Condition :</div>
-              <div className="text-muted">{data.medicalCondition || "--"}</div>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">School Name :</div>
-              <div className="text-muted">{data.schoolName || "--"}</div>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">School Type :</div>
-              <div className="text-muted">{data.schoolType || "--"}</div>
-            </div>
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Pre-Assessment Result :</div>
+              <div className="fw-medium">Medical Condition&nbsp;</div>
               <div className="text-muted">
-                {data.preAssessmentResult || "--"}
+                {" "}
+                : {data.medicalCondition || "--"}
               </div>
             </div>
           </div>
+          <div className="col-md-4">
+            <div className="mb-2 d-flex">
+              <div className="fw-medium">School Name&nbsp;</div>
+              <div className="text-muted"> : {data.schoolName || "--"}</div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="mb-2 d-flex">
+              <div className="fw-medium">School Type&nbsp;</div>
+              <div className="text-muted"> : {data.schoolType || "--"}</div>
+            </div>
+          </div>
         </div>
-        <div className="row">
+        <div className="row mt-2">
           <div className=" mb-2 col-md-4">
             <div className="mb-2 d-flex">
-              <div className="fw-medium">Race:</div>
-              <div className="text-muted">{data.race || "--"}</div>
-            </div>
-          </div>
-          <div className=" mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Nationality:</div>
-              <div className="text-muted">{data.nationality || "--"}</div>
-            </div>
-          </div>
-          <div className=" mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Primary Language Spoken :</div>
+              <div className="fw-medium">Pre-Assessment Result&nbsp;</div>
               <div className="text-muted">
+                {" "}
+                : {data.preAssessmentResult || "--"}
+              </div>
+            </div>
+          </div>
+          <div className=" mb-2 col-md-4">
+            <div className="mb-2 d-flex">
+              <div className="fw-medium">Race&nbsp;</div>
+              <div className="text-muted"> : {data.race || "--"}</div>
+            </div>
+          </div>
+          <div className=" mb-2 col-md-4">
+            <div className="mb-2 d-flex">
+              <div className="fw-medium">Nationality&nbsp;</div>
+              <div className="text-muted"> : {data.nationality || "--"}</div>
+            </div>
+          </div>
+        </div>
+        <div className="row mt-2">
+          <div className=" mb-2 col-md-4">
+            <div className="mb-2 d-flex">
+              <div className="fw-medium">Primary Language Spoken&nbsp;</div>
+              <div className="text-muted">
+                :{" "}
                 {data.primaryLanguage
                   ? data.primaryLanguage === "ENGLISH"
                     ? "English"
@@ -1087,44 +1107,45 @@ function StudentNewView() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="row">
           <div className="mb-2 col-md-8">
             <div className="mb-2 d-flex">
               <div className="fw-medium">
-                Allow display in Facility Bulletin / Magazine / Advert :
+                Allow display in Facility Bulletin / Magazine / Advert&nbsp;
               </div>
               <div className="text-muted">
-                {data.allowMagazine ? "Yes" : "No"}
-              </div>
-            </div>
-          </div>
-          <div className="mb-2 col-md-4">
-            <div className="mb-2 d-flex">
-              <div className="fw-medium">Allow display on Social Media :</div>
-              <div className="text-muted">
-                {data.allowSocialMedia ? "Yes" : "No"}
+                : {data.allowMagazine ? "Yes" : "No"}
               </div>
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row mt-2">
           <div className="mb-2 col-md-4">
             <div className="mb-2 d-flex">
-              <div className="fw-medium">Refer By Parent :</div>
-              <div className="text-muted">{data.referByParent || "--"}</div>
+              <div className="fw-medium">
+                Allow display on Social Media&nbsp;
+              </div>
+              <div className="text-muted">
+                : {data.allowSocialMedia ? "Yes" : "No"}
+              </div>
             </div>
           </div>
           <div className="mb-2 col-md-4">
             <div className="mb-2 d-flex">
-              <div className="fw-medium">Refer By Student :</div>
-              <div className="text-muted">{data.referByStudent || "--"}</div>
+              <div className="fw-medium">Refer By Parent&nbsp;</div>
+              <div className="text-muted"> : {data.referByParent || "--"}</div>
             </div>
           </div>
-
           <div className="mb-2 col-md-4">
             <div className="mb-2 d-flex">
-              <div className="fw-medium">Profile Image :</div>
+              <div className="fw-medium">Refer By Student&nbsp;</div>
+              <div className="text-muted"> : {data.referByStudent || "--"}</div>
+            </div>
+          </div>
+        </div>
+        <div className="row mt-2">
+          <div className="mb-2 col-md-4">
+            <div className="mb-2 d-flex">
+              <div className="fw-medium">Profile Image&nbsp;</div>
               <img
                 src={data.profileImage}
                 className="img-fluid rounded w-25"
@@ -1132,16 +1153,20 @@ function StudentNewView() {
               />
             </div>
           </div>
+          <div className="mb-2 col-md-4">
+            <div className="mb-2 d-flex ">
+              <div className="fw-medium">Remark&nbsp;</div>
+              <div className="text-muted"> : {data.remark || "--"}</div>
+            </div>
+          </div>
         </div>
-        <div className="mb-2 d-flex ">
-          <div className="fw-medium">Remark :</div>
-          <div className="text-muted">{data.remark || "--"}</div>
-        </div>
+
         <h3 className="mt-5 mb-5">Emergency Contact</h3>
         <div className="row ">
           <div className="mb-2 d-flex col-md-4">
-            <div className="fw-medium">Emergency Contact Name:</div>
+            <div className="fw-medium">Emergency Contact Name&nbsp;</div>
             <div className="text-muted ms-2">
+              :{" "}
               {data.studentEmergencyContacts &&
               data.studentEmergencyContacts.length > 0 &&
               data.studentEmergencyContacts[0].emergencyContactName
@@ -1150,8 +1175,9 @@ function StudentNewView() {
             </div>
           </div>
           <div className="mb-2 d-flex col-md-4">
-            <div className="fw-medium">Emergency Contact No:</div>
+            <div className="fw-medium">Emergency Contact No&nbsp;</div>
             <div className="text-muted ms-2">
+              :{" "}
               {data.studentEmergencyContacts &&
               data.studentEmergencyContacts.length > 0 &&
               data.studentEmergencyContacts[0].emergencyContactNo
