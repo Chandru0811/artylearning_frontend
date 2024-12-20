@@ -80,6 +80,7 @@ export default function InvoiceEdit() {
       receiptAmount: "",
       creditAdviceOffset: "",
       gst: "",
+      updatedBy: userName,
       totalAmount: "",
 
       invoiceItems: [
@@ -114,6 +115,7 @@ export default function InvoiceEdit() {
           creditAdviceOffset: parseFloat(values.creditAdviceOffset), // Ensure numerical values are parsed correctly
           totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
           remark: values.remark,
+          updatedBy: userName,
           receiptAmount: parseFloat(values.receiptAmount), // Ensure numerical values are parsed correctly
         },
         invoiceItemsList: values.invoiceItems.map((item) => ({

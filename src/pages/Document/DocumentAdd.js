@@ -91,7 +91,8 @@ function DocumentAdd() {
           folderCategory: folderCategory,
           batchTime: values.batchTime,
           date: values.date,
-          expiredDate: values.expiredDate, // Calculating expiry date
+          expiredDate: values.expiredDate, 
+          createdBy: userName, 
         };
 
         if (folderCategory === "group") {
