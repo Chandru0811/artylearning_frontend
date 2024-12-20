@@ -280,7 +280,7 @@ const Lead = () => {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
+                className={`btn btn-sm px-1 py-1 leadStatus text-bg-success`}
                 type="button"
               >
                 <span
@@ -298,7 +298,7 @@ const Lead = () => {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className={`btn btn-sm px-4 py-2 leadStatus text-bg-success`}
+                className={`btn btn-sm px-1 py-1 leadStatus text-bg-success`}
                 type="button"
                 style={{ cursor: "default" }}
               >
@@ -317,7 +317,7 @@ const Lead = () => {
                 }}
                 className="form-control d-flex justify-content-center "
                 style={{
-                  padding: "4px 3px",
+                  padding: "0px",
                   borderRadius: "4px",
                   border: "1px solid #ccc",
                   appearance: "none",

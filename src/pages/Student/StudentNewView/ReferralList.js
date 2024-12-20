@@ -1,51 +1,122 @@
-import React, { useEffect, useRef } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
+import React, { useMemo } from "react";
+import { ThemeProvider, createTheme } from "@mui/material";
+import { MaterialReactTable } from "material-react-table";
 
 const ReferralList = ({ data }) => {
-  const tableRef = useRef(null);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 20,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "referByStudent",
+        enableHiding: false,
+        header: "Referral Student Name",
+      },
+      {
+        accessorKey: "referByParent",
+        enableHiding: false,
+        header: "Referal Parent Name",
+      },
+      {
+        accessorKey: "referralFee",
+        enableHiding: false,
+        header: "Referal Fee",
+      },
+      {
+        accessorKey: "attendance",
+        enableHiding: false,
+        header: "Attendance",
+      },
+      {
+        accessorKey: "studentName",
+        enableHiding: false,
+        header: "New Student Name",
+      },
+      {
+        accessorKey: "enrollDate",
+        enableHiding: false,
+        header: "New Student Start Date",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      { accessorKey: "createdBy", header: "Created By" },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+    ],
+    []
+  );
 
-  useEffect(() => {
-    const table = $(tableRef.current).DataTable({
-      responsive: true,
-    });
-    return () => {
-      table.destroy();
-    };
-  }, []);
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
+    },
+  });
 
   return (
-    <div className="container my-3">
-      <table ref={tableRef} className="display">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Referral Student Name</th>
-            <th scope="col">Referral Parent Name</th>
-            <th scope="col">Referral Fee</th>
-            <th scope="col">Attendance</th>
-            <th scope="col">New Student Name</th>
-            <th scope="col">New Student Start Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, index) => (
-            <tr key={item.id}>
-              <th scope="row">{index + 1}</th>
-              <td>{item.referByStudent || "N/A"}</td> {/* Center Name */}
-              <td>{item.referByParent || "N/A"}</td>{" "}
-              <td>{item.referralFee || "N/A"}</td> {/* Center Name */}
-              <td>{item.attendance || "N/A"}</td> {/* Center Name */}
-              {/* Referral Student Name */}
-              <td>{item.studentName || "N/A"}</td> {/* New Student Name */}
-              <td>{item.enrollDate.substring(0, 10) || "N/A"}</td>{" "}
-              {/* Start Date */}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <ThemeProvider theme={theme}>
+        <MaterialReactTable
+          columns={columns}
+          data={data}
+          enableColumnActions={false}
+          enableDensityToggle={false}
+          enableFullScreenToggle={false}
+          initialState={{
+            columnVisibility: {
+              createdBy: false,
+              createdAt: false,
+            },
+          }}
+        />
+      </ThemeProvider>
+    </>
   );
 };
 

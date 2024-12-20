@@ -1,10 +1,20 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 
 const StudentViewCourse = ({ data }) => {
   const columns = useMemo(
     () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
       {
         accessorKey: "status",
         enableHiding: false,
@@ -92,6 +102,33 @@ const StudentViewCourse = ({ data }) => {
             fontWeight: "400 !important",
             fontSize: "13px !important",
             textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
           },
         },
       },

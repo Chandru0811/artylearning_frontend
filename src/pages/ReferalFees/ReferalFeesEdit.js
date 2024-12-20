@@ -18,7 +18,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
   const [isModified, setIsModified] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   // const userName = localStorage.getItem("userName");
-  const userName = localStorage.getItem("userName") || "SMS_ADMIN";
+  const userName = localStorage.getItem("userName");
 
   const validationSchema = yup.object().shape({
     centerId: yup.string().required("*Centre is required"),
@@ -42,7 +42,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
     onSubmit: async (values) => {
       // console.log(values);
       setLoadIndicator(true);
-
+      values.updatedBy= userName;
       try {
         const response = await api.put(`/updateReferralFees/${id}`, values, {
           headers: {

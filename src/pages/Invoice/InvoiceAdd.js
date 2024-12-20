@@ -87,6 +87,7 @@ export default function InvoiceAdd() {
       creditAdviceOffset: "" || 0.0,
       gst: "",
       totalAmount: "",
+      createdBy: userName,
       invoiceItems: [
         {
           item: "",
@@ -119,6 +120,7 @@ export default function InvoiceAdd() {
             creditAdviceOffset: parseFloat(values.creditAdviceOffset || 0.0), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
             remark: values.remark,
+            createdBy: userName,
             receiptAmount: parseFloat(values.receiptAmount), // Ensure numerical values are parsed correctly
           },
           invoiceItemsList: values.invoiceItems.map((item) => ({
