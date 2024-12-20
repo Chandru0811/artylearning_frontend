@@ -18,13 +18,14 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => {
     setShow(false);
     handleMenuClose();
   };
   const handleShow = () => setShow(true);
-  const userName = localStorage.getItem("userName");
+
 
   const validationSchema = Yup.object({
     folderName: Yup.string().required("*Folder Name is required"),
@@ -38,6 +39,7 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      values.updatedBy= userName;
       try {
         const response = await api.put(
           `/updateDocumentFoldersWithAws/${id}`,
