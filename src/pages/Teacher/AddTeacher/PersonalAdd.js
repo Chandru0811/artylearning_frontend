@@ -64,7 +64,7 @@ const PersonalAdd = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-
+        values.createdBy = userName;
         try {
           const formData = new FormData();
           let nationalityName;
@@ -187,7 +187,7 @@ const PersonalAdd = forwardRef(
         }}
       >
         <section>
-          <div className="container">
+          <div className="container-fluid">
             <p className="headColor my-4">Personal Information</p>
             <div className="row">
               <div className="col-md-6 col-12 mb-2 mt-3">

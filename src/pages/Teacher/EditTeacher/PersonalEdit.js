@@ -105,10 +105,12 @@ const PersonalEdit = forwardRef(
         gender: formData.gender || "",
         email: formData.email || "",
         password: formData.password || "",
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.updatedBy = userName;
         setFormData((prev) => ({ ...prev, ...data }));
         let nationalityName;
         if (data.nationalityId)
@@ -230,7 +232,7 @@ const PersonalEdit = forwardRef(
         }}
       >
         <section>
-          <div className="container">
+          <div className="container-fluid">
             <p className="headColor my-4">Personal Information</p>
             <div className="row">
               <div className="col-md-6 col-12 mb-2 mt-3">

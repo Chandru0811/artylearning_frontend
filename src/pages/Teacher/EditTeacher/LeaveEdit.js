@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
   year: Yup.number()
-  .min(1990, "*Year is required")
-  .max(2050, "*Year is required")
-  .required("*Year is required"),
+    .min(1990, "*Year is required")
+    .max(2050, "*Year is required")
+    .required("*Year is required"),
 
   annualLeave: Yup.string()
     .matches(/^[0-9]+$/, "*Annual Leave Must be numbers")
@@ -24,8 +24,8 @@ const validationSchema = Yup.object().shape({
     .required("*Carry Forward Leave is required"),
 });
 const LeaveEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
@@ -34,8 +34,7 @@ const LeaveEdit = forwardRef(
         medicalLeave: "",
         otherLeave: "",
         carryForwardLeave: "",
-        updatedBy:userName,
-
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {
@@ -62,7 +61,8 @@ const LeaveEdit = forwardRef(
       // },
 
       onSubmit: async (values) => {
-        setLoadIndicators(true)
+        setLoadIndicators(true);
+        values.updatedBy = userName;
         // console.log("Api Data:", values);
         try {
           if (values.leaveId !== null) {
@@ -102,12 +102,12 @@ const LeaveEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally{
-          setLoadIndicators(false)
+        } finally {
+          setLoadIndicators(false);
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -129,8 +129,10 @@ const LeaveEdit = forwardRef(
 
     useEffect(() => {
       const getData = async () => {
-        try{
-          const response = await api.get(`/getAllUserById/${formData.staff_id}`);
+        try {
+          const response = await api.get(
+            `/getAllUserById/${formData.staff_id}`
+          );
           if (
             response.data.userLeaveCreationModels &&
             response.data.userLeaveCreationModels.length > 0
@@ -138,7 +140,10 @@ const LeaveEdit = forwardRef(
             formik.setValues({
               ...response.data.userLeaveCreationModels[0],
               leaveId: response.data.userLeaveCreationModels[0].id,
-              year: response.data.userLeaveCreationModels[0].year.substring(0,10)
+              year: response.data.userLeaveCreationModels[0].year.substring(
+                0,
+                10
+              ),
             });
           } else {
             formik.setValues({
@@ -151,27 +156,30 @@ const LeaveEdit = forwardRef(
             });
             // console.log("Leave ID:", formik.values.leaveId);
           }
-        }catch (error) {
+        } catch (error) {
           console.error("Error fetching data:", error);
         }
       };
       // console.log(formik.values);
       getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     useImperativeHandle(ref, () => ({
       leaveEdit: formik.handleSubmit,
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <section>
-          <div className="container" style={{ minHeight: "50vh" }}>
+          <div className="container-fluid" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Leave Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2">

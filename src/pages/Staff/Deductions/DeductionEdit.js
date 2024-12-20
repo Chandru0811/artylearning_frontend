@@ -22,6 +22,7 @@ function DeductionEdit() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -32,10 +33,12 @@ function DeductionEdit() {
       deductionMonth: "",
       deductionAmount: "",
       deductionName: "",
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      values.updatedBy = userName;
       try {
         const response = await api.put(`/updateUserDeduction/${id}`, values, {
           headers: {

@@ -70,6 +70,7 @@ const SalaryEdit = forwardRef(
 
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         console.log("Api Data:", values);
         try {
           if (id) {
@@ -187,7 +188,7 @@ const SalaryEdit = forwardRef(
         }}
       >
         <section>
-          <div className="container" style={{ minHeight: "50vh" }}>
+          <div className="container-fluid" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2 mt-3">

@@ -853,7 +853,7 @@ const Lead = () => {
   const handleMenuClose = () => setMenuAnchor(null);
   return (
     <div>
-      <div className="container my-4 center">
+      <div className="container-fluid my-4 center">
         <ol
           className="breadcrumb my-3"
           style={{ listStyle: "none", padding: 0, margin: 0 }}

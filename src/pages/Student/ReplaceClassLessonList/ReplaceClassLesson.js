@@ -100,7 +100,6 @@ const ReplaceClassLesson = () => {
       {
         accessorKey: "updatedBy",
         header: "Updated By",
-        enableHiding: false,
         Cell: ({ cell }) => cell.getValue() || "",
       },
     ],

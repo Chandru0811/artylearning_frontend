@@ -5,7 +5,7 @@ import api from "../../../config/URL";
 
 const StaffRequiredAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
@@ -24,7 +24,7 @@ const StaffRequiredAdd = forwardRef(
           formDatas.append("educationCertificate", values.educationCertificate);
           formDatas.append("educationCertificate", values.educationCertificate);
           formDatas.append("createdBy", userName);
-          
+
           const response = await api.post(
             `/createUserRequireInformation`,
             formDatas,
@@ -65,12 +65,15 @@ const StaffRequiredAdd = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
-        <div className="container" style={{ minHeight: "50vh" }}>
+        }}
+      >
+        <div className="container-fluid" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Required Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2">

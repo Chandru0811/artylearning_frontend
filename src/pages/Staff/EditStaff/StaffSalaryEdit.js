@@ -46,6 +46,7 @@ const StaffSalaryEdit = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         try {
           if (id) {
             const response = await api.put(
@@ -143,7 +144,7 @@ const StaffSalaryEdit = forwardRef(
         }}
       >
         <section>
-          <div className="container" style={{ minHeight: "50vh" }}>
+          <div className="container-fluid" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2 mt-3">

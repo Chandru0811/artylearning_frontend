@@ -49,11 +49,11 @@ const validationSchema = Yup.object().shape({
     .email("*Invalid Email")
     .required("*Email is required"),
   monthlyIncomeOfFather: Yup.string().required("*Father Income is required"),
-
 });
 
 const EditForm3 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
     const formik = useFormik({
       initialValues: {
         fathersFullName: formData.fathersFullName || "",
@@ -71,10 +71,12 @@ const EditForm3 = forwardRef(
         primaryContact: formData.primaryContact || "",
         primaryContactFather: formData.primaryContactFather,
         primaryContactMother: formData.primaryContactMother,
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.updatedBy = userName;
         // const primarycontactFather = data.primaryContact === "father";
         // const primarycontactMother = data.primaryContact === "mother";
         // data.primaryContactFather = primarycontactFather ? true : false;
@@ -104,7 +106,7 @@ const EditForm3 = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -143,7 +145,7 @@ const EditForm3 = forwardRef(
         });
       };
       getData();
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -151,13 +153,15 @@ const EditForm3 = forwardRef(
       editForm3: formik.handleSubmit,
     }));
 
-
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <div className="container py-4">
           <h5 className="headColor mb-5">Parent Information</h5>
           <div className="row">

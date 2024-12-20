@@ -19,6 +19,7 @@ function EditPayroll() {
   const [empRole, setEmpRole] = useState(null);
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
   const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
   console.log("NET PAY:", netPay);
@@ -130,6 +131,7 @@ function EditPayroll() {
         freelancerCount: Number(values.freelancerCount),
         startDate: values.startDate,
         endDate: values.endDate,
+        updatedBy: userName,
       };
       console.log("Payload Values:", payload);
       try {

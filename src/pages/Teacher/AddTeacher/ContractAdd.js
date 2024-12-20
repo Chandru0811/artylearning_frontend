@@ -113,6 +113,7 @@ const ContractAdd = forwardRef(
 
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
           const response = await api.post(
             `/createUserContractCreation/${formData.user_id}`,
@@ -246,9 +247,9 @@ const ContractAdd = forwardRef(
           }
         }}
       >
-        <div className="container">
+        <div className="container-fluid">
           <p className="headColor my-4">Contract Information</p>
-          <div className="container mt-5" style={{ minHeight: "95vh" }}>
+          <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
               <div class="col-md-6 col-12 mb-2 mt-3">
