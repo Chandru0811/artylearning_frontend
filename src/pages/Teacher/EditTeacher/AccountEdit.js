@@ -59,11 +59,13 @@ const AccountEdit = forwardRef(
         approvelContentRequired: "",
         workingDays: [],
         centerIds: [],
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
 
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         // console.log("Api Data:", values);
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
@@ -95,7 +97,6 @@ const AccountEdit = forwardRef(
             const updatedData = {
               ...values,
               approvelContentRequired: Approval,
-              updatedBy: userName,
               userId: formData.staff_id,
             };
             const response = await api.post(
@@ -234,7 +235,7 @@ const AccountEdit = forwardRef(
           }
         }}
       >
-        <div className="container courseAdd">
+        <div className="container-fluid courseAdd">
           <p className="headColor my-4">Account Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2 mt-2">

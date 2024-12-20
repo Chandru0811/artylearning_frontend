@@ -6,24 +6,22 @@ import { toast } from "react-toastify";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const validationSchema = Yup.object().shape({
-  password: Yup
-  .string()
-  .matches(/^\S*$/, "*Password must not contain spaces.")
-  .required("*Enter the valid Password"),
+  password: Yup.string()
+    .matches(/^\S*$/, "*Password must not contain spaces.")
+    .required("*Enter the valid Password"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
 });
 const StaffLoginEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
         password: "",
         confirmPassword: "",
-        updatedBy:userName,
-
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {
@@ -50,6 +48,7 @@ const StaffLoginEdit = forwardRef(
       // },
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         try {
           if (values.loginId !== null) {
             const response = await api.put(
@@ -88,7 +87,7 @@ const StaffLoginEdit = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally{
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -152,11 +151,14 @@ const StaffLoginEdit = forwardRef(
     };
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <div className="container" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Login Information</p>
           <div class="row">

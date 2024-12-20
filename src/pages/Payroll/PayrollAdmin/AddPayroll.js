@@ -14,6 +14,7 @@ function AddPayroll() {
   const [empRole, setEmpRole] = useState(null);
   const [userSalaryInfo, setUserSalaryInfo] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
   const [bonus, setBonus] = useState(0);
   const [netPay, setNetPay] = useState(0);
   console.log("NET PAY:", netPay);
@@ -107,12 +108,14 @@ function AddPayroll() {
       cpfContribution: "",
       freelancerCount: "",
       payrollType: "",
+      createdBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("VALUES:", values);
 
       setLoadIndicator(true);
+      values.createdBy = userName;
       let selectedCenterName = "";
       let selectedEmployeeName = "";
 

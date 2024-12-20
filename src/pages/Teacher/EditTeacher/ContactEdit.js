@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -18,10 +23,9 @@ const validationSchema = Yup.object().shape({
     .required("*Postal Code is required"),
 });
 const ContactEdit = forwardRef(
-  ({ formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
-    const[datas,setDatas] = useState();
-
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
+    const [datas, setDatas] = useState();
 
     const formik = useFormik({
       initialValues: {
@@ -29,8 +33,7 @@ const ContactEdit = forwardRef(
         contactNumber: "",
         address: "",
         postalCode: "",
-        updatedBy:userName,
-
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {
@@ -56,7 +59,8 @@ const ContactEdit = forwardRef(
       //   }
       // },
       onSubmit: async (values) => {
-        setLoadIndicators(true)
+        setLoadIndicators(true);
+        values.updatedBy = userName;
         // console.log("Api Data:", values);
         try {
           if (values.contactId !== null) {
@@ -77,11 +81,15 @@ const ContactEdit = forwardRef(
               toast.error(response.data.message);
             }
           } else {
-            const response = await api.post(`/createUserContactInfo/${formData.staff_id}`, values, {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
+            const response = await api.post(
+              `/createUserContactInfo/${formData.staff_id}`,
+              values,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
             if (response.status === 201) {
               toast.success(response.data.message);
               setFormData((prv) => ({ ...prv, ...values }));
@@ -91,13 +99,16 @@ const ContactEdit = forwardRef(
             }
           }
         } catch (error) {
-          if(error?.response?.status === 409){
-            toast.warning(error?.response?.data?.message)
+          if (error?.response?.status === 409) {
+            toast.warning(error?.response?.data?.message);
           } else {
-            toast.error("Error Submiting data " ,error?.response?.data?.message )
+            toast.error(
+              "Error Submiting data ",
+              error?.response?.data?.message
+            );
           }
-        }finally{
-          setLoadIndicators(false)
+        } finally {
+          setLoadIndicators(false);
         }
       },
     });
@@ -117,13 +128,15 @@ const ContactEdit = forwardRef(
 
     useEffect(() => {
       const getData = async () => {
-        try{
-          const response = await api.get(`/getAllUserById/${formData.staff_id}`);
+        try {
+          const response = await api.get(
+            `/getAllUserById/${formData.staff_id}`
+          );
           if (
             response.data.userContactInfo &&
             response.data.userContactInfo.length > 0
           ) {
-            setDatas(response.data.userContactInfo[0])
+            setDatas(response.data.userContactInfo[0]);
 
             formik.setValues({
               ...response.data.userContactInfo[0],
@@ -139,28 +152,30 @@ const ContactEdit = forwardRef(
             });
             // console.log("Contact ID:", formik.values.contactId);
           }
-          
-        }catch (error) {
+        } catch (error) {
           console.error("Error fetching data:", error);
         }
       };
       // console.log(formik.values);
       getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     useImperativeHandle(ref, () => ({
       contactEdit: formik.handleSubmit,
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
+        }}
+      >
         <section>
-          <div className="container">
+          <div className="container-fluid">
             <p className="headColor my-4">Contact Information</p>
             <div class="row">
               {/* <div class="col-md-6 col-12 mb-2 mt-3">

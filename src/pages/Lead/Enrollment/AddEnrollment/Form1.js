@@ -40,6 +40,7 @@ const Form1 = forwardRef(
     const [raceData, setRaceData] = useState(null);
     const [centerData, setCenterData] = useState(null);
     console.log("Form data is ", formData);
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
@@ -55,11 +56,13 @@ const Form1 = forwardRef(
         // nameOfChildrenInTotal: formData.nameOfChildrenInTotal || "",
         fathersFullName: formData.fathersFullName || "",
         leadStatus: "NEW_WAITLIST" || "",
-        referby:""
+        referby: "",
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.createdBy = userName;
         try {
           // console.log("Before API Call - formData:", formData);
 

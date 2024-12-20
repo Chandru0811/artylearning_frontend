@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
@@ -7,7 +12,7 @@ import { MdOutlineDownloadForOffline } from "react-icons/md";
 
 const StaffRequiredEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const [datas,setDatas]=useState();
+    const [datas, setDatas] = useState();
     // const formik = useFormik({
     //   initialValues: {
     //     resume: null || "",
@@ -29,9 +34,11 @@ const StaffRequiredEdit = forwardRef(
       initialValues: {
         resume: null || "",
         educationCertificate: null || "",
+        updatedBy: userName,
       },
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         try {
           if (values.userEnquireId !== null || undefined) {
             const formDatas = new FormData();
@@ -113,7 +120,7 @@ const StaffRequiredEdit = forwardRef(
             response.data.userRequireInformationModels &&
             response.data.userRequireInformationModels.length > 0
           ) {
-            setDatas(response.data.userRequireInformationModels[0])
+            setDatas(response.data.userRequireInformationModels[0]);
             formik.setValues({
               ...response.data.userRequireInformationModels[0],
               userEnquireId: response.data.userRequireInformationModels[0].id,
@@ -148,7 +155,7 @@ const StaffRequiredEdit = forwardRef(
           }
         }}
       >
-        <div className="container" style={{ minHeight: "60vh" }}>
+        <div className="container-fluid" style={{ minHeight: "60vh" }}>
           <p className="headColor my-4">Required Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2">
@@ -164,19 +171,33 @@ const StaffRequiredEdit = forwardRef(
                 onBlur={formik.handleBlur}
               />
               <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
-              {datas?.resume &&(
-                <div class="card border-0 shadow" style={{width: "18rem"}}>
-                <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(datas?.resume)}&embedded=true`} target="_blank" rel="noopener noreferrer" ><img class="card-img-top img-fluid" style={{height:"10rem"}} src={pdfLogo} alt="Card image cap" /></a>
-                <div class="card-body d-flex justify-content-between">
-                  <p class="card-title fw-semibold text-wrap">{datas?.resume?.split("/").pop()}</p>
-                  
-                  <a href={datas?.resume} class="btn text-dark">
-                    <MdOutlineDownloadForOffline size={25}/>
+              {datas?.resume && (
+                <div class="card border-0 shadow" style={{ width: "18rem" }}>
+                  <a
+                    href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                      datas?.resume
+                    )}&embedded=true`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      class="card-img-top img-fluid"
+                      style={{ height: "10rem" }}
+                      src={pdfLogo}
+                      alt="Card image cap"
+                    />
                   </a>
+                  <div class="card-body d-flex justify-content-between">
+                    <p class="card-title fw-semibold text-wrap">
+                      {datas?.resume?.split("/").pop()}
+                    </p>
+
+                    <a href={datas?.resume} class="btn text-dark">
+                      <MdOutlineDownloadForOffline size={25} />
+                    </a>
+                  </div>
                 </div>
-              </div>
               )}
-              
             </div>
             <div class="col-md-6 col-12 mb-2">
               <label>Education Certificate</label>
@@ -194,17 +215,32 @@ const StaffRequiredEdit = forwardRef(
                 onBlur={formik.handleBlur}
               />
               <p class="mt-4">Note : File must be PDF,Max Size 2 MB</p>
-              {datas?.educationCertificate &&(
-                <div class="card border-0 shadow" style={{width: "18rem"}}>
-                <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(datas?.educationCertificate)}&embedded=true`} target="_blank" rel="noopener noreferrer" ><img class="card-img-top img-fluid" style={{height:"10rem"}} src={pdfLogo} alt="Card image cap" /></a>
-                <div class="card-body d-flex justify-content-between">
-                  <p class="card-title fw-semibold text-wrap">{datas?.educationCertificate?.split("/").pop()}</p>
-                  
-                  <a href={datas?.educationCertificate} class="btn text-dark">
-                    <MdOutlineDownloadForOffline size={25}/>
+              {datas?.educationCertificate && (
+                <div class="card border-0 shadow" style={{ width: "18rem" }}>
+                  <a
+                    href={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                      datas?.educationCertificate
+                    )}&embedded=true`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      class="card-img-top img-fluid"
+                      style={{ height: "10rem" }}
+                      src={pdfLogo}
+                      alt="Card image cap"
+                    />
                   </a>
+                  <div class="card-body d-flex justify-content-between">
+                    <p class="card-title fw-semibold text-wrap">
+                      {datas?.educationCertificate?.split("/").pop()}
+                    </p>
+
+                    <a href={datas?.educationCertificate} class="btn text-dark">
+                      <MdOutlineDownloadForOffline size={25} />
+                    </a>
+                  </div>
                 </div>
-              </div>
               )}
             </div>
           </div>

@@ -31,6 +31,7 @@ const validationSchema = Yup.object().shape({
 
 const EditForm4 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
     const formik = useFormik({
       initialValues: {
         address: formData.address || "",
@@ -43,10 +44,12 @@ const EditForm4 = forwardRef(
         relationToChils: formData.relationToChils || "",
         noAuthorisedNric: formData.noAuthorisedNric || "",
         contactOfAuthorised: formData.contactOfAuthorised || "",
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.updatedBy = userName;
         try {
           const response = await api.put(
             `/updateLeadInfo/${formData.id}`,
@@ -71,7 +74,7 @@ const EditForm4 = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -97,10 +100,9 @@ const EditForm4 = forwardRef(
         formik.setValues(response.data);
         formik.setValues({
           ...response.data,
-          relationToChils: response.data.relation
+          relationToChils: response.data.relation,
         });
         console.log("relationToChils", response.data.relation);
-
       };
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       getData();
@@ -185,8 +187,8 @@ const EditForm4 = forwardRef(
             <div className="col-md-6 col-12">
               <div className="mb-3">
                 <label for="exampleFormControlInput1" className="form-label">
-                  Emergency Contact Person's NRIC/FIC No. (other Than
-                  Parents)<span className="text-danger">*</span>
+                  Emergency Contact Person's NRIC/FIC No. (other Than Parents)
+                  <span className="text-danger">*</span>
                 </label>
                 <input
                   type="text"

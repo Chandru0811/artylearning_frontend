@@ -6,30 +6,29 @@ import api from "../../../config/URL";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const validationSchema = Yup.object().shape({
-  password: Yup
-  .string()
-  .matches(/^\S*$/, "*Password must not contain spaces.")
-  .required("*Enter the valid Password"),
+  password: Yup.string()
+    .matches(/^\S*$/, "*Password must not contain spaces.")
+    .required("*Enter the valid Password"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "*Passwords must match")
     .required("*Confirm Password is required"),
 });
 const StaffLoginAdd = forwardRef(
-  ({formData,setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName  = localStorage.getItem('userName');
+  ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
         password: formData.password,
         confirmPassword: formData.confirmPassword,
         createdBy: userName,
-
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
-          const userId = formData.user_id
+          const userId = formData.user_id;
           const response = await api.post(
             `/createUserLoginInfo/${userId}`,
             values,
@@ -48,7 +47,7 @@ const StaffLoginAdd = forwardRef(
           }
         } catch (error) {
           toast.error(error);
-        }finally {
+        } finally {
           setLoadIndicators(false);
         }
       },
@@ -70,12 +69,15 @@ const StaffLoginAdd = forwardRef(
     };
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
-        <div className="container" style={{ minHeight: "50vh" }}>
+        }}
+      >
+        <div className="container-fluid" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Login Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2">
@@ -117,7 +119,7 @@ const StaffLoginAdd = forwardRef(
                 </div>
               </div>
             </div>
-             <div class="col-md-6 col-12 mb-2">
+            <div class="col-md-6 col-12 mb-2">
               <div className="mb-3">
                 <label>
                   Confirm Password<span class="text-danger">*</span>
@@ -127,7 +129,8 @@ const StaffLoginAdd = forwardRef(
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Enter confirm password"
                     className={`form-control ${
-                      formik.touched.confirmPassword && formik.errors.confirmPassword
+                      formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword
                         ? "is-invalid"
                         : ""
                     }`}
@@ -146,13 +149,18 @@ const StaffLoginAdd = forwardRef(
                     onClick={toggleConfirmPasswordVisibility}
                     style={{ cursor: "pointer", borderRadius: "3px" }}
                   >
-                    {showConfirmPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+                    {showConfirmPassword ? (
+                      <IoEyeOffOutline />
+                    ) : (
+                      <IoEyeOutline />
+                    )}
                   </span>
-                  {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                    <div className="invalid-feedback">
-                      {formik.errors.confirmPassword}
-                    </div>
-                  )}
+                  {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword && (
+                      <div className="invalid-feedback">
+                        {formik.errors.confirmPassword}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IoIosMail, IoIosSettings } from "react-icons/io";
+import { IoIosSettings } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
@@ -7,7 +7,6 @@ import fetchAllCentersWithIds from "../List/CenterList";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import fetchAllSalaryTypeWithIds from "../List/SalaryTypeList";
-// import PasswordModal from "../Student/StudentNewView/PasswordModal";
 
 function StaffNewView() {
   const { id } = useParams();
@@ -30,7 +29,6 @@ function StaffNewView() {
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
-      //   const packageData = await fetchAllPackageList();
       setCenterData(centerData);
       setPackageData(packageData);
     } catch (error) {
@@ -72,29 +70,24 @@ function StaffNewView() {
   };
   const handleGeneratePDF = async () => {
     const pdf = new jsPDF({
-      orientation: "p", // 'p' for portrait, 'l' for landscape
+      orientation: "p",
       unit: "px",
-      format: "a3", // page format
+      format: "a3",
     });
 
-    // Helper function to capture table as image and add to PDF
     const addTableToPDF = async (tableRef, pageNumber) => {
       const table = tableRef.current;
 
       try {
         table.style.visibility = "visible";
         table.style.display = "block";
-        // Generate canvas from table
         const canvas = await html2canvas(table, { scale: 2 });
 
-        // Convert canvas to PNG image data
         const imgData = canvas.toDataURL();
 
-        // Calculate PDF dimensions based on canvas
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-        // Add image to PDF
         if (pageNumber > 1) {
           pdf.addPage();
         }
@@ -106,10 +99,8 @@ function StaffNewView() {
       }
     };
 
-    // Add each table to PDF
     await addTableToPDF(table1Ref, 1);
 
-    // Save PDF
     pdf.save("student-details.pdf");
   };
   return (
@@ -172,9 +163,6 @@ function StaffNewView() {
                   </p>
                 </Link>
               )}
-              {/* <p className="stdSettings mt-1 mb-0" onClick={handleGeneratePDF}>
-                <IoIosSettings /> Student Detail PDF
-              </p> */}
               <hr className="mt-2 mb-0" />
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                 <li className="stdList">
@@ -183,14 +171,6 @@ function StaffNewView() {
                 </li>
                 <li className="stdList">
                   <b>Date of Birth</b>
-                  {/* <span>
-                    {centerData &&
-                      centerData.map((center) =>
-                        parseInt(data.centerId) === center.id
-                          ? center.centerNames || "--"
-                          : ""
-                      )}
-                  </span> */}
                   <span>
                     {data.dateOfBirth
                       ? data.dateOfBirth.substring(0, 10)
@@ -245,7 +225,6 @@ function StaffNewView() {
             <div className="card mb-3">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
-                  {/* <FaBook size={20} /> */}
                   &nbsp;&nbsp;Account Information
                 </p>
               </div>
@@ -524,12 +503,9 @@ function StaffNewView() {
                 </li>
               </ul>
             </div>
-            {/* {data.role !== "freelancer" && (
-              <> */}
             <div className="card mb-3 mt-3">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
-                  {/* <FaUsers size={20} /> */}
                   &nbsp;&nbsp;Salary Information
                 </p>
               </div>
@@ -581,7 +557,6 @@ function StaffNewView() {
             <div className="card">
               <div className="withBorder">
                 <p className="fw-medium ms-3 my-2">
-                  {/* <FaUsers size={20} /> */}
                   &nbsp;&nbsp; Leave Information
                 </p>
               </div>
@@ -638,14 +613,11 @@ function StaffNewView() {
                 </ul>
               </div>
             </div>
-            {/* </>
-            )} */}
           </div>
           <div className="col-md-3 col-12 mb-3">
             <div className="card" style={{ padding: "10px" }}>
               <hr className="mt-2 mb-0" />
               <p className="fw-medium ms-3 my-2">
-                {/* <FaBook size={20} /> */}
                 &nbsp;&nbsp;Contract Information
               </p>
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>

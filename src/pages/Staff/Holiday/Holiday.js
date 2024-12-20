@@ -55,7 +55,11 @@ const Holiday = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
+      {
+        accessorFn: (row) => row.centers?.[0]?.centerName,
+        enableHiding: false,
+        header: "Center Name",
+      },
       {
         accessorKey: "holidayName",
         enableHiding: false,
@@ -97,16 +101,16 @@ const Holiday = () => {
     }
   };
 
+  const getData = async () => {
+    try {
+      const response = await api.get("/getAllUserHoliday");
+      setData(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllUserHoliday");
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
     getData();
     fetchData();
   }, []);
@@ -261,7 +265,7 @@ const Holiday = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteUserHoliday/${selectedId}`}
-                  onDeleteSuccess={fetchData}
+                  onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>

@@ -1,11 +1,15 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-
   primaryContact: Yup.string()
     .oneOf(
       ["father", "mother"],
@@ -52,6 +56,7 @@ const validationSchema = Yup.object().shape({
 
 const Form3 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
     const formik = useFormik({
       initialValues: {
         fathersFullName: formData.fathersFullName || "",
@@ -67,10 +72,12 @@ const Form3 = forwardRef(
         mothersEmailAddress: formData.mothersEmailAddress || "",
         monthlyIncomeOfMother: formData.monthlyIncomeOfMother || "",
         primaryContact: formData.primaryContact || false,
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.createdBy = userName;
         const primarycontactFather = data.primaryContact === "father";
         const primarycontactMother = data.primaryContact === "mother";
         data.primaryContactFather = primarycontactFather ? true : false;
@@ -100,9 +107,8 @@ const Form3 = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
-
 
     // Function to scroll to the first error field
     const scrollToError = (errors) => {
@@ -125,15 +131,18 @@ const Form3 = forwardRef(
       form3: formik.handleSubmit,
     }));
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <div className="container py-4">
           <h5 className="headColor mb-5">Parent Information</h5>
           <div className="row">
