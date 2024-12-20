@@ -82,10 +82,27 @@ const ReferalHistory = () => {
     []
   );
 
+  // const fetchData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await api.get("/getAllReferralHistory");
+  //     setData(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("/getAllReferralHistory");
+      const queryParams = new URLSearchParams(filters).toString();
+      const response = await api.get(`/getReferralHistoryWithCustomInfo?${queryParams}`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -96,7 +113,7 @@ const ReferalHistory = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [filters]);
 
   const theme = createTheme({
     components: {
@@ -185,7 +202,7 @@ const ReferalHistory = () => {
           </span>
         </div>
         <div className="mb-3 d-flex justify-content-between">
-          {/* <div className="individual_fliters d-lg-flex ">
+          <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
@@ -231,7 +248,7 @@ const ReferalHistory = () => {
                 Clear
               </button>
             </div>
-          </div> */}
+          </div>
         </div>
         {loading ? (
           <div className="loader-container">

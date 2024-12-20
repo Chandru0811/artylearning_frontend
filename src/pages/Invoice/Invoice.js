@@ -77,7 +77,7 @@ const Invoice = () => {
         enableHiding: false,
         header: "Course",
         cell: ({ row }) => {
-          const data = row.original; // Access the original row data
+          const data = row.original;
           return (
             (courseData &&
               courseData.find((course) => parseInt(data.courseId) === course.id)

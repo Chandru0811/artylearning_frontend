@@ -13,12 +13,19 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import GlobalDelete from "../../components/common/GlobalDelete";
 import ReferalFeesAdd from "./ReferalFeesAdd";
 import ReferalFeesEdit from "./ReferalFeesEdit";
+import fetchAllCentersWithIds from "../List/CenterList";
+import { toast } from "react-toastify";
 
 const ReferalFees = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [centerId, setCenterId] = useState("");
+  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
+  const [centerData, setCenterData] = useState([]);
+
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [filters, setFilters] = useState({
     centerName: "",
   });
@@ -105,17 +112,54 @@ const ReferalFees = () => {
 
   const fetchData = async () => {
     try {
-      const response = await api.get("/getAllReferralFees");
+      setLoading(true);
+
+      const centerId =
+        !isClearFilterClicked &&
+        (filters.centerId || (centerLocalId && centerLocalId !== "undefined"))
+          ? filters.centerId || centerLocalId
+          : "";
+
+      const response = await api.get(`/getReferralFeeByCenterId/${centerId}`);
       setData(response.data);
-      setLoading(false);
     } catch (error) {
-      console.error("Error fetching data ", error);
+      toast.error(`Error Fetching Data: ${error.message}`);
+    } finally {
+      setLoading(false);
+      setIsClearFilterClicked(false);
     }
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      await fetchCenterData(); // Fetch center data
+    };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [filters]);
+
+  const fetchCenterData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      if (centerLocalId !== null && centerLocalId !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerLocalId,
+        }));
+      } else if (centerData !== null && centerData.length > 0) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+      }
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   const theme = createTheme({
     components: {
@@ -134,25 +178,25 @@ const ReferalFees = () => {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0", 
-              opacity: 1, 
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
           },
           track: {
-            backgroundColor: "#e0e0e0", 
+            backgroundColor: "#e0e0e0",
           },
           thumb: {
-            color: "#eb862a", 
+            color: "#eb862a",
           },
           switchBase: {
             "&.Mui-checked": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
             "&.Mui-checked + .MuiSwitch-track": {
-              backgroundColor: "#eb862a", 
+              backgroundColor: "#eb862a",
             },
           },
         },
@@ -171,7 +215,10 @@ const ReferalFees = () => {
     });
   };
 
-  const handleMenuClose = () => {setMenuAnchor(null);console.log("null")}
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+    console.log("null");
+  };
 
   return (
     <div className="container-fluid px-2 my-4 center">
@@ -203,19 +250,29 @@ const ReferalFees = () => {
             <strong style={{ color: "#287f71" }}>Referal Fees</strong>
           </span>
         </div>
-        <div className="mb-3 d-flex justify-content-end">
-          {/* <div className="individual_fliters d-lg-flex ">
+        <div className="mb-3 d-flex justify-content-between">
+          <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="centerName"
-                value={filters.centerName}
-                onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Center Name"
-                autoComplete="off"
-              />
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                onChange={(e) => {
+                  const { value } = e.target;
+                  setFilters((prevFilters) => ({
+                    ...prevFilters,
+                    centerId: value,
+                  }));
+                  setCenterId(value);
+                }}
+                name="centerId"
+                value={filters.centerId}
+              >
+                {centerData?.map((center) => (
+                  <option key={center.id} value={center.id}>
+                    {center.centerNames}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group mb-2 ms-2">
               <button
@@ -226,7 +283,7 @@ const ReferalFees = () => {
                 Clear
               </button>
             </div>
-          </div> */}
+          </div>
           <ReferalFeesAdd onSuccess={fetchData} />
         </div>
         {loading ? (

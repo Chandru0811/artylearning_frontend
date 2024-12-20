@@ -67,11 +67,11 @@ const Course = () => {
         ),
       },
       {
-        accessorFn: (row) => row.centers?.[0]?.centerName,
+        accessorFn: (row) => row.centerName?.[0]?.centerName,
         enableHiding: false,
         header: "Center Name",
       },
-      { accessorKey: "levelId", enableHiding: false, header: "Level" },
+      { accessorKey: "levelName", enableHiding: false, header: "Level" },
       {
         accessorKey: "courseName",
         enableHiding: false,
@@ -83,7 +83,7 @@ const Course = () => {
         header: "Course Code",
       },
       {
-        accessorKey: "subjectId",
+        accessorKey: "subjectName",
         enableHiding: false,
         header: "Subject",
       },

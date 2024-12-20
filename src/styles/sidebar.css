@@ -718,7 +718,8 @@ a:hover {
   height: 20px;
   display: block;
   border-radius: 10px;
-  background-color: #f72a2a;
+  /* background-color: #f72a2a; */
+  background-color: #eb862a;
   transition: background-color 0.4s;
 
   &:before {
@@ -755,7 +756,8 @@ a:hover {
 }
 
 .on-off-toggle__input:checked + .on-off-toggle__slider {
-  background-color: #64e455;
+  /* background-color: #64e455; */
+  background-color: #287f71;
 
   &:before {
     transform: translateX(20px);
@@ -838,6 +840,7 @@ a:hover {
   border-radius: 100%;
   border: 3px solid #fff;
   box-shadow: 0px 0px 0px 4px #e7e4e4;
+  /* box-shadow: 0px 0px 0px 4px #eb862a; */
 }
 
 @media screen and (max-width: 991px) {
