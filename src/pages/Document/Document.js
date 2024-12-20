@@ -61,9 +61,14 @@ const Document = () => {
       },
       { accessorKey: "folderName", enableHiding: false, header: "Folder Name" },
       {
-        accessorKey: "studentNames",
+        accessorKey: "studentName",
         enableHiding: false,
         header: "Student Name",
+      },
+      {
+        accessorKey: "user",
+        enableHiding: false,
+        header: "User Name",
       },
       {
         accessorKey: "course",
@@ -78,7 +83,12 @@ const Document = () => {
         size: 50,
       },
       { accessorKey: "batchTime", enableHiding: false, header: "Batch" },
-      { accessorKey: "dayTime", enableHiding: false, header: "Day/Time" },
+      {
+        accessorKey: "date",
+        enableHiding: false,
+        header: "Day/Time",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
       { accessorKey: "teacher", enableHiding: false, header: "Teacher" },
       {
         accessorKey: "folderCategory",
