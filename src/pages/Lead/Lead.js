@@ -754,7 +754,7 @@ const Lead = () => {
       },
       {
         header: "Centre Name",
-        accessorKey: "centreName",
+        accessorKey: "center",
         enableHiding: false,
         cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
