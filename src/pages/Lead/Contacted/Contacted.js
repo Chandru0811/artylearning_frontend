@@ -16,7 +16,7 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Level = () => {
- const navigate = useNavigate();
+  const navigate = useNavigate();
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,9 +24,9 @@ const Level = () => {
   const [messageData, setMessageData] = useState("");
   const [email, setEmail] = useState("");
 
-    const [menuAnchor, setMenuAnchor] = useState(null);
-    const [selectedId, setSelectedId] = useState(null);
-    // console.log("data",datas)
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  // console.log("data",datas)
   // const clearFilters = () => {
   //   setContactedName("");
   //   setMessageData("");
@@ -49,8 +49,7 @@ const Level = () => {
     getData();
   }, []);
 
-
-  // new table 
+  // new table
   const columns = useMemo(
     () => [
       {
@@ -63,23 +62,23 @@ const Level = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      {
-        accessorKey: "id",
-        header: "",
-        enableHiding: false,
-        enableSorting: false,
-        size: 20,
-        Cell: ({ cell }) => (
-          <IconButton
-            onClick={(e) => {
-              setMenuAnchor(e.currentTarget);
-              setSelectedId(cell.getValue());
-            }}
-          >
-            <MoreVertIcon />
-          </IconButton>
-        ),
-      },
+      // {
+      //   accessorKey: "id",
+      //   header: "",
+      //   enableHiding: false,
+      //   enableSorting: false,
+      //   size: 20,
+      //   Cell: ({ cell }) => (
+      //     <IconButton
+      //       onClick={(e) => {
+      //         setMenuAnchor(e.currentTarget);
+      //         setSelectedId(cell.getValue());
+      //       }}
+      //     >
+      //       <MoreVertIcon />
+      //     </IconButton>
+      //   ),
+      // },
       { accessorKey: "name", enableHiding: false, header: "Name" },
       {
         accessorKey: "email",
@@ -106,22 +105,22 @@ const Level = () => {
     ],
     []
   );
-   const theme = createTheme({
-      components: {
-        MuiTableCell: {
-          styleOverrides: {
-            head: {
-              color: "#535454 !important",
-              backgroundColor: "#e6edf7 !important",
-              fontWeight: "400 !important",
-              fontSize: "13px !important",
-              textAlign: "center !important",
-            },
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
           },
         },
       },
-    });
-    const handleMenuClose = () => setMenuAnchor(null);
+    },
+  });
+  const handleMenuClose = () => setMenuAnchor(null);
   return (
     <div className="container-fluid my-4 center">
       <ol
@@ -225,7 +224,7 @@ const Level = () => {
           </div>
         ) : (
           <>
-          <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
               <MaterialReactTable
                 columns={columns}
                 data={datas}

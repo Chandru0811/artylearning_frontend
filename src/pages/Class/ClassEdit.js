@@ -64,7 +64,7 @@ function ClassEdit() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      values.createdBy = userName;
+      values.updatedBy = userName;
       const selectedValue = formik.values.centerId;
       let selectedOptionName = "";
 

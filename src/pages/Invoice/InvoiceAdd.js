@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import {
   Link,
-  useAsyncError,
   useLocation,
   useNavigate,
 } from "react-router-dom";
@@ -65,7 +64,7 @@ export default function InvoiceAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const [packageData, setPackageData] = useState(null);
-  const [description, setDescription] = useState("");
+  // const [description, setDescription] = useState("");
 
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [lessonsOptions, setLessonsOptions] = useState([]);
@@ -176,9 +175,9 @@ export default function InvoiceAdd() {
     }
   }, [formik.submitCount, formik.errors]);
 
-  const handleInputChange = (e) => {
-    setDescription(e.target.value);
-  };
+  // const handleInputChange = (e) => {
+  //   setDescription(e.target.value);
+  // };
 
   const fetchData = async () => {
     try {
@@ -863,8 +862,8 @@ export default function InvoiceAdd() {
                         e.stopPropagation(); // Prevent the event from bubbling up to the parent
                       }
                     }}
-                    value={description}
-                    onChange={handleInputChange}
+                    // value={description}
+                    // onChange={handleInputChange}
                   />
                 </div>
               </div>

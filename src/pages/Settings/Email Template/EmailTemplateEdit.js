@@ -55,6 +55,8 @@ const formats = [
 
 function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
+  const userName = localStorage.getItem("userName");
+    const [loadIndicator, setLoadIndicator] = useState(false);
 
   const handleClose = () => {
     handleMenuClose();
@@ -80,10 +82,13 @@ function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
     initialValues: {
       subject: "",
       description: "",
+      updatedBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        setLoadIndicator(true)
+        values.updatedBy = userName
         const response = await api.put(`/updateEmailTemplate/${id}`, values);
         if (response.status === 200) {
           toast.success("The email template has been successfully updated");
@@ -96,6 +101,7 @@ function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
         toast.error(e);
       } finally {
         handleClose();
+        setLoadIndicator(false)
       }
     },
   });
@@ -112,7 +118,7 @@ function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="text-start"
+        className="text-start mb-0"
         onClick={handleOpen}
       >
         Edit
@@ -179,12 +185,12 @@ function EmailTemplateEdit({ id, onSuccess, handleMenuClose }) {
               Cancel
             </button>
             <button type="submit" className="btn btn-button btn-sm">
-              {/* {loadIndicator && (
+              {loadIndicator && (
                 <span
                   className="spinner-border spinner-border-sm me-2"
                   aria-hidden="true"
                 ></span>
-              )} */}
+              )}
               Update
             </button>
           </DialogActions>

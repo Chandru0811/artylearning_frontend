@@ -28,7 +28,8 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
   const getData = async () => {
     try {
       const response = await api.get(`/getAllSHGSettingById/${id}`);
-      formik.setValues(response.data);
+      formik.setFieldValue("shgAmount",response.data.shgAmount);
+      formik.setFieldValue("shgType",response.data.shgType);
     } catch (error) {
       console.error("Error fetching data ", error);
     }
@@ -96,7 +97,7 @@ function ShgEdit({ id, onSuccess, handleMenuClose }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="text-start"
+        className="text-start mb-0"
         onClick={handleShow}
       >
         Edit

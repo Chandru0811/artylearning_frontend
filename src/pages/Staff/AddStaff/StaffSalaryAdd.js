@@ -41,11 +41,12 @@ const StaffSalaryAdd = forwardRef(
         salary: formData.salary || "",
         effectiveDate: formData.effectiveDate || "",
         salaryTypeId: formData.salaryTypeId || "",
-        createdBy: formData.userName || "",
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
           const response = await api.post(
             `/createUserSalaryCreation/${formData.user_id}`,
@@ -85,7 +86,7 @@ const StaffSalaryAdd = forwardRef(
         }}
       >
         <section>
-          <div className="container" style={{ minHeight: "50vh" }}>
+          <div className="container-fluid" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2 mt-3">

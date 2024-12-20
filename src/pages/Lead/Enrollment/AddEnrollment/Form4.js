@@ -30,6 +30,7 @@ const validationSchema = Yup.object().shape({
 
 const Form4 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
     const formik = useFormik({
       initialValues: {
         address: formData.address || "",
@@ -42,10 +43,12 @@ const Form4 = forwardRef(
         relationToChils: formData.relationToChils || "",
         noAuthorisedNric: formData.noAuthorisedNric || "",
         contactOfAuthorised: formData.contactOfAuthorised || "",
+        creaderBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.creaderBy = userName;
         try {
           const response = await api.put(
             `/updateLeadInfo/${formData.lead_id}`,
@@ -70,7 +73,7 @@ const Form4 = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field

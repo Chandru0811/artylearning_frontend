@@ -17,7 +17,7 @@ function CmsBanner({
   const [editingField, setEditingField] = useState(null);
   const [logoUrl, setLogoUrl] = useState(null);
   const [menulogoUrl, setMenuLogoUrl] = useState(null);
-
+  const userName = localStorage.getItem("userName");
   const [content, setContent] = useState();
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   useEffect(() => {
@@ -44,6 +44,7 @@ function CmsBanner({
 
   const updateData = async (formData) => {
     try {
+      formData.append("updatedBy", userName);
       const response = await api.put(
         `/updateCoursesSave/${courseId}`,
         formData,
@@ -184,15 +185,15 @@ function CmsBanner({
             ) : (
               <>
                 <div className="d-flex py-2">
-                <h5 className="headcolor">{menuTitle}</h5>
-                {storedScreens?.chineseCourseUpdate && (
-                  <button
-                    className="btn btn-sm btn-outline-warning border ms-2 edit-button"
-                    onClick={() => handleEdit("menuTitle")}
-                  >
-                    <FaEdit />
-                  </button>
-                )}
+                  <h5 className="headcolor">{menuTitle}</h5>
+                  {storedScreens?.chineseCourseUpdate && (
+                    <button
+                      className="btn btn-sm btn-outline-warning border ms-2 edit-button"
+                      onClick={() => handleEdit("menuTitle")}
+                    >
+                      <FaEdit />
+                    </button>
+                  )}
                 </div>
               </>
             )}

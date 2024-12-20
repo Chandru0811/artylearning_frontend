@@ -28,7 +28,7 @@ function SalaryEdit({ id, onSuccess, handleMenuClose }) {
   const getData = async () => {
     try {
       const response = await api.get(`/getAllSalarySettingById/${id}`);
-      formik.setValues(response.data);
+      formik.setFieldValue("salaryType",response.data.salaryType);
     } catch (error) {
       console.error("Error fetching data ", error);
     }
@@ -43,6 +43,7 @@ function SalaryEdit({ id, onSuccess, handleMenuClose }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
+        values.updatedBy = userName
         const response = await api.put(`/updateSalarySetting/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
@@ -95,7 +96,7 @@ function SalaryEdit({ id, onSuccess, handleMenuClose }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="text-start"
+        className="text-start mb-0"
         onClick={handleShow}
       >
         Edit

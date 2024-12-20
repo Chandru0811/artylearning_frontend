@@ -102,6 +102,29 @@ const Payroll = () => {
         accessorKey: "userRole",
         enableHiding: false,
         header: "Role",
+        Cell: ({ row }) =>
+          row.original.userRole === "SMS_TEACHER" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#287f71" }}
+            >
+              SMS TEACHER
+            </span>
+          ) : row.original.userRole === "SMS_FREELANCER" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#eb862a" }}
+            >
+              SMS FREELANCER
+            </span>
+          ) : row.original.userRole === "SMS_STAFF" ? (
+            <span
+              className="badge text-light fw-light"
+              style={{ backgroundColor: "#ed1a1a" }}
+            >
+              SMS STAFF
+            </span>
+          ) : null,
       },
       { accessorKey: "bonus", header: "Bonus" },
       { accessorKey: "cpfContributions", header: "Cpf Contributions" },

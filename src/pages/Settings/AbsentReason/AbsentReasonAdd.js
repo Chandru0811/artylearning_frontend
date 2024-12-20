@@ -10,6 +10,7 @@ function AbsentReasonAdd({ onSuccess }) {
   const [show, setShow] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
+  const userName = localStorage.getItem("userName");
 
   const handleClose = () => {
     formik.resetForm();
@@ -29,6 +30,7 @@ function AbsentReasonAdd({ onSuccess }) {
     initialValues: {
       absentReason: "",
       remarks: "",
+      createdBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -120,9 +122,19 @@ function AbsentReasonAdd({ onSuccess }) {
             >
               Cancel
             </Button>
-            <Button type="submit" className="btn btn-button btn-sm">
-              Submit
-            </Button>
+            <button
+              type="submit"
+              className="btn btn-button btn-sm"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              submit
+            </button>
           </Modal.Footer>
         </form>
       </Modal>

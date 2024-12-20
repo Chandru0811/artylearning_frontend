@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
 });
 const StaffLeaveEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    const userName = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
@@ -35,7 +35,6 @@ const StaffLeaveEdit = forwardRef(
         otherLeave: "",
         carryForwardLeave: "",
         updatedBy: userName,
-
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {
@@ -62,6 +61,7 @@ const StaffLeaveEdit = forwardRef(
       // },
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         // console.log("Api Data:", values);
         try {
           if (values.leaveId !== null) {
@@ -106,7 +106,7 @@ const StaffLeaveEdit = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -183,13 +183,16 @@ const StaffLeaveEdit = forwardRef(
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <section>
-          <div className="container" style={{ minHeight: "60vh" }}>
+          <div className="container-fluid" style={{ minHeight: "60vh" }}>
             <p className="headColor my-4">Leave Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2">

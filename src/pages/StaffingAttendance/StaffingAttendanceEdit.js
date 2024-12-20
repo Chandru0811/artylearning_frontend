@@ -224,6 +224,8 @@ function StaffingAttendanceEdit() {
         const formattedResponseData = {
           ...response.data,
           date: response.data.date.substring(0, 10),
+          checkIn: response.data.checkIn.substring(0, 5),
+          checkOut: response.data.checkOut.substring(0, 5),
         };
         formik.setValues(formattedResponseData);
         fetchUserName(response.data.centerId);
@@ -405,6 +407,7 @@ function StaffingAttendanceEdit() {
                       {/* <span className="text-danger">*</span> */}
                       <input
                         type="time"
+                        step="60"
                         // onFocus={(e) => e.target.showPicker()}
                         className={`form-control ${
                           formik.touched.checkIn && formik.errors.checkIn

@@ -81,17 +81,18 @@ const AccountAdd = forwardRef(
         approvelContentRequired: formData.approvelContentRequired || "",
         workingDays: formData.workingDays || [],
         centerIds: formData.centerIds || [],
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         values.userId = formData.user_id;
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
         const updatedData = {
           ...values,
           approvelContentRequired: Approval,
-          createdBy: userName,
         };
         values.signature = null;
         try {
@@ -173,7 +174,7 @@ const AccountAdd = forwardRef(
           }
         }}
       >
-        <div className="container courseAdd">
+        <div className="container-fluid courseAdd">
           <p className="headColor my-4">Account Information</p>
           <div className="row">
             <div className="col-md-6 col-12 mb-2 mt-2">

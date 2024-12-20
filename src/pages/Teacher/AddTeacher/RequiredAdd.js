@@ -4,11 +4,10 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 
 const RequiredAdd = forwardRef(
-  ({ formData, setLoadIndicators, setFormData, handleNext ,roleF}, ref) => {
-    const userName  = localStorage.getItem('userName');
-    const role = formData.role ;
-    console.log("Role:",formData.role);
-    
+  ({ formData, setLoadIndicators, setFormData, handleNext, roleF }, ref) => {
+    const userName = localStorage.getItem("userName");
+    const role = formData.role;
+    console.log("Role:", formData.role);
 
     const formik = useFormik({
       initialValues: {
@@ -20,13 +19,12 @@ const RequiredAdd = forwardRef(
         try {
           const formDatas = new FormData();
 
-          // Add each data field manually to the FormData object
           const userId = formData.user_id;
           formDatas.append("userId", userId);
           formDatas.append("resume", values.resume);
           formDatas.append("educationCertificate", values.educationCertificate);
           formDatas.append("createdBy", userName);
-          
+
           const response = await api.post(
             `/createUserRequireInformation`,
             formDatas,
@@ -67,12 +65,15 @@ const RequiredAdd = forwardRef(
     }));
 
     return (
-       <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
           }
-        }}>
-        <div className="container" style={{ minHeight: "50vh" }}>
+        }}
+      >
+        <div className="container-fluid" style={{ minHeight: "50vh" }}>
           <p className="headColor my-4">Required Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2">

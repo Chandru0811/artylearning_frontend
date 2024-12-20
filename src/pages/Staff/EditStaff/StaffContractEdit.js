@@ -62,7 +62,6 @@ const StaffContractEdit = forwardRef(
     const [employerData, setEmployerData] = useState(null);
     const [datas, setDatas] = useState();
 
-
     const formik = useFormik({
       initialValues: {
         employer: formData.employer || "",
@@ -115,6 +114,7 @@ const StaffContractEdit = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         // console.log("Api Data:", values);
         try {
           if (values.contractId !== null) {
@@ -159,7 +159,7 @@ const StaffContractEdit = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -179,7 +179,6 @@ const StaffContractEdit = forwardRef(
       }
     }, [formik.submitCount, formik.errors]);
 
-    
     const fetchData = async () => {
       try {
         const centerData = await fetchAllCentersWithIds();
@@ -247,18 +246,36 @@ const StaffContractEdit = forwardRef(
             response.data.userContractCreationModels &&
             response.data.userContractCreationModels.length > 0
           ) {
-            setDatas(response.data.userContractCreationModels[0])
+            setDatas(response.data.userContractCreationModels[0]);
 
             const contractData = response.data.userContractCreationModels[0];
             formik.setValues({
               ...contractData,
               employee: formData.teacherName || response.data.teacherName || "",
-              userContractAddress: formData.address || response.data.userContactInfo[0].address || "",
-              startDateOfEmployment: formData.startDate || response.data.userAccountInfo[0].startDate || "",
-              userContractStartDate: formData.startDate || response.data.userAccountInfo[0].startDate || "",
-              workingDays: formData.workingDays || response.data.userAccountInfo[0].workingDays || "",
-              userContractSalary: formData.salary || response.data.userSalaryCreationModels[0].salary || "",
-              contractDate: formData.contractDate || response.data.userAccountInfo[0].startDate || "",
+              userContractAddress:
+                formData.address ||
+                response.data.userContactInfo[0].address ||
+                "",
+              startDateOfEmployment:
+                formData.startDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
+              userContractStartDate:
+                formData.startDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
+              workingDays:
+                formData.workingDays ||
+                response.data.userAccountInfo[0].workingDays ||
+                "",
+              userContractSalary:
+                formData.salary ||
+                response.data.userSalaryCreationModels[0].salary ||
+                "",
+              contractDate:
+                formData.contractDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
 
               contractId: contractData.id,
               startDateOfEmployment: contractData.startDateOfEmployment
@@ -286,22 +303,40 @@ const StaffContractEdit = forwardRef(
               addressOfEmployment: formData.addressOfEmployment || "",
               detailsEmployee: formData.detailsEmployee || "",
               nric: formData.nric || "",
-              userContractAddress: formData.address || response.data.userContactInfo[0].address || "",
+              userContractAddress:
+                formData.address ||
+                response.data.userContactInfo[0].address ||
+                "",
               jobTitle: formData.jobTitle || "",
               mainDuties: formData.mainDuties || "",
-              startDateOfEmployment: formData.startDate || response.data.userAccountInfo[0].startDate || "",
+              startDateOfEmployment:
+                formData.startDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
               training: formData.training || "",
               allowance: formData.allowance || "",
-              userContractStartDate: formData.startDate || response.data.userAccountInfo[0].startDate || "",
+              userContractStartDate:
+                formData.startDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
               contactPeriod: formData.contactPeriod || "",
               probation: formData.probation || "",
-              workingDays: formData.workingDays || response.data.userAccountInfo[0].workingDays || "",
-              userContractSalary: formData.salary || response.data.userSalaryCreationModels[0].salary || "",
+              workingDays:
+                formData.workingDays ||
+                response.data.userAccountInfo[0].workingDays ||
+                "",
+              userContractSalary:
+                formData.salary ||
+                response.data.userSalaryCreationModels[0].salary ||
+                "",
               salaryStartDate: formData.effectiveDate || "",
               userContractEndDate: formData.endDate || "",
               payNow: formData.payNow || "",
               internetBanking: formData.internetBanking || "",
-              contractDate: formData.contractDate || response.data.userAccountInfo[0].startDate || "",
+              contractDate:
+                formData.contractDate ||
+                response.data.userAccountInfo[0].startDate ||
+                "",
               terminationNotice: formData.terminationNotice || "",
             });
             console.log("Contract ID:", formik.values.contractId);
@@ -313,7 +348,7 @@ const StaffContractEdit = forwardRef(
       console.log(formik.values);
       getData();
       fetchData();
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -340,9 +375,9 @@ const StaffContractEdit = forwardRef(
           }
         }}
       >
-        <div className="container">
+        <div className="container-fluid">
           <p className="headColor my-4">Contract Information</p>
-          <div className="container mt-5" style={{ minHeight: "95vh" }}>
+          <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
               <div class="col-md-6 col-12 mb-2 mt-3">
@@ -402,7 +437,8 @@ const StaffContractEdit = forwardRef(
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.addressOfEmployment}
-                readOnly={datas?.addressOfEmployment} />
+                readOnly={datas?.addressOfEmployment}
+              />
               {formik.touched.addressOfEmployment &&
                 formik.errors.addressOfEmployment && (
                   <div className="error text-danger ">
@@ -678,7 +714,15 @@ const StaffContractEdit = forwardRef(
                   Working Days<span className="text-danger">*</span>
                 </label>
                 <div className="mt-2 d-flex justify-content-between mt-3">
-                  {["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"].map((day, index) => (
+                  {[
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY",
+                    "SATURDAY",
+                    "SUNDAY",
+                  ].map((day, index) => (
                     <div className="checkbox-container" key={day}>
                       <input
                         type="checkbox"
@@ -697,10 +741,16 @@ const StaffContractEdit = forwardRef(
                         // Disable only if the form is submitted
                         disabled={formik.isSubmitting}
                       />
-                      <label htmlFor={`myCheckbox${index + 1}`} className="custom-checkbox">
+                      <label
+                        htmlFor={`myCheckbox${index + 1}`}
+                        className="custom-checkbox"
+                      >
                         <div className="inner-square"></div>
                       </label>
-                      <label htmlFor={`myCheckbox${index + 1}`} className="mx-1">
+                      <label
+                        htmlFor={`myCheckbox${index + 1}`}
+                        className="mx-1"
+                      >
                         {day.slice(0, 3)}
                       </label>
                     </div>

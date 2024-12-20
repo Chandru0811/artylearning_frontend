@@ -60,6 +60,7 @@ function CMSContactEdit({ id, onSuccess, handleMenuClose }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
+        values.updatedBy = userName
         const response = await api.put(`/updateContactUsSave/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
@@ -94,7 +95,7 @@ function CMSContactEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <p className="text-start" onClick={handleOpen}>
+      <p className="text-start mb-0" onClick={handleOpen}>
         Edit
       </p>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">

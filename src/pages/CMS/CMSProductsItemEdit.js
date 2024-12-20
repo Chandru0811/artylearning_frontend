@@ -104,7 +104,7 @@ function CMSProductsItemEdit({ id, getData, handleMenuClose }) {
 
   return (
     <>
-      <p className="text-start" onClick={handleOpen}>
+      <p className="text-start mb-0" onClick={handleOpen}>
         Edit
       </p>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>

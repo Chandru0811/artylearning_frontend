@@ -305,7 +305,7 @@ const Course = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container my-4 center">
+    <div className="container-fluid my-4 center">
       <ol
         className="breadcrumb my-3 px-1"
         style={{ listStyle: "none", padding: 0, margin: 0 }}

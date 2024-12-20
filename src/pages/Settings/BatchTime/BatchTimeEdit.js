@@ -136,7 +136,7 @@ function BatchTimeEdit({ id, onSuccess, handleMenuClose }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className=" text-start"
+        className=" text-start mb-0"
         onClick={handleShow}
       >
         Edit

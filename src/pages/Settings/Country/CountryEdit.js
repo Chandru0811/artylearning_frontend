@@ -46,6 +46,7 @@ function CountryEdit({ id, onSuccess, handleMenuClose }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
+        values.updatedBy = userName
         const response = await api.put(`/updateCountrySetting/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
@@ -100,7 +101,7 @@ function CountryEdit({ id, onSuccess, handleMenuClose }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="text-start"
+        className="text-start mb-0"
         onClick={handleShow}
       >
         Edit

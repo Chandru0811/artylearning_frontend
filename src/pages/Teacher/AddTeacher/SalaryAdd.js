@@ -13,16 +13,15 @@ import fetchAllSalaryTypeWithIds from "../../List/SalaryTypeList";
 
 const validationSchema = Yup.object().shape({
   salary: Yup.number()
-  .typeError("*Salary must be a number")
-  .positive("*Salary must be a positive number")
-  .notRequired(),
-
+    .typeError("*Salary must be a number")
+    .positive("*Salary must be a positive number")
+    .notRequired(),
 });
 
 const SalaryAdd = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [salaryTypeData, setSalaryTypeData] = useState(null);
-    const userName = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
     const fetchData = async () => {
       try {
@@ -43,11 +42,11 @@ const SalaryAdd = forwardRef(
         effectiveDate: formData.effectiveDate || "",
         salaryTypeId: formData.salaryTypeId || "",
         createdBy: userName,
-
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(false);
+        values.createdBy = userName;
         try {
           const response = await api.post(
             `/createUserSalaryCreation/${formData.user_id}`,
@@ -78,13 +77,16 @@ const SalaryAdd = forwardRef(
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <section>
-          <div className="container" style={{ minHeight: "50vh" }}>
+          <div className="container-fluid" style={{ minHeight: "50vh" }}>
             <p className="headColor my-4">Salary Information</p>
             <div class="row">
               <div class="col-md-6 col-12 mb-2 mt-3">

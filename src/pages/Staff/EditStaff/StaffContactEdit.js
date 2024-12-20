@@ -1,4 +1,9 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -23,9 +28,9 @@ const validationSchema = Yup.object().shape({
 
 const StaffContactEdit = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    console.log("form",formData);
-    const userName = localStorage.getItem('userName');
-  const[datas,setDatas] = useState();
+    console.log("form", formData);
+    const userName = localStorage.getItem("userName");
+    const [datas, setDatas] = useState();
 
     const formik = useFormik({
       initialValues: {
@@ -34,7 +39,6 @@ const StaffContactEdit = forwardRef(
         address: "",
         postalCode: "",
         updatedBy: userName,
-
       },
       validationSchema: validationSchema,
       // onSubmit: async (data) => {
@@ -61,6 +65,7 @@ const StaffContactEdit = forwardRef(
       // },
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         // console.log("Api Data:", values);
         try {
           if (values.contactId !== null) {
@@ -100,9 +105,12 @@ const StaffContactEdit = forwardRef(
           }
         } catch (error) {
           if (error?.response?.status === 409) {
-            toast.warning(error?.response?.data?.message)
+            toast.warning(error?.response?.data?.message);
           } else {
-            toast.error("Error Submiting data ", error?.response?.data?.message)
+            toast.error(
+              "Error Submiting data ",
+              error?.response?.data?.message
+            );
           }
         } finally {
           setLoadIndicators(false);
@@ -132,10 +140,8 @@ const StaffContactEdit = forwardRef(
           if (
             response.data.userContactInfo &&
             response.data.userContactInfo.length > 0
-         
-          ) 
-        {
-          setDatas(response.data.userContactInfo[0])
+          ) {
+            setDatas(response.data.userContactInfo[0]);
             formik.setValues({
               ...response.data.userContactInfo[0],
               contactId: response.data.userContactInfo[0].id,
@@ -165,16 +171,19 @@ const StaffContactEdit = forwardRef(
     }));
 
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
         <section>
-          <div className="container">
+          <div className="container-fluid">
             <p className="headColor my-4">Contact Information</p>
             <div class="row">
-            {/* <div class="col-md-6 col-12 mb-2 mt-3">
+              {/* <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>
                   Email Id<span class="text-danger">*</span>
                 </label>

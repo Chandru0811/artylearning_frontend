@@ -198,18 +198,18 @@ function Sidebar() {
           },
         ],
       },
-      {
-        title: "Student Movement",
-        icon: "TbStatusChange",
-        isOpen: false,
-        subMenus: [
-          {
-            title: "Transfer Out",
-            path: "/transferOut",
-            access: storedScreens.studentListingIndex,
-          },
-        ],
-      },
+      // {
+      //   title: "Student Movement",
+      //   icon: "TbStatusChange",
+      //   isOpen: false,
+      //   subMenus: [
+      //     {
+      //       title: "Transfer Out",
+      //       path: "/transferOut",
+      //       access: storedScreens.studentListingIndex,
+      //     },
+      //   ],
+      // },
       {
         title: "Schedule",
         icon: "TbCalendarTime",
@@ -217,7 +217,7 @@ function Sidebar() {
         subMenus: [
           {
             title: "Time Schedule",
-            path: "/scheduleteacher",
+            path: "/calendar",
             access: storedScreens.scheduleTeacherIndex,
           },
           // { title: "Make Up Class", path: "/reschedule" },
