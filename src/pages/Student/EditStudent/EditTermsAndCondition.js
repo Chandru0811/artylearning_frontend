@@ -215,93 +215,7 @@ const EditTermsAndCondition = forwardRef(
                 <div className="container py-3">
                   <div className="row">
                     {/* <div className="col-md-6 col-12">
-                       {showEditSign ? (
-                        // SignatureCanvas Edit Mode
-                        <div className="text-start mt-3">
-                          <label htmlFor="" className="mb-1 fw-medium">
-                            <small>Parent Signature</small>
-                          </label>
-                          <br />
-                          <div
-                            style={{
-                              width: 423,
-                              height: 150,
-                            }}
-                            className="border border-secondary rounded-2"
-                          >
-                            {data.studentTermsAndConditions &&
-                              data.studentTermsAndConditions.length > 0 &&
-                              data.studentTermsAndConditions.map(
-                                (parent, index) => (
-                                  <img
-                                    src={parent.parentSignature}  
-                                    className="img-fluid rounded ms-3 mt-2"
-                                    style={{ width: "35%" }}
-                                    alt=""
-                                  />
-                                )
-                              )}
-                          </div>
-                          <br />
-                          <button
-                            type="button"
-                            style={{ height: "30px", width: "60px" }}
-                            onClick={handleEdit}
-                            className="btn btn-sm bg-light"
-                          >
-                            Edit
-                          </button>
-                        </div>
-                      ) : (
-                        // SignatureCanvas Save Mode
-                        <div className="text-start mt-3">
-                          <label htmlFor="" className="mb-1 fw-medium">
-                            <small>Parent Signature</small>
-                          </label>
-                          <br />
-                          <div
-                            style={{
-                              width: 423,
-                              height: 150,
-                            }}
-                            className="border border-secondary rounded-2"
-                          >
-                            <SignatureCanvas
-                              canvasProps={{
-                                width: 423,
-                                height: 150,
-                                className: "sigCanvas",
-                              }}
-                              name="file"
-                              ref={(data) => setSign(data)}
-                            />
-                          </div>
-                          <br />
-                          <button
-                            type="button"
-                            style={{ height: "30px", width: "60px" }}
-                            onClick={handleClear}
-                            className="btn btn-sm bg-light mx-1"
-                          >
-                            Clear
-                          </button>
-                          <button
-                            type="button"
-                            style={{ height: "30px", width: "60px" }}
-                            onClick={handleGenerate}
-                            className="btn btn-sm bg-light"
-                          >
-                            Save
-                          </button>
-                          <br />
-                          <img src={url} />
-                        </div>
-                      )}
-                    </div> */}
-
-                    <div className="col-md-6 col-12">
                       {!data.parentSignature || isEditing ? (
-                        // Show the signature canvas with Save, Clear, and Cancel buttons if there's no signature or in edit mode
                         <div className="text-start mt-3">
                           <label className="mb-1 fw-medium">
                             <small>Parent Signature</small>
@@ -350,7 +264,6 @@ const EditTermsAndCondition = forwardRef(
                           )}
                         </div>
                       ) : (
-                        // Show the image and Edit button if a signature exists and not in edit mode
                         <div className="text-start mt-3">
                           <label className="mb-1 fw-medium">
                             <small>Parent Signature</small>
@@ -384,6 +297,87 @@ const EditTermsAndCondition = forwardRef(
                           )}
                         </div>
                       )}
+                    </div> */}
+
+                    <div className="col-md-6 col-12">
+                      <div className="text-start mt-3">
+                        <label className="mb-1 fw-medium">
+                          <small>Parent Signature</small>
+                        </label>
+                        <br />
+                        <div className="border border-secondary rounded-2 parentSignature">
+                          {showImage &&
+                          (url ||
+                            data.studentTermsAndConditions?.[0]
+                              ?.parentSignature) ? (
+                            // Show the signature image if URL or parentSignature is available
+                            <img
+                              src={
+                                url ||
+                                data.studentTermsAndConditions?.[0]
+                                  ?.parentSignature
+                              }
+                              className="img-fluid rounded ms-3 mt-2"
+                              style={{ maxWidth: "40%" }}
+                              alt="Parent Signature"
+                            />
+                          ) : (
+                            // Show the signature canvas for drawing if no signature is available or in edit mode
+                            <div>
+                              <SignatureCanvas
+                                canvasProps={{
+                                  width: 423,
+                                  height: 150,
+                                  className: "sigCanvas",
+                                }}
+                                ref={(data) => setSign(data)}
+                              />
+                              <br />
+                              <button
+                                type="button"
+                                style={{ height: "30px", width: "60px" }}
+                                onClick={handleClear}
+                                className="btn btn-sm bg-light mx-1"
+                              >
+                                Clear
+                              </button>
+                              <button
+                                type="button"
+                                style={{ height: "30px", width: "60px" }}
+                                onClick={handleGenerate}
+                                className="btn btn-sm bg-light mx-1"
+                              >
+                                Save
+                              </button>
+                              {isEditing && (
+                                <button
+                                  type="button"
+                                  style={{ height: "30px", width: "70px" }}
+                                  onClick={handleCancel}
+                                  className="btn btn-sm bg-light ms-1"
+                                >
+                                  Cancel
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <br />
+                        {/* Edit button for existing signatures */}
+                        {showImage &&
+                          (url ||
+                            data.studentTermsAndConditions?.[0]
+                              ?.parentSignature) && (
+                            <button
+                              type="button"
+                              style={{ height: "30px", width: "60px" }}
+                              onClick={handleEdit}
+                              className="btn btn-sm bg-light"
+                            >
+                              Edit
+                            </button>
+                          )}
+                      </div>
                     </div>
 
                     <div className="col-md-6 col-12">
@@ -398,7 +392,6 @@ const EditTermsAndCondition = forwardRef(
                           className="form-control  form-contorl-sm"
                           name="termsAndConditionSignatureDate"
                           type="date"
-                          // onFocus={(e) => e.target.showPicker()}
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                           value={formik.values.termsAndConditionSignatureDate}

@@ -179,7 +179,7 @@
 }
 
 .btn-outline-danger-button {
-  color: #ff1e1e;
+  color: #287f71;
   padding: 9px 20px;
   text-align: center;
   border-radius: 3px;
@@ -189,12 +189,12 @@
 }
 
 .btn-outline-danger-button:hover {
-  background-color: #ff1e1e !important;
+  background-color: #287f71 !important;
   color: #fff;
 }
 
 .btn-danger-button:hover {
-  background-color: #ff1e1e !important;
+  background-color: #287f71 !important;
 }
 
 /* Dropdown active styling */

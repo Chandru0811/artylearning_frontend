@@ -132,7 +132,7 @@
 }
 
 .radio-button input[type="radio"]:checked[value="absent"] + .radio-button-text {
-  background-color: red;
+  background-color: #eb862a;
   color: white;
 }
 
@@ -469,7 +469,7 @@ tbody tr td {
 }
 
 .custom-button {
-  background-color: rgb(206, 0, 0);
+  background-color: #eb862a;
   /* Customize the button color */
   color: white;
   border: none;
@@ -479,7 +479,7 @@ tbody tr td {
 }
 
 .custom-button:hover {
-  background-color: rgb(206, 0, 0);
+  background-color: #eb862a;
 }
 
 .cms-header {
@@ -958,6 +958,10 @@ input.searchInputG:hover {
   color: #757575 !important;
 }
 
+.fc .fc-daygrid-event-harness{
+  cursor: pointer !important;
+}
+
 .fc-h-event .fc-event-main {
   background-color: white;
   color: #666464 !important;
@@ -1132,3 +1136,8 @@ table.dataTable.display > tbody > tr > th {
   border-radius: 3px;
 }
 
+.badges-purple {
+  background-color: #ee1891da !important;
+  font-weight: 400;
+  border-radius: 3px;
+}

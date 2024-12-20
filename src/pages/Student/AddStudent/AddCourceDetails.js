@@ -166,41 +166,39 @@ const AddcourseDetail = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formik.values.days]);
 
-
     const formatTo12Hour = (time) => {
       const [hours, minutes] = time.split(":");
       let period = "AM";
       let hour = parseInt(hours, 10);
-  
+
       if (hour === 0) {
         hour = 12;
       } else if (hour >= 12) {
         period = "PM";
         if (hour > 12) hour -= 12;
       }
-  
+
       return `${hour}:${minutes} ${period}`;
     };
 
-    
     const normalizeTime = (time) => {
       if (time.includes("AM") || time.includes("PM")) {
         return time;
       }
-  
+
       return formatTo12Hour(time);
     };
 
     const convertTo24Hour = (time) => {
       const [timePart, modifier] = time.split(" ");
       let [hours, minutes] = timePart.split(":").map(Number);
-  
+
       if (modifier === "PM" && hours < 12) {
         hours += 12;
       } else if (modifier === "AM" && hours === 12) {
         hours = 0;
       }
-  
+
       return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
         2,
         "0"
@@ -365,20 +363,23 @@ const AddcourseDetail = forwardRef(
                       id="batchId"
                       name="batchId"
                     >
+                      <option value="" disabled selected>
+                        Select Batch
+                      </option>
                       {batchData &&
-                    batchData.map((time) => {
-                      const displayTime = normalizeTime(time);
-                      const valueTime =
-                        time.includes("AM") || time.includes("PM")
-                          ? convertTo24Hour(time)
-                          : time;
+                        batchData.map((time) => {
+                          const displayTime = normalizeTime(time);
+                          const valueTime =
+                            time.includes("AM") || time.includes("PM")
+                              ? convertTo24Hour(time)
+                              : time;
 
-                      return (
-                        <option key={time} value={valueTime}>
-                          {displayTime}
-                        </option>
-                      );
-                    })}
+                          return (
+                            <option key={time} value={valueTime}>
+                              {displayTime}
+                            </option>
+                          );
+                        })}
                     </select>
                     <button
                       type="button"

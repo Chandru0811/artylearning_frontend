@@ -27,6 +27,7 @@ const validationSchema = Yup.object().shape({
 const EditEmergencyContact = forwardRef(
   ({ formData, setLoadIndicators, handleNext }, ref) => {
     const userName = localStorage.getItem("userName");
+    const [data, setData] = useState([]);
 
     const formik = useFormik({
       initialValues: {
@@ -127,6 +128,7 @@ const EditEmergencyContact = forwardRef(
     const fetchData = async () => {
       try {
         const response = await api.get(`/getAllStudentById/${formData.id}`);
+
         if (
           response.data.studentEmergencyContacts &&
           response.data.studentEmergencyContacts.length > 0
@@ -156,6 +158,7 @@ const EditEmergencyContact = forwardRef(
             ],
           });
         }
+        setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -335,6 +338,34 @@ const EditEmergencyContact = forwardRef(
                               }
                             />
                           </div>
+                          {/* <div className="text-start mt-4">
+                            <label htmlFor="" className="mb-1 fw-medium">
+                              <small>Person Profile</small>
+                            </label>
+                            <input
+                              className="form-control"
+                              type="file"
+                              name="files"
+                              onChange={(event) => {
+                                formik.setFieldValue(
+                                  `emergencyAuthorizedContactModels[${index}].files`,
+                                  event.target.files[0]
+                                );
+                              }}
+                              onBlur={formik.handleBlur}
+                              accept=".jpg, .jpeg, .png"
+                            />
+                            {row.personProfile ? (
+                              <img
+                                src={row.personProfile || " "}
+                                alt="Profile"
+                                style={{ width: "60%" }}
+                                className="img-fluid rounded"
+                              />
+                            ) : (
+                              <div>No Profile Available</div> // Or an empty tag: <></>
+                            )}
+                          </div> */}
                           <div className="text-start mt-4">
                             <label htmlFor="" className="mb-1 fw-medium">
                               <small>Person Profile</small>
@@ -352,15 +383,24 @@ const EditEmergencyContact = forwardRef(
                               onBlur={formik.handleBlur}
                               accept=".jpg, .jpeg, .png"
                             />
-                            {row.personProfile && (
-                              <div className="my-2 text-center">
-                                <img
-                                  src={row.personProfile}
-                                  alt="Profile"
-                                  style={{ width: "60%" }}
-                                  className="img-fluid rounded"
-                                />
-                              </div>
+                            {row.personProfile ? (
+                              <img
+                                src={
+                                  row.personProfile ===
+                                  "Still file path not created in aws"
+                                    ? "" 
+                                    : row.personProfile
+                                }
+                                alt="Profile"
+                                style={{ width: "60%" }}
+                                className="img-fluid rounded"
+                                onError={(e) => {
+                                  e.target.onerror = null; 
+                                  e.target.src = "";
+                                }}
+                              />
+                            ) : (
+                              <div>{row.personProfile || ""}</div>
                             )}
                           </div>
                         </div>

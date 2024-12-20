@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../config/URL";
-import fetchAllCoursesWithIds from "../List/CourseList";
 import fetchAllClassesWithIds from "../List/ClassList";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
+import fetchAllClassesWithIdsC from "../List/ClassListByCourse";
 
 const validationSchema = Yup.object().shape({
   currentCourse: Yup.string().required("*Select a Current Course"),
-  // currentClass: Yup.string().required("*Select a Current Class"),
+  currentClass: Yup.string().required("*Select a Current Class"),
   lastLessonDate: Yup.string().required("*Select a Last Lesson"),
   reason: Yup.string().required("*Select a Reason"),
   otherReason: Yup.string().required("*Other Reason is required"),
@@ -27,12 +28,13 @@ const StudentEndClass = () => {
   const { id } = useParams();
   const [courseData, setCourseData] = useState(null);
   const [classData, setClassData] = useState(null);
-
+  const [searchParams] = useSearchParams();
+  const centerId = searchParams.get("centerId");
   // console.log(id);
   const formik = useFormik({
     initialValues: {
       currentCourse: "",
-      // currentClass: "",
+      currentClass: "",
       lastLessonDate: "",
       reason: "",
       otherReason: "",
@@ -63,7 +65,7 @@ const StudentEndClass = () => {
 
   const fetchData = async () => {
     try {
-      const course = await fetchAllCoursesWithIds();
+      const course = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(course);
     } catch (error) {
       toast.error(error);
@@ -72,7 +74,7 @@ const StudentEndClass = () => {
 
   const fetchClasses = async (courseId) => {
     try {
-      const classes = await fetchAllClassesWithIds(courseId);
+      const classes = await fetchAllClassesWithIdsC(courseId);
       setClassData(classes);
     } catch (error) {
       toast.error(error);
@@ -135,12 +137,12 @@ const StudentEndClass = () => {
         </li>
         <li>
           <Link to={`/student/view/${id}`} className="custom-breadcrumb">
-            &nbsp;student View
+            &nbsp;Student View
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          &nbsp;student End Class
+          &nbsp;Student End Class
         </li>
       </ol>
       <form

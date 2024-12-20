@@ -162,15 +162,26 @@ function Calendar() {
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  const clearFilters = () => {
+  const clearFilters = async () => {
     setFilters({
       centerId: "",
       courseId: "",
       teacherId: "",
       date: "",
     });
-    SearchShedule();
+  
+    try {
+      setLoading(true);
+      const response = await api.get(`/getAllScheduleInfo`);
+      setData(response.data);
+      processEventData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   return (
     <div className="container card my-2 py-2">
@@ -183,7 +194,7 @@ function Calendar() {
             onChange={handleFilterChange}
             value={filters.centerId}
           >
-            <option value="">Select Center</option>
+            <option value="">Select a Center</option>
             {centerData?.map((center) => (
               <option key={center.id} value={center.id} selected>
                 {center.centerNames}
