@@ -73,7 +73,7 @@ const Teacher = () => {
         size: 40,
       },
       {
-        accessorKey: "employeeType",
+        accessorKey: "teacherType",
         header: "Teacher Type",
         enableHiding: false,
         size: 50,

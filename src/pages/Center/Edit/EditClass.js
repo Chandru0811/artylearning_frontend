@@ -3,9 +3,9 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { FaEdit } from "react-icons/fa";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
+import { BiEditAlt } from "react-icons/bi";
 
 function EditClass({ id, onSuccess }) {
   const [show, setShow] = useState(false);
@@ -102,7 +102,7 @@ function EditClass({ id, onSuccess }) {
           whiteSpace: "nowrap",
         }}
         className="btn btn-normal text-start" onClick={handleShow}>
-        <FaEdit />
+        <BiEditAlt />
       </button>
 
       <Modal

@@ -130,9 +130,9 @@ function ClassAdd() {
     }
   };
 
-  const fetchBatchandTeacherData = async (day) => {
+  const fetchBatchandTeacherData = async (day ,centerId) => {
     try {
-      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}&centerId=${centerId}`);
       setTeacherData(response.data.teacherList);
       setBatchData(response.data.batchList);
     } catch (error) {
@@ -141,11 +141,12 @@ function ClassAdd() {
   };
 
   useEffect(() => {
-    if (formik.values.day) {
-      fetchBatchandTeacherData(formik.values.day);
+    if (formik.values.day && formik.values.centerId) {
+      fetchBatchandTeacherData(formik.values.day, formik.values.centerId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.day]);
+  }, [formik.values.day, formik.values.centerId]);
+  
 
   useEffect(() => {
     const getData = async () => {
