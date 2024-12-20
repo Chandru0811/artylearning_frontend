@@ -48,6 +48,16 @@ const validationSchema = Yup.object().shape({
   invoiceNotes: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
+  target: Yup.number()
+    .typeError("*Must be a number")
+    .required("*File is required")
+    .positive("*Must be a positive number")
+    .test(
+      "max-two-decimals",
+      "*Must have at most two decimal places",
+      (value) =>
+        value === undefined || /^\d+(\.\d{1,2})?$/.test(value.toString())
+    ),
 });
 
 function CenterEdit() {
@@ -88,6 +98,7 @@ function CenterEdit() {
       bankAccountNumber: "",
       bankAccountName: "",
       invoiceNotes: "",
+      target: "",
       file: null,
       updatedBy: userName,
     },
@@ -125,6 +136,7 @@ function CenterEdit() {
       formData.append("invoiceNotes", values.invoiceNotes);
       formData.append("file", values.file);
       formData.append("updatedBy", userName);
+      formData.append("target", values.target);
 
       // for (let [key, value] of formData.entries()) {
       //   console.log(`${key}: ${value}`);
@@ -655,6 +667,27 @@ function CenterEdit() {
                   className="img-fluid ms-2 w-50 rounded mt-2"
                   alt="Profile Image"
                 />
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Target<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...formik.getFieldProps("target")}
+                    type="text"
+                    className={`form-control   ${
+                      formik.touched.target && formik.errors.target
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.target && formik.errors.target && (
+                    <div className="invalid-feedback">
+                      {formik.errors.target}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="col-12">
                 <label for="exampleFormControlInput1" className="form-label">

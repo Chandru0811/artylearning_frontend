@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { Link } from "react-router-dom";
+import api from "../../config/URL";
+import { toast } from "react-toastify";
+import fetchAllCentersWithIds from "../List/CenterList";
 
 function Datatable2() {
   const getCurrentWeek = () => {
@@ -15,42 +18,66 @@ function Datatable2() {
   };
 
   const [selectedType, setSelectedType] = useState(getCurrentWeek());
-  const [selectedCenterId, setSelectedCenterId] = useState("1");
+  const [selectedCenterId, setSelectedCenterId] = useState();
   const [selectedDay, setSelectedDay] = useState("ALL");
+  const [data, setData] = useState([]);
+  const [centerData, setCenterData] = useState(null);
   const [chartData, setChartData] = useState({
     dayData: [],
     labels: [],
   });
 
-  const hardcodedCenters = [
-    { id: "1", centerNames: "Arty Learning @ AMK" },
-    { id: "2", centerNames: "Arty Learning @ HG" },
-    { id: "3", centerNames: "Arty Learning @ BB" },
-  ];
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
-  const calculateVariance = (booked, available) => 
+  const calculateVariance = (booked, available) =>
     booked.map((b, i) => available[i] - b);
-  
+
   const hardcodedData = {
-    "ALL": {
-      labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Total", "Target"],
+    ALL: {
+      labels: [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Total",
+        "Target",
+      ],
       bookedSlots: [30, 20, 15, 30, 25, 18, 30],
       availableSlots: [20, 10, 20, 10, 15, 22, 60],
       variance: calculateVariance(
         [30, 20, 15, 30, 25, 18, 30],
         [20, 10, 20, 10, 15, 22, 60]
       ),
-      total: [30, 20, 15, 30, 25, 18, 30].reduce((acc, value) => acc + value, 0),
+      total: [30, 20, 15, 30, 25, 18, 30].reduce(
+        (acc, value) => acc + value,
+        0
+      ),
       target: 500,
     },
-    "FRIDAY": {
-      labels: ["9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM"],
+    FRIDAY: {
+      labels: [
+        "9:00 AM",
+        "10:00 AM",
+        "11:00 AM",
+        "12:00 PM",
+        "1:00 PM",
+        "2:00 PM",
+      ],
       bookedSlots: [5, 3, 7, 10, 20],
       availableSlots: [5, 7, 3, 0, 15],
       variance: calculateVariance([5, 3, 7, 10, 20], [5, 7, 3, 0, 15]),
     },
   };
-  
 
   const handleTypeChange = (e) => {
     setSelectedType(e.target.value);
@@ -60,25 +87,28 @@ function Datatable2() {
     setSelectedDay(e.target.value);
   };
 
-  const handleCenterChange = (e) => {
-    setSelectedCenterId(e.target.value);
-  };
-
   useEffect(() => {
     const data = hardcodedData[selectedDay] || hardcodedData["ALL"];
-    const totalBooked = data.total || data.bookedSlots.reduce((acc, value) => acc + value, 0);
+    const totalBooked =
+      data.total || data.bookedSlots.reduce((acc, value) => acc + value, 0);
     const remainingSlots = Math.max(0, data.target - totalBooked);
-  
+
     setChartData({
       dayData: [
         { name: "Booked Slots", data: [...data.bookedSlots, totalBooked, 0] }, // Add booked slots, total, and 0 for target
-        { name: "Available Slots", data: [...data.availableSlots, 0, remainingSlots] }, // Add available slots, 0 for total, and remaining slots
-        { name: "Variance", data: [...Array(data.bookedSlots.length).fill(0), 0, remainingSlots] }, // Variance only for the target
+        {
+          name: "Available Slots",
+          data: [...data.availableSlots, 0, remainingSlots],
+        }, // Add available slots, 0 for total, and remaining slots
+        {
+          name: "Variance",
+          data: [...Array(data.bookedSlots.length).fill(0), 0, remainingSlots],
+        }, // Variance only for the target
       ],
       labels: data.labels,
     });
   }, [selectedDay, selectedType, selectedCenterId]);
-  
+
   const options = {
     chart: {
       type: "bar",
@@ -115,27 +145,54 @@ function Datatable2() {
       },
     },
   };
-  
+
   const series = chartData?.dayData.map((data, index) => {
     if (data.name === "Target") {
       const targetData = data.data[data.data.length - 1]; // Assuming the target is always the last data point
-      const totalBooked = chartData?.dayData[0]?.data.reduce((acc, val, idx) => {
-        if (chartData?.labels[idx] === "Total") return acc + val;
-        return acc;
-      }, 0);
-      
+      const totalBooked = chartData?.dayData[0]?.data.reduce(
+        (acc, val, idx) => {
+          if (chartData?.labels[idx] === "Total") return acc + val;
+          return acc;
+        },
+        0
+      );
+
       // Change target color based on comparison
       const color = totalBooked >= targetData ? "red" : "balck";
-      
+
       return {
         name: data.name,
         data: data.data,
         color: color, // Dynamically set color for Target bar
       };
     }
-    
+
     return data;
   });
+  const fetchReportData = async () => {
+    try {
+      const filters = {
+        centerId: selectedCenterId,
+        week: selectedType,
+        day: selectedDay,
+      };
+
+      const queryString = new URLSearchParams(filters).toString();
+      const response = await api.get(`/getEnrollmentReportData?${queryString}`);
+      setData(response.data);
+    } catch (error) {
+      toast.error( error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchReportData();
+    fetchData();
+  }, [selectedType, selectedCenterId, selectedDay]);
+
+  const handleCenterChange = (e) => {
+    setSelectedCenterId(e.target.value);
+  };
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
@@ -180,11 +237,12 @@ function Datatable2() {
                   onChange={handleCenterChange}
                   aria-label="Default select example"
                 >
-                  {hardcodedCenters.map((center) => (
-                    <option key={center.id} value={center.id}>
-                      {center.centerNames}
-                    </option>
-                  ))}
+                  {centerData &&
+                    centerData.map((center) => (
+                      <option key={center.id} value={center.id}>
+                        {center.centerNames}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="col-md-4 col-12">
@@ -240,6 +298,3 @@ function Datatable2() {
 }
 
 export default Datatable2;
-
-
-
