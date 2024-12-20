@@ -59,7 +59,7 @@ const AddcourseDetail = forwardRef(
           className: selectedRowData.className,
           course: selectedRowData.course,
           courseId: selectedRowData.courseId,
-          batchId: selectedRowData.batchId,
+          batchs: selectedRowData.batchs,
           batch: selectedRowData.batch,
           days: selectedRowData.days,
           classRoom: selectedRowData.classRoom,
@@ -130,8 +130,8 @@ const AddcourseDetail = forwardRef(
         params.day = formik.values.days;
       }
 
-      if (formik.values.batchId !== "") {
-        params.batchId = formik.values.batchId;
+      if (formik.values.batchs !== "") {
+        params.batchs = formik.values.batchs;
       }
 
       try {
@@ -208,7 +208,7 @@ const AddcourseDetail = forwardRef(
     useEffect(() => {
       formik.setFieldValue("studentId", formData.student_id);
       getData();
-    }, [formik.values.courseId, formik.values.batchId, formik.values.days]);
+    }, [formik.values.courseId, formik.values.batchs, formik.values.days]);
 
     useEffect(() => {
       if (!loading) {
@@ -358,10 +358,10 @@ const AddcourseDetail = forwardRef(
                   </div>
                   <div className="col-md-4 d-flex">
                     <select
-                      {...formik.getFieldProps("batchId")}
+                      {...formik.getFieldProps("batchs")}
                       className="form-select"
-                      id="batchId"
-                      name="batchId"
+                      id="batchs"
+                      name="batchs"
                     >
                       <option value="" disabled selected>
                         Select Batch
@@ -392,7 +392,7 @@ const AddcourseDetail = forwardRef(
                             packageName: "",
                             courseId: "",
                             days: "",
-                            batchId: "",
+                            batchs: "",
                           },
                         })
                       }

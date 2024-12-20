@@ -3,6 +3,16 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 
 const StudentViewCourse = ({ data }) => {
+  const formatTimeTo12Hour = (time) => {
+    if (!time) return "";
+    const [hours, minutes] = time.split(":").map(Number);
+    const formattedTime = new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    }).format(new Date(0, 0, 0, hours, minutes));
+    return formattedTime;
+  };
   const columns = useMemo(
     () => [
       {
@@ -70,8 +80,16 @@ const StudentViewCourse = ({ data }) => {
         size: 50,
         header: "End Date",
       },
-      { accessorKey: "startTime", header: "Start Time" },
-      { accessorKey: "endTime", header: "End Time" },
+      {
+        accessorKey: "startTime",
+        header: "Start Time",
+        Cell: ({ cell }) => formatTimeTo12Hour(cell.getValue()),
+      },
+      {
+        accessorKey: "endTime",
+        header: "End Time",
+        Cell: ({ cell }) => formatTimeTo12Hour(cell.getValue()),
+      },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",

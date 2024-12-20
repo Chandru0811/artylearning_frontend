@@ -284,6 +284,19 @@ function CenterView() {
             <div className="col-md-6 col-12">
               <div className="row  mb-2">
                 <div className="col-6  ">
+                  <p className="">Target</p>
+                </div>
+                <div className="col-6  ">
+                  <p className="text-muted text-sm d-flex text-truncate">
+                    : {data.target || "--"}
+                    {/* : {formatValue(data.invoiceNotes) || "--"} */}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 col-12">
+              <div className="row  mb-2">
+                <div className="col-6  ">
                   <p className="">QR Code </p>
                 </div>
                 <div className="col-6">
@@ -308,18 +321,10 @@ function CenterView() {
               <table className="table table-border-solid">
                 <thead>
                   <tr>
-                    <td  className="">
-                      S.No
-                    </td>
-                    <td  className="">
-                      Effective Date
-                    </td>
-                    <td  className="">
-                      Amount Including(GST)
-                    </td>
-                    <td  className="">
-                      Tax Type
-                    </td>
+                    <td className="">S.No</td>
+                    <td className="">Effective Date</td>
+                    <td className="">Amount Including(GST)</td>
+                    <td className="">Tax Type</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -349,18 +354,10 @@ function CenterView() {
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <td  className="">
-                      S.No
-                    </td>
-                    <td  className="">
-                      Break Name
-                    </td>
-                    <td  className="">
-                      From Date
-                    </td>
-                    <td  className="">
-                      To date
-                    </td>
+                    <td className="">S.No</td>
+                    <td className="">Break Name</td>
+                    <td className="">From Date</td>
+                    <td className="">To date</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -382,42 +379,20 @@ function CenterView() {
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <td  className="">
-                      S.No
-                    </td>
-                    <td
-                      
-                      className=""
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    <td className="">S.No</td>
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Class Room Name
                     </td>
-                    <td
-                      
-                      className=""
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Class Room Code
                     </td>
-                    <td
-                      
-                      className=""
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Class Room Type
                     </td>
-                    <td
-                      
-                      className=""
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Capacity
                     </td>
-                    <td
-                      
-                      className=""
-                      style={{ whiteSpace: "nowrap" }}
-                    >
+                    <td className="" style={{ whiteSpace: "nowrap" }}>
                       Description
                     </td>
                   </tr>
@@ -445,15 +420,9 @@ function CenterView() {
               <table class="table table-border-solid">
                 <thead>
                   <tr>
-                    <td  className="">
-                      S.No
-                    </td>
-                    <td  className="">
-                      Package
-                    </td>
-                    <td  className="">
-                      Number Of Lesson
-                    </td>
+                    <td className="">S.No</td>
+                    <td className="">Package</td>
+                    <td className="">Number Of Lesson</td>
                   </tr>
                 </thead>
                 <tbody>

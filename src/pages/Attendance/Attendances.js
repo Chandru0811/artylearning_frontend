@@ -32,7 +32,7 @@ function Attendances() {
   // Function to format date as "DD/MM/YYYY"
   const formatDate = (date) => {
     const [year, month, day] = date.split("-");
-    return `${day}/${month}/${year}`;
+    return `${day}-${month}-${year}`;
   };
 
   // Fetch available slots based on the selected date
@@ -40,7 +40,7 @@ function Attendances() {
     try {
       const formattedDate = formatDate(date);
       const response = await api.get(
-        `getActualSlotsByDate?date=${formattedDate}`
+        `getAvailableBatchTimings?attendanceDate=${formattedDate}`
       );
       setBatchOptions(response.data); // Update batch options with API response
     } catch (error) {
@@ -76,15 +76,15 @@ function Attendances() {
     fetchListData();
   }, []);
 
-    const handleCenterChange = (event) => {
-      const center = event.target.value;
-      setCourseData(null);
-      fetchCourses(center);
-    };
-  
-    useEffect(() => {
-      fetchData();
-    }, []);
+  const handleCenterChange = (event) => {
+    const center = event.target.value;
+    setCourseData(null);
+    fetchCourses(center);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (selectedDate) {
@@ -97,8 +97,8 @@ function Attendances() {
     try {
       const requestBody = {
         centerId: selectedCenter,
-        courseId: selectedCourse,
-        batchId: selectedBatch,
+        // courseId: selectedCourse,
+        batchTime: selectedBatch,
         date: selectedDate,
       };
 
@@ -225,9 +225,7 @@ function Attendances() {
             </div>
             <div className="col-md-6 col-12 mb-2">
               <label className="form-lable">Course</label>
-              <select
-                className="form-select "
-              >
+              <select className="form-select ">
                 <option selected></option>
                 {courseData &&
                   courseData.map((courseId) => (
@@ -236,6 +234,16 @@ function Attendances() {
                     </option>
                   ))}
               </select>
+            </div>
+
+            <div className="col-md-6 col-12">
+              <label className="form-lable">Attendance Date</label>
+              <input
+                type="date"
+                className="form-control"
+                onChange={handleDateChange}
+                value={selectedDate}
+              />
             </div>
             <div className="col-md-6 col-12">
               <label className="form-lable">Batch</label>
@@ -246,20 +254,11 @@ function Attendances() {
               >
                 <option value=""></option>
                 {batchOptions?.map((batch, index) => (
-                  <option key={index} value={batch.batchId}>
-                    {batch.batchTime}
+                  <option key={index} value={batch}>
+                    {batch}
                   </option>
                 ))}
               </select>
-            </div>
-            <div className="col-md-6 col-12">
-              <label className="form-lable">Attendance Date</label>
-              <input
-                type="date"
-                className="form-control"
-                onChange={handleDateChange}
-                value={selectedDate}
-              />
             </div>
             <div className="col-md-12 col-12 d-flex align-items-end justify-content-end mb-3">
               <button

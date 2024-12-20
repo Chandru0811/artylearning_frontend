@@ -199,7 +199,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                               <p className="">Last lesson</p>
                             </div>
                             <div className="col-7">
-                              <p>:&nbsp;{item.details.classVenue || "--"}</p>
+                              <p>:&nbsp;{item.details.lastLesson || "--"}</p>
                             </div>
                           </div>
                         </div>

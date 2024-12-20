@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { FaEdit } from "react-icons/fa";
+import { BiEditAlt } from "react-icons/bi";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 
@@ -116,7 +116,7 @@ function EditBreak({ id, onSuccess }) {
           whiteSpace: "nowrap",
         }}
         className="btn btn-normal text-start" onClick={handleShow}>
-        <FaEdit />
+        <BiEditAlt />
       </button>
 
       <Modal

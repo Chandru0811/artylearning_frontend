@@ -1141,3 +1141,13 @@ table.dataTable.display > tbody > tr > th {
   font-weight: 400;
   border-radius: 3px;
 }
+
+.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root.Mui-active{
+  color: #287f71 !important;
+}
+.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed{
+  color: #287f71 !important;
+}
+.css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root{
+  color: #329181c3 !important;
+}

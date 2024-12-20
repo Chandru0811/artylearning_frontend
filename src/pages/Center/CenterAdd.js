@@ -40,6 +40,16 @@ const validationSchema = Yup.object().shape({
     .integer("*Bank Account Number is must be number"),
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
   file: Yup.mixed().required("*File is required"),
+  target: Yup.number()
+    .typeError("*Must be a number")
+    .required("*File is required")
+    .positive("*Must be a positive number")
+    .test(
+      "max-two-decimals",
+      "*Must have at most two decimal places",
+      (value) =>
+        value === undefined || /^\d+(\.\d{1,2})?$/.test(value.toString())
+    ),
   invoiceNotes: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),
@@ -81,6 +91,7 @@ function CenterAdd() {
       bankBranch: "",
       bankAccountNumber: "",
       bankAccountName: "",
+      target: "",
       file: null,
     },
     validationSchema: validationSchema,
@@ -113,6 +124,7 @@ function CenterAdd() {
       formData.append("bankAccountName", values.bankAccountName);
       formData.append("invoiceNotes  ", values.invoiceNotes || " ");
       formData.append("file", values.file);
+      formData.append("target", values.target);
       formData.append("createdBy", userName);
 
       // for (let [key, value] of formData.entries()) {
@@ -606,6 +618,27 @@ function CenterAdd() {
                   {formik.touched.file && formik.errors.file && (
                     <div className="error text-danger">
                       <small>{formik.errors.file}</small>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-md-6 col-12">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
+                    Target<span className="text-danger">*</span>
+                  </label>
+                  <input
+                    {...formik.getFieldProps("target")}
+                    type="text"
+                    className={`form-control   ${
+                      formik.touched.target && formik.errors.target
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                  {formik.touched.target && formik.errors.target && (
+                    <div className="invalid-feedback">
+                      {formik.errors.target}
                     </div>
                   )}
                 </div>
