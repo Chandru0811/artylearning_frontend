@@ -228,13 +228,13 @@ const Class = () => {
     getClassData();
     setIsClearFilterClicked(true);
   };
- useEffect(() => {
+  useEffect(() => {
     const fetchDatas = async () => {
       await fetchData(); // Fetch center data
     };
     fetchDatas();
   }, []);
-  
+
   useEffect(() => {
     getClassData();
   }, [filters]);
@@ -259,7 +259,7 @@ const Class = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container my-4 center">
+    <div className="container-fluid my-4 center">
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}

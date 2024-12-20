@@ -72,7 +72,6 @@ const StaffPersonalAdd = forwardRef(
             nationalityName = nationalityData.find(
               (prv) => prv.id === parseInt(values.nationalityId)
             );
-          // Add each data field manually to the FormData object
           formData.append("role", values.role);
           formData.append("teacherName", values.teacherName);
           formData.append("dateOfBirth", values.dateOfBirth);
@@ -187,7 +186,7 @@ const StaffPersonalAdd = forwardRef(
       >
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
-          <div class="container row d-flex my-4">
+          <div class="container-fluid row d-flex my-4">
             <div class="col-md-6 col-12 mb-3">
               <div class="form-group  col-sm ">
                 <label>Staff Name</label>
@@ -513,7 +512,7 @@ const StaffPersonalAdd = forwardRef(
                 >
                   <option value=""></option>
                   <option value={"ACTIVE"}>Active</option>
-                  <option value={"INACTIVE"}>Inactive</option>
+                  <option value={"RESIGNED"}>Resigned</option>
                 </select>
                 {formik.touched.status && formik.errors.status && (
                   <div className="error text-danger ">

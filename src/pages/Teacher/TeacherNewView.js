@@ -315,12 +315,12 @@ function TeacherNewView() {
                   <li className="stdList">
                     <b>Status</b>
                     <span>
-                      {" "}
-                      {data.userAccountInfo &&
-                      data.userAccountInfo.length > 0 &&
-                      data.userAccountInfo[0].status
-                        ? data.userAccountInfo[0].status
-                        : "--"}
+                      {{
+                        ACTIVE: "Active",
+                        RESIGNED: "Resigned",
+                      }[data.status] ||
+                        data.status ||
+                        ""}
                     </span>
                   </li>
                   <li className="stdList">

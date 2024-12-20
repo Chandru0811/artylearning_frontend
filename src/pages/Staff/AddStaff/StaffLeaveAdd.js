@@ -39,6 +39,7 @@ const StaffLeaveAdd = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
           const response = await api.post(
             `/createUserLeaveCreation/${formData.user_id}`,
@@ -63,7 +64,7 @@ const StaffLeaveAdd = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -97,7 +98,7 @@ const StaffLeaveAdd = forwardRef(
         }}
       >
         <section>
-          <div className="container" style={{ minHeight: "60vh" }}>
+          <div className="container-fluid" style={{ minHeight: "60vh" }}>
             <p className="headColor my-4">Leave Information</p>
             <div class="row">
               {/* <div class="col-md-6 col-12 mb-2">

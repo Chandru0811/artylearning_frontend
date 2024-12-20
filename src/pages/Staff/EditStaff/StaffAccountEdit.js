@@ -9,7 +9,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
 import fetchAllCentersWithIds from "../../List/CenterList";
-import { MultiSelect } from 'react-multi-select-component';
+import { MultiSelect } from "react-multi-select-component";
 
 const validationSchema = Yup.object().shape({
   startDate: Yup.string().required("*Start Date is required!"),
@@ -29,7 +29,10 @@ const StaffAccountEdit = forwardRef(
     const [centerData, setCenterData] = useState([]);
     const [shgData, setShgData] = useState([]);
     const [selectedCenters, setSelectedCenters] = useState([]);
-    const centerOptions = centerData.map(center => ({ label: center.centerNames, value: center.id }));
+    const centerOptions = centerData.map((center) => ({
+      label: center.centerNames,
+      value: center.id,
+    }));
 
     const fetchData = async () => {
       try {
@@ -39,7 +42,7 @@ const StaffAccountEdit = forwardRef(
         toast.error(error);
       }
     };
-    const userName = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
@@ -53,6 +56,7 @@ const StaffAccountEdit = forwardRef(
         approvelContentRequired: "",
         workingDays: [],
         centerIds: [],
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
 
@@ -85,6 +89,7 @@ const StaffAccountEdit = forwardRef(
       onSubmit: async (values) => {
         // console.log("Api Data:", values);
         setLoadIndicators(true);
+        values.updatedBy = userName;
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
         const updatedData = {
@@ -144,7 +149,7 @@ const StaffAccountEdit = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -190,13 +195,22 @@ const StaffAccountEdit = forwardRef(
               ...response.data.userAccountInfo[0],
               accountId: response.data.userAccountInfo[0].id,
               startDate: data.startDate.substring(0, 10),
-              approvelContentRequired: data.approvelContentRequired === true ? "Yes" : "No",
+              approvelContentRequired:
+                data.approvelContentRequired === true ? "Yes" : "No",
             });
-            const centers = response.data.userAccountInfo[0].centers
-            const selectedCenterIds = centers.map(center => center.id);
+            const centers = response.data.userAccountInfo[0].centers;
+            const selectedCenterIds = centers.map((center) => center.id);
             formik.setFieldValue("centerIds", selectedCenterIds);
-            formik.setFieldValue("shgTypeId", response.data.userAccountInfo[0]?.shgTypeId);
-            setSelectedCenters(centers.map(center => ({ label: center.centerName, value: center.id })));
+            formik.setFieldValue(
+              "shgTypeId",
+              response.data.userAccountInfo[0]?.shgTypeId
+            );
+            setSelectedCenters(
+              centers.map((center) => ({
+                label: center.centerName,
+                value: center.id,
+              }))
+            );
           } else {
             formik.setValues({
               accountId: null,
@@ -219,7 +233,7 @@ const StaffAccountEdit = forwardRef(
       getData();
       fetchData();
       ShgType();
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
     useImperativeHandle(ref, () => ({
@@ -236,12 +250,15 @@ const StaffAccountEdit = forwardRef(
     };
 
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
-        <div className="container courseAdd">
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
+        <div className="container-fluid courseAdd">
           <p className="headColor my-4">Account Information</p>
           <div class="row">
             <div class="col-md-6 col-12 mb-2 mt-2">
@@ -271,11 +288,18 @@ const StaffAccountEdit = forwardRef(
                 value={selectedCenters}
                 onChange={(selected) => {
                   setSelectedCenters(selected);
-                  formik.setFieldValue('centerIds', selected.map(option => option.value));
+                  formik.setFieldValue(
+                    "centerIds",
+                    selected.map((option) => option.value)
+                  );
                 }}
                 labelledBy="Select Centers"
                 menuPlacement="top"
-                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds ? 'is-invalid' : ''}`}
+                className={`form-multi-select ${
+                  formik.touched.centerIds && formik.errors.centerIds
+                    ? "is-invalid"
+                    : ""
+                }`}
               />
               {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
@@ -408,7 +432,7 @@ const StaffAccountEdit = forwardRef(
                 </div>
               </div>
               {formik.touched.approvelContentRequired &&
-                formik.errors.approvelContentRequired ? (
+              formik.errors.approvelContentRequired ? (
                 <div className="error text-danger ">
                   <small>{formik.errors.approvelContentRequired}</small>
                 </div>
@@ -575,9 +599,7 @@ const StaffAccountEdit = forwardRef(
             </div>
 
             <div class="col-md-6 col-12 mb-2 mt-3">
-              <label>
-                Color Code
-              </label>
+              <label>Color Code</label>
               <div class="input-group mb-3 courseAdd">
                 <div class="input-group-text inputGroup">
                   <input
@@ -599,7 +621,6 @@ const StaffAccountEdit = forwardRef(
                 </div>
               ) : null}
             </div>
-
           </div>
         </div>
       </form>

@@ -29,6 +29,7 @@ const EditForm5 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [centerData, setCenterData] = useState(null);
     const [studentData, setStudentData] = useState(null);
+    const userName = localStorage.getItem("userName");
     const formik = useFormik({
       initialValues: {
         // centerId: formData.centerId,
@@ -40,10 +41,12 @@ const EditForm5 = forwardRef(
         referedStudentCenterNameId: formData.referedStudentCenterNameId || "",
         remark: formData.remark || "",
         preferredTimeSlot: formData.preferredTimeSlot || [],
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.updatedBy = userName;
         try {
           const response = await api.put(
             `/updateLeadInfo/${formData.id}`,
@@ -68,7 +71,7 @@ const EditForm5 = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -186,10 +189,11 @@ const EditForm5 = forwardRef(
                 <div className="input-group ">
                   <select
                     {...formik.getFieldProps("studentId")}
-                    className={`form-select ${formik.touched.studentId && formik.errors.studentId
+                    className={`form-select ${
+                      formik.touched.studentId && formik.errors.studentId
                         ? "is-invalid"
                         : ""
-                      }`}
+                    }`}
                   >
                     <option selected></option>
                     {studentData &&
@@ -302,11 +306,12 @@ const EditForm5 = forwardRef(
                     />
                     <label className="form-check-label">Sunday</label>
                   </div>
-                  {formik.touched.preferredDay && formik.errors.preferredDay && (
-                    <div className="error text-danger ">
-                      <small>{formik.errors.preferredDay}</small>
-                    </div>
-                  )}
+                  {formik.touched.preferredDay &&
+                    formik.errors.preferredDay && (
+                      <div className="error text-danger ">
+                        <small>{formik.errors.preferredDay}</small>
+                      </div>
+                    )}
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">

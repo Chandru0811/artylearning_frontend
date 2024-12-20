@@ -5,10 +5,12 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import fetchAllCoursesWithIdsC from "../../../pages/List/CourseListByCenter";
 import fetchAllCentersWithIds from "../../../pages/List/CenterList";
+import fetchAllClassesWithIdsC from "../../List/ClassListByCourse";
 
 function TransferOutModal({ id, centerId }) {
   const [show, setShow] = useState(false);
   const [courseData, setCourseData] = useState(null);
+  const [classData, setClassData] = useState(null);
   const [centerData, setCenterData] = useState(null);
 
   const handleClose = () => {
@@ -46,7 +48,7 @@ function TransferOutModal({ id, centerId }) {
       centerRemark: "",
       parentRemark: "",
     },
-    validationSchema: validationSchema,
+    // validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Transfer Out Modal Datas:", values);
     },
@@ -60,6 +62,22 @@ function TransferOutModal({ id, centerId }) {
       setCenterData(center);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleCourseChange = (event) => {
+    setClassData(null);
+    const courseId = event.target.value;
+    formik.setFieldValue("courseId", courseId);
+    fetchClasses(courseId); // Fetch class for the selected center
+  };
+
+  const fetchClasses = async (courseId) => {
+    try {
+      const classes = await fetchAllClassesWithIdsC(courseId);
+      setClassData(classes);
+    } catch (error) {
+      console.error(error.message);
     }
   };
 
@@ -99,6 +117,7 @@ function TransferOutModal({ id, centerId }) {
                   }`}
                   id="courseId"
                   name="courseId"
+                  onChange={handleCourseChange}
                 >
                   <option value="" disabled selected>
                     Select a course
@@ -122,17 +141,23 @@ function TransferOutModal({ id, centerId }) {
                 </label>
                 <select
                   {...formik.getFieldProps("currentClass")}
-                  name="currentClass"
-                  className={`form-select ${
+                  class={`form-select  ${
                     formik.touched.currentClass && formik.errors.currentClass
                       ? "is-invalid"
                       : ""
                   }`}
+                  id="currentClass"
+                  name="currentClass"
                 >
-                  <option selected>Select a class</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option value="" disabled selected>
+                    Select a class
+                  </option>
+                  {classData &&
+                      classData.map((classes) => (
+                        <option key={classes.id} value={classes.id}>
+                          {classes.classNames}
+                        </option>
+                      ))}
                 </select>
                 {formik.touched.currentClass && formik.errors.currentClass && (
                   <div className="invalid-feedback">

@@ -79,7 +79,7 @@ const Teacher = () => {
         size: 50,
       },
       { accessorKey: "email", enableHiding: false, header: "Email" },
-      { accessorKey: "mobile", enableHiding: false, header: "Mobile" },
+      { accessorKey: "contactNumber", enableHiding: false, header: "Mobile" },
       {
         accessorKey: "role",
         enableHiding: false,

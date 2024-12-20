@@ -23,6 +23,7 @@ function DeductionAdd() {
   const [centerData, setCenterData] = useState(null);
   const [userNamesData, setUserNameData] = useState(null);
   const [loadIndicator, setLoadIndicator] = useState(false);
+  const userName = localStorage.getItem("userName");
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -32,10 +33,12 @@ function DeductionAdd() {
       deductionName: "",
       deductionMonth: "",
       deductionAmount: "",
+      createdBy: userName,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      values.createdBy = userName;
       console.log("Attendance Emp:", values);
       let selectedCenterName = "";
       let selectedEmployeeName = "";

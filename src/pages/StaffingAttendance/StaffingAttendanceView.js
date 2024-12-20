@@ -35,6 +35,7 @@ function StaffingAttendanceView() {
     getData();
     fetchData();
   }, []);
+  
   const formatTimeTo12Hour = (time) => {
     if (!time) return "--";
     const [hours, minutes] = time.split(":");

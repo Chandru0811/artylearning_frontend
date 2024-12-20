@@ -58,7 +58,7 @@ function LevelAdd({ onSuccess }) {
     validationSchema: validationSchema, // Assign the validation schema
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      values.createdBy= userName;
+      values.createdBy = userName;
       try {
         const response = await api.post("/createCourseLevels", values, {
           headers: {

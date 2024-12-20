@@ -19,7 +19,6 @@ const validationSchema = Yup.object({
 });
 
 function LeaveAdminEdit() {
-  const [datas, setDatas] = useState([]);
   const [data, setData] = useState([]);
 
   const [leaveDatas, setLeaveDatas] = useState([]);
@@ -28,11 +27,8 @@ function LeaveAdminEdit() {
   const [daysDifference, setDaysDifference] = useState(0);
   const userId = localStorage.getItem("userId");
   const centerId = localStorage.getItem("centerId");
+  const userName = localStorage.getItem("userName");
   const navigate = useNavigate();
-
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
 
   const formik = useFormik({
     initialValues: {
@@ -50,11 +46,12 @@ function LeaveAdminEdit() {
       leaveStatus: "",
       leaveReason: "",
       attachment: "",
+      updatedBy: userName,
     },
     // validationSchema: validationSchema,
-
     onSubmit: async (data) => {
       setLoadIndicator(true);
+      data.updatedBy = userName;
       try {
         const payload = {
           leaveStatus: data.leaveStatus,

@@ -42,7 +42,7 @@ const StaffAccountAdd = forwardRef(
       label: center.centerNames,
       value: center.id,
     }));
-    const userName = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
     const fetchData = async () => {
       try {
@@ -69,7 +69,7 @@ const StaffAccountAdd = forwardRef(
       };
 
       getData();
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
     const formik = useFormik({
@@ -85,19 +85,18 @@ const StaffAccountAdd = forwardRef(
         approvelContentRequired: formData.approvelContentRequired,
         workingDays: formData.workingDays || [],
         centerIds: formData.centerIds || [],
-
+        createdBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
         values.userId = formData.user_id;
+        values.createdBy = userName;
         const Approval =
           values.approvelContentRequired === "Yes" ? true : false;
         const updatedData = {
           ...values,
           approvelContentRequired: Approval,
-          createdBy: userName,
-
         };
         try {
           const response = await api.post(
@@ -125,7 +124,7 @@ const StaffAccountAdd = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -164,7 +163,7 @@ const StaffAccountAdd = forwardRef(
     };
     useEffect(() => {
       if (formik.values.centerIds && formik.values.centerIds.length) {
-        const initializedCenters = centerOptions.filter(option =>
+        const initializedCenters = centerOptions.filter((option) =>
           formik.values.centerIds.includes(option.value)
         );
         setSelectedCenters(initializedCenters);
@@ -172,12 +171,15 @@ const StaffAccountAdd = forwardRef(
     }, [formik.values.centerIds.length, centerOptions]);
 
     return (
-      <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-        if (e.key === 'Enter' && !formik.isSubmitting) {
-          e.preventDefault();  // Prevent default form submission
-        }
-      }}>
-        <div className="container courseAdd">
+      <form
+        onSubmit={formik.handleSubmit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !formik.isSubmitting) {
+            e.preventDefault(); // Prevent default form submission
+          }
+        }}
+      >
+        <div className="container-fluid courseAdd">
           <p className="headColor my-4">Account Information</p>
           <div class="row">
             <div class="col-md-6 col-12 my-2">
@@ -192,8 +194,6 @@ const StaffAccountAdd = forwardRef(
                 onBlur={formik.handleBlur}
                 value={formik.values.startDate}
                 min={new Date().toISOString().split("T")[0]}
-
-
               />
               {formik.touched.startDate && formik.errors.startDate && (
                 <div className="error text-danger ">
@@ -218,10 +218,11 @@ const StaffAccountAdd = forwardRef(
                 }}
                 labelledBy="Select Centers"
                 menuPlacement="top"
-                className={`form-multi-select ${formik.touched.centerIds && formik.errors.centerIds
+                className={`form-multi-select ${
+                  formik.touched.centerIds && formik.errors.centerIds
                     ? "is-invalid"
                     : ""
-                  }`}
+                }`}
               />
               {formik.touched.centerIds && formik.errors.centerIds && (
                 <div className="invalid-feedback">
@@ -339,7 +340,7 @@ const StaffAccountAdd = forwardRef(
                 </div>
               </div>
               {formik.touched.approvelContentRequired &&
-                formik.errors.approvelContentRequired ? (
+              formik.errors.approvelContentRequired ? (
                 <div className="error text-danger ">
                   <small>{formik.errors.approvelContentRequired}</small>
                 </div>
@@ -534,7 +535,6 @@ const StaffAccountAdd = forwardRef(
                 )}
               </div>
             </div> */}
-
 
             <div className="col-md-6 col-12 mb-2">
               <lable className="form-lable">Color Code</lable>

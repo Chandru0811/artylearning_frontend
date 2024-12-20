@@ -6,14 +6,21 @@ import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  agreeConditionOne: Yup.boolean().oneOf([true], "*Declare is required").required(),
-  agreeConditionTwo: Yup.boolean().oneOf([true], "*Declare is required").required(),
-  agreeConditionThree: Yup.boolean().oneOf([true], "*Declare is required").required(),
+  agreeConditionOne: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
+  agreeConditionTwo: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
+  agreeConditionThree: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
 });
 
 const Form6 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const navigate = useNavigate();
+    const userName = localStorage.getItem("userName");
 
     const formik = useFormik({
       initialValues: {
@@ -21,10 +28,12 @@ const Form6 = forwardRef(
         agreeConditionOne: false,
         agreeConditionTwo: false,
         agreeConditionThree: false,
+        createdBy: userName,
       },
       // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
           const response = await api.put(
             `/updateLeadInfo/${formData.lead_id}`,
@@ -60,11 +69,14 @@ const Form6 = forwardRef(
         <div className="py-3">
           <p className="headColor">Permission for Medias Posting</p>
         </div>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="row">
             {/* <div className="col-md-12 col-12 mb-3">
               <div className="mb-3">
@@ -98,7 +110,7 @@ const Form6 = forwardRef(
             </div> */}
             {/* <div className="d-flex"> */}
             <div className="col-md-12 col-12 mb-2">
-              <div className="form-check d-flex" >
+              <div className="form-check d-flex">
                 <input
                   className="form-check-input mx-2"
                   id="agreeConditionOne"
@@ -117,7 +129,8 @@ const Form6 = forwardRef(
                   information will be displayed on the company’s website.
                 </label>
               </div>
-              {formik.touched.agreeConditionOne && formik.errors.agreeConditionOne && (
+              {formik.touched.agreeConditionOne &&
+                formik.errors.agreeConditionOne && (
                   <div className="error text-danger ms-5">
                     <small>{formik.errors.agreeConditionOne}</small>
                   </div>
@@ -139,7 +152,10 @@ const Form6 = forwardRef(
                     checked={formik.values.agreeConditionTwo}
                     onChange={formik.handleChange}
                   />
-                  <label className="form-check-label" htmlFor="agreeConditionTwo">
+                  <label
+                    className="form-check-label"
+                    htmlFor="agreeConditionTwo"
+                  >
                     I hereby provide my consent to Arty Learning Pte Ltd for the
                     display my child’s name, limited to first names and
                     potentially last initials (in cases where there are multiple
@@ -148,11 +164,12 @@ const Form6 = forwardRef(
                     which will be shown to the public.
                   </label>
                 </div>
-                {formik.touched.agreeConditionTwo && formik.errors.agreeConditionTwo && (
-                  <div className="error text-danger ms-5">
-                    <small>{formik.errors.agreeConditionTwo}</small>
-                  </div>
-                )}
+                {formik.touched.agreeConditionTwo &&
+                  formik.errors.agreeConditionTwo && (
+                    <div className="error text-danger ms-5">
+                      <small>{formik.errors.agreeConditionTwo}</small>
+                    </div>
+                  )}
               </div>
               {/* <div className="col-md-11 col-10 mb-3">
     <div className="form-check">
@@ -173,11 +190,15 @@ const Form6 = forwardRef(
                   onBlur={formik.handleBlur}
                   value={formik.values.agreeConditionThree}
                 />
-                <label className="form-check-label" htmlFor="agreeConditionThree">
+                <label
+                  className="form-check-label"
+                  htmlFor="agreeConditionThree"
+                >
                   I agree that the information provided is true to my abilities.
                 </label>
               </div>
-              {formik.touched.agreeConditionThree && formik.errors.agreeConditionThree && (
+              {formik.touched.agreeConditionThree &&
+                formik.errors.agreeConditionThree && (
                   <div className="error text-danger ms-5">
                     <small>{formik.errors.agreeConditionThree}</small>
                   </div>

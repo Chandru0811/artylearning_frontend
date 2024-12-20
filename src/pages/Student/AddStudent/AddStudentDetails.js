@@ -117,6 +117,7 @@ const AddStudentDetails = forwardRef(
         remark: formData.remark || "",
         allowMagazine: formData.allowMagazine || "",
         allowSocialMedia: formData.allowSocialMedia || "",
+        createdby:  userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (values) => {

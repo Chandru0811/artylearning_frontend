@@ -6,13 +6,20 @@ import api from "../../../../config/URL";
 import { toast } from "react-toastify";
 
 const validationSchema = Yup.object().shape({
-  agreeConditionOne: Yup.boolean().oneOf([true], "*Declare is required").required(),
-  agreeConditionTwo: Yup.boolean().oneOf([true], "*Declare is required").required(),
-  agreeConditionThree: Yup.boolean().oneOf([true], "*Declare is required").required(),
+  agreeConditionOne: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
+  agreeConditionTwo: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
+  agreeConditionThree: Yup.boolean()
+    .oneOf([true], "*Declare is required")
+    .required(),
 });
 
 const EditForm6 = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
+    const userName = localStorage.getItem("userName");
     const navigate = useNavigate();
 
     const formik = useFormik({
@@ -20,10 +27,12 @@ const EditForm6 = forwardRef(
         agreeConditionOne: formData.agreeConditionOne ?? false,
         agreeConditionTwo: formData.agreeConditionTwo ?? false,
         agreeConditionThree: formData.agreeConditionThree ?? false,
+        updatedBy: userName,
       },
       // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         try {
           const response = await api.put(
             `/updateLeadInfo/${formData.id}`,
@@ -74,11 +83,14 @@ const EditForm6 = forwardRef(
         <div className="py-3">
           <p className="headColor">Permission for Medias Posting</p>
         </div>
-         <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className="row">
             {/* <div className="col-md-12 col-12 mb-3">
               <div className="mb-3">

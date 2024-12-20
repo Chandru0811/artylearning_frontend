@@ -90,6 +90,7 @@ const StaffContractAdd = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.createdBy = userName;
         try {
           const response = await api.post(
             `/createUserContractCreation/${formData.user_id}`,
@@ -114,7 +115,7 @@ const StaffContractAdd = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -160,7 +161,7 @@ const StaffContractAdd = forwardRef(
       }
     };
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       // getData();
       fetchData();
     }, []);
@@ -215,9 +216,9 @@ const StaffContractAdd = forwardRef(
           }
         }}
       >
-        <div className="container">
+        <div className="container-fluid">
           <p className="headColor my-4">Contract Information</p>
-          <div className="container mt-5" style={{ minHeight: "95vh" }}>
+          <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
               <div class="col-md-6 col-12 mb-2 mt-3">

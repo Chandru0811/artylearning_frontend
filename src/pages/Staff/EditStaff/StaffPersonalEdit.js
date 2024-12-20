@@ -50,10 +50,12 @@ const StaffPersonalEdit = forwardRef(
         nationality: formData.nationality || "",
         nationalityId: formData.nationalityId || "",
         status: formData.status || "",
+        updatedBy: userName,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
+        data.updatedBy = userName;
         setFormData((prev) => ({ ...prev, ...data }));
         let nationalityName;
         if (data.nationalityId)
@@ -170,7 +172,7 @@ const StaffPersonalEdit = forwardRef(
       >
         <div className="pb-4">
           <p class="headColor">Personal Information</p>
-          <div class="container row d-flex my-4">
+          <div class="container-fluid row d-flex my-4">
             <div class="col-md-6 col-12 mb-3">
               <div class="form-group  col-sm ">
                 <label>Staff Name</label>
@@ -354,7 +356,7 @@ const StaffPersonalEdit = forwardRef(
                 >
                   <option value=""></option>
                   <option value={"ACTIVE"}>Active</option>
-                  <option value={"INACTIVE"}>Inactive</option>
+                  <option value={"RESIGNED"}>Resigned</option>
                 </select>
                 {formik.touched.status && formik.errors.status && (
                   <div className="error text-danger ">

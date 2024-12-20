@@ -89,6 +89,8 @@ const Staff = () => {
             <span className="badge badges-orange fw-light">Center Manager</span>
           ) : row.original.role === "staff_admin" ? (
             <span className="badge badges-red fw-light">Staff Admin</span>
+          ) : row.original.role === "branch_admin" ? (
+            <span className="badge badges-purple fw-light">Branch Admin</span>
           ) : null,
       },
       {
@@ -101,7 +103,6 @@ const Staff = () => {
 
         header: "Citizenship",
       },
-      { accessorKey: "centerId", header: "Center Id" },
       {
         accessorKey: "dateOfBirth",
 
@@ -109,7 +110,6 @@ const Staff = () => {
       },
       { accessorKey: "idNo", header: "Id No" },
       { accessorKey: "idType", header: "Id Type" },
-      { accessorKey: "idTypeId", header: "Id Type Id" },
       {
         accessorKey: "userUniqueId",
 

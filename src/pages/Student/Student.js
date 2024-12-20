@@ -162,6 +162,22 @@ const Student = () => {
         accessorKey: "remark",
         header: "Remark",
       },
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+      },
     ],
     []
   );

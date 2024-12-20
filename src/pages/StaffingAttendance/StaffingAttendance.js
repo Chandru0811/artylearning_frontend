@@ -88,12 +88,42 @@ const StaffingAttendance = () => {
         size: 30,
         enableHiding: false,
         header: "Check In",
+        Cell: ({ cell }) => {
+          const timeValue = cell.getValue();
+          if (timeValue) {
+            const [hours, minutes] = timeValue.split(":");
+            const date = new Date();
+            date.setHours(hours, minutes);
+            const options = {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            };
+            return date.toLocaleTimeString(undefined, options);
+          }
+          return null;
+        },
       },
       {
         accessorKey: "checkOut",
         size: 30,
         enableHiding: false,
         header: "Check Out",
+        Cell: ({ cell }) => {
+          const timeValue = cell.getValue();
+          if (timeValue) {
+            const [hours, minutes] = timeValue.split(":");
+            const date = new Date();
+            date.setHours(hours, minutes);
+            const options = {
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            };
+            return date.toLocaleTimeString(undefined, options);
+          }
+          return null;
+        },
       },
       { accessorKey: "date", enableHiding: false, header: "Date" },
       { accessorKey: "createdBy", enableHiding: false, header: "Created By" },

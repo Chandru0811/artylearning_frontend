@@ -135,6 +135,7 @@ const ContractEdit = forwardRef(
       // validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+        values.updatedBy = userName;
         console.log("Api Data:", values);
         values.workingDays = contactId.workingDays;
         try {
@@ -422,9 +423,9 @@ const ContractEdit = forwardRef(
           }
         }}
       >
-        <div className="container">
+        <div className="container-fluid">
           <p className="headColor my-4">Contract Information</p>
-          <div className="container mt-5" style={{ minHeight: "95vh" }}>
+          <div className="container-fluid mt-5" style={{ minHeight: "95vh" }}>
             <span className="mt-3 fw-bold">Details of EMPLOYER</span>
             <div class="row mt-4">
               <div class="col-md-6 col-12 mb-2 mt-3">
