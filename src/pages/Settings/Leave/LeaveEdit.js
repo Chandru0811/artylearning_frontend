@@ -53,6 +53,7 @@ function LeaveEdit({ id, onSuccess, handleMenuClose }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
+        values.updatedBy = userName
         const response = await api.put(`/updateLeaveSetting/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
@@ -95,7 +96,7 @@ function LeaveEdit({ id, onSuccess, handleMenuClose }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="text-start"
+        className="text-start mb-0"
         onClick={handleShow}
       >
         Edit

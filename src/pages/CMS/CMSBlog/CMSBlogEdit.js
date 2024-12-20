@@ -96,7 +96,7 @@ function CMSBlogEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <p className="text-start" onClick={handleShow}>
+      <p className="text-start mb-0" onClick={handleShow}>
         Edit
       </p>
 

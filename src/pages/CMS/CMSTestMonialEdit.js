@@ -98,7 +98,7 @@ function CMSTestMonialEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <p className="text-start" onClick={handleShow}>
+      <p className="text-start mb-0" onClick={handleShow}>
         Edit
       </p>
 
@@ -212,7 +212,7 @@ function CMSTestMonialEdit({ id, onSuccess, handleMenuClose }) {
                   aria-hidden="true"
                 ></span>
               )}
-              Save
+              Update
             </button>
           </DialogActions>
         </form>

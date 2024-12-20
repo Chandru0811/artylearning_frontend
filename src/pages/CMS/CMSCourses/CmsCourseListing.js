@@ -27,6 +27,7 @@ function CmsCourseListing({
   const [paragraph1, setParagraph1] = useState("");
   const [paragraph2, setParagraph2] = useState("");
   const [editingSection, setEditingSection] = useState(null);
+  const userName = localStorage.getItem("userName");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [sections, setSections] = useState([
     {
@@ -98,6 +99,7 @@ function CmsCourseListing({
 
   const updateData = async (formData) => {
     try {
+      formData.append("updatedBy", userName);
       const response = await api.put(
         `/updateCoursesSave/${courseId}`,
         formData,

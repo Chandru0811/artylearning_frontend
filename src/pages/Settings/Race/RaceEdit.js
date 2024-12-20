@@ -55,6 +55,7 @@ function RaceEdit({ id, onSuccess, handleMenuClose }) {
     onSubmit: async (values) => {
       setLoadIndicator(true);
       try {
+        values.updatedBy = userName
         const response = await api.put(`/updateRaceSetting/${id}`, values, {
           headers: {
             "Content-Type": "application/json",
@@ -97,7 +98,7 @@ function RaceEdit({ id, onSuccess, handleMenuClose }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="text-start"
+        className="text-start mb-0"
         onClick={handleShow}
       >
         Edit

@@ -46,6 +46,7 @@ function TaxAdd({ onSuccess }) {
       setLoadIndicator(true);
       // console.log(values);
       try {
+        values.createdBy = userName;
         const response = await api.post("/createTaxSetting", values, {
           headers: {
             "Content-Type": "application/json",
