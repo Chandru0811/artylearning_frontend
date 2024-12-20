@@ -412,6 +412,396 @@ function RolesAdd() {
       formik.setFieldValue(fieldName, event.target.checked);
     };
   };
+  const handleCheckAll = () => {
+    Object.keys(formik.values).map((key) => {
+      formik.setFieldValue(key, true);
+    });
+  };
+
+  const handleUncheckAll = () => {
+    Object.keys(formik.values).map((key) => {
+      formik.setFieldValue(key, false);
+    });
+  };
+
+  const handleCheckAllCreate = () => {
+    formik.setValues({
+      ...formik.values,
+      courseCreate: true,
+      classCreate: true,
+      levelCreate: true,
+      subjectCreate: true,
+      curriculumCreate: true,
+      courseFeesCreate: true,
+      courseDepositFeesCreate: true,
+      curriculumOutlineCreate: true,
+      centerListingCreate: true,
+      leadListingCreate: true,
+      enrollmentCreate: true,
+      staffCreate: true,
+      teacherCreate: true,
+      attendanceCreate: true,
+      staffAttendanceCreate: true,
+      leaveAdminCreate: true,
+      leaveCreate: true,
+      holidayCreate: true,
+      deductionCreate: true,
+      payrollCreate: true,
+      payslipCreate: true,
+      freeLancerCreate: true,
+      leaveRequestCreate: true,
+      rolesMatrixCreate: true,
+      studentListingCreate: true,
+      changeClassCreate: true,
+      transferOutCreate: true,
+      withdrawCreate: true,
+      endClassCreate: true,
+      registerNewCreate: true,
+      deductDepositCreate: true,
+      documentListingCreate: true,
+      documentFileCreate: true,
+      invoiceCreate: true,
+      paymentCreate: true,
+      scheduleTeacherCreate: true,
+      documentReportCreate: true,
+      attendanceReportCreate: true,
+      studentReportCreate: true,
+      assessmentReportCreate: true,
+      enrollmentReportCreate: true,
+      feeCollectionReportCreate: true,
+      packageBalanceReportCreate: true,
+      salesRevenueReportCreate: true,
+      replaceClassLessonListCreate: true,
+      timeScheduleAdd: true,
+      sendNotificationCreate: true,
+      smsMessageCreate: true,
+      account_create: true,
+      headerCreate: true,
+      homeCreate: true,
+      testimonialCreate: true,
+      aboutCreate: true,
+      englishCourseCreate: true,
+      chineseCourseCreate: true,
+      teacherSaveCreate: true,
+      productSaveCreate: true,
+      productImageSaveCreate: true,
+      newsUpdatesCreate: true,
+      contactUsCreate: true,
+      taxSettingCreate: true,
+      raceSettingCreate: true,
+      countrySettingCreate: true,
+      shgSettingCreate: true,
+      batchtimeSettingCreate: true,
+      leaveSettingCreate: true,
+      idTypeSettingCreate: true,
+      salarySettingCreate: true,
+      blogCreate: true,
+      contactUsSettingCreate: true,
+    });
+  };
+
+  const handleCheckAllRead = () => {
+    formik.setValues({
+      ...formik.values,
+      courseRead: true,
+      classRead: true,
+      levelRead: true,
+      subjectRead: true,
+      curriculumRead: true,
+      courseFeesRead: true,
+      courseDepositFeesRead: true,
+      curriculumOutlineRead: true,
+      centerListingRead: true,
+      leadListingRead: true,
+      enrollmentRead: true,
+      staffRead: true,
+      teacherRead: true,
+      attendanceRead: true,
+      staffAttendanceRead: true,
+      leaveAdminRead: true,
+      leaveRead: true,
+      holidayRead: true,
+      deductionRead: true,
+      payrollRead: true,
+      payslipRead: true,
+      freeLancerRead: true,
+      leaveRequestRead: true,
+      rolesMatrixRead: true,
+      studentListingRead: true,
+      changeClassRead: true,
+      transferOutRead: true,
+      withdrawRead: true,
+      endClassRead: true,
+      registerNewRead: true,
+      deductDepositRead: true,
+      documentListingRead: true,
+      documentFileRead: true,
+      invoiceRead: true,
+      paymentRead: true,
+      scheduleTeacherRead: true,
+      documentReportRead: true,
+      attendanceReportRead: true,
+      studentReportRead: true,
+      assessmentReportRead: true,
+      enrollmentReportRead: true,
+      feeCollectionReportRead: true,
+      packageBalanceReportRead: true,
+      salesRevenueReportRead: true,
+      replaceClassLessonListRead: true,
+      timeScheduleBlock: true,
+      sendNotificationRead: true,
+      smsMessageRead: true,
+      account_read: true,
+      headerRead: true,
+      homeRead: true,
+      testimonialRead: true,
+      aboutRead: true,
+      englishCourseRead: true,
+      chineseCourseRead: true,
+      teacherSaveRead: true,
+      productSaveRead: true,
+      productImageSaveRead: true,
+      newsUpdatesRead: true,
+      contactUsRead: true,
+      taxSettingRead: true,
+      raceSettingRead: true,
+      countrySettingRead: true,
+      shgSettingRead: true,
+      batchtimeSettingRead: true,
+      leaveSettingRead: true,
+      idTypeSettingRead: true,
+      salarySettingRead: true,
+      blogRead: true,
+      contactUsSettingRead: true,
+    });
+  };
+
+  const handleCheckAllUpdate = () => {
+    formik.setValues({
+      ...formik.values,
+      courseUpdate: true,
+      classUpdate: true,
+      levelUpdate: true,
+      subjectUpdate: true,
+      curriculumUpdate: true,
+      courseFeesUpdate: true,
+      courseDepositFeesUpdate: true,
+      curriculumOutlineUpdate: true,
+      centerListingUpdate: true,
+      leadListingUpdate: true,
+      enrollmentUpdate: true,
+      staffUpdate: true,
+      teacherUpdate: true,
+      attendanceUpdate: true,
+      staffAttendanceUpdate: true,
+      leaveAdminUpdate: true,
+      leaveUpdate: true,
+      holidayUpdate: true,
+      deductionUpdate: true,
+      payrollUpdate: true,
+      payslipUpdate: true,
+      freeLancerUpdate: true,
+      leaveRequestUpdate: true,
+      rolesMatrixUpdate: true,
+      studentListingUpdate: true,
+      changeClassUpdate: true,
+      transferOutUpdate: true,
+      withdrawUpdate: true,
+      endClassUpdate: true,
+      registerNewUpdate: true,
+      deductDepositUpdate: true,
+      documentListingUpdate: true,
+      documentFileUpdate: true,
+      invoiceUpdate: true,
+      paymentUpdate: true,
+      scheduleTeacherUpdate: true,
+      documentReportUpdate: true,
+      attendanceReportUpdate: true,
+      studentReportUpdate: true,
+      assessmentReportUpdate: true,
+      enrollmentReportUpdate: true,
+      feeCollectionReportUpdate: true,
+      packageBalanceReportUpdate: true,
+      salesRevenueReportUpdate: true,
+      replaceClassLessonListUpdate: true,
+      timeScheduleBlockUpdate: true,
+      sendNotificationUpdate: true,
+      smsMessageUpdate: true,
+      account_update: true,
+      headerUpdate: true,
+      homeUpdate: true,
+      testimonialUpdate: true,
+      aboutUpdate: true,
+      englishCourseUpdate: true,
+      chineseCourseUpdate: true,
+      teacherSaveUpdate: true,
+      productSaveUpdate: true,
+      productImageSaveUpdate: true,
+      newsUpdatesUpdate: true,
+      contactUsUpdate: true,
+      taxSettingUpdate: true,
+      raceSettingUpdate: true,
+      countrySettingUpdate: true,
+      shgSettingUpdate: true,
+      batchtimeSettingUpdate: true,
+      leaveSettingUpdate: true,
+      idTypeSettingUpdate: true,
+      salarySettingUpdate: true,
+      blogUpdate: true,
+      contactUsSettingUpdate: true,
+    });
+  };
+
+  const handleCheckAllDelete = () => {
+    formik.setValues({
+      ...formik.values,
+      courseDelete: true,
+      classDelete: true,
+      levelDelete: true,
+      subjectDelete: true,
+      curriculumDelete: true,
+      courseFeesDelete: true,
+      courseDepositFeesDelete: true,
+      curriculumOutlineDelete: true,
+      centerListingDelete: true,
+      leadListingDelete: true,
+      enrollmentDelete: true,
+      staffDelete: true,
+      teacherDelete: true,
+      attendanceDelete: true,
+      staffAttendanceDelete: true,
+      leaveAdminDelete: true,
+      leaveDelete: true,
+      holidayDelete: true,
+      deductionDelete: true,
+      payrollDelete: true,
+      payslipDelete: true,
+      freeLancerDelete: true,
+      leaveRequestDelete: true,
+      rolesMatrixDelete: true,
+      studentListingDelete: true,
+      changeClassDelete: true,
+      transferOutDelete: true,
+      withdrawDelete: true,
+      endClassDelete: true,
+      registerNewDelete: true,
+      deductDepositDelete: true,
+      documentListingDelete: true,
+      documentFileDelete: true,
+      invoiceDelete: true,
+      paymentDelete: true,
+      scheduleTeacherDelete: true,
+      documentReportDelete: true,
+      attendanceReportDelete: true,
+      studentReportDelete: true,
+      assessmentReportDelete: true,
+      enrollmentReportDelete: true,
+      feeCollectionReportDelete: true,
+      packageBalanceReportDelete: true,
+      salesRevenueReportDelete: true,
+      replaceClassLessonListDelete: true,
+      timeScheduleBlockDelete: true,
+      sendNotificationDelete: true,
+      smsMessageDelete: true,
+      account_delete: true,
+      headerDelete: true,
+      homeDelete: true,
+      testimonialDelete: true,
+      aboutDelete: true,
+      englishCourseDelete: true,
+      chineseCourseDelete: true,
+      teacherSaveDelete: true,
+      productSaveDelete: true,
+      productImageSaveDelete: true,
+      newsUpdatesDelete: true,
+      contactUsDelete: true,
+      taxSettingDelete: true,
+      raceSettingDelete: true,
+      countrySettingDelete: true,
+      shgSettingDelete: true,
+      batchtimeSettingDelete: true,
+      leaveSettingDelete: true,
+      idTypeSettingDelete: true,
+      salarySettingDelete: true,
+      blogDelete: true,
+      contactUsSettingDelete: true,
+    });
+  };
+  const handleCheckAllIndex = () => {
+    formik.setValues({
+      ...formik.values,
+      courseIndex: true,
+      classIndex: true,
+      levelIndex: true,
+      subjectIndex: true,
+      curriculumIndex: true,
+      courseFeesIndex: true,
+      courseDepositFeesIndex: true,
+      curriculumOutlineIndex: true,
+      centerListingIndex: true,
+      leadListingIndex: true,
+      enrollmentIndex: true,
+      staffIndex: true,
+      teacherIndex: true,
+      attendanceIndex: true,
+      staffAttendanceIndex: true,
+      leaveAdminIndex: true,
+      leaveIndex: true,
+      holidayIndex: true,
+      deductionIndex: true,
+      payrollIndex: true,
+      payslipIndex: true,
+      freeLancerIndex: true,
+      leaveRequestIndex: true,
+      rolesMatrixIndex: true,
+      studentListingIndex: true,
+      changeClassIndex: true,
+      transferOutIndex: true,
+      withdrawIndex: true,
+      endClassIndex: true,
+      registerNewIndex: true,
+      deductDepositIndex: true,
+      documentListingIndex: true,
+      documentFileIndex: true,
+      invoiceIndex: true,
+      paymentIndex: true,
+      scheduleTeacherIndex: true,
+      documentReportIndex: true,
+      attendanceReportIndex: true,
+      studentReportIndex: true,
+      assessmentReportIndex: true,
+      enrollmentReportIndex: true,
+      feeCollectionReportIndex: true,
+      packageBalanceReportIndex: true,
+      salesRevenueReportIndex: true,
+      replaceClassLessonListIndex: true,
+      timeScheduleBlockIndex: true,
+      sendNotificationIndex: true,
+      smsMessageIndex: true,
+      account_index: true,
+      headerIndex: true,
+      homeIndex: true,
+      testimonialIndex: true,
+      aboutIndex: true,
+      englishCourseIndex: true,
+      chineseCourseIndex: true,
+      teacherSaveIndex: true,
+      productSaveIndex: true,
+      productImageSaveIndex: true,
+      newsUpdatesIndex: true,
+      contactUsIndex: true,
+      taxSettingIndex: true,
+      raceSettingIndex: true,
+      countrySettingIndex: true,
+      shgSettingIndex: true,
+      batchtimeSettingIndex: true,
+      leaveSettingIndex: true,
+      idTypeSettingIndex: true,
+      salarySettingIndex: true,
+      blogIndex: true,
+      contactUsSettingIndex: true,
+    });
+  };
 
   const getRoleData = async () => {
     try {
@@ -482,22 +872,53 @@ function RolesAdd() {
           <div>
             <div className="d-flex justify-content-start align-items-center p-2">
               <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn find_roll">
-                  View
+                <button
+                  type="button"
+                  class="btn find_roll"
+                  onClick={handleCheckAllIndex}
+                >
+                  Index
                 </button>
-                <button type="button" class="btn find_roll">
-                  Add
+                <button
+                  type="button"
+                  class="btn find_roll"
+                  onClick={handleCheckAllRead}
+                >
+                  Read
                 </button>
-                <button type="button" class="btn find_roll">
-                  Edit
+                <button
+                  type="button"
+                  class="btn find_roll"
+                  onClick={handleCheckAllCreate}
+                >
+                  Create
                 </button>
-                <button type="button" class="btn find_roll">
+                <button
+                  type="button"
+                  class="btn find_roll"
+                  onClick={handleCheckAllUpdate}
+                >
+                  Update
+                </button>
+                <button
+                  type="button"
+                  class="btn find_roll"
+                  onClick={handleCheckAllDelete}
+                >
                   Delete
                 </button>
-                <button type="button" class="btn find_roll">
+                <button
+                  type="button"
+                  class="btn find_roll"
+                  onClick={handleCheckAll}
+                >
                   Check All
                 </button>
-                <button type="button" class="btn find_roll">
+                <button
+                  type="button"
+                  class="btn find_roll"
+                  onClick={handleUncheckAll}
+                >
                   Uncheck All
                 </button>
               </div>
