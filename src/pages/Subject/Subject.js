@@ -91,8 +91,12 @@ const Subject = () => {
         enableHiding: false,
         header: "Subject Code",
       },
-   
-      { accessorKey: "createdBy", header: "Created By" },
+
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
       {
         accessorKey: "createdAt",
         header: "Created At",
@@ -281,7 +285,7 @@ const Subject = () => {
           {storedScreens?.subjectCreate && (
             <div className="d-flex justify-content-end align-items-center me-2">
               <span>
-                <SubjectAdd onSuccess={fetchData}/>
+                <SubjectAdd onSuccess={fetchData} />
               </span>
             </div>
           )}
@@ -327,8 +331,12 @@ const Subject = () => {
               {/* <MenuItem onClick={() => navigate(`/subject/view/${selectedId}`)}>
                 View
               </MenuItem> */}
-              <MenuItem >
-                <SubjectEdit onSuccess={fetchData} id={selectedId} handleMenuClose={handleMenuClose}/>
+              <MenuItem>
+                <SubjectEdit
+                  onSuccess={fetchData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
