@@ -36,19 +36,22 @@ const AddcourseDetail = forwardRef(
     const userName = localStorage.getItem("userName");
     console.log("selectedRow", selectedRow);
     console.log("selectedRowData", selectedRowData);
-    console.log("FormData", formData);
+    console.log("FormData", formData.centerId);
 
     const columns = useMemo(
       () => [
         {
           accessorKey: "id",
           enableHiding: false,
+          enableSorting: false,
           size: 50,
           header: "",
           Cell: ({ row }) => (
-            <div style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center", cursor: "pointer" }}>
               <input
                 type="radio"
+                style={{ cursor: "pointer" }}
+                className="form-check-input pointer"
                 name="courseSelection"
                 onClick={() => handleRowSelect(row.original)}
               />
@@ -64,6 +67,23 @@ const AddcourseDetail = forwardRef(
           size: 40,
           cell: ({ cell }) => (
             <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+          ),
+        },
+        {
+          accessorKey: "availableSlots",
+          enableHiding: false,
+          header: "Available Slots",
+          size: 50,
+          Cell: ({ cell }) => (
+            <div className="d-flex justify-content-center">
+              {cell.getValue() ? (
+                <span className="badge rounded-pill text-bg-success">
+                  {cell.getValue()}
+                </span>
+              ) : (
+                <span className="badge rounded-pill text-bg-danger">0</span>
+              )}
+            </div>
           ),
         },
         {
@@ -95,21 +115,6 @@ const AddcourseDetail = forwardRef(
           header: "Days",
           size: 50,
         },
-        {
-          accessorKey: "availableSlots",
-          enableHiding: false,
-          header: "Available Slots",
-          size: 50,
-          Cell: ({ cell }) =>
-            cell.getValue() ? (
-              <span className="badge rounded-pill text-bg-success">
-                {cell.getValue()}
-              </span>
-            ) : (
-              ""
-            ),
-        },
-
         {
           accessorKey: "createdBy",
           header: "Created By",
@@ -275,7 +280,7 @@ const AddcourseDetail = forwardRef(
 
       try {
         const response = await api.get(
-          `/getAllScheduleTeachers/${formData.centerId}`,
+          `/getCourseClassListingTeachers/${formData.centerId}`,
           { params }
         );
         setDatas(response.data);
@@ -412,7 +417,7 @@ const AddcourseDetail = forwardRef(
     }));
 
     return (
-      <div className="container-fluid">
+      <div className="container-fluid p-0">
         <form
           onSubmit={formik.handleSubmit}
           onKeyDown={(e) => {
@@ -423,7 +428,7 @@ const AddcourseDetail = forwardRef(
         >
           <div className="border-0 mb-5">
             <div className="mb-5">
-              <div className="border-0 my-2 px-2">
+              <div className="border-0 my-2">
                 <p class="headColor">Course Detail</p>
                 <div className="row mt-2">
                   <div className="col-md-4">

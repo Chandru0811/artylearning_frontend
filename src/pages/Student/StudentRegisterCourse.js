@@ -58,12 +58,15 @@ function StudentRegisterCourse() {
       {
         accessorKey: "id",
         enableHiding: false,
+        enableSorting: false,
         size: 50,
         header: "",
         Cell: ({ row }) => (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", cursor: "pointer" }}>
             <input
               type="radio"
+              style={{ cursor: "pointer" }}
+              className="form-check-input pointer"
               name="courseSelection"
               onClick={() => handleRowSelect(row.original)}
             />
@@ -82,11 +85,28 @@ function StudentRegisterCourse() {
         ),
       },
       {
+        accessorKey: "availableSlots",
+        enableHiding: false,
+        header: "Available Slots",
+        size: 50,
+        Cell: ({ cell }) => (
+          <div className="d-flex justify-content-center">
+            {cell.getValue() ? (
+              <span className="badge rounded-pill text-bg-success">
+                {cell.getValue()}
+              </span>
+            ) : (
+              <span className="badge rounded-pill text-bg-danger">0</span>
+            )}
+          </div>
+        ),
+      },
+      {
         accessorKey: "course",
         enableHiding: false,
         header: "Course",
       },
-      { accessorKey: "batch", enableHiding: false, header: "Batch", size: 50, },
+      { accessorKey: "batch", enableHiding: false, header: "Batch", size: 50 },
       {
         accessorKey: "startDate",
         enableHiding: false,
@@ -105,21 +125,6 @@ function StudentRegisterCourse() {
         header: "Days",
         size: 50,
       },
-      {
-        accessorKey: "availableSlots",
-        enableHiding: false,
-        header: "Available Slots",
-        size: 50,
-        Cell: ({ cell }) =>
-          cell.getValue() ? (
-            <span className="badge rounded-pill text-bg-success">
-              {cell.getValue()}
-            </span>
-          ) : (
-            ""
-          ),
-      },
-
       {
         accessorKey: "createdBy",
         header: "Created By",
@@ -291,14 +296,17 @@ function StudentRegisterCourse() {
       params.day = formik.values.days;
     }
 
-    if (formik.values.batchId !== "") {
-      params.batchId = formik.values.batchId;
+    if (formik.values.batchs !== "") {
+      params.batchs = formik.values.batchs;
     }
 
     try {
-      const response = await api.get(`/getAllScheduleTeachers/${centerId}`, {
-        params,
-      });
+      const response = await api.get(
+        `/getCourseClassListingTeachers/${centerId}`,
+        {
+          params,
+        }
+      );
       setDatas(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -309,7 +317,7 @@ function StudentRegisterCourse() {
 
   useEffect(() => {
     getData();
-  }, [formik.values.courseId, formik.values.batchId, formik.values.days]);
+  }, [formik.values.courseId, formik.values.batchs, formik.values.days]);
 
   useEffect(() => {
     const getData = async () => {
@@ -585,10 +593,10 @@ function StudentRegisterCourse() {
               </div>
               <div className="col-md-4 d-flex">
                 <select
-                  {...formik.getFieldProps("batchId")}
+                  {...formik.getFieldProps("batchs")}
                   className="form-select"
-                  id="batchId"
-                  name="batchId"
+                  id="batchs"
+                  name="batchs"
                 >
                   <option value="">Select Batch</option>
                   {batchData &&
@@ -617,7 +625,7 @@ function StudentRegisterCourse() {
                         packageName: "",
                         courseId: "",
                         days: "",
-                        batchId: "",
+                        batchs: "",
                       },
                     })
                   }

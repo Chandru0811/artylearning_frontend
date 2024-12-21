@@ -54,7 +54,7 @@ const Student = () => {
         header: "",
         enableHiding: false,
         enableSorting: false,
-        size: 20,
+        size: 10,
         Cell: ({ cell }) => (
           <IconButton
             onClick={(e) => {

@@ -104,7 +104,7 @@ const EditStudentRelation = forwardRef(
           if (response.data.studentRelationModels?.length) {
             const studentInfo = response.data.studentRelationModels[0];
             formik.setValues({
-              centerId: studentInfo.studentRelationCenter,
+              studentRelationCenter: studentInfo.studentRelationCenter,
               StudentRelationStudentName:
                 studentInfo.studentRelationStudentName,
               studentRelation: studentInfo.studentRelation,

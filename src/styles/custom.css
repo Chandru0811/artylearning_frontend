@@ -970,6 +970,10 @@ input.searchInputG:hover {
   margin-bottom: 5px;
 }
 
+.fc .fc-daygrid-more-link{
+  border-radius: 7px !important;
+}
+
 .popover-text-wrapper {
   max-width: 200px;
   overflow: hidden;
@@ -1068,13 +1072,15 @@ table.dataTable.display > tbody > tr > th {
   padding: 15px 20px !important;
 }
 
-/* tbody, td, tfoot, th, thead, tr {
-  border-top: none !important;
-} */
+.css-aixiz9-MuiButtonBase-root-MuiIconButton-root{
+  color: #a09f9ff6 !important;
+}
+
 .breadcrumb-separator {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
 }
+
 .badges-Green {
   background-color: #287f71 !important;
   font-weight: 400;
