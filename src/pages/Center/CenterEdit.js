@@ -52,12 +52,7 @@ const validationSchema = Yup.object().shape({
     .typeError("*Must be a number")
     .required("*File is required")
     .positive("*Must be a positive number")
-    .test(
-      "max-two-decimals",
-      "*Must have at most two decimal places",
-      (value) =>
-        value === undefined || /^\d+(\.\d{1,2})?$/.test(value.toString())
-    ),
+    .integer("*Must be a whole number"),
 });
 
 function CenterEdit() {

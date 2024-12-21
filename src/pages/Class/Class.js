@@ -306,6 +306,7 @@ const Class = () => {
                 onChange={handleFilterChange}
                 value={filters.centerId}
               >
+                <option >Select the centre</option>
                 {centerData?.map((center) => (
                   <option key={center.id} value={center.id} selected>
                     {center.centerNames}

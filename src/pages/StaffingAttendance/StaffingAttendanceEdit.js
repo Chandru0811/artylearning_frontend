@@ -154,6 +154,7 @@ function StaffingAttendanceEdit() {
       }
 
       try {
+        setLoadIndicator(true)
         const response = await api.put(`/updateUserAttendance/${id}`, payload, {
           headers: {
             "Content-Type": "application/json",
@@ -224,8 +225,8 @@ function StaffingAttendanceEdit() {
         const formattedResponseData = {
           ...response.data,
           date: response.data.date.substring(0, 10),
-          checkIn: response.data.checkIn.substring(0, 5),
-          checkOut: response.data.checkOut.substring(0, 5),
+          checkIn: response.data?.checkIn?.slice(0, 5),
+          checkOut: response.data?.checkOut?.slice(0, 5),
         };
         formik.setValues(formattedResponseData);
         fetchUserName(response.data.centerId);
