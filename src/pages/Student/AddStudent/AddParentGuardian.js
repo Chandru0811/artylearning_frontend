@@ -40,12 +40,14 @@ const AddParentGuardian = forwardRef(
     const userName = localStorage.getItem("userName");
     const [parentDetailIds, setParentDetailIds] = useState([]);
     const [parentDetailId, setParentDetailId] = useState(null);
-    console.log("object1", parentDetailIds)
-    console.log("object2", parentDetailId)
+    const [profileImage, setProfileImage] = useState(null);
+    console.log("object1", parentDetailIds);
+    console.log("object2", parentDetailId);
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
-    const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] = useState(null);
+    const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
+      useState(null);
 
     console.log("FormData is ", formData);
 
@@ -53,18 +55,18 @@ const AddParentGuardian = forwardRef(
       initialValues: {
         parentInformation: formData.parentInformation
           ? formData.parentInformation.map((parent) => ({
-            parentNames: parent.parentNames || "",
-            parentDateOfBirths: parent.parentDateOfBirths || "",
-            emails: parent.emails || "",
-            relations: parent.relations || "",
-            occupations: parent.occupations || "",
-            files: null || "",
-            passwords: parent.passwords || "",
-            mobileNumbers: parent.mobileNumbers || "",
-            postalCodes: parent.postalCodes || "",
-            addresses: parent.addresses || "",
-            primaryContacts: parent.primaryContacts || "",
-          }))
+              parentNames: parent.parentNames || "",
+              parentDateOfBirths: parent.parentDateOfBirths || "",
+              emails: parent.emails || "",
+              relations: parent.relations || "",
+              occupations: parent.occupations || "",
+              files: null || "",
+              passwords: parent.passwords || "",
+              mobileNumbers: parent.mobileNumbers || "",
+              postalCodes: parent.postalCodes || "",
+              addresses: parent.addresses || "",
+              primaryContacts: parent.primaryContacts || "",
+            }))
           : [],
       },
       validationSchema: validationSchema,
@@ -111,7 +113,7 @@ const AddParentGuardian = forwardRef(
                 `primaryContacts`,
                 index === selectedPrimaryContactIndex ? true : false
               );
-              console.log("file",file)
+              console.log("file", file);
             });
 
             // If parentDetailId exists, make PUT request (update)
@@ -163,7 +165,7 @@ const AddParentGuardian = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -195,9 +197,12 @@ const AddParentGuardian = forwardRef(
             const leadData = response.data;
             console.log("Lead Data", leadData);
             if (!formData.parentInformation) {
-
-              const primaryContactMother = leadData.primaryContactMother ? true : false;
-              const primaryContactFather = leadData.primaryContactFather ? true : false;
+              const primaryContactMother = leadData.primaryContactMother
+                ? true
+                : false;
+              const primaryContactFather = leadData.primaryContactFather
+                ? true
+                : false;
               formik.setFieldValue("parentInformation", [
                 {
                   parentNames: leadData.mothersFullName || "",
@@ -252,18 +257,20 @@ const AddParentGuardian = forwardRef(
       const primaryContactIndex = formData.parentInformation?.findIndex(
         (parent) => parent.primaryContacts === true
       );
-      setSelectedPrimaryContactIndex(primaryContactIndex >= 0 ? primaryContactIndex : 0);
+      setSelectedPrimaryContactIndex(
+        primaryContactIndex >= 0 ? primaryContactIndex : 0
+      );
       // Default to 0 if no parent has primaryContacts set to true
     }, [formData.parentInformation]);
 
     const getData = async () => {
       setLoadIndicators(true);
       try {
-        const response = await api.get(`/getAllStudentById/${formData.student_id}`);
+        const response = await api.get(
+          `/getAllStudentById/${formData.student_id}`
+        );
         setParentDetailId(response.data.studentParentsDetails[0].id);
-        const studentData = response.data;
-        console.log("getAllStudentById : ", studentData);
-
+        setProfileImage(response.data.studentParentsDetails[0].profileImage);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -548,6 +555,18 @@ const AddParentGuardian = forwardRef(
                               MB
                             </small>
                           </p>
+                          {profileImage ? (
+                            <img
+                              src={profileImage}
+                              alt="Profile Preview"
+                              style={{
+                                width: "100px",
+                                height: "100px",
+                              }}
+                            />
+                          ) : (
+                            <></>
+                          )}
                         </div>
                         <div className="text-start">
                           <label htmlFor="" className="mb-1 fw-medium">

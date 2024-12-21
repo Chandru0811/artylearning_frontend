@@ -400,7 +400,7 @@ const EditEmergencyContact = forwardRef(
                                 }}
                               />
                             ) : (
-                              <div>{row.personProfile || ""}</div>
+                             <></>
                             )}
                           </div>
                         </div>
