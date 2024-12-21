@@ -1043,16 +1043,6 @@ input.searchInputG:hover {
   justify-content: left;
 }
 
-/* data table */
-/* tbody,
-td,
-tfoot,
-th,
-thead,
-th {
-  border-top: 1px solid #e31010;
-} */
-
 .dataTables_wrapper .dataTables_length {
   padding-left: 20px !important;
   padding-bottom: 10px !important;

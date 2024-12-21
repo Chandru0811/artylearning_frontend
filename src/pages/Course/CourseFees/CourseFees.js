@@ -82,11 +82,6 @@ const CourseFees = () => {
         header: "Weekday Fees",
       },
       {
-        accessorKey: "weekendFee",
-        enableHiding: false,
-        header: "weekend Fees",
-      },
-      {
         accessorKey: "taxType",
         enableHiding: false,
         header: "Tax Type",

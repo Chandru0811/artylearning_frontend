@@ -16,8 +16,9 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 const Staff = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
-    staffId: "",
+    country: "",
     staffName: "",
+    teacherType: "",
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -200,7 +201,7 @@ const Staff = () => {
   };
 
   const clearFilter = () => {
-    setFilters({ staffId: "", staffName: "" });
+    setFilters({ country: "", staffName: "", teacherType: "" });
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
@@ -209,12 +210,15 @@ const Staff = () => {
     return data.filter((item) => {
       const staffIdMatch = item.teacherId
         ?.toLowerCase()
-        .includes(filters.staffId.toLowerCase());
+        .includes(filters.country.toLowerCase());
       const staffNameMatch = item.teacherName
         ?.toLowerCase()
         .includes(filters.staffName.toLowerCase());
+      const staffJobMatch = item.teacherType
+        ?.toLowerCase()
+        .includes(filters.teacherType.toLowerCase());
 
-      return staffIdMatch && staffNameMatch;
+      return staffIdMatch && staffNameMatch && staffJobMatch;
     });
   }, [data, filters]);
 
@@ -262,9 +266,9 @@ const Staff = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                name="staffId"
-                placeholder="Staff Id"
-                value={filters.staffId}
+                name="staffName"
+                placeholder="Staff Name"
+                value={filters.staffName}
                 onChange={handleFilterChange}
               />
             </div>
@@ -273,11 +277,41 @@ const Staff = () => {
                 type="text"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                name="staffName"
-                placeholder="Staff Name"
-                value={filters.staffName}
+                name="country"
+                placeholder="Country"
+                value={filters.country}
                 onChange={handleFilterChange}
               />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                type="text"
+                className="form-select form-select-sm center_list"
+                style={{ width: "160px" }}
+                name="teacherType"
+                value={filters.teacherType}
+              >
+                <option value="" selected>
+                  Select Job Type
+                </option>
+                <option value="Permanent">Permanent</option>
+                <option value="Temporary">Temporary</option>
+                <option value="Intern">Intern</option>
+              </select>
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                type="text"
+                className="form-select form-select-sm center_list"
+                style={{ width: "160px" }}
+                name="status"
+              >
+                <option value="" selected>
+                  Select a status
+                </option>
+                <option value={"ACTIVE"}>Active</option>
+                <option value={"RESIGNED"}>Resigned</option>
+              </select>
             </div>
 
             <div className="form-group mb-0 ms-2 mb-1 ">
@@ -344,7 +378,7 @@ const Staff = () => {
                     updatedBy: false,
                   },
                   columnFilters: [
-                    { id: "teacherId", value: filters.staffId },
+                    { id: "teacherId", value: filters.country },
                     { id: "teacherName", value: filters.staffName },
                   ],
                 }}

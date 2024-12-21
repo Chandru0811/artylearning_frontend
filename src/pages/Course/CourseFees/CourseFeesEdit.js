@@ -5,11 +5,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
 } from "@mui/material";
 import * as Yup from "yup";
 import api from "../../../config/URL";
@@ -25,7 +20,7 @@ const validationSchema = Yup.object({
   status: Yup.string().required("*Status is required"),
 });
 
-function CourseFeesEdit({ id, onSuccess,handleMenuClose }) {
+function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);
@@ -121,145 +116,120 @@ function CourseFeesEdit({ id, onSuccess,handleMenuClose }) {
         }}
       >
         Edit
-      </span> 
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
+      </span>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle>Edit Course Fees</DialogTitle>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <div className="container">
               <div className="row">
                 <div className="col-md-6 col-12 mb-3">
-                  <TextField
-                    label="Effective Date"
+                  <label>Effective Date</label>
+                  <input
                     type="date"
-                    onKeyDown={(e) => e.stopPropagation()}
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
+                    className="form-control"
                     {...formik.getFieldProps("effectiveDate")}
-                    error={
-                      formik.touched.effectiveDate &&
-                      Boolean(formik.errors.effectiveDate)
-                    }
-                    helperText={
-                      formik.touched.effectiveDate &&
-                      formik.errors.effectiveDate
-                    }
                   />
-                </div>
-
-                <div className="col-md-6 col-12 mb-3">
-                  <FormControl fullWidth>
-                    <InputLabel>Package</InputLabel>
-                    <Select
-                      {...formik.getFieldProps("packageId")}
-                      error={
-                        formik.touched.packageId &&
-                        Boolean(formik.errors.packageId)
-                      }
-                    >
-                      <MenuItem value="">
-                        <em>Select Package</em>
-                      </MenuItem>
-                      {packageData &&
-                        packageData.map((packages) => (
-                          <MenuItem key={packages.id} value={packages.id}>
-                            {packages.packageNames}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                    {formik.touched.packageId && formik.errors.packageId && (
+                  {formik.touched.effectiveDate &&
+                    formik.errors.effectiveDate && (
                       <div style={{ color: "red", fontSize: "0.8rem" }}>
-                        {formik.errors.packageId}
+                        {formik.errors.effectiveDate}
                       </div>
                     )}
-                  </FormControl>
                 </div>
 
                 <div className="col-md-6 col-12 mb-3">
-                  <TextField
-                    label="Weekday Fee"
-                    fullWidth
-                    onKeyDown={(e) => e.stopPropagation()}
+                  <label>Package</label>
+                  <select
+                    className="form-select"
+                    {...formik.getFieldProps("packageId")}
+                  >
+                    <option value="">Select Package</option>
+                    {packageData &&
+                      packageData.map((packages) => (
+                        <option key={packages.id} value={packages.id}>
+                          {packages.packageNames}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.packageId && formik.errors.packageId && (
+                    <div style={{ color: "red", fontSize: "0.8rem" }}>
+                      {formik.errors.packageId}
+                    </div>
+                  )}
+                </div>
+
+                <div className="col-md-6 col-12 mb-3">
+                  <label>Weekday Fee</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     {...formik.getFieldProps("weekdayFee")}
-                    error={
-                      formik.touched.weekdayFee &&
-                      Boolean(formik.errors.weekdayFee)
-                    }
-                    helperText={
-                      formik.touched.weekdayFee && formik.errors.weekdayFee
-                    }
                   />
+                  {formik.touched.weekdayFee && formik.errors.weekdayFee && (
+                    <div style={{ color: "red", fontSize: "0.8rem" }}>
+                      {formik.errors.weekdayFee}
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-md-6 col-12 mb-3">
-                  <TextField
-                    label="Weekend Fee"
-                    fullWidth
+                  <label>Weekend Fee</label>
+                  <input
+                    type="text"
+                    className="form-control"
                     {...formik.getFieldProps("weekendFee")}
-                    error={
-                      formik.touched.weekendFee &&
-                      Boolean(formik.errors.weekendFee)
-                    }
-                    helperText={
-                      formik.touched.weekendFee && formik.errors.weekendFee
-                    }
                   />
+                  {formik.touched.weekendFee && formik.errors.weekendFee && (
+                    <div style={{ color: "red", fontSize: "0.8rem" }}>
+                      {formik.errors.weekendFee}
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-md-6 col-12 mb-3">
-                  <FormControl fullWidth>
-                    <InputLabel>Tax Type</InputLabel>
-                    <Select
-                      {...formik.getFieldProps("taxType")}
-                      error={
-                        formik.touched.taxType && Boolean(formik.errors.taxType)
-                      }
-                    >
-                      <MenuItem value="">
-                        <em>Select Tax Type</em>
-                      </MenuItem>
-                      {taxData &&
-                        taxData.map((tax) => (
-                          <MenuItem key={tax.id} value={tax.id}>
-                            {tax.taxType}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                    {formik.touched.taxType && formik.errors.taxType && (
-                      <div style={{ color: "red", fontSize: "0.8rem" }}>
-                        {formik.errors.taxType}
-                      </div>
-                    )}
-                  </FormControl>
+                  <label>Tax Type</label>
+                  <select
+                    className="form-select"
+                    {...formik.getFieldProps("taxType")}
+                  >
+                    <option value="">Select Tax Type</option>
+                    {taxData &&
+                      taxData.map((tax) => (
+                        <option key={tax.id} value={tax.id}>
+                          {tax.taxType}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.taxType && formik.errors.taxType && (
+                    <div style={{ color: "red", fontSize: "0.8rem" }}>
+                      {formik.errors.taxType}
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-md-6 col-12 mb-3">
-                  <FormControl fullWidth>
-                    <InputLabel>Status</InputLabel>
-                    <Select
-                      {...formik.getFieldProps("status")}
-                      error={
-                        formik.touched.status && Boolean(formik.errors.status)
-                      }
-                    >
-                      <MenuItem value="">
-                        <em>Select Status</em>
-                      </MenuItem>
-                      <MenuItem value="ACTIVE">Active</MenuItem>
-                      <MenuItem value="INACTIVE">Inactive</MenuItem>
-                    </Select>
-                    {formik.touched.status && formik.errors.status && (
-                      <div style={{ color: "red", fontSize: "0.8rem" }}>
-                        {formik.errors.status}
-                      </div>
-                    )}
-                  </FormControl>
+                  <label>Status</label>
+                  <select
+                    className="form-select"
+                    {...formik.getFieldProps("status")}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+                  </select>
+                  {formik.touched.status && formik.errors.status && (
+                    <div style={{ color: "red", fontSize: "0.8rem" }}>
+                      {formik.errors.status}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </DialogContent>
           <DialogActions>
-            <button type="button"
+            <button
+              type="button"
               className="btn btn-sm btn-border bg-light text-dark"
               onClick={handleClose}
             >

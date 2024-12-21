@@ -212,7 +212,7 @@ const EditTermsAndCondition = forwardRef(
             <div className="mb-5 ">
               <div className="border-0 my-2 px-2">
                 <p class="headColor">Terms and Conditions</p>
-                <div className="container py-3">
+                <div className="container-fluid py-3">
                   <div className="row">
                     {/* <div className="col-md-6 col-12">
                       {!data.parentSignature || isEditing ? (

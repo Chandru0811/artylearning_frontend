@@ -54,7 +54,7 @@ function LeaveAdminView() {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to="/center" className="custom-breadcrumb">
+          <Link to="/leaveadmin" className="custom-breadcrumb">
             &nbsp;Leave
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
@@ -82,7 +82,7 @@ function LeaveAdminView() {
             </Link>
           </div>
         </div>
-        <div className="container">
+        <div className="container-fluid">
           <div className="row mt-5">
             <div className="col-md-6 col-12">
               <div className="row mb-3">

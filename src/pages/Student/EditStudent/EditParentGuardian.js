@@ -14,7 +14,7 @@ const EditParentGuardian = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const [data, setData] = useState({});
     const [primaryContact, setPrimaryContact] = useState(false);
-      const userName  = localStorage.getItem('userName');
+    const userName = localStorage.getItem("userName");
 
     // console.log("Api Datas:",data);
 
@@ -26,8 +26,8 @@ const EditParentGuardian = forwardRef(
         // console.log("Response data", response.data.studentParentsDetails.length)
         if (response.data.studentParentsDetails.length === 0) {
           setPrimaryContact(true);
-        }else{
-          setPrimaryContact(false)
+        } else {
+          setPrimaryContact(false);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -45,13 +45,13 @@ const EditParentGuardian = forwardRef(
     }));
 
     useEffect(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-     }, []);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, []);
 
     return (
       <div className="container-fluid">
         <div className="container-fluid">
-          <div className="container">
+          <div className="container-fluid">
             <div className="row">
               <div className="col-md-12 col-12 mt-4">
                 <h5 className="headColor mb-3">Parents / Guardian Details</h5>

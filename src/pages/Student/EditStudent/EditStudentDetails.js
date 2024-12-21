@@ -33,7 +33,8 @@ const validationSchema = Yup.object().shape({
   //   "*Pre-Assessment Result is required!"
   // ),
   remark: Yup.string()
-    .max(200, "*The maximum length is 200 characters").notRequired(),
+    .max(200, "*The maximum length is 200 characters")
+    .notRequired(),
   medicalCondition: Yup.string().required(
     "*Medical Condition Result is required"
   ),
@@ -50,8 +51,7 @@ const EditStudentDetails = forwardRef(
     const [studentData, setStudentData] = useState(null);
     const [raceData, setRaceData] = useState(null);
     const [nationalityData, setNationalityData] = useState(null);
-    const userName = localStorage.getItem('userName');
-
+    const userName = localStorage.getItem("userName");
 
     const fetchData = async () => {
       try {
@@ -108,7 +108,6 @@ const EditStudentDetails = forwardRef(
         allowMagazine: false || "",
         allowSocialMedia: false || "",
         updatedBy: userName,
-
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
@@ -158,7 +157,7 @@ const EditStudentDetails = forwardRef(
         }
       },
       validateOnChange: false, // Enable validation on change
-      validateOnBlur: true,   // Enable validation on blur
+      validateOnBlur: true, // Enable validation on blur
     });
 
     // Function to scroll to the first error field
@@ -211,15 +210,18 @@ const EditStudentDetails = forwardRef(
 
     return (
       <div className="container-fluid">
-        <form onSubmit={formik.handleSubmit} onKeyDown={(e) => {
-          if (e.key === 'Enter' && !formik.isSubmitting) {
-            e.preventDefault();  // Prevent default form submission
-          }
-        }}>
+        <form
+          onSubmit={formik.handleSubmit}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !formik.isSubmitting) {
+              e.preventDefault(); // Prevent default form submission
+            }
+          }}
+        >
           <div className=" border-0 mb-5">
             <div className="mb-3">
               <p class="headColor">Student Details</p>
-              <div className="container">
+              <div className="container-fluid">
                 <div className="row mt-3">
                   <div className="col-lg-6 col-md-6 col-12">
                     <div className="text-start mt-2">
@@ -659,7 +661,6 @@ const EditStudentDetails = forwardRef(
                       height: "7rem",
                     }}
                     maxLength={200}
-
                   />
                 </div>
 

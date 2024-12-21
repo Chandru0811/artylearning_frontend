@@ -8,11 +8,11 @@ import {
   IconButton,
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import GlobalDelete from "../../../components/common/GlobalDelete";
 import { MaterialReactTable } from "material-react-table";
 import api from "../../../config/URL";
 import CurriculumOutletAdd from "./CurriculumOutletAdd";
 import CurriculumOutletEdit from "./CurriculumOutletEdit";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 function CurriculumOutlet() {
   const { id } = useParams();
@@ -256,15 +256,15 @@ function CurriculumOutlet() {
                 Course Curriculum
               </MenuItem>
               <MenuItem>
-              <CurriculumOutletEdit
-                onSuccess={getData}
-                id={selectedId}
-                handleMenuClose={handleMenuClose}
-              />
+                <CurriculumOutletEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteCourse/${selectedId}`}
+                  path={`/deleteCourseCurriculumOutlet/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />

@@ -184,7 +184,7 @@ const EditEmergencyContact = forwardRef(
         >
           <div className="border-0 mb-5">
             <p className="headColor">Emergency Contact</p>
-            <div className="container py-3">
+            <div className="container-fluid py-3">
               <div className="row mt-3">
                 <div className="col-lg-6 col-md-6 col-12">
                   <div className="text-start mt-4">
@@ -240,7 +240,7 @@ const EditEmergencyContact = forwardRef(
                     <p className="headColor">
                       Authorized Person to Take Child from Class
                     </p>
-                    <div className="container py-3">
+                    <div className="container-fluid py-3">
                       <div className="row mt-3">
                         {/* Left Section */}
                         <div className="col-lg-6 col-md-6 col-12">
@@ -388,14 +388,14 @@ const EditEmergencyContact = forwardRef(
                                 src={
                                   row.personProfile ===
                                   "Still file path not created in aws"
-                                    ? "" 
+                                    ? ""
                                     : row.personProfile
                                 }
                                 alt="Profile"
                                 style={{ width: "60%" }}
                                 className="img-fluid rounded"
                                 onError={(e) => {
-                                  e.target.onerror = null; 
+                                  e.target.onerror = null;
                                   e.target.src = "";
                                 }}
                               />

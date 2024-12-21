@@ -194,7 +194,7 @@ const CourseDeposit = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li className="breadcrumb-item active" aria-current="page">
-          Deposit
+          Course Deposit
         </li>
       </ol>
       <div className="card">
@@ -254,11 +254,11 @@ const CourseDeposit = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-              <CourseDepositEdit
-                onSuccess={getData}
-                id={selectedId}
-                handleMenuClose={handleMenuClose}
-              />
+                <CourseDepositEdit
+                  onSuccess={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
