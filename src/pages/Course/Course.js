@@ -358,6 +358,7 @@ const Course = () => {
                 name="centerId"
                 value={filters.centerId}
               >
+                <option value="">All Center</option>
                 {centerData?.map((center) => (
                   <option key={center.id} value={center.id}>
                     {center.centerNames}

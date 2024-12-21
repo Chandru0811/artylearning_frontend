@@ -150,8 +150,8 @@ const MyMessages = () => {
 
   return (
     <div>
-      <div className="container my-3">
-        <ol className="breadcrumb my-3 px-1">
+      <div className="container-fluid my-3">
+        <ol className="breadcrumb my-3 px-2">
           <li>
             <Link to="/" className="custom-breadcrumb">
               Home

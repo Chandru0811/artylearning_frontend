@@ -62,10 +62,10 @@ const CourseDeposit = () => {
           row.original.status === "active" ||
           row.original.status === "Active" ? (
             <span className="badge badges-Green fw-light">Active</span>
-          ) : row.original.status === "In Active" ||
+          ) : row.original.status === "INACTIVE" ||
             row.original.status === "Inactive" ||
-            row.original.status === "string" ? (
-            <span className="badge badges-orange fw-light">In Active</span>
+            row.original?.status === "In Actice" ? (
+            <span className="badge badges-red fw-light">In Active</span>
           ) : null,
       },
       {
@@ -262,7 +262,7 @@ const CourseDeposit = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteCourse/${selectedId}`}
+                  path={`/deleteCourseDepositFees/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />

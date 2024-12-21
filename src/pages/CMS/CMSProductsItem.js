@@ -179,7 +179,7 @@ const CMSProductsItem = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container center p-0">
+    <div className="container-fluid center p-2">
       <ol
         className="breadcrumb my-3 px-1"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -198,7 +198,7 @@ const CMSProductsItem = () => {
           Product Item
         </li>
       </ol>
- 
+
       <div className="card">
         <div
           className="mb-3 d-flex justify-content-between align-items-center p-1"
@@ -216,27 +216,25 @@ const CMSProductsItem = () => {
             </span>
           </div>
         </div>
-        <div className="container">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            {/* <h4>Product Item</h4> */}
-          </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end">
-            {storedScreens?.productImageSaveCreate && (
-              <CMSProductsItemAdd onSuccess={getData} />
-            )}
-            {storedScreens?.productImageSavePublish && (
-              <button
-                type="button"
-                className="btn btn-sm custom-outline-danger border ms-2"
-                onClick={PublishProductImageSection}
-              >
-                Publish
-              </button>
-            )}
+        <div className="container-fluid">
+          <div className="row p-1">
+            <div className="col-md-6 col-12">{/* <h4>Product Item</h4> */}</div>
+            <div className="col-md-6 col-12 d-flex justify-content-end">
+              {storedScreens?.productImageSaveCreate && (
+                <CMSProductsItemAdd onSuccess={getData} />
+              )}
+              {storedScreens?.productImageSavePublish && (
+                <button
+                  type="button"
+                  className="btn btn-sm custom-outline-danger border ms-2"
+                  onClick={PublishProductImageSection}
+                >
+                  Publish
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -279,7 +277,11 @@ const CMSProductsItem = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <CMSProductsItemEdit getData={getData} id={selectedId} handleMenuClose={handleMenuClose} />
+                <CMSProductsItemEdit
+                  getData={getData}
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

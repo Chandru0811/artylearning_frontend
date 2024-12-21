@@ -181,7 +181,7 @@ const CMSBlog = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container center p-0">
+    <div className="container-fluid center p-2">
       <ol
         className="breadcrumb my-3 px-1"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -217,7 +217,7 @@ const CMSBlog = () => {
             </span>
           </div>
         </div>
-        <div className="container">
+        <div className="container-fluid">
           <div className="row p-1">
             <div className="col-md-6 col-12">{/* <h4>Blogs</h4> */}</div>
             <div className="col-md-6 col-12 d-flex justify-content-end">

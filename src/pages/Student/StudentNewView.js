@@ -125,29 +125,24 @@ function StudentNewView() {
 
   const handleGeneratePDF = async () => {
     const pdf = new jsPDF({
-      orientation: "p", // 'p' for portrait, 'l' for landscape
+      orientation: "p",
       unit: "px",
-      format: "a3", // page format
+      format: "a3",
     });
 
-    // Helper function to capture table as image and add to PDF
     const addTableToPDF = async (tableRef, pageNumber) => {
       const table = tableRef.current;
 
       try {
         table.style.visibility = "visible";
         table.style.display = "block";
-        // Generate canvas from table
         const canvas = await html2canvas(table, { scale: 2 });
 
-        // Convert canvas to PNG image data
         const imgData = canvas.toDataURL();
 
-        // Calculate PDF dimensions based on canvas
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-        // Add image to PDF
         if (pageNumber > 1) {
           pdf.addPage();
         }
@@ -159,12 +154,10 @@ function StudentNewView() {
       }
     };
 
-    // Add each table to PDF
-    await addTableToPDF(table1Ref, 1); // Add first table
-    await addTableToPDF(table2Ref, 2); // Add second table
+    await addTableToPDF(table1Ref, 1);
+    await addTableToPDF(table2Ref, 2);
 
-    // Save PDF
-    pdf.save("student-details.pdf");
+    pdf.save(`${data.studentName}-details.pdf`);
   };
 
   const handleClick = async () => {
@@ -573,21 +566,23 @@ function StudentNewView() {
             </div>
           </div>
           <div className="col-md-3 col-12 mb-3">
-            <div className="card mb-3">
-              <div className="withBorder">
+            <div
+              className="card mb-3 overflow-auto"
+              style={{ height: "190px" }}
+            >
+              <div
+                className="withBorder"
+                style={{
+                  position: "sticky",
+                  top: "0px",
+                  zIndex: "99",
+                  background: "#fff",
+                }}
+              >
                 <p className="fw-medium ms-3 my-2">
                   <FaUsers size={20} />
                   &nbsp;&nbsp;Family
                 </p>
-                {/* <p className="stdSettings mb-0 me-2">
-                  <FaPlus /> Parents/Guardians Info
-                </p>
-                <p className="stdSettings mt-1 mb-0 me-2">
-                  <FaPlus /> Change Main Contact
-                </p>
-                <p className="stdSettings my-1 me-2">
-                  <FaPlus /> Student Relation
-                </p> */}
               </div>
               <div style={{ padding: "10px" }}>
                 <hr className="mt-0 mb-2" />
@@ -619,13 +614,13 @@ function StudentNewView() {
               </div>
             </div>
 
-            <div className="card overflow-auto" style={{ height: "300px" }}>
+            <div className="card overflow-auto" style={{ height: "200px" }}>
               <div
                 className="withBorder"
                 style={{
                   position: "sticky",
                   top: "0px",
-                  zIndex: "999",
+                  zIndex: "99",
                   background: "#fff",
                 }}
               >
@@ -783,7 +778,9 @@ function StudentNewView() {
               Withdraw
             </button> */}
             {storedScreens?.endClassCreate && (
-              <Link to={`/student/view/endClass/${data.id}?centerId=${centerId}`}>
+              <Link
+                to={`/student/view/endClass/${data.id}?centerId=${centerId}`}
+              >
                 <button
                   className="btn btn-success btn-sm"
                   type="button"

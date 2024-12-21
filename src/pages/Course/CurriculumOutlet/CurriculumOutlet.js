@@ -264,7 +264,7 @@ function CurriculumOutlet() {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteCourseCurriculumOutlet/${selectedId}`}
+                  path={`/deleteCurriculumOutLet/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />

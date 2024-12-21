@@ -144,7 +144,8 @@ const RevenueReport = () => {
             label: item.label,
             data: item.data,
             borderColor: item.label === "Registration" ? "#287F71" : "#EB862A",
-            backgroundColor: item.label === "Registration" ? "#287F71" : "#EB862A",
+            backgroundColor:
+              item.label === "Registration" ? "#287F71" : "#EB862A",
             fill: false,
           })),
         },
@@ -159,7 +160,7 @@ const RevenueReport = () => {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
-      <div className="container">
+      <div className="container-fluid">
         <ol
           className="breadcrumb my-3"
           style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -190,61 +191,61 @@ const RevenueReport = () => {
               <span class="me-2 text-muted">Revenue Report</span>
             </div>
           </div>
-          <div className="container">
-        <div className="row my-5">
-          <div className="col-md-4 col-12">
-            <label className="form-label">Centre</label>
-            <select
-              className="form-select"
-              value={selectedCenterId}
-              onChange={handleCenterChange}
-            >
-              {centerData?.map((data) => (
-                <option key={data.id} value={data.id}>
-                  {data.centerNames}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="col-md-4 col-12">
-            <label className="form-label">Select Type</label>
-            <select
-              className="form-select"
-              value={selectedType}
-              onChange={handleTypeChange}
-            >
-              <option value="WEEKLY">Weekly</option>
-              <option value="MONTHLY">Monthly</option>
-            </select>
-          </div>
-          <div className="col-md-4 col-12">
-            {selectedType === "WEEKLY" ? (
-              <>
-                <label className="form-label">Select Week</label>
-                <input
-                  type="week"
-                  className="form-control"
-                  value={selectedWeek}
-                  onChange={(e) => setSelectedWeek(e.target.value)}
-                />
-              </>
-            ) : (
-              <>
-                <label className="form-label">Select Month</label>
-                <input
-                  type="month"
-                  className="form-control"
-                  value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(e.target.value)}
-                />
-              </>
-            )}
-          </div>
-        </div>
+          <div className="container-fluid">
+            <div className="row my-5">
+              <div className="col-md-4 col-12">
+                <label className="form-label">Centre</label>
+                <select
+                  className="form-select"
+                  value={selectedCenterId}
+                  onChange={handleCenterChange}
+                >
+                  {centerData?.map((data) => (
+                    <option key={data.id} value={data.id}>
+                      {data.centerNames}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-4 col-12">
+                <label className="form-label">Select Type</label>
+                <select
+                  className="form-select"
+                  value={selectedType}
+                  onChange={handleTypeChange}
+                >
+                  <option value="WEEKLY">Weekly</option>
+                  <option value="MONTHLY">Monthly</option>
+                </select>
+              </div>
+              <div className="col-md-4 col-12">
+                {selectedType === "WEEKLY" ? (
+                  <>
+                    <label className="form-label">Select Week</label>
+                    <input
+                      type="week"
+                      className="form-control"
+                      value={selectedWeek}
+                      onChange={(e) => setSelectedWeek(e.target.value)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <label className="form-label">Select Month</label>
+                    <input
+                      type="month"
+                      className="form-control"
+                      value={selectedMonth}
+                      onChange={(e) => setSelectedMonth(e.target.value)}
+                    />
+                  </>
+                )}
+              </div>
+            </div>
 
-        <div className="card p-4 mb-5">
-          <div className="row mt-5">
-            {/* <div className="col-md-6">
+            <div className="card p-4 mb-5">
+              <div className="row mt-5">
+                {/* <div className="col-md-6">
               <div className="p-1">
                 <label className="form-label">Course</label>
                 <select className="form-select" value={selectedCourseId} onChange={handleCourseChange}>
@@ -264,57 +265,57 @@ const RevenueReport = () => {
                 </select>
               </div>
             </div> */}
-            <div
-              className="col-md-6 d-flex align-items-center justify-content-center"
-              style={{ height: "450px" }}
-            >
-              <canvas id="lineChart" ref={lineChartCanvasRef}></canvas>
-            </div>
-            <div className="col-md-6" style={{ minHeight: "450px" }}>
-              <div className="row">
-                <div className="col-6 p-1">
-                  <label className="form-label">Course</label>
-                  <select
-                    className="form-select"
-                    value={selectedCourseId}
-                    onChange={handleCourseChange}
-                  >
-                    <option value="All">ALL</option>
-                    {courseData?.map((data) => (
-                      <option key={data.id} value={data.id}>
-                        {data.courseNames}
-                      </option>
-                    ))}
-                  </select>
+                <div
+                  className="col-md-6 d-flex align-items-center justify-content-center"
+                  style={{ height: "450px" }}
+                >
+                  <canvas id="lineChart" ref={lineChartCanvasRef}></canvas>
                 </div>
-                <div className="col-6 p-1">
-                  <label className="form-label">Subject</label>
-                  <select
-                    className="form-select"
-                    value={selectedSubjectId}
-                    onChange={handleSubjectChange}
-                  >
-                    <option value="All">ALL</option>
-                    {subjectData?.map((data) => (
-                      <option key={data.id} value={data.id}>
-                        {data.subjects}
-                      </option>
-                    ))}
-                  </select>
+                <div className="col-md-6" style={{ minHeight: "450px" }}>
+                  <div className="row">
+                    <div className="col-6 p-1">
+                      <label className="form-label">Course</label>
+                      <select
+                        className="form-select"
+                        value={selectedCourseId}
+                        onChange={handleCourseChange}
+                      >
+                        <option value="All">ALL</option>
+                        {courseData?.map((data) => (
+                          <option key={data.id} value={data.id}>
+                            {data.courseNames}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-6 p-1">
+                      <label className="form-label">Subject</label>
+                      <select
+                        className="form-select"
+                        value={selectedSubjectId}
+                        onChange={handleSubjectChange}
+                      >
+                        <option value="All">ALL</option>
+                        {subjectData?.map((data) => (
+                          <option key={data.id} value={data.id}>
+                            {data.subjects}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <ReactApexChart
+                    options={chartData.options}
+                    series={chartData.series}
+                    type="bar"
+                    height={350}
+                    key={selectedType}
+                  />
                 </div>
               </div>
-
-              <ReactApexChart
-                options={chartData.options}
-                series={chartData.series}
-                type="bar"
-                height={350}
-                key={selectedType}
-              />
             </div>
           </div>
-        </div>
-        </div>
         </div>
       </div>
     </div>

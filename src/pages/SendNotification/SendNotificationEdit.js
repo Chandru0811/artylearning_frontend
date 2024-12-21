@@ -273,7 +273,7 @@ function SendNotificationEdit() {
   }, []); // Ensure that classData is available before mapping classes
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <ol
         className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -306,7 +306,7 @@ function SendNotificationEdit() {
           }
         }}
       >
-           <div className="card">
+        <div className="card">
           <div
             className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
             style={{ background: "#f5f7f9" }}
@@ -339,172 +339,176 @@ function SendNotificationEdit() {
               </button>
             </div>
           </div>
-        <div className="container">
-          <div className="row ">
-            <div class="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Recipient<span class="text-danger">*</span>
-              </label>
-              <select
-                {...formik.getFieldProps("recipient")}
-                className={`form-select  ${
-                  formik.touched.recipient && formik.errors.recipient
-                    ? "is-invalid"
-                    : ""
-                }`}
-                name="recipient"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.recipient}
-              >
-                <option selected value="ALL">
-                  All
-                </option>
-                <option value="PARENTS">Parents</option>
-                <option value="TEACHERS">Teachers</option>
-              </select>
-              {formik.touched.recipient && formik.errors.recipient && (
-                <div className="invalid-feedback">
-                  {formik.errors.recipient}
-                </div>
-              )}
-            </div>
+          <div className="container-fluid">
+            <div className="row ">
+              <div class="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Recipient<span class="text-danger">*</span>
+                </label>
+                <select
+                  {...formik.getFieldProps("recipient")}
+                  className={`form-select  ${
+                    formik.touched.recipient && formik.errors.recipient
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  name="recipient"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.recipient}
+                >
+                  <option selected value="ALL">
+                    All
+                  </option>
+                  <option value="PARENTS">Parents</option>
+                  <option value="TEACHERS">Teachers</option>
+                </select>
+                {formik.touched.recipient && formik.errors.recipient && (
+                  <div className="invalid-feedback">
+                    {formik.errors.recipient}
+                  </div>
+                )}
+              </div>
 
-            <div class="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Title<span class="text-danger">*</span>
-              </label>
-              <input
-                {...formik.getFieldProps("messageTitle")}
-                className={`form-control  ${
-                  formik.touched.messageTitle && formik.errors.messageTitle
-                    ? "is-invalid"
-                    : ""
-                }`}
-                name="messageTitle"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.messageTitle}
-              ></input>
-              {formik.touched.messageTitle && formik.errors.messageTitle && (
-                <div className="invalid-feedback">
-                  {formik.errors.messageTitle}
-                </div>
-              )}
-            </div>
+              <div class="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Title<span class="text-danger">*</span>
+                </label>
+                <input
+                  {...formik.getFieldProps("messageTitle")}
+                  className={`form-control  ${
+                    formik.touched.messageTitle && formik.errors.messageTitle
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  name="messageTitle"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.messageTitle}
+                ></input>
+                {formik.touched.messageTitle && formik.errors.messageTitle && (
+                  <div className="invalid-feedback">
+                    {formik.errors.messageTitle}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Centre<span className="text-danger">*</span>
-              </label>
-              {centerOptions.length > 0 && (
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Centre<span className="text-danger">*</span>
+                </label>
+                {centerOptions.length > 0 && (
+                  <MultiSelect
+                    options={centerOptions}
+                    value={selectedCenters}
+                    onChange={(selected) => {
+                      setSelectedCenters(selected);
+                      formik.setFieldValue(
+                        "centerIds",
+                        selected.map((option) => option.value)
+                      );
+                    }}
+                    labelledBy="Select Centers"
+                    className={`form-multi-select ${
+                      formik.touched.centerIds && formik.errors.centerIds
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                  />
+                )}
+                {formik.touched.centerIds && formik.errors.centerIds && (
+                  <div className="invalid-feedback">
+                    {formik.errors.centerIds}
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Course<span className="text-danger">*</span>
+                </label>
                 <MultiSelect
-                  options={centerOptions}
-                  value={selectedCenters}
+                  options={courseOptions}
+                  value={selectedCourses}
                   onChange={(selected) => {
-                    setSelectedCenters(selected);
+                    setSelectedCourses(selected);
                     formik.setFieldValue(
-                      "centerIds",
+                      "courseIds",
                       selected.map((option) => option.value)
                     );
                   }}
-                  labelledBy="Select Centers"
+                  labelledBy="Select Courses"
                   className={`form-multi-select ${
-                    formik.touched.centerIds && formik.errors.centerIds
+                    formik.touched.courseIds && formik.errors.courseIds
                       ? "is-invalid"
                       : ""
                   }`}
                 />
-              )}
-              {formik.touched.centerIds && formik.errors.centerIds && (
-                <div className="invalid-feedback">
-                  {formik.errors.centerIds}
-                </div>
-              )}
-            </div>
+                {formik.touched.courseIds && formik.errors.courseIds && (
+                  <div className="invalid-feedback">
+                    {formik.errors.courseIds}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-2">
-              <label className="form-label">
-                Course<span className="text-danger">*</span>
-              </label>
-              <MultiSelect
-                options={courseOptions}
-                value={selectedCourses}
-                onChange={(selected) => {
-                  setSelectedCourses(selected);
-                  formik.setFieldValue(
-                    "courseIds",
-                    selected.map((option) => option.value)
-                  );
-                }}
-                labelledBy="Select Courses"
-                className={`form-multi-select ${
-                  formik.touched.courseIds && formik.errors.courseIds
-                    ? "is-invalid"
-                    : ""
-                }`}
-              />
-              {formik.touched.courseIds && formik.errors.courseIds && (
-                <div className="invalid-feedback">
-                  {formik.errors.courseIds}
-                </div>
-              )}
-            </div>
+              <div className="col-md-6 col-12 mb-2">
+                <label className="form-label">
+                  Class<span className="text-danger">*</span>
+                </label>
+                <MultiSelect
+                  options={classOptions}
+                  value={selectedClasses}
+                  onChange={(selected) => {
+                    setSelectedClasses(selected);
+                    formik.setFieldValue(
+                      "classIds",
+                      selected.map((option) => option.value)
+                    );
+                  }}
+                  labelledBy="Select Classes"
+                  className={`form-multi-select ${
+                    formik.touched.classIds && formik.errors.classIds
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+                {formik.touched.classIds && formik.errors.classIds && (
+                  <div className="invalid-feedback">
+                    {formik.errors.classIds}
+                  </div>
+                )}
+              </div>
 
-            <div className="col-md-6 col-12 mb-2">
-              <label className="form-label">
-                Class<span className="text-danger">*</span>
-              </label>
-              <MultiSelect
-                options={classOptions}
-                value={selectedClasses}
-                onChange={(selected) => {
-                  setSelectedClasses(selected);
-                  formik.setFieldValue(
-                    "classIds",
-                    selected.map((option) => option.value)
-                  );
-                }}
-                labelledBy="Select Classes"
-                className={`form-multi-select ${
-                  formik.touched.classIds && formik.errors.classIds
-                    ? "is-invalid"
-                    : ""
-                }`}
-              />
-              {formik.touched.classIds && formik.errors.classIds && (
-                <div className="invalid-feedback">{formik.errors.classIds}</div>
-              )}
-            </div>
+              <div class="col-md-6 col-12 mb-4">
+                <label className="form-label">
+                  Day<span class="text-danger">*</span>
+                </label>
+                <select
+                  {...formik.getFieldProps("days")}
+                  name="days"
+                  className={`form-select   ${
+                    formik.touched.days && formik.errors.days
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  aria-label="Default select example"
+                  class="form-select "
+                >
+                  <option selected></option>
+                  <option value="SUNDAY">Sunday</option>
+                  <option value="MONDAY">Monday</option>
+                  <option value="TUESDAY">Tuesday</option>
+                  <option value="WEDNESDAY">Wednesday</option>
+                  <option value="THURSDAY">Thursday</option>
+                  <option value="FRIDAY">Friday</option>
+                  <option value="SATURDAY">Saturday</option>
+                </select>
+                {formik.touched.days && formik.errors.days && (
+                  <div className="invalid-feedback">{formik.errors.days}</div>
+                )}
+              </div>
 
-            <div class="col-md-6 col-12 mb-4">
-              <label className="form-label">
-                Day<span class="text-danger">*</span>
-              </label>
-              <select
-                {...formik.getFieldProps("days")}
-                name="days"
-                className={`form-select   ${
-                  formik.touched.days && formik.errors.days ? "is-invalid" : ""
-                }`}
-                aria-label="Default select example"
-                class="form-select "
-              >
-                <option selected></option>
-                <option value="SUNDAY">Sunday</option>
-                <option value="MONDAY">Monday</option>
-                <option value="TUESDAY">Tuesday</option>
-                <option value="WEDNESDAY">Wednesday</option>
-                <option value="THURSDAY">Thursday</option>
-                <option value="FRIDAY">Friday</option>
-                <option value="SATURDAY">Saturday</option>
-              </select>
-              {formik.touched.days && formik.errors.days && (
-                <div className="invalid-feedback">{formik.errors.days}</div>
-              )}
-            </div>
-
-            {/* <div class="col-md-6 col-12 mb-4">
+              {/* <div class="col-md-6 col-12 mb-4">
               <label className="form-label">Attachement</label>
 
               <input
@@ -525,75 +529,75 @@ function SendNotificationEdit() {
               )}
             </div> */}
 
-            <div className="col-md-6 col-12 mb-4">
-              <label className="form-label">Attachments</label>
-              <input
-                type="file"
-                className={`form-control ${
-                  formik.touched.attachments && formik.errors.attachments
-                    ? "is-invalid"
-                    : ""
-                }`}
-                multiple
-                onChange={(event) => {
-                  const files = Array.from(event.currentTarget.files);
-                  formik.setFieldValue("attachments", files);
-                }}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.attachments && formik.errors.attachments && (
-                <div className="invalid-feedback">
-                  {formik.errors.attachments}
-                </div>
-              )}
-            </div>
-
-            <div class="col-md-6 col-12 mb-4">
-              <label className="form-label">Description</label>
-              <textarea
-                name="messageDescription"
-                class="form-control "
-                row="5"
-                type="text"
-                className={`form-control  ${
-                  formik.touched.messageDescription &&
-                  formik.errors.messageDescription
-                    ? "is-invalid"
-                    : ""
-                }`}
-                style={{
-                  height: "7rem",
-                }}
-                {...formik.getFieldProps("messageDescription")}
-              />
-              {formik.touched.messageDescription &&
-                formik.errors.messageDescription && (
+              <div className="col-md-6 col-12 mb-4">
+                <label className="form-label">Attachments</label>
+                <input
+                  type="file"
+                  className={`form-control ${
+                    formik.touched.attachments && formik.errors.attachments
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  multiple
+                  onChange={(event) => {
+                    const files = Array.from(event.currentTarget.files);
+                    formik.setFieldValue("attachments", files);
+                  }}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.attachments && formik.errors.attachments && (
                   <div className="invalid-feedback">
-                    {formik.errors.messageDescription}
+                    {formik.errors.attachments}
                   </div>
                 )}
-            </div>
+              </div>
 
-            <div className="col-12">
-              <div className="row mb-2">
-                <div className="col-12">
-                  <p className="fw-medium">Attachments &nbsp; : &nbsp;</p>
-                </div>
-                {data.attachments && data.attachments.length > 0 ? (
-                  <div className="row">
-                    {data.attachments.map((attachment, index) => (
-                      <div key={index} className="col-md-6 col-12 mb-2">
-                        {renderAttachment(attachment)}
-                      </div>
-                    ))}
+              <div class="col-md-6 col-12 mb-4">
+                <label className="form-label">Description</label>
+                <textarea
+                  name="messageDescription"
+                  class="form-control "
+                  row="5"
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.messageDescription &&
+                    formik.errors.messageDescription
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  style={{
+                    height: "7rem",
+                  }}
+                  {...formik.getFieldProps("messageDescription")}
+                />
+                {formik.touched.messageDescription &&
+                  formik.errors.messageDescription && (
+                    <div className="invalid-feedback">
+                      {formik.errors.messageDescription}
+                    </div>
+                  )}
+              </div>
+
+              <div className="col-12">
+                <div className="row mb-2">
+                  <div className="col-12">
+                    <p className="fw-medium">Attachments &nbsp; : &nbsp;</p>
                   </div>
-                ) : (
-                  <p className="text-muted">No attachments available</p>
-                )}
+                  {data.attachments && data.attachments.length > 0 ? (
+                    <div className="row">
+                      {data.attachments.map((attachment, index) => (
+                        <div key={index} className="col-md-6 col-12 mb-2">
+                          {renderAttachment(attachment)}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-muted">No attachments available</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </form>
     </div>

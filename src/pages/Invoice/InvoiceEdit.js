@@ -487,7 +487,7 @@ export default function InvoiceEdit() {
               </button>
             </div>
           </div>
-          <div className="container py-3">
+          <div className="container-fluid py-3">
             <div className="row mt-3">
               <div className="col-lg-6 col-md-6 col-12 px-5">
                 <div className="text-start mt-3">
