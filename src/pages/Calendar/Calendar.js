@@ -29,7 +29,7 @@ function Calendar() {
   const [filters, setFilters] = useState({
     centerId: "",
     courseId: "",
-    teacherId: "",
+    userId: "",
     date: "",
   });
   // Process event data for calendar rendering
@@ -166,7 +166,7 @@ function Calendar() {
     setFilters({
       centerId: "",
       courseId: "",
-      teacherId: "",
+      userId: "",
       date: "",
     });
   
@@ -184,7 +184,7 @@ function Calendar() {
   
 
   return (
-    <div className="container card my-2 py-2">
+    <div className="container-fluid card my-2 py-2">
       <div className="d-flex justify-content-between align-items-center pb-3">
         <div className="form-group mb-0 ms-2 mb-1">
           <select
@@ -224,9 +224,9 @@ function Calendar() {
         <div className="form-group mb-0 ms-2 mb-1">
           <select
             className="form-select form-select-sm center_list"
-            name="teacherId"
+            name="userId"
             style={{ width: "100%" }}
-            value={filters.teacherId}
+            value={filters.userId}
             onChange={handleFilterChange}
           >
             <option selected>Select a Teacher</option>
@@ -310,7 +310,7 @@ function Calendar() {
               dayMaxEventRows={2} // Show only one event by default per row
               dayMaxEvents={true} // Enable collapsing events
               moreLinkContent={(args) => (
-                <span className="p-2" style={{backgroundColor:"#ddebec",borderRadius:"5px"}}>{args.num}</span>
+                <span className="p-2 text-white" style={{backgroundColor:"#287f71",borderRadius:"10px !important"}}>{args.num}</span>
               )}
               buttonText={{
                 today: "Today",
