@@ -57,7 +57,7 @@ const Teacher = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "country", enableHiding: false, header: "Country" },
+      { accessorKey: "countryName", enableHiding: false, header: "Country" },
       {
         accessorKey: "userUniqueId",
         enableHiding: false,

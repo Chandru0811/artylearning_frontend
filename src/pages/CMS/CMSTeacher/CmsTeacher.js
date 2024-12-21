@@ -75,7 +75,7 @@ export const CmsTeacher = () => {
 
   return (
     <section style={{ backgroundColor: "#f9fafb" }}>
-      <div className="container cms-header shadow-sm py-2 mb-4">
+      <div className="container-fluid cms-header shadow-sm py-2 mb-4">
         <ol
           className="breadcrumb my-3 px-1"
           style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -116,7 +116,7 @@ export const CmsTeacher = () => {
           </div>
         </div>
       </div>
-      <div className="container py-5">
+      <div className="container-fluid py-5">
         <Tabs
           defaultActiveKey="profile"
           id="fill-tab-example"

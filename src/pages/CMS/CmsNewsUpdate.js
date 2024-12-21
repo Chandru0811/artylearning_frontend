@@ -118,8 +118,8 @@ const CmsNewsUpdate = () => {
   }, []);
 
   return (
-    <div className="news">
-      <div className="container cms-header shadow-sm py-2">
+    <div className="news p-2">
+      <div className="container-fluid cms-header shadow-sm p-2">
         <ol
           className="breadcrumb my-3 px-1"
           style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -155,7 +155,7 @@ const CmsNewsUpdate = () => {
         </div>
       </div>
 
-      <div className="container py-3">
+      <div className="container-fluid py-3">
         <div className="d-flex align-content-end justify-content-end">
           {storedScreens?.newsUpdatesCreate && (
             <button className="btn btn-button" onClick={handleShowAddModal}>

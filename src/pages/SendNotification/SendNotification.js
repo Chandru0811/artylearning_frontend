@@ -116,25 +116,25 @@ const SendNotification = () => {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0", 
-              opacity: 1, 
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
           },
           track: {
-            backgroundColor: "#e0e0e0", 
+            backgroundColor: "#e0e0e0",
           },
           thumb: {
-            color: "#eb862a", 
+            color: "#eb862a",
           },
           switchBase: {
             "&.Mui-checked": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
             "&.Mui-checked + .MuiSwitch-track": {
-              backgroundColor: "#eb862a", 
+              backgroundColor: "#eb862a",
             },
           },
         },
@@ -145,9 +145,9 @@ const SendNotification = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container my-4">
+    <div className="container-fluid my-4">
       <ol
-        className="breadcrumb my-3 px-1"
+        className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -222,7 +222,8 @@ const SendNotification = () => {
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({
-                  onClick: () => navigate(`/sendNotification/view/${row.original.id}`),
+                  onClick: () =>
+                    navigate(`/sendNotification/view/${row.original.id}`),
                   style: { cursor: "pointer" },
                 })}
               />

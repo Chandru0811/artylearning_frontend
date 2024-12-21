@@ -165,8 +165,8 @@ const CMSContact = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container center p-0">
-      <div className="container cms-header shadow-sm py-2 mb-4">
+    <div className="container-fluid center p-2">
+      <div className="container-fluid cms-header shadow-sm py-2 mb-4">
         <ol
           className="breadcrumb my-3 px-1"
           style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -185,7 +185,6 @@ const CMSContact = () => {
             Contact Us
           </li>
         </ol>
-   
       </div>
       <div className="card">
         <div
@@ -204,26 +203,24 @@ const CMSContact = () => {
             </span>
           </div>
         </div>
-        <div className="container">
-        <div className="row p-1">
-          <div className="col-md-6 col-12">
-            {/* <h4>Contact</h4> */}
+        <div className="container-fluid">
+          <div className="row p-1">
+            <div className="col-md-6 col-12">{/* <h4>Contact</h4> */}</div>
+            <div className="col-md-6 col-12 d-flex justify-content-end gap-2">
+              {storedScreens?.contactUsCreate && (
+                <CMSContactAdd onSuccess={getCenterData} />
+              )}
+              {storedScreens?.contactUsPublish && (
+                <button
+                  type="button"
+                  className="btn custom-outline-danger border d-flex align-items-center "
+                  onClick={contactPublish}
+                >
+                  Publish
+                </button>
+              )}
+            </div>
           </div>
-          <div className="col-md-6 col-12 d-flex justify-content-end gap-2">
-            {storedScreens?.contactUsCreate && (
-              <CMSContactAdd onSuccess={getCenterData} />
-            )}
-            {storedScreens?.contactUsPublish && (
-              <button
-                type="button"
-                className="btn custom-outline-danger border d-flex align-items-center "
-                onClick={contactPublish}
-              >
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
         </div>
         {loading ? (
           <div className="loader-container">
@@ -267,10 +264,17 @@ const CMSContact = () => {
               onClose={handleMenuClose}
             >
               <MenuItem>
-                <CMSContactView id={selectedId} handleMenuClose={handleMenuClose}/>
+                <CMSContactView
+                  id={selectedId}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
-                <CMSContactEdit id={selectedId} onSuccess={getCenterData} handleMenuClose={handleMenuClose}/>
+                <CMSContactEdit
+                  id={selectedId}
+                  onSuccess={getCenterData}
+                  handleMenuClose={handleMenuClose}
+                />
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

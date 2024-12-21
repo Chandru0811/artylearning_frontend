@@ -135,8 +135,8 @@ const OtherMessages = () => {
 
   return (
     <div>
-      <div className="container my-3">
-        <ol className="breadcrumb my-3 px-1">
+      <div className="container-fluid my-3">
+        <ol className="breadcrumb my-3 px-2">
           <li>
             <Link to="/" className="custom-breadcrumb">
               Home
@@ -204,8 +204,8 @@ const OtherMessages = () => {
           open={Boolean(menuAnchor)}
           onClose={handleMenuClose}
         > */}
-          {/* <MenuItem onClick={() => handleViewClick()}>View</MenuItem> */}
-          {/* <MenuItem>
+        {/* <MenuItem onClick={() => handleViewClick()}>View</MenuItem> */}
+        {/* <MenuItem>
             <GlobalDelete
               path={`/deleteMessage/${selectedMessage?.id}`}
               onDeleteSuccess={getData}

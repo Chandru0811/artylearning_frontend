@@ -173,7 +173,7 @@ function DocumentFile() {
           }
         }}
       >
-        <div className="container">
+        <div className="container-fluid">
           <ol
             className="breadcrumb my-3"
             style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -193,181 +193,191 @@ function DocumentFile() {
             </li>
           </ol>
           <div className="card">
-          <div
-            className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
-            style={{ background: "#f5f7f9" }}
-          >
-            <div class="d-flex align-items-center">
-              <div class="d-flex">
-                <div class="dot active"></div>
+            <div
+              className="d-flex justify-content-between align-items-center p-1 mb-4 px-4"
+              style={{ background: "#f5f7f9" }}
+            >
+              <div class="d-flex align-items-center">
+                <div class="d-flex">
+                  <div class="dot active"></div>
+                </div>
+                <span class="me-2 text-muted">Add Document</span>
               </div>
-              <span class="me-2 text-muted">Add Document</span>
-            </div>
-            <div className="my-2 pe-3 d-flex align-items-center">
-              <Link to="/document">
-                <button type="button " className="btn btn-sm btn-border">
-                  Back
+              <div className="my-2 pe-3 d-flex align-items-center">
+                <Link to="/document">
+                  <button type="button " className="btn btn-sm btn-border">
+                    Back
+                  </button>
+                </Link>
+                &nbsp;&nbsp;
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm"
+                  disabled={loadIndicator}
+                >
+                  {loadIndicator && (
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      aria-hidden="true"
+                    ></span>
+                  )}
+                  <span className="fw-medium">Save</span>
                 </button>
-              </Link>
-              &nbsp;&nbsp;
-              <button
-                type="submit"
-                className="btn btn-button btn-sm"
-                disabled={loadIndicator}
-              >
-                {loadIndicator && (
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    aria-hidden="true"
-                  ></span>
-                )}
-                <span className="fw-medium">Save</span>
-              </button>
-            </div>
-          </div>
-          <div className="container">
-          <div className="row px-1">
-            <div className="py-3">
-              <p className="headColor">Centre Files</p>
-            </div>
-
-            <div className="col-md-6 col-12 mb-2">
-              <label>
-                Centre<span class="text-danger">*</span>
-              </label>
-              <div className="input-group">
-                <select
-                  className="form-select"
-                  name="centerName"
-                  {...formik.getFieldProps("centerName")}
-                  onChange={handleCenterChange}
-                >
-                  <option></option>
-                  {centerData &&
-                    centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
-                        {center.centerNames}
-                      </option>
-                    ))}
-                </select>
               </div>
-              {formik.touched.centerName && formik.errors.centerName && (
-                <small className="text-danger">
-                  {formik.errors.centerName}
-                </small>
-              )}
             </div>
+            <div className="container-fluid">
+              <div className="row px-1">
+                <div className="py-3">
+                  <p className="headColor">Centre Files</p>
+                </div>
 
-            <div className="col-md-6 col-12 mb-2 ">
-              <label>
-                Course<span class="text-danger">*</span>
-              </label>
-              <div className="input-group">
-                <select
-                  className="form-select"
-                  name="course"
-                  {...formik.getFieldProps("course")}
-                  onChange={handleCourseChange}
-                >
-                  <option></option>
-                  {courseData &&
-                    courseData.map((course) => (
-                      <option key={course.id} value={course.id}>
-                        {course.courseNames}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              {formik.touched.course && formik.errors.course && (
-                <small className="text-danger">{formik.errors.course}</small>
-              )}
-            </div>
+                <div className="col-md-6 col-12 mb-2">
+                  <label>
+                    Centre<span class="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <select
+                      className="form-select"
+                      name="centerName"
+                      {...formik.getFieldProps("centerName")}
+                      onChange={handleCenterChange}
+                    >
+                      <option></option>
+                      {centerData &&
+                        centerData.map((center) => (
+                          <option key={center.id} value={center.id}>
+                            {center.centerNames}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                  {formik.touched.centerName && formik.errors.centerName && (
+                    <small className="text-danger">
+                      {formik.errors.centerName}
+                    </small>
+                  )}
+                </div>
 
-            <div className="col-md-6 col-12 mb-2 ">
-              <div className="row">
-                <label>
-                  Class<span class="text-danger">*</span>
-                </label>
-                <div className="input-group">
-                  <select
-                    className="form-select"
-                    name="classListing"
-                    {...formik.getFieldProps("classListing")}
-                    onChange={handleClassChange}
-                  >
-                    <option></option>
-                    {classData &&
-                      classData.map((classListing) => (
-                        <option key={classListing.id} value={classListing.id}>
-                          {classListing.classNames}
-                        </option>
-                      ))}
-                  </select>
+                <div className="col-md-6 col-12 mb-2 ">
+                  <label>
+                    Course<span class="text-danger">*</span>
+                  </label>
+                  <div className="input-group">
+                    <select
+                      className="form-select"
+                      name="course"
+                      {...formik.getFieldProps("course")}
+                      onChange={handleCourseChange}
+                    >
+                      <option></option>
+                      {courseData &&
+                        courseData.map((course) => (
+                          <option key={course.id} value={course.id}>
+                            {course.courseNames}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                  {formik.touched.course && formik.errors.course && (
+                    <small className="text-danger">
+                      {formik.errors.course}
+                    </small>
+                  )}
+                </div>
+
+                <div className="col-md-6 col-12 mb-2 ">
+                  <div className="row">
+                    <label>
+                      Class<span class="text-danger">*</span>
+                    </label>
+                    <div className="input-group">
+                      <select
+                        className="form-select"
+                        name="classListing"
+                        {...formik.getFieldProps("classListing")}
+                        onChange={handleClassChange}
+                      >
+                        <option></option>
+                        {classData &&
+                          classData.map((classListing) => (
+                            <option
+                              key={classListing.id}
+                              value={classListing.id}
+                            >
+                              {classListing.classNames}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                  </div>
+                  {formik.touched.classListing &&
+                    formik.errors.classListing && (
+                      <small className="text-danger">
+                        {formik.errors.classListing}
+                      </small>
+                    )}
+                </div>
+
+                <div className="col-md-6 col-12 mb-2 ">
+                  <div>
+                    <label>
+                      Folder Name<span class="text-danger">*</span>
+                    </label>
+                    <div className="input-group">
+                      <select
+                        className="form-select"
+                        name="folder"
+                        {...formik.getFieldProps("folder")}
+                      >
+                        <option></option>
+                        {documentData &&
+                          documentData.map((document) => (
+                            <option key={document.id} value={document.id}>
+                              {document.folderName}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                    {formik.touched.folder && formik.errors.folder && (
+                      <small className="text-danger">
+                        {formik.errors.folder}
+                      </small>
+                    )}
+                  </div>
+                </div>
+
+                <div className="col-md-6 col-12 mb-2 ">
+                  <div className="row">
+                    <label>
+                      Files<span class="text-danger">*</span>
+                    </label>
+                    <div className="input-group">
+                      <input
+                        className="form-control"
+                        type="file"
+                        multiple
+                        accept="image/*, video/*"
+                        onChange={(event) =>
+                          formik.setFieldValue(
+                            "files",
+                            Array.from(event.target.files)
+                          )
+                        }
+                      ></input>
+                    </div>
+                    {formik.touched.files && formik.errors.files && (
+                      <small className="text-danger">
+                        {formik.errors.files}
+                      </small>
+                    )}
+                    <label className="text-muted">
+                      Note:Files Must Be JPG,PNG,MP4 And The Maximum Total Size
+                      is 1GB.
+                    </label>
+                  </div>
                 </div>
               </div>
-              {formik.touched.classListing && formik.errors.classListing && (
-                <small className="text-danger">
-                  {formik.errors.classListing}
-                </small>
-              )}
             </div>
-
-            <div className="col-md-6 col-12 mb-2 ">
-              <div>
-                <label>
-                  Folder Name<span class="text-danger">*</span>
-                </label>
-                <div className="input-group">
-                  <select
-                    className="form-select"
-                    name="folder"
-                    {...formik.getFieldProps("folder")}
-                  >
-                    <option></option>
-                    {documentData &&
-                      documentData.map((document) => (
-                        <option key={document.id} value={document.id}>
-                          {document.folderName}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                {formik.touched.folder && formik.errors.folder && (
-                  <small className="text-danger">{formik.errors.folder}</small>
-                )}
-              </div>
-            </div>
-
-            <div className="col-md-6 col-12 mb-2 ">
-              <div className="row">
-                <label>
-                  Files<span class="text-danger">*</span>
-                </label>
-                <div className="input-group">
-                  <input
-                    className="form-control"
-                    type="file"
-                    multiple
-                    accept="image/*, video/*"
-                    onChange={(event) =>
-                      formik.setFieldValue(
-                        "files",
-                        Array.from(event.target.files)
-                      )
-                    }
-                  ></input>
-                </div>
-                {formik.touched.files && formik.errors.files && (
-                  <small className="text-danger">{formik.errors.files}</small>
-                )}
-                <label className="text-muted">
-                  Note:Files Must Be JPG,PNG,MP4 And The Maximum Total Size is
-                  1GB.
-                </label>
-              </div>
-            </div>
-          </div>
-          </div>
           </div>
         </div>
       </form>

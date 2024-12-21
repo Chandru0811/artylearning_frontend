@@ -171,9 +171,9 @@ const CMSTestMonail = () => {
   const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container center p-0">
+    <div className="container-fluid center p-0">
       <ol
-        className="breadcrumb my-3 px-1"
+        className="breadcrumb my-3 px-2"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
       >
         <li>
@@ -191,7 +191,7 @@ const CMSTestMonail = () => {
         </li>
       </ol>
 
-      <div className="container">
+      <div className="container-fluid">
         <div className="card ">
           <div
             className="mb-3 d-flex justify-content-between align-items-center p-1"
@@ -209,7 +209,7 @@ const CMSTestMonail = () => {
               </span>
             </div>
           </div>
-          <div className="container">
+          <div className="container-fluid">
             <div className="row p-1">
               <div className="col-md-6 col-12">
                 {/* <h4>Testimonial</h4> */}
