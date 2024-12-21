@@ -955,7 +955,7 @@ const Lead = () => {
                   </option>
                   {centerData &&
                     centerData.map((center) => (
-                      <option key={center.id} value={center.id}>
+                      <option key={center.id} value={center.id} >
                         {center.centerNames}
                       </option>
                     ))}

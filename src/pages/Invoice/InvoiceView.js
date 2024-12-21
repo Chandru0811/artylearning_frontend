@@ -323,188 +323,195 @@ function InvoiceView() {
             </Link>
           </div>
         </div>
-      <div className=" row">
-        <div className="col-12 d-flex justify-content-end my-1">
-          <button
-            type="button"
-            className="btn btn-border btn-sm me-1"
-            onClick={VoidInvoice}
-          >
-            Void Invoice
-          </button>
+        <div className=" row">
+          <div className="col-12 d-flex justify-content-end my-1">
+            <button
+              type="button"
+              className="btn btn-border btn-sm me-1"
+              onClick={VoidInvoice}
+            >
+              Void Invoice
+            </button>
 
-          {/* <Link to="/sendAndPublish"> */}
-          <SendAndPublish data={data} id={id} qr={qrCodeUrl} />
-          {/* </Link> */}
-          <button
-            onClick={handleGeneratePDF}
-            className="btn btn-border btn-sm me-1"
-            disabled={loadIndicator}
-          >
-            {loadIndicator && (
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                aria-hidden="true"
-              ></span>
-            )}
-            Generate PDF
-          </button>
+            {/* <Link to="/sendAndPublish"> */}
+            <SendAndPublish data={data} id={id} qr={qrCodeUrl} />
+            {/* </Link> */}
+            <button
+              onClick={handleGeneratePDF}
+              className="btn btn-border btn-sm me-1"
+              disabled={loadIndicator}
+            >
+              {loadIndicator && (
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  aria-hidden="true"
+                ></span>
+              )}
+              Generate PDF
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="card shadow border-0 minHeight">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-6 col-md-6 col-12 p-3">
-              <div className="d-flex justify-content-center flex-column align-items-start">
-                <img src={Logo} className="img-fluid" width={150} alt=".." />
-                <p className="text-center fw-small">
-                  Learning Languages The Creative Way
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12 p-3 d-flex justify-content-center flex-column align-items-start">
-              <h5>
-                {centerData &&
-                  centerData.map((center) =>
-                    parseInt(data.centerId) === center.id
-                      ? center.centerNames || "--"
-                      : ""
-                  )}
-              </h5>
-              <span>Tel No : 87270752</span>
-              <span>Email &nbsp;: Artylearning@gmail.com</span>
-            </div>
-            <div className="card-header my-5">
-              <h5>Official Receipt</h5>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="row my-1">
-                <div className="col-6 ">
-                  <p>Invoice </p>
-                </div>
-                <div className="col-6">
-                  - &nbsp; {data.invoiceNumber || "--"}{" "}
+        <div className="card shadow border-0 minHeight">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-lg-6 col-md-6 col-12 p-3">
+                <div className="d-flex justify-content-center flex-column align-items-start">
+                  <img src={Logo} className="img-fluid" width={150} alt=".." />
+                  <p className="text-center fw-small">
+                    Learning Languages The Creative Way
+                  </p>
                 </div>
               </div>
-              <div className="row my-1">
-                <div className="col-6 ">
-                  <p>Student Name </p>
-                </div>
-                <div className="col-6">- &nbsp; {data.studentName || "--"}</div>
+              <div className="col-lg-6 col-md-6 col-12 p-3 d-flex justify-content-center flex-column align-items-start">
+                <h5>
+                  {centerData &&
+                    centerData.map((center) =>
+                      parseInt(data.centerId) === center.id
+                        ? center.centerNames || "--"
+                        : ""
+                    )}
+                </h5>
+                <span>Tel No : 87270752</span>
+                <span>Email &nbsp;: Artylearning@gmail.com</span>
               </div>
-              <div className="row my-1">
-                <div className="col-6 ">
-                  <p>Student Id</p>
+              <div className="card-header my-5">
+                <h5>Official Receipt</h5>
+              </div>
+              <div className="col-lg-6 col-md-6 col-12">
+                <div className="row my-1">
+                  <div className="col-6 ">
+                    <p>Invoice </p>
+                  </div>
+                  <div className="col-6">
+                    - &nbsp; {data.invoiceNumber || "--"}{" "}
+                  </div>
                 </div>
-                <div className="col-6">
-                  - &nbsp; {data.studentUniqueId || "--"}
+                <div className="row my-1">
+                  <div className="col-6 ">
+                    <p>Student Name </p>
+                  </div>
+                  <div className="col-6">
+                    - &nbsp; {data.studentName || "--"}
+                  </div>
+                </div>
+                <div className="row my-1">
+                  <div className="col-6 ">
+                    <p>Student Id</p>
+                  </div>
+                  <div className="col-6">
+                    - &nbsp; {data.studentUniqueId || "--"}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-lg-6 col-md-6 col-12">
-              <div className="row my-1">
-                <div className="col-6 ">
-                  <p>Invoice Date</p>
+              <div className="col-lg-6 col-md-6 col-12">
+                <div className="row my-1">
+                  <div className="col-6 ">
+                    <p>Invoice Date</p>
+                  </div>
+                  <div className="col-6">
+                    - &nbsp;{" "}
+                    {data.invoiceDate
+                      ? data.invoiceDate.substring(0, 10)
+                      : "--"}
+                  </div>
                 </div>
-                <div className="col-6">
-                  - &nbsp;{" "}
-                  {data.invoiceDate ? data.invoiceDate.substring(0, 10) : "--"}
+                <div className="row my-1">
+                  <div className="col-6 ">
+                    <p>Due Date</p>
+                  </div>
+                  <div className="col-6">
+                    - &nbsp;{" "}
+                    {data.dueDate ? data.dueDate.substring(0, 10) : "--"}
+                  </div>
                 </div>
-              </div>
-              <div className="row my-1">
-                <div className="col-6 ">
-                  <p>Due Date</p>
+                <div className="row my-1">
+                  <div className="col-6 ">
+                    <p>Course Name</p>
+                  </div>
+                  <div className="col-6">
+                    - &nbsp; {data.courseName || "--"}
+                  </div>
                 </div>
-                <div className="col-6">
-                  - &nbsp; {data.dueDate ? data.dueDate.substring(0, 10) : "--"}
-                </div>
-              </div>
-              <div className="row my-1">
-                <div className="col-6 ">
-                  <p>Course Name</p>
-                </div>
-                <div className="col-6">- &nbsp; {data.courseName || "--"}</div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="table-responsive px-3 mt-5">
-          <table id="invoice-table" className="table table-nowrap ">
-            <thead className="table-secondary">
-              <tr>
-                <th>NO</th>
-                <th>Item</th>
-                <th>Item Amount</th>
-                <th>Tax Type</th>
-                <th>GST Amount</th>
-                <th>Total Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.invoiceItemsDtoList &&
-                data.invoiceItemsDtoList.map((InvoiceItemRow, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{InvoiceItemRow.item}</td>
-                    <td>{InvoiceItemRow.itemAmount}</td>
-                    <td>
-                      {taxData &&
-                        taxData.map((tax) =>
-                          parseInt(InvoiceItemRow.taxType) === tax.id
-                            ? `${tax.taxType + " " + tax.rate} %` || "--"
-                            : ""
-                        )}
-                    </td>
+          <div class="table-responsive px-3 mt-5">
+            <table id="invoice-table" className="table table-nowrap ">
+              <thead className="table-secondary">
+                <tr>
+                  <th>NO</th>
+                  <th>Item</th>
+                  <th>Item Amount</th>
+                  <th>Tax Type</th>
+                  <th>GST Amount</th>
+                  <th>Total Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.invoiceItemsDtoList &&
+                  data.invoiceItemsDtoList.map((InvoiceItemRow, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{InvoiceItemRow.item}</td>
+                      <td>{InvoiceItemRow.itemAmount}</td>
+                      <td>
+                        {taxData &&
+                          taxData.map((tax) =>
+                            parseInt(InvoiceItemRow.taxType) === tax.id
+                              ? `${tax.taxType + " " + tax.rate} %` || "--"
+                              : ""
+                          )}
+                      </td>
 
-                    <td>{InvoiceItemRow.gstAmount}</td>
-                    <td>{InvoiceItemRow.totalAmount}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="container mt-5">
-          <div className="card-header border-1 rounded">
-            <div className="d-flex justify-content-between">
-              <div className="">Credit Advice Offset</div>
-              <div className="">{data.creditAdviceOffset || "--"}</div>
-            </div>
+                      <td>{InvoiceItemRow.gstAmount}</td>
+                      <td>{InvoiceItemRow.totalAmount}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
-          <div className="card-header border-1 rounded mt-5">
-            <div className="d-flex justify-content-between">
-              <div className="">GST</div>
-              <div className="">{data.gst || "--"}</div>
+          <div className="container-fluid mt-5">
+            <div className="card-header border-1 rounded">
+              <div className="d-flex justify-content-between">
+                <div className="">Credit Advice Offset</div>
+                <div className="">{data.creditAdviceOffset || "--"}</div>
+              </div>
             </div>
-          </div>
-          <div className="card-header border-1 rounded mt-5">
-            <div className="d-flex justify-content-between">
-              <div className="">Total Amount</div>
-              <div className="">{data.totalAmount || "--"}</div>
+            <div className="card-header border-1 rounded mt-5">
+              <div className="d-flex justify-content-between">
+                <div className="">GST</div>
+                <div className="">{data.gst || "--"}</div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="row mt-5 ms-2">
-          {/* <h5>Remark</h5> */}
-          <div className="col-lg-8 col-md-8 col-12 mt-5">
-            <div>
-              <h5>Remarks:</h5>
-              <div className="container">
-                <p>{data.remark || "--"}</p>
+            <div className="card-header border-1 rounded mt-5">
+              <div className="d-flex justify-content-between">
+                <div className="">Total Amount</div>
+                <div className="">{data.totalAmount || "--"}</div>
               </div>
             </div>
           </div>
-          <div className="col-lg-8 col-md-8 col-12 mt-5">
-            <div>
-              <h5>Notes:</h5>
-              <div className="container">
-                <p>{invoiceNotes || "--"}</p>
+          <div className="row mt-5 ms-2">
+            {/* <h5>Remark</h5> */}
+            <div className="col-lg-8 col-md-8 col-12 mt-5">
+              <div>
+                <h5>Remarks:</h5>
+                <div className="container">
+                  <p>{data.remark || "--"}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-lg-4 col-md-8 col-12">
-            <div className="d-flex justify-content-center flex-column align-items-center">
-              <img src={qrCodeUrl} alt="Teacher" width="100" height="100" />
-              {/* {data.qrCode ? (
+            <div className="col-lg-8 col-md-8 col-12 mt-5">
+              <div>
+                <h5>Notes:</h5>
+                <div className="container">
+                  <p>{invoiceNotes || "--"}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4 col-md-8 col-12">
+              <div className="d-flex justify-content-center flex-column align-items-center">
+                <img src={qrCodeUrl} alt="Teacher" width="100" height="100" />
+                {/* {data.qrCode ? (
                 <img
                   src={
                     centerData
@@ -532,14 +539,14 @@ function InvoiceView() {
                   height="100"
                 />
               )} */}
-              <p className="text-center">
-                Arty Learning Pvt.Ltd <br />
-                UEN : {uenNumber || " "}
-              </p>
+                <p className="text-center">
+                  Arty Learning Pvt.Ltd <br />
+                  UEN : {uenNumber || " "}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );

@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Link,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
@@ -506,7 +502,9 @@ export default function InvoiceAdd() {
       if (studentID) {
         try {
           const response = await api.get(`/getAllStudentById/${studentID}`);
-          const referralDetails = await api.get(`/getAvailableCreditAdviseOffset?studentId=${studentID}`);
+          const referralDetails = await api.get(
+            `/getAvailableCreditAdviseOffset?studentId=${studentID}`
+          );
           const studentData = response.data;
           const referralAmount = referralDetails.data.overallTotalForFee;
           // console.log("Student Data:", studentData);
@@ -568,47 +566,51 @@ export default function InvoiceAdd() {
   useEffect(() => {
     const fetchReferralDetails = async () => {
       let overAllAmount = 0; // Default fallback value
-  
+
       if (studentID) {
         try {
           const referralDetails = await api.get(
             `/getAvailableCreditAdviseOffset?studentId=${studentID}`
           );
-          overAllAmount = parseFloat(referralDetails.data.overallTotalForFee || 0); // Ensure it's a number
+          overAllAmount = parseFloat(
+            referralDetails.data.overallTotalForFee || 0
+          ); // Ensure it's a number
           console.log("Referral Amount from API:", overAllAmount);
         } catch (error) {
-          console.error("Error fetching referral details. Using fallback overAllAmount:", error);
+          console.error(
+            "Error fetching referral details. Using fallback overAllAmount:",
+            error
+          );
         }
       }
-  
+
       // Log the value of overAllAmount for debugging
       console.log("Final overAllAmount used:", overAllAmount);
-  
+
       // Calculate total GST
       const totalGst = formik.values.invoiceItems.reduce(
         (total, item) => total + parseFloat(item?.gstAmount || 0),
         0
       );
       formik.setFieldValue("gst", totalGst.toFixed(2));
-  
+
       // Calculate total Amount (sum of invoice items)
       const totalAmount = formik.values.invoiceItems.reduce(
         (total, item) => total + parseFloat(item?.totalAmount || 0),
         0
       );
-  
+
       // If overAllAmount is not valid, ensure totalAmount remains unchanged
       const CreditOffsetAmount = totalAmount - (overAllAmount || 0); // Graceful fallback
       console.log("Credit Offset Amount:", CreditOffsetAmount);
-  
+
       // Set the calculated value in Formik
       formik.setFieldValue("totalAmount", CreditOffsetAmount.toFixed(2));
     };
-  
+
     fetchReferralDetails();
   }, [formik.values.invoiceItems, studentID]);
-  
-  
+
   return (
     <div className="container-fluid">
       <ol
@@ -676,7 +678,7 @@ export default function InvoiceAdd() {
               </button>
             </div>
           </div>
-          <div className="container py-3">
+          <div className="container-fluid py-3">
             <div className="row mt-3">
               <div className="col-lg-6 col-md-6 col-12 px-5">
                 <div className="text-start mt-3">
@@ -1032,8 +1034,7 @@ export default function InvoiceAdd() {
                           Total Amount (Inc GST)
                           <span className="text-danger">*</span>
                         </th>
-                        <th>
-                        </th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>

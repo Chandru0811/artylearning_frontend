@@ -41,15 +41,11 @@ const validationSchema = Yup.object().shape({
   bankAccountName: Yup.string().required("*Bank Account Name is required"),
   file: Yup.mixed().required("*File is required"),
   target: Yup.number()
-    .typeError("*Must be a number")
-    .required("*File is required")
-    .positive("*Must be a positive number")
-    .test(
-      "max-two-decimals",
-      "*Must have at most two decimal places",
-      (value) =>
-        value === undefined || /^\d+(\.\d{1,2})?$/.test(value.toString())
-    ),
+  .typeError("*Must be a number")
+  .required("*File is required")
+  .positive("*Must be a positive number")
+  .integer("*Must be a whole number"),
+
   invoiceNotes: Yup.string()
     .notRequired()
     .max(200, "*The maximum length is 200 characters"),

@@ -89,7 +89,7 @@ function CMSProducts() {
   return (
     <>
       <div className="">
-        <div className="container cms-header shadow-sm py-2">
+        <div className="container-fluid cms-header shadow-sm py-2">
           <ol
             className="breadcrumb my-3 px-1"
             style={{ listStyle: "none", padding: 0, margin: 0 }}

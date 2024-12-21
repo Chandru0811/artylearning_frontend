@@ -156,6 +156,60 @@ const AddEmergencyContact = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formData.LeadId]);
 
+    useEffect(() => {
+      const getData = async () => {
+        if (formData.student_id) {
+          try {
+            const response = await api.get(
+              `/getAllStudentById/${formData.student_id}`
+            );
+
+            const studentData = response.data;
+            const leadData = studentData.studentEmergencyContacts[0];
+            const emergencyContacts =
+              leadData.emergencyAuthorizedContactModels?.map((contact) => ({
+                name: contact.name || "",
+                authorizedRelation: contact.authorizedRelation || "",
+                contactNo: contact.contactNo || "",
+                postalCode: contact.postalCode || "",
+                emergencyContactAddress: contact.emergencyContactAddress || "",
+                fileUrl: contact.personProfile || null,
+              })) || [];
+
+            console.log("Lead Data", leadData);
+
+            formik.setValues({
+              emergencyContactName: leadData?.emergencyContactName || "",
+              emergencyContactNo: leadData?.emergencyContactNo || "",
+              authorizedRelation: leadData?.emergencyRelation || "",
+              emergencyContactInformation: emergencyContacts,
+            });
+
+            // Set rows based on emergencyContactInformation
+            setRows(emergencyContacts.map(() => ({})));
+          } catch (error) {
+            console.error("Error fetching lead data:", error);
+            toast.error(error.message);
+          }
+        } else {
+          // If student_id is not present, set rows to match form data
+          setRows(
+            formData.emergencyContactInformation
+              ? formData.emergencyContactInformation.map(() => ({}))
+              : [{}]
+          );
+          formik.setValues((prevValues) => ({
+            ...prevValues,
+            emergencyContactInformation:
+              formData.emergencyContactInformation ||
+              prevValues.emergencyContactInformation,
+          }));
+        }
+      };
+
+      getData();
+    }, [formData.student_id]);
+
     useImperativeHandle(ref, () => ({
       EmergencyContact: formik.handleSubmit,
     }));
@@ -167,7 +221,10 @@ const AddEmergencyContact = forwardRef(
     const handleFileChange = (event, index) => {
       const file = event.currentTarget.files[0];
       if (file) {
-        formik.setFieldValue(`emergencyContactInformation[${index}].files`, file);
+        formik.setFieldValue(
+          `emergencyContactInformation[${index}].files`,
+          file
+        );
         setImagePreviews((prev) => ({
           ...prev,
           [index]: URL.createObjectURL(file),
@@ -211,11 +268,12 @@ const AddEmergencyContact = forwardRef(
                       onBlur={formik.handleBlur}
                       value={formik.values.emergencyContactName}
                     />
-                    {formik.touched.emergencyContactName && formik.errors.emergencyContactName && (
-                      <div className="text-danger">
-                        <small>{formik.errors.emergencyContactName}</small>
-                      </div>
-                    )}
+                    {formik.touched.emergencyContactName &&
+                      formik.errors.emergencyContactName && (
+                        <div className="text-danger">
+                          <small>{formik.errors.emergencyContactName}</small>
+                        </div>
+                      )}
                   </div>
                 </div>
                 {/* Emergency Contact No */}
@@ -233,11 +291,12 @@ const AddEmergencyContact = forwardRef(
                       onBlur={formik.handleBlur}
                       value={formik.values.emergencyContactNo}
                     />
-                    {formik.touched.emergencyContactNo && formik.errors.emergencyContactNo && (
-                      <div className="text-danger">
-                        <small>{formik.errors.emergencyContactNo}</small>
-                      </div>
-                    )}
+                    {formik.touched.emergencyContactNo &&
+                      formik.errors.emergencyContactNo && (
+                        <div className="text-danger">
+                          <small>{formik.errors.emergencyContactNo}</small>
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>
@@ -268,12 +327,23 @@ const AddEmergencyContact = forwardRef(
                             name={`emergencyContactInformation[${index}].name`}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            value={formik.values.emergencyContactInformation?.[index]?.name || ""}
+                            value={
+                              formik.values.emergencyContactInformation?.[index]
+                                ?.name || ""
+                            }
                           />
-                          {formik.touched.emergencyContactInformation?.[index]?.name &&
-                            formik.errors.emergencyContactInformation?.[index]?.name && (
+                          {formik.touched.emergencyContactInformation?.[index]
+                            ?.name &&
+                            formik.errors.emergencyContactInformation?.[index]
+                              ?.name && (
                               <div className="text-danger">
-                                <small>{formik.errors.emergencyContactInformation[index].name}</small>
+                                <small>
+                                  {
+                                    formik.errors.emergencyContactInformation[
+                                      index
+                                    ].name
+                                  }
+                                </small>
                               </div>
                             )}
                         </div>
@@ -288,7 +358,10 @@ const AddEmergencyContact = forwardRef(
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             className="form-select"
-                            value={formik.values.emergencyContactInformation?.[index]?.authorizedRelation || ""}
+                            value={
+                              formik.values.emergencyContactInformation?.[index]
+                                ?.authorizedRelation || ""
+                            }
                           >
                             <option value="">Select Relation</option>
                             <option value="Mother">Mother</option>
@@ -297,10 +370,18 @@ const AddEmergencyContact = forwardRef(
                             <option value="Brother">Brother</option>
                             {/* Add more options as needed */}
                           </select>
-                          {formik.touched.emergencyContactInformation?.[index]?.authorizedRelation &&
-                            formik.errors.emergencyContactInformation?.[index]?.authorizedRelation && (
+                          {formik.touched.emergencyContactInformation?.[index]
+                            ?.authorizedRelation &&
+                            formik.errors.emergencyContactInformation?.[index]
+                              ?.authorizedRelation && (
                               <div className="text-danger">
-                                <small>{formik.errors.emergencyContactInformation[index].authorizedRelation}</small>
+                                <small>
+                                  {
+                                    formik.errors.emergencyContactInformation[
+                                      index
+                                    ].authorizedRelation
+                                  }
+                                </small>
                               </div>
                             )}
                         </div>
@@ -316,12 +397,23 @@ const AddEmergencyContact = forwardRef(
                             name={`emergencyContactInformation[${index}].emergencyContactAddress`}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            value={formik.values.emergencyContactInformation?.[index]?.emergencyContactAddress || ""}
+                            value={
+                              formik.values.emergencyContactInformation?.[index]
+                                ?.emergencyContactAddress || ""
+                            }
                           />
-                          {formik.touched.emergencyContactInformation?.[index]?.emergencyContactAddress &&
-                            formik.errors.emergencyContactInformation?.[index]?.emergencyContactAddress && (
+                          {formik.touched.emergencyContactInformation?.[index]
+                            ?.emergencyContactAddress &&
+                            formik.errors.emergencyContactInformation?.[index]
+                              ?.emergencyContactAddress && (
                               <div className="text-danger">
-                                <small>{formik.errors.emergencyContactInformation[index].emergencyContactAddress}</small>
+                                <small>
+                                  {
+                                    formik.errors.emergencyContactInformation[
+                                      index
+                                    ].emergencyContactAddress
+                                  }
+                                </small>
                               </div>
                             )}
                         </div>
@@ -340,12 +432,23 @@ const AddEmergencyContact = forwardRef(
                             name={`emergencyContactInformation[${index}].contactNo`}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            value={formik.values.emergencyContactInformation?.[index]?.contactNo || ""}
+                            value={
+                              formik.values.emergencyContactInformation?.[index]
+                                ?.contactNo || ""
+                            }
                           />
-                          {formik.touched.emergencyContactInformation?.[index]?.contactNo &&
-                            formik.errors.emergencyContactInformation?.[index]?.contactNo && (
+                          {formik.touched.emergencyContactInformation?.[index]
+                            ?.contactNo &&
+                            formik.errors.emergencyContactInformation?.[index]
+                              ?.contactNo && (
                               <div className="text-danger">
-                                <small>{formik.errors.emergencyContactInformation[index].contactNo}</small>
+                                <small>
+                                  {
+                                    formik.errors.emergencyContactInformation[
+                                      index
+                                    ].contactNo
+                                  }
+                                </small>
                               </div>
                             )}
                         </div>
@@ -361,12 +464,23 @@ const AddEmergencyContact = forwardRef(
                             name={`emergencyContactInformation[${index}].postalCode`}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            value={formik.values.emergencyContactInformation?.[index]?.postalCode || ""}
+                            value={
+                              formik.values.emergencyContactInformation?.[index]
+                                ?.postalCode || ""
+                            }
                           />
-                          {formik.touched.emergencyContactInformation?.[index]?.postalCode &&
-                            formik.errors.emergencyContactInformation?.[index]?.postalCode && (
+                          {formik.touched.emergencyContactInformation?.[index]
+                            ?.postalCode &&
+                            formik.errors.emergencyContactInformation?.[index]
+                              ?.postalCode && (
                               <div className="text-danger">
-                                <small>{formik.errors.emergencyContactInformation[index].postalCode}</small>
+                                <small>
+                                  {
+                                    formik.errors.emergencyContactInformation[
+                                      index
+                                    ].postalCode
+                                  }
+                                </small>
                               </div>
                             )}
                         </div>
@@ -384,27 +498,49 @@ const AddEmergencyContact = forwardRef(
                             onBlur={formik.handleBlur}
                             accept=".jpg, .jpeg, .png"
                           />
-                          {/* Image Preview */}
+                          {/* Image Preview for Uploaded Files */}
                           {imagePreviews[index] && (
                             <img
                               src={imagePreviews[index]}
                               alt="Preview"
-                              style={{ width: "100px", height: "100px", marginTop: "10px" }}
+                              style={{
+                                width: "100px",
+                                height: "100px",
+                                marginTop: "10px",
+                              }}
                             />
                           )}
-                          {/* If existing image URL is available (from formData), display it */}
-                          {!imagePreviews[index] && formData.emergencyContactInformation?.[index]?.fileUrl && (
-                            <img
-                              src={formData.emergencyContactInformation[index].fileUrl}
-                              alt="Existing Profile"
-                              style={{ width: "100px", height: "100px", marginTop: "10px" }}
-                            />
-                          )}
-                          {/* Display validation error for files */}
-                          {formik.touched.emergencyContactInformation?.[index]?.files &&
-                            formik.errors.emergencyContactInformation?.[index]?.files && (
+                          {/* Show Existing Image if No Preview is Available */}
+                          {!imagePreviews[index] &&
+                            formik.values.emergencyContactInformation?.[index]
+                              ?.fileUrl && (
+                              <img
+                                src={
+                                  formik.values.emergencyContactInformation[
+                                    index
+                                  ].fileUrl
+                                }
+                                alt="Existing Profile"
+                                style={{
+                                  width: "100px",
+                                  height: "100px",
+                                  marginTop: "10px",
+                                }}
+                              />
+                            )}
+                          {/* Validation Error Display */}
+                          {formik.touched.emergencyContactInformation?.[index]
+                            ?.files &&
+                            formik.errors.emergencyContactInformation?.[index]
+                              ?.files && (
                               <div className="text-danger">
-                                <small>{formik.errors.emergencyContactInformation[index].files}</small>
+                                <small>
+                                  {
+                                    formik.errors.emergencyContactInformation[
+                                      index
+                                    ].files
+                                  }
+                                </small>
                               </div>
                             )}
                         </div>
@@ -445,8 +581,12 @@ const AddEmergencyContact = forwardRef(
                   type="button"
                   onClick={() => {
                     setRows((prev) => prev.slice(0, -1));
-                    const updatedContacts = formik.values.emergencyContactInformation.slice(0, -1);
-                    formik.setFieldValue("emergencyContactInformation", updatedContacts);
+                    const updatedContacts =
+                      formik.values.emergencyContactInformation.slice(0, -1);
+                    formik.setFieldValue(
+                      "emergencyContactInformation",
+                      updatedContacts
+                    );
                     setImagePreviews((prev) => {
                       const updatedPreviews = { ...prev };
                       delete updatedPreviews[rows.length - 1];

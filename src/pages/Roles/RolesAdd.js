@@ -843,13 +843,13 @@ function RolesAdd() {
       >
         <div className="card">
           <div className="row d-flex align-items-start p-2">
-            <div className="col-md-8 col-12">
+            <div className="col-md-7 col-12">
               <lable className="form-lable">
                 User Role <span class="text-danger">*</span>
               </lable>
               <div class="input-group mb-3">
                 <select
-                  class="form-select iconInput "
+                  class="form-select form-select-sm iconInput "
                   aria-label="Default select example"
                   onChange={(e) => setRole(e.target.value)}
                 >
@@ -863,7 +863,7 @@ function RolesAdd() {
                 </select>
               </div>
             </div>
-            <div className="col-md-4 col-12 d-flex justify-content-end">
+            <div className="col-md-5 col-12 d-flex justify-content-end">
               <button type="submit" className="btn btn-button btn-sm ">
                 Save
               </button>
