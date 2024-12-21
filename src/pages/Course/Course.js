@@ -67,7 +67,7 @@ const Course = () => {
         ),
       },
       {
-        accessorFn: (row) => row.centerName?.[0]?.centerName,
+        accessorFn: (row) => row.centerName[0],
         enableHiding: false,
         header: "Center Name",
       },

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Link,
   useNavigate,
@@ -15,7 +15,14 @@ import "datatables.net";
 import * as Yup from "yup";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
-
+import {
+  ThemeProvider,
+  createTheme,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { MaterialReactTable } from "material-react-table";
 const validationSchema = Yup.object().shape({
   packageName: Yup.string().required("Package Name is required"),
   lessonName: Yup.string().required("Lesson Name is required"),
@@ -33,8 +40,6 @@ function StudentRegisterCourse() {
   const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
 
   console.log("studentCourseDetailsId", studentCourseDetailsId);
-
-  const tableRef = useRef(null);
   const [datas, setDatas] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -47,6 +52,141 @@ function StudentRegisterCourse() {
   const [searchParams] = useSearchParams();
   const centerId = searchParams.get("centerId");
   const [batchData, setBatchData] = useState(null);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "id",
+        enableHiding: false,
+        size: 50,
+        header: "",
+        Cell: ({ row }) => (
+          <div style={{ textAlign: "center" }}>
+            <input
+              type="radio"
+              name="courseSelection"
+              onClick={() => handleRowSelect(row.original)}
+            />
+          </div>
+        ),
+      },
+
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "course",
+        enableHiding: false,
+        header: "Course",
+      },
+      { accessorKey: "batch", enableHiding: false, header: "Batch", size: 50, },
+      {
+        accessorKey: "startDate",
+        enableHiding: false,
+        header: "Start Date",
+        size: 50,
+      },
+      {
+        accessorKey: "endDate",
+        enableHiding: false,
+        header: "End Date",
+        size: 50,
+      },
+      {
+        accessorKey: "days",
+        enableHiding: false,
+        header: "Days",
+        size: 50,
+      },
+      {
+        accessorKey: "availableSlots",
+        enableHiding: false,
+        header: "Available Slots",
+        size: 50,
+        Cell: ({ cell }) =>
+          cell.getValue() ? (
+            <span className="badge rounded-pill text-bg-success">
+              {cell.getValue()}
+            </span>
+          ) : (
+            ""
+          ),
+      },
+
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
+
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      // Switch (Toggle button) customization
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a", // Thumb (circle) color when disabled
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0", // Default track color
+          },
+          thumb: {
+            color: "#eb862a", // Default thumb color
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a", // Thumb color when checked
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a", // Track color when checked
+            },
+          },
+        },
+      },
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -139,22 +279,7 @@ function StudentRegisterCourse() {
     fetchPackageData();
   }, []);
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      return;
-    }
-    $(tableRef.current).DataTable();
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table) {
-      table.destroy();
-    }
-  };
-
   const getData = async () => {
-    destroyDataTable();
     setLoading(true);
     let params = {};
 
@@ -175,7 +300,6 @@ function StudentRegisterCourse() {
         params,
       });
       setDatas(response.data);
-      initializeDataTable();
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -186,15 +310,6 @@ function StudentRegisterCourse() {
   useEffect(() => {
     getData();
   }, [formik.values.courseId, formik.values.batchId, formik.values.days]);
-
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
 
   useEffect(() => {
     const getData = async () => {
@@ -228,7 +343,6 @@ function StudentRegisterCourse() {
     setSelectedRow(data.id);
     setSelectedRowData(data);
     console.log("Selected Row Data:", data);
-    console.log("Selected Row Data Valuess are:", selectedRowData);
 
     // Calculate days between startDate and endDate
     if (data.startDate && data.endDate) {
@@ -525,53 +639,26 @@ function StudentRegisterCourse() {
                   </div>
                 </div>
               ) : (
-                <div className="table-responsive">
-                  <table ref={tableRef} className="display">
-                    <thead>
-                      <tr>
-                        <th scope="col"></th>
-                        <th scope="col">Course</th>
-                        <th scope="col">Batch</th>
-                        <th scope="col">Start Date</th>
-                        <th scope="col">End Date</th>
-                        <th scope="col">Day</th>
-                        <th scope="col">Available Slot</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Array.isArray(datas) &&
-                        datas.map((data, index) => (
-                          <tr
-                            key={index}
-                            onClick={() => handleRowSelect(data)}
-                            className={
-                              selectedRow === data.id ? "selected-row" : ""
-                            }
-                            style={{ cursor: "pointer" }}
-                          >
-                            <th scope="row" className="text-center">
-                              <input
-                                type="radio"
-                                className="form-check-input"
-                                checked={selectedRow === data.id}
-                                onChange={() => handleRowSelect(data)}
-                              />
-                            </th>
-                            <td>{data.course}</td>
-                            <td>{data.batch}</td>
-                            <td>{data.startDate}</td>
-                            <td>{data.endDate}</td>
-                            <td>{data.days}</td>
-                            <td className="text-center">
-                              <span className="badge rounded-pill text-bg-success">
-                                {data.availableSlots}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
+                <>
+                  <ThemeProvider theme={theme}>
+                    <MaterialReactTable
+                      columns={columns}
+                      data={datas}
+                      enableColumnActions={false}
+                      enableColumnFilters={false}
+                      enableDensityToggle={false}
+                      enableFullScreenToggle={false}
+                      initialState={{
+                        columnVisibility: {
+                          createdBy: false,
+                          createdAt: false,
+                          updatedBy: false,
+                          updatedAt: false,
+                        },
+                      }}
+                    />
+                  </ThemeProvider>
+                </>
               )}
             </div>
             <div className="row mt-2">

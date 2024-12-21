@@ -18,7 +18,8 @@ const ReferralList = ({ data }) => {
       {
         accessorKey: "referByStudent",
         enableHiding: false,
-        header: "Referral Student Name",
+        header: "Referal Student Name",
+        size: 200,
       },
       {
         accessorKey: "referByParent",
