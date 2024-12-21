@@ -67,7 +67,7 @@ function Viewpayroll() {
             </Link>
           </div>
         </div>
-        <div className="container">
+        <div className="container-fluid">
           {data.userRole === "SMS_FREELANCER" ? (
             <>
               <div className="row mt-5">

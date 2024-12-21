@@ -83,7 +83,7 @@ const CheckIndex = () => {
 
   return (
     <div className="pt-3">
-      <div className="container text-center">
+      <div className="container-fluid text-center">
         <ol
           className="breadcrumb"
           style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -96,6 +96,12 @@ const CheckIndex = () => {
           </li>
           <li>
             Staffing
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
+          <li>
+            <Link to="/staffing/attendance" className="custom-breadcrumb">
+              Attendance
+            </Link>
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
           <li className="breadcrumb-item active" aria-current="page">

@@ -33,7 +33,7 @@ function HolidayView() {
 
   return (
     <section>
-      <div className="container">
+      <div className="container-fluid">
         <ol
           className="breadcrumb my-3"
           style={{ listStyle: "none", padding: 0, margin: 0 }}

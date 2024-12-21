@@ -44,8 +44,8 @@ function CurriculumOutletAdd({ onSuccess }) {
 
   const validationSchema = Yup.object({
     effectiveDate: Yup.string().required("*Effective Date is required"),
-    name: Yup.string().required("*Name Fees Code is required"),
-    status: Yup.string().required("*Status Fee is required"),
+    name: Yup.string().required("*Name is required"),
+    status: Yup.string().required("*Status is required"),
   });
 
   const formik = useFormik({
@@ -198,7 +198,7 @@ function CurriculumOutletAdd({ onSuccess }) {
               </div>
             </div>
             <Modal.Footer>
-              <Button 
+              <Button
                 type="button"
                 className="btn btn-sm btn-border bg-light text-dark"
                 onClick={handleClose}

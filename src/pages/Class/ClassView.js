@@ -37,7 +37,7 @@ function ClassView() {
   }, [id]);
 
   return (
-    <div className="container ">
+    <div className="container-fluid">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -211,7 +211,16 @@ function ClassView() {
                   <p className="">Start Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {new Date(`1970-01-01T${data.startTime}:00`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }) || ""}</p>
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {new Date(
+                      `1970-01-01T${data.startTime}:00`
+                    ).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    }) || ""}
+                  </p>
                 </div>
               </div>
             </div>
@@ -221,7 +230,16 @@ function ClassView() {
                   <p className="">End Time</p>
                 </div>
                 <div className="col-6">
-                  <p className="text-muted text-sm">: {new Date(`1970-01-01T${data.endTime}:00`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }) || ""}</p>
+                  <p className="text-muted text-sm">
+                    :{" "}
+                    {new Date(
+                      `1970-01-01T${data.endTime}:00`
+                    ).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                      hour12: true,
+                    }) || ""}
+                  </p>
                 </div>
               </div>
             </div>

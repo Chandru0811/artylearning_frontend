@@ -35,7 +35,7 @@ function StaffingAttendanceView() {
     getData();
     fetchData();
   }, []);
-  
+
   const formatTimeTo12Hour = (time) => {
     if (!time) return "--";
     const [hours, minutes] = time.split(":");
@@ -45,7 +45,7 @@ function StaffingAttendanceView() {
   };
 
   return (
-    <div className="container ">
+    <div className="container-fluid">
       <ol
         className="breadcrumb my-3"
         style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -89,7 +89,7 @@ function StaffingAttendanceView() {
             </Link>
           </div>
         </div>
-        <div className="container">
+        <div className="container-fluid">
           <div className="row mt-5 pb-3">
             <div className="col-md-6 col-12">
               <div className="row    mb-2">

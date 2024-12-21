@@ -15,7 +15,7 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 const Teacher = () => {
   const [filters, setFilters] = useState({
     teacherName: "",
-    email: "",
+    country: "",
   });
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -23,9 +23,6 @@ const Teacher = () => {
   const roles = localStorage.getItem("userName");
 
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
-  const [teacherName, setTeacherName] = useState("");
-  const [email, setEmail] = useState("");
 
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
@@ -196,7 +193,7 @@ const Teacher = () => {
   const clearFilter = () => {
     setFilters({
       teacherName: "",
-      email: "",
+      country: "",
     });
   };
 
@@ -205,13 +202,13 @@ const Teacher = () => {
       const matchesTeacherName = item.teacherName
         ?.toLowerCase()
         .includes(filters.teacherName.toLowerCase());
-      const matchesEmail = item.email
+      const matchesEmail = item.country
         ?.toLowerCase()
-        .includes(filters.email.toLowerCase());
+        .includes(filters.country.toLowerCase());
 
       return (
         (filters.teacherName ? matchesTeacherName : true) &&
-        (filters.email ? matchesEmail : true)
+        (filters.country ? matchesEmail : true)
       );
     });
   }, [data, filters]);
@@ -271,13 +268,43 @@ const Teacher = () => {
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
-                name="email"
+                name="country"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Email"
-                value={filters.email}
+                placeholder="Country"
+                value={filters.country}
                 onChange={handleFilterChange}
               />
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                type="text"
+                className="form-select form-select-sm center_list"
+                style={{ width: "160px" }}
+                name="teacherType"
+                value={filters.teacherType}
+              >
+                <option value="" selected>
+                  Select Job Type
+                </option>
+                <option value="Permanent">Permanent</option>
+                <option value="Temporary">Temporary</option>
+                <option value="Intern">Intern</option>
+              </select>
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                type="text"
+                className="form-select form-select-sm center_list"
+                style={{ width: "160px" }}
+                name="status"
+              >
+                <option value="" selected>
+                  Select a status
+                </option>
+                <option value={"ACTIVE"}>Active</option>
+                <option value={"RESIGNED"}>Resigned</option>
+              </select>
             </div>
 
             <div className="form-group mb-0 ms-2 mb-1">

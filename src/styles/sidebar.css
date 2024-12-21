@@ -749,6 +749,7 @@ a:hover {
     color: #ffffff;
     padding-left: 23px;
     transition: all 0.4s;
+    content: "X";
   }
 }
 
@@ -760,16 +761,17 @@ a:hover {
 .on-off-toggle__input:checked + .on-off-toggle__slider {
   /* background-color: #64e455; */
   background-color: #287f71;
-
+  
   &:before {
     transform: translateX(20px);
-    color: #fff;
+    color: white !important;
   }
-
+  
   &:after {
     content: "\2714";
-    color: #ffffff;
+    color: #ffffff !important;
     padding-left: 5px;
+    content: "O";
   }
 }
 

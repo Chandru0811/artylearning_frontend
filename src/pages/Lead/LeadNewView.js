@@ -153,10 +153,13 @@ function LeadNewView() {
                   </p>
                 </Link>
               )}
-              <hr className="mt-2 mb-0" />
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                {/* <b>Lead Information</b> */}
-                <h6 className="headColor"> Student Information</h6>
+                <div className="withBorder">
+                  <p className="fw-medium ms-3 my-2 headColor">
+                    {" "}
+                    Student Information
+                  </p>
+                </div>
                 <li className="stdList">
                   <b>Student Name</b>
                   <span> {data.studentName || "--"}</span>
@@ -241,15 +244,13 @@ function LeadNewView() {
               </div>
               <div style={{ padding: "10px" }}>
                 <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                  <li className="stdList">
-                    <span>
-                      {" "}
-                      {data.primaryContactMother ? (
-                        <p className="badge text-bg-primary">primary</p>
-                      ) : null}
-                    </span>
-                  </li>
-                  <li className="stdList">
+                  <span className="d-flex justify-content-end p-0">
+                    {" "}
+                    {data.primaryContactMother ? (
+                      <p className="badge text-bg-primary">primary</p>
+                    ) : null}
+                  </span>
+                  <li className="stdList pt-0">
                     <b> Mother's Full Name</b>
                     <span> {data.mothersFullName || "--"}</span>
                   </li>
@@ -272,20 +273,21 @@ function LeadNewView() {
                   </li>
                   <li className="stdList">
                     <b> Mother's Monthly Income</b>
-                    <span> {data.monthlyIncomeOfMother?.split("_").join(" ") || "--"}</span>
+                    <span>
+                      {" "}
+                      {data.monthlyIncomeOfMother?.split("_").join(" ") || "--"}
+                    </span>
                   </li>
                   <li className="stdList">
                     <b> Mother's Email Address</b>
                     <span> {data.mothersEmailAddress || "--"}</span>
                   </li>
-                  <li className="stdList">
-                    <span>
-                      {data.primaryContactFather ? (
-                        <p className="badge text-bg-primary">primary</p>
-                      ) : null}
-                    </span>
-                  </li>
-                  <li className="stdList">
+                  <span className="d-flex justify-content-end pt-1">
+                    {data.primaryContactFather ? (
+                      <p className="badge text-bg-primary">primary</p>
+                    ) : null}
+                  </span>
+                  <li className="stdList pt-0">
                     <b> Mother's Occupation</b>
                     <span> {data.mothersOccupation || "--"}</span>
                   </li>
@@ -312,7 +314,10 @@ function LeadNewView() {
                   </li>
                   <li className="stdList">
                     <b> Father's Monthly Income</b>
-                    <span> {data.monthlyIncomeOfFather?.split("_").join(" ") || "--"}</span>
+                    <span>
+                      {" "}
+                      {data.monthlyIncomeOfFather?.split("_").join(" ") || "--"}
+                    </span>
                   </li>
                   <li className="stdList">
                     <b> Father's Email Address</b>
@@ -325,17 +330,11 @@ function LeadNewView() {
           <div className="col-md-3 col-12 mb-3">
             <div className="card mb-3">
               <div className="withBorder">
-                <p className="fw-medium ms-3 my-2 headColor">
-                  {/* <FaBook size={20} /> */}
-                  &nbsp;&nbsp;Child Ability
-                </p>
+                <p className="fw-medium ms-3 my-2 headColor">Child Ability</p>
               </div>
               <div style={{ padding: "10px" }}>
                 <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
+                  <li className="stdList pt-0">
                     <b>Pencil Grip</b>
                     <span>{data.pencilGrip || "--"}</span>
                   </li>
@@ -375,28 +374,19 @@ function LeadNewView() {
               </div>
               <div style={{ padding: "10px" }}>
                 <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
+                  <li className="stdList">
                     <p className="m-0">
                       <b>Refer Center Name</b>
                       <span>{data.referedStudentCenterName || "--"}</span>
                     </p>
                   </li>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
+                  <li className="stdList">
                     <p className="m-0">
                       <b>Refer By</b>
                       <span>{data.referBy}</span>
                     </p>
                   </li>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
+                  <li className="stdList">
                     <p className="m-0">
                       <b>Preferred Day</b>
                       <span>
@@ -406,10 +396,7 @@ function LeadNewView() {
                       </span>
                     </p>
                   </li>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
+                  <li className="stdList">
                     <b> Preferred Timeslot</b>
                     <span>
                       {" "}
@@ -419,17 +406,11 @@ function LeadNewView() {
                     </span>
                   </li>
 
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
+                  <li className="stdList">
                     <b> Marketing Source</b>
                     <span> {data.marketingSource || "--"}</span>
                   </li>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
+                  <li className="stdList">
                     <b> Enquiry Date</b>
                     <span>
                       {" "}
@@ -438,10 +419,7 @@ function LeadNewView() {
                         ""}
                     </span>
                   </li>
-                  <li
-                    className="stdList"
-                    style={{ borderTop: "1px solid #ddd" }}
-                  >
+                  <li className="stdList">
                     <b> Remarks</b>
                     <span> {data.remark || "--"}</span>
                   </li>
@@ -502,36 +480,40 @@ function LeadNewView() {
           <div className="col-md-3 col-12 mb-3">
             <div className="card" style={{ padding: "10px" }}>
               <ul style={{ listStyle: "none", paddingLeft: "0" }}>
-                <p className="headColor"> Address Information</p>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <div className="withBorder">
+                  <p className="fw-medium ms-3 my-2 headColor">
+                    Address Information
+                  </p>
+                </div>
+                <li className="stdList">
                   <b>Address</b>
                   <span> {data.address || "--"}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>Postal Code</b>
                   <span> {data.postalCode || "--"}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>Emergency Contact Name</b>
                   <span> {data.nameOfEmergency || "--"}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>Emergency Contact NRIC</b>
                   <span> {data.emergencyNric || "--"}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>Emergency Contact Mobile</b>
                   <span> {data.emergencyContact || "--"}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>Relation To Child</b>
                   <span> {data.relationToChild || "--"}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>Name Of Authorised Person To Take child From Class</b>
                   <span> {data.nameOfAuthorised || "--"}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>
                     {" "}
                     Relation To Child Of Authorised Person To Take Child From
@@ -539,14 +521,14 @@ function LeadNewView() {
                   </b>
                   <span> {data.relationToChils || data.relation || ""}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>
                     {" "}
                     NRIC/FIN No. Authorised Person To Take Child From Class
                   </b>
                   <span> {data.noAuthorisedNric || "--"}</span>
                 </li>
-                <li className="stdList" style={{ borderTop: "1px solid #ddd" }}>
+                <li className="stdList">
                   <b>
                     {" "}
                     Contact Number Authorised Person To Take Child From Class

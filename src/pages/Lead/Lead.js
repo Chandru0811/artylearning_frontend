@@ -221,24 +221,19 @@ const Lead = () => {
   };
 
   useEffect(() => {
-    // Function to check screen size
     const checkScreenSize = () => {
       setIsSmallScreen(window.innerWidth <= 736);
     };
 
-    // Initial check
     checkScreenSize();
 
-    // Add event listener
     window.addEventListener("resize", checkScreenSize);
 
-    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener("resize", checkScreenSize);
     };
   }, []);
 
-  // ===new Data table
   const columns = useMemo(
     () => [
       {
@@ -776,17 +771,12 @@ const Lead = () => {
         enableHiding: false,
       },
       { accessorKey: "parentName", enableHiding: false, header: "Parent Name" },
-      { accessorKey: "address", header: "  Sounds of a-z" },
-      { accessorKey: "invoiceNotes", header: "Invoice Notes" },
-      { accessorKey: "openingDate", header: "Opening Date" },
-      { accessorKey: "bankAccountName", header: "Bank A/C Name" },
-      { accessorKey: "bankAccountNumber", header: "Bank A/C Number" },
-      { accessorKey: "bankBranch", header: "Bank Branch" },
-      { accessorKey: "bankName", header: "Bank Name" },
-      { accessorKey: "gst", header: "GST" },
-      { accessorKey: "taxRegistrationNumber", header: "Tax Reg Number" },
-      { accessorKey: "zipCode", header: "Zip Code" },
-      { accessorKey: "createdBy", header: "Created By" },
+      { accessorKey: "address", header: "Sounds of a-z" },
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
       {
         accessorKey: "createdAt",
         header: "Created At",

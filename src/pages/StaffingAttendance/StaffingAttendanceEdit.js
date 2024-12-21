@@ -255,6 +255,12 @@ function StaffingAttendanceEdit() {
             &nbsp;Staffing
             <span className="breadcrumb-separator"> &gt; </span>
           </li>
+          <li>
+            <Link to="/staffing/attendance" className="custom-breadcrumb">
+              Attendance
+            </Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </li>
           <li className="breadcrumb-item active" aria-current="page">
             &nbsp;Attendance Edit
           </li>

@@ -62,7 +62,7 @@ const Curriculum = () => {
   useEffect(() => {
     getData();
     fetchData();
-  }, [id]);
+  }, []);
 
   // ===New Table
 
@@ -112,7 +112,7 @@ const Curriculum = () => {
             </span>
           ) : row.original.status === "In Active" ||
             row.original.status === "Inactive" ||
-            row.original.status === "string" ? (
+            row.original.status === "INACTIVE" ? (
             <span
               className="badge badges-orange fw-light"
               // style={{ backgroundColor: "#eb862a" }}
@@ -174,11 +174,11 @@ const Curriculum = () => {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0", 
-              opacity: 1, 
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
           },
           track: {
@@ -189,7 +189,7 @@ const Curriculum = () => {
           },
           switchBase: {
             "&.Mui-checked": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
             "&.Mui-checked + .MuiSwitch-track": {
               backgroundColor: "#eb862a",
@@ -224,8 +224,11 @@ const Curriculum = () => {
           <span className="breadcrumb-separator"> &gt; </span>
         </li>
         <li>
-          <Link to={`course/curriculumoutlet/${id}`} className="custom-breadcrumb"> 
-          Curriculum Outlet
+          <Link
+            to={`/course/curriculumoutlet/${id}`}
+            className="custom-breadcrumb"
+          >
+            Curriculum Outlet
           </Link>
           <span className="breadcrumb-separator"> &gt; </span>
         </li>

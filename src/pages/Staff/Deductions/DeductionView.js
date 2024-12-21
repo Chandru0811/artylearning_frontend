@@ -34,7 +34,7 @@ function DeductionView() {
 
   return (
     <section>
-      <div className="container">
+      <div className="container-fluid">
         <ol
           className="breadcrumb my-3"
           style={{ listStyle: "none", padding: 0, margin: 0 }}
@@ -60,24 +60,24 @@ function DeductionView() {
           </li>
         </ol>
         <div className="card">
-        <div
-          className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
-          style={{ background: "#f5f7f9" }}
-        >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
+          <div
+            className="d-flex px-4 justify-content-between align-items-center p-1 mb-4"
+            style={{ background: "#f5f7f9" }}
+          >
+            <div class="d-flex align-items-center">
+              <div class="d-flex">
+                <div class="dot active"></div>
+              </div>
+              <span class="me-2 text-muted">View Deduction</span>
             </div>
-            <span class="me-2 text-muted">View Deduction</span>
+            <div className="my-2 pe-3 d-flex align-items-center">
+              <Link to="/deduction">
+                <button type="button " className="btn btn-sm btn-border   ">
+                  Back
+                </button>
+              </Link>
+            </div>
           </div>
-          <div className="my-2 pe-3 d-flex align-items-center">
-            <Link to="/deduction">
-              <button type="button " className="btn btn-sm btn-border   ">
-                Back
-              </button>
-            </Link>
-          </div>
-        </div>
           <div className="container-fluid px-4 mt-3">
             <div className="row pb-3">
               <div className="col-md-6 col-12">
