@@ -169,6 +169,7 @@ const Student = () => {
       {
         accessorKey: "createdAt",
         header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "updatedBy",
@@ -177,6 +178,7 @@ const Student = () => {
       {
         accessorKey: "updatedAt",
         header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
     ],
     []
