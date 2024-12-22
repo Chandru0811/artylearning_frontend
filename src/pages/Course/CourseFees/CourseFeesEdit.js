@@ -9,7 +9,7 @@ import {
 import * as Yup from "yup";
 import api from "../../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllPackageList from "../../List/PackageList";
+import fetchAllPackageListByCenter from "../../List/PackageListByCenter";
 
 const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),
@@ -20,19 +20,43 @@ const validationSchema = Yup.object({
   status: Yup.string().required("*Status is required"),
 });
 
-function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
+function CourseFeesEdit({ id, onSuccess, handleMenuClose, centerId }) {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [packageData, setPackageData] = useState(null);
   const [taxData, setTaxData] = useState([]);
   const userName = localStorage.getItem("userName");
 
-  const fetchPackageData = async () => {
-    try {
-      const packageData = await fetchAllPackageList();
-      setPackageData(packageData);
-    } catch (error) {
-      toast.error(error);
+  // const fetchPackageData = async () => {
+  //   try {
+  //     const packageData = await fetchAllPackageList();
+  //     setPackageData(packageData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
+
+  const fetchPackageData = async (id) => {
+    if (id) {
+      try {
+        const newData = await fetchAllPackageListByCenter(id);
+        setPackageData((prev) => {
+          if (!Array.isArray(prev)) {
+            return newData;
+          }
+          const uniqueDataMap = new Map();
+
+          prev.forEach((item) => {
+            uniqueDataMap.set(item.id, item);
+          });
+          newData.forEach((item) => {
+            uniqueDataMap.set(item.id, item);
+          });
+          return Array.from(uniqueDataMap.values());
+        });
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
 
@@ -106,6 +130,17 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
     getData();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchTaxData();
+
+      for (const center of centerId) {
+        await fetchPackageData(center.id);
+      }
+    };
+
+    fetchData();
+  }, [centerId]);
   return (
     <>
       <span

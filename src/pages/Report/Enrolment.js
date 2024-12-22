@@ -26,7 +26,8 @@ function Datatable2() {
     dayData: [],
     labels: [],
   });
-
+  console.log("chartData",chartData);
+  
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -71,10 +72,15 @@ function Datatable2() {
       );
 
       const data = response.data;
+      const targetValue = data?.Target?.target; 
+      console.log("targetValue:",targetValue);
+      
       if (day === "ALL") {
         // Map for "ALL" days structure
         const dayData = data.dayData || {};
         const labels = data.labels || [];
+        console.log("Target:",targetValue);
+        
         const bookedSlots = labels.map(
           (label) => dayData[label]?.bookSlot || 0
         );
@@ -88,11 +94,11 @@ function Datatable2() {
             { name: "Available Slots", data: availableSlots },
           ],
           labels: labels,
+          // target: targetValue,
         });
       } else {
-        // Map for specific day structure (like "FRIDAY")
         const timeData = data.dayData[0] || {};
-        const labels = Object.keys(timeData); // Extract time labels directly from keys
+        const labels = Object.keys(timeData);
 
         const bookedSlots = labels.map(
           (label) => timeData[label]?.bookSlot || 0
@@ -107,6 +113,7 @@ function Datatable2() {
             { name: "Available Slots", data: availableSlots },
           ],
           labels: labels,
+          // target: targetValue,
         });
       }
     } catch (error) {
@@ -119,57 +126,6 @@ function Datatable2() {
       fetchEnrollmentData(selectedCenterId, selectedType, selectedDay);
     }
   }, [selectedType, selectedDay, selectedCenterId]);
-
-  // const options = {
-  //   chart: {
-  //     type: "bar",
-  //     height: 350,
-  //     stacked: true,
-  //     stackType: "100%",
-  //   },
-  //   xaxis: {
-  //     categories: chartData?.labels,
-  //   },
-  //   fill: {
-  //     type: "gradient", // Set the fill type to gradient
-  //     gradient: {
-  //       type: "vertical", 
-  //       gradientToColors: ["#4286F5", "#EC5040"],
-  //       stops: [50, 50],
-  //     },
-  //   },
-  //   legend: {
-  //     position: "right",
-  //     offsetX: 0,
-  //     offsetY: 50,
-  //   },
-  // };
-
-  // const options = {
-  //   chart: {
-  //     type: "bar",
-  //     height: 350,
-  //     stacked: true,
-  //     stackType: "100%",
-  //   },
-  //   xaxis: {
-  //     categories: chartData?.labels,
-  //   },
-  //   fill: {
-  //     type: "gradient", // Set the fill type to gradient
-  //     gradient: {
-  //       type: "vertical",
-  //       gradientToColors: ["#4286F5", "#EC5040"], // Two colors
-  //       stops: [50, 50],
-  //     },
-  //   },
-  //   colors: ["#4286F5", "#EC5040"], // Two colors for series
-  //   legend: {
-  //     position: "right",
-  //     offsetX: 0,
-  //     offsetY: 50,
-  //   },
-  // };
 
   const options = {
     chart: {
@@ -196,20 +152,22 @@ function Datatable2() {
       offsetY: 50,
     },
     annotations: {
-      yaxis: [
-        {
-          y: 1000, // Target value hardcoded here
-          borderColor: "#00E396",
-          label: {
-            borderColor: "#00E396",
-            style: {
-              color: "#fff",
-              background: "#00E396",
+      yaxis: chartData.dayData?.Target?.target
+        ? [
+            {
+              y: chartData.dayData?.Target?.target,
+              borderColor: "#00E396",
+              label: {
+                borderColor: "#00E396",
+                style: {
+                  color: "#fff",
+                  background: "#00E396",
+                },
+                text: `Target: ${chartData.dayData?.Target?.target}`, // Display target value
+              },
             },
-            text: "Target: 1000", // Display text for target
-          },
-        },
-      ],
+          ]
+        : [],
     },
   };
   
