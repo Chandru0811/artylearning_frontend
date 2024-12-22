@@ -73,35 +73,28 @@ const Invoice = () => {
           ),
       },
       {
-        accessorKey: "courseData",
-        enableHiding: false,
-        header: "Course",
-        cell: ({ row }) => {
-          const data = row.original;
-          return (
-            (courseData &&
-              courseData.find((course) => parseInt(data.courseId) === course.id)
-                ?.courseNames) ||
-            "--"
-          );
-        },
-      },
-      {
-        accessorKey: "centerNames",
+        accessorKey: "centerName",
         enableHiding: false,
         header: "Centre",
       },
+      {
+        accessorKey: "courseName",
+        enableHiding: false,
+        header: "Course",
+      },
+      {
+        accessorKey: "studentId",
+        enableHiding: false,
+        header: "Student ID",
+      },
+      { accessorKey: "studentName", header: "Student" },
+      { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
+      { accessorKey: "packageName", header: "Package" },
       {
         accessorKey: "invoiceNumber",
         header: "Invoice Number",
         enableHiding: false,
         size: 50,
-      },
-      { accessorKey: "parent", enableHiding: false, header: "Parent Name" },
-      {
-        accessorKey: "studentId",
-        enableHiding: false,
-        header: "Student ID",
       },
       {
         accessorKey: "invoiceDate",
@@ -115,8 +108,6 @@ const Invoice = () => {
       },
 
       { accessorKey: "noOfLessons", header: "Number Of Lesson" },
-      { accessorKey: "studentNames", header: "Student" },
-      { accessorKey: "packageNames", header: "Package" },
       { accessorKey: "createdBy", header: "Created By" },
       {
         accessorKey: "createdAt",
@@ -350,18 +341,11 @@ const Invoice = () => {
                   columnVisibility: {
                     gst: false,
                     address: false,
-                    bankAccountName: false,
-                    bankAccountNumber: false,
-                    bankBranch: false,
-                    bankName: false,
+               
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,
                     updatedAt: false,
-                    invoiceNotes: false,
-                    openingDate: false,
-                    taxRegistrationNumber: false,
-                    zipCode: false,
                   },
                 }}
                 muiTableBodyRowProps={({ row }) => ({

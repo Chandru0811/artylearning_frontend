@@ -56,7 +56,7 @@ const Holiday = () => {
         ),
       },
       {
-        accessorFn: (row) => row.centers?.[0]?.centerName,
+        accessorKey: "centerName",
         enableHiding: false,
         header: "Center Name",
       },
@@ -70,7 +70,7 @@ const Holiday = () => {
         enableHiding: false,
         header: "Start Date",
       },
-      { accessorKey: "endDate", header: "End Date" },
+      { accessorKey: "endDate", header: "End Date" , enableHiding: false,},
       { accessorKey: "holidayDescription", header: "Holiday Description" },
       { accessorKey: "createdBy", header: "Created By" },
       {
@@ -238,7 +238,6 @@ const Holiday = () => {
                     noOfDays: true,
                     requestDate: true,
                     userId: false,
-                    endDate: false,
                     holidayDescription: false,
                     createdBy: false,
                     createdAt: false,

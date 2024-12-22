@@ -336,6 +336,7 @@ function ClassEdit() {
                   aria-label="Default select example"
                   class="form-select "
                   onChange={handleCenterChange}
+                  disabled
                 >
                   <option selected></option>
                   {centerData &&
@@ -364,7 +365,8 @@ function ClassEdit() {
                       : ""
                   }`}
                   aria-label="Default select example"
-                  class="form-select "
+                  class="form-select"
+                  disabled
                 >
                   <option selected></option>
                   {courseData &&
@@ -393,6 +395,7 @@ function ClassEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
+                  readOnly
                   {...formik.getFieldProps("className")}
                 />
                 {formik.touched.className && formik.errors.className && (
@@ -415,6 +418,7 @@ function ClassEdit() {
                     value="Group"
                     onChange={formik.handleChange}
                     checked={formik.values.classType === "Group"}
+                    disabled
                   />
                   <label class="form-check-label" for="inlineRadio1">
                     Group
@@ -429,6 +433,7 @@ function ClassEdit() {
                     value="Individual"
                     onChange={formik.handleChange}
                     checked={formik.values.classType === "Individual"}
+                    disabled
                   />
                   <label class="form-check-label" for="inlineRadio2">
                     Individual
@@ -455,6 +460,7 @@ function ClassEdit() {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.durationInHrs}
+                  disabled
                 >
                   <option></option>
                   <option value="01">01</option>
@@ -485,6 +491,7 @@ function ClassEdit() {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.durationInMins}
+                  disabled
                 >
                   <option></option>
                   <option value="00">00</option>
@@ -512,6 +519,7 @@ function ClassEdit() {
                   }`}
                   name="startDate"
                   type="date"
+                  readOnly
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.startDate}
@@ -535,6 +543,7 @@ function ClassEdit() {
                   }`}
                   name="endDate"
                   type="date"
+                  readOnly
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.endDate}
@@ -555,6 +564,7 @@ function ClassEdit() {
                     formik.touched.day && formik.errors.day ? "is-invalid" : ""
                   }`}
                   name="day"
+                  disabled
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.day}
@@ -582,6 +592,7 @@ function ClassEdit() {
                       : ""
                   }`}
                   name="userId"
+                  disabled
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.userId}
@@ -610,6 +621,7 @@ function ClassEdit() {
                       : ""
                   }`}
                   name="startTime"
+                  disabled
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.startTime}
@@ -647,6 +659,7 @@ function ClassEdit() {
                       ? "is-invalid"
                       : ""
                   }`}
+                  disabled
                   name="endTime"
                   type="time"
                   onChange={formik.handleChange}

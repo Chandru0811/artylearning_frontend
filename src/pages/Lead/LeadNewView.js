@@ -383,7 +383,7 @@ function LeadNewView() {
                   <li className="stdList">
                     <p className="m-0">
                       <b>Refer By</b>
-                      <span>{data.referBy}</span>
+                      <span>{arrangeassesmentData.referByStudentName || "--"}</span>
                     </p>
                   </li>
                   <li className="stdList">
