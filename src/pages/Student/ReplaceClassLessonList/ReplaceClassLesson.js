@@ -46,7 +46,7 @@ const ReplaceClassLesson = () => {
           ),
       },
       {
-        accessorKey: "centerNames",
+        accessorKey: "centerName",
         enableHiding: false,
         header: "Centre Name",
       },
@@ -69,7 +69,7 @@ const ReplaceClassLesson = () => {
       },
       { accessorKey: "month", header: "Month", enableHiding: false, size: 40 },
       {
-        accessorKey: "classListing",
+        accessorKey: "className",
         header: "Class Listing",
         enableHiding: false,
         size: 40,

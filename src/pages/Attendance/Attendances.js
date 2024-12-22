@@ -13,9 +13,9 @@ function Attendances() {
   console.log("Attendance Data Reload again", attendanceData);
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
-  const [selectedCenter, setSelectedCenter] = useState("1");
-  const [selectedCourse, setSelectedCourse] = useState("1");
-  const [selectedBatch, setSelectedBatch] = useState("1");
+  const [selectedCenter, setSelectedCenter] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedBatch, setSelectedBatch] = useState("");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [batchOptions, setBatchOptions] = useState([]);
 
@@ -52,15 +52,34 @@ function Attendances() {
     setSelectedDate(e.target.value);
   };
 
+  // const fetchListData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
+  //     setCenterData(centerData);
+  //     setSelectedCenter(centerData[0].id);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
+
   const fetchListData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
-      setSelectedCenter(centerData[0].id);
+  
+      // Set default centerId to the first available center
+      if (centerData?.length > 0) {
+        const defaultCenterId = centerData[0].id;
+        setSelectedCenter(defaultCenterId);
+  
+        // Fetch courses for the default center
+        fetchCourses(defaultCenterId);
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Error fetching centers.");
     }
   };
+  
 
   const fetchCourses = async (centerId) => {
     try {
@@ -78,8 +97,28 @@ function Attendances() {
 
   const handleCenterChange = (event) => {
     const center = event.target.value;
+    setSelectedCenter(center);
     setCourseData(null);
     fetchCourses(center);
+  };
+
+  const fetchData = async () => {
+    try {
+      const requestBody = {
+        centerId: selectedCenter,
+        // courseId: selectedCourse || " ",
+        batchTime: selectedBatch || " ",
+        date: selectedDate || " ",
+      };
+
+      const response = await api.post(
+        "getAllTeacherWithStudentAttendance",
+        requestBody
+      );
+      setAttendanceData(response.data);
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
   };
 
   useEffect(() => {
@@ -93,24 +132,7 @@ function Attendances() {
     }
   }, [selectedDate]);
 
-  const fetchData = async () => {
-    try {
-      const requestBody = {
-        centerId: selectedCenter,
-        // courseId: selectedCourse,
-        batchTime: selectedBatch,
-        date: selectedDate,
-      };
 
-      const response = await api.post(
-        "getAllTeacherWithStudentAttendance",
-        requestBody
-      );
-      setAttendanceData(response.data);
-    } catch (error) {
-      toast.error("Error fetching data:", error);
-    }
-  };
 
   useEffect(() => {
     fetchData();
@@ -207,14 +229,14 @@ function Attendances() {
           </div>
           <div className="row px-2">
             <div className="col-md-6 col-12 mb-2">
-              <label className="form-lable">Centre</label>
+              <label className="form-lable">Centre<span class="text-danger">*</span></label>
               <select
                 className="form-select "
                 aria-label="Default select example"
                 // onChange={(e) => setSelectedCenter(e.target.value)}
                 onChange={handleCenterChange}
               >
-                <option selected></option>
+                {/* <option selected></option> */}
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
@@ -222,6 +244,15 @@ function Attendances() {
                     </option>
                   ))}
               </select>
+            </div>
+            <div className="col-md-6 col-12">
+              <label className="form-lable">Attendance Date<span class="text-danger">*</span></label>
+              <input
+                type="date"
+                className="form-control"
+                onChange={handleDateChange}
+                value={selectedDate}
+              />
             </div>
             <div className="col-md-6 col-12 mb-2">
               <label className="form-lable">Course</label>
@@ -234,16 +265,6 @@ function Attendances() {
                     </option>
                   ))}
               </select>
-            </div>
-
-            <div className="col-md-6 col-12">
-              <label className="form-lable">Attendance Date</label>
-              <input
-                type="date"
-                className="form-control"
-                onChange={handleDateChange}
-                value={selectedDate}
-              />
             </div>
             <div className="col-md-6 col-12">
               <label className="form-lable">Batch</label>
@@ -291,6 +312,11 @@ function Attendances() {
                 <div style={{ width: "20%" }} className="py-2">
                   <p style={{ marginBottom: "0px", fontWeight: "700" }}>
                     Class Code
+                  </p>
+                </div>
+                <div style={{ width: "20%" }} className="py-2">
+                  <p style={{ marginBottom: "0px", fontWeight: "700" }}>
+                    Batch Time
                   </p>
                 </div>
                 <div style={{ width: "20%" }} className="py-2">
@@ -361,6 +387,16 @@ function Attendances() {
                                 }}
                               >
                                 {attendanceItem.classCode}
+                              </p>
+                            </div>
+                            <div style={{ width: "20%" }} className="pb-2 pt-4">
+                              <p
+                                style={{
+                                  marginBottom: "0px",
+                                  paddingLeft: "10px",
+                                }}
+                              >
+                                {attendanceItem.batchTime}
                               </p>
                             </div>
                             <div style={{ width: "20%" }} className="pb-2 pt-4">

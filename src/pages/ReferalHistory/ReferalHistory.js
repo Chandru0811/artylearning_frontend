@@ -82,22 +82,6 @@ const ReferalHistory = () => {
     []
   );
 
-  // const fetchData = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await api.get("/getAllReferralHistory");
-  //     setData(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
   const fetchData = async () => {
     try {
       setLoading(true);
