@@ -412,6 +412,24 @@ const AddcourseDetail = forwardRef(
       }
     }, [formData.coursesData]);
 
+    const getData1 = async () => {
+      setLoadIndicators(true);
+      try {
+        const response = await api.get(
+          `/getAllStudentById/${formData.student_id}`
+        );
+        formik.setFieldValue("courseId",response.data.studentCourseDetailModels[0]?.courseId)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoadIndicators(false);
+      }
+    };
+
+    useEffect(() => {
+      getData1();
+    }, []);
+
     useImperativeHandle(ref, () => ({
       CourseDetail: formik.handleSubmit,
     }));

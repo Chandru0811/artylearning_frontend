@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
 const AddEmergencyContact = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("userName");
-
+    const [parentDetailId, setParentDetailId] = useState(null);
     // Initialize rows based on emergencyContactInformation length
     const initialRows = formData.emergencyContactInformation
       ? formData.emergencyContactInformation.map(() => ({}))
@@ -39,8 +39,9 @@ const AddEmergencyContact = forwardRef(
 
     const formik = useFormik({
       initialValues: {
+        emergencyContactId: "",
         emergencyContactName: formData.emergencyContactName || "",
-        authorizedRelation: "",
+        authorizedRelation: formData.authorizedRelation || "",
         emergencyContactNo: formData.emergencyContactNo || "",
         emergencyContactInformation: [
           {
@@ -56,40 +57,46 @@ const AddEmergencyContact = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (data) => {
         setLoadIndicators(true);
-
-        const formDatas = new FormData();
-        // Append fields for emergency contact
-        formDatas.append("emergencyContactName", data.emergencyContactName);
-        formDatas.append("emergencyRelation", " ");
-        formDatas.append("emergencyContactNo", data.emergencyContactNo);
-
-        // Append fields for each emergency contact information
-        data.emergencyContactInformation?.map((contact) => {
-          formDatas.append("name", contact.name);
-          formDatas.append("contactNo", contact.contactNo);
-          formDatas.append("authorizedRelation", contact.authorizedRelation);
-          formDatas.append("postalCode", contact.postalCode);
-          formDatas.append(
-            "emergencyContactAddress",
-            contact.emergencyContactAddress
-          );
-          formDatas.append("files", contact.files);
-          formDatas.append("createdBy", userName);
-        });
-        console.log(formDatas);
         try {
-          const response = await api.post(
-            `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.student_id}`,
-            formDatas,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data", // Specify the Content-Type header
-              },
-            }
-          );
-          if (response.status === 201) {
+          const formDatas = new FormData();
+          formDatas.append("emergencyContactName", data.emergencyContactName);
+          formDatas.append("emergencyRelation", " ");
+          formDatas.append("emergencyContactNo", data.emergencyContactNo);
+          data.emergencyContactInformation.forEach((contact) => {
+            formDatas.append("name", contact.name);
+            formDatas.append("contactNo", contact.contactNo);
+            formDatas.append("authorizedRelation", contact.authorizedRelation);
+            formDatas.append("postalCode", contact.postalCode);
+            formDatas.append(
+              "emergencyContactAddress",
+              contact.emergencyContactAddress
+            );
+            formDatas.append("files", contact.files);
+          });
+
+          const response =
+            data.emergencyContactId !== null
+              ? await api.put(
+                  `/updateEmergencyContactWithEmergencyAuthorizedContact/${data.emergencyContactId}`,
+                  formDatas,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  }
+                )
+              : await api.post(
+                  `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.student_id}`,
+                  formDatas,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                  }
+                );
+
+          if (response.status === 200 || response.status === 201) {
             toast.success(response.data.message);
-            setFormData((prev) => ({ ...prev, ...data }));
             handleNext();
           } else {
             toast.error(response.data.message);
@@ -123,7 +130,8 @@ const AddEmergencyContact = forwardRef(
                   authorizedRelation: leadData.relationToChils || "",
                   contactNo: leadData.contactOfAuthorised || "",
                   postalCode: leadData.postalCode || "",
-                  emergencyContactAddress: leadData.addressOfAuthorisedPerson || "",
+                  emergencyContactAddress:
+                    leadData.addressOfAuthorisedPerson || "",
                   files: null,
                 },
               ],
@@ -147,7 +155,9 @@ const AddEmergencyContact = forwardRef(
           );
           formik.setValues((prevValues) => ({
             ...prevValues,
-            emergencyContactInformation: formData.emergencyContactInformation || prevValues.emergencyContactInformation,
+            emergencyContactInformation:
+              formData.emergencyContactInformation ||
+              prevValues.emergencyContactInformation,
           }));
         }
       };
@@ -158,52 +168,45 @@ const AddEmergencyContact = forwardRef(
 
     useEffect(() => {
       const getData = async () => {
-        if (formData.student_id) {
-          try {
-            const response = await api.get(
-              `/getAllStudentById/${formData.student_id}`
-            );
-
-            const studentData = response.data;
-            const leadData = studentData.studentEmergencyContacts[0];
-            const emergencyContacts =
-              leadData.emergencyAuthorizedContactModels?.map((contact) => ({
-                name: contact.name || "",
-                authorizedRelation: contact.authorizedRelation || "",
-                contactNo: contact.contactNo || "",
-                postalCode: contact.postalCode || "",
-                emergencyContactAddress: contact.emergencyContactAddress || "",
-                fileUrl: contact.personProfile || null,
-              })) || [];
-
-            console.log("Lead Data", leadData);
-
-            formik.setValues({
-              emergencyContactName: leadData?.emergencyContactName || "",
-              emergencyContactNo: leadData?.emergencyContactNo || "",
-              authorizedRelation: leadData?.emergencyRelation || "",
-              emergencyContactInformation: emergencyContacts,
-            });
-
-            // Set rows based on emergencyContactInformation
-            setRows(emergencyContacts.map(() => ({})));
-          } catch (error) {
-            console.error("Error fetching lead data:", error);
-            toast.error(error.message);
-          }
-        } else {
-          // If student_id is not present, set rows to match form data
-          setRows(
-            formData.emergencyContactInformation
-              ? formData.emergencyContactInformation.map(() => ({}))
-              : [{}]
+        try {
+          const response = await api.get(
+            `/getAllStudentById/${formData.student_id}`
           );
-          formik.setValues((prevValues) => ({
-            ...prevValues,
-            emergencyContactInformation:
-              formData.emergencyContactInformation ||
-              prevValues.emergencyContactInformation,
-          }));
+
+          if (
+            response.data.studentEmergencyContacts &&
+            response.data.studentEmergencyContacts.length > 0
+          ) {
+            const contactData = response.data.studentEmergencyContacts[0];
+            formik.setValues({
+              ...contactData,
+              emergencyContactId: contactData.id,
+              emergencyContactInformation:
+                contactData.emergencyAuthorizedContactModels?.map((item) => ({
+                  ...item,
+                  files: item.personProfile || null,
+                })) || [],
+            });
+          } else {
+            formik.setValues({
+              emergencyContactId: null,
+              emergencyContactName: "",
+              authorizedRelation: "",
+              emergencyContactNo: "",
+              emergencyContactInformation: [
+                {
+                  name: "",
+                  emergencyRelation: "",
+                  contactNo: "",
+                  postalCode: "",
+                  emergencyContactAddress: "",
+                  files: null,
+                },
+              ],
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
         }
       };
 
@@ -513,12 +516,12 @@ const AddEmergencyContact = forwardRef(
                           {/* Show Existing Image if No Preview is Available */}
                           {!imagePreviews[index] &&
                             formik.values.emergencyContactInformation?.[index]
-                              ?.fileUrl && (
+                              ?.files && (
                               <img
                                 src={
                                   formik.values.emergencyContactInformation[
                                     index
-                                  ].fileUrl
+                                  ].files
                                 }
                                 alt="Existing Profile"
                                 style={{
