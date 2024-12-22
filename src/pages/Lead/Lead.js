@@ -770,7 +770,15 @@ const Lead = () => {
         accessorKey: "subject",
         enableHiding: false,
       },
-      { accessorKey: "parentName", enableHiding: false, header: "Parent Name" },
+      {
+        accessorKey: "fathersFullName",
+        enableHiding: false,
+        header: "Parent Name",
+        // cell: ({ row }) => {
+        //   const { fathersFullName, mothersFullName } = row.original; // Access row data
+        //   return fathersFullName || mothersFullName || " "; // Priority: Father's name, then Mother's name, then "N/A"
+        // },
+      },
       { accessorKey: "address", header: "Sounds of a-z" },
       {
         accessorKey: "createdBy",
