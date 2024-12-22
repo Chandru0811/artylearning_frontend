@@ -39,10 +39,9 @@ const AddParentGuardian = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("userName");
     const [parentDetailIds, setParentDetailIds] = useState([]);
-    const [parentDetailId, setParentDetailId] = useState(null);
+    const [parentDetailId, setParentDetailId] = useState([]);
     const [profileImage, setProfileImage] = useState(null);
-    console.log("object1", parentDetailIds);
-    console.log("object2", parentDetailId);
+
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
@@ -72,7 +71,6 @@ const AddParentGuardian = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
-        // console.log("Add ParentGuardian", values);
         try {
           const formDatas = new FormData();
           values.parentInformation.map((parent, index) => {
@@ -92,47 +90,59 @@ const AddParentGuardian = forwardRef(
             );
           });
 
-          if (parentDetailId) {
-            const formData = new FormData();
-            values.parentInformation.map((parent, index) => {
-              formData.append(`parentName`, parent.parentNames);
-              formData.append(`parentDateOfBirth`, parent.parentDateOfBirths);
-              formData.append(`email`, parent.emails);
-              formData.append(`relation`, parent.relations);
-              formData.append(`occupation`, parent.occupations);
-              formData.append(`file`, parent.files);
-              formData.append(`mobileNumber`, parent.mobileNumbers);
-              formData.append(`postalCode`, parent.postalCodes);
-              formData.append(`address`, parent.addresses);
-              formData.append("updatedBy", userName);
-              formData.append("parentId", parentDetailId);
-
-              // formDatas.append(`primaryContact`, parent.primaryContact);
-
-              formData.append(
-                `primaryContacts`,
-                index === selectedPrimaryContactIndex ? true : false
-              );
-              console.log("file", file);
-            });
-
-            // If parentDetailId exists, make PUT request (update)
-            const response = await api.put(
-              `/updateStudentParentsDetailsWithProfileImages/${parentDetailId}`,
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
+          if (parentDetailId.length > 0) {
+            const formDataArray = values.parentInformation.map(
+              (parent, index) => {
+                const formData = new FormData();
+                formData.append("parentName", parent.parentNames);
+                formData.append("parentDateOfBirth", parent.parentDateOfBirths);
+                formData.append("email", parent.emails);
+                formData.append("relation", parent.relations);
+                formData.append("occupation", parent.occupations);
+                formData.append("file", parent.files);
+                formData.append("mobileNumber", parent.mobileNumbers);
+                formData.append("postalCode", parent.postalCodes);
+                formData.append("address", parent.addresses);
+                formData.append("updatedBy", userName);
+                formData.append("parentId", parentDetailId[index]);
+                formData.append(
+                  "primaryContacts",
+                  index === selectedPrimaryContactIndex ? true : false
+                );
+                return { formData, parentId: parentDetailId[index] };
               }
             );
 
-            if (response.status === 201) {
-              toast.success(response.data.message);
-              setFormData((prev) => ({ ...prev, ...values }));
-              handleNext();
-            } else {
-              toast.error(response.data.message);
+            try {
+              // Map through all formData objects and make API calls
+              const responses = await Promise.all(
+                formDataArray.map(({ formData, parentId }) =>
+                  api.put(
+                    `/updateStudentParentsDetailsWithProfileImages/${parentId}`,
+                    formData,
+                    {
+                      headers: {
+                        "Content-Type": "multipart/form-data",
+                      },
+                    }
+                  )
+                )
+              );
+
+              const allSuccessful = responses.every(
+                (response) => response.status === 200 || response.status === 201
+              );
+
+              if (allSuccessful) {
+                toast.success("Parents details updated successfully!");
+                setFormData((prev) => ({ ...prev, ...values }));
+                handleNext();
+              } else {
+                toast.error("Some updates failed. Please check and try again.");
+              }
+            } catch (error) {
+              toast.error("An error occurred while updating parent details.");
+              console.error(error);
             }
           } else {
             const response = await api.post(
@@ -233,11 +243,11 @@ const AddParentGuardian = forwardRef(
               ]);
 
               if (primaryContactMother) {
-                setSelectedPrimaryContactIndex(0); // Mother is the primary contact
+                setSelectedPrimaryContactIndex(0);
               } else if (primaryContactFather) {
-                setSelectedPrimaryContactIndex(1); // Father is the primary contact
+                setSelectedPrimaryContactIndex(1);
               } else {
-                setSelectedPrimaryContactIndex(null); // Neither parent is selected as primary contact
+                setSelectedPrimaryContactIndex(null);
               }
 
               setRows(2);
@@ -269,7 +279,11 @@ const AddParentGuardian = forwardRef(
         const response = await api.get(
           `/getAllStudentById/${formData.student_id}`
         );
-        setParentDetailId(response.data.studentParentsDetails[0].id);
+        const parentDetailIds = response.data.studentParentsDetails.map(
+          (detail) => detail.id
+        );
+
+        setParentDetailId(parentDetailIds);
         setProfileImage(response.data.studentParentsDetails[0].profileImage);
       } catch (error) {
         console.error("Error fetching data:", error);
