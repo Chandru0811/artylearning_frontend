@@ -14,19 +14,29 @@ import { toast } from "react-toastify";
 import fetchAllCentreManager from "../List/CentreMangerList";
 import GlobalDelete from "../../components/common/GlobalDelete";
 import fetchAllCoursesWithIds from "../List/CourseList";
+import fetchAllCentersWithIds from "../List/CenterList";
+import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
+import fetchAllStudentListByCenter from "../List/StudentListByCenter";
+import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 
 const Invoice = () => {
   const [filters, setFilters] = useState({
-    centerName: "",
-    student: "",
-    parent: "",
+    centerId: "",
+    courseId: "",
+    studentId: "",
+    packageId: "",
   });
+  const [centerData, setCenterData] = useState([]);
+  const centerIDLocal = localStorage.getItem("selectedCenterId");
   const [centerManagerData, setCenterManagerData] = useState([]);
+  const [packageData, setPackageData] = useState(null);
+  const [studentData, setStudentData] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [isClearFilterClicked, setIsClearFilterClicked] = useState(false);
   const [courseData, setCourseData] = useState(null);
 
   const columns = useMemo(
@@ -141,35 +151,35 @@ const Invoice = () => {
     fetchCenterManagerData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      // const centerData = await fetchAllCentersWithIds();
-      const courseData = await fetchAllCoursesWithIds();
-      // const studentData = await fetchAllStudentsWithIds();
-      // const packageData = await api.get("getAllCentersPackageWithIds");
-      // setPackageData(packageData.data);
-      // setCenterData(centerData);
-      setCourseData(courseData);
-      // setStudentData(studentData);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     // const centerData = await fetchAllCentersWithIds();
+  //     const courseData = await fetchAllCoursesWithIds();
+  //     // const studentData = await fetchAllStudentsWithIds();
+  //     // const packageData = await api.get("getAllCentersPackageWithIds");
+  //     // setPackageData(packageData.data);
+  //     // setCenterData(centerData);
+  //     setCourseData(courseData);
+  //     // setStudentData(studentData);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get("/getAllGenerateInvoices");
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await api.get("/getAllGenerateInvoices");
+  //       setData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getData();
+  //   fetchData();
+  // }, []);
 
   const theme = createTheme({
     components: {
@@ -188,25 +198,25 @@ const Invoice = () => {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0", 
-              opacity: 1, 
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
           },
           track: {
-            backgroundColor: "#e0e0e0", 
+            backgroundColor: "#e0e0e0",
           },
           thumb: {
-            color: "#eb862a", 
+            color: "#eb862a",
           },
           switchBase: {
             "&.Mui-checked": {
-              color: "#eb862a", 
+              color: "#eb862a",
             },
             "&.Mui-checked + .MuiSwitch-track": {
-              backgroundColor: "#eb862a", 
+              backgroundColor: "#eb862a",
             },
           },
         },
@@ -214,20 +224,109 @@ const Invoice = () => {
     },
   });
 
+  const getInvoiceData = async () => {
+    try {
+      setLoading(true);
+      // Dynamically construct query parameters based on filters
+      const queryParams = new URLSearchParams();
+      if (!isClearFilterClicked) {
+        if (filters.centerId) {
+          queryParams.append("centerId", filters.centerId);
+        } else if (centerIDLocal && centerIDLocal !== "undefined") {
+          queryParams.append("centerId", centerIDLocal);
+        }
+      }
+
+      // Loop through other filters and add key-value pairs if they have a value
+      for (let key in filters) {
+        if (filters[key] && key !== "centerId") {
+          queryParams.append(key, filters[key]);
+        }
+      }
+
+      const response = await api.get(
+        `/getInvoiceWithCustomInfo?${queryParams.toString()}`
+      );
+      setData(response.data);
+    } catch (error) {
+      toast.error("Error Fetching Data : ", error);
+    } finally {
+      setLoading(false);
+      setIsClearFilterClicked(false);
+    }
+  };
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
   };
 
-  const clearFilter = () => {
-    setFilters({
-      centerName: "",
-      student: "",
-      parent: "",
-    });
+  const fetchData = async () => {
+    try {
+      const centerData = await fetchAllCentersWithIds();
+      if (centerIDLocal !== null && centerIDLocal !== "undefined") {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerIDLocal,
+        }));
+        fetchListData(centerIDLocal);
+      } else if (centerData !== null && centerData.length > 0) {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          centerId: centerData[0].id,
+        }));
+        fetchListData(centerData[0].id);
+      }
+      setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
-  const handleMenuClose = () => {setMenuAnchor(null);console.log("null")}
+  const clearFilters = () => {
+    setFilters({
+      centerId: "",
+      courseId: "",
+      studentId: "",
+      packageId: "",
+    });
+    getInvoiceData();
+    setIsClearFilterClicked(true);
+  };
+  useEffect(() => {
+    const fetchDatas = async () => {
+      await fetchData(); // Fetch center data
+    };
+    fetchDatas();
+  }, []);
+
+  const fetchListData = async (centerId) => {
+    try {
+      const courseDatas = await fetchAllCoursesWithIdsC(centerId);
+      const student = await fetchAllStudentListByCenter(centerId);
+      const packageData = await fetchAllPackageListByCenter(centerId);
+      setPackageData(packageData);
+      setStudentData(student);
+      setCourseData(courseDatas);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (filters.centerId) {
+      fetchListData(filters.centerId);
+    }
+  }, [filters]);
+
+    useEffect(() => {
+      getInvoiceData();
+    }, [filters]);
+
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+    console.log("null");
+  };
 
   return (
     <div className="container-fluid px-2 my-4 center">
@@ -259,54 +358,85 @@ const Invoice = () => {
             <strong style={{ color: "#287f71" }}>Invoice</strong>
           </span>
         </div>
-        <div className="mb-3 d-flex justify-content-end">
-          {/* <div className="individual_fliters d-lg-flex ">
+        <div className="mb-3 d-flex justify-content-between">
+          <div className="individual_fliters d-lg-flex ">
             <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="centerName"
-                value={filters.centerName}
+              <select
+                className="form-select form-select-sm center_list"
+                name="centerId"
+                style={{ width: "100%" }}
                 onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Center Name"
-                autoComplete="off"
-              />
+                value={filters.centerId}
+              >
+                <option>Select the centre</option>
+                {centerData?.map((center) => (
+                  <option key={center.id} value={center.id} selected>
+                    {center.centerNames}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="student"
-                value={filters.student}
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                name="courseId"
                 onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Student"
-                autoComplete="off"
-              />
+                value={filters.courseId}
+              >
+                <option selected>Select a Course</option>
+                {courseData &&
+                  courseData.map((courseId) => (
+                    <option key={courseId.id} value={courseId.id}>
+                      {courseId.courseNames}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
-              <input
-                type="text"
-                name="parent"
-                value={filters.parent}
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                name="studentId"
                 onChange={handleFilterChange}
-                className="form-control form-control-sm center_list"
-                style={{ width: "160px" }}
-                placeholder="Parent"
-                autoComplete="off"
-              />
+                value={filters.studentId}
+              >
+                <option selected>Select a Student</option>
+                {studentData &&
+                  studentData.map((student) => (
+                    <option key={student.id} value={student.id}>
+                      {student.studentNames}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="form-group mb-0 ms-2 mb-1">
+              <select
+                className="form-select form-select-sm center_list"
+                style={{ width: "100%" }}
+                name="packageId"
+                onChange={handleFilterChange}
+                value={filters.packageId}
+              >
+                <option selected>Select a Package</option>
+                {packageData &&
+                  packageData.map((packages) => (
+                    <option key={packages.id} value={packages.id}>
+                      {packages.packageNames}
+                    </option>
+                  ))}
+              </select>
             </div>
             <div className="form-group mb-2 ms-2">
               <button
                 type="button"
-                onClick={clearFilter}
                 className="btn btn-sm btn-border"
+                onClick={clearFilters}
               >
                 Clear
               </button>
             </div>
-          </div> */}
+          </div>
           <Link to="/invoice/add">
             <button
               type="button"
@@ -341,7 +471,7 @@ const Invoice = () => {
                   columnVisibility: {
                     gst: false,
                     address: false,
-               
+
                     createdBy: false,
                     createdAt: false,
                     updatedBy: false,

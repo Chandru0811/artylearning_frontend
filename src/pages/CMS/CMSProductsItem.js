@@ -285,7 +285,7 @@ const CMSProductsItem = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteProductImageSavePublish/${selectedId}`}
+                  path={`/deleteProductImageSave/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />

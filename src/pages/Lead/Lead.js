@@ -83,18 +83,18 @@ const Lead = () => {
     }
   };
 
-  const getLeadData = async () => {
-    try {
-      const response = await api.get("/getAllLeadInfo");
-      setDatas(response.data);
-    } catch (error) {
-      toast.error("Error Fetch Data ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getLeadData = async () => {
+  //   try {
+  //     const response = await api.get("/getAllLeadInfo");
+  //     setDatas(response.data);
+  //   } catch (error) {
+  //     toast.error("Error Fetch Data ", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   useEffect(() => {
-    getLeadData();
+    // getLeadData();
     fetchData();
   }, []);
 
@@ -137,24 +137,24 @@ const Lead = () => {
     setSelectedId(row.id);
   };
 
-  const handleFormSubmit = async () => {
-    try {
-      const response = await api.put(`/updateLeadInfo/${selectedId}`, {
-        leadStatus: newStatus,
-      });
+  // const handleFormSubmit = async () => {
+  //   try {
+  //     const response = await api.put(`/updateLeadInfo/${selectedId}`, {
+  //       leadStatus: newStatus,
+  //     });
 
-      if (response.status === 200) {
-        toast.success("Lead Status Updated");
-        setShowModal(false);
-        ResetFilter();
-        getLeadData();
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.error(error.message || "An error occurred");
-    }
-  };
+  //     if (response.status === 200) {
+  //       toast.success("Lead Status Updated");
+  //       setShowModal(false);
+  //       ResetFilter();
+  //       getLeadData();
+  //     } else {
+  //       toast.error(response.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message || "An error occurred");
+  //   }
+  // };
 
   // Get filtered data based on Formik values
   const getData = async () => {
@@ -163,6 +163,9 @@ const Lead = () => {
 
     if (filters.centerId !== "") {
       params.centerId = filters.centerId;
+    }
+    if (filters.centerId === "") {
+      params.centerId = centerIDLocal;
     }
 
     if (filters.subjectId !== "") {
@@ -953,7 +956,7 @@ const Lead = () => {
                 <select
                   className="form-select form-select-sm mb-2 mb-md-0 me-md-3"
                   name="centerId"
-                  value={filters.centerId}
+                  value={filters.centerId || centerIDLocal}
                   onChange={(e) =>
                     setFilters((pre) => ({ ...pre, centerId: e.target.value }))
                   }
@@ -1081,7 +1084,7 @@ const Lead = () => {
                 <MenuItem>
                   <GlobalDelete
                     path={`/deleteLeadInfo/${selectedId}`}
-                    onDeleteSuccess={getLeadData}
+                    onDeleteSuccess={getData}
                     onOpen={handleMenuClose}
                   />
                 </MenuItem>
@@ -1117,7 +1120,7 @@ const Lead = () => {
               <button
                 style={{ background: "#eb862a" }}
                 className="btn btn-sm text-white"
-                onClick={handleFormSubmit}
+                onClick={getData}
               >
                 Confirm
               </button>
@@ -1127,7 +1130,7 @@ const Lead = () => {
       </Modal>
       <ArrangeAssesmentAdd
         leadId={selectedRow.id}
-        onSuccess={getLeadData}
+        onSuccess={getData}
         centerId={selectedRow.centerId}
         studentNames={selectedRow.studentName}
         setAll={ResetFilter}
@@ -1143,7 +1146,7 @@ const Lead = () => {
             ? selectedRow?.assessmentArrange[0]?.id
             : 0
         }
-        onSuccess={getLeadData}
+        onSuccess={getData}
         centerId={selectedRow.centerId}
         studentNames={selectedRow.studentName}
         setAll={ResetFilter}

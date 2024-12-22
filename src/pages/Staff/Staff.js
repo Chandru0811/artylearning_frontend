@@ -16,9 +16,10 @@ import GlobalDelete from "../../components/common/GlobalDelete";
 const Staff = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
+    teacherName: "",
     country: "",
-    staffName: "",
     teacherType: "",
+    status: "",
   });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,7 @@ const Staff = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
+  console.log("data",data)
   const columns = useMemo(
     () => [
       {
@@ -56,7 +58,7 @@ const Staff = () => {
           </IconButton>
         ),
       },
-      { accessorKey: "teacherId", enableHiding: false, header: "Staff Id" },
+      { accessorKey: "userUniqueId", enableHiding: false, header: "Staff Id" },
       {
         accessorKey: "teacherType",
         enableHiding: false,
@@ -138,19 +140,21 @@ const Staff = () => {
 
   const fetchData = async () => {
     try {
-      const response = await api.get("/getAllUserListExceptTeacher");
+      setLoading(true);
+      const queryParams = new URLSearchParams(filters).toString();
+      const response = await api.get(
+        `/getAllUserListExceptTeacher?${queryParams}`
+      );
       setData(response.data);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [filters]);
 
   const theme = createTheme({
     components: {
@@ -201,26 +205,30 @@ const Staff = () => {
   };
 
   const clearFilter = () => {
-    setFilters({ country: "", staffName: "", teacherType: "" });
+    setFilters({
+      teacherName: "",
+      country: "",
+      teacherType: "",
+      status: "",
+    });
   };
 
   const handleMenuClose = () => setMenuAnchor(null);
 
-  const filteredData = useMemo(() => {
-    return data.filter((item) => {
-      const staffIdMatch = item.teacherId
-        ?.toLowerCase()
-        .includes(filters.country.toLowerCase());
-      const staffNameMatch = item.teacherName
-        ?.toLowerCase()
-        .includes(filters.staffName.toLowerCase());
-      const staffJobMatch = item.teacherType
-        ?.toLowerCase()
-        .includes(filters.teacherType.toLowerCase());
-
-      return staffIdMatch && staffNameMatch && staffJobMatch;
-    });
-  }, [data, filters]);
+  // const filteredData = useMemo(() => {
+  //   return data.filter((item) => {
+  //     const matchesTeacherName = item.teacherName
+  //       ?.toLowerCase()
+  //       .includes(filters.teacherName.toLowerCase());
+  //     const matchesCountry = item.countryName
+  //       ?.toLowerCase()
+  //       .includes(filters.country.toLowerCase());
+  //     return (
+  //       (filters.teacherName ? matchesTeacherName : true) &&
+  //       (filters.country ? matchesCountry : true)
+  //     );
+  //   });
+  // }, [data, filters]);
 
   return (
     <div className="container-fluid my-4 center">
@@ -260,24 +268,24 @@ const Staff = () => {
           </div>
         </div>
         <div className="mb-3 d-flex justify-content-between">
-          <div className="individual_fliters d-lg-flex ">
+          <div className="individual_fliters d-lg-flex">
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="teacherName"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                name="staffName"
-                placeholder="Staff Name"
-                value={filters.staffName}
+                placeholder="Teacher Name"
+                value={filters.teacherName}
                 onChange={handleFilterChange}
               />
             </div>
             <div className="form-group mb-0 ms-2 mb-1">
               <input
                 type="text"
+                name="country"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                name="country"
                 placeholder="Country"
                 value={filters.country}
                 onChange={handleFilterChange}
@@ -290,9 +298,10 @@ const Staff = () => {
                 style={{ width: "160px" }}
                 name="teacherType"
                 value={filters.teacherType}
+                onChange={handleFilterChange}
               >
                 <option value="" selected>
-                  Select Job Type
+                  Select Teacher Type
                 </option>
                 <option value="Permanent">Permanent</option>
                 <option value="Temporary">Temporary</option>
@@ -305,6 +314,8 @@ const Staff = () => {
                 className="form-select form-select-sm center_list"
                 style={{ width: "160px" }}
                 name="status"
+                value={filters.status}
+                onChange={handleFilterChange}
               >
                 <option value="" selected>
                   Select a status
@@ -314,7 +325,7 @@ const Staff = () => {
               </select>
             </div>
 
-            <div className="form-group mb-0 ms-2 mb-1 ">
+            <div className="form-group mb-0 ms-2 mb-1">
               <button
                 type="button"
                 className="btn btn-sm btn-border"
@@ -351,14 +362,14 @@ const Staff = () => {
             <ThemeProvider theme={theme}>
               <MaterialReactTable
                 columns={columns}
-                data={filteredData}
+                data={data}
                 enableColumnActions={false}
                 enableColumnFilters={false}
                 enableDensityToggle={false}
                 enableFullScreenToggle={false}
                 initialState={{
                   columnVisibility: {
-                    teacherId: true,
+                    // teacherId: true,
                     teacherName: true,
                     teacherType: true,
                     email: true,
@@ -377,10 +388,10 @@ const Staff = () => {
                     updatedAt: false,
                     updatedBy: false,
                   },
-                  columnFilters: [
-                    { id: "teacherId", value: filters.country },
-                    { id: "teacherName", value: filters.staffName },
-                  ],
+                  // columnFilters: [
+                  //   // { id: "teacherId", value: filters.country },
+                  //   { id: "teacherName", value: filters.staffName },
+                  // ],
                 }}
                 muiTableBodyRowProps={({ row }) => ({
                   onClick: () => navigate(`/staff/view/${row.original.id}`),
@@ -413,4 +424,4 @@ const Staff = () => {
   );
 };
 
-export default Staff;
+export default Staff; 

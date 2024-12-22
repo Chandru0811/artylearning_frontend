@@ -16,6 +16,8 @@ const Teacher = () => {
   const [filters, setFilters] = useState({
     teacherName: "",
     country: "",
+    teacherType: "",
+    status: "",
   });
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -114,28 +116,40 @@ const Teacher = () => {
     []
   );
 
+  // const fetchData = async () => {
+  //   try {
+  //     let response;
+
+  //     if (roles === "SMS_ADMIN") {
+  //       response = await api.get("/getAllTeachersAndFreelancers");
+  //     } else if (roles === "SMS_TEACHER") {
+  //       response = await api.get("/getAllUsersByRole/teacher");
+  //     } else if (roles === "SMS_FREELANCER") {
+  //       response = await api.get("/getAllFreelance");
+  //     }
+
+  //     if (response) {
+  //       setData(response.data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const fetchData = async () => {
     try {
-      let response;
-
-      if (roles === "SMS_ADMIN") {
-        response = await api.get("/getAllTeachersAndFreelancers");
-      } else if (roles === "SMS_TEACHER") {
-        response = await api.get("/getAllUsersByRole/teacher");
-      } else if (roles === "SMS_FREELANCER") {
-        response = await api.get("/getAllFreelance");
-      }
-
-      if (response) {
-        setData(response.data);
-      }
+      setLoading(true);
+      const queryParams = new URLSearchParams(filters).toString();
+      const response = await api.get(`/getAllTeachersAndFreelancers?${queryParams}`);
+      setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData();
   }, [filters]);
@@ -194,24 +208,26 @@ const Teacher = () => {
     setFilters({
       teacherName: "",
       country: "",
+      teacherType: "",
+      status: "",
     });
   };
 
-  const filteredData = useMemo(() => {
-    return data.filter((item) => {
-      const matchesTeacherName = item.teacherName
-        ?.toLowerCase()
-        .includes(filters.teacherName.toLowerCase());
-      const matchesEmail = item.country
-        ?.toLowerCase()
-        .includes(filters.country.toLowerCase());
+  // const filteredData = useMemo(() => {
+  //   return data.filter((item) => {
+  //     const matchesTeacherName = item.teacherName
+  //       ?.toLowerCase()
+  //       .includes(filters.teacherName.toLowerCase());
+  //     const matchesEmail = item.country
+  //       ?.toLowerCase()
+  //       .includes(filters.country.toLowerCase());
 
-      return (
-        (filters.teacherName ? matchesTeacherName : true) &&
-        (filters.country ? matchesEmail : true)
-      );
-    });
-  }, [data, filters]);
+  //     return (
+  //       (filters.teacherName ? matchesTeacherName : true) &&
+  //       (filters.country ? matchesEmail : true)
+  //     );
+  //   });
+  // }, [data, filters]);
 
   const handleMenuClose = () => setMenuAnchor(null);
 
@@ -283,9 +299,10 @@ const Teacher = () => {
                 style={{ width: "160px" }}
                 name="teacherType"
                 value={filters.teacherType}
+                onChange={handleFilterChange}
               >
                 <option value="" selected>
-                  Select Job Type
+                  Select Teacher Type
                 </option>
                 <option value="Permanent">Permanent</option>
                 <option value="Temporary">Temporary</option>
@@ -298,6 +315,8 @@ const Teacher = () => {
                 className="form-select form-select-sm center_list"
                 style={{ width: "160px" }}
                 name="status"
+                value={filters.status}
+                onChange={handleFilterChange}
               >
                 <option value="" selected>
                   Select a status
@@ -344,7 +363,7 @@ const Teacher = () => {
             <ThemeProvider theme={theme}>
               <MaterialReactTable
                 columns={columns}
-                data={filteredData}
+                data={data}
                 enableColumnActions={false}
                 enableColumnFilters={false}
                 enableDensityToggle={false}
