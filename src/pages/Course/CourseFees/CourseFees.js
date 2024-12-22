@@ -292,6 +292,7 @@ const CourseFees = () => {
               <MenuItem>
                 <CourseFeesEdit
                   onSuccess={getData}
+                  centerId={centerId}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
                 />
