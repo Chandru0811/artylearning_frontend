@@ -14,7 +14,7 @@ import api from "../../../config/URL";
 const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),
   depositFees: Yup.string().required("*Deposit Fees Code is required"),
-  taxType: Yup.string().required("*TaxType is required"),
+  taxTypeId: Yup.string().required("*Tax Type is required"),
   status: Yup.string().required("*Status is required"),
 });
 
@@ -47,7 +47,7 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
     initialValues: {
       effectiveDate: "",
       depositFees: "",
-      taxType: "",
+      taxTypeId: "",
       status: "",
       updatedBy: userName,
     },
@@ -159,11 +159,11 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
                   </label>
                   <select
                     className={`form-control ${
-                      formik.touched.taxType && formik.errors.taxType
+                      formik.touched.taxTypeId && formik.errors.taxTypeId
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("taxType")}
+                    {...formik.getFieldProps("taxTypeId")}
                   >
                     <option value=""></option>
                     {taxData.map((tax) => (
@@ -172,9 +172,9 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose }) {
                       </option>
                     ))}
                   </select>
-                  {formik.touched.taxType && formik.errors.taxType && (
+                  {formik.touched.taxTypeId && formik.errors.taxTypeId && (
                     <div className="invalid-feedback">
-                      {formik.errors.taxType}
+                      {formik.errors.taxTypeId}
                     </div>
                   )}
                 </div>

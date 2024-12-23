@@ -72,6 +72,11 @@ const AddEmergencyContact = forwardRef(
               contact.emergencyContactAddress
             );
             formDatas.append("files", contact.files);
+            if (data.emergencyContactId !== null && contact.emergencyAuthorizedContactIds?.length) {
+              contact.emergencyAuthorizedContactIds.forEach((id) => {
+                formDatas.append("emergencyAuthorizedContactIds", id);
+              });
+            }
           });
 
           const response =

@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
   weekendFee: Yup.number()
     .typeError("*Must be a Number")
     .required("*Weekend Fee is required"),
-  taxType: Yup.string().required("*TaxType Fee is required"),
+  taxTypeId: Yup.string().required("*Tax Type Fee is required"),
   status: Yup.string().required("*Status is required"),
 });
 
@@ -87,7 +87,7 @@ function CourseFeesAdd({ onSuccess, centerId }) {
       packageId: "",
       weekdayFee: "",
       weekendFee: "",
-      taxType: "",
+      taxTypeId: "",
       courseId: id,
       status: "ACTIVE",
       createdBy: userName,
@@ -274,11 +274,11 @@ function CourseFeesAdd({ onSuccess, centerId }) {
                   </label>
                   <select
                     className={`form-select  ${
-                      formik.touched.taxType && formik.errors.taxType
+                      formik.touched.taxTypeId && formik.errors.taxTypeId
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("taxType")}
+                    {...formik.getFieldProps("taxTypeId")}
                     style={{ width: "100%" }}
                   >
                     <option value=""></option>
@@ -289,9 +289,9 @@ function CourseFeesAdd({ onSuccess, centerId }) {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.taxType && formik.errors.taxType && (
+                  {formik.touched.taxTypeId && formik.errors.taxTypeId && (
                     <div className="invalid-feedback">
-                      {formik.errors.taxType}
+                      {formik.errors.taxTypeId}
                     </div>
                   )}
                 </div>
