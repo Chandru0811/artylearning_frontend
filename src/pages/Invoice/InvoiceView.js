@@ -8,15 +8,14 @@ import fetchAllStudentsWithIds from "../List/StudentList";
 import { toast } from "react-toastify";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import SendAndPublish from "../../components/SendAndPublish";
 import fetchAllCentersWithIds from "../List/CenterList";
+import SendAndPublish from "./SendAndPublish";
 
 function InvoiceView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
-  const [invoiceItem, setInvoiceItem] = useState([]);
   console.log("data", data);
   const [courseData, setCourseData] = useState(null);
   const [studentData, setStudentData] = useState(null);
@@ -332,10 +331,7 @@ function InvoiceView() {
             >
               Void Invoice
             </button>
-
-            {/* <Link to="/sendAndPublish"> */}
             <SendAndPublish data={data} id={id} qr={qrCodeUrl} />
-            {/* </Link> */}
             <button
               onClick={handleGeneratePDF}
               className="btn btn-border btn-sm me-1"

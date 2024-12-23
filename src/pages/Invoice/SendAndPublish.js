@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import api from "../config/URL";
-import fetchAllCentersWithIds from "../pages/List/CenterList";
+import api from "../../config/URL";
+import fetchAllCentersWithIds from "../List/CenterList";
 
 function SendAndPublish({ data ,qr }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -279,7 +279,7 @@ function SendAndPublish({ data ,qr }) {
     `;
       const formData = new FormData();
       formData.append("from", data.parentEmail);
-      formData.append("to", "ragulecs1@gmail.com");
+      formData.append("to", data.parentEmail);
       formData.append("subject", "Invoice");
       formData.append("htmlContent", mailcontent);
       setLoadIndicator(true);

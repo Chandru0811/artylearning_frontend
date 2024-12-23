@@ -484,6 +484,7 @@ const Course = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteCourse/${selectedId}`}
+                  onOpen={handleMenuClose}
                   onDeleteSuccess={fetchData}
                 />
               </MenuItem>

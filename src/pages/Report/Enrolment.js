@@ -42,10 +42,6 @@ function Datatable2() {
     fetchData();
   }, []);
 
-  const handleTypeChange = (e) => {
-    setSelectedType(e.target.value);
-  };
-
   const handleDayChange = (e) => {
     setSelectedDay(e.target.value);
   };
@@ -70,16 +66,11 @@ function Datatable2() {
           },
         }
       );
-
       const data = response.data;
-      const targetValue = data?.Target?.target; 
-      console.log("targetValue:",targetValue);
-      
       if (day === "ALL") {
         // Map for "ALL" days structure
         const dayData = data.dayData || {};
         const labels = data.labels || [];
-        console.log("Target:",targetValue);
         
         const bookedSlots = labels.map(
           (label) => dayData[label]?.bookSlot || 0
@@ -94,7 +85,6 @@ function Datatable2() {
             { name: "Available Slots", data: availableSlots },
           ],
           labels: labels,
-          // target: targetValue,
         });
       } else {
         const timeData = data.dayData[0] || {};
@@ -113,7 +103,6 @@ function Datatable2() {
             { name: "Available Slots", data: availableSlots },
           ],
           labels: labels,
-          // target: targetValue,
         });
       }
     } catch (error) {
@@ -152,26 +141,12 @@ function Datatable2() {
       offsetY: 50,
     },
     annotations: {
-      yaxis: chartData.dayData?.Target?.target
-        ? [
-            {
-              y: chartData.dayData?.Target?.target,
-              borderColor: "#00E396",
-              label: {
-                borderColor: "#00E396",
-                style: {
-                  color: "#fff",
-                  background: "#00E396",
-                },
-                text: `Target: ${chartData.dayData?.Target?.target}`, // Display target value
-              },
-            },
-          ]
-        : [],
+      yaxis: []
     },
   };
   
   
+    
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
       <div className="container">

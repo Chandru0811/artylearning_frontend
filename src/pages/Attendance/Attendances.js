@@ -17,7 +17,7 @@ function Attendances() {
   const [selectedCourse, setSelectedCourse] = useState("");
   const [selectedBatch, setSelectedBatch] = useState("");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-  const [batchOptions, setBatchOptions] = useState([]);
+  const [batchData, setBatchData] = useState(null);
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -42,36 +42,65 @@ function Attendances() {
       const response = await api.get(
         `getAvailableBatchTimings?attendanceDate=${formattedDate}`
       );
-      setBatchOptions(response.data); // Update batch options with API response
+      setBatchData(response.data); // Update batch options with API response
     } catch (error) {
       toast.error("Error fetching slots:", error);
     }
+  };
+
+  const formatTo12Hour = (time) => {
+    const [hours, minutes] = time.split(":");
+    let period = "AM";
+    let hour = parseInt(hours, 10);
+
+    if (hour === 0) {
+      hour = 12;
+    } else if (hour >= 12) {
+      period = "PM";
+      if (hour > 12) hour -= 12;
+    }
+
+    return `${hour}:${minutes} ${period}`;
+  };
+
+  const normalizeTime = (time) => {
+    if (time.includes("AM") || time.includes("PM")) {
+      return time;
+    }
+
+    return formatTo12Hour(time);
+  };
+
+  const convertTo24Hour = (time) => {
+    const [timePart, modifier] = time.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+
+    if (modifier === "PM" && hours < 12) {
+      hours += 12;
+    } else if (modifier === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}`;
   };
 
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
   };
 
-  // const fetchListData = async () => {
-  //   try {
-  //     const centerData = await fetchAllCentersWithIds();
-  //     setCenterData(centerData);
-  //     setSelectedCenter(centerData[0].id);
-  //   } catch (error) {
-  //     toast.error(error);
-  //   }
-  // };
-
   const fetchListData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
-  
+
       // Set default centerId to the first available center
       if (centerData?.length > 0) {
         const defaultCenterId = centerData[0].id;
         setSelectedCenter(defaultCenterId);
-  
+
         // Fetch courses for the default center
         fetchCourses(defaultCenterId);
       }
@@ -79,7 +108,6 @@ function Attendances() {
       toast.error(error.message || "Error fetching centers.");
     }
   };
-  
 
   const fetchCourses = async (centerId) => {
     try {
@@ -106,7 +134,7 @@ function Attendances() {
     try {
       const requestBody = {
         centerId: selectedCenter,
-        // courseId: selectedCourse || " ",
+        courseId: selectedCourse || " ",
         batchTime: selectedBatch || " ",
         date: selectedDate || " ",
       };
@@ -131,8 +159,6 @@ function Attendances() {
       fetchData();
     }
   }, [selectedDate]);
-
-
 
   useEffect(() => {
     fetchData();
@@ -229,7 +255,9 @@ function Attendances() {
           </div>
           <div className="row px-2">
             <div className="col-md-6 col-12 mb-2">
-              <label className="form-lable">Centre<span class="text-danger">*</span></label>
+              <label className="form-lable">
+                Centre<span class="text-danger">*</span>
+              </label>
               <select
                 className="form-select "
                 aria-label="Default select example"
@@ -246,7 +274,9 @@ function Attendances() {
               </select>
             </div>
             <div className="col-md-6 col-12">
-              <label className="form-lable">Attendance Date<span class="text-danger">*</span></label>
+              <label className="form-lable">
+                Attendance Date<span class="text-danger">*</span>
+              </label>
               <input
                 type="date"
                 className="form-control"
@@ -274,17 +304,27 @@ function Attendances() {
                 onChange={(e) => setSelectedBatch(e.target.value)}
               >
                 <option value=""></option>
-                {batchOptions?.map((batch, index) => (
-                  <option key={index} value={batch}>
-                    {batch}
-                  </option>
-                ))}
+                {batchData &&
+                  batchData.map((time) => {
+                    const displayTime = normalizeTime(time);
+                    const valueTime =
+                      time.includes("AM") || time.includes("PM")
+                        ? convertTo24Hour(time)
+                        : time;
+
+                    return (
+                      <option key={time} value={valueTime}>
+                        {displayTime}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div className="col-md-12 col-12 d-flex align-items-end justify-content-end mb-3">
               <button
                 className="btn btn-light btn-button btn-sm mt-3"
                 onClick={handelSubmitData}
+                disabled={!selectedCenter || !selectedDate}
               >
                 Search
               </button>
@@ -396,7 +436,9 @@ function Attendances() {
                                   paddingLeft: "10px",
                                 }}
                               >
-                                {attendanceItem.batchTime}
+                                {attendanceItem.batchTime
+                                  ? formatTo12Hour(attendanceItem.batchTime)
+                                  : "N/A"}
                               </p>
                             </div>
                             <div style={{ width: "20%" }} className="pb-2 pt-4">

@@ -262,7 +262,7 @@ function CourseAdd({ onSuccess }) {
                       : ""
                   }`}
                   style={{
-                    height: "37.6px !important" , // Set the desired height
+                    height: "37.6px !important", // Set the desired height
                     minHeight: "37.6px", // Ensure the height doesn't shrink
                   }}
                 />
@@ -401,6 +401,26 @@ function CourseAdd({ onSuccess }) {
             <div className="row">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="form-lable">
+                  Min Class Size <span className="text-danger">*</span>
+                </lable>
+                <input
+                  type="text"
+                  className={`form-control  ${
+                    formik.touched.minClassSize && formik.errors.minClassSize
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("minClassSize")}
+                  placeholder=""
+                />
+                {formik.touched.minClassSize && formik.errors.minClassSize && (
+                  <div className="text-danger" style={{ fontSize: ".875em" }}>
+                    {formik.errors.minClassSize}
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-2">
+                <lable className="form-lable">
                   Max Class Size <span className="text-danger">*</span>
                 </lable>
                 <input
@@ -419,6 +439,8 @@ function CourseAdd({ onSuccess }) {
                   </div>
                 )}
               </div>
+            </div>
+            <div className="row mt-3">
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">Replacement Lesson Student Buffer</lable>
                 <input
@@ -437,28 +459,6 @@ function CourseAdd({ onSuccess }) {
                       {formik.errors.replacementLessonStudentBuffer}
                     </div>
                   )}
-              </div>
-            </div>
-            <div className="row mt-3">
-              <div className="col-md-6 col-12 mb-2">
-                <lable className="form-lable">
-                  Min Class Size <span className="text-danger">*</span>
-                </lable>
-                <input
-                  type="text"
-                  className={`form-control  ${
-                    formik.touched.minClassSize && formik.errors.minClassSize
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("minClassSize")}
-                  placeholder=""
-                />
-                {formik.touched.minClassSize && formik.errors.minClassSize && (
-                  <div className="text-danger" style={{ fontSize: ".875em" }}>
-                    {formik.errors.minClassSize}
-                  </div>
-                )}
               </div>
               <div className="col-md-6 col-12 mb-2">
                 <lable className="">

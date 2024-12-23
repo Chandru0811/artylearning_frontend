@@ -247,14 +247,21 @@ function CurriculumOutlet() {
               onClose={handleMenuClose}
             >
               <MenuItem
-                onClick={() =>
-                  navigate(
-                    `/course/curriculumoutlet/curriculum/${selectedId}?courseId=${selectedId}`
-                  )
-                }
+                onClick={() => {
+                  const selectedRow = datas.find(
+                    (row) => row.id === selectedId
+                  ); // Find the row corresponding to selectedId
+                  if (selectedRow) {
+                    const courseId = selectedRow.courseId; // Extract courseId from the selected row
+                    navigate(
+                      `/course/curriculumoutlet/curriculum/${selectedId}?courseId=${courseId}`
+                    );
+                  }
+                }}
               >
                 Course Curriculum
               </MenuItem>
+
               <MenuItem>
                 <CurriculumOutletEdit
                   onSuccess={getData}
