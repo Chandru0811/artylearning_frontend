@@ -71,109 +71,73 @@ const AddParentGuardian = forwardRef(
       validationSchema: validationSchema,
       onSubmit: async (values) => {
         setLoadIndicators(true);
+
         try {
-          const formDatas = new FormData();
-          values.parentInformation.map((parent, index) => {
-            formDatas.append(`parentNames`, parent.parentNames);
-            formDatas.append(`parentDateOfBirths`, parent.parentDateOfBirths);
-            formDatas.append(`emails`, parent.emails);
-            formDatas.append(`relations`, parent.relations);
-            formDatas.append(`occupations`, parent.occupations);
-            formDatas.append(`files`, parent.files);
-            formDatas.append(`mobileNumbers`, parent.mobileNumbers);
-            formDatas.append(`postalCodes`, parent.postalCodes);
-            formDatas.append(`addresses`, parent.addresses);
-            formDatas.append("createdBy", userName);
+          const requests = values.parentInformation.map((parent, index) => {
+            const formDatas = new FormData();
+            formDatas.append("parentNames", parent.parentNames);
+            formDatas.append("parentDateOfBirths", parent.parentDateOfBirths);
+            formDatas.append("emails", parent.emails);
+            formDatas.append("relations", parent.relations);
+            formDatas.append("occupations", parent.occupations);
+            formDatas.append("files", parent.files);
+            formDatas.append("mobileNumbers", parent.mobileNumbers);
+            formDatas.append("postalCodes", parent.postalCodes);
+            formDatas.append("addresses", parent.addresses);
             formDatas.append(
-              `primaryContacts`,
+              "primaryContacts",
               index === selectedPrimaryContactIndex ? true : false
             );
+
+            if (parentDetailId[index]) {
+              formDatas.append("updatedBy", userName);
+              formDatas.append("parentId", parentDetailId[index]);
+              return api.put(
+                `/updateStudentParentsDetailsWithProfileImages/${parentDetailId[index]}`,
+                formDatas,
+                { headers: { "Content-Type": "multipart/form-data" } }
+              );
+            } else {
+              formDatas.append("createdBy", userName);
+              return api.post(
+                `/createMultipleStudentParentsDetailsWithProfileImages/${formData.student_id}`,
+                formDatas,
+                { headers: { "Content-Type": "multipart/form-data" } }
+              );
+            }
           });
 
-          if (parentDetailId.length > 0) {
-            const formDataArray = values.parentInformation.map(
-              (parent, index) => {
-                const formData = new FormData();
-                formData.append("parentName", parent.parentNames);
-                formData.append("parentDateOfBirth", parent.parentDateOfBirths);
-                formData.append("email", parent.emails);
-                formData.append("relation", parent.relations);
-                formData.append("occupation", parent.occupations);
-                formData.append("file", parent.files);
-                formData.append("mobileNumber", parent.mobileNumbers);
-                formData.append("postalCode", parent.postalCodes);
-                formData.append("address", parent.addresses);
-                formData.append("updatedBy", userName);
-                formData.append("parentId", parentDetailId[index]);
-                formData.append(
-                  "primaryContacts",
-                  index === selectedPrimaryContactIndex ? true : false
-                );
-                return { formData, parentId: parentDetailId[index] };
-              }
-            );
+          // Execute all API calls
+          const responses = await Promise.all(requests);
 
-            try {
-              // Map through all formData objects and make API calls
-              const responses = await Promise.all(
-                formDataArray.map(({ formData, parentId }) =>
-                  api.put(
-                    `/updateStudentParentsDetailsWithProfileImages/${parentId}`,
-                    formData,
-                    {
-                      headers: {
-                        "Content-Type": "multipart/form-data",
-                      },
-                    }
-                  )
-                )
-              );
+          // Check responses
+          const allSuccessful = responses.every(
+            (response) => response.status === 200 || response.status === 201
+          );
 
-              const allSuccessful = responses.every(
-                (response) => response.status === 200 || response.status === 201
-              );
-
-              if (allSuccessful) {
-                toast.success("Parents details updated successfully!");
-                setFormData((prev) => ({ ...prev, ...values }));
-                handleNext();
-              } else {
-                toast.error("Some updates failed. Please check and try again.");
-              }
-            } catch (error) {
-              toast.error("An error occurred while updating parent details.");
-              console.error(error);
-            }
+          if (allSuccessful) {
+            toast.success("Parent details processed successfully!");
+            // Extract new IDs from POST responses and update state
+            const createdIds = responses
+              .filter((res) => res.status === 201)
+              .map((res) => res.data.id);
+            setParentDetailIds((prev) => [...prev, ...createdIds]);
+            setFormData((prev) => ({ ...prev, ...values }));
+            handleNext();
           } else {
-            const response = await api.post(
-              `/createMultipleStudentParentsDetailsWithProfileImages/${formData.student_id}`,
-              formDatas,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            );
-            if (response.status === 201) {
-              const createdIds = response.data.id;
-              setParentDetailIds(createdIds);
-              toast.success(response.data.message);
-              setFormData((prev) => ({ ...prev, ...values }));
-              handleNext();
-            } else {
-              toast.error(response.data.message);
-            }
+            toast.error("Some operations failed. Please check and try again.");
           }
         } catch (error) {
-          if (error?.response?.status === 500) {
-            toast.warning(error?.response?.data?.message);
-          } else {
-            toast.error(error?.response?.data?.message);
-          }
+          toast.error(
+            error?.response?.data?.message ||
+              "An error occurred. Please try again."
+          );
+          console.error(error);
         } finally {
           setLoadIndicators(false);
         }
       },
+
       validateOnChange: false, // Enable validation on change
       validateOnBlur: true, // Enable validation on blur
     });

@@ -11,9 +11,9 @@ import { Link, useParams } from "react-router-dom";
 const validationSchema = Yup.object({
   effectiveDate: Yup.string().required("*Effective Date is required"),
   depositFees: Yup.number()
-      .typeError("*Must be a Number")
-      .required("*Deposit Fees Code is required"),
-  taxType: Yup.string().required("*TaxType is required"),
+    .typeError("*Must be a Number")
+    .required("*Deposit Fees Code is required"),
+  taxTypeId: Yup.string().required("*TaxType is required"),
   status: Yup.string().required("*Status is required"),
 });
 
@@ -49,7 +49,7 @@ function CourseFeesAdd({ onSuccess }) {
     initialValues: {
       effectiveDate: "",
       depositFees: "",
-      taxType: "",
+      taxTypeId: "",
       status: "ACTIVE",
       createdBy: userName,
     },
@@ -181,11 +181,11 @@ function CourseFeesAdd({ onSuccess }) {
                   </label>
                   <select
                     className={`form-select  ${
-                      formik.touched.taxType && formik.errors.taxType
+                      formik.touched.taxTypeId && formik.errors.taxTypeId
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("taxType")}
+                    {...formik.getFieldProps("taxTypeId")}
                     style={{ width: "100%" }}
                   >
                     <option value=""></option>
@@ -196,9 +196,9 @@ function CourseFeesAdd({ onSuccess }) {
                         </option>
                       ))}
                   </select>
-                  {formik.touched.taxType && formik.errors.taxType && (
+                  {formik.touched.taxTypeId && formik.errors.taxTypeId && (
                     <div className="invalid-feedback">
-                      {formik.errors.taxType}
+                      {formik.errors.taxTypeId}
                     </div>
                   )}
                 </div>

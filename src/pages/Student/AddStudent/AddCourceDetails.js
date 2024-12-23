@@ -34,6 +34,7 @@ const AddcourseDetail = forwardRef(
     const [selectedRow, setSelectedRow] = useState(formData.id); // Add state for selected row
     const [selectedRowData, setSelectedRowData] = useState({}); // State for selected row data
     const userName = localStorage.getItem("userName");
+    const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
     console.log("selectedRow", selectedRow);
     console.log("selectedRowData", selectedRowData);
     console.log("FormData", formData.centerId);
@@ -188,7 +189,7 @@ const AddcourseDetail = forwardRef(
         lessonName: formData?.lessonName || "",
         packageName: formData?.packageName,
       },
-      validationSchema: validationSchema,
+      // validationSchema: validationSchema,
       onSubmit: async (data) => {
         if (!selectedRow) {
           toast.warning("Please select a course");
@@ -197,7 +198,7 @@ const AddcourseDetail = forwardRef(
         setLoadIndicators(true);
         const payload = {
           ...data,
-          studentId: formData.student_id,
+          studentId: String(formData.student_id),
           centerId: selectedRowData.centerId,
           centerName: selectedRowData.centerName,
           classId: selectedRowData.classId,
@@ -213,16 +214,30 @@ const AddcourseDetail = forwardRef(
           studentCount: selectedRowData.studentCount,
           teacher: selectedRowData.teacher,
           userId: selectedRowData.userId,
-          createdBy: userName,
         };
         console.log("Course Payload Data:", payload);
         try {
-          const response = await api.post(
-            `/createStudentCourseDetails`,
-            payload
-          );
+          let response;
+          if (studentCourseDetailsId !== null) {
+            payload.studentCourseDetailsId = studentCourseDetailsId;
+            response = await api.put(
+              `/updateStudentCourseDetails/${studentCourseDetailsId}`,
+              payload,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+          } else {
+            response = await api.post(`/createStudentCourseDetails`, payload, {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+          }
 
-          if (response.status === 201) {
+          if (response.status === 201 || response.status === 200) {
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
             handleNext();
@@ -230,7 +245,7 @@ const AddcourseDetail = forwardRef(
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error);
+          toast.error(error.message);
         } finally {
           setLoadIndicators(false);
         }
@@ -413,16 +428,35 @@ const AddcourseDetail = forwardRef(
     }, [formData.coursesData]);
 
     const getData1 = async () => {
-      setLoadIndicators(true);
       try {
         const response = await api.get(
           `/getAllStudentById/${formData.student_id}`
         );
-        formik.setFieldValue("courseId",response.data.studentCourseDetailModels[0]?.courseId)
+        const data = response.data;
+        const studentCourseDetail = data.studentCourseDetailModels[0];
+
+        setStudentCourseDetailsId(studentCourseDetail?.id || null);
+        console.log("studentCourseDetail:", studentCourseDetail);
+        formik.setValues((prevValues) => ({
+          ...prevValues,
+          centerName: data.centerName || prevValues.centerName,
+          centerId: data.centerId || prevValues.centerId,
+          nationality: data.nationality || prevValues.nationality,
+          classId: studentCourseDetail?.classId || prevValues.classId,
+          className: studentCourseDetail?.className || prevValues.className,
+          courseId: studentCourseDetail?.courseId || prevValues.courseId,
+          course: studentCourseDetail?.course || prevValues.course,
+          batch: studentCourseDetail?.batch || prevValues.batch,
+          days: studentCourseDetail?.days || prevValues.days,
+          startDate: studentCourseDetail?.startDate || prevValues.startDate,
+          endDate: studentCourseDetail?.endDate || prevValues.endDate,
+          teacher: studentCourseDetail?.teacher || prevValues.teacher,
+          lessonName: studentCourseDetail?.lessonName || prevValues.lessonName,
+          packageName:
+            studentCourseDetail?.packageName || prevValues.packageName,
+        }));
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoadIndicators(false);
       }
     };
 
