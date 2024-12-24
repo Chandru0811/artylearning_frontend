@@ -13,6 +13,7 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import fetchAllCentersWithIds from "../List/CenterList";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsBuildings } from "react-icons/bs";
+import { filter } from "jszip";
 
 function Calendar() {
   const [data, setData] = useState([]);
@@ -21,7 +22,7 @@ function Calendar() {
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [currentDate, setCurrentDate] = useState(null);
+  const [initialLoad, SetInitialLoad] = useState(true);
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [teacherData, setTeachereData] = useState(null);
@@ -122,6 +123,13 @@ function Calendar() {
   }, []);
 
   useEffect(() => {
+    if (filters.centerId !== "" && initialLoad === true) {
+      SearchShedule();
+      SetInitialLoad(false);
+    }
+  }, [filters, initialLoad]);
+
+  useEffect(() => {
     if (filters.centerId) {
       fetchListData(filters.centerId);
     }
@@ -169,7 +177,7 @@ function Calendar() {
       userId: "",
       date: "",
     });
-  
+
     try {
       setLoading(true);
       const response = await api.get(`/getAllScheduleInfo`);
@@ -181,7 +189,6 @@ function Calendar() {
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="container-fluid card my-2 py-2">
@@ -310,7 +317,15 @@ function Calendar() {
               dayMaxEventRows={2} // Show only one event by default per row
               dayMaxEvents={true} // Enable collapsing events
               moreLinkContent={(args) => (
-                <span className="p-2 text-white" style={{backgroundColor:"#287f71",borderRadius:"10px !important"}}>{args.num}</span>
+                <span
+                  className="p-2 text-white"
+                  style={{
+                    backgroundColor: "#287f71",
+                    borderRadius: "10px !important",
+                  }}
+                >
+                  {args.num}
+                </span>
               )}
               buttonText={{
                 today: "Today",
@@ -335,9 +350,14 @@ function Calendar() {
                   info.event.extendedProps;
                 return (
                   <div className="popover-text-wrapper p-2 border-bottom">
-                    <div className="p-1 text-wrap"><FaChalkboardUser className="me-1"/> Teacher: {teacherName}</div>
-                    
-                    <div className="p-1 text-wrap"><BsBuildings className="me-1"/> Centre: {centerName}</div>
+                    <div className="p-1 text-wrap">
+                      <FaChalkboardUser className="me-1" /> Teacher:{" "}
+                      {teacherName}
+                    </div>
+
+                    <div className="p-1 text-wrap">
+                      <BsBuildings className="me-1" /> Centre: {centerName}
+                    </div>
                   </div>
                 );
               }}

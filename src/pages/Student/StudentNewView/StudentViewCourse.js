@@ -30,26 +30,48 @@ const StudentViewCourse = ({ data }) => {
         enableHiding: false,
         size: 50,
         header: "Status",
-        Cell: ({ row }) =>
-          row.original.status === "Pending" ||
-          row.original.status === "pending" ||
-          row.original.status === "PENDING" ? (
-            <span
-              className="badge text-light fw-light"
-              style={{ backgroundColor: "#eb862a" }}
-            >
-              Pending
-            </span>
-          ) : row.original.status !== "pending" ||
-            row.original.status !== "pending" ||
-            row.original.status !== "pending" ? (
-            <span
-              className="badge text-light fw-light"
-              style={{ backgroundColor: "#287f71" }}
-            >
-              Active
-            </span>
-          ) : null,
+        Cell: ({ row }) => {
+          const status = row.original.status;
+
+          switch (status) {
+            case "YET_TO_START":
+              return (
+                <span
+                  className="badge text-light fw-light"
+                  style={{ backgroundColor: "#007bff" }} 
+                >
+                  Yet to Start
+                </span>
+              );
+            case "PURSUING":
+              return (
+                <span
+                  className="badge text-light fw-light"
+                  style={{ backgroundColor: "#eb862a" }}
+                >
+                  Pursuing
+                </span>
+              );
+            case "COMPLETED":
+              return (
+                <span
+                  className="badge text-light fw-light"
+                  style={{ backgroundColor: "#287f71" }} 
+                >
+                  Completed
+                </span>
+              );
+            default:
+              return (
+                <span
+                  className="badge text-light fw-light"
+                  style={{ backgroundColor: "#6c757d" }} 
+                >
+                  Pending
+                </span>
+              );
+          }
+        },
       },
       { accessorKey: "centerName", enableHiding: false, header: "Center Name" },
       {

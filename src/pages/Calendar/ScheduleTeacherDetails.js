@@ -39,9 +39,9 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
 
   const convertTo12HourFormat = (time) => {
     // Assuming time format is 'HH:mm' or already 'hh:mm AM/PM'
-    const [hours, minutes] = time.split(':');
+    const [hours, minutes] = time.split(":");
     let hour = parseInt(hours, 10);
-    const suffix = hour >= 12 ? 'PM' : 'AM';
+    const suffix = hour >= 12 ? "PM" : "AM";
     hour = hour % 12 || 12; // Convert 0 -> 12 for 12AM, and keep 12PM as is
     return `${hour}:${minutes} ${suffix}`;
   };
@@ -99,7 +99,8 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                     }}
                   >
                     {/* {item.batchTime} */}
-                    {convertTo12HourFormat(item.batchTime)} {/* Use the helper function */}
+                    {convertTo12HourFormat(item.batchTime)}{" "}
+                    {/* Use the helper function */}
                   </button>
                 </li>
               ))}
@@ -130,6 +131,21 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
+                              <p className="">Start Time</p>
+                            </div>
+                            <div className="col-7">
+                              <p>
+                                :&nbsp;
+                                {convertTo12HourFormat(
+                                  item.details.startTime
+                                ) || "--"}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
                               <p className="">End Date</p>
                             </div>
                             <div className="col-7">
@@ -137,7 +153,42 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                             </div>
                           </div>
                         </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">End Time</p>
+                            </div>
+                            <div className="col-7">
+                              <p>
+                                :&nbsp;
+                                {convertTo12HourFormat(item.details.endTime) ||
+                                  "--"}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Center Name</p>
+                            </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.centerName || "--"}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
+                              <p className="">Duration</p>
+                            </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.duration || "--"} Hrs</p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+
                       <div className="row">
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
@@ -237,7 +288,6 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                                   <Link
                                     to={`/student/view/${student.id}`}
                                     style={{
-                                      textDecoration: "none",
                                       color: "inherit",
                                     }}
                                   >
