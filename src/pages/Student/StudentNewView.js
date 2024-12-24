@@ -1526,7 +1526,7 @@ function StudentNewView() {
           </div>
         </div>
 
-        <h3 className="mt-5 mb-3">Terms&Condition</h3>
+        <h3 className="mt-5 mb-3">Terms & Conditions</h3>
         <div id="panelsStayOpen-collapseSix">
           <div className="row">
             <div className="col-md-6 col-12">

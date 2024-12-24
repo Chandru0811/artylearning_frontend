@@ -14,7 +14,6 @@ const Attendance = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const getCurrentDate = () => {
@@ -25,60 +24,25 @@ const Attendance = () => {
     ).slice(-2)}-${("0" + today.getDate()).slice(-2)}`;
     return formattedDate;
   };
-
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
-
   const validationSchema = Yup.object({});
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     initializeDataTable();
-  //   }
-  //   return () => {
-  //     destroyDataTable();
-  //   };
-  // }, [loading]);
-
-  const initializeDataTable = () => {
-    $(tableRef.current).DataTable({
-      responsive: true,
-    });
-  };
-
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
 
   const formik = useFormik({
     initialValues: {
       centerId: "",
       courseId: "",
+      attendanceDate:"",
       attendanceStatus: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const payload = {
         centerId: values.centerId,
+        courseId: values.courseId,
         attendanceDate: selectedDate,
+        attendanceStatus: values.attendanceStatus,
       };
-      if (values.courseId !== undefined && values.courseId !== null) {
-        payload.courseId = values.courseId;
-      }
-      if (
-        values.attendanceStatus !== undefined &&
-        values.attendanceStatus !== null
-      ) {
-        payload.attendanceStatus = values.attendanceStatus;
-      }
-
+      console.log("Payload:",payload);
       try {
         const response = await api.post(
           "getAttendanceByCenterIdAndDate",
@@ -100,30 +64,51 @@ const Attendance = () => {
   const fetchData = async () => {
     try {
       const centers = await fetchAllCentersWithIds();
-      formik.setValues({ centerId: centers[0].id });
-      setCenterData(centers);
-      setLoading(false); // Set loading to false after fetching data
+      if (centers.length > 0) {
+        const defaultCenterId = centers[0].id; // Set the first center as the default
+        formik.setFieldValue("centerId", defaultCenterId); // Update formik value
+        setCenterData(centers);
+        // Fetch courses for the default center
+        await fetchCourses(defaultCenterId);
+      } else {
+        toast.error("No centers found!");
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Error fetching centers.");
     }
   };
-
+  
   const fetchCourses = async (centerId) => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
-      setCourseData(courses);
+      if (courses.length > 0) {
+        const defaultCourseId = courses[0].id; // Set the first course as the default
+        formik.setFieldValue("courseId", defaultCourseId); // Update formik value
+        setCourseData(courses);
+      } else {
+        toast.error("No courses found for the selected center.");
+      }
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || "Error fetching courses.");
     }
   };
-
+  
   const handleCenterChange = (event) => {
     setCourseData(null);
-    formik.setFieldValue("courseId", null);
+    const courseId = event.target.value;
+    formik.setFieldValue("courseId", courseId);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     fetchCourses(centerId);
   };
+
+  const clearFilter = () =>{
+    formik.resetForm();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="container-fluid my-3">
@@ -262,57 +247,62 @@ const Attendance = () => {
                   )}
               </div>
               <div className="col-md-4 col-12 d-flex align-items-end">
-                <button
-                  type="submit"
-                  className="btn btn-light btn-border btn-sm mt-3"
-                >
+                <button type="button" onClick={clearFilter} className="btn btn-border btn-sm mt-3">
+                  Clear
+                </button>
+                <button type="submit" className="btn btn-button btn-sm mt-3 mx-3">
                   Search
                 </button>
               </div>
             </div>
           </div>
+          <div className="container-fluid">
+            <table ref={tableRef} className="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col" style={{ whiteSpace: "nowrap" }}>
+                    S No
+                  </th>
+                  <th scope="col">Student ID</th>
+                  <th scope="col">Student Name</th>
+                  <th scope="col">Centre</th>
+                  <th scope="col">Course</th>
+                  <th scope="col">Class Code</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {datas &&
+                  datas.map((data, index) => (
+                    <tr key={index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{data.studentUniqueId}</td>
+                      <td>{data.studentName}</td>
+                      <td>{data.centerName}</td>
+                      <td>{data.courseName}</td>
+                      <td>{data.classCode}</td>
+                      <td>
+                        {data.attendanceStatus === "present" ? (
+                          <span className="badge badges-Green">Present</span>
+                        ) : data.attendanceStatus === "deposit" ? (
+                          <span className="badge badges-Brown">
+                            Deposit Deducted
+                          </span>
+                        ) : data.attendanceStatus === "class_replaced" ? (
+                          <span className="badge badges-Orange">
+                            Class Replaced
+                          </span>
+                        ) : (
+                          <span className="badge badges-Red">Absent</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </form>
-
-      <table ref={tableRef} className="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col" style={{ whiteSpace: "nowrap" }}>
-              S No
-            </th>
-            <th scope="col">Student ID</th>
-            <th scope="col">Student Name</th>
-            <th scope="col">Centre</th>
-            <th scope="col">Course</th>
-            <th scope="col">Class Code</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {datas &&
-            datas.map((data, index) => (
-              <tr key={index}>
-                <th scope="row">{index + 1}</th>
-                <td>{data.studentUniqueId}</td>
-                <td>{data.studentName}</td>
-                <td>{data.centerName}</td>
-                <td>{data.courseName}</td>
-                <td>{data.classCode}</td>
-                <td>
-                  {data.attendanceStatus === "present" ? (
-                    <span className="badge badges-Green">Present</span>
-                  ) : data.attendanceStatus === "deposit" ? (
-                    <span className="badge badges-Brown">Deposit Deducted</span>
-                  ) : data.attendanceStatus === "class_replaced" ? (
-                    <span className="badge badges-Orange">Class Replaced</span>
-                  ) : (
-                    <span className="badge badges-Red">Absent</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
     </div>
   );
 };
