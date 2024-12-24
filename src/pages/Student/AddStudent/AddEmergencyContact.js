@@ -27,15 +27,12 @@ const validationSchema = Yup.object().shape({
 const AddEmergencyContact = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
     const userName = localStorage.getItem("userName");
-    const [parentDetailId, setParentDetailId] = useState(null);
+    const [profileImage, setProfileImage] = useState([]);
     // Initialize rows based on emergencyContactInformation length
     const initialRows = formData.emergencyContactInformation
       ? formData.emergencyContactInformation.map(() => ({}))
       : [{}];
     const [rows, setRows] = useState(initialRows);
-
-    // State to hold image previews
-    const [imagePreviews, setImagePreviews] = useState({});
 
     const formik = useFormik({
       initialValues: {
@@ -62,7 +59,7 @@ const AddEmergencyContact = forwardRef(
           formDatas.append("emergencyContactName", data.emergencyContactName);
           formDatas.append("emergencyRelation", " ");
           formDatas.append("emergencyContactNo", data.emergencyContactNo);
-          data.emergencyContactInformation.forEach((contact) => {
+          data.emergencyContactInformation?.map((contact) => {
             formDatas.append("name", contact.name);
             formDatas.append("contactNo", contact.contactNo);
             formDatas.append("authorizedRelation", contact.authorizedRelation);
@@ -72,10 +69,8 @@ const AddEmergencyContact = forwardRef(
               contact.emergencyContactAddress
             );
             formDatas.append("files", contact.files);
-            if (data.emergencyContactId !== null && contact.emergencyAuthorizedContactIds?.length) {
-              contact.emergencyAuthorizedContactIds.forEach((id) => {
-                formDatas.append("emergencyAuthorizedContactIds", id);
-              });
+            if (data.emergencyContactId !== null) {
+              formDatas.append("emergencyAuthorizedContactIds", contact.id);
             }
           });
 
@@ -171,50 +166,56 @@ const AddEmergencyContact = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formData.LeadId]);
 
-    useEffect(() => {
-      const getData = async () => {
-        try {
-          const response = await api.get(
-            `/getAllStudentById/${formData.student_id}`
+    const getData = async () => {
+      try {
+        const response = await api.get(
+          `/getAllStudentById/${formData.student_id}`
+        );
+
+        if (
+          response.data.studentEmergencyContacts &&
+          response.data.studentEmergencyContacts.length > 0
+        ) {
+          const contactData = response.data.studentEmergencyContacts[0];
+          formik.setValues({
+            ...contactData,
+            emergencyContactId: contactData.id,
+            emergencyContactInformation:
+              contactData.emergencyAuthorizedContactModels?.map((item) => ({
+                ...item,
+                emergencyAuthorizedContactIds: item.id,
+                files: item.personProfile,
+              })) || [],
+          });
+
+          const profile = contactData.emergencyAuthorizedContactModels?.map(
+            (item) => item.personProfile
           );
-
-          if (
-            response.data.studentEmergencyContacts &&
-            response.data.studentEmergencyContacts.length > 0
-          ) {
-            const contactData = response.data.studentEmergencyContacts[0];
-            formik.setValues({
-              ...contactData,
-              emergencyContactId: contactData.id,
-              emergencyContactInformation:
-                contactData.emergencyAuthorizedContactModels?.map((item) => ({
-                  ...item,
-                  files: item.personProfile || null,
-                })) || [],
-            });
-          } else {
-            formik.setValues({
-              emergencyContactId: null,
-              emergencyContactName: "",
-              authorizedRelation: "",
-              emergencyContactNo: "",
-              emergencyContactInformation: [
-                {
-                  name: "",
-                  emergencyRelation: "",
-                  contactNo: "",
-                  postalCode: "",
-                  emergencyContactAddress: "",
-                  files: null,
-                },
-              ],
-            });
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
+          console.log("Profile data: ", profile);
+          setProfileImage(profile);
+        } else {
+          formik.setValues({
+            emergencyContactId: null,
+            emergencyContactName: "",
+            authorizedRelation: "",
+            emergencyContactNo: "",
+            emergencyContactInformation: [
+              {
+                name: "",
+                emergencyRelation: "",
+                contactNo: "",
+                postalCode: "",
+                emergencyContactAddress: "",
+                files: null,
+              },
+            ],
+          });
         }
-      };
-
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    useEffect(() => {
       getData();
     }, [formData.student_id]);
 
@@ -226,25 +227,22 @@ const AddEmergencyContact = forwardRef(
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, []);
 
-    const handleFileChange = (event, index) => {
-      const file = event.currentTarget.files[0];
-      if (file) {
-        formik.setFieldValue(
-          `emergencyContactInformation[${index}].files`,
-          file
-        );
-        setImagePreviews((prev) => ({
-          ...prev,
-          [index]: URL.createObjectURL(file),
-        }));
+    const handleDelete = async (index) => {
+      try {
+        // Make the delete API call here
+        const contactToDelete =
+          formik.values.emergencyContactInformation[index];
+        console.log("contactToDelete", contactToDelete.id);
+        if (contactToDelete?.id) {
+          await api.delete(
+            `/deleteStudentEmergencyContact/${contactToDelete.id}`
+          );
+          getData();
+        }
+      } catch (error) {
+        console.error("Error deleting contact:", error);
       }
     };
-
-    useEffect(() => {
-      return () => {
-        Object.values(imagePreviews).forEach((url) => URL.revokeObjectURL(url));
-      };
-    }, [imagePreviews]);
 
     return (
       <div className="container-fluid">
@@ -313,7 +311,7 @@ const AddEmergencyContact = forwardRef(
 
           {/* Authorized Persons Section */}
           <div className="border-0 mb-5">
-            {rows.map((row, index) => (
+            {formik.values.emergencyContactInformation.map((row, index) => (
               <div className="border-0 mb-5" key={index}>
                 <div className="border-0 my-2">
                   <p className="headColor">
@@ -492,65 +490,47 @@ const AddEmergencyContact = forwardRef(
                               </div>
                             )}
                         </div>
-                        {/* Person Profile */}
                         <div className="text-start mt-4">
-                          <label className="mb-1 fw-medium">
-                            <small>Person Profile</small>&nbsp;
+                          <label htmlFor="" className="fw-medium">
+                            <small>Person Profile</small>
                           </label>
                           <br />
                           <input
-                            className="form-control"
                             type="file"
                             name={`emergencyContactInformation[${index}].files`}
-                            onChange={(event) => handleFileChange(event, index)}
+                            className="form-control"
+                            onChange={(event) => {
+                              const file = event.target.files[0];
+                              formik.setFieldValue(
+                                `emergencyContactInformation[${index}].files`,
+                                file
+                              );
+
+                              const reader = new FileReader();
+                              reader.onload = (e) => {
+                                const updatedProfileImage = [...profileImage];
+                                updatedProfileImage[index] = e.target.result;
+                                setProfileImage(updatedProfileImage);
+                              };
+                              reader.readAsDataURL(file);
+                            }}
                             onBlur={formik.handleBlur}
-                            accept=".jpg, .jpeg, .png"
+                            accept=".jpg, .jpeg, .png, .gif, .bmp"
                           />
-                          {/* Image Preview for Uploaded Files */}
-                          {imagePreviews[index] && (
+                          {profileImage[index] ? (
                             <img
-                              src={imagePreviews[index]}
-                              alt="Preview"
+                              src={profileImage[index]}
+                              alt="Uploaded Preview"
                               style={{
                                 width: "100px",
                                 height: "100px",
+                                objectFit: "cover",
                                 marginTop: "10px",
                               }}
                             />
+                          ) : (
+                            <></>
                           )}
-                          {/* Show Existing Image if No Preview is Available */}
-                          {!imagePreviews[index] &&
-                            formik.values.emergencyContactInformation?.[index]
-                              ?.files && (
-                              <img
-                                src={
-                                  formik.values.emergencyContactInformation[
-                                    index
-                                  ].files
-                                }
-                                alt="Existing Profile"
-                                style={{
-                                  width: "100px",
-                                  height: "100px",
-                                  marginTop: "10px",
-                                }}
-                              />
-                            )}
-                          {/* Validation Error Display */}
-                          {formik.touched.emergencyContactInformation?.[index]
-                            ?.files &&
-                            formik.errors.emergencyContactInformation?.[index]
-                              ?.files && (
-                              <div className="text-danger">
-                                <small>
-                                  {
-                                    formik.errors.emergencyContactInformation[
-                                      index
-                                    ].files
-                                  }
-                                </small>
-                              </div>
-                            )}
                         </div>
                       </div>
                     </div>
@@ -587,20 +567,7 @@ const AddEmergencyContact = forwardRef(
               {rows.length > 1 && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setRows((prev) => prev.slice(0, -1));
-                    const updatedContacts =
-                      formik.values.emergencyContactInformation.slice(0, -1);
-                    formik.setFieldValue(
-                      "emergencyContactInformation",
-                      updatedContacts
-                    );
-                    setImagePreviews((prev) => {
-                      const updatedPreviews = { ...prev };
-                      delete updatedPreviews[rows.length - 1];
-                      return updatedPreviews;
-                    });
-                  }}
+                  onClick={() => handleDelete(rows.length - 1)}
                   className="btn btn-outline-danger"
                 >
                   Delete

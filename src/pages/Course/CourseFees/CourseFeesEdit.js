@@ -95,6 +95,7 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose, centerId }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
+      values.updatedBy = userName
       try {
         const response = await api.put(`/updateCourseFees/${id}`, values, {
           headers: {

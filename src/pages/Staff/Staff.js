@@ -27,7 +27,7 @@ const Staff = () => {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
-  console.log("data",data)
+  console.log("data", data);
   const columns = useMemo(
     () => [
       {
@@ -93,7 +93,7 @@ const Staff = () => {
           ) : row.original.role === "staff_admin" ? (
             <span className="badge badges-red fw-light">Staff Admin</span>
           ) : row.original.role === "branch_admin" ? (
-            <span className="badge badges-purple fw-light">Branch Admin</span>
+            <span className="badge bg-primary fw-light">Branch Admin</span>
           ) : null,
       },
       {
@@ -424,4 +424,4 @@ const Staff = () => {
   );
 };
 
-export default Staff; 
+export default Staff;

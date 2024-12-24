@@ -40,7 +40,7 @@ const AddParentGuardian = forwardRef(
     const userName = localStorage.getItem("userName");
     const [parentDetailIds, setParentDetailIds] = useState([]);
     const [parentDetailId, setParentDetailId] = useState([]);
-    const [profileImage, setProfileImage] = useState(null);
+    const [profileImage, setProfileImage] = useState([]);
 
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
@@ -73,65 +73,51 @@ const AddParentGuardian = forwardRef(
         setLoadIndicators(true);
 
         try {
-          const requests = values.parentInformation.map((parent, index) => {
+          for (
+            let index = 0;
+            index < values.parentInformation.length;
+            index++
+          ) {
+            const parent = values.parentInformation[index];
             const formDatas = new FormData();
-            formDatas.append("parentNames", parent.parentNames);
-            formDatas.append("parentDateOfBirths", parent.parentDateOfBirths);
-            formDatas.append("emails", parent.emails);
-            formDatas.append("relations", parent.relations);
-            formDatas.append("occupations", parent.occupations);
-            formDatas.append("files", parent.files);
-            formDatas.append("mobileNumbers", parent.mobileNumbers);
-            formDatas.append("postalCodes", parent.postalCodes);
-            formDatas.append("addresses", parent.addresses);
+            formDatas.append("parentName", parent.parentNames);
+            formDatas.append("parentDateOfBirth", parent.parentDateOfBirths);
+            formDatas.append("email", parent.emails);
+            formDatas.append("relation", parent.relations);
+            formDatas.append("occupation", parent.occupations);
+            formDatas.append("file", parent.files);
+            formDatas.append("mobileNumber", parent.mobileNumbers);
+            formDatas.append("postalCode", parent.postalCodes);
+            formDatas.append("address", parent.addresses);
             formDatas.append(
-              "primaryContacts",
+              "primaryContact",
               index === selectedPrimaryContactIndex ? true : false
             );
 
             if (parentDetailId[index]) {
               formDatas.append("updatedBy", userName);
               formDatas.append("parentId", parentDetailId[index]);
-              return api.put(
+
+              const response = await api.put(
                 `/updateStudentParentsDetailsWithProfileImages/${parentDetailId[index]}`,
                 formDatas,
                 { headers: { "Content-Type": "multipart/form-data" } }
               );
             } else {
               formDatas.append("createdBy", userName);
-              return api.post(
+
+              const response = await api.post(
                 `/createMultipleStudentParentsDetailsWithProfileImages/${formData.student_id}`,
                 formDatas,
                 { headers: { "Content-Type": "multipart/form-data" } }
               );
             }
-          });
-
-          // Execute all API calls
-          const responses = await Promise.all(requests);
-
-          // Check responses
-          const allSuccessful = responses.every(
-            (response) => response.status === 200 || response.status === 201
-          );
-
-          if (allSuccessful) {
-            toast.success("Parent details processed successfully!");
-            // Extract new IDs from POST responses and update state
-            const createdIds = responses
-              .filter((res) => res.status === 201)
-              .map((res) => res.data.id);
-            setParentDetailIds((prev) => [...prev, ...createdIds]);
-            setFormData((prev) => ({ ...prev, ...values }));
-            handleNext();
-          } else {
-            toast.error("Some operations failed. Please check and try again.");
           }
+          toast.success("Parent details processed successfully!");
+          setFormData((prev) => ({ ...prev, ...values }));
+          handleNext();
         } catch (error) {
-          toast.error(
-            error?.response?.data?.message ||
-              "An error occurred. Please try again."
-          );
+          toast.error(error?.response?.data?.message);
           console.error(error);
         } finally {
           setLoadIndicators(false);
@@ -243,12 +229,34 @@ const AddParentGuardian = forwardRef(
         const response = await api.get(
           `/getAllStudentById/${formData.student_id}`
         );
+        const parentDetails = response.data.studentParentsDetails || [];
+        const parentInformation = parentDetails.map((detail) => ({
+          id: detail.id,
+          parentNames: detail.parentName || "",
+          parentDateOfBirths: detail.parentDateOfBirth || "",
+          emails: detail.email || "",
+          relations: detail.relation || "",
+          occupations: detail.occupation || "",
+          passwords: detail.password || "",
+          mobileNumbers: detail.mobileNumber || "",
+          postalCodes: detail.postalCode || "",
+          addresses: detail.address || "",
+          primaryContacts: detail.primaryContact || false,
+        }));
+
+        formik.setValues((prevValues) => ({
+          ...prevValues,
+          parentInformation,
+        }));
         const parentDetailIds = response.data.studentParentsDetails.map(
           (detail) => detail.id
         );
+        const profileImage = response.data.studentParentsDetails.map(
+          (detail) => detail.profileImage
+        );
 
         setParentDetailId(parentDetailIds);
-        setProfileImage(response.data.studentParentsDetails[0].profileImage);
+        setProfileImage(profileImage);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -277,6 +285,32 @@ const AddParentGuardian = forwardRef(
         setSelectedPrimaryContactIndex(null);
       } else if (selectedPrimaryContactIndex > index) {
         setSelectedPrimaryContactIndex(selectedPrimaryContactIndex - 1);
+      }
+    };
+
+    const handleDeleteRow = async (index) => {
+      try {
+        const lastRowId = formik.values.parentInformation[index - 1]?.id;
+        console.log("lastRowId", lastRowId);
+        if (lastRowId) {
+          const response = await api.delete(
+            `/deleteStudentParentsDetails/${lastRowId}`
+          );
+          if (response.status === 200 || response.status === 201) {
+            getData();
+          }
+        }
+
+        // formik.setValues((prevValues) => ({
+        //   ...prevValues,
+        //   parentInformation: prevValues.parentInformation.filter(
+        //     (_, i) => i !== index - 1
+        //   ),
+        // }));
+
+        // setRows((prevRows) => prevRows - 1);
+      } catch (error) {
+        console.error("Error deleting the parent information:", error);
       }
     };
 
@@ -519,33 +553,78 @@ const AddParentGuardian = forwardRef(
                             name="files"
                             className="form-control"
                             onChange={(event) => {
+                              const file = event.target.files[0];
+
+                              // If no file is selected, remove the image preview
+                              if (!file) {
+                                const updatedProfileImage = [...profileImage];
+                                updatedProfileImage[index] = null; // Clear the image for this index
+                                setProfileImage(updatedProfileImage);
+                                formik.setFieldValue(
+                                  `parentInformation[${index}].files`,
+                                  null
+                                );
+                                return;
+                              }
+
+                              // Validate file type and size
+                              const validTypes = [
+                                "image/jpeg",
+                                "image/jpg",
+                                "image/png",
+                                "image/gif",
+                                "image/bmp",
+                              ];
+                              if (!validTypes.includes(file.type)) {
+                                alert(
+                                  "Invalid file type. Please upload a PNG, JPG, GIF, or BMP file."
+                                );
+                                return;
+                              }
+                              if (file.size > 1 * 1024 * 1024) {
+                                alert(
+                                  "File size exceeds 1MB. Please upload a smaller file."
+                                );
+                                return;
+                              }
+
+                              // Update Formik field value
                               formik.setFieldValue(
                                 `parentInformation[${index}].files`,
-                                event.target.files[0]
+                                file
                               );
+
+                              // Read file as Base64 and update the image source
+                              const reader = new FileReader();
+                              reader.onload = (e) => {
+                                const updatedProfileImage = [...profileImage];
+                                updatedProfileImage[index] = e.target.result; // Set the base64 string as the image source
+                                setProfileImage(updatedProfileImage);
+                              };
+                              reader.readAsDataURL(file);
                             }}
                             onBlur={formik.handleBlur}
-                            accept=".jpg, .jpeg, .png"
+                            accept=".jpg, .jpeg, .png, .gif, .bmp"
                           />
                           <p>
                             <small>
-                              Note: File must be PNG,JPG,GIF or BMP, Max Size 1
-                              MB
+                              Note: File must be PNG, JPG, GIF, or BMP, Max Size
+                              1 MB
                             </small>
                           </p>
-                          {profileImage ? (
+                          {profileImage[index] ? (
                             <img
-                              src={profileImage}
-                              alt="Profile Preview"
+                              src={profileImage[index]}
+                              alt="Uploaded Preview"
                               style={{
                                 width: "100px",
                                 height: "100px",
+                                objectFit: "cover",
                               }}
                             />
-                          ) : (
-                            <></>
-                          )}
+                          ) : null}
                         </div>
+
                         <div className="text-start">
                           <label htmlFor="" className="mb-1 fw-medium">
                             <small>Mobile No</small>
@@ -666,7 +745,10 @@ const AddParentGuardian = forwardRef(
               <button
                 type="button"
                 // onClick={() => setRows((prevRows) => prevRows - 1)}
-                onClick={() => handleRemoveRow(rows)}
+                onClick={() => {
+                  handleDeleteRow(rows);
+                  handleRemoveRow(rows);
+                }}
                 className="btn btn-outline-danger"
               >
                 Delete

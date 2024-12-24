@@ -66,10 +66,11 @@ const Class = () => {
           </IconButton>
         ),
       },
+      { accessorKey: "className", header: "Class Name", enableHiding: false },
       { accessorKey: "centerName", header: "Center Name", enableHiding: false },
       { accessorKey: "courseName", header: "Course Name", enableHiding: false },
       { accessorKey: "classCode", header: "Class Code", enableHiding: false },
-      { accessorKey: "className", header: "Class Name", enableHiding: false },
+ 
       { accessorKey: "classType", header: "Class Type", enableHiding: false },
       {
         accessorKey: "teacherName",
