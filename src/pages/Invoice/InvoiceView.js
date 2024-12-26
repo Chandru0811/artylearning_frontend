@@ -72,7 +72,7 @@ function InvoiceView() {
   const generatePDF = async (qrCodeUrl) => {
     try {
       const doc = new jsPDF();
-      doc.addImage(Logo, "PNG", 13, 25, 40, 25); // x, y, width, height
+      // doc.addImage(Logo, "PNG", 13, 25, 40, 25); // x, y, width, height
 
       doc.setFontSize(15);
       doc.setFont("helvetica", "bold");
@@ -331,7 +331,13 @@ function InvoiceView() {
             >
               Void Invoice
             </button>
-            <SendAndPublish data={data} id={id} qr={qrCodeUrl} />
+            <SendAndPublish
+              data={data}
+              id={id}
+              qr={qrCodeUrl}
+              invoiceNotes={invoiceNotes}
+              uenNumber={uenNumber}
+            />
             <button
               onClick={handleGeneratePDF}
               className="btn btn-border btn-sm me-1"
@@ -354,7 +360,8 @@ function InvoiceView() {
                 <div className="d-flex justify-content-center flex-column align-items-start">
                   {/* <img src={Logo} className="img-fluid" width={150} alt=".." /> */}
                   <p className="text-start fw-small">
-                    Learning Languages <br />The Creative Way
+                    Learning Languages <br />
+                    The Creative Way
                   </p>
                 </div>
               </div>
@@ -451,12 +458,13 @@ function InvoiceView() {
                       <td>{InvoiceItemRow.item}</td>
                       <td>{InvoiceItemRow.itemAmount}</td>
                       <td>
-                        {taxData &&
+                        {InvoiceItemRow.taxTypes}
+                        {/* {taxData &&
                           taxData.map((tax) =>
                             parseInt(InvoiceItemRow.taxType) === tax.id
                               ? `${tax.taxType + " " + tax.rate} %` || "--"
                               : ""
-                          )}
+                          )} */}
                       </td>
 
                       <td>{InvoiceItemRow.gstAmount}</td>

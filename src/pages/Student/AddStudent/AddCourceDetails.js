@@ -189,7 +189,7 @@ const AddcourseDetail = forwardRef(
         lessonName: formData?.lessonName || "",
         packageName: formData?.packageName,
       },
-      // validationSchema: validationSchema,
+      validationSchema: validationSchema,
       onSubmit: async (data) => {
         if (!selectedRow) {
           toast.warning("Please select a course");
@@ -370,7 +370,7 @@ const AddcourseDetail = forwardRef(
 
     const handleRowSelect = (data) => {
       if (data.availableSlots === 0) {
-        toast.error("Class is Full");
+        toast.warning("Class is Full");
         return;
       }
       setSelectedRow(data.id);

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import api from "../../config/URL";
 import fetchAllCentersWithIds from "../List/CenterList";
 
-function SendAndPublish({ data ,qr }) {
+function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [centerData, setcenterData] = useState(null);
 
@@ -134,14 +134,7 @@ function SendAndPublish({ data ,qr }) {
                 <td colspan="2">
                   <table>
                     <tr>
-                      <td class="title">
-                        <img
-                          src="https://arty-cms-bucket.s3.ap-southeast-1.amazonaws.com/cms/Logo.png"
-                          style="width: 75%; max-width: 180px"
-                          alt="Logo"
-                        />
-                      </td>
-                      <td class="third">
+                       <td class="third">
                         <b>Arty Learning @HG</b><br />
                         Tel No:87270752<br />
                         Email:Artylearning@gmail.com
@@ -153,7 +146,7 @@ function SendAndPublish({ data ,qr }) {
             </table>
 
             <div  id="LABEL1" id="LABEL2" style="width: 150% !important;">
-            <strong>Voided Invoice</strong>
+            <strong>Invoice</strong>
             <br />
             <div style="display: flex;">
               <label>Invoice</label>
@@ -202,9 +195,9 @@ function SendAndPublish({ data ,qr }) {
                               <td>${index + 1 || "--"}</td>
                               <td>${product.item || "--"}</td>
                               <td>${product.itemAmount || "--"}</td>
-                              <td>${product.taxType || "--"}</td>
+                              <td>${product.taxTypes || "--"}</td>
                               
-                              <td>${product.gstAmount || "0"} %</td>
+                              <td>${product.gstAmount || "0"} </td>
                               <td>${product.totalAmount}</td>
                               </tr>
                               `
@@ -251,10 +244,12 @@ function SendAndPublish({ data ,qr }) {
             >
               <div style="width: 50%">
              <p> <strong style="margin-right: 14px;">Remark</strong></p>
-            
+             <p style="margin-top: 0px;margin-left: 10px;">${
+               data.remark || "--"
+             }</p><br />
                 <strong style="margin-right: 14px;margin-bottom: 50px; ">Notes : </strong>
             <p style="margin-top: 0px;margin-left: 10px;">${
-              data.remark || "--"
+              invoiceNotes || "--"
             }</p><br />
               </div>
               <div style="width: 50%; text-align: end">
@@ -267,7 +262,7 @@ function SendAndPublish({ data ,qr }) {
                   />
                   <div><strong style="margin-right: 14px;margin-bottom: 10px;">Arty Learning Pte.Ltd.</strong>
                   </strong><br /></div>
-              <div><strong style="margin-right: 34px;margin-bottom: 10px;">UEN:202042173K</strong>
+              <div><strong style="margin-right: 34px;margin-bottom: 10px;">UEN:${uenNumber}</strong>
                   </strong><br /></div>
                 </div>
               </div>
