@@ -14,9 +14,6 @@ const AddParentGuardian = forwardRef(
     const [rows, setRows] = useState(
       formData.parentInformation ? formData.parentInformation.length : 1
     ); // Initially one row for one parent
-    const [data, setData] = useState([]);
-    console.log("STD Data:", data);
-
     const userName = localStorage.getItem("userName");
     const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
       useState(false);
@@ -232,10 +229,30 @@ const AddParentGuardian = forwardRef(
         const parentDetailIds = response.data.studentParentsDetails.map(
           (detail) => detail.id
         );
-        formik.setValues((prevValues) => ({
-          ...prevValues,
-          parentInformation,
-        }));
+        if (parentInformation.length > 0) {
+          formik.setValues((prevValues) => ({
+            ...prevValues,
+            parentInformation,
+          }));
+        } else {
+          formik.setValues((prevValues) => ({
+            ...prevValues,
+            parentInformation: [
+              {
+                parentName: "",
+                occupation: "",
+                postalCode: "",
+                relation: "",
+                address: "",
+                parentDateOfBirth: "",
+                email: "",
+                mobileNumber: "",
+                primaryContact: false,
+                file: null,
+              },
+            ],
+          }));
+        }
         // const profileImage = response.data.studentParentsDetails.map(
         //   (detail) => detail.profileImage
         // );
