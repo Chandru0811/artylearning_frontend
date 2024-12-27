@@ -51,6 +51,12 @@ const ReplaceClassLesson = () => {
         header: "Centre Name",
       },
       {
+        accessorKey: "studentUniqueId",
+        header: "Student ID",
+        enableHiding: false,
+        size: 40,
+      },
+      {
         accessorKey: "studentName",
         enableHiding: false,
         header: "Student Name",
@@ -58,12 +64,6 @@ const ReplaceClassLesson = () => {
       {
         accessorKey: "course",
         header: "Course",
-        enableHiding: false,
-        size: 40,
-      },
-      {
-        accessorKey: "studentUniqueId",
-        header: "Student Unique Id",
         enableHiding: false,
         size: 40,
       },

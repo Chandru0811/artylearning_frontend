@@ -57,7 +57,7 @@ const AddEmergencyContact = forwardRef(
         try {
           const formDatas = new FormData();
           formDatas.append("emergencyContactName", data.emergencyContactName);
-          formDatas.append("emergencyRelation", " ");
+          formDatas.append("emergencyRelation", "Brother");
           formDatas.append("emergencyContactNo", data.emergencyContactNo);
           data.emergencyContactInformation?.map((contact) => {
             formDatas.append("name", contact.name);
@@ -235,7 +235,7 @@ const AddEmergencyContact = forwardRef(
         console.log("contactToDelete", contactToDelete.id);
         if (contactToDelete?.id) {
           await api.delete(
-            `/deleteStudentEmergencyContact/${contactToDelete.id}`
+            `/deleteEmergencyAuthorizedContact/${contactToDelete.id}`
           );
           getData();
         }

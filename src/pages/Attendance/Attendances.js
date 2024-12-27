@@ -91,7 +91,7 @@ function Attendances() {
     setSelectedDate(e.target.value);
   };
 
-  const fetchListData = async () => {
+  const fetchCentreData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
@@ -100,7 +100,6 @@ function Attendances() {
       if (centerData?.length > 0) {
         const defaultCenterId = centerData[0].id;
         setSelectedCenter(defaultCenterId);
-
         // Fetch courses for the default center
         fetchCourses(defaultCenterId);
       }
@@ -113,32 +112,27 @@ function Attendances() {
     try {
       const courseData = await fetchAllCoursesWithIdsC(centerId);
       setCourseData(courseData);
-      setSelectedCourse(courseData[0].id);
     } catch (error) {
       toast.error(error);
     }
   };
 
-  useEffect(() => {
-    fetchListData();
-  }, []);
-
-  const handleCenterChange = (event) => {
-    const center = event.target.value;
-    setSelectedCenter(center);
-    setCourseData(null);
-    fetchCourses(center);
+  const handleCenterChange = (e) => {
+    const centerId = e.target.value;
+    setSelectedCenter(centerId);
+    setSelectedCourse("");
+    setCourseData([]);
+    fetchCourses(centerId);
   };
 
   const fetchData = async () => {
     try {
       const requestBody = {
         centerId: selectedCenter,
-        courseId: selectedCourse || " ",
-        batchTime: selectedBatch || " ",
-        date: selectedDate || " ",
+        date: selectedDate,
+        courseId: selectedCourse || "",
+        ...(selectedBatch && { batchTime: selectedBatch }), // Include batchTime only when selected
       };
-
       const response = await api.post(
         "getAllTeacherWithStudentAttendance",
         requestBody
@@ -150,23 +144,20 @@ function Attendances() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     if (selectedDate) {
       fetchAvailableSlots(selectedDate);
       fetchData();
     }
   }, [selectedDate]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const handelSubmitData = () => {
     fetchData();
   };
+
+  useEffect(() => {
+    fetchData();
+    fetchCentreData();
+  }, []);
 
   const handleAttendanceChange = (attendanceIndex, studentIndex, value) => {
     const updatedAttendanceData = [...attendanceData];
@@ -179,7 +170,6 @@ function Attendances() {
     const updatedAttendanceData = [...attendanceData];
     updatedAttendanceData[attendanceIndex].students[studentIndex].remarks =
       value;
-    setAttendanceData(updatedAttendanceData);
     setAttendanceData(updatedAttendanceData);
   };
 
@@ -258,13 +248,7 @@ function Attendances() {
               <label className="form-lable">
                 Centre<span class="text-danger">*</span>
               </label>
-              <select
-                className="form-select "
-                aria-label="Default select example"
-                // onChange={(e) => setSelectedCenter(e.target.value)}
-                onChange={handleCenterChange}
-              >
-                {/* <option selected></option> */}
+              <select className="form-select " onChange={handleCenterChange}>
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
@@ -286,8 +270,11 @@ function Attendances() {
             </div>
             <div className="col-md-6 col-12 mb-2">
               <label className="form-lable">Course</label>
-              <select className="form-select ">
-                <option selected></option>
+              <select
+                className="form-select "
+                onChange={(e) => setSelectedCourse(e.target.value)}
+              >
+                <option value="">Select a course</option>
                 {courseData &&
                   courseData.map((courseId) => (
                     <option key={courseId.id} value={courseId.id}>
@@ -300,7 +287,6 @@ function Attendances() {
               <label className="form-lable">Batch</label>
               <select
                 className="form-select"
-                aria-label="Default select example"
                 onChange={(e) => setSelectedBatch(e.target.value)}
               >
                 <option value=""></option>

@@ -448,7 +448,7 @@ const AddcourseDetail = forwardRef(
           course: studentCourseDetail?.course || prevValues.course,
           batch: studentCourseDetail?.batch || prevValues.batch,
           days: studentCourseDetail?.days || prevValues.days,
-          startDate: studentCourseDetail?.startDate || prevValues.startDate,
+          startDate: studentCourseDetail?.lessonName || prevValues.lessonName,
           endDate: studentCourseDetail?.endDate || prevValues.endDate,
           teacher: studentCourseDetail?.teacher || prevValues.teacher,
           lessonName: studentCourseDetail?.lessonName || prevValues.lessonName,
