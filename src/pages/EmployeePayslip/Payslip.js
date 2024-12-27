@@ -82,7 +82,8 @@ function Payslip() {
 
     await addTableToPDF(table1Ref, 1);
 
-    pdf.save(`PayRole.pdf`);
+    pdf.save(`Payslip_${data.employeeName}_${selectedMonth}.pdf`);
+
     // setLoadIndicator(false);
   };
   return (
@@ -158,7 +159,7 @@ function Payslip() {
                             </p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>:{data.dob || "--"}</p>
+                            <p>:{data.dateOfBirth || "--"}</p>
                           </dvi>
                         </div>
                       </div>
@@ -199,7 +200,11 @@ function Payslip() {
                           </p>
                           <p className="d-flex justify-content-between">
                             <strong>EMPLOYER CPF</strong>
-                            <p>{data.cpfContribution || "--"}</p>
+                            <p>
+                              {data.cpfContribution !== undefined
+                                ? data.cpfContribution.toFixed(2)
+                                : "--"}
+                            </p>
                           </p>
                           {/* <div className="row ">
                             <dvi className="col-4">
@@ -214,35 +219,24 @@ function Payslip() {
                           className="col-6 d-flex flex-column justify-content-evenly"
                           style={{ borderLeft: "2px solid #000" }}
                         >
-                           <p className="d-flex justify-content-between">
-                            <strong>MBMF</strong>
-                            <p>{data.mbmf || "--"}</p>
-                          </p>
-                          <p className="d-flex justify-content-between">
-                            <strong>EMPLOYEE CPF</strong>
-                            <p>{data.bonus || "--"}</p>
-                          </p>
-                          <p className="d-flex justify-content-between">
-                          <strong>Detection</strong>
-                            {data.deductions && data.deductions.length > 0 ? (
-                              data.deductions.map((deduct, index) => (
-                                <p key={index}>
-                                  <strong>{deduct.detectionName}</strong>{" "}
+                          <strong>Deduction </strong>
+                          {data.deductions && data.deductions.length > 0 ? (
+                            data.deductions.map((deduct, index) => (
+                              <div
+                                key={index}
+                                className="d-flex justify-content-between"
+                              >
+                                <p>
+                                  <strong>
+                                    {deduct.detectionName || "--"}
+                                  </strong>
                                 </p>
-                              ))
-                            ) : (
-                              <p>--</p>
-                            )}
-                            {data.deductions && data.deductions.length > 0 ? (
-                              data.deductions.map((deduct, index) => (
-                                <p key={index}>
-                                  {deduct.amount}
-                                </p>
-                              ))
-                            ) : (
-                              <p>--</p>
-                            )}
-                          </p>
+                                <p>{deduct.amount || "--"}</p>
+                              </div>
+                            ))
+                          ) : (
+                            <p>--</p>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -262,7 +256,7 @@ function Payslip() {
                             <p>Salary Credited To</p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: CASH</p>
+                            <p>: {data.salaryCreditedTo}</p>
                           </dvi>
                         </div>
                         <p>This is a system-generated payslip</p>
@@ -277,7 +271,12 @@ function Payslip() {
                             <p>CPF Wages</p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: {data.cpfContribution || "--"}</p>
+                            <p>
+                              :
+                              {data.cpfContribution !== undefined
+                                ? data.cpfContribution.toFixed(2)
+                                : "--"}
+                            </p>
                           </dvi>
                         </div>
                         <div className="row">
@@ -285,23 +284,12 @@ function Payslip() {
                             <p>Total CPF</p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: {data.totalCpf || "--"}</p>
-                          </dvi>
-                        </div>
-                        <div className="row">
-                          <dvi className="col-4">
-                            <p>AL/YTD/Bal</p>
-                          </dvi>
-                          <dvi className="col-8">
-                            <p>: 00.0</p>
-                          </dvi>
-                        </div>
-                        <div className="row">
-                          <dvi className="col-4">
-                            <p>ML/YTD/Bal</p>
-                          </dvi>
-                          <dvi className="col-8">
-                            <p>: 00.0</p>
+                            <p>
+                              :
+                              {data.totalCpf !== undefined
+                                ? data.totalCpf.toFixed(2)
+                                : "--"}
+                            </p>
                           </dvi>
                         </div>
                         <div className="row">

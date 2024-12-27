@@ -100,10 +100,6 @@ function TaxEdit({ id, onSuccess, handleMenuClose }) {
   return (
     <>
       <p
-        style={{
-          whiteSpace: "nowrap",
-          width: "100%",
-        }}
         className="text-start mb-0"
         onClick={handleShow}
       >

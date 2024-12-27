@@ -323,7 +323,7 @@ function InvoiceView() {
           </div>
         </div>
         <div className=" row">
-          <div className="col-12 d-flex justify-content-end my-1">
+          <div className="col-12 d-flex justify-content-end my-2">
             <button
               type="button"
               className="btn btn-border btn-sm me-1"

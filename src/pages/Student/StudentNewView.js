@@ -1199,7 +1199,7 @@ function StudentNewView() {
             <thead>
               <tr>
                 <th className="fw-medium">S.No</th>
-                <th className="fw-medium">Person Profile</th>
+                {/* <th className="fw-medium">Person Profile</th> */}
                 <th className="fw-medium">Name</th>
                 <th className="fw-medium">Contact No</th>
                 <th className="fw-medium">Relation</th>
@@ -1214,14 +1214,14 @@ function StudentNewView() {
                   (emergency, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>
+                      {/* <td>
                         <img
                           src={emergency.personProfile || ""}
                           alt=""
                           style={{ width: "50px", height: "auto" }}
                           className="rounded"
                         />
-                      </td>
+                      </td> */}
                       <td>{emergency.name || "--"}</td>
                       <td>{emergency.contactNo || "--"}</td>
                       <td>{emergency.authorizedRelation || "--"}</td>
@@ -1245,7 +1245,7 @@ function StudentNewView() {
                   <thead>
                     <tr>
                       <th className="fw-medium">S.No</th>
-                      <th className="fw-medium">Profile Image</th>
+                      {/* <th className="fw-medium">Profile Image</th> */}
                       <th className="fw-medium">Name</th>
                       <th className="fw-medium">Occupation</th>
                       <th className="fw-medium">DOB</th>
@@ -1260,7 +1260,7 @@ function StudentNewView() {
                     {data.studentParentsDetails.map((parent, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
-                        <td>
+                        {/* <td>
                           {parent.profileImage ? (
                             <img
                               src={parent.profileImage}
@@ -1271,7 +1271,7 @@ function StudentNewView() {
                           ) : (
                             <></>
                           )}
-                        </td>
+                        </td> */}
                         <td>{parent.parentName || "--"}</td>
                         <td>{parent.occupation || "--"}</td>
                         <td>
@@ -1532,17 +1532,22 @@ function StudentNewView() {
             <div className="col-md-6 col-12">
               {data.studentTermsAndConditions &&
                 data.studentTermsAndConditions.length > 0 &&
-                data.studentTermsAndConditions.map((parent, index) => (
-                  <div key={index} className="col-12 p-2">
-                    <h6 className="mt-2 mb-4">Parent Signature</h6>
-                    <img
-                      src={parent.parentSignature}
-                      className="img-fluid rounded"
-                      style={{ width: "50%" }}
-                      alt=""
-                    />
-                  </div>
-                ))}
+                data.studentTermsAndConditions.map((parent, index) => {
+                  // Log the Parent Signature URL
+                  console.log("Parent Signature URL:", parent.parentSignature);
+
+                  return (
+                    <div key={index} className="col-12 p-2">
+                      <h6 className="mt-2 mb-4">Parent Signature</h6>
+                      <img
+                        src={parent.parentSignature}
+                        className="img-fluid rounded"
+                        style={{ width: "50%" }}
+                        alt="Parent Signature"
+                      />
+                    </div>
+                  );
+                })}
               {(!data.studentTermsAndConditions ||
                 data.studentTermsAndConditions.length === 0) && <></>}
             </div>

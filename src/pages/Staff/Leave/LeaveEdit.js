@@ -446,6 +446,7 @@ function LeaveEdit() {
                       src={leavedatas.attachment}
                       alt="Attachment"
                       className="img-fluid"
+                      style={{ height: "100px", objectFit: "contain" }}
                     />
                   )}
                 </div>
