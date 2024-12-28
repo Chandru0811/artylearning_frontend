@@ -18,7 +18,7 @@ import AddBreak from "./Add/AddBreak";
 import AddClass from "./Add/AddClass";
 import AddPackage from "./Add/AddPackage";
 
-const Center = () => {
+const Center = ({handleCenterChanged}) => {
   const [filters, setFilters] = useState({
     centerName: "",
     centerCode: "",
@@ -373,6 +373,7 @@ const Center = () => {
                 <GlobalDelete
                   path={`/deleteCenter/${selectedId}`}
                   onDeleteSuccess={fetchData}
+                  handleCenterChanged={handleCenterChanged}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>

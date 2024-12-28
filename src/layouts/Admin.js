@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "../styles/sidebar.css";
 import "boxicons/css/boxicons.min.css";
@@ -244,6 +244,7 @@ import BatchTimeEdit from "../pages/Settings/BatchTime/BatchTimeEdit";
 import LeadNewView from "../pages/Lead/LeadNewView";
 
 function Admin({ handleLogout }) {
+  const [centerChange, setCenterChange] = useState();
   useEffect(() => {
     let sidebar = document.querySelector(".sidebar");
     let sidebarBtn = document.querySelector(".sidebarBtn");
@@ -254,6 +255,10 @@ function Admin({ handleLogout }) {
       } else sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
     };
   }, []);
+  const handleCenterChanged = () => {
+    setCenterChange("CenterChanged");
+    // console.log("Center Changed")
+  };
 
   return (
     <div>
@@ -261,7 +266,7 @@ function Admin({ handleLogout }) {
         <ToastContainer position="top-center" />
         <Sidebar />
         <section className="home-section">
-          <Header onLogout={handleLogout} />
+          <Header onLogout={handleLogout} centerChange={centerChange} />
           <ScrollToTop />
           <div className="home-content" style={{ minHeight: "95vh" }}>
             <Routes>
@@ -339,8 +344,8 @@ function Admin({ handleLogout }) {
               <Route path="/transferOut" element={<TransferOut />} />
 
               {/* Center */}
-              <Route path="/center" element={<Center />} />
-              <Route path="/center/add" element={<CenterAdd />} />
+              <Route path="/center" element={<Center handleCenterChanged={handleCenterChanged} />} />
+              <Route path="/center/add" element={<CenterAdd handleCenterChanged={handleCenterChanged} />} />
               <Route path="/center/view/:id" element={<CenterView />} />
               <Route path="/center/edit/:id" element={<CenterEdit />} />
 
@@ -608,8 +613,6 @@ function Admin({ handleLogout }) {
 
               {/* {/ Role /} */}
               <Route path="/role/add" element={<RolesAdd />} />
-
-              
 
               {/* Compaign */}
               <Route path="/campaign" element={<Campaign />} />

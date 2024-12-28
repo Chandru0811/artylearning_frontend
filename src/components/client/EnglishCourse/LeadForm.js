@@ -161,6 +161,7 @@ function LeadForm() {
   };
 
   useEffect(() => {
+    formik.setFieldValue("parentMobileNumberPrefix","65")
     fetchData();
     fetchAllSubjectsList();
   }, []);
@@ -614,13 +615,13 @@ function LeadForm() {
               >
                 <select
                   {...formik.getFieldProps("parentMobileNumberPrefix")}
-                  name="parentMobileNumberPrefix"
+                  
                   className="form-select"
                   aria-label="Default select example"
                   style={{ border: "none" }}
                 >
-                  <option value="+91">+91</option>
-                  <option value="+65">+65</option>
+                  <option value="91">+91</option>
+                  <option value="65">+65</option>
                 </select>
               </div>
               <input

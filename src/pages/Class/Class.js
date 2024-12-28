@@ -13,8 +13,10 @@ import {
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import fetchAllCentersWithIds from "../List/CenterList";
 import GlobalDelete from "../../components/common/GlobalDelete";
+import TeacherReplacement from "./TeacherReplacement";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
+import ClassReplacement from "./ClassReplacement";
 
 const Class = () => {
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
@@ -455,7 +457,16 @@ const Class = () => {
               {/* <MenuItem onClick={() => navigate(`/class/view/${selectedId}`)}>
                 View
               </MenuItem> */}
-              <MenuItem onClick={() => navigate(`/class/edit/${selectedId}`)}>
+              
+              <MenuItem >
+                <ClassReplacement classId={selectedId} onDeleteSuccess={getClassData}
+                  onOpen={handleMenuClose}/>
+              </MenuItem>
+              <MenuItem >
+                <TeacherReplacement classId={selectedId} onDeleteSuccess={getClassData}
+                  onOpen={handleMenuClose}/>
+              </MenuItem>
+              <MenuItem onClick={() => navigate(`/class/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>

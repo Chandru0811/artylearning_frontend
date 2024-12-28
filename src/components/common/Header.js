@@ -6,7 +6,7 @@ import ChangePassword from "./ChangePassword";
 import { BiLogOut } from "react-icons/bi";
 import { CiCalendarDate } from "react-icons/ci";
 
-function Header({ onLogout }) {
+function Header({ onLogout,centerChange }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("email");
@@ -43,7 +43,7 @@ function Header({ onLogout }) {
     };
 
     fetchData();
-  }, []);
+  }, [centerChange]);
 
   return (
     <nav>

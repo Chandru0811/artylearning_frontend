@@ -8,7 +8,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
-function GlobalDelete({ path, onDeleteSuccess, onOpen }) {
+function GlobalDelete({ path, onDeleteSuccess, onOpen,handleCenterChanged }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // useEffect(() => {
@@ -37,6 +37,7 @@ function GlobalDelete({ path, onDeleteSuccess, onOpen }) {
       if (response.status === 200 || response.status === 201) {
         toast.success(response.data.message);
         onDeleteSuccess();
+        if (typeof onOpen === "function") handleCenterChanged();
         if (typeof onOpen === "function") onOpen();
       }
     } catch (error) {

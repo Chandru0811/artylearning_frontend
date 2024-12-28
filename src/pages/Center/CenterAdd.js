@@ -51,7 +51,7 @@ const validationSchema = Yup.object().shape({
     .max(200, "*The maximum length is 200 characters"),
 });
 
-function CenterAdd() {
+function CenterAdd({handleCenterChanged}) {
   const navigate = useNavigate();
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [managerData, setmanagerData] = useState(null);
@@ -135,6 +135,7 @@ function CenterAdd() {
         if (response.status === 201) {
           toast.success(response.data.message);
           navigate("/center");
+          handleCenterChanged()
         } else {
           toast.error(response.data.message);
         }
