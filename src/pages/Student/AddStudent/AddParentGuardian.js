@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import api from "../../../config/URL";
+import { file } from "jszip";
 
 const AddParentGuardian = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -17,8 +18,12 @@ const AddParentGuardian = forwardRef(
     const userName = localStorage.getItem("userName");
     const [selectedPrimaryContactIndex, setSelectedPrimaryContactIndex] =
       useState(false);
+    const [leadDataTrue, setleadDataTrue] = useState(true);
+    console.log("leadDataTrue", leadDataTrue);
+
     const [parentDetailId, setParentDetailId] = useState([]);
-    console.log("parentDetailId", parentDetailId);
+    // console.log("parentDetailId", parentDetailId);
+    const [profileImage, setProfileImage] = useState([]);
 
     const validationSchema = Yup.object({
       parentInformation: Yup.array()
@@ -41,27 +46,6 @@ const AddParentGuardian = forwardRef(
             primaryContact: Yup.boolean().required(
               "*Primary Contact is required"
             ),
-            // file: Yup.mixed()
-            //   .nullable()
-            //   .required("*Profile Image is required")
-            //   .test(
-            //     "fileType",
-            //     "Invalid file type. Please upload a PNG, JPG, GIF, or BMP file.",
-            //     (file) =>
-            //       !file ||
-            //       [
-            //         "image/jpeg",
-            //         "image/jpg",
-            //         "image/png",
-            //         "image/gif",
-            //         "image/bmp",
-            //       ].includes(file.type)
-            //   )
-            //   .test(
-            //     "fileSize",
-            //     "File size exceeds 1MB. Please upload a smaller file.",
-            //     (file) => !file || file.size <= 1 * 1024 * 1024
-            //   ),
           })
         )
         .min(1, "*At least one parent information is required"),
@@ -71,16 +55,15 @@ const AddParentGuardian = forwardRef(
       initialValues: {
         parentInformation: formData.parentInformation
           ? formData.parentInformation.map((parent) => ({
-              parentNames: parent.parentNames || "",
-              parentDateOfBirths: parent.parentDateOfBirths || "",
-              emails: parent.emails || "",
+              parentName: parent.parentName || "",
+              parentDateOfBirth: parent.parentDateOfBirth || "",
+              email: parent.email || "",
               relations: parent.relations || "",
-              occupations: parent.occupations || "",
-              files: null || "",
-              passwords: parent.passwords || "",
-              mobileNumbers: parent.mobileNumbers || "",
-              postalCodes: parent.postalCodes || "",
-              addresses: parent.addresses || "",
+              occupation: parent.occupation || "",
+              file: null || "",
+              mobileNumber: parent.mobileNumber || "",
+              postalCode: parent.postalCode || "",
+              address: parent.address || "",
               primaryContact: parent.primaryContact || "",
             }))
           : [
@@ -93,6 +76,7 @@ const AddParentGuardian = forwardRef(
                 mobileNumber: "",
                 postalCode: "",
                 address: "",
+                file: null,
                 primaryContact: true,
               },
             ],
@@ -140,6 +124,9 @@ const AddParentGuardian = forwardRef(
                 formDatas,
                 { headers: { "Content-Type": "multipart/form-data" } }
               );
+              if (response.data.status === 201) {
+                setleadDataTrue(false);
+              }
             }
           }
           toast.success("Parent details processed successfully!");
@@ -253,11 +240,11 @@ const AddParentGuardian = forwardRef(
             ],
           }));
         }
-        // const profileImage = response.data.studentParentsDetails.map(
-        //   (detail) => detail.profileImage
-        // );
+        const profileImage = response.data.studentParentsDetails.map(
+          (detail) => detail.profileImage
+        );
         setParentDetailId(parentDetailIds);
-        // setProfileImage(profileImage);
+        setProfileImage(profileImage);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -265,72 +252,72 @@ const AddParentGuardian = forwardRef(
       }
     };
 
-    useEffect(() => {
-      const getLeadData = async () => {
-        if (formData.LeadId) {
-          try {
-            const response = await api.get(
-              `/getAllLeadInfoById/${formData.LeadId}`
-            );
-            const leadData = response.data;
-            console.log("Lead Data", leadData);
-            if (!formData.parentInformation) {
-              const primaryContactMother = leadData.primaryContactMother
-                ? true
-                : false;
-              const primaryContactFather = leadData.primaryContactFather
-                ? true
-                : false;
-              formik.setFieldValue("parentInformation", [
-                {
-                  parentName: leadData.mothersFullName || "",
-                  parentDateOfBirth:
-                    leadData?.mothersDateOfBirth?.substring(0, 10) || "",
-                  email: leadData.mothersEmailAddress || "",
-                  relation: "Mother" || "",
-                  occupation: leadData.mothersOccupation || "",
-                  file: null || "",
-                  mobileNumber: leadData.mothersMobileNumber || "",
-                  address: leadData.address,
-                  postalCode: leadData.postalCode || "",
-                  primaryContact: primaryContactMother,
-                },
-                {
-                  parentName: leadData.fathersFullName || "",
-                  parentDateOfBirth:
-                    leadData?.fathersDateOfBirth?.substring(0, 10) || "",
-                  email: leadData.fathersEmailAddress || "",
-                  relation: "Father" || "",
-                  occupation: leadData.fathersOccupation || "",
-                  file: null || "",
-                  mobileNumber: leadData.fathersMobileNumber || "",
-                  address: leadData.address || "",
-                  postalCode: leadData.postalCode || "",
-                  primaryContact: primaryContactFather,
-                },
-              ]);
-
-              if (primaryContactMother) {
-                setSelectedPrimaryContactIndex(0);
-              } else if (primaryContactFather) {
-                setSelectedPrimaryContactIndex(1);
-              } else {
-                setSelectedPrimaryContactIndex(null);
-              }
-              setRows(2);
-            }
-          } catch (error) {
-            console.error("Error fetching lead data:", error);
-            toast.error("Error fetching lead data");
+    const getLeadData = async () => {
+      if (formData.LeadId && leadDataTrue) {
+        try {
+          const response = await api.get(
+            `/getAllLeadInfoById/${formData.LeadId}`
+          );
+          const leadData = response.data;
+          console.log("Lead Data", leadData);
+          if (!formData.parentInformation) {
+            const primaryContactMother = leadData.primaryContactMother
+              ? true
+              : false;
+            const primaryContactFather = leadData.primaryContactFather
+              ? true
+              : false;
+            formik.setFieldValue("parentInformation", [
+              {
+                parentName: leadData.mothersFullName || "",
+                parentDateOfBirth:
+                  leadData?.mothersDateOfBirth?.substring(0, 10) || "",
+                email: leadData.mothersEmailAddress || "",
+                relation: "Mother" || "",
+                occupation: leadData.mothersOccupation || "",
+                file: null || "",
+                mobileNumber: leadData.mothersMobileNumber || "",
+                address: leadData.address,
+                postalCode: leadData.postalCode || "",
+                primaryContact: true,
+              },
+              {
+                parentName: leadData.fathersFullName || "",
+                parentDateOfBirth:
+                  leadData?.fathersDateOfBirth?.substring(0, 10) || "",
+                email: leadData.fathersEmailAddress || "",
+                relation: "Father" || "",
+                occupation: leadData.fathersOccupation || "",
+                file: null || "",
+                mobileNumber: leadData.fathersMobileNumber || "",
+                address: leadData.address || "",
+                postalCode: leadData.postalCode || "",
+                primaryContact: primaryContactFather,
+              },
+            ]);
+            setRows(2);
           }
+        } catch (error) {
+          console.error("Error fetching lead data:", error);
+          toast.error("Error fetching lead data");
         }
-      };
-      getLeadData();
-    }, []);
+      }
+    };
 
     useEffect(() => {
-      getStudentData();
-    }, []);
+      if (formData.LeadId && leadDataTrue) {
+        getLeadData();
+      } else {
+        getStudentData();
+      }
+    }, [formData.LeadId, leadDataTrue]);
+
+    useEffect(() => {
+      // Check the conditions to set leadDataTrue to false
+      if (formData.parentInformation && formData.parentInformation.length > 0) {
+        setleadDataTrue(false);
+      }
+    }, [formData.parentInformation]);
 
     useEffect(() => {
       // Find the parent with primaryContact set to true, if any
@@ -555,7 +542,7 @@ const AddParentGuardian = forwardRef(
                       </div>
                     )}
                 </div>
-                <div className="col-lg-6 col-md-6 col-12 mt-3">
+                {/* <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="">Profile Image</label>
                   <input
                     type="file"
@@ -571,24 +558,99 @@ const AddParentGuardian = forwardRef(
                     onBlur={formik.handleBlur}
                     accept=".jpg,.jpeg,.png,.gif,.bmp"
                   />
-                  {formik.touched.parentInformation?.[index]?.file &&
-                    formik.errors.parentInformation?.[index]?.file && (
-                      <div className="text-danger">
-                        {formik.errors.parentInformation[index].file}
-                      </div>
-                    )}
-                  {formik.values.parentInformation[index].file && (
+                </div> */}
+                <div className="col-lg-6 col-md-6 col-12 mt-3">
+                  <label className="">Profile Image</label>
+                  <input
+                    type="file"
+                    name="file"
+                    className="form-control"
+                    onChange={(event) => {
+                      const file = event.target.files[0];
+
+                      // If no file is selected, remove the image preview
+                      if (!file) {
+                        const updatedProfileImage = [...profileImage];
+                        updatedProfileImage[index] = null; // Clear the image for this index
+                        setProfileImage(updatedProfileImage);
+                        formik.setFieldValue(
+                          `parentInformation[${index}].file`,
+                          null
+                        );
+                        return;
+                      }
+
+                      // Validate file type and size
+                      const validTypes = [
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/png",
+                        "image/gif",
+                        "image/bmp",
+                      ];
+                      if (!validTypes.includes(file.type)) {
+                        alert(
+                          "Invalid file type. Please upload a PNG, JPG, GIF, or BMP file."
+                        );
+                        return;
+                      }
+                      if (file.size > 1 * 1024 * 1024) {
+                        alert(
+                          "File size exceeds 1MB. Please upload a smaller file."
+                        );
+                        return;
+                      }
+
+                      // Update Formik field value
+                      formik.setFieldValue(
+                        `parentInformation[${index}].file`,
+                        file
+                      );
+
+                      // Read file as Base64 and update the image source
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                        const updatedProfileImage = [...profileImage];
+                        updatedProfileImage[index] = e.target.result; // Set the base64 string as the image source
+                        setProfileImage(updatedProfileImage);
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                    onBlur={formik.handleBlur}
+                    accept=".jpg, .jpeg, .png, .gif, .bmp"
+                  />
+
+                  {/* Display image conditionally */}
+                  {profileImage[index] ||
+                  formik.values.parentInformation[index].file ? (
                     <img
-                      src={URL.createObjectURL(
+                      src={
                         formik.values.parentInformation[index].file
-                      )}
-                      alt="Profile"
+                          ? URL.createObjectURL(
+                              formik.values.parentInformation[index].file
+                            )
+                          : profileImage[index]
+                      }
+                      alt="Uploaded or Existing Preview"
                       style={{
                         width: "100px",
                         height: "100px",
                         objectFit: "cover",
                       }}
                     />
+                  ) : (
+                    <div
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        backgroundColor: "#e0e0e0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      No Image
+                    </div>
                   )}
                 </div>
                 <div className="col-lg-12 col-md-12 col-12 my-3">
@@ -614,7 +676,7 @@ const AddParentGuardian = forwardRef(
               {rows > 1 && (
                 <button
                   type="button"
-                  className="btn btn-danger"
+                  className="btn btn-danger btn-sm"
                   onClick={() => {
                     handleDeleteRow(index);
                     handleRemoveRow(index);

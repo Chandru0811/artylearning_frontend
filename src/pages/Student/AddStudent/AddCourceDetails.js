@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
 
 const AddcourseDetail = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
-    console.log("Student Id:", formData.student_id);
+    // console.log("Student Id:", formData.student_id);
     const [courseData, setCourseData] = useState(null);
     const [packageData, setPackageData] = useState(null);
     const [availableDays, setAvailableDays] = useState([]); // State for available days in select
@@ -35,9 +35,9 @@ const AddcourseDetail = forwardRef(
     const [selectedRowData, setSelectedRowData] = useState({}); // State for selected row data
     const userName = localStorage.getItem("userName");
     const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
-    console.log("selectedRow", selectedRow);
-    console.log("selectedRowData", selectedRowData);
-    console.log("FormData", formData.centerId);
+    // console.log("selectedRow", selectedRow);
+    // console.log("selectedRowData", selectedRowData);
+    console.log("FormData CenterID:", formData);
 
     const columns = useMemo(
       () => [
@@ -97,6 +97,18 @@ const AddcourseDetail = forwardRef(
           enableHiding: false,
           header: "Batch",
           size: 50,
+          Cell: ({ cell }) => {
+            const value = cell.getValue(); // Get the batch value from the cell
+            const formattedValue = Array.isArray(value)
+              ? value.map((time) => formatTo12Hour(time)).join(", ") // Handle arrays of times if necessary
+              : formatTo12Hour(value); // Handle a single time value
+        
+            return (
+              <div className="d-flex justify-content-center">
+                <span>{formattedValue}</span>
+              </div>
+            );
+          },
         },
         {
           accessorKey: "startDate",
@@ -209,13 +221,14 @@ const AddcourseDetail = forwardRef(
           batch: selectedRowData.batch,
           days: selectedRowData.days,
           classRoom: selectedRowData.classRoom,
-          startDate: selectedRowData.startDate,
+          // startDate: selectedRowData.startDate,
+          startDate: data.lessonName,
           endDate: selectedRowData.endDate,
           studentCount: selectedRowData.studentCount,
           teacher: selectedRowData.teacher,
           userId: selectedRowData.userId,
         };
-        console.log("Course Payload Data:", payload);
+        // console.log("Course Payload Data:", payload);
         try {
           let response;
           if (studentCourseDetailsId !== null) {
@@ -375,8 +388,8 @@ const AddcourseDetail = forwardRef(
       }
       setSelectedRow(data.id);
       setSelectedRowData(data);
-      console.log("Selected Row Data:", data);
-      console.log("Selected Row Data Valuess are:", selectedRowData);
+      // console.log("Selected Row Data:", data);
+      // console.log("Selected Row Data Valuess are:", selectedRowData);
       setFormData((prev) => ({ ...prev, coursesData: data }));
 
       if (data.startDate && data.endDate) {
@@ -427,7 +440,7 @@ const AddcourseDetail = forwardRef(
       }
     }, [formData.coursesData]);
 
-    const getData1 = async () => {
+    const getStudentData = async () => {
       try {
         const response = await api.get(
           `/getAllStudentById/${formData.student_id}`
@@ -439,9 +452,8 @@ const AddcourseDetail = forwardRef(
         console.log("studentCourseDetail:", studentCourseDetail);
         formik.setValues((prevValues) => ({
           ...prevValues,
-          centerName: data.centerName || prevValues.centerName,
-          centerId: data.centerId || prevValues.centerId,
-          nationality: data.nationality || prevValues.nationality,
+          centerName: studentCourseDetail.centerName || prevValues.centerName,
+          centerId: studentCourseDetail.centerId || formData.centerId,
           classId: studentCourseDetail?.classId || prevValues.classId,
           className: studentCourseDetail?.className || prevValues.className,
           courseId: studentCourseDetail?.courseId || prevValues.courseId,
@@ -461,7 +473,7 @@ const AddcourseDetail = forwardRef(
     };
 
     useEffect(() => {
-      getData1();
+      getStudentData();
     }, []);
 
     useImperativeHandle(ref, () => ({

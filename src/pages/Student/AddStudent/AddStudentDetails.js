@@ -54,7 +54,7 @@ const AddStudentDetails = forwardRef(
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem('userName');
 
-    console.log("FormData is ", formData);
+    // console.log("FormData is ", formData);
 
     const maxDate = new Date();
     maxDate.setFullYear(maxDate.getFullYear() - 1);
@@ -160,9 +160,9 @@ const AddStudentDetails = forwardRef(
           formDatas.append("file", values.file);
           formDatas.append("createdBy", userName);
 
-          for (let [key, value] of formDatas.entries()) {
-            console.log(`${key}: ${value}`);
-          }
+          // for (let [key, value] of formDatas.entries()) {
+          //   console.log(`${key}: ${value}`);
+          // }
 
           const response = await api.post(
             "/createStudentDetailsWithProfileImageLatest",
@@ -243,7 +243,7 @@ const AddStudentDetails = forwardRef(
               allowMagazine: leadData.allowMagazine || "",
               allowSocialMedia: leadData.allowSocialMedia || "",
             });
-            console.log("Lead Data:", response.data);
+            // console.log("Lead Data:", response.data);
           } catch (error) {
             console.error("Error fetching lead data:", error);
             toast.error("Error fetching lead data");
