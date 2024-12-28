@@ -459,12 +459,12 @@ const Course = () => {
               onClose={handleMenuClose}
             >
               <MenuItem
-                onClick={() => navigate(`/course/coursefees/${selectedId}`)}
+                onClick={() => navigate(`/course/coursefees/${selectedId}`)} className="text-start mb-0 menuitem-style"
               >
                 Course Fees
               </MenuItem>
               <MenuItem
-                onClick={() => navigate(`/course/coursedeposit/${selectedId}`)}
+                onClick={() => navigate(`/course/coursedeposit/${selectedId}`)} className="text-start mb-0 menuitem-style"
               >
                 Course Deposit Fees
               </MenuItem>
@@ -472,13 +472,14 @@ const Course = () => {
                 onClick={() =>
                   navigate(`/course/curriculumoutlet/${selectedId}`)
                 }
+                className="text-start mb-0 menuitem-style"
               >
                 Curriculum Outlet
               </MenuItem>
               {/* <MenuItem onClick={() => navigate(`/course/view/${selectedId}`)}>
                 View
               </MenuItem> */}
-              <MenuItem onClick={() => navigate(`/course/edit/${selectedId}`)}>
+              <MenuItem onClick={() => navigate(`/course/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>

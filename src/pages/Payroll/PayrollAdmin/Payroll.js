@@ -446,6 +446,7 @@ const Payroll = () => {
             >
               <MenuItem
                 onClick={() => navigate(`/payrolladmin/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
               >
                 Edit
               </MenuItem>

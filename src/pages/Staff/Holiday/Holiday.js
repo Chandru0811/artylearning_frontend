@@ -258,7 +258,7 @@ const Holiday = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/holiday/edit/${selectedId}`)}>
+              <MenuItem onClick={() => navigate(`/holiday/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>

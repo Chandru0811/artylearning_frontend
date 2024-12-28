@@ -108,7 +108,8 @@ function Edit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <span
+      <p
+      className="text-start mb-0 menuitem-style"
         onClick={handleOpen}
         style={{
           whiteSpace: "nowrap",
@@ -116,7 +117,7 @@ function Edit({ id, onSuccess, handleMenuClose }) {
         }}
       >
         Edit
-      </span>
+      </p>
 
       <Dialog
         open={open}

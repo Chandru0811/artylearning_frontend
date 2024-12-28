@@ -98,7 +98,7 @@ function CMSTestMonialEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <p className="text-start mb-0" onClick={handleShow}>
+      <p className="text-start mb-0 menuitem-style" onClick={handleShow}>
         Edit
       </p>
 

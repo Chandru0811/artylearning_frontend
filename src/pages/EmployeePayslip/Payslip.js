@@ -162,6 +162,16 @@ function Payslip() {
                             <p>:{data.dateOfBirth || "--"}</p>
                           </dvi>
                         </div>
+                        <div className="row">
+                          <dvi className="col-4">
+                            <p>
+                              <strong>Designation </strong>
+                            </p>
+                          </dvi>
+                          <dvi className="col-8">
+                            <p>:{data.designation  || "--"}</p>
+                          </dvi>
+                        </div>
                       </div>
                       <div className="col-5">
                         <div className="row">
@@ -181,7 +191,7 @@ function Payslip() {
                             </p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>: {data.payPeriod || "--"}</p>
+                            <p>: {data.payslipMonth || "--"}</p>
                           </dvi>
                         </div>
                       </div>

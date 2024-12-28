@@ -95,7 +95,8 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
 
   return (
     <>
-      <span
+      <p
+      className="text-start mb-0 menuitem-style"
         onClick={handleShow}
         style={{
           whiteSpace: "nowrap",
@@ -103,7 +104,7 @@ function DocumentEdit({ id, onSuccess, handleMenuClose }) {
         }}
       >
         Edit
-      </span>
+      </p>
       <Dialog
         open={show}
         onClose={handleClose}

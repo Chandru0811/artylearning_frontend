@@ -98,7 +98,7 @@ function RaceEdit({ id, onSuccess, handleMenuClose }) {
           whiteSpace: "nowrap",
           width: "100%",
         }}
-        className="text-start mb-0"
+        className="text-start mb-0 menuitem-style"
         onClick={handleShow}
       >
         Edit

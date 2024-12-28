@@ -397,7 +397,7 @@ const Teacher = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/teacher/edit/${selectedId}`)}>
+              <MenuItem onClick={() => navigate(`/teacher/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>

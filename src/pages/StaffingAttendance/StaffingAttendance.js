@@ -343,6 +343,7 @@ const StaffingAttendance = () => {
                 onClick={() =>
                   navigate(`/staffing/attendance/edit/${selectedId}`)
                 }
+                className="text-start mb-0 menuitem-style"
               >
                 Edit
               </MenuItem>

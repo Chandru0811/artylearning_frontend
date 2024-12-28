@@ -39,7 +39,7 @@ function CMSContactView({ id, handleMenuClose }) {
 
   return (
     <>
-      <p className="text-start mb-0" onClick={handleOpen}>
+      <p className="text-start mb-0 menuitem-style" onClick={handleOpen}>
         View
       </p>
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>

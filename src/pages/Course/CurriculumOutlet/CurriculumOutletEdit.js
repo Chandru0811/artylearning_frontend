@@ -110,15 +110,12 @@ function CurriculumOutletEdit({ id, onSuccess, courseId, handleMenuClose }) {
 
   return (
     <>
-      <span
+      <p
         onClick={handleOpen}
-        style={{
-          whiteSpace: "nowrap",
-          width: "100% !important",
-        }}
+        className="text-start mb-0 menuitem-style"
       >
         Edit
-      </span> 
+      </p> 
       <Dialog
         open={open}
         onClose={handleClose}

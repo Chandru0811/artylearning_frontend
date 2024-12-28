@@ -122,7 +122,8 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
 
   return (
     <>
-      <span
+      <p
+      className="text-start mb-0 menuitem-style"
         onClick={handleOpenDialog}
         style={{
           whiteSpace: "nowrap",
@@ -130,7 +131,7 @@ function ReferalFeesEdit({ id, onSuccess, onOpen }) {
         }}
       >
         Edit
-      </span>
+      </p>
 
       <Dialog
         open={dialogOpen}

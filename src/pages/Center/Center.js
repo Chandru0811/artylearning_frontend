@@ -366,7 +366,7 @@ const Center = ({handleCenterChanged}) => {
               <MenuItem >
                 <AddBreak id={selectedId} onSuccess={fetchData} handleMenuClose={handleMenuClose}/>
               </MenuItem>
-              <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)}>
+              <MenuItem onClick={() => navigate(`/center/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>

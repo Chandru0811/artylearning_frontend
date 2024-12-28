@@ -256,11 +256,12 @@ function CurriculumOutlet() {
                     );
                   }
                 }}
+                className="text-start mb-0 menuitem-style"
               >
                 Course Curriculum
               </MenuItem>
 
-              <MenuItem>
+              <MenuItem >
                 <CurriculumOutletEdit
                   onSuccess={getData}
                   id={selectedId}

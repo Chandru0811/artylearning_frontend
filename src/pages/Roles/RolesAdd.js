@@ -926,8 +926,9 @@ function RolesAdd() {
             <div className="row">
               <div className="clo-12">
                 <div className="table-responsive">
-                  <table class="table table-light table-hover">
-                    <thead style={{ background: "#a2bab6" }}>
+                <div id="datatable" style={{ maxHeight: "460px",overflowY:"auto"}}>
+                  <table class="table table-light table-hover" >
+                  <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
                       <tr>
                         <th scope="col">Module Permission</th>
                         <th scope="col">Index</th>
@@ -4116,6 +4117,7 @@ function RolesAdd() {
                       </tr>
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </div>
             </div>

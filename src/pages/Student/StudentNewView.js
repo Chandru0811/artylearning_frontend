@@ -129,23 +129,53 @@ function StudentNewView() {
       unit: "px",
       format: "a3",
     });
-
+  
+    const convertImageToDataURL = async (url) => {
+      try {
+        const response = await fetch(url, { mode: "cors" });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image, status: ${response.status}`);
+        }
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(blob);
+        });
+      } catch (error) {
+        console.error(`Error converting image to data URL: ${error.message}`);
+        return null; // Return null if the image can't be converted
+      }
+    };
+  
     const addTableToPDF = async (tableRef, pageNumber) => {
       const table = tableRef.current;
-
+  
       try {
         table.style.visibility = "visible";
         table.style.display = "block";
-        const canvas = await html2canvas(table, { scale: 2 });
-
+        const images = table.querySelectorAll("img");
+        for (const img of images) {
+          if (img.src && !img.src.startsWith("data:")) {
+            const dataURL = await convertImageToDataURL(img.src);
+            }
+        }
+  
+        const canvas = await html2canvas(table, {
+          scale: 2, // Higher scale for better resolution
+          useCORS: true, // Allow cross-origin images
+          allowTaint: false, // Prevent tainted canvas
+        });
+  
         const imgData = canvas.toDataURL();
-
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
+  
         if (pageNumber > 1) {
           pdf.addPage();
         }
+  
         pdf.addImage(imgData, "PNG", 10, 10, pdfWidth - 20, pdfHeight);
         table.style.visibility = "hidden";
         table.style.display = "none";
@@ -153,12 +183,15 @@ function StudentNewView() {
         console.error("Error generating PDF:", error);
       }
     };
-
+  
     await addTableToPDF(table1Ref, 1);
     await addTableToPDF(table2Ref, 2);
 
     pdf.save(`${data.studentName}-details.pdf`);
   };
+  
+  
+  
 
   const handleClick = async () => {
     setLoadIndicator(true);

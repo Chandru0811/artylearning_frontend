@@ -144,15 +144,16 @@ function CourseFeesEdit({ id, onSuccess, handleMenuClose, centerId }) {
   }, [centerId]);
   return (
     <>
-      <span
+      <p
         onClick={handleShow}
         style={{
           whiteSpace: "nowrap",
           width: "100% !important",
         }}
+        className="text-start mb-0 menuitem-style"
       >
         Edit
-      </span>
+      </p>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle>Edit Course Fees</DialogTitle>
         <form onSubmit={formik.handleSubmit}>

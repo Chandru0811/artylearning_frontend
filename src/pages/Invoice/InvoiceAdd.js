@@ -74,8 +74,10 @@ export default function InvoiceAdd() {
       schedule: "",
       noOfLessons: "",
       remark: "",
-      invoiceDate: "",
-      dueDate: "",
+      invoiceDate: new Date().toISOString().split("T")[0],
+      dueDate: new Date(new Date().setMonth(new Date().getMonth() + 1))
+        .toISOString()
+        .split("T")[0],
       packageId: null,
       invoicePeriodTo: "",
       invoicePeriodFrom: "",
@@ -260,6 +262,11 @@ export default function InvoiceAdd() {
         const packageId = studentCourseDetails?.packageName;
         const studentData = response.data;
         let invoiceItems = [];
+        formik.setFieldValue(
+          "invoicePeriodFrom",
+          studentCourseDetails.startDate
+        );
+        formik.setFieldValue("invoicePeriodTo", studentCourseDetails.endDate);
         // Find the package details based on packageId
         const selectedPackage = packageData.find(
           (pkg) => pkg.id === parseInt(packageId)
@@ -377,10 +384,10 @@ export default function InvoiceAdd() {
           schedule: studentData.studentCourseDetailModels[0].batch,
           noOfLessons: noOfLessons,
           remark: studentData.remark,
-          invoiceDate: formik.values.invoiceDate,
-          dueDate: formik.values.dueDate,
-          invoicePeriodTo: formik.values.invoicePeriodTo,
-          invoicePeriodFrom: formik.values.invoicePeriodFrom,
+          // invoiceDate: formik.values.invoiceDate,
+          // dueDate: formik.values.dueDate,
+          // invoicePeriodTo: formik.values.invoicePeriodTo,
+          // invoicePeriodFrom: formik.values.invoicePeriodFrom,
           receiptAmount: formik.values.receiptAmount,
           creditAdviceOffset: formik.values.creditAdviceOffset,
           gst: formik.values.gst,
@@ -520,10 +527,10 @@ export default function InvoiceAdd() {
             schedule: studentData.studentCourseDetailModels[0].batch,
             noOfLessons: "",
             remark: studentData.remark,
-            invoiceDate: "",
-            dueDate: "",
-            invoicePeriodTo: "",
-            invoicePeriodFrom: "",
+            // invoiceDate: "",
+            // dueDate: "",
+            // invoicePeriodTo: "",
+            // invoicePeriodFrom: "",
             receiptAmount: "",
             creditAdviceOffset: referralAmount || 0.0,
             gst: "",
@@ -610,6 +617,7 @@ export default function InvoiceAdd() {
 
     fetchReferralDetails();
   }, [formik.values.invoiceItems, studentID]);
+
 
   return (
     <div className="container-fluid">
@@ -874,7 +882,7 @@ export default function InvoiceAdd() {
 
               <div className="col-lg-6 col-md-6 col-12 px-5">
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="invoiceDate" className="mb-1 fw-medium">
                     Invoice Date<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -886,6 +894,28 @@ export default function InvoiceAdd() {
                         : ""
                     }`}
                     type="date"
+                    onChange={(e) => {
+                      const invoiceDate = e.target.value;
+
+                      // Set invoiceDate value
+                      formik.setFieldValue("invoiceDate", invoiceDate);
+
+                      // If invoiceDate is cleared, reset dueDate to empty
+                      if (!invoiceDate) {
+                        formik.setFieldValue("dueDate", "");
+                      } else {
+                        // Set dueDate based on invoiceDate (1 month ahead)
+                        const newDueDate = new Date(
+                          new Date(invoiceDate).setMonth(
+                            new Date(invoiceDate).getMonth() + 1
+                          )
+                        )
+                          .toISOString()
+                          .split("T")[0];
+
+                        formik.setFieldValue("dueDate", newDueDate);
+                      }
+                    }}
                   />
                   {formik.touched.invoiceDate && formik.errors.invoiceDate && (
                     <div className="invalid-feedback">
@@ -893,8 +923,9 @@ export default function InvoiceAdd() {
                     </div>
                   )}
                 </div>
+
                 <div className="text-start mt-3">
-                  <label htmlFor="" className="mb-1 fw-medium">
+                  <label htmlFor="dueDate" className="mb-1 fw-medium">
                     Due Date<span className="text-danger">*</span>
                   </label>
                   <br />
@@ -906,11 +937,7 @@ export default function InvoiceAdd() {
                         : ""
                     }`}
                     type="date"
-                    // Set the minimum due date to the selected invoice date
-                    min={
-                      formik.values.invoiceDate ||
-                      new Date().toISOString().split("T")[0]
-                    }
+                    min={formik.values.invoiceDate} // Ensure Due Date is at least the Invoice Date
                   />
                   {formik.touched.dueDate && formik.errors.dueDate && (
                     <div className="invalid-feedback">

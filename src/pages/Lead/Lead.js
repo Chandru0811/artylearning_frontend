@@ -1076,6 +1076,7 @@ const Lead = () => {
                 {storedScreens?.leadListingUpdate && (
                   <MenuItem
                     onClick={() => navigate(`/lead/lead/edit/${selectedId}`)}
+                    className="text-start mb-0 menuitem-style"
                   >
                     Edit
                   </MenuItem>

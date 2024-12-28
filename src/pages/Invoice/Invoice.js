@@ -491,7 +491,7 @@ const Invoice = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/invoice/edit/${selectedId}`)}>
+              <MenuItem onClick={() => navigate(`/invoice/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>

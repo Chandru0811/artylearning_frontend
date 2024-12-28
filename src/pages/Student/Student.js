@@ -505,7 +505,7 @@ const Student = () => {
               onClose={handleMenuClose}
               disableScrollLock
             >
-              <MenuItem onClick={() => navigate(`/student/edit/${selectedId}`)}>
+              <MenuItem onClick={() => navigate(`/student/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>

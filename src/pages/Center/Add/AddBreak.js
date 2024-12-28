@@ -91,7 +91,7 @@ function AddBreak({ id, onSuccess, handleMenuClose }) {
   return (
     <>
       <p
-        className="text-start mb-0"
+        className="text-start mb-0 menuitem-style"
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleShow}
       >

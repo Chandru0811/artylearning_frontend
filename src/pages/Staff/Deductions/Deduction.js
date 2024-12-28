@@ -246,7 +246,7 @@ const Deduction = () => {
               onClose={handleMenuClose}
             >
               <MenuItem
-                onClick={() => navigate(`/deduction/edit/${selectedId}`)}
+                onClick={() => navigate(`/deduction/edit/${selectedId}`)} className="text-start mb-0 menuitem-style"
               >
                 Edit
               </MenuItem>

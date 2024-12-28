@@ -235,13 +235,11 @@ const SendNotification = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem>
-                <Link
-                  to={`/sendNotification/edit/${selectedId}`}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Edit
-                </Link>
+              <MenuItem
+                onClick={() => navigate(`/sendNotification/edit/${selectedId}`)}
+                className="menuitem-style"
+              >
+                Edit
               </MenuItem>
               <MenuItem>
                 <GlobalDelete

@@ -406,7 +406,7 @@ const Staff = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/staff/edit/${selectedId}`)}>
+              <MenuItem onClick={() => navigate(`/staff/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
                 Edit
               </MenuItem>
               <MenuItem>
