@@ -43,8 +43,6 @@ function GlobalDelete({ path, onDeleteSuccess, onOpen,handleCenterChanged }) {
     } catch (error) {
       if (error?.response?.status === 409) {
         toast.warning(error?.response?.data?.message);
-      } else {
-        toast.error("An error occurred while deleting the record.");
       }
     } finally {
       handleCloseDialog(); // Close the dialog after deletion

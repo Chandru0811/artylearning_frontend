@@ -62,7 +62,7 @@ const Curriculum = () => {
   useEffect(() => {
     getData();
     fetchData();
-  }, []);
+  }, [id]);
 
   // ===New Table
 

@@ -383,7 +383,9 @@ function LeadNewView() {
                   <li className="stdList">
                     <p className="m-0">
                       <b>Refer By</b>
-                      <span>{arrangeassesmentData.referByStudentName || "--"}</span>
+                      <span>
+                        {arrangeassesmentData.referByStudentName || "--"}
+                      </span>
                     </p>
                   </li>
                   <li className="stdList">
@@ -458,13 +460,24 @@ function LeadNewView() {
                           <b>Assessment</b>
                           <span>{arrange.assessment || "--"}</span>
                         </p>
-                        <p className="m-0">
+                        <p className="m-0 mt-4">
                           <b>Assessment Date</b>
                           <span>{arrange.assessmentDate || "--"}</span>
                         </p>
                         <p className="m-0">
                           <b> Start Time</b>
-                          <span>{arrange.time || "--"}</span>
+                          <span>
+                            {" "}
+                            {arrange.time
+                              ? new Date(
+                                  `1970-01-01T${arrange.time}`
+                                ).toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })
+                              : "--"}
+                          </span>
                         </p>
                         <p className="m-0">
                           <b>Remark</b>
@@ -638,19 +651,28 @@ function LeadNewView() {
                   <hr className="mt-2 mb-0" />
                   <ul style={{ listStyle: "none", paddingLeft: "0" }}>
                     <li className="stdList">
-                      <b> Hi parent your childern secured Grade</b>
+                      <b> Hi parent, your children secured Grade </b>
                       <span>
-                        {(doassesmentData &&
-                          doassesmentData.leadDoAssessmentModel &&
-                          doassesmentData.leadDoAssessmentModel.length > 0 &&
-                          doassesmentData.leadDoAssessmentModel[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet &&
-                          doassesmentData.leadDoAssessmentAlphabet[0] &&
-                          doassesmentData.leadDoAssessmentAlphabet[0]
-                            .gradeCategory) ||
-                          "--"}{" "}
+                        {doassesmentData &&
+                        doassesmentData.leadDoAssessmentModel &&
+                        doassesmentData.leadDoAssessmentModel.length > 0 &&
+                        doassesmentData.leadDoAssessmentModel[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet &&
+                        doassesmentData.leadDoAssessmentAlphabet[0] &&
+                        doassesmentData.leadDoAssessmentAlphabet[0]
+                          .gradeCategory ? (
+                          <span className="badge badges-Green text-dark">
+                            {
+                              doassesmentData.leadDoAssessmentAlphabet[0]
+                                .gradeCategory
+                            }
+                          </span>
+                        ) : (
+                          "--"
+                        )}
                       </span>
                     </li>
+
                     <h5 className="headColor mt-2 mb-4">Child Particulars</h5>
                     <li className="stdList">
                       <b>Name</b>

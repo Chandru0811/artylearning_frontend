@@ -187,7 +187,7 @@ function LeaveView() {
                     >
                       <img
                         class="card-img-top img-fluid"
-                        style={{ height: "50%" }}
+                        style={{ height: "100px", objectFit: "contain" }}
                         src={pdfLogo}
                         alt="Card image cap"
                       />
@@ -211,7 +211,7 @@ function LeaveView() {
                     src={data?.attachment}
                     alt="Attachment"
                     className="img-fluid"
-                    style={{ height: "40% " }}
+                    style={{ height: "100px", objectFit: "contain" }}
                   />
                 )}
               </div>

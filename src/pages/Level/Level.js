@@ -88,9 +88,9 @@ const Level = () => {
         header: "Level Code",
       },
       {
-        accessorKey: "subjectId",
+        accessorKey: "subjectName",
         enableHiding: false,
-        header: "Subject Id",
+        header: "Subject Name",
       },
 
       { accessorKey: "createdBy", header: "Created By" },

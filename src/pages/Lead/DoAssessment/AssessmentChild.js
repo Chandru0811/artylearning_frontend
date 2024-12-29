@@ -393,13 +393,13 @@ const AssessmentChild = forwardRef(
                   {...formik.getFieldProps("referredBy")}
                   className={`form-control ${formik.touched.referredBy && formik.errors.referredBy ? "is-invalid" : ""
                     }`}
-                  value={
-                    studentData && studentData.length > 0
-                      ? studentData.find(
-                        (std) => parseInt(arrangeassesmentData.referBy) === std.id
-                      )?.studentNames || "--"
-                      : ""
-                  }
+                  // value={
+                  //   studentData && studentData.length > 0
+                  //     ? studentData.find(
+                  //       (std) => parseInt(arrangeassesmentData.referBy) === std.id
+                  //     )?.studentNames || "--"
+                  //     : ""
+                  // }
                   readOnly
                 />
               </div>
