@@ -14,19 +14,16 @@ import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 
 const validationSchema = Yup.object({
   classId: Yup.string().required("*Class Name is required"),
-  date: Yup.string().required("*Date is required"),
-  teacherId: Yup.string().required("*Teacher Name is required"),
+  startDate: Yup.string().required("*Date is required"),
+  userId: Yup.string().required("*Teacher Name is required"),
 });
 
-const Replacement = ({ classId, onDeleteSuccess, onOpen }) => {
+const Replacement = ({ classId, onOpen }) => {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [classData, setClassData] = useState({});
   const [teacherData, setTeacherData] = useState([]);
   const [availableDays, setAvailableDays] = useState([]);
-  // console.log("classData", classData);
-  // console.log("teacherData", teacherData);
-  // console.log("availableDays", availableDays);
 
   const handleClose = () => {
     setOpen(false);
@@ -39,50 +36,43 @@ const Replacement = ({ classId, onDeleteSuccess, onOpen }) => {
 
   const formik = useFormik({
     initialValues: {
-      className: "",
       classId: "",
-      date: "",
-      teacherId: "",
+      startDate: "",
+      userId: "",
       remark: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("values", values);
-      // setLoadIndicator(true);
-      // try {
-      //   const response = await api.put(
-      //     `/${id}`,
-      //     values,
-      //     {
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
-      //   if (response.status === 200) {
-      //     onSuccess();
-      //     handleClose();
-      //     toast.success(response.data.message);
-      //   } else {
-      //     toast.error(response.data.message);
-      //   }
-      // } catch (error) {
-      //   toast.error(error);
-      // } finally {
-      //   setLoadIndicator(false);
-      // }
+      const { classId, startDate, userId } = values; 
+      setLoadIndicator(true);
+      try {
+        // Interpolate query parameters
+        const response = await api.put(
+          `doTeacherReplacement?classId=${classId}&startDate=${startDate}&userId=${userId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        
+        if (response.status === 200) {
+          handleClose();
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error) {
+        toast.error("An error occurred while processing the request");
+      } finally {
+        setLoadIndicator(false);
+      }
     },
     enableReinitialize: true,
   });
+  
 
   const handleRowSelect = (data = classData) => {
-    // if (data.availableSlots === 0) {
-    //   toast.warning("Class is Full");
-    //   return;
-    // }
-    // console.log("Selected Row Data:", data);
-    // setFormData((prev) => ({ ...prev, coursesData: data }));
-
     if (data.startDate && data.endDate) {
       const days = calculateDays(data.startDate, data.endDate, data.day);
       setAvailableDays(days);
@@ -109,14 +99,14 @@ const Replacement = ({ classId, onDeleteSuccess, onOpen }) => {
     const targetDay = dayMapping[selectedDay?.toUpperCase()];
 
     for (
-      let date = new Date(start);
-      date <= end;
-      date.setDate(date.getDate() + 1)
+      let startDate = new Date(start);
+      startDate <= end;
+      startDate.setDate(startDate.getDate() + 1)
     ) {
-      if (date.getDay() === targetDay) {
+      if (startDate.getDay() === targetDay) {
         days.push({
-          value: date.toISOString().split("T")[0],
-          label: date.toDateString(),
+          value: startDate.toISOString().split("T")[0],
+          label: startDate.toDateString(),
         });
       }
     }
@@ -158,6 +148,7 @@ const Replacement = ({ classId, onDeleteSuccess, onOpen }) => {
     <div>
       <span
         onClick={handleOpen}
+        className="text-start mb-0 menuitem-style"
         style={{
           whiteSpace: "nowrap",
           width: "100% !important",
@@ -175,22 +166,18 @@ const Replacement = ({ classId, onDeleteSuccess, onOpen }) => {
                   <label className="form-label">
                     Class Listing<span className="text-danger">*</span>
                   </label>
-                  <input readOnly
+                  <input
                     type="text"
-                    onKeyDown={(e) => e.stopPropagation()}
+                    readOnly
+                    value={formik.values.className}
                     className={`form-control ${
                       formik.touched.className && formik.errors.className
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("className")}
                   />
-                  {formik.touched.className && formik.errors.className && (
-                    <div className="invalid-feedback">
-                      {formik.errors.className}
-                    </div>
-                  )}
                 </div>
+
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">
                     Class Date<span className="text-danger">*</span>
@@ -198,19 +185,21 @@ const Replacement = ({ classId, onDeleteSuccess, onOpen }) => {
                   <select
                     type="text"
                     className={`form-select ${
-                      formik.touched.date && formik.errors.date
+                      formik.touched.startDate && formik.errors.startDate
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("date")}
+                    {...formik.getFieldProps("startDate")}
                   >
                     <option value=""></option>
                     {availableDays?.map((data, i) => (
                       <option value={data.value}>{data.label}</option>
                     ))}
                   </select>
-                  {formik.touched.date && formik.errors.date && (
-                    <div className="invalid-feedback">{formik.errors.date}</div>
+                  {formik.touched.startDate && formik.errors.startDate && (
+                    <div className="invalid-feedback">
+                      {formik.errors.startDate}
+                    </div>
                   )}
                 </div>
 
@@ -220,28 +209,27 @@ const Replacement = ({ classId, onDeleteSuccess, onOpen }) => {
                   </label>
                   <select
                     className={`form-select ${
-                      formik.touched.teacherId && formik.errors.teacherId
+                      formik.touched.userId && formik.errors.userId
                         ? "is-invalid"
                         : ""
                     }`}
-                    {...formik.getFieldProps("teacherId")}
+                    {...formik.getFieldProps("userId")}
                   >
                     <option value=""></option>
                     {teacherData?.map((data, i) => (
                       <option value={data.id}>{data.teacherNames}</option>
                     ))}
                   </select>
-                  {formik.touched.teacherId && formik.errors.teacherId && (
+                  {formik.touched.userId && formik.errors.userId && (
                     <div className="invalid-feedback">
-                      {formik.errors.teacherId}
+                      {formik.errors.userId}
                     </div>
                   )}
                 </div>
                 <div className="col-md-6 col-12 mb-2">
-                  <label className="form-label">
-                    Remark
-                  </label>
-                  <input
+                  <label className="form-label">Remark</label>
+                  <textarea
+                  rows={5}
                     onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control ${
                       formik.touched.remark && formik.errors.remark

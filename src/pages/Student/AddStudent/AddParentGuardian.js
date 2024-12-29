@@ -41,7 +41,7 @@ const AddParentGuardian = forwardRef(
               .email("*Invalid email format")
               .required("*Email is required"),
             mobileNumber: Yup.string()
-              .matches(/^[6-9]\d{6,9}$/, "*Invalid Mobile Number")
+              .matches(/^[1-9]\d{6,9}$/, "*Invalid Mobile Number")
               .required("*Mobile Number is required"),
             primaryContact: Yup.boolean().required(
               "*Primary Contact is required"
@@ -352,12 +352,16 @@ const AddParentGuardian = forwardRef(
     return (
       <div className="container-fluid">
         <form onSubmit={formik.handleSubmit}>
-          {(formik.values.parentInformation || []).map((parent, index) => (
+          {(formik.values.parentInformation || []).map((row, index) => (
             <div className="border-0 mb-5" key={index}>
               <div className="d-flex justify-content-between align-item-center my-2">
                 <p className="headColor">Parent / Guardian Information</p>
                 <div className="col-lg-6 col-md-6 col-12 text-end">
-                  <label className="">Primary Contact</label>
+                  <label className="fw-medium">
+                    <small>
+                      Primary Contact<span className="text-danger">*</span>
+                    </small>
+                  </label>
                   <input
                     type="radio"
                     className="form-check-input ms-3"
@@ -391,15 +395,17 @@ const AddParentGuardian = forwardRef(
                   />
                   {formik.errors.parentInformation?.[index]?.primaryContact && (
                     <div className="text-danger">
-                      {formik.errors.parentInformation[index].primaryContact}
+                     <small>{formik.errors.parentInformation[index].primaryContact}</small>
                     </div>
                   )}
                 </div>
               </div>
               <div className="row mt-2">
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">
-                    Parent/Guardian Name<span className="text-danger">*</span>
+                  <label className="fw-medium">
+                    <small>
+                      Parent/Guardian Name<span className="text-danger">*</span>
+                    </small>
                   </label>
                   <input
                     type="text"
@@ -412,13 +418,15 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.parentName &&
                     formik.errors.parentInformation?.[index]?.parentName && (
                       <div className="text-danger">
-                        {formik.errors.parentInformation[index].parentName}
+                        <small>{formik.errors.parentInformation[index].parentName}</small>
                       </div>
                     )}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">
-                    Occupation<span className="text-danger">*</span>
+                  <label className="fw-medium">
+                    <small>
+                      Occupation<span className="text-danger">*</span>
+                    </small>
                   </label>
                   <input
                     type="text"
@@ -431,13 +439,15 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.occupation &&
                     formik.errors.parentInformation?.[index]?.occupation && (
                       <div className="text-danger">
-                        {formik.errors.parentInformation[index].occupation}
+                        <small>{formik.errors.parentInformation[index].occupation}</small>
                       </div>
                     )}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">
-                    Email<span className="text-danger">*</span>
+                  <label className="fw-medium">
+                    <small>
+                      Email<span className="text-danger">*</span>
+                    </small>
                   </label>
                   <input
                     type="email"
@@ -450,13 +460,15 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.email &&
                     formik.errors.parentInformation?.[index]?.email && (
                       <div className="text-danger">
-                        {formik.errors.parentInformation[index].email}
+                        <small>{formik.errors.parentInformation[index].email}</small>
                       </div>
                     )}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">
-                    Mobile Number<span className="text-danger">*</span>
+                  <label className="fw-medium">
+                    <small>
+                      Mobile Number<span className="text-danger">*</span>
+                    </small>
                   </label>
                   <input
                     type="tel"
@@ -469,13 +481,15 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.mobileNumber &&
                     formik.errors.parentInformation?.[index]?.mobileNumber && (
                       <div className="text-danger">
-                        {formik.errors.parentInformation[index].mobileNumber}
+                       <small> {formik.errors.parentInformation[index].mobileNumber}</small>
                       </div>
                     )}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">
-                    Relation<span className="text-danger">*</span>
+                  <label className="fw-medium">
+                    <small>
+                      Relation<span className="text-danger">*</span>
+                    </small>
                   </label>
                   <select
                     className="form-select"
@@ -493,13 +507,15 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.relation &&
                     formik.errors.parentInformation?.[index]?.relation && (
                       <div className="text-danger">
-                        {formik.errors.parentInformation[index].relation}
+                        <small>{formik.errors.parentInformation[index].relation}</small>
                       </div>
                     )}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">
-                    Date of Birth<span className="text-danger">*</span>
+                  <label className="fw-medium">
+                    <small>
+                      Date of Birth<span className="text-danger">*</span>
+                    </small>
                   </label>
                   <input
                     type="date"
@@ -516,16 +532,18 @@ const AddParentGuardian = forwardRef(
                     formik.errors.parentInformation?.[index]
                       ?.parentDateOfBirth && (
                       <div className="text-danger">
-                        {
+                      <small>  {
                           formik.errors.parentInformation[index]
                             .parentDateOfBirth
-                        }
+                        }</small>
                       </div>
                     )}
                 </div>
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">
-                    Postal Code<span className="text-danger">*</span>
+                  <label className="fw-medium">
+                    <small>
+                      Postal Code<span className="text-danger">*</span>
+                    </small>
                   </label>
                   <input
                     type="text"
@@ -538,7 +556,7 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.postalCode &&
                     formik.errors.parentInformation?.[index]?.postalCode && (
                       <div className="text-danger">
-                        {formik.errors.parentInformation[index].postalCode}
+                        <small>{formik.errors.parentInformation[index].postalCode}</small>
                       </div>
                     )}
                 </div>
@@ -560,14 +578,15 @@ const AddParentGuardian = forwardRef(
                   />
                 </div> */}
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">Profile Image</label>
+                  <label className="fw-medium">
+                    <small>Profile</small>
+                  </label>
                   <input
                     type="file"
                     name="file"
                     className="form-control"
                     onChange={(event) => {
                       const file = event.target.files[0];
-
                       // If no file is selected, remove the image preview
                       if (!file) {
                         const updatedProfileImage = [...profileImage];
@@ -654,8 +673,10 @@ const AddParentGuardian = forwardRef(
                   )}
                 </div>
                 <div className="col-lg-12 col-md-12 col-12 my-3">
-                  <label className="">
-                    Address<span className="text-danger">*</span>
+                  <label className="fw-medium">
+                    <small>
+                      Address<span className="text-danger">*</span>
+                    </small>
                   </label>
                   <textarea
                     rows={5}
@@ -668,7 +689,7 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.address &&
                     formik.errors.parentInformation?.[index]?.address && (
                       <div className="text-danger">
-                        {formik.errors.parentInformation[index].address}
+                        <small>{formik.errors.parentInformation[index].address}</small>
                       </div>
                     )}
                 </div>
@@ -678,8 +699,11 @@ const AddParentGuardian = forwardRef(
                   type="button"
                   className="btn btn-danger btn-sm"
                   onClick={() => {
-                    handleDeleteRow(index);
-                    handleRemoveRow(index);
+                    if (row.id) {
+                      handleDeleteRow(index);
+                    }else if(row){
+                      handleRemoveRow(index);
+                    }
                   }}
                 >
                   Delete

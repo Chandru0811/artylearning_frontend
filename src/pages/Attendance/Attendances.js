@@ -146,7 +146,7 @@ function Attendances() {
   useEffect(() => {
     if (selectedDate) {
       fetchAvailableSlots(selectedDate);
-      fetchData();
+      // fetchData();
     }
   }, [selectedDate]);
 
@@ -365,7 +365,7 @@ function Attendances() {
                   >
                     <div className="accordion-item">
                       <h2
-                        clclassNameass="accordion-header"
+                        className="accordion-header"
                         style={{ marginBottom: "0px" }}
                       >
                         <button
@@ -382,10 +382,7 @@ function Attendances() {
                             id="acordeanHead"
                             style={{ backgroundColor: "transparent" }}
                           >
-                            <div
-                              style={{ width: "20%" }}
-                              className="pb-2 pt-4 "
-                            >
+                            <div style={{ width: "20%" }} className="pb-2 pt-4">
                               <p
                                 style={{
                                   marginBottom: "0px",
@@ -453,7 +450,7 @@ function Attendances() {
                       <div
                         id={`flush-collapse-${attendanceIndex}`}
                         className="accordion-collapse collapse"
-                        data-bs-parent="#accordionFlushExample"
+                        data-bs-parent="#accordionExample"
                       >
                         <div className="accordion-body">
                           <div className="d-flex justify-content-end mb-3">
@@ -467,7 +464,7 @@ function Attendances() {
                             />
                           </div>
                           <div className="table-responsive">
-                            <table className="table table-striped ">
+                            <table className="table table-striped">
                               <thead>
                                 <tr>
                                   <th>#</th>
@@ -478,125 +475,103 @@ function Attendances() {
                                 </tr>
                               </thead>
                               <tbody>
-                                {attendanceData &&
-                                  attendanceData.map(
-                                    (attendanceItem, attendanceIndex) => (
-                                      <React.Fragment key={attendanceIndex}>
-                                        {attendanceItem.students.map(
-                                          (student, studentIndex) => (
-                                            <tr key={studentIndex}>
-                                              <th scope="row">
-                                                {studentIndex + 1}
-                                              </th>
-                                              <td>{student.studentUniqueId}</td>
-                                              <td>{student.studentName}</td>
-                                              <td>
-                                                <div className="">
-                                                  {student.attendance !==
-                                                  "replacement" ? (
-                                                    <>
-                                                      <label className="radio-button">
-                                                        <input
-                                                          type="radio"
-                                                          name={`attendance-${attendanceIndex}-${studentIndex}`}
-                                                          value="present"
-                                                          checked={
-                                                            student.attendance ===
-                                                            "present"
-                                                          }
-                                                          onChange={() =>
-                                                            handleAttendanceChange(
-                                                              attendanceIndex,
-                                                              studentIndex,
-                                                              "present"
-                                                            )
-                                                          }
-                                                        />
-                                                        <span className="radio-button-text">
-                                                          Present
-                                                        </span>
-                                                      </label>
-                                                      <label className="radio-button">
-                                                        <input
-                                                          type="radio"
-                                                          name={`attendance-${attendanceIndex}-${studentIndex}`}
-                                                          checked={
-                                                            student.attendance ===
-                                                            "absent"
-                                                          }
-                                                          value="absent"
-                                                          onChange={() =>
-                                                            handleAttendanceChange(
-                                                              attendanceIndex,
-                                                              studentIndex,
-                                                              "absent"
-                                                            )
-                                                          }
-                                                        />
-                                                        <span className="radio-button-text">
-                                                          Absent
-                                                        </span>
-                                                      </label>
-                                                    </>
-                                                  ) : (
-                                                    <>
-                                                      <span className="text-center">
-                                                        Replacement Class
-                                                        Requseted
-                                                      </span>
-                                                    </>
-                                                  )}
-                                                  <br />
-                                                  {student.attendance ===
-                                                    "absent" && (
-                                                    <>
-                                                      <label>
-                                                        <ReplacementAdd
-                                                          selectedID={
-                                                            student.id
-                                                          }
-                                                          attendanceData={
-                                                            attendanceData
-                                                          }
-                                                          attendanceDate={
-                                                            selectedDate
-                                                          }
-                                                          selectedStudent={
-                                                            student
-                                                          }
-                                                          onClickReplacement={() =>
-                                                            handleAttendanceChange(
-                                                              attendanceIndex,
-                                                              studentIndex,
-                                                              "replacement"
-                                                            )
-                                                          }
-                                                        />
-                                                      </label>
-                                                    </>
-                                                  )}
-                                                </div>
-                                              </td>
-                                              <td>
+                                {attendanceItem.students.map(
+                                  (student, studentIndex) => (
+                                    <tr key={studentIndex}>
+                                      <th scope="row">{studentIndex + 1}</th>
+                                      <td>
+                                        {student.studentUniqueId || "N/A"}
+                                      </td>
+                                      <td>{student.studentName}</td>
+                                      <td>
+                                        <div>
+                                          {student.attendance !==
+                                          "replacement" ? (
+                                            <>
+                                              <label className="radio-button">
                                                 <input
-                                                  type="text"
-                                                  value={student.remarks}
-                                                  className="form-control"
-                                                  onChange={(e) =>
-                                                    handleRemarksChange(
+                                                  type="radio"
+                                                  name={`attendance-${attendanceIndex}-${studentIndex}`}
+                                                  value="present"
+                                                  checked={
+                                                    student.attendance ===
+                                                    "present"
+                                                  }
+                                                  onChange={() =>
+                                                    handleAttendanceChange(
                                                       attendanceIndex,
                                                       studentIndex,
-                                                      e.target.value
+                                                      "present"
                                                     )
                                                   }
                                                 />
-                                              </td>
-                                            </tr>
-                                          )
-                                        )}
-                                      </React.Fragment>
-                                    )
-                                  )}
+                                                <span className="radio-button-text">
+                                                  Present
+                                                </span>
+                                              </label>
+                                              <label className="radio-button">
+                                                <input
+                                                  type="radio"
+                                                  name={`attendance-${attendanceIndex}-${studentIndex}`}
+                                                  value="absent"
+                                                  checked={
+                                                    student.attendance ===
+                                                    "absent"
+                                                  }
+                                                  onChange={() =>
+                                                    handleAttendanceChange(
+                                                      attendanceIndex,
+                                                      studentIndex,
+                                                      "absent"
+                                                    )
+                                                  }
+                                                />
+                                                <span className="radio-button-text">
+                                                  Absent
+                                                </span>
+                                              </label>
+                                            </>
+                                          ) : (
+                                            <span className="text-center">
+                                              Replacement Class Requested
+                                            </span>
+                                          )}
+                                          {student.attendance === "absent" && (
+                                            <label>
+                                              <ReplacementAdd
+                                                selectedID={student.id}
+                                                attendanceData={attendanceData}
+                                                attendanceDate={selectedDate}
+                                                selectedStudent={student}
+                                                onClickReplacement={() =>
+                                                  handleAttendanceChange(
+                                                    attendanceIndex,
+                                                    studentIndex,
+                                                    "replacement"
+                                                  )
+                                                }
+                                              />
+                                            </label>
+                                          )}
+                                        </div>
+                                      </td>
+                                      <td>
+                                        <input
+                                          type="text"
+                                          value={student.remarks || ""}
+                                          className="form-control"
+                                          onChange={(e) =>
+                                            handleRemarksChange(
+                                              attendanceIndex,
+                                              studentIndex,
+                                              e.target.value
+                                            )
+                                          }
+                                        />
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
                               </tbody>
                             </table>
                           </div>
@@ -607,10 +582,7 @@ function Attendances() {
                                 onClick={() =>
                                   handleSubmit(attendanceIndex, attendanceItem)
                                 }
-                                disabled={
-                                  attendanceData[attendanceIndex].students
-                                    .length === 0
-                                }
+                                disabled={attendanceItem.students.length === 0}
                               >
                                 Submit
                               </button>

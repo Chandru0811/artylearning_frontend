@@ -16,8 +16,8 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
 
 const validationSchema = Yup.object().shape({
-  packageName: Yup.string().required("Package Name is required"),
-  lessonName: Yup.string().required("Lesson Name is required"),
+  packageName: Yup.string().required("*Package Name is required"),
+  lessonName: Yup.string().required("*Lesson Date is required"),
 });
 
 const AddcourseDetail = forwardRef(
@@ -25,18 +25,15 @@ const AddcourseDetail = forwardRef(
     // console.log("Student Id:", formData.student_id);
     const [courseData, setCourseData] = useState(null);
     const [packageData, setPackageData] = useState(null);
-    const [availableDays, setAvailableDays] = useState([]); // State for available days in select
+    const [availableDays, setAvailableDays] = useState([]);
+    const userName = localStorage.getItem("userName");
     const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
-
     const [datas, setDatas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [batchData, setBatchData] = useState(null);
-    const [selectedRow, setSelectedRow] = useState(formData.id); // Add state for selected row
-    const [selectedRowData, setSelectedRowData] = useState({}); // State for selected row data
-    const userName = localStorage.getItem("userName");
+    const [selectedRow, setSelectedRow] = useState(formData.id);
+    const [selectedRowData, setSelectedRowData] = useState({});
     const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
-    // console.log("selectedRow", selectedRow);
-    // console.log("selectedRowData", selectedRowData);
     console.log("FormData CenterID:", formData);
 
     const columns = useMemo(
@@ -53,7 +50,7 @@ const AddcourseDetail = forwardRef(
                 type="radio"
                 style={{ cursor: "pointer" }}
                 className="form-check-input pointer"
-                name="courseSelection"
+                name="selectedRow"
                 onClick={() => handleRowSelect(row.original)}
               />
             </div>
@@ -102,7 +99,7 @@ const AddcourseDetail = forwardRef(
             const formattedValue = Array.isArray(value)
               ? value.map((time) => formatTo12Hour(time)).join(", ") // Handle arrays of times if necessary
               : formatTo12Hour(value); // Handle a single time value
-        
+
             return (
               <div className="d-flex justify-content-center">
                 <span>{formattedValue}</span>
@@ -198,13 +195,15 @@ const AddcourseDetail = forwardRef(
 
     const formik = useFormik({
       initialValues: {
-        lessonName: formData?.lessonName || "",
+        lessonName: formData?.lessonName,
         packageName: formData?.packageName,
+        selectedRow: formData?.selectedRow,
       },
       validationSchema: validationSchema,
       onSubmit: async (data) => {
-        if (!selectedRow) {
-          toast.warning("Please select a course");
+        // Check if a row is selected
+        if (!selectedRow || Object.keys(selectedRowData).length === 0) {
+          toast.warning("Please select a course before proceeding.");
           return;
         }
         setLoadIndicators(true);
@@ -217,18 +216,18 @@ const AddcourseDetail = forwardRef(
           className: selectedRowData.className,
           course: selectedRowData.course,
           courseId: selectedRowData.courseId,
-          batchs: selectedRowData.batchs,
+          // batchs: selectedRowData.batchs,
           batch: selectedRowData.batch,
           days: selectedRowData.days,
           classRoom: selectedRowData.classRoom,
           // startDate: selectedRowData.startDate,
+          packageName: data.packageName,
           startDate: data.lessonName,
           endDate: selectedRowData.endDate,
           studentCount: selectedRowData.studentCount,
           teacher: selectedRowData.teacher,
           userId: selectedRowData.userId,
         };
-        // console.log("Course Payload Data:", payload);
         try {
           let response;
           if (studentCourseDetailsId !== null) {
@@ -302,8 +301,8 @@ const AddcourseDetail = forwardRef(
         params.day = formik.values.days;
       }
 
-      if (formik.values.batchs !== "") {
-        params.batchs = formik.values.batchs;
+      if (formik.values.batch !== "") {
+        params.batchs = formik.values.batch;
       }
 
       try {
@@ -379,7 +378,7 @@ const AddcourseDetail = forwardRef(
     useEffect(() => {
       formik.setFieldValue("studentId", formData.student_id);
       getData();
-    }, [formik.values.courseId, formik.values.batchs, formik.values.days]);
+    }, [formik.values.courseId, formik.values.batch, formik.values.days]);
 
     const handleRowSelect = (data) => {
       if (data.availableSlots === 0) {
@@ -388,8 +387,6 @@ const AddcourseDetail = forwardRef(
       }
       setSelectedRow(data.id);
       setSelectedRowData(data);
-      // console.log("Selected Row Data:", data);
-      // console.log("Selected Row Data Valuess are:", selectedRowData);
       setFormData((prev) => ({ ...prev, coursesData: data }));
 
       if (data.startDate && data.endDate) {
@@ -542,10 +539,10 @@ const AddcourseDetail = forwardRef(
                   </div>
                   <div className="col-md-4 d-flex">
                     <select
-                      {...formik.getFieldProps("batchs")}
+                      {...formik.getFieldProps("batch")}
                       className="form-select"
-                      id="batchs"
-                      name="batchs"
+                      id="batch"
+                      name="batch"
                     >
                       <option value="" disabled selected>
                         Select Batch
@@ -576,7 +573,7 @@ const AddcourseDetail = forwardRef(
                             packageName: "",
                             courseId: "",
                             days: "",
-                            batchs: "",
+                            batch: "",
                           },
                         })
                       }
@@ -616,6 +613,12 @@ const AddcourseDetail = forwardRef(
                           }}
                         />
                       </ThemeProvider>
+                      {/* Display validation message if no row is selected */}
+                      {!selectedRow && (
+                        <div className="text-danger mt-2">
+                          Please select a row.
+                        </div>
+                      )}
                     </>
                   )}
                 </div>
@@ -651,12 +654,18 @@ const AddcourseDetail = forwardRef(
                   {availableDays.length > 0 && (
                     <div className="col-md-4">
                       <select
-                        className="form-select"
-                        name="lessonName"
                         {...formik.getFieldProps("lessonName")}
+                        id="lessonName"
+                        name="lessonName"
+                        className={`form-select  ${
+                          formik.touched.lessonName &&
+                          formik.errors.lessonName
+                            ? "is-invalid"
+                            : ""
+                        }`}
                       >
                         <option value="" disabled selected>
-                          Select Date
+                          Select Lesson Date
                         </option>
                         {availableDays.map((day) => (
                           <option key={day.value} value={day.value}>

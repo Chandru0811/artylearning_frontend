@@ -76,24 +76,6 @@ const AddParentDetailModel = forwardRef(
     );
 
     const formik = useFormik({
-      // initialValues: {
-      //   parentInformation:
-      //     formData && formData.parentInformation
-      //       ? formData.parentInformation.map((parent) => ({
-      //           parentNames: parent.parentNames || "",
-      //           parentDateOfBirths: parent.parentDateOfBirths || "",
-      //           emails: parent.emails || "",
-      //           relations: parent.relations || "",
-      //           occupations: parent.occupations || "",
-      //           file: null || "",
-      //           passwords: parent.passwords || "",
-      //           mobileNumbers: parent.mobileNumbers || "",
-      //           postalCodes: parent.postalCodes || "",
-      //           addresses: parent.addresses || "",
-      //           primaryContacts: primaryContact || false,
-      //         }))
-      //       : [],
-      // },
       initialValues: {
         parentNames: formData?.parentNames || "",
         parentDateOfBirths: formData?.parentDateOfBirths || "",
@@ -113,30 +95,16 @@ const AddParentDetailModel = forwardRef(
         // console.log("Add ParentGuardian", values);
         try {
           const formDatas = new FormData();
-          // values.parentInformation.map((parent, index) => {
-          //   formDatas.append(`parentNames`, parent.parentNames);
-          //   formDatas.append(`parentDateOfBirths`, parent.parentDateOfBirths);
-          //   formDatas.append(`emails`, parent.emails);
-          //   formDatas.append(`relations`, parent.relations);
-          //   formDatas.append(`occupations`, parent.occupations);
-          //   formDatas.append(`file`, parent.file);
-          //   formDatas.append(`mobileNumbers`, parent.mobileNumbers);
-          //   formDatas.append(`postalCodes`, parent.postalCodes);
-          //   formDatas.append(`addresses`, parent.addresses);
-          //   formDatas.append(`primaryContacts`, primaryContact);
-          //   formDatas.append(`createdBy,`, userName);
-          // });
-
-          formDatas.append(`parentNames`, values.parentNames);
-          formDatas.append(`parentDateOfBirths`, values.parentDateOfBirths);
-          formDatas.append(`emails`, values.emails);
-          formDatas.append(`relations`, values.relations);
-          formDatas.append(`occupations`, values.occupations);
+          formDatas.append(`parentName`, values.parentNames);
+          formDatas.append(`parentDateOfBirth`, values.parentDateOfBirths);
+          formDatas.append(`email`, values.emails);
+          formDatas.append(`relation`, values.relations);
+          formDatas.append(`occupation`, values.occupations);
           formDatas.append(`file`, values.file);
-          formDatas.append(`mobileNumbers`, values.mobileNumbers);
-          formDatas.append(`postalCodes`, values.postalCodes);
-          formDatas.append(`addresses`, values.addresses);
-          formDatas.append(`primaryContacts`, primaryContact);
+          formDatas.append(`mobileNumber`, values.mobileNumbers);
+          formDatas.append(`postalCode`, values.postalCodes);
+          formDatas.append(`address`, values.addresses);
+          formDatas.append(`primaryContact`, primaryContact);
           formDatas.append(`createdBy,`, userName);
 
           const response = await api.post(

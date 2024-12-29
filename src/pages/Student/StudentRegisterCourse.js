@@ -345,7 +345,7 @@ function StudentRegisterCourse() {
 
   const handleRowSelect = (data) => {
     if (data.availableSlots === 0) {
-      toast.error("Class is Full");
+      toast.warning("Class is Full");
       return; // Prevent further actions
     }
     setSelectedRow(data.id);

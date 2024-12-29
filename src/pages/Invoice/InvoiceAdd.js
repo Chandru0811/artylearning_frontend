@@ -318,18 +318,15 @@ export default function InvoiceAdd() {
             const selectedCourse = courseData.find(
               (course) => parseInt(response2.data.courseId) === course.id
             );
-            // console.log("selectedCourse:", selectedCourse);
-
+            const weekdayFee = response2.data.weekdayFee || 0;
+            const weekendFee = response2.data.weekendFee || 0;       
+            // console.log("studentCourseDetails Days:",studentCourseDetails.days);
+            const isWeekend = "SATURDAY" || "SUNDAY"
             const itemsName = selectedCourse ? selectedCourse.courseNames : "";
-            // console.log("itemsName:", itemsName);
             const gstRate = selectedTax ? selectedTax.rate : 0;
-            // console.log("gstRate:", gstRate);
-            const amount = response2.data.weekdayFee || 0;
-            // console.log("amount:", amount);
+            const amount = isWeekend ? weekendFee : weekdayFee || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
-            // console.log("gstAmount:", gstAmount);
             const amountBeforeGST = amount - gstAmount || 0;
-            // console.log("amountBeforeGST:", amountBeforeGST);
 
             invoiceItems.push({
               item: itemsName,
@@ -384,10 +381,10 @@ export default function InvoiceAdd() {
           schedule: studentData.studentCourseDetailModels[0].batch,
           noOfLessons: noOfLessons,
           remark: studentData.remark,
-          // invoiceDate: formik.values.invoiceDate,
-          // dueDate: formik.values.dueDate,
-          // invoicePeriodTo: formik.values.invoicePeriodTo,
-          // invoicePeriodFrom: formik.values.invoicePeriodFrom,
+          invoiceDate: formik.values.invoiceDate,
+          dueDate: formik.values.dueDate,
+          invoicePeriodTo: studentCourseDetails.endDate,
+          invoicePeriodFrom: studentCourseDetails.startDate,
           receiptAmount: formik.values.receiptAmount,
           creditAdviceOffset: formik.values.creditAdviceOffset,
           gst: formik.values.gst,

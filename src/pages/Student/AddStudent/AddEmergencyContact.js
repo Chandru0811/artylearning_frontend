@@ -78,7 +78,6 @@ const AddEmergencyContact = forwardRef(
           });
 
           if (data.emergencyContactId) {
-            console.log("Making PUT request...");
             const response = await api.put(
               `/updateEmergencyContactWithEmergencyAuthorizedContact/${data.emergencyContactId}`,
               formDatas,
@@ -587,10 +586,11 @@ const AddEmergencyContact = forwardRef(
                         type="button"
                         className="btn btn-danger btn-sm"
                         onClick={() => {
-                          if (row.id) {
+                          if (row.id){
                             handleDeleteRow(index);
+                          }else if(row){
+                            handleRemoveRow(index);
                           }
-                          handleRemoveRow(index);
                         }}
                       >
                         Delete

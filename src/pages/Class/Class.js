@@ -458,10 +458,10 @@ const Class = () => {
                 View
               </MenuItem> */}
               
-              <MenuItem >
+              {/* <MenuItem >
                 <ClassReplacement classId={selectedId} onDeleteSuccess={getClassData}
                   onOpen={handleMenuClose}/>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem >
                 <TeacherReplacement classId={selectedId} onDeleteSuccess={getClassData}
                   onOpen={handleMenuClose}/>
