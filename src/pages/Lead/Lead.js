@@ -766,7 +766,7 @@ const Lead = () => {
         header: "Date Of Birth",
         enableHiding: false,
         Cell: ({ cell }) =>
-          cell.getValue()?.substring(0, 10)?.split("").reverse().join(""),
+          cell.getValue()?.substring(0, 10)?.split("").join(""),
       },
       {
         header: "Subject",
@@ -782,7 +782,7 @@ const Lead = () => {
         //   return fathersFullName || mothersFullName || " "; // Priority: Father's name, then Mother's name, then "N/A"
         // },
       },
-      { accessorKey: "address", header: "Sounds of a-z" },
+      { accessorKey: "address", header: "Address" },
       {
         accessorKey: "createdBy",
         header: "Created By",

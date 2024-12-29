@@ -829,8 +829,8 @@ a:hover {
 }
 
 .plans .plan input[type="radio"]:checked + .plan-content {
-  border: 2px solid #216ee0;
-  background: #eaf1fe;
+  border: 2px solid #287f71;
+  background: #a7f0e4;
   transition: ease-in 0.3s;
 }
 
