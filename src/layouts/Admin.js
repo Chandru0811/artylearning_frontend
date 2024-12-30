@@ -242,6 +242,7 @@ import Calendar from "../pages/Calendar/Calendar";
 import BatchTime from "../pages/Settings/BatchTime/BatchTime";
 import BatchTimeEdit from "../pages/Settings/BatchTime/BatchTimeEdit";
 import LeadNewView from "../pages/Lead/LeadNewView";
+import TimeTable from "../pages/TimeTable";
 
 function Admin({ handleLogout }) {
   const [centerChange, setCenterChange] = useState();
@@ -761,6 +762,10 @@ function Admin({ handleLogout }) {
               <Route
                 path="/othermessaging/view/:id"
                 element={<OtherMessagesView />}
+              />
+              <Route
+                path="/timetable"
+                element={<TimeTable />}
               />
             </Routes>
           </div>

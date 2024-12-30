@@ -217,7 +217,7 @@ function Sidebar() {
         subMenus: [
           {
             title: "Time Schedule",
-            path: "/calendar",
+            path: "/timetable",
             access: storedScreens.scheduleTeacherIndex,
           },
           // { title: "Make Up Class", path: "/reschedule" },
