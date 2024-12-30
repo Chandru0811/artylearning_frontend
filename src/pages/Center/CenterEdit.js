@@ -55,7 +55,7 @@ const validationSchema = Yup.object().shape({
     .integer("*Must be a whole number"),
 });
 
-function CenterEdit() {
+function CenterEdit({handleCenterChanged}) {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [loadIndicator, setLoadIndicator] = useState(false);
@@ -100,16 +100,7 @@ function CenterEdit() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoadIndicator(true);
-      // let selectedTeacherName = "";
       setLoadIndicator(true);
-      // teacherData.forEach((teacher) => {
-      //   if (parseInt(values.userId) === teacher.id) {
-      //     selectedTeacherName = teacher.userNames || "--";
-      //   }
-      // });
-
-      // Convert gst value to boolean
-      // values.gst = values.gst === "true";
       const formData = new FormData();
       formData.append("centerName", values.centerName);
       formData.append("code", values.code);
@@ -132,10 +123,6 @@ function CenterEdit() {
       formData.append("file", values.file);
       formData.append("updatedBy", userName);
       formData.append("target", values.target);
-
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(`${key}: ${value}`);
-      // }
       try {
         const response = await api.put(`/updateCenters/${id}`, formData, {
           headers: {
@@ -145,6 +132,7 @@ function CenterEdit() {
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/center");
+          handleCenterChanged();
         } else {
           toast.error(response.data.message);
         }

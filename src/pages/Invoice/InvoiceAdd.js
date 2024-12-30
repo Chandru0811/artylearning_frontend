@@ -14,7 +14,7 @@ const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
   itemAmount: Yup.number()
     .required("Item amount is required")
-    .positive("Item amount must be a positive number"),
+    .min(0, "Item amount must be a positive number or zero"),
   taxType: Yup.string().required("Tax type is required"),
   gstAmount: Yup.number()
     .required("GST amount is required")
@@ -60,7 +60,10 @@ export default function InvoiceAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [taxData, setTaxData] = useState([]);
   const [packageData, setPackageData] = useState(null);
-  // const [description, setDescription] = useState("");
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [schedulesData ,setSchedulesData] = useState([]);
+  console.log("Schedules Data:",schedulesData);
+  
 
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [lessonsOptions, setLessonsOptions] = useState([]);
@@ -175,14 +178,21 @@ export default function InvoiceAdd() {
     }
   }, [formik.submitCount, formik.errors]);
 
-  // const handleInputChange = (e) => {
-  //   setDescription(e.target.value);
-  // };
-
-  const fetchData = async () => {
+  const fetchCenterData = async () => {
     try {
       const centerData = await fetchAllCentersWithStudentList();
       setCenterData(centerData);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  const fetchsetSchedulesData = async () => {
+    try {
+      const response = await api.get(`/getAllStudentById/${selectedStudentId}`);
+      const schedule = response.data.schedules;
+      console.log("schedule",schedule);
+      
+      setSchedulesData(schedule);
     } catch (error) {
       toast.error(error);
     }
@@ -224,6 +234,12 @@ export default function InvoiceAdd() {
     }
   };
 
+  useEffect(() => {
+    fetchCenterData();
+    fetchsetSchedulesData();
+    fetchTaxData();
+  }, []);
+
   const handleCenterChange = (event) => {
     setCourseData(null);
     setPackageData(null);
@@ -235,23 +251,93 @@ export default function InvoiceAdd() {
     fetchStudent(center);
   };
 
-  const handleStudentChange = (event) => {
-    // console.log("Event", event);
-    formik.setFieldValue("student", event);
+  const handleStudentChange = (studentId) => {
+    console.log("Selected Student ID:", studentId);
+    setSelectedStudentId(studentId); // Update selected student ID in state
+    formik.setFieldValue("student", studentId); // Update Formik field value
   };
 
-  useEffect(() => {
-    fetchData();
-    fetchTaxData();
-  }, []);
+  const handlePackageChange = async (event) => {
+    try {
+      const response1 = await api.get(
+        `/getAllStudentById/${formik.values.student}`
+      );
+      // Get the selected packageId from the event
+      const packageId = event.target.value;
+      console.log("Selected Package ID:", packageId);
+      let invoiceItems = [];
+      // Update formik value for packageId
+      formik.setFieldValue("packageId", packageId);
+
+      const studentCourseDetails = response1.data.studentCourseDetailModels[0];
+      const courseId = studentCourseDetails.courseId;
+      if (!courseId) {
+        console.error("Course ID is missing!");
+        return;
+      }
+
+      // Trigger the API call
+      console.log("Fetching data for packageId and courseId...");
+      const response = await api.get(
+        `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
+      );
+
+      // Extract data from API response
+      const data = response.data;
+      console.log("API Response:", data);
+
+      // Find related tax and course details
+      const selectedTax = taxData.find(
+        (tax) => parseInt(data.taxType) === tax.id
+      );
+      const selectedCourse = courseData.find(
+        (course) => parseInt(data.courseId) === course.id
+      );
+
+      // Define fees based on weekday or weekend
+      const isWeekend =
+        formik.values.days?.includes("SATURDAY") ||
+        formik.values.days?.includes("SUNDAY");
+      const fee = isWeekend ? data.weekendFee : data.weekdayFee || 0;
+
+      console.log("Fee based on day type:", fee);
+
+      // Calculate GST amount
+      const gstRate = selectedTax ? selectedTax.rate : 0;
+      const gstAmount = (fee * gstRate) / 100 || 0;
+      const amountBeforeGST = fee - gstAmount || 0;
+
+      // Log detailed calculations
+      console.log("Selected Tax:", selectedTax);
+      console.log("Selected Course:", selectedCourse);
+      console.log("Amount Details:", {
+        fee,
+        gstRate,
+        gstAmount,
+        amountBeforeGST,
+      });
+
+      // Add to invoice items
+      const invoiceItem = {
+        item: selectedCourse ? selectedCourse.courseNames : "",
+        itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+        taxType: data.taxType,
+        gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+        totalAmount: isNaN(fee) ? 0 : fee,
+      };
+
+      console.log("Generated Invoice Item:", invoiceItem);
+      invoiceItems.push(invoiceItem);
+    } catch (error) {
+      // Handle any API errors
+      console.error("Error fetching course fees:", error);
+    }
+  };
+  
 
   useEffect(() => {
     const fetchStudentData = async () => {
-      // console.log("Formik student name", formik.values.student);
-      // console.log("Tax", taxData);
-      // console.log("Course", courseData);
       if (!formik.values.student) return;
-
       try {
         const response = await api.get(
           `/getAllStudentById/${formik.values.student}`
@@ -267,13 +353,6 @@ export default function InvoiceAdd() {
           studentCourseDetails.startDate
         );
         formik.setFieldValue("invoicePeriodTo", studentCourseDetails.endDate);
-        // Find the package details based on packageId
-        const selectedPackage = packageData.find(
-          (pkg) => pkg.id === parseInt(packageId)
-        );
-
-        // Get the number of lessons from the selected package
-        const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
 
         if (centerId) {
           try {
@@ -319,9 +398,10 @@ export default function InvoiceAdd() {
               (course) => parseInt(response2.data.courseId) === course.id
             );
             const weekdayFee = response2.data.weekdayFee || 0;
-            const weekendFee = response2.data.weekendFee || 0;       
-            // console.log("studentCourseDetails Days:",studentCourseDetails.days);
-            const isWeekend = "SATURDAY" || "SUNDAY"
+            const weekendFee = response2.data.weekendFee || 0;
+            console.log("studentCourseDetails Days:",studentCourseDetails.days);
+            const days = studentCourseDetails.days;
+            const isWeekend = days === "SATURDAY" || days === "SUNDAY";
             const itemsName = selectedCourse ? selectedCourse.courseNames : "";
             const gstRate = selectedTax ? selectedTax.rate : 0;
             const amount = isWeekend ? weekendFee : weekdayFee || 0;
@@ -372,6 +452,11 @@ export default function InvoiceAdd() {
         } else {
           console.error("Course ID not found");
         }
+
+        const selectedPackage = packageData.find(
+          (pkg) => pkg.id === parseInt(packageId)
+        );
+        const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
         formik.setValues({
           center: studentData.centerId || "",
           parent: studentData?.studentParentsDetails[0]?.parentName || "",
@@ -405,6 +490,12 @@ export default function InvoiceAdd() {
   useEffect(() => {
     if (studentID) {
       handleStudentChange(studentID);
+    }
+  }, [studentID]);
+
+  useEffect(() => {
+    if (studentID) {
+      handlePackageChange(studentID);
     }
   }, [studentID]);
 
@@ -579,7 +670,27 @@ export default function InvoiceAdd() {
           overAllAmount = parseFloat(
             referralDetails.data.overallTotalForFee || 0
           ); // Ensure it's a number
-          console.log("Referral Amount from API:", overAllAmount);
+          console.log("Referral Amount from API(studentID):", overAllAmount);
+          formik.setFieldValue("creditAdviceOffset", overAllAmount);
+        } catch (error) {
+          console.error(
+            "Error fetching referral details. Using fallback overAllAmount:",
+            error
+          );
+        }
+      } else if (selectedStudentId) {
+        try {
+          const referralDetails = await api.get(
+            `/getAvailableCreditAdviseOffset?studentId=${selectedStudentId}`
+          );
+          overAllAmount = parseFloat(
+            referralDetails.data.overallTotalForFee || 0
+          ); // Ensure it's a number
+          console.log(
+            "Referral Amount from API(selectedStudentId):",
+            overAllAmount
+          );
+          formik.setFieldValue("creditAdviceOffset", overAllAmount);
         } catch (error) {
           console.error(
             "Error fetching referral details. Using fallback overAllAmount:",
@@ -613,8 +724,7 @@ export default function InvoiceAdd() {
     };
 
     fetchReferralDetails();
-  }, [formik.values.invoiceItems, studentID]);
-
+  }, [formik.values.invoiceItems, studentID, selectedStudentId]);
 
   return (
     <div className="container-fluid">
@@ -805,13 +915,13 @@ export default function InvoiceAdd() {
                         : ""
                     }`}
                   >
-                    <option value=""></option>
-                    <option value="2:30 pm">2:30 pm</option>
-                    <option value="3:30 pm">3:30 pm</option>
-                    <option value="5:00 pm">5:00 pm</option>
-                    <option value="7:00 pm">7:00 pm</option>
-                    <option value="12:00 pm">12:00 pm</option>
-                    <option value="1:00 pm">1:00 pm</option>
+                    <option selected></option>
+                    {schedulesData &&
+                      schedulesData.map((schedules) => (
+                        <option key={schedules.id} value={schedules.classCode}>
+                          {schedules.classCode}/{schedules.className}/{schedules.days}/1
+                        </option>
+                      ))}
                   </select>
                   {formik.touched.schedule && formik.errors.schedule && (
                     <div className="invalid-feedback">
@@ -834,7 +944,7 @@ export default function InvoiceAdd() {
                     }`}
                     onChange={(e) => {
                       formik.handleChange(e);
-                      setSelectedPackage(e.target.value); // Update the selected package
+                      handlePackageChange(e);
                     }}
                   >
                     <option selected></option>
@@ -1177,7 +1287,7 @@ export default function InvoiceAdd() {
                             {index !== 0 && (
                               <button
                                 type="button"
-                                className="btn btn-sm mx-2 text-danger border-danger bg-white"
+                                className="btn btn-sm me-2 btn-danger"
                                 onClick={() => handleRowDelete(index)}
                               >
                                 Delete
@@ -1195,8 +1305,12 @@ export default function InvoiceAdd() {
             <div className="row mt-3">
               <div className="col-12 text-end mt-3">
                 <button
-                  className="btn btn-sm btn-danger me-2"
                   type="button"
+                  className="btn btn-sm text-white"
+                  style={{
+                    fontWeight: "600px !important",
+                    background: "#eb862a",
+                  }}
                   onClick={() => {
                     setRows((pr) => [...pr, {}]);
                   }}

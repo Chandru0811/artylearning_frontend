@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 function AddMore({
   courseId,
   attendanceDate,
-  batchId,
+  batchTime,
   userId,
   feedbackData,
   onSuccess,
@@ -48,7 +48,7 @@ function AddMore({
       try {
         const additionalValues = {
           attendanceDate: attendanceDate,
-          batchId: batchId,
+          batchTime: batchTime,
           userId: userId,
         };
 
@@ -166,7 +166,7 @@ function AddMore({
                       )}
                     </div>
                     <div className="col-md-3 col-6 mb-4">
-                      <label className="form-label">Lesson No</label>
+                      <label className="form-label">Lesson No<span className="text-danger">*</span></label>
                       <select
                         {...formik.getFieldProps(`items[${index}].lessonNo`)}
                         className={`form-select ${
@@ -193,7 +193,7 @@ function AddMore({
                       ) : null}
                     </div>
                     <div className="col-md-3 col-6 mb-4">
-                      <label className="form-label">Curriculum Code</label>
+                      <label className="form-label">Curriculum Code<span className="text-danger">*</span></label>
                       <input
                         type="text"
                         className={`form-control ${
@@ -386,16 +386,16 @@ function AddMore({
               </div>
             </div>
             <Modal.Footer>
-              <Button
+              <button
                 type="button"
-                className="btn btn-sm btn-border bg-light text-dark"
+                className="btn btn-sm btn-border text-dark"
                 onClick={handleClose}
               >
                 Cancel
-              </Button>
-              <Button variant="danger" type="submit">
+              </button>
+              <button type="submit" className="btn btn-sm btn-button">
                 Submit
-              </Button>
+              </button>
             </Modal.Footer>
           </Modal.Body>
         </form>
