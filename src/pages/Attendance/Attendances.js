@@ -191,7 +191,7 @@ function Attendances() {
           centerId: attendanceItem.centerId,
           classId: attendanceItem.classId,
           courseId: attendanceItem.courseId,
-          batchId: parseInt(selectedBatch),
+          batchTime: parseInt(selectedBatch),
         }));
       const response = await api.post("markStudentAttendance", flattenedData);
       if (response.status === 201) {
@@ -459,7 +459,7 @@ function Attendances() {
                               courseId={attendanceItem.courseId}
                               userId={attendanceItem.userId}
                               attendanceDate={selectedDate}
-                              batchId={selectedBatch}
+                              batchTime={selectedBatch}
                               feedbackData={attendanceItem.feedbacks}
                             />
                           </div>
