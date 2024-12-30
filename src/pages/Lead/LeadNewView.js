@@ -456,11 +456,18 @@ function LeadNewView() {
                           <b>Student Name</b>
                           <span> {data.studentName || "--"}</span>
                         </p>
-                        <p className="m-0">
+                        <p className="m-0 d-flex gap-5">
                           <b>Assessment</b>
-                          <span>{arrange.assessment || "--"}</span>
+                          <span
+                            className="text-wrap"
+                            style={{
+                              fontSize: "12px",
+                            }}
+                          >
+                            {arrange.assessment || "--"}
+                          </span>
                         </p>
-                        <p className="m-0 mt-4">
+                        <p className="m-0 ">
                           <b>Assessment Date</b>
                           <span>{arrange.assessmentDate || "--"}</span>
                         </p>

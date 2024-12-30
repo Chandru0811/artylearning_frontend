@@ -1155,3 +1155,7 @@ table.dataTable.display > tbody > tr > th {
   padding: 0px ;
 }
 
+.cms-header{
+  background: #287f71 !important;
+  color: #fff !important;
+}

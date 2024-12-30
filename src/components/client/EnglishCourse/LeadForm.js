@@ -839,7 +839,6 @@ function LeadForm() {
             </div>
           </div>
           <div className="col-md-6 col-12 mb-3">
-            {/* <label className="form-label">Preferred Day / 首选日期</label> */}
             <div>
               <div className="form-check form-check-inline">
                 <input

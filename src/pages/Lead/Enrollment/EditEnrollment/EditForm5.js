@@ -210,7 +210,7 @@ const EditForm5 = forwardRef(
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Preferred Day<span className="text-danger">*</span>
                 </label>
@@ -400,6 +400,192 @@ const EditForm5 = forwardRef(
                         <small>{formik.errors.preferredTimeSlot}</small>
                       </div>
                     )}
+                </div>
+              </div> */}
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Preferred Day</label>
+                <div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="TUESDAY"
+                      name="preferredDay"
+                      value="TUESDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("TUESDAY")}
+                    />
+                    <label className="form-check-label">Tuesday</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="WEDNESDAY"
+                      name="preferredDay"
+                      value="WEDNESDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("WEDNESDAY")}
+                    />
+                    <label className="form-check-label">Wednesday</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="THURSDAY"
+                      name="preferredDay"
+                      value="THURSDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("THURSDAY")}
+                    />
+                    <label className="form-check-label">Thursday</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="FRIDAY"
+                      name="preferredDay"
+                      value="FRIDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("FRIDAY")}
+                    />
+                    <label className="form-check-label">Friday</label>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">Preferred Time Slot</label>
+                <div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="3.30PM"
+                      id="3.30PM"
+                      name="preferredTimeSlot"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredTimeSlot.includes(
+                        "3.30PM"
+                      )}
+                    />
+                    <label className="form-check-label">3.30PM</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="5.00PM"
+                      id="5.00PM"
+                      name="preferredTimeSlot"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredTimeSlot.includes(
+                        "5.00PM"
+                      )}
+                    />
+                    <label className="form-check-label">5.00PM</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="7.00PM"
+                      id="7.00PM"
+                      name="preferredTimeSlot"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredTimeSlot.includes(
+                        "7.00PM"
+                      )}
+                    />
+                    <label className="form-check-label">7.00PM</label>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="SATURDAY"
+                      name="preferredDay"
+                      value="SATURDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("SATURDAY")}
+                    />
+                    <label className="form-check-label">Saturday</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="SUNDAY"
+                      name="preferredDay"
+                      value="SUNDAY"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredDay.includes("SUNDAY")}
+                    />
+                    <label className="form-check-label">Sunday</label>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="9AM - 12NN"
+                      id="9AM - 12NN"
+                      name="preferredTimeSlot"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredTimeSlot.includes(
+                        "9AM - 12NN"
+                      )}
+                    />
+                    <label className="form-check-label">9AM - 12NN</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="12NN - 3PM"
+                      id="12NN - 3PM"
+                      name="preferredTimeSlot"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredTimeSlot.includes(
+                        "12NN - 3PM"
+                      )}
+                    />
+                    <label className="form-check-label">12NN - 3PM</label>
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="3PM - 6PM"
+                      id="3PM - 6PM"
+                      name="preferredTimeSlot"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      checked={formik.values.preferredTimeSlot.includes(
+                        "3PM - 6PM"
+                      )}
+                    />
+                    <label className="form-check-label">3PM - 6PM</label>
+                  </div>
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">

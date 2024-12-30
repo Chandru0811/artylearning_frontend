@@ -930,12 +930,12 @@ function RolesAdd() {
                   <table class="table table-light table-hover" >
                   <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
                       <tr>
-                        <th scope="col">Module Permission</th>
-                        <th scope="col">Index</th>
-                        <th scope="col">Read</th>
-                        <th scope="col">Create</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">Delete</th>
+                        <th scope="col" className="cms-header">Module Permission</th>
+                        <th scope="col" className="cms-header">Index</th>
+                        <th scope="col" className="cms-header">Read</th>
+                        <th scope="col" className="cms-header">Create</th>
+                        <th scope="col" className="cms-header">Update</th>
+                        <th scope="col" className="cms-header">Delete</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -4122,7 +4122,7 @@ function RolesAdd() {
               </div>
             </div>
 
-            <div className="row mt-4">
+            {/* <div className="row mt-4">
               <div className="clo-12">
                 <div className="table-responsive">
                   <table class="table table-light table-hover">
@@ -4138,7 +4138,6 @@ function RolesAdd() {
                       </tr>
                     </thead>
                     <tbody>
-                      {/* Time Schedule */}
                       <tr>
                         <td>
                           <p
@@ -4212,20 +4211,21 @@ function RolesAdd() {
                   </table>
                 </div>
               </div>
-            </div>
+            </div> */}
+
             <div className="row mt-4">
               <div className="clo-12">
                 <div className="table-responsive">
                   <table class="table table-light table-hover">
                     <thead style={{ background: "#a2bab6" }}>
                       <tr>
-                        <th scope="col">Content Management</th>
-                        <th scope="col">Index</th>
-                        <th scope="col">Create</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">View</th>
-                        <th scope="col">Delete</th>
-                        <th scope="col">Publish</th>
+                        <th scope="col" className="cms-header">Content Management</th>
+                        <th scope="col" className="cms-header">Index</th>
+                        <th scope="col" className="cms-header">Create</th>
+                        <th scope="col" className="cms-header">Update</th>
+                        <th scope="col" className="cms-header">View</th>
+                        <th scope="col" className="cms-header">Delete</th>
+                        <th scope="col" className="cms-header">Publish</th>
                       </tr>
                     </thead>
                     <tbody>

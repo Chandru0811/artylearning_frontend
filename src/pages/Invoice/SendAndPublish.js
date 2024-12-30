@@ -152,25 +152,28 @@ function SendAndPublish({ data, qr, invoiceNotes, uenNumber }) {
               <label>Invoice</label>
               <span>:&nbsp;&nbsp;${data.invoiceNumber}</span>
       
+                 <label>Course Name</label>
+              <span>:&nbsp;&nbsp;${data.courseName}</span>
+           
+            </div>
+            <div style="display: flex;">
+                <label>Invoice Date</label>
+              <span>:&nbsp;&nbsp;${
+                data.dueDate ? data.invoiceDate.substring(0, 10) : "--"
+              }</span>
+      
               <label>Due Date</label>
               <span>:&nbsp;&nbsp;${
                 data.dueDate ? data.dueDate.substring(0, 10) : "--"
               }</span>
-            </div>
-            <div style="display: flex;">
-              <label>Student Name</label>
-              <span>:&nbsp;&nbsp;${data.studentName}</span>
-      
-              <label>Course Name</label>
-              <span>:&nbsp;&nbsp;${data.courseName}</span>
             </div>
       
             <div style="display: flex">
               <label>Student Id</label>
               <span>:&nbsp;&nbsp;${data.studentUniqueId}</span>
       
-              <label>Course Id</label>
-              <span>:&nbsp;&nbsp;${data.courseId}</span>
+            <label>Student Name</label>
+              <span>:&nbsp;&nbsp;${data.studentName}</span>
             </div>
           </div>
           <br/>
