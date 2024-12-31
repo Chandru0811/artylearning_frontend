@@ -8,9 +8,7 @@ import { Link } from "react-router-dom";
 function Datatable2() {
   const getCurrentWeek = () => {
     const date = new Date();
-    // Set to nearest Thursday: current date + 4 - current day number makes Thursday day number 4
     date.setDate(date.getDate() + 4 - (date.getDay() || 7));
-    // ISO year and week calculation
     const yearStart = new Date(date.getFullYear(), 0, 1);
     const weekNumber = Math.ceil(
       ((date - yearStart) / 86400000 + yearStart.getDay() + 1) / 7
@@ -22,17 +20,34 @@ function Datatable2() {
   const [centerData, setCenterData] = useState(null);
   const [selectedCenterId, setSelectedCenterId] = useState(null);
   const [selectedDay, setSelectedDay] = useState("ALL");
+  const centerLocalId = localStorage.getItem("selectedCenterId");
   const [chartData, setChartData] = useState({
     dayData: [],
     labels: [],
   });
   console.log("chartData", chartData);
 
+  // const fetchData = async () => {
+  //   try {
+  //     const centerData = await fetchAllCentersWithIds();
+  //     setCenterData(centerData);
+  //     setSelectedCenterId(centerData[0]?.id || null);
+  //   } catch (error) {
+  //     toast.error(error);
+  //   }
+  // };
+
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
-      setSelectedCenterId(centerData[0]?.id || null);
+      if (centerData && centerData.length > 0 && !selectedCenterId) {
+        if (centerLocalId !== null && centerLocalId !== "undefined") {
+          setSelectedCenterId(centerLocalId);
+        } else if (centerData !== null && centerData.length > 0) {
+          setSelectedCenterId(centerData[0].id);
+        }
+      }
     } catch (error) {
       toast.error(error);
     }
