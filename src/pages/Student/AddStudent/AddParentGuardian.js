@@ -632,10 +632,9 @@ const AddParentGuardian = forwardRef(
                     className="form-control"
                     onChange={(event) => {
                       const file = event.target.files[0];
-                      // If no file is selected, remove the image preview
                       if (!file) {
                         const updatedProfileImage = [...profileImage];
-                        updatedProfileImage[index] = null; // Clear the image for this index
+                        updatedProfileImage[index] = null; 
                         setProfileImage(updatedProfileImage);
                         formik.setFieldValue(
                           `parentInformation[${index}].file`,

@@ -100,12 +100,14 @@ function Payslip() {
             />
           </div>
           <div className="col-md-5 col-12 d-flex justify-content-end mt-4">
-            <button
-              className="btn btn-success mx-2 btn-sm m-2"
-              onClick={handleGeneratePDF}
-            >
-              <FaDownload />
-            </button>
+            {data && Object.keys(data).length > 0 ? (
+              <button
+                className="btn btn-success mx-2 btn-sm m-2"
+                onClick={handleGeneratePDF}
+              >
+                <FaDownload />
+              </button>
+            ) : null}
             <Link to="/">
               <button className="btn btn-sm btn-border mx-2 mt-2">Back</button>
             </Link>
@@ -159,7 +161,7 @@ function Payslip() {
                             </p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>:{data.dateOfBirth || "--"}</p>
+                            <p>: {data.dateOfBirth || "--"}</p>
                           </dvi>
                         </div>
                         <div className="row">
@@ -169,7 +171,7 @@ function Payslip() {
                             </p>
                           </dvi>
                           <dvi className="col-8">
-                            <p>:{data.designation  || "--"}</p>
+                            <p>: {data.designation || "--"}</p>
                           </dvi>
                         </div>
                       </div>
@@ -198,7 +200,7 @@ function Payslip() {
                     </div>
 
                     <div className="content-section">
-                      <div className="row " style={{ minHeight: "20rem" }}>
+                      <div className="row" style={{ minHeight: "20rem" }}>
                         <div className="col-6 d-flex flex-column justify-content-evenly">
                           <p className="d-flex justify-content-between">
                             <strong>BASIC PAY</strong>
@@ -229,7 +231,7 @@ function Payslip() {
                           className="col-6 d-flex flex-column justify-content-evenly"
                           style={{ borderLeft: "2px solid #000" }}
                         >
-                          <strong>Deduction </strong>
+                          {/* <strong>Deduction</strong>
                           {data.deductions && data.deductions.length > 0 ? (
                             data.deductions.map((deduct, index) => (
                               <div
@@ -246,7 +248,41 @@ function Payslip() {
                             ))
                           ) : (
                             <p>--</p>
-                          )}
+                          )} */}
+                          <p className="d-flex justify-content-between">
+                            <strong>Deduction</strong>
+                            <p>
+                              {data.deductions && data.deductions.length > 0 ? (
+                                data.deductions.map((deduct, index) => (
+                                  <div
+                                    key={index}
+                                    className="d-flex justify-content-between"
+                                  >
+                                    <p>
+                                      <strong>{deduct.detectionName}</strong>
+                                    </p>
+                                    <p>{deduct.amount}</p>
+                                  </div>
+                                ))
+                              ) : (
+                                <p>--</p>
+                              )}
+                            </p>
+                          </p>
+                          <p
+                            className="d-flex justify-content-between"
+                            style={{ visibility: "hidden" }}
+                          >
+                            <strong>BASIC PAY</strong>
+                            <p>{data.basicSalary || "--"}</p>
+                          </p>
+                          <p
+                            className="d-flex justify-content-between"
+                            style={{ visibility: "hidden" }}
+                          >
+                            <strong>BASIC PAY</strong>
+                            <p>{data.basicSalary || "--"}</p>
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -263,7 +299,7 @@ function Payslip() {
                         </div>
                         <div className="row">
                           <dvi className="col-4">
-                            <p>Salary Credited To</p>
+                            <p>Salary Credited By</p>
                           </dvi>
                           <dvi className="col-8">
                             <p>: {data.salaryCreditedTo}</p>
@@ -282,7 +318,7 @@ function Payslip() {
                           </dvi>
                           <dvi className="col-8">
                             <p>
-                              :
+                              :{" "}
                               {data.cpfContribution !== undefined
                                 ? data.cpfContribution.toFixed(2)
                                 : "--"}
@@ -295,7 +331,7 @@ function Payslip() {
                           </dvi>
                           <dvi className="col-8">
                             <p>
-                              :
+                              :{" "}
                               {data.totalCpf !== undefined
                                 ? data.totalCpf.toFixed(2)
                                 : "--"}

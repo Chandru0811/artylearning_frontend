@@ -377,6 +377,10 @@ const Document = () => {
                     zipCode: false,
                   },
                 }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/document/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
               />
             </ThemeProvider>
 

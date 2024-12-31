@@ -42,7 +42,7 @@ const validationSchema = Yup.object().shape({
   file: Yup.mixed().required("*File is required"),
   target: Yup.number()
   .typeError("*Must be a number")
-  .required("*File is required")
+  .required("*Target is required")
   .positive("*Must be a positive number")
   .integer("*Must be a whole number"),
 

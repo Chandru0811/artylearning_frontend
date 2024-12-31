@@ -50,7 +50,7 @@ const validationSchema = Yup.object().shape({
     .max(200, "*The maximum length is 200 characters"),
   target: Yup.number()
     .typeError("*Must be a number")
-    .required("*File is required")
+    .required("*Target is required")
     .positive("*Must be a positive number")
     .integer("*Must be a whole number"),
 });

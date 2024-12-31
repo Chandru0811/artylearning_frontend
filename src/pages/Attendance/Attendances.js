@@ -96,7 +96,6 @@ function Attendances() {
       const centerData = await fetchAllCentersWithIds();
       setCenterData(centerData);
 
-      // Set default centerId to the first available center
       if (centerData?.length > 0) {
         const defaultCenterId = centerData[0].id;
         if (centerLocalId !== null && centerLocalId !== "undefined") {
@@ -104,7 +103,6 @@ function Attendances() {
         } else if (centerData !== null && centerData.length > 0) {
           setSelectedCenter(defaultCenterId);
         }
-        // Fetch courses for the default center
         fetchCourses(defaultCenterId);
       }
     } catch (error) {
@@ -135,7 +133,7 @@ function Attendances() {
         centerId: selectedCenter,
         date: selectedDate,
         courseId: selectedCourse || "",
-        ...(selectedBatch && { batchTime: selectedBatch }), // Include batchTime only when selected
+        ...(selectedBatch && { batchTime: selectedBatch }),
       };
       const response = await api.post(
         "getAllTeacherWithStudentAttendance",
