@@ -89,6 +89,7 @@ const PersonalAdd = forwardRef(
           formData.append("nationalityId", values.nationalityId);
           formData.append("status", values.status);
           formData.append("file", values.file);
+          formData.append("createdBy", userName);
 
           const response = await api.post(
             "/createUserWithProfileImage",

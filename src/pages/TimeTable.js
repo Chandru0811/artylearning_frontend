@@ -12,7 +12,7 @@ function TimeTable() {
     {
       className: "Physics Class",
       teacherName: "Mr. Smith",
-      maxClassSizeofDay: 6,
+      maxClassSizeofDay: 5,
       batches: [
         {
           startTime: "09:00",
@@ -200,7 +200,7 @@ function TimeTable() {
     {
       className: "Chemistry Class",
       teacherName: "Dr. Brown",
-      maxClassSizeofDay: 6,
+      maxClassSizeofDay: 5,
       batches: [
         {
           startTime: "08:00",
@@ -319,17 +319,17 @@ function TimeTable() {
           {data.map((classData, index) => (
             <div key={index}>
               <div className="table-responsive">
-                <table className="table table-bordered table-striped border border-info">
-                  <thead className="">
+                <table
+                  className="table table-bordered table-striped"
+                  style={{ borderColor: "#b4c4d8" }}
+                >
+                  <thead>
                     <tr>
                       <th scope="col" className="text-center fw-normal">
                         Class Name
                       </th>
                       <th scope="col" className="text-center fw-normal">
                         Teacher Name
-                      </th>
-                      <th scope="col" className="text-center fw-normal">
-                        Timing
                       </th>
                       {Array.from({ length: classData.maxClassSizeofDay }).map(
                         (_, colIndex) => (
@@ -338,7 +338,7 @@ function TimeTable() {
                             scope="col"
                             className="text-center fw-normal"
                           >
-                            Student {colIndex + 1}
+                            {colIndex === 0 ? classData.teacherName : ""}
                           </th>
                         )
                       )}
@@ -348,7 +348,6 @@ function TimeTable() {
                     {classData.batches.map((batch, batchIndex) => (
                       <tr key={batchIndex} className="table-info">
                         <td className="text-center">{classData.className}</td>
-                        <td className="text-center">{classData.teacherName}</td>
                         <td className="text-center">
                           {convertTo12HourFormat(batch.startTime)} -{" "}
                           {convertTo12HourFormat(batch.endTime)}
@@ -357,7 +356,7 @@ function TimeTable() {
                           length: classData.maxClassSizeofDay,
                         }).map((_, studentIndex) => {
                           const studentName =
-                            batch.students[studentIndex]?.studentName;
+                            batch.students[studentIndex]?.studentName || ""; // Handle empty values
                           return (
                             <td
                               key={studentIndex}
@@ -365,7 +364,7 @@ function TimeTable() {
                                 !studentName ? "orange-background" : ""
                               }`}
                             >
-                              {studentName || ""}
+                              {studentName}
                             </td>
                           );
                         })}
