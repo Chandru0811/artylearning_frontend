@@ -33,7 +33,7 @@ const Attendance = () => {
     initialValues: {
       centerId: "",
       courseId: "",
-      attendanceDate:"",
+      attendanceDate: "",
       attendanceStatus: "",
     },
     validationSchema: validationSchema,
@@ -44,7 +44,7 @@ const Attendance = () => {
         attendanceDate: selectedDate,
         attendanceStatus: values.attendanceStatus,
       };
-      console.log("Payload:",payload);
+      console.log("Payload:", payload);
       try {
         const response = await api.post(
           "getAttendanceByCenterIdAndDate",
@@ -69,9 +69,9 @@ const Attendance = () => {
       if (centers.length > 0) {
         const defaultCenterId = centers[0].id;
         if (centerLocalId !== null && centerLocalId !== "undefined") {
-          setCenterData(centerLocalId);
+          formik.setFieldValue("centerId", centerLocalId);
         } else if (centerData !== null && centerData.length > 0) {
-          setCenterData(defaultCenterId);
+          formik.setFieldValue("centerId", defaultCenterId);
         }
         setCenterData(centers);
         await fetchCourses(defaultCenterId);
@@ -82,13 +82,13 @@ const Attendance = () => {
       toast.error(error.message || "Error fetching centers.");
     }
   };
-  
+
   const fetchCourses = async (centerId) => {
     try {
       const courses = await fetchAllCoursesWithIdsC(centerId);
       if (courses.length > 0) {
-        const defaultCourseId = courses[0].id; // Set the first course as the default
-        formik.setFieldValue("courseId", defaultCourseId); // Update formik value
+        const defaultCourseId = courses[0].id;
+        formik.setFieldValue("courseId", defaultCourseId);
         setCourseData(courses);
       } else {
         toast.error("No courses found for the selected center.");
@@ -97,17 +97,15 @@ const Attendance = () => {
       toast.error(error.message || "Error fetching courses.");
     }
   };
-  
+
   const handleCenterChange = (event) => {
     setCourseData(null);
-    const courseId = event.target.value;
-    formik.setFieldValue("courseId", courseId);
     const centerId = event.target.value;
     formik.setFieldValue("centerId", centerId);
     fetchCourses(centerId);
   };
 
-  const clearFilter = () =>{
+  const clearFilter = () => {
     formik.resetForm();
   };
 
@@ -252,10 +250,17 @@ const Attendance = () => {
                   )}
               </div>
               <div className="col-md-4 col-12 d-flex align-items-end">
-                <button type="button" onClick={clearFilter} className="btn btn-border btn-sm mt-3">
+                <button
+                  type="button"
+                  onClick={clearFilter}
+                  className="btn btn-border btn-sm mt-3"
+                >
                   Clear
                 </button>
-                <button type="submit" className="btn btn-button btn-sm mt-3 mx-3">
+                <button
+                  type="submit"
+                  className="btn btn-button btn-sm mt-3 mx-3"
+                >
                   Search
                 </button>
               </div>

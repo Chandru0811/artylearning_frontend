@@ -21,6 +21,7 @@ const RevenueReport = () => {
   const [selectedSubjectId, setSelectedSubjectId] = useState("All");
   const lineChartCanvasRef = useRef(null);
   const lineChartRef = useRef(null);
+  const centerLocalId = localStorage.getItem("selectedCenterId");
 
   const [chartData, setChartData] = useState({
     series: [{ name: "Sales Rate", data: [] }],
@@ -57,7 +58,11 @@ const RevenueReport = () => {
         const subjects = await fetchAllSubjectsWithIds();
         setSubjectData(subjects);
         if (centers && centers.length > 0 && !selectedCenterId) {
-          setSelectedCenterId(centers[0].id);
+          if (centerLocalId !== null && centerLocalId !== "undefined") {
+            setSelectedCenterId(centerLocalId);
+          } else if (centerData !== null && centerData.length > 0) {
+            setSelectedCenterId(centers[0].id);
+          }
         }
       } catch (error) {
         toast.error(error.message || "Failed to fetch data");
