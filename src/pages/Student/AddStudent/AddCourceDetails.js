@@ -34,7 +34,9 @@ const AddcourseDetail = forwardRef(
     const [selectedRow, setSelectedRow] = useState(formData.id);
     const [selectedRowData, setSelectedRowData] = useState({});
     const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
-    console.log("FormData CenterID:", formData);
+    // console.log("FormData CenterID:", formData);
+    console.log("Selected Row Data:", selectedRowData);
+    console.log("Selected Row ID:", selectedRow);
 
     const handleDayChange = (e) => {
       formik.setFieldValue("days", e.target.value); // Update Formik value
@@ -55,6 +57,7 @@ const AddcourseDetail = forwardRef(
                 type="radio"
                 style={{ cursor: "pointer" }}
                 className="form-check-input pointer"
+                checked={row.original.id === selectedRow} 
                 name="selectedRow"
                 onClick={() => handleRowSelect(row.original)}
               />
@@ -258,11 +261,16 @@ const AddcourseDetail = forwardRef(
             toast.success(response.data.message);
             setFormData((prv) => ({ ...prv, ...data }));
             handleNext();
+            // setSelectedRow(null);
           } else {
             toast.error(response.data.message);
           }
         } catch (error) {
-          toast.error(error.message);
+          if (error?.response?.status === 409) {
+            toast.warning(error?.response?.message);
+          } else {
+            toast.error(error?.response?.data?.message);
+          }
         } finally {
           setLoadIndicators(false);
         }
@@ -316,6 +324,7 @@ const AddcourseDetail = forwardRef(
           { params }
         );
         setDatas(response.data);
+        setSelectedRow(null);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -378,6 +387,19 @@ const AddcourseDetail = forwardRef(
         2,
         "0"
       )}`;
+    };
+
+    const ClearSelection = () => {
+      formik.resetForm({
+        values: {
+          lessonName: "",
+          packageName: "",
+          courseId: "",
+          days: "",
+          batch: "",
+        },
+      });
+      setSelectedRow(null);
     };
 
     useEffect(() => {
@@ -572,17 +594,7 @@ const AddcourseDetail = forwardRef(
                       type="button"
                       className="btn btn-sm border-secondary ms-3 my-1"
                       style={{ width: "100px" }}
-                      onClick={() =>
-                        formik.resetForm({
-                          values: {
-                            lessonName: "",
-                            packageName: "",
-                            courseId: "",
-                            days: "",
-                            batch: "",
-                          },
-                        })
-                      }
+                      onClick={ClearSelection}
                     >
                       Clear
                     </button>
@@ -621,8 +633,8 @@ const AddcourseDetail = forwardRef(
                       </ThemeProvider>
                       {/* Display validation message if no row is selected */}
                       {!selectedRow && (
-                        <div className="text-danger mt-2">
-                          Please select a row.
+                        <div className="text-danger text-center fs-6 mt-2">
+                          * Please select a row.
                         </div>
                       )}
                     </>
@@ -658,35 +670,34 @@ const AddcourseDetail = forwardRef(
                       )}
                   </div>
                   {availableDays.length > 0 && (
-                      <div className="col-md-4">
-                        <select
-                          {...formik.getFieldProps("lessonName")}
-                          id="lessonName"
-                          name="lessonName"
-                          className={`form-select  ${
-                            formik.touched.lessonName &&
-                            formik.errors.lessonName
-                              ? "is-invalid"
-                              : ""
-                          }`}
-                        >
-                          <option value="" disabled selected>
-                            Select Lesson Date
+                    <div className="col-md-4">
+                      <select
+                        {...formik.getFieldProps("lessonName")}
+                        id="lessonName"
+                        name="lessonName"
+                        className={`form-select  ${
+                          formik.touched.lessonName && formik.errors.lessonName
+                            ? "is-invalid"
+                            : ""
+                        }`}
+                      >
+                        <option value="" disabled selected>
+                          Select Lesson Date
+                        </option>
+                        {availableDays.map((day) => (
+                          <option key={day.value} value={day.value}>
+                            {day.label}
                           </option>
-                          {availableDays.map((day) => (
-                            <option key={day.value} value={day.value}>
-                              {day.label}
-                            </option>
-                          ))}
-                        </select>
-                        {formik.touched.lessonName &&
-                          formik.errors.lessonName && (
-                            <div className="invalid-feedback">
-                              {formik.errors.lessonName}
-                            </div>
-                          )}
-                      </div>
-                    )}
+                        ))}
+                      </select>
+                      {formik.touched.lessonName &&
+                        formik.errors.lessonName && (
+                          <div className="invalid-feedback">
+                            {formik.errors.lessonName}
+                          </div>
+                        )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -62,32 +62,118 @@ const EditTermsAndCondition = forwardRef(
         updatedBy: userName,
       },
       validationSchema: validationSchema,
+      //   onSubmit: async (data) => {
+      //     setLoadIndicators(true);
+      //     try {
+      //       if (data.stdTermsAndConditionId !== null) {
+      //         const formDatas = new FormData();
+
+      //         // Generate a random number
+      //         const randomNumber = Math.floor(Math.random() * 100000);
+
+      //         // Convert URL to Blob
+      //         const apiResponse = await fetch(url);
+      //         const blob = await apiResponse.blob();
+      //         formDatas.append(
+      //           "file",
+      //           blob,
+      //           `${randomNumber}Signature.png` || null
+      //         );
+      //         formDatas.append(
+      //           "termsAndConditionSignatureDate",
+      //           data.termsAndConditionSignatureDate
+      //         );
+      //         formDatas.append("agree", data.agree);
+      //         formDatas.append(
+      //           "studentTermsAndConditionId",
+      //           data.stdTermsAndConditionId
+      //         );
+      //         const response = await api.put(
+      //           `/updateStudentTermsAndConditions/${data.stdTermsAndConditionId}`,
+      //           formDatas,
+      //           {
+      //             headers: {
+      //               "Content-Type": "multipart/form-data",
+      //             },
+      //           }
+      //         );
+      //         if (response.status === 200) {
+      //           toast.success(response.data.message);
+      //           navigate("/student");
+      //           // window.location.reload();
+      //         } else {
+      //           toast.error(response.data.message);
+      //         }
+      //       } else {
+      //         const formDatas = new FormData();
+      //         // Generate a random number
+      //         const randomNumber = Math.floor(Math.random() * 1000);
+      //         // Convert URL to Blob
+      //         const apiResponse = await fetch(url);
+      //         const blob = await apiResponse.blob();
+      //         formDatas.append("file", blob, `${randomNumber}Signature.png`);
+      //         formDatas.append("agree", data.agree);
+      //         formDatas.append(
+      //           "termsAndConditionSignatureDate",
+      //           data.termsAndConditionSignatureDate
+      //         );
+      //         formDatas.append("studentDetailId", formData.id);
+      //         const response = await api.post(
+      //           `/createStudentTermsAndConditions`,
+      //           formDatas,
+      //           {
+      //             headers: {
+      //               "Content-Type": "multipart/form-data",
+      //             },
+      //           }
+      //         );
+      //         if (response.status === 201) {
+      //           toast.success(response.data.message);
+      //           setFormData((prv) => ({ ...prv, ...data }));
+      //           navigate("/student");
+      //         } else {
+      //           toast.error(response.data.message);
+      //         }
+      //       }
+      //     } catch (error) {
+      //       toast.error(error);
+      //     } finally {
+      //       setLoadIndicators(false);
+      //     }
+      //   },
+      //   validateOnChange: false, // Enable validation on change
+      //   validateOnBlur: true, // Enable validation on blur
+      // });
+
+      // Function to scroll to the first error field
+
       onSubmit: async (data) => {
         setLoadIndicators(true);
         try {
-          if (data.stdTermsAndConditionId !== null) {
-            const formDatas = new FormData();
+          const formDatas = new FormData();
 
-            // Generate a random number
-            const randomNumber = Math.floor(Math.random() * 100000);
+          // Append common fields
+          formDatas.append(
+            "termsAndConditionSignatureDate",
+            data.termsAndConditionSignatureDate
+          );
+          formDatas.append("agree", data.agree);
 
-            // Convert URL to Blob
-            const apiResponse = await fetch(url);
-            const blob = await apiResponse.blob();
-            formDatas.append(
-              "file",
-              blob,
-              `${randomNumber}Signature.png` || null
-            );
-            formDatas.append(
-              "termsAndConditionSignatureDate",
-              data.termsAndConditionSignatureDate
-            );
-            formDatas.append("agree", data.agree);
+          if (data.stdTermsAndConditionId) {
+            // Edit existing record
             formDatas.append(
               "studentTermsAndConditionId",
               data.stdTermsAndConditionId
             );
+
+            if (isEditing) {
+              // Append the signature only if it was edited
+              const randomNumber = Math.floor(Math.random() * 100000);
+              const apiResponse = await fetch(url);
+              const blob = await apiResponse.blob();
+              formDatas.append("file", blob, `${randomNumber}Signature.png`);
+            }
+
             const response = await api.put(
               `/updateStudentTermsAndConditions/${data.stdTermsAndConditionId}`,
               formDatas,
@@ -97,27 +183,25 @@ const EditTermsAndCondition = forwardRef(
                 },
               }
             );
+
             if (response.status === 200) {
               toast.success(response.data.message);
               navigate("/student");
-              // window.location.reload();
             } else {
               toast.error(response.data.message);
             }
           } else {
-            const formDatas = new FormData();
-            // Generate a random number
-            const randomNumber = Math.floor(Math.random() * 1000);
-            // Convert URL to Blob
-            const apiResponse = await fetch(url);
-            const blob = await apiResponse.blob();
-            formDatas.append("file", blob, `${randomNumber}Signature.png`);
-            formDatas.append("agree", data.agree);
-            formDatas.append(
-              "termsAndConditionSignatureDate",
-              data.termsAndConditionSignatureDate
-            );
+            // Create new record
             formDatas.append("studentDetailId", formData.id);
+
+            if (isEditing) {
+              // Append the signature only if it was edited
+              const randomNumber = Math.floor(Math.random() * 1000);
+              const apiResponse = await fetch(url);
+              const blob = await apiResponse.blob();
+              formDatas.append("file", blob, `${randomNumber}Signature.png`);
+            }
+
             const response = await api.post(
               `/createStudentTermsAndConditions`,
               formDatas,
@@ -127,9 +211,10 @@ const EditTermsAndCondition = forwardRef(
                 },
               }
             );
+
             if (response.status === 201) {
               toast.success(response.data.message);
-              setFormData((prv) => ({ ...prv, ...data }));
+              setFormData((prev) => ({ ...prev, ...data }));
               navigate("/student");
             } else {
               toast.error(response.data.message);
@@ -141,11 +226,7 @@ const EditTermsAndCondition = forwardRef(
           setLoadIndicators(false);
         }
       },
-      validateOnChange: false, // Enable validation on change
-      validateOnBlur: true, // Enable validation on blur
     });
-
-    // Function to scroll to the first error field
     const scrollToError = (errors) => {
       const errorField = Object.keys(errors)[0]; // Get the first error field
       const errorElement = document.querySelector(`[name="${errorField}"]`); // Find the DOM element
@@ -166,7 +247,10 @@ const EditTermsAndCondition = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(`/getAllStudentById/${formData.id}`);
-          console.log("Response is parentSignature:", response.data.studentTermsAndConditions[0].parentSignature);
+          console.log(
+            "Response is parentSignature:",
+            response.data.studentTermsAndConditions[0].parentSignature
+          );
           if (
             response.data.studentTermsAndConditions &&
             response.data.studentTermsAndConditions.length > 0
@@ -214,7 +298,6 @@ const EditTermsAndCondition = forwardRef(
                 <p class="headColor">Terms and Conditions</p>
                 <div className="container-fluid py-3">
                   <div className="row">
-
                     <div className="col-md-6 col-12">
                       <div className="text-start mt-3">
                         <label className="mb-1 fw-medium">

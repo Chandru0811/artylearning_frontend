@@ -280,7 +280,7 @@ const AddParentGuardian = forwardRef(
                 mobileNumber: leadData.mothersMobileNumber || "",
                 address: leadData.address,
                 postalCode: leadData.postalCode || "",
-                primaryContact: true,
+                primaryContact: primaryContactMother,
               },
               {
                 parentName: leadData.fathersFullName || "",

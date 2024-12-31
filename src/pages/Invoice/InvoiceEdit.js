@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
-import { IoMdTrash } from "react-icons/io";
+import { ImCancelCircle } from "react-icons/im";
 import { Modal, Button } from "react-bootstrap";
 import fetchAllCentersWithStudentList from "../List/CenterAvailableStudentLidt";
 
@@ -52,6 +52,7 @@ export default function InvoiceEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
   const [description, setDescription] = useState("");
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
 
   const lessonOptions = [];
   for (let i = 1; i <= 50; i++) {
@@ -345,40 +346,40 @@ export default function InvoiceEdit() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    // Calculate total Item Amounts
-    const totalItemAmount = formik.values.invoiceItems?.reduce(
-      (total, item) => {
-        // Ensure the item is defined and has an itemAmount property
-        if (item && item.itemAmount) {
-          return total + parseFloat(item.itemAmount || 0);
-        }
-        return total;
-      },
-      0
-    );
-    formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
+  // useEffect(() => {
+  //   // Calculate total Item Amounts
+  //   const totalItemAmount = formik.values.invoiceItems?.reduce(
+  //     (total, item) => {
+  //       // Ensure the item is defined and has an itemAmount property
+  //       if (item && item.itemAmount) {
+  //         return total + parseFloat(item.itemAmount || 0);
+  //       }
+  //       return total;
+  //     },
+  //     0
+  //   );
+  //   formik.setFieldValue("creditAdviceOffset", totalItemAmount.toFixed(2));
 
-    // Calculate total GST
-    const totalGst = formik.values.invoiceItems?.reduce((total, item) => {
-      // Ensure the item is defined and has a gstAmount property
-      if (item && item.gstAmount) {
-        return total + parseFloat(item.gstAmount || 0);
-      }
-      return total;
-    }, 0);
-    formik.setFieldValue("gst", totalGst.toFixed(2));
+  //   // Calculate total GST
+  //   const totalGst = formik.values.invoiceItems?.reduce((total, item) => {
+  //     // Ensure the item is defined and has a gstAmount property
+  //     if (item && item.gstAmount) {
+  //       return total + parseFloat(item.gstAmount || 0);
+  //     }
+  //     return total;
+  //   }, 0);
+  //   formik.setFieldValue("gst", totalGst.toFixed(2));
 
-    // Calculate total Amount
-    const totalAmount = formik.values.invoiceItems?.reduce((total, item) => {
-      // Ensure the item is defined and has a totalAmount property
-      if (item && item.totalAmount) {
-        return total + parseFloat(item.totalAmount || 0);
-      }
-      return total;
-    }, 0);
-    formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
-  }, [formik.values.invoiceItems]);
+  //   // Calculate total Amount
+  //   const totalAmount = formik.values.invoiceItems?.reduce((total, item) => {
+  //     // Ensure the item is defined and has a totalAmount property
+  //     if (item && item.totalAmount) {
+  //       return total + parseFloat(item.totalAmount || 0);
+  //     }
+  //     return total;
+  //   }, 0);
+  //   formik.setFieldValue("totalAmount", totalAmount.toFixed(2));
+  // }, [formik.values.invoiceItems]);
 
   const handleRowDelete = (index) => {
     const selectedItem = formik.values.invoiceItems[index];
@@ -840,7 +841,7 @@ export default function InvoiceEdit() {
                           Total Amount (Inc GST)
                           <span className="text-danger">*</span>
                         </th>
-                        <th>Action</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -956,13 +957,15 @@ export default function InvoiceEdit() {
                             />
                           </td>
                           <td className="text-center">
-                            <button
-                              type="button"
-                              className="btn btn-white border-danger btn-sm rounded-5"
-                              onClick={() => handleRowDelete(index)}
-                            >
-                              <IoMdTrash className="fs-6 text-danger" />
-                            </button>
+                            {index >= 3 && (
+                              <button
+                                type="button"
+                                className="btn btn-white border-white"
+                                onClick={() => handleRowDelete(index)}
+                              >
+                                <ImCancelCircle className="fs-6 fw-mideum text-danger" />
+                              </button>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -974,22 +977,6 @@ export default function InvoiceEdit() {
 
             <div className="row mt-3">
               <div className="col-12 text-end mt-3">
-                {/* {rows.length > 1 && (
-                <button
-                  type="button"
-                  className="btn btn-sm mx-2 text-danger border-danger bg-white"
-                  // onClick={() => {
-                  //   setRows((pr) => pr.slice(0, -1));
-                  //   formik.setFieldValue(
-                  //     "invoiceItems",
-                  //     formik.values.invoiceItems.slice(0, -1)
-                  //   );
-                  // }}
-                  onClick={() => handleRowDelete(rows.length - 1)}
-                >
-                  Delete
-                </button>
-              )} */}
                 <button
                   className="btn btn-sm btn-danger me-2"
                   type="button"
@@ -1042,24 +1029,6 @@ export default function InvoiceEdit() {
                   </div>
                 </div>
               </div>
-              {/* <div className="col-12 text-end  mt-3">
-                <Link to="/invoice">
-                  <button className="btn btn-sm btn-border mx-2">Cancel</button>
-                </Link>
-                <button
-                  type="submit"
-                  className="btn btn-sm btn-button mx-2"
-                  disabled={loadIndicator}
-                >
-                  {loadIndicator && (
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      aria-hidden="true"
-                    ></span>
-                  )}
-                  Generate
-                </button>
-              </div> */}
             </div>
           </div>
         </div>

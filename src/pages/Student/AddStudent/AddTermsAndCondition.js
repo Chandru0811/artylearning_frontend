@@ -81,21 +81,24 @@ const AddTermsAndCondition = forwardRef(
             setFormData((prv) => ({ ...prv, ...data }));
             const studentId = formData.student_id;
             navigate(`/invoice/add?studentID=${studentId}`);
-            try {
-              const response = await api.put(
-                `/updateLeadInfo/${formData.LeadId}`,
-                {
-                  leadStatus: formData.LeadStatus,
+            if(!formData.LeadId){
+              try {
+                const response = await api.put(
+                  `/updateLeadInfo/${formData.LeadId}`,
+                  {
+                    leadStatus: formData.LeadStatus,
+                  }
+                );
+                if (response === 200) {
+                  console.log("Lead Status CONFIRMED");
+                } else {
+                  console.log("Lead Status Not CONFIRMED");
                 }
-              );
-              if (response === 200) {
-                console.log("Lead Status CONFIRMED");
-              } else {
+              } catch {
                 console.log("Lead Status Not CONFIRMED");
               }
-            } catch {
-              console.log("Lead Status Not CONFIRMED");
             }
+            
           } else {
             toast.error(response.data.message);
           }
