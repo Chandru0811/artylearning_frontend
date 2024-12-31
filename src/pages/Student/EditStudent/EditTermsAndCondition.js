@@ -166,7 +166,7 @@ const EditTermsAndCondition = forwardRef(
       const getData = async () => {
         try {
           const response = await api.get(`/getAllStudentById/${formData.id}`);
-          console.log("Response is ", response.data);
+          console.log("Response is parentSignature:", response.data.studentTermsAndConditions[0].parentSignature);
           if (
             response.data.studentTermsAndConditions &&
             response.data.studentTermsAndConditions.length > 0
@@ -214,90 +214,6 @@ const EditTermsAndCondition = forwardRef(
                 <p class="headColor">Terms and Conditions</p>
                 <div className="container-fluid py-3">
                   <div className="row">
-                    {/* <div className="col-md-6 col-12">
-                      {!data.parentSignature || isEditing ? (
-                        <div className="text-start mt-3">
-                          <label className="mb-1 fw-medium">
-                            <small>Parent Signature</small>
-                          </label>
-                          <br />
-                          <div className="border border-secondary rounded-2 parentSignature">
-                            <SignatureCanvas
-                              canvasProps={{
-                                width: 423,
-                                height: 150,
-                                className: "sigCanvas",
-                              }}
-                              ref={(data) => setSign(data)}
-                            />
-                          </div>
-                          <br />
-                          <button
-                            type="button"
-                            style={{ height: "30px", width: "60px" }}
-                            onClick={handleClear}
-                            className="btn btn-sm bg-light mx-1"
-                          >
-                            Clear
-                          </button>
-                          <button
-                            type="button"
-                            style={{ height: "30px", width: "60px" }}
-                            onClick={handleGenerate}
-                            className="btn btn-sm bg-light mx-1"
-                          >
-                            Save
-                          </button>
-                          {isEditing && (
-                            <button
-                              type="button"
-                              style={{ height: "30px", width: "70px" }}
-                              onClick={handleCancel}
-                              className="btn btn-sm bg-light ms-1"
-                            >
-                              Cancel
-                            </button>
-                          )}
-                          <br />
-                          {showImage && (
-                            <img src={url} className="mt-2" alt="Signature" />
-                          )}
-                        </div>
-                      ) : (
-                        <div className="text-start mt-3">
-                          <label className="mb-1 fw-medium">
-                            <small>Parent Signature</small>
-                          </label>
-                          <br />
-                          <div className="border border-secondary rounded-2 parentSignature">
-                            {data.studentTermsAndConditions &&
-                              data.studentTermsAndConditions.map(
-                                (parentData, index) =>
-                                  parentData.parentSignature ? (
-                                    <img
-                                      key={index}
-                                      src={parentData.parentSignature}
-                                      className="img-fluid rounded ms-3 mt-2"
-                                      style={{ width: "75%" }}
-                                      alt="Parent Signature"
-                                    />
-                                  ) : null
-                              )}
-                          </div>
-                          <br />
-                          {data.parentSignature && (
-                            <button
-                              type="button"
-                              style={{ height: "30px", width: "60px" }}
-                              onClick={handleEdit}
-                              className="btn btn-sm bg-light"
-                            >
-                              Edit
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </div> */}
 
                     <div className="col-md-6 col-12">
                       <div className="text-start mt-3">

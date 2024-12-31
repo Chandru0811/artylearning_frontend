@@ -46,6 +46,7 @@ const AddParentGuardian = forwardRef(
             primaryContact: Yup.boolean().required(
               "*Primary Contact is required"
             ),
+            file: Yup.mixed().nullable(), // File is not mandatory
           })
         )
         .min(1, "*At least one parent information is required"),
@@ -304,6 +305,49 @@ const AddParentGuardian = forwardRef(
       }
     };
 
+    // const handleFileChange = (event, index) => {
+    //   const file = event.target.files[0];
+    //   if (!file) {
+    //     formik.setFieldValue(`parentInformation[${index}].file`, null);
+    //     return;
+    //   }
+
+    //   const validTypes = [
+    //     "image/jpeg",
+    //     "image/jpg",
+    //     "image/png",
+    //     "image/gif",
+    //     "image/bmp",
+    //   ];
+    //   if (!validTypes.includes(file.type)) {
+    //     formik.setFieldError(
+    //       `parentInformation[${index}].file`,
+    //       "Invalid file type. Please upload a PNG, JPG, GIF, or BMP file."
+    //     );
+    //     return;
+    //   }
+
+    //   if (file.size > 1 * 1024 * 1024) {
+    //     formik.setFieldError(
+    //       `parentInformation[${index}].file`,
+    //       "File size exceeds 1MB. Please upload a smaller file."
+    //     );
+    //     return;
+    //   }
+
+    //   // Valid file - clear errors and set values
+    //   formik.setFieldError(`parentInformation[${index}].file`, null);
+    //   formik.setFieldValue(`parentInformation[${index}].file`, file);
+
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     const updatedProfileImage = [...profileImage];
+    //     updatedProfileImage[index] = e.target.result;
+    //     setProfileImage(updatedProfileImage);
+    //   };
+    //   reader.readAsDataURL(file);
+    // };
+
     useEffect(() => {
       if (formData.LeadId && leadDataTrue) {
         getLeadData();
@@ -395,7 +439,9 @@ const AddParentGuardian = forwardRef(
                   />
                   {formik.errors.parentInformation?.[index]?.primaryContact && (
                     <div className="text-danger">
-                     <small>{formik.errors.parentInformation[index].primaryContact}</small>
+                      <small>
+                        {formik.errors.parentInformation[index].primaryContact}
+                      </small>
                     </div>
                   )}
                 </div>
@@ -418,7 +464,9 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.parentName &&
                     formik.errors.parentInformation?.[index]?.parentName && (
                       <div className="text-danger">
-                        <small>{formik.errors.parentInformation[index].parentName}</small>
+                        <small>
+                          {formik.errors.parentInformation[index].parentName}
+                        </small>
                       </div>
                     )}
                 </div>
@@ -439,7 +487,9 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.occupation &&
                     formik.errors.parentInformation?.[index]?.occupation && (
                       <div className="text-danger">
-                        <small>{formik.errors.parentInformation[index].occupation}</small>
+                        <small>
+                          {formik.errors.parentInformation[index].occupation}
+                        </small>
                       </div>
                     )}
                 </div>
@@ -460,7 +510,9 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.email &&
                     formik.errors.parentInformation?.[index]?.email && (
                       <div className="text-danger">
-                        <small>{formik.errors.parentInformation[index].email}</small>
+                        <small>
+                          {formik.errors.parentInformation[index].email}
+                        </small>
                       </div>
                     )}
                 </div>
@@ -481,7 +533,10 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.mobileNumber &&
                     formik.errors.parentInformation?.[index]?.mobileNumber && (
                       <div className="text-danger">
-                       <small> {formik.errors.parentInformation[index].mobileNumber}</small>
+                        <small>
+                          {" "}
+                          {formik.errors.parentInformation[index].mobileNumber}
+                        </small>
                       </div>
                     )}
                 </div>
@@ -507,7 +562,9 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.relation &&
                     formik.errors.parentInformation?.[index]?.relation && (
                       <div className="text-danger">
-                        <small>{formik.errors.parentInformation[index].relation}</small>
+                        <small>
+                          {formik.errors.parentInformation[index].relation}
+                        </small>
                       </div>
                     )}
                 </div>
@@ -532,10 +589,13 @@ const AddParentGuardian = forwardRef(
                     formik.errors.parentInformation?.[index]
                       ?.parentDateOfBirth && (
                       <div className="text-danger">
-                      <small>  {
-                          formik.errors.parentInformation[index]
-                            .parentDateOfBirth
-                        }</small>
+                        <small>
+                          {" "}
+                          {
+                            formik.errors.parentInformation[index]
+                              .parentDateOfBirth
+                          }
+                        </small>
                       </div>
                     )}
                 </div>
@@ -556,27 +616,12 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.postalCode &&
                     formik.errors.parentInformation?.[index]?.postalCode && (
                       <div className="text-danger">
-                        <small>{formik.errors.parentInformation[index].postalCode}</small>
+                        <small>
+                          {formik.errors.parentInformation[index].postalCode}
+                        </small>
                       </div>
                     )}
                 </div>
-                {/* <div className="col-lg-6 col-md-6 col-12 mt-3">
-                  <label className="">Profile Image</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    name={`parentInformation[${index}].file`}
-                    onChange={(event) => {
-                      const file = event.currentTarget.files[0];
-                      formik.setFieldValue(
-                        `parentInformation[${index}].file`,
-                        file
-                      );
-                    }}
-                    onBlur={formik.handleBlur}
-                    accept=".jpg,.jpeg,.png,.gif,.bmp"
-                  />
-                </div> */}
                 <div className="col-lg-6 col-md-6 col-12 mt-3">
                   <label className="fw-medium">
                     <small>Profile</small>
@@ -598,7 +643,6 @@ const AddParentGuardian = forwardRef(
                         );
                         return;
                       }
-
                       // Validate file type and size
                       const validTypes = [
                         "image/jpeg",
@@ -607,25 +651,12 @@ const AddParentGuardian = forwardRef(
                         "image/gif",
                         "image/bmp",
                       ];
-                      if (!validTypes.includes(file.type)) {
-                        alert(
-                          "Invalid file type. Please upload a PNG, JPG, GIF, or BMP file."
-                        );
-                        return;
-                      }
-                      if (file.size > 1 * 1024 * 1024) {
-                        alert(
-                          "File size exceeds 1MB. Please upload a smaller file."
-                        );
-                        return;
-                      }
 
                       // Update Formik field value
                       formik.setFieldValue(
                         `parentInformation[${index}].file`,
                         file
                       );
-
                       // Read file as Base64 and update the image source
                       const reader = new FileReader();
                       reader.onload = (e) => {
@@ -638,7 +669,11 @@ const AddParentGuardian = forwardRef(
                     onBlur={formik.handleBlur}
                     accept=".jpg, .jpeg, .png, .gif, .bmp"
                   />
-
+                  <p>
+                    <small>
+                      Note: File must be PNG,JPG,GIF or BMP, Max Size 1 MB
+                    </small>
+                  </p>
                   {/* Display image conditionally */}
                   {profileImage[index] ||
                   formik.values.parentInformation[index].file ? (
@@ -689,7 +724,9 @@ const AddParentGuardian = forwardRef(
                   {formik.touched.parentInformation?.[index]?.address &&
                     formik.errors.parentInformation?.[index]?.address && (
                       <div className="text-danger">
-                        <small>{formik.errors.parentInformation[index].address}</small>
+                        <small>
+                          {formik.errors.parentInformation[index].address}
+                        </small>
                       </div>
                     )}
                 </div>
@@ -701,7 +738,7 @@ const AddParentGuardian = forwardRef(
                   onClick={() => {
                     if (row.id) {
                       handleDeleteRow(index);
-                    }else if(row){
+                    } else if (row) {
                       handleRemoveRow(index);
                     }
                   }}
