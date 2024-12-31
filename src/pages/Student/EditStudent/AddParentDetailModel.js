@@ -9,29 +9,8 @@ import { FaEdit } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
-  // parentInformation: Yup.array().of(
-  //   Yup.object().shape({
-  //     parentNames: Yup.string().required("*Guardian Name is required"),
-  //     parentDateOfBirths: Yup.date()
-  //       .required("*Date Of Birth is required")
-  //       .max(new Date(), "*Date Of Birth cannot be in the future"),
-  //     emails: Yup.string()
-  //       .email("*Invalid email format")
-  //       .required("*Email is required"),
-  //     relations: Yup.string().required("*Relation is required"),
-  //     mobileNumbers: Yup.string()
-  //       .matches(
-  //         /^(?:\+?65)?\s?(?:\d{4}\s?\d{4}|\d{3}\s?\d{3}\s?\d{4})$/,
-  //         "*Invalid Phone Number"
-  //       )
-  //       .required("*Phone Number is required"),
-  //     postalCodes: Yup.string()
-  //       .matches(/^\d+$/, "*Invalid Postal Code")
-  //       .required("*Postal code is required"),
-  //     addresses: Yup.string().required("*Address is required"),
-  //   })
-  // ),
   parentNames: Yup.string().required("*Guardian Name is required"),
+  occupations: Yup.string().required("*Occupations Name is required"),
   parentDateOfBirths: Yup.date()
     .required("*Date Of Birth is required")
     .max(new Date(), "*Date Of Birth cannot be in the future"),
@@ -105,7 +84,7 @@ const AddParentDetailModel = forwardRef(
           formDatas.append(`postalCode`, values.postalCodes);
           formDatas.append(`address`, values.addresses);
           formDatas.append(`primaryContact`, primaryContact);
-          formDatas.append(`createdBy,`, userName);
+          formDatas.append(`createdBy`, userName);
 
           const response = await api.post(
             `/createMultipleStudentParentsDetailsWithProfileImages/${id}`,
@@ -170,9 +149,13 @@ const AddParentDetailModel = forwardRef(
           <button
             onClick={handleShow}
             type="button"
-            className="btn btn-border btn-sm"
+            className="btn btn-sm text-white"
+            style={{
+              fontWeight: "600px !important",
+              background: "#eb862a",
+            }}
           >
-            <i className="bx bx-plus"></i> Add
+            Add More
           </button>
 
           <Modal
@@ -228,29 +211,11 @@ const AddParentDetailModel = forwardRef(
                             <input
                               className="form-control "
                               type="text"
-                              // name={`parentInformation[${index}].parentNames`}
                               name="parentNames"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              // value={
-                              //   formik.values.parentInformation[index]
-                              //     ?.parentNames || ""
-                              // }
                               value={formik.values.parentNames}
                             />
-                            {/* {formik.touched.parentInformation?.[index]
-                                ?.parentNames &&
-                                formik.errors.parentInformation?.[index]
-                                  ?.parentNames && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {
-                                        formik.errors.parentInformation[index]
-                                          .parentNames
-                                      }
-                                    </small>
-                                  </div>
-                                )} */}
                             {formik.touched.parentNames &&
                               formik.errors.parentNames && (
                                 <div className="text-danger">
@@ -267,30 +232,11 @@ const AddParentDetailModel = forwardRef(
                             <input
                               className="form-control  form-contorl-sm"
                               type="date"
-                              // name={`parentInformation[${index}].parentDateOfBirths`}
                               name="parentDateOfBirths"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              // value={
-                              //   formik.values.parentInformation[index]
-                              //     ?.parentDateOfBirths || ""
-                              // }
                               value={formik.values.parentDateOfBirths}
                             />
-
-                            {/* {formik.touched.parentInformation?.[index]
-                                ?.parentDateOfBirths &&
-                                formik.errors.parentInformation?.[index]
-                                  ?.parentDateOfBirths && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {
-                                        formik.errors.parentInformation[index]
-                                          .parentDateOfBirths
-                                      }
-                                    </small>
-                                  </div>
-                                )} */}
                             {formik.touched.parentDateOfBirths &&
                               formik.errors.parentDateOfBirths && (
                                 <div className="text-danger">
@@ -309,29 +255,11 @@ const AddParentDetailModel = forwardRef(
                             <input
                               className="form-control "
                               type="email"
-                              // name={`parentInformation[${index}].emails`}
                               name="emails"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              // value={
-                              //   formik.values.parentInformation[index]
-                              //     ?.emails || ""
-                              // }
                               value={formik.values.emails}
                             ></input>
-                            {/* {formik.touched.parentInformation?.[index]
-                                ?.emails &&
-                                formik.errors.parentInformation?.[index]
-                                  ?.emails && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {
-                                        formik.errors.parentInformation[index]
-                                          .emails
-                                      }
-                                    </small>
-                                  </div>
-                                )} */}
                             {formik.touched.emails && formik.errors.emails && (
                               <div className="text-danger">
                                 <small>{formik.errors.emails}</small>
@@ -347,14 +275,9 @@ const AddParentDetailModel = forwardRef(
                             <select
                               className="form-select "
                               type="text"
-                              // name={`parentInformation[${index}].relations`}
                               name="relations"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              // value={
-                              //   formik.values.parentInformation[index]
-                              //     ?.relations || ""
-                              // }
                               value={formik.values.relations}
                             >
                               <option selected></option>
@@ -363,19 +286,6 @@ const AddParentDetailModel = forwardRef(
                               <option value="Mother">Mother</option>
                               <option value="Sister">Sister</option>
                             </select>
-                            {/* {formik.touched.parentInformation?.[index]
-                                ?.relations &&
-                                formik.errors.parentInformation?.[index]
-                                  ?.relations && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {
-                                        formik.errors.parentInformation[index]
-                                          .relations
-                                      }
-                                    </small>
-                                  </div>
-                                )} */}
                             {formik.touched.relations &&
                               formik.errors.relations && (
                                 <div className="text-danger">
@@ -388,34 +298,17 @@ const AddParentDetailModel = forwardRef(
                           <div className="text-start">
                             <label htmlFor="" className="mb-1 fw-medium">
                               <small>Occupation</small>
+                              <span className="text-danger">*</span>
                             </label>
                             <br />
                             <input
                               className="form-control "
                               type="text"
-                              // name={`parentInformation[${index}].occupations`}
                               name="occupations"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              // value={
-                              //   formik.values.parentInformation[index]
-                              //     ?.occupations || ""
-                              // }
                               value={formik.values.occupations}
                             ></input>
-                            {/* {formik.touched.parentInformation?.[index]
-                                ?.occupations &&
-                                formik.errors.parentInformation?.[index]
-                                  ?.occupations && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {
-                                        formik.errors.parentInformation[index]
-                                          .occupations
-                                      }
-                                    </small>
-                                  </div>
-                                )} */}
                             {formik.touched.occupations &&
                               formik.errors.occupations && (
                                 <div className="text-danger">
@@ -432,12 +325,6 @@ const AddParentDetailModel = forwardRef(
                               type="file"
                               name="file"
                               className="form-control"
-                              // onChange={(event) => {
-                              //   formik.setFieldValue(
-                              //     `parentInformation[${index}].file`,
-                              //     event.target.file[0]
-                              //   );
-                              // }}
                               onChange={(event) => {
                                 formik.setFieldValue(
                                   "file",
@@ -463,29 +350,11 @@ const AddParentDetailModel = forwardRef(
                             <input
                               className="form-control "
                               type="tel"
-                              // name={`parentInformation[${index}].mobileNumbers`}
                               name="mobileNumbers"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              // value={
-                              //   formik.values.parentInformation[index]
-                              //     ?.mobileNumbers || ""
-                              // }
                               value={formik.values.mobileNumbers}
                             />
-                            {/* {formik.touched.parentInformation?.[index]
-                                ?.mobileNumbers &&
-                                formik.errors.parentInformation?.[index]
-                                  ?.mobileNumbers && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {
-                                        formik.errors.parentInformation[index]
-                                          .mobileNumbers
-                                      }
-                                    </small>
-                                  </div>
-                                )} */}
                             {formik.touched.mobileNumbers &&
                               formik.errors.mobileNumbers && (
                                 <div className="text-danger">
@@ -502,29 +371,11 @@ const AddParentDetailModel = forwardRef(
                             <input
                               className="form-control "
                               type="tel"
-                              // name={`parentInformation[${index}].postalCodes`}
                               name="postalCodes"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              // value={
-                              //   formik.values.parentInformation[index]
-                              //     ?.postalCodes || ""
-                              // }
                               value={formik.values.postalCodes}
                             />
-                            {/* {formik.touched.parentInformation?.[index]
-                                ?.postalCodes &&
-                                formik.errors.parentInformation?.[index]
-                                  ?.postalCodes && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {
-                                        formik.errors.parentInformation[index]
-                                          .postalCodes
-                                      }
-                                    </small>
-                                  </div>
-                                )} */}
                             {formik.touched.postalCodes &&
                               formik.errors.postalCodes && (
                                 <div className="text-danger">
@@ -546,29 +397,11 @@ const AddParentDetailModel = forwardRef(
                               style={{
                                 height: "7rem",
                               }}
-                              // name={`parentInformation[${index}].addresses`}
                               name="addresses"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
-                              // value={
-                              //   formik.values.parentInformation[index]
-                              //     ?.addresses || ""
-                              // }
                               value={formik.values.addresses}
                             />
-                            {/* {formik.touched.parentInformation?.[index]
-                                ?.addresses &&
-                                formik.errors.parentInformation?.[index]
-                                  ?.addresses && (
-                                  <div className="text-danger">
-                                    <small>
-                                      {
-                                        formik.errors.parentInformation[index]
-                                          ?.addresses
-                                      }
-                                    </small>
-                                  </div>
-                                )} */}
                             {formik.touched.addresses &&
                               formik.errors.addresses && (
                                 <div className="text-danger">
@@ -602,15 +435,8 @@ const AddParentDetailModel = forwardRef(
                       aria-hidden="true"
                     ></span>
                   )}
-                  Save{" "}
+                  Save
                 </Button>
-                {/* <Button
-                type="submit"
-                variant="danger"
-                onSubmit={formik.handleSubmit}
-              >
-                Save
-              </Button> */}
               </Modal.Footer>
             </form>
           </Modal>

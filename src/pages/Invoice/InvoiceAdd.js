@@ -61,9 +61,8 @@ export default function InvoiceAdd() {
   const [taxData, setTaxData] = useState([]);
   const [packageData, setPackageData] = useState(null);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
-  const [schedulesData ,setSchedulesData] = useState([]);
-  console.log("Schedules Data:",schedulesData);
-  
+  const [schedulesData, setSchedulesData] = useState([]);
+  console.log("Schedules Data:", schedulesData);
 
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [lessonsOptions, setLessonsOptions] = useState([]);
@@ -186,17 +185,6 @@ export default function InvoiceAdd() {
       toast.error(error);
     }
   };
-  const fetchsetSchedulesData = async () => {
-    try {
-      const response = await api.get(`/getAllStudentById/${selectedStudentId}`);
-      const schedule = response.data.schedules;
-      console.log("schedule",schedule);
-      
-      setSchedulesData(schedule);
-    } catch (error) {
-      toast.error(error);
-    }
-  };
 
   const fetchCourses = async (centerId) => {
     try {
@@ -236,7 +224,6 @@ export default function InvoiceAdd() {
 
   useEffect(() => {
     fetchCenterData();
-    fetchsetSchedulesData();
     fetchTaxData();
   }, []);
 
@@ -333,7 +320,6 @@ export default function InvoiceAdd() {
       console.error("Error fetching course fees:", error);
     }
   };
-  
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -399,7 +385,10 @@ export default function InvoiceAdd() {
             );
             const weekdayFee = response2.data.weekdayFee || 0;
             const weekendFee = response2.data.weekendFee || 0;
-            console.log("studentCourseDetails Days:",studentCourseDetails.days);
+            console.log(
+              "studentCourseDetails Days:",
+              studentCourseDetails.days
+            );
             const days = studentCourseDetails.days;
             const isWeekend = days === "SATURDAY" || days === "SUNDAY";
             const itemsName = selectedCourse ? selectedCourse.courseNames : "";
@@ -463,7 +452,7 @@ export default function InvoiceAdd() {
           student: formik.values.student,
           course: studentData.studentCourseDetailModels[0].courseId,
           packageId: studentData.studentCourseDetailModels[0].packageName,
-          schedule: studentData.studentCourseDetailModels[0].batch,
+          schedule: studentData.schedules,
           noOfLessons: noOfLessons,
           remark: studentData.remark,
           invoiceDate: formik.values.invoiceDate,
@@ -612,7 +601,7 @@ export default function InvoiceAdd() {
             student: studentID,
             course: studentData.studentCourseDetailModels[0].courseId,
             packageId: studentData.studentCourseDetailModels[0].packageName,
-            schedule: studentData.studentCourseDetailModels[0].batch,
+            schedule: studentData.schedule[0].classCode,
             noOfLessons: "",
             remark: studentData.remark,
             // invoiceDate: "",
@@ -915,13 +904,15 @@ export default function InvoiceAdd() {
                         : ""
                     }`}
                   >
-                    <option selected></option>
-                    {schedulesData &&
-                      schedulesData.map((schedules) => (
+                    <option value="">Select a schedule</option>
+                    {(Array.isArray(schedulesData) ? schedulesData : []).map(
+                      (schedules) => (
                         <option key={schedules.id} value={schedules.classCode}>
-                          {schedules.classCode}/{schedules.className}/{schedules.days}/1
+                          {schedules.classCode}/{schedules.className}/
+                          {schedules.days}/1
                         </option>
-                      ))}
+                      )
+                    )}
                   </select>
                   {formik.touched.schedule && formik.errors.schedule && (
                     <div className="invalid-feedback">

@@ -36,6 +36,11 @@ const AddcourseDetail = forwardRef(
     const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
     console.log("FormData CenterID:", formData);
 
+    const handleDayChange = (e) => {
+      formik.setFieldValue("days", e.target.value); // Update Formik value
+      setAvailableDays([]); // Clear available days
+    };
+
     const columns = useMemo(
       () => [
         {
@@ -524,6 +529,7 @@ const AddcourseDetail = forwardRef(
                       }`}
                       id="days"
                       name="days"
+                      onChange={handleDayChange}
                     >
                       <option value="" disabled selected>
                         Select Day
@@ -652,35 +658,35 @@ const AddcourseDetail = forwardRef(
                       )}
                   </div>
                   {availableDays.length > 0 && (
-                    <div className="col-md-4">
-                      <select
-                        {...formik.getFieldProps("lessonName")}
-                        id="lessonName"
-                        name="lessonName"
-                        className={`form-select  ${
-                          formik.touched.lessonName &&
-                          formik.errors.lessonName
-                            ? "is-invalid"
-                            : ""
-                        }`}
-                      >
-                        <option value="" disabled selected>
-                          Select Lesson Date
-                        </option>
-                        {availableDays.map((day) => (
-                          <option key={day.value} value={day.value}>
-                            {day.label}
+                      <div className="col-md-4">
+                        <select
+                          {...formik.getFieldProps("lessonName")}
+                          id="lessonName"
+                          name="lessonName"
+                          className={`form-select  ${
+                            formik.touched.lessonName &&
+                            formik.errors.lessonName
+                              ? "is-invalid"
+                              : ""
+                          }`}
+                        >
+                          <option value="" disabled selected>
+                            Select Lesson Date
                           </option>
-                        ))}
-                      </select>
-                      {formik.touched.lessonName &&
-                        formik.errors.lessonName && (
-                          <div className="invalid-feedback">
-                            {formik.errors.lessonName}
-                          </div>
-                        )}
-                    </div>
-                  )}
+                          {availableDays.map((day) => (
+                            <option key={day.value} value={day.value}>
+                              {day.label}
+                            </option>
+                          ))}
+                        </select>
+                        {formik.touched.lessonName &&
+                          formik.errors.lessonName && (
+                            <div className="invalid-feedback">
+                              {formik.errors.lessonName}
+                            </div>
+                          )}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
