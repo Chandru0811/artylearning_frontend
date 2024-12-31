@@ -25,7 +25,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
         if (response && response.data.length > 0) {
           setTeacherDetails(response.data);
           setActiveTab(response.data[0]?.batchTime || ""); // Set the first batch as active
-          setReplaceedTeacher(response.data[0]?.details.replacement);
+          setReplaceedTeacher(response.data[0]?.details.isReplacement);
         } else {
           setError("No schedule data found.");
         }
@@ -304,7 +304,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                               <div className="col-7">
                                 <p>
                                   :&nbsp;
-                                  {item.details.replacementRemarks || "--"}
+                                  {item.details.reason || "--"}
                                 </p>
                               </div>
                             </div>
