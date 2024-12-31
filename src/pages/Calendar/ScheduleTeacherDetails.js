@@ -7,8 +7,10 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
   const { teacherId, startDate } = teacherDetail || {};
   const [teacherDetails, setTeacherDetails] = useState([]); // To store API response
   const [activeTab, setActiveTab] = useState(""); // To manage active tab
+  const [replaceedTeacher, setReplaceedTeacher] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(""); // Error state
+  console.log("replaceedTeacher", replaceedTeacher);
 
   useEffect(() => {
     if (!teacherId || !startDate) return; // Prevent API call if data is incomplete
@@ -23,6 +25,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
         if (response && response.data.length > 0) {
           setTeacherDetails(response.data);
           setActiveTab(response.data[0]?.batchTime || ""); // Set the first batch as active
+          setReplaceedTeacher(response.data[0]?.details.replacement);
         } else {
           setError("No schedule data found.");
         }
@@ -228,7 +231,23 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                               <p className="">Teacher</p>
                             </div>
                             <div className="col-7">
-                              <p>:&nbsp;{item.details.teacherName || "--"}</p>
+                              <p className="">
+                                :&nbsp;{item.details.teacherName || "--"}
+                                {replaceedTeacher === true && (
+                                  <span
+                                    className=" p-1"
+                                    style={{
+                                      fontSize: "10px",
+                                      background: "#287f71",
+                                      color: "#fff",
+                                      borderRadius: "5px",
+                                      marginLeft:"3px"
+                                    }}
+                                  >
+                                    ReplaceTeacher
+                                  </span>
+                                )}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -276,6 +295,21 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                             </div>
                           </div>
                         </div>
+                        {replaceedTeacher === true && (
+                          <div className="col-md-6 col-12 mb-2">
+                            <div className="row">
+                              <div className="col-5">
+                                <p className="">replacementRemarks</p>
+                              </div>
+                              <div className="col-7">
+                                <p>
+                                  :&nbsp;
+                                  {item.details.replacementRemarks || "--"}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="row">
                         <div className="col-12 mb-2">

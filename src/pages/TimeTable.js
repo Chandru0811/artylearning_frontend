@@ -298,77 +298,85 @@ function TimeTable() {
   ];
 
   return (
-    <div className="container-fluid my-4 center">
-      <div className="card">
+    <div className="container-fluid my-4">
+      <div className="card shadow-sm">
         <div
-          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          className="card-header d-flex justify-content-between align-items-center"
           style={{ background: "#f5f7f9" }}
         >
-          <div class="d-flex align-items-center">
-            <div class="d-flex">
-              <div class="dot active"></div>
-            </div>
-            <span class="me-2 text-muted">
+          <div className="d-flex align-items-center">
+            <div className="dot bg-success rounded-circle me-2"></div>
+            <span className="text-muted">
               This database shows the list of{" "}
-              <span className="bold" style={{ color: "#287f71" }}>
+              <span className="fw-bold" style={{ color: "#287f71" }}>
                 TimeTable
               </span>
             </span>
           </div>
         </div>
-        {data.map((classData, index) => (
-          <div key={index}>
-            {/* <h5>
-              {classData.className} - {classData.teacherName}
-            </h5> */}
-            <div className="table-responsive">
-              <table className="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col" className="cms-header">Class Name</th>
-                    <th scope="col" className="cms-header">Teacher Name</th>
-                    <th scope="col" className="cms-header">Timing</th>
-                    {Array.from({ length: classData.maxClassSizeofDay }).map(
-                      (_, colIndex) => (
-                        <th key={colIndex} scope="col" className="cms-header">
-                          Student {colIndex + 1}
-                        </th>
-                      )
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {classData.batches.map((batch, batchIndex) => (
-                    <tr key={batchIndex}>
-                      <td className="data-column">{classData.className}</td>
-                      <td className="data-column">{classData.teacherName}</td>
-                      <td className="data-column">
-                        {convertTo12HourFormat(batch.startTime)} -{" "}
-                        {convertTo12HourFormat(batch.endTime)}
-                      </td>
+        <div className="card-body p-2">
+          <h5 className="text-center badges-Green p-1">WEDNESDAY</h5>
+          {data.map((classData, index) => (
+            <div key={index}>
+              <div className="table-responsive">
+                <table className="table table-bordered table-striped border border-info">
+                  <thead className="">
+                    <tr>
+                      <th scope="col" className="text-center fw-normal">
+                        Class Name
+                      </th>
+                      <th scope="col" className="text-center fw-normal">
+                        Teacher Name
+                      </th>
+                      <th scope="col" className="text-center fw-normal">
+                        Timing
+                      </th>
                       {Array.from({ length: classData.maxClassSizeofDay }).map(
-                        (_, studentIndex) => {
+                        (_, colIndex) => (
+                          <th
+                            key={colIndex}
+                            scope="col"
+                            className="text-center fw-normal"
+                          >
+                            Student {colIndex + 1}
+                          </th>
+                        )
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {classData.batches.map((batch, batchIndex) => (
+                      <tr key={batchIndex} className="table-info">
+                        <td className="text-center">{classData.className}</td>
+                        <td className="text-center">{classData.teacherName}</td>
+                        <td className="text-center">
+                          {convertTo12HourFormat(batch.startTime)} -{" "}
+                          {convertTo12HourFormat(batch.endTime)}
+                        </td>
+                        {Array.from({
+                          length: classData.maxClassSizeofDay,
+                        }).map((_, studentIndex) => {
                           const studentName =
                             batch.students[studentIndex]?.studentName;
                           return (
                             <td
                               key={studentIndex}
-                              className={`data-column ${
+                              className={`text-center ${
                                 !studentName ? "orange-background" : ""
                               }`}
                             >
                               {studentName || ""}
                             </td>
                           );
-                        }
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
