@@ -108,7 +108,7 @@ const AddStudentDetails = forwardRef(
         gender: formData.gender || "",
         schoolType: formData.schoolType || "",
         schoolName: formData.schoolName || "",
-        preAssessmentResult: formData.preAssessmentResult || "",
+        preAssessmentResult: "No Assessment Performed" || "",
         race: formData.race || "",
         nationality: formData.nationality || "",
         primaryLanguage: formData.primaryLanguage || "",
@@ -210,7 +210,7 @@ const AddStudentDetails = forwardRef(
     }, [formik.submitCount, formik.errors]);
 
     useEffect(() => {
-      const getData = async () => {
+      const getLeadDate = async () => {
         // console.log(formData.LeadId)
         if (formData.LeadId) {
           try {
@@ -233,7 +233,7 @@ const AddStudentDetails = forwardRef(
               gender: leadData.gender || "",
               schoolType: leadData.schoolType || "",
               schoolName: leadData.nameOfSchool || "",
-              preAssessmentResult: " " || "",
+              preAssessmentResult: leadData.result || "No Assessment Performed",
               race: leadData.ethnicGroup || "",
               nationality: leadData.nationality || "",
               primaryLanguage: leadData.primaryLanguage || "",
@@ -250,7 +250,7 @@ const AddStudentDetails = forwardRef(
           }
         }
       };
-      getData();
+      getLeadDate();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -440,7 +440,6 @@ const AddStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Pre-Assessment Result</small>
-                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
@@ -450,13 +449,8 @@ const AddStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.preAssessmentResult}
+                        readOnly
                       />
-                      {formik.touched.preAssessmentResult &&
-                        formik.errors.preAssessmentResult && (
-                          <div className="error text-danger ">
-                            <small>{formik.errors.preAssessmentResult}</small>
-                          </div>
-                        )}
                     </div>
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">

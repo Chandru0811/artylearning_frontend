@@ -62,20 +62,33 @@ const AddEmergencyContact = forwardRef(
           formDatas.append("emergencyContactName", data.emergencyContactName);
           formDatas.append("emergencyRelation", "Brother");
           formDatas.append("emergencyContactNo", data.emergencyContactNo);
-          data.emergencyContactInformation?.map((contact) => {
-            formDatas.append("name", contact.name);
-            formDatas.append("contactNo", contact.contactNo);
-            formDatas.append("authorizedRelation", contact.authorizedRelation);
-            formDatas.append("postalCode", contact.postalCode);
-            formDatas.append(
-              "emergencyContactAddress",
-              contact.emergencyContactAddress
-            );
-            formDatas.append("files", contact.files);
+          // data.emergencyContactInformation?.map((contact) => {
+          //   formDatas.append("name", contact.name);
+          //   formDatas.append("contactNo", contact.contactNo);
+          //   formDatas.append("authorizedRelation", contact.authorizedRelation);
+          //   formDatas.append("postalCode", contact.postalCode);
+          //   formDatas.append(
+          //     "emergencyContactAddress",
+          //     contact.emergencyContactAddress
+          //   );
+          //   formDatas.append("files", contact.files);
+          //   if (contact.id) {
+          //     formDatas.append("emergencyAuthorizedContactIds", contact.id);
+          //   }
+          // });
+          data.emergencyContactInformation?.map((contact, index) => { 
+            formDatas.append(`name[${index}]`, contact.name);
+            formDatas.append(`contactNo[${index}]`, contact.contactNo);
+            formDatas.append(`authorizedRelation[${index}]`, contact.authorizedRelation);
+            formDatas.append(`postalCode[${index}]`, contact.postalCode);
+            formDatas.append(`emergencyContactAddress[${index}]`, contact.emergencyContactAddress);
+            formDatas.append(`files[${index}]`, contact.files);
+            formDatas.append(`index[${index}]`, index); // Include the index explicitly if needed.
             if (contact.id) {
               formDatas.append("emergencyAuthorizedContactIds", contact.id);
             }
           });
+          
 
           if (data.emergencyContactId) {
             const response = await api.put(
