@@ -17,6 +17,7 @@ function ReplacementAdd({
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const [attendanceDatas, setAttendanceData] = useState([]);
+  const [batchData, setBatchData] = useState([]);
 
   const validationSchema = Yup.object({
     studentName: Yup.string().required("*Student Name is required"),
@@ -30,6 +31,7 @@ function ReplacementAdd({
   const handleClose = () => {
     setShow(false);
     formik.resetForm();
+    setBatchData([]);
   };
 
   const handleShow = () => {
@@ -111,6 +113,61 @@ function ReplacementAdd({
     };
     getData();
   }, []);
+  const fetchBatchandTeacherData = async (day) => {
+    try {
+      const response = await api.get(`getTeacherWithBatchListByDay?day=${day}`);
+      console.log("response.data.batchList",response.data.batchList)
+      setBatchData(response.data.batchList);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (formik.values.preferredDay) {
+      fetchBatchandTeacherData(formik.values.preferredDay);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.preferredDay]);
+
+  const formatTo12Hour = (time) => {
+    const [hours, minutes] = time.split(":");
+    let period = "AM";
+    let hour = parseInt(hours, 10);
+
+    if (hour === 0) {
+      hour = 12;
+    } else if (hour >= 12) {
+      period = "PM";
+      if (hour > 12) hour -= 12;
+    }
+
+    return `${hour}:${minutes} ${period}`;
+  };
+
+  const normalizeTime = (time) => {
+    if (time.includes("AM") || time.includes("PM")) {
+      return time;
+    }
+
+    return formatTo12Hour(time);
+  };
+
+  const convertTo24Hour = (time) => {
+    const [timePart, modifier] = time.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+
+    if (modifier === "PM" && hours < 12) {
+      hours += 12;
+    } else if (modifier === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}`;
+  };
 
   return (
     <>
@@ -239,7 +296,7 @@ function ReplacementAdd({
                     }`}
                     aria-label="Default select example"
                   >
-                    <option selected></option>
+                    <option selected disabled></option>
                     <option value="MONDAY">MONDAY</option>
                     <option value="TUESDAY">TUESDAY</option>
                     <option value="WEDNESDAY">WEDNESDAY</option>
@@ -267,26 +324,20 @@ function ReplacementAdd({
                     }`}
                   >
                     <option value="" disabled selected></option>
-                    {formik.values.preferredDay === "SUNDAY" ||
-                    formik.values.preferredDay === "SATURDAY" ? (
-                      <>
-                        <option value="9:00 am">9:00 am</option>
-                        <option value="10:30 am">10:30 am</option>
-                        <option value="12:00 pm">12:00 pm</option>
-                        <option value="1:30 pm">1:30 pm</option>
-                        <option value="3:00 pm">3:00 pm</option>
-                        <option value="4:30 pm">4:30 pm</option>
-                        <option value="6:00 pm">6:00 pm</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="2:30 pm">2:30 pm</option>
-                        <option value="3:30 pm">3:30 pm</option>
-                        <option value="5:00 pm">5:00 pm</option>
-                        <option value="7:00 pm">7:00 pm</option>
-                        <option value="8:30 pm">8:30 pm</option>
-                      </>
-                    )}
+                    {batchData &&
+                    batchData.map((time) => {
+                      const displayTime = normalizeTime(time);
+                      const valueTime =
+                        time.includes("AM") || time.includes("PM")
+                          ? convertTo24Hour(time)
+                          : time;
+
+                      return (
+                        <option key={time} value={valueTime}>
+                          {displayTime}
+                        </option>
+                      );
+                    })}
                   </select>
                   {formik.touched.preferredTiming &&
                     formik.errors.preferredTiming && (

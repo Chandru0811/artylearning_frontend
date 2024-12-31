@@ -10,7 +10,6 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 
 function Attendances() {
   const [attendanceData, setAttendanceData] = useState([]);
-  console.log("Attendance Data Reload again", attendanceData);
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("");
@@ -18,6 +17,7 @@ function Attendances() {
   const [selectedBatch, setSelectedBatch] = useState("");
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [batchData, setBatchData] = useState(null);
+  const centerLocalId = localStorage.getItem("selectedCenterId");
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -99,7 +99,11 @@ function Attendances() {
       // Set default centerId to the first available center
       if (centerData?.length > 0) {
         const defaultCenterId = centerData[0].id;
-        setSelectedCenter(defaultCenterId);
+        if (centerLocalId !== null && centerLocalId !== "undefined") {
+          setSelectedCenter(centerLocalId);
+        } else if (centerData !== null && centerData.length > 0) {
+          setSelectedCenter(defaultCenterId);
+        }
         // Fetch courses for the default center
         fetchCourses(defaultCenterId);
       }
@@ -155,9 +159,12 @@ function Attendances() {
   };
 
   useEffect(() => {
-    fetchData();
     fetchCentreData();
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedCenter]);
 
   const handleAttendanceChange = (attendanceIndex, studentIndex, value) => {
     const updatedAttendanceData = [...attendanceData];
@@ -248,7 +255,11 @@ function Attendances() {
               <label className="form-lable">
                 Centre<span class="text-danger">*</span>
               </label>
-              <select className="form-select " onChange={handleCenterChange}>
+              <select
+                className="form-select "
+                value={selectedCenter}
+                onChange={handleCenterChange}
+              >
                 {centerData &&
                   centerData.map((center) => (
                     <option key={center.id} value={center.id}>
