@@ -275,7 +275,7 @@ const Staff = () => {
                 name="teacherName"
                 className="form-control form-control-sm center_list"
                 style={{ width: "160px" }}
-                placeholder="Teacher Name"
+                placeholder="Staff Name"
                 value={filters.teacherName}
                 onChange={handleFilterChange}
               />
@@ -301,7 +301,7 @@ const Staff = () => {
                 onChange={handleFilterChange}
               >
                 <option value="" selected>
-                  Select Teacher Type
+                  Select Staff Type
                 </option>
                 <option value="Permanent">Permanent</option>
                 <option value="Temporary">Temporary</option>

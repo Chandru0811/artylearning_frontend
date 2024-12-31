@@ -207,7 +207,7 @@ function TeacherNewView() {
                 </li>
                 <li className="stdList">
                   <b>Country</b>
-                  <span>{data.country || "--"}</span>
+                  <span>{data.countryName || "--"}</span>
                 </li>
                 <li className="stdList">
                   <b>Citizenship</b>
@@ -885,6 +885,12 @@ function TeacherNewView() {
                     data.userContractCreationModels.length > 0 &&
                     data.userContractCreationModels[0].contractDate
                       ? data.userContractCreationModels[0].contractDate.substring(
+                          0,
+                          10
+                        )
+                      : data.userContractCreationModels &&
+                      data.userContractCreationModels.length > 0 && data.userContractCreationModels[0]?.userContractStartDate
+                      ? data.userContractCreationModels[0]?.userContractStartDate.substring(
                           0,
                           10
                         )

@@ -10,6 +10,7 @@ function Header({ onLogout,centerChange }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("email");
+  const selectedCenterId = localStorage.getItem("selectedCenterId");
   const [centerData, setCenterData] = useState(null);
   const [selectedCenter, setSelectedCenter] = useState("");
 
@@ -33,7 +34,10 @@ function Header({ onLogout,centerChange }) {
       try {
         const centerData = await fetchAllCentersWithIds();
         setCenterData(centerData);
-        if (centerData && centerData.length > 0) {
+        if (selectedCenterId !== null && selectedCenterId !== "undefined") {
+          setSelectedCenter(selectedCenterId);
+          localStorage.setItem("selectedCenterId", selectedCenterId);
+        } else if (centerData && centerData.length > 0) {
           setSelectedCenter(centerData[0].id);
           localStorage.setItem("selectedCenterId", centerData[0].id); // Set in localStorage
         }        

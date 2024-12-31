@@ -187,7 +187,7 @@ function StaffNewView() {
                 </li>
                 <li className="stdList">
                   <b>Country</b>
-                  <span>{data.country || "--"}</span>
+                  <span>{data.countryName || "--"}</span>
                 </li>
                 <li className="stdList">
                   <b>Citizenship</b>
