@@ -37,7 +37,7 @@ function StudentRegisterCourse() {
   // const centerIdNO = data.centerId;
   // console.log("Center ID:", centerIdNO);
 
-  const [studentCourseDetailsId, setStudentCourseDetailsId] = useState({});
+  const [studentCourseDetailsId, setStudentCourseDetailsId] = useState(null);
 
   console.log("studentCourseDetailsId", studentCourseDetailsId);
   const [datas, setDatas] = useState({});
@@ -52,6 +52,11 @@ function StudentRegisterCourse() {
   const [searchParams] = useSearchParams();
   const centerId = searchParams.get("centerId");
   const [batchData, setBatchData] = useState(null);
+
+  const handleDayChange = (e) => {
+    formik.setFieldValue("days", e.target.value); 
+    setAvailableDays([]); 
+  };
 
   const columns = useMemo(
     () => [
@@ -366,10 +371,18 @@ function StudentRegisterCourse() {
     const end = new Date(endDate);
     const days = [];
 
-    // Get the numeric representation of the selected day (0 for Sunday, 1 for Monday, etc.)
-    const targetDay = new Date(
-      `${selectedDay}, ${start.toDateString()}`
-    ).getDay();
+    // Mapping selected day string to its corresponding numeric value
+    const dayMapping = {
+      SUNDAY: 0,
+      MONDAY: 1,
+      TUESDAY: 2,
+      WEDNESDAY: 3,
+      THURSDAY: 4,
+      FRIDAY: 5,
+      SATURDAY: 6,
+    };
+
+    const targetDay = dayMapping[selectedDay.toUpperCase()];
 
     for (
       let date = new Date(start);
@@ -578,6 +591,7 @@ function StudentRegisterCourse() {
                   }`}
                   id="days"
                   name="days"
+                  onChange={handleDayChange} 
                 >
                   <option value="" disabled selected>
                     Select Day

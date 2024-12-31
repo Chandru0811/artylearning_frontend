@@ -96,7 +96,6 @@ const AddEmergencyContact = forwardRef(
               toast.error(response.data.message);
             }
           } else {
-            console.log("Making POST request...");
             const response = await api.post(
               `/createEmergencyContactWithEmergencyAuthorizedContact/${formData.student_id}`,
               formDatas,

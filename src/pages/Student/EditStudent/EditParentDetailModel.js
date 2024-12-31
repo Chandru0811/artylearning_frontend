@@ -5,8 +5,7 @@ import api from "../../../config/URL";
 import { toast } from "react-toastify";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { FaEdit } from "react-icons/fa";
-import { data } from "jquery";
+import { CiEdit } from "react-icons/ci";
 
 const validationSchema = Yup.object().shape({
   parentName: Yup.string().required("*Guardian Name is required"),
@@ -109,7 +108,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
       console.error("Error fetching data:", error);
     }
   };
-
+  
   useEffect(() => {
     fetchParentData();
   }, []);
@@ -117,8 +116,8 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <button className="btn">
-          <FaEdit onClick={handleShow} />
+        <button className="btn" type="button">
+          <CiEdit onClick={handleShow} />
         </button>
 
         <Modal
@@ -360,13 +359,6 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                 )}
                 Update
               </button>
-              {/* <Button
-                type="submit"
-                variant="danger"
-               
-              >
-                Update
-              </Button> */}
             </Modal.Footer>
           </form>
         </Modal>

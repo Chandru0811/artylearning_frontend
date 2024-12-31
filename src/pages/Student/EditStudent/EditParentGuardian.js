@@ -8,7 +8,8 @@ import api from "../../../config/URL";
 import EditParentDetailModel from "./EditParentDetailModel";
 import AddParentDetailModel from "./AddParentDetailModel";
 import { GoDotFill } from "react-icons/go";
-import { FaEdit } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
 
 const EditParentGuardian = forwardRef(
   ({ formData, setLoadIndicators, setFormData, handleNext }, ref) => {
@@ -39,6 +40,17 @@ const EditParentGuardian = forwardRef(
     useEffect(() => {
       getData();
     }, []);
+
+    const handleDeleteRow = async (id) => {
+      try {
+        const response = await api.delete(`/deleteStudentParentsDetails/${id}`);
+        if (response.status === 200 || response.status === 201) {
+          getData(); // Refresh the data after successful deletion
+        }
+      } catch (error) {
+        console.error("Error deleting the parent information:", error);
+      }
+    };
 
     useImperativeHandle(ref, () => ({
       editParentGuardian: handleNext,
@@ -110,21 +122,43 @@ const EditParentGuardian = forwardRef(
                           <td>{parent.relation || "-"}</td>
                           <td>{parent.email || "-"}</td>
                           <td>{parent.mobileNumber || "-"}</td>
-                          <td>
-                            {parent.primaryContact ? (
-                              <button
-                                className="btn border-white"
-                                type="button"
-                                disabled
-                              >
-                                <FaEdit className="text-secondary" />
-                              </button>
-                            ) : (
-                              <EditParentDetailModel
-                                id={parent.id}
-                                getData={getData}
-                              />
-                            )}
+                          <td className="center">
+                            <div className="d-flex">
+                              {parent.primaryContact ? (
+                                <button
+                                  className="btn border-white"
+                                  type="button"
+                                  disabled
+                                >
+                                  <CiEdit className="text-secondary" />
+                                </button>
+                              ) : (
+                                <EditParentDetailModel
+                                  id={parent.id}
+                                  getData={getData}
+                                />
+                              )}
+                              {parent.primaryContact ? (
+                                <button
+                                  className="btn"
+                                  type="button"
+                                  style={{ display: "none" }}
+                                >
+                                  <MdDeleteOutline />
+                                </button>
+                              ) : (
+                                <button
+                                  className="btn"
+                                  type="button"
+                                  onClick={() => handleDeleteRow(parent.id)}
+                                >
+                                  <MdDeleteOutline
+                                    id={parent.id}
+                                    getData={getData}
+                                  />
+                                </button>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       ))
