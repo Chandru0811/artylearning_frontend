@@ -62,34 +62,27 @@ const AddEmergencyContact = forwardRef(
           formDatas.append("emergencyContactName", data.emergencyContactName);
           formDatas.append("emergencyRelation", "Brother");
           formDatas.append("emergencyContactNo", data.emergencyContactNo);
-          // data.emergencyContactInformation?.map((contact) => {
-          //   formDatas.append("name", contact.name);
-          //   formDatas.append("contactNo", contact.contactNo);
-          //   formDatas.append("authorizedRelation", contact.authorizedRelation);
-          //   formDatas.append("postalCode", contact.postalCode);
-          //   formDatas.append(
-          //     "emergencyContactAddress",
-          //     contact.emergencyContactAddress
-          //   );
-          //   formDatas.append("files", contact.files);
-          //   if (contact.id) {
-          //     formDatas.append("emergencyAuthorizedContactIds", contact.id);
-          //   }
-          // });
-          data.emergencyContactInformation?.map((contact, index) => { 
+          data.emergencyContactInformation?.map((contact, index) => {
             formDatas.append(`name[${index}]`, contact.name);
             formDatas.append(`contactNo[${index}]`, contact.contactNo);
-            formDatas.append(`authorizedRelation[${index}]`, contact.authorizedRelation);
+            formDatas.append(
+              `authorizedRelation[${index}]`,
+              contact.authorizedRelation
+            );
             formDatas.append(`postalCode[${index}]`, contact.postalCode);
-            formDatas.append(`emergencyContactAddress[${index}]`, contact.emergencyContactAddress);
-            formDatas.append(`files[${index}]`, contact.files);
+            formDatas.append(
+              `emergencyContactAddress[${index}]`,
+              contact.emergencyContactAddress
+            );
+            // Append files only if it's not a URL and not null/empty
+            if (contact.files && !String(contact.files).startsWith("http")) {
+              formDatas.append(`files[${index}]`, contact.files);
+            }
             formDatas.append(`index[${index}]`, index); // Include the index explicitly if needed.
             if (contact.id) {
               formDatas.append("emergencyAuthorizedContactIds", contact.id);
             }
           });
-          
-
           if (data.emergencyContactId) {
             const response = await api.put(
               `/updateEmergencyContactWithEmergencyAuthorizedContact/${data.emergencyContactId}`,
@@ -143,28 +136,28 @@ const AddEmergencyContact = forwardRef(
           const leadData = response.data;
           console.log("Lead Data ", leadData);
           if (!formData.emergencyContactInformation) {
-          formik.setValues({
-            emergencyContactName: leadData.nameOfEmergency || "",
-            emergencyContactNo: leadData.emergencyContact || "",
-            emergencyRelation: leadData.nameOfEmergency || "",
-            emergencyContactInformation: [
+            formik.setValues({
+              emergencyContactName: leadData.nameOfEmergency || "",
+              emergencyContactNo: leadData.emergencyContact || "",
+              emergencyRelation: leadData.nameOfEmergency || "",
+              emergencyContactInformation: [
+                {
+                  name: leadData.nameOfAuthorised || "",
+                  authorizedRelation: leadData.relationToChils || "",
+                  contactNo: leadData.contactOfAuthorised || "",
+                  postalCode: leadData.postalCode || "",
+                  emergencyContactAddress: leadData.address || "",
+                  files: null || "",
+                },
+              ],
+            });
+            // Set rows based on emergencyContactInformation
+            setRows([
               {
-                name: leadData.nameOfAuthorised || "",
-                authorizedRelation: leadData.relationToChils || "",
-                contactNo: leadData.contactOfAuthorised || "",
-                postalCode: leadData.postalCode || "",
-                emergencyContactAddress: leadData.address || "",
-                files: null || "",
+                /* Each object can be empty since it's used to map rows */
               },
-            ],
-          });
-          // Set rows based on emergencyContactInformation
-          setRows([
-            {
-              /* Each object can be empty since it's used to map rows */
-            },
-          ]);
-        }
+            ]);
+          }
         } catch (error) {
           console.error("Error fetching lead data:", error);
           toast.error("Error fetching lead data");
@@ -239,8 +232,10 @@ const AddEmergencyContact = forwardRef(
       if (
         formData.emergencyContactInformation &&
         formData.emergencyContactInformation.length > 0 &&
-        formData.emergencyContactInformation[0].emergencyAuthorizedContactModels &&
-        formData.emergencyContactInformation[0].emergencyAuthorizedContactModels.length > 0
+        formData.emergencyContactInformation[0]
+          .emergencyAuthorizedContactModels &&
+        formData.emergencyContactInformation[0].emergencyAuthorizedContactModels
+          .length > 0
       ) {
         setleadDataTrue(false);
       }
@@ -598,9 +593,9 @@ const AddEmergencyContact = forwardRef(
                         type="button"
                         className="btn btn-danger btn-sm"
                         onClick={() => {
-                          if (row.id){
+                          if (row.id) {
                             handleDeleteRow(index);
-                          }else if(row){
+                          } else if (row) {
                             handleRemoveRow(index);
                           }
                         }}

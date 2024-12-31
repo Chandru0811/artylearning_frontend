@@ -54,18 +54,39 @@ const EditEmergencyContact = forwardRef(
           formDatas.append("emergencyContactName", data.emergencyContactName);
           formDatas.append("emergencyRelation", " ");
           formDatas.append("emergencyContactNo", data.emergencyContactNo);
-          data.emergencyAuthorizedContactModels.forEach((contact) => {
-            formDatas.append("name", contact.name);
-            formDatas.append("contactNo", contact.contactNo);
-            formDatas.append("authorizedRelation", contact.authorizedRelation);
-            formDatas.append("postalCode", contact.postalCode);
+          // as
+          //   formDatas.append("name", contact.name);
+          //   formDatas.append("contactNo", contact.contactNo);
+          //   formDatas.append("authorizedRelation", contact.authorizedRelation);
+          //   formDatas.append("postalCode", contact.postalCode);
+          //   formDatas.append(
+          //     "emergencyContactAddress",
+          //     contact.emergencyContactAddress
+          //   );
+          //   formDatas.append("files", contact.files);
+          // });
+
+          data.emergencyAuthorizedContactModels?.map((contact, index) => {
+            formDatas.append(`name[${index}]`, contact.name);
+            formDatas.append(`contactNo[${index}]`, contact.contactNo);
             formDatas.append(
-              "emergencyContactAddress",
+              `authorizedRelation[${index}]`,
+              contact.authorizedRelation
+            );
+            formDatas.append(`postalCode[${index}]`, contact.postalCode);
+            formDatas.append(
+              `emergencyContactAddress[${index}]`,
               contact.emergencyContactAddress
             );
-            formDatas.append("files", contact.files);
+             // Append files only if it's not a URL and not null/empty
+             if (contact.files && !String(contact.files).startsWith("http")) {
+              formDatas.append(`files[${index}]`, contact.files);
+            }
+            formDatas.append(`index[${index}]`, index);
+            if (contact.id) {
+              formDatas.append("emergencyAuthorizedContactIds", contact.id);
+            }
           });
-
           const response =
             data.emergencyContactId !== null
               ? await api.put(
@@ -400,7 +421,7 @@ const EditEmergencyContact = forwardRef(
                                 }}
                               />
                             ) : (
-                             <></>
+                              <></>
                             )}
                           </div>
                         </div>
