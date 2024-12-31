@@ -81,8 +81,7 @@ const Addrelation = forwardRef(
     });
 
     useEffect(() => {
-      const getData = async () => {
-        // console.log(formData.LeadId)
+      const getLeadDate = async () => {
         if (formData.LeadId) {
           try {
             const response = await api.get(
@@ -102,7 +101,7 @@ const Addrelation = forwardRef(
           }
         }
       };
-      getData();
+      getLeadDate();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

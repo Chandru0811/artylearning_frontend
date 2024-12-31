@@ -26,8 +26,8 @@ function Datatable2() {
     dayData: [],
     labels: [],
   });
-  console.log("chartData",chartData);
-  
+  console.log("chartData", chartData);
+
   const fetchData = async () => {
     try {
       const centerData = await fetchAllCentersWithIds();
@@ -102,7 +102,16 @@ function Datatable2() {
             { name: "Booked Slots", data: bookedSlots },
             { name: "Available Slots", data: availableSlots },
           ],
-          labels: labels,
+          labels: Object.keys(timeData).map((key) => {
+              if (key.toLowerCase() === "total") return key;
+              const [hours, minutes] = key.split(":").map(Number);
+              const period = hours >= 12 ? "PM" : "AM";
+              const formattedHours = hours % 12 || 12;
+              return `${formattedHours}:${String(minutes).padStart(
+                2,
+                "0"
+              )} ${period}`;
+            }),
         });
       }
     } catch (error) {
@@ -141,12 +150,10 @@ function Datatable2() {
       offsetY: 50,
     },
     annotations: {
-      yaxis: []
+      yaxis: [],
     },
   };
-  
-  
-    
+
   return (
     <div className="d-flex flex-column align-items-center justify-content-center Hero">
       <div className="container">
@@ -251,4 +258,3 @@ function Datatable2() {
 }
 
 export default Datatable2;
-

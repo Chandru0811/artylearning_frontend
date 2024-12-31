@@ -37,6 +37,7 @@ const CmsCourses = () => {
   useEffect(() => {
     getAllCourses();
   }, []);
+  
   const columns = useMemo(
     () => [
       {
@@ -287,7 +288,7 @@ const CmsCourses = () => {
               </MenuItem>
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteCoursesSavePublish/${selectedId}`}
+                  path={`/deleteCoursesSave/${selectedId}`}
                   onDeleteSuccess={getAllCourses}
                   onOpen={handleMenuClose}
                 />

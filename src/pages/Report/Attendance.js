@@ -25,6 +25,8 @@ const Attendance = () => {
     return formattedDate;
   };
   const [selectedDate, setSelectedDate] = useState(getCurrentDate());
+  const centerLocalId = localStorage.getItem("selectedCenterId");
+
   const validationSchema = Yup.object({});
 
   const formik = useFormik({
@@ -65,10 +67,13 @@ const Attendance = () => {
     try {
       const centers = await fetchAllCentersWithIds();
       if (centers.length > 0) {
-        const defaultCenterId = centers[0].id; // Set the first center as the default
-        formik.setFieldValue("centerId", defaultCenterId); // Update formik value
+        const defaultCenterId = centers[0].id;
+        if (centerLocalId !== null && centerLocalId !== "undefined") {
+          setCenterData(centerLocalId);
+        } else if (centerData !== null && centerData.length > 0) {
+          setCenterData(defaultCenterId);
+        }
         setCenterData(centers);
-        // Fetch courses for the default center
         await fetchCourses(defaultCenterId);
       } else {
         toast.error("No centers found!");

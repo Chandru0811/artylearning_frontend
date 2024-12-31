@@ -287,10 +287,6 @@ function LeadNewView() {
                       <p className="badge text-bg-primary">primary</p>
                     ) : null}
                   </span>
-                  <li className="stdList pt-0">
-                    <b> Mother's Occupation</b>
-                    <span> {data.mothersOccupation || "--"}</span>
-                  </li>
                   <li className="stdList">
                     <b> Father's Full Name</b>
                     <span> {data.fathersFullName || "--"}</span>
