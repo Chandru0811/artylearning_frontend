@@ -133,7 +133,7 @@ function AbsentReasonAdd({ onSuccess }) {
                   aria-hidden="true"
                 ></span>
               )}
-              submit
+              Submit
             </button>
           </Modal.Footer>
         </form>

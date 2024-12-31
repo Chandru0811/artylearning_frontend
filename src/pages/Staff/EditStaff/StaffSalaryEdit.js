@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
   salary: Yup.number()
     .typeError("*Salary must be a number")
     .positive("*Salary must be a positive number")
-    .notRequired(),
+    .required("*Salary is required"),
 });
 
 const StaffSalaryEdit = forwardRef(
@@ -149,6 +149,7 @@ const StaffSalaryEdit = forwardRef(
             <div class="row">
               <div class="col-md-6 col-12 mb-2 mt-3">
                 <label>Salary</label>
+                <span className="text-danger">*</span>
                 <input
                   type="text"
                   className="form-control"
