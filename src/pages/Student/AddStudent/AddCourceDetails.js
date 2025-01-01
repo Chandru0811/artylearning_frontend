@@ -57,6 +57,7 @@ const AddcourseDetail = forwardRef(
                 type="radio"
                 style={{ cursor: "pointer" }}
                 className="form-check-input pointer"
+                // checked={row.original.id === selectedRow} 
                 name="selectedRow"
                 onClick={() => handleRowSelect(row.original)}
               />
@@ -266,7 +267,7 @@ const AddcourseDetail = forwardRef(
           }
         } catch (error) {
           if (error?.response?.status === 409) {
-            toast.warning(error?.response?.message);
+            toast.warning(error?.response?.data?.message);
           } else {
             toast.error(error?.response?.data?.message);
           }

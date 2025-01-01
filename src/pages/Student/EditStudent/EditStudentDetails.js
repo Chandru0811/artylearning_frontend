@@ -381,7 +381,6 @@ const EditStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className=" fw-medium">
                         <small>Pre-Assessment Result</small>
-                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <input
@@ -391,6 +390,7 @@ const EditStudentDetails = forwardRef(
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.preAssessmentResult}
+                        readOnly
                       />
                       {formik.touched.preAssessmentResult &&
                         formik.errors.preAssessmentResult && (
@@ -402,7 +402,6 @@ const EditStudentDetails = forwardRef(
                     <div className="text-start mt-4">
                       <label htmlFor="" className="mb-1 fw-medium">
                         <small>Nationality</small>
-                        {/* <span className="text-danger">*</span> */}
                       </label>
                       <br />
                       <select
