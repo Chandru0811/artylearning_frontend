@@ -88,6 +88,7 @@ export default function InvoiceAdd() {
       gst: "",
       totalAmount: "",
       createdBy: userName,
+      referralId: "",
       invoiceItems: [
         {
           item: "",
@@ -112,10 +113,11 @@ export default function InvoiceAdd() {
             schedule: values.schedule,
             invoiceDate: values.invoiceDate,
             dueDate: values.dueDate,
-            packageId: values.packageId,
+            packageId: values.packageName,
             noOfLessons: values.noOfLessons,
             invoicePeriodFrom: values.invoicePeriodFrom,
             invoicePeriodTo: values.invoicePeriodTo,
+            referralId: values.referralId,
             gst: parseFloat(values.gst), // Ensure numerical values are parsed correctly
             creditAdviceOffset: parseFloat(values.creditAdviceOffset || 0.0), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
@@ -275,7 +277,7 @@ export default function InvoiceAdd() {
 
       // Find related tax and course details
       const selectedTax = taxData.find(
-        (tax) => parseInt(data.taxType) === tax.id
+        (tax) => parseInt(data.taxTypeId) === tax.id
       );
       const selectedCourse = courseData.find(
         (course) => parseInt(data.courseId) === course.id
@@ -400,7 +402,7 @@ export default function InvoiceAdd() {
             invoiceItems.push({
               item: itemsName,
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-              taxType: response2.data.taxType,
+              taxType: response2.data.taxTypeId,
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
               totalAmount: isNaN(amount) ? 0 : amount,
             });
@@ -431,7 +433,7 @@ export default function InvoiceAdd() {
             invoiceItems.push({
               item: itemsName,
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-              taxType: response3.data.taxType,
+              taxType: response3.data.taxTypeId,
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
               totalAmount: isNaN(amount) ? 0 : amount,
             });
@@ -446,13 +448,14 @@ export default function InvoiceAdd() {
           (pkg) => pkg.id === parseInt(packageId)
         );
         const noOfLessons = selectedPackage ? selectedPackage.noOfLesson : "";
+        setSchedulesData(studentData.schedules);
         formik.setValues({
           center: studentData.centerId || "",
           parent: studentData?.studentParentsDetails[0]?.parentName || "",
           student: formik.values.student,
           course: studentData.studentCourseDetailModels[0].courseId,
           packageId: studentData.studentCourseDetailModels[0].packageName,
-          schedule: studentData.schedules,
+          schedule: studentData?.schedules[0] || "",
           noOfLessons: noOfLessons,
           remark: studentData.remark,
           invoiceDate: formik.values.invoiceDate,
@@ -475,18 +478,18 @@ export default function InvoiceAdd() {
       fetchStudentData();
     }
   }, [courseData, taxData, formik.values.student, packageData]);
-
+  console.log("Formik is ", formik.values);
   useEffect(() => {
     if (studentID) {
       handleStudentChange(studentID);
     }
   }, [studentID]);
 
-  useEffect(() => {
-    if (studentID) {
-      handlePackageChange(studentID);
-    }
-  }, [studentID]);
+  // useEffect(() => {
+  //   if (studentID) {
+  //     handlePackageChange(studentID);
+  //   }
+  // }, [studentID]);
 
   useEffect(() => {
     // Update the lessons dropdown options based on the selected package
@@ -591,8 +594,11 @@ export default function InvoiceAdd() {
           );
           const studentData = response.data;
           const referralAmount = referralDetails.data.overallTotalForFee;
-          // console.log("Student Data:", studentData);
-          console.log("Referral Amount:", referralAmount);
+          const referralIds = referralDetails.data.referralDetails.map(
+            (referral) => referral.id
+          );
+
+          console.log("Referal Id is ", referralIds);
 
           // Uncomment and update this section if you want to set values in a form
           formik.setValues({
@@ -601,13 +607,14 @@ export default function InvoiceAdd() {
             student: studentID,
             course: studentData.studentCourseDetailModels[0].courseId,
             packageId: studentData.studentCourseDetailModels[0].packageName,
-            schedule: studentData.schedule[0].classCode,
+            schedule: studentData?.schedules[0] || "",
             noOfLessons: "",
             remark: studentData.remark,
             // invoiceDate: "",
             // dueDate: "",
             // invoicePeriodTo: "",
             // invoicePeriodFrom: "",
+            referralId: referralIds,
             receiptAmount: "",
             creditAdviceOffset: referralAmount || 0.0,
             gst: "",
@@ -659,7 +666,11 @@ export default function InvoiceAdd() {
           overAllAmount = parseFloat(
             referralDetails.data.overallTotalForFee || 0
           ); // Ensure it's a number
-          console.log("Referral Amount from API(studentID):", overAllAmount);
+          const referralIds = referralDetails.data.referralDetails.map(
+            (referral) => referral.id
+          );
+
+          formik.setFieldValue("referralId", referralIds);
           formik.setFieldValue("creditAdviceOffset", overAllAmount);
         } catch (error) {
           console.error(
@@ -675,11 +686,13 @@ export default function InvoiceAdd() {
           overAllAmount = parseFloat(
             referralDetails.data.overallTotalForFee || 0
           ); // Ensure it's a number
-          console.log(
-            "Referral Amount from API(selectedStudentId):",
-            overAllAmount
+          const referralIds = referralDetails.data.referralDetails.map(
+            (referral) => referral.id
           );
+
+          console.log("Referal Id is ", referralIds);
           formik.setFieldValue("creditAdviceOffset", overAllAmount);
+          formik.setFieldValue("referralId", referralIds);
         } catch (error) {
           console.error(
             "Error fetching referral details. Using fallback overAllAmount:",
@@ -906,10 +919,9 @@ export default function InvoiceAdd() {
                   >
                     <option value="">Select a schedule</option>
                     {(Array.isArray(schedulesData) ? schedulesData : []).map(
-                      (schedules) => (
-                        <option key={schedules.id} value={schedules.classCode}>
-                          {schedules.classCode}/{schedules.className}/
-                          {schedules.days}/1
+                      (schedules, index) => (
+                        <option key={index} value={schedules}>
+                          {schedules}
                         </option>
                       )
                     )}

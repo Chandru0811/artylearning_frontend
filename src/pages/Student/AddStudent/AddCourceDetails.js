@@ -57,7 +57,6 @@ const AddcourseDetail = forwardRef(
                 type="radio"
                 style={{ cursor: "pointer" }}
                 className="form-check-input pointer"
-                checked={row.original.id === selectedRow} 
                 name="selectedRow"
                 onClick={() => handleRowSelect(row.original)}
               />

@@ -290,7 +290,7 @@ function NewDashboard() {
                 <div className="d-flex justify-content-between">
                   <h6 className="card-title">Capacity Status</h6>
                 </div>
-                {datas.productionSalesComparisonReport.progressValues &&
+                {datas?.productionSalesComparisonReport?.progressValues &&
                   datas?.productionSalesComparisonReport?.progressValues.map(
                     (center, index) => (
                       <div key={index}>

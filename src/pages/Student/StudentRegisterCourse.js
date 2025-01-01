@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Link,
   useNavigate,
@@ -228,6 +228,7 @@ function StudentRegisterCourse() {
         studentCount: selectedRowData.studentCount,
         teacher: selectedRowData.teacher,
         userId: selectedRowData.userId,
+        packageName: data.packageName,
       };
       console.log("Payload Data:", payload);
       try {
