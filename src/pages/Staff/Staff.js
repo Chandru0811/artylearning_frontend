@@ -141,7 +141,13 @@ const Staff = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const queryParams = new URLSearchParams(filters).toString();
+      const filteredFilters = Object.fromEntries(
+        Object.entries(filters).filter(
+          ([key, value]) =>
+            value !== "" && value !== null && value !== undefined
+        )
+      );
+      const queryParams = new URLSearchParams(filteredFilters).toString();
       const response = await api.get(
         `/getAllUserListExceptTeacher?${queryParams}`
       );
@@ -406,7 +412,10 @@ const Staff = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/staff/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/staff/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>

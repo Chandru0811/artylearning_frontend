@@ -141,8 +141,16 @@ const Teacher = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const queryParams = new URLSearchParams(filters).toString();
-      const response = await api.get(`/getAllTeachersAndFreelancers?${queryParams}`);
+      const filteredFilters = Object.fromEntries(
+        Object.entries(filters).filter(
+          ([key, value]) =>
+            value !== "" && value !== null && value !== undefined
+        )
+      );
+      const queryParams = new URLSearchParams(filteredFilters).toString();
+      const response = await api.get(
+        `/getAllTeachersAndFreelancers?${queryParams}`
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -397,7 +405,10 @@ const Teacher = () => {
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
             >
-              <MenuItem onClick={() => navigate(`/teacher/edit/${selectedId}`)} className="text-start mb-0 menuitem-style">
+              <MenuItem
+                onClick={() => navigate(`/teacher/edit/${selectedId}`)}
+                className="text-start mb-0 menuitem-style"
+              >
                 Edit
               </MenuItem>
               <MenuItem>
