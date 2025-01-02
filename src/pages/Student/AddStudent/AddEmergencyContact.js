@@ -78,10 +78,10 @@ const AddEmergencyContact = forwardRef(
             if (contact.files && !String(contact.files).startsWith("http")) {
               formDatas.append(`files[${index}]`, contact.files);
             }
-            formDatas.append(`index[${index}]`, index); // Include the index explicitly if needed.
             if (contact.id) {
-              formDatas.append("emergencyAuthorizedContactIds", contact.id);
+              formDatas.append(`emergencyAuthorizedContactIds[${index}]`, contact.id);
             }
+            // formDatas.append(`index[${index}]`, index);
           });
           if (data.emergencyContactId) {
             const response = await api.put(

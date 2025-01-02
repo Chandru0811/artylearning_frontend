@@ -701,7 +701,7 @@ function StudentRegisterCourse() {
                   </option>
                   {packageData &&
                     packageData.map((packages) => (
-                      <option key={packages.id} value={packages.packageNamesas}>
+                      <option key={packages.id} value={packages.id}>
                         {packages.packageNames}
                       </option>
                     ))}
