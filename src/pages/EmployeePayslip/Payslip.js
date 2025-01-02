@@ -249,26 +249,25 @@ function Payslip() {
                           ) : (
                             <p>--</p>
                           )} */}
-                          <p className="d-flex justify-content-between">
-                            <strong>Deduction</strong>
-                            <p>
-                              {data.deductions && data.deductions.length > 0 ? (
-                                data.deductions.map((deduct, index) => (
-                                  <div
-                                    key={index}
-                                    className="d-flex justify-content-between"
-                                  >
-                                    <p>
-                                      <strong>{deduct.detectionName}</strong>
-                                    </p>
-                                    <p>{deduct.amount}</p>
-                                  </div>
-                                ))
-                              ) : (
-                                <p>--</p>
-                              )}
-                            </p>
-                          </p>
+
+                          {data.deductions && data.deductions.length > 0 ? (
+                            data.deductions.map((deduct, index) => (
+                              <p
+                                key={index}
+                                className="d-flex justify-content-between"
+                              >
+                                <p>
+                                  <strong>Deduction </strong>
+                                  <span>({deduct.detectionName})</span>
+                                </p>
+
+                                <p>{deduct.amount}</p>
+                              </p>
+                            ))
+                          ) : (
+                            <p>--</p>
+                          )}
+
                           <p
                             className="d-flex justify-content-between"
                             style={{ visibility: "hidden" }}
