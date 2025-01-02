@@ -53,7 +53,7 @@ const EditStudentRelation = forwardRef(
         studentRelationCenter: formData.studentRelationCenter || "",
         centerId: formData.centerId || "",
         studentRelation: formData.studentRelation || "",
-        StudentRelationStudentName: formData.StudentRelationStudentName || "",
+        studentRelationStudentName: formData.studentRelationStudentName || "",
         studentId: formData.id || "",
         updatedBy: userName,
       },
@@ -75,7 +75,7 @@ const EditStudentRelation = forwardRef(
             const payload = {
               studentRelationCenter: data.studentRelationCenter,
               studentRelation: data.studentRelation,
-              StudentRelationStudentName: data.StudentRelationStudentName,
+              studentRelationStudentName: data.studentRelationStudentName,
               studentId: formData.id,
             };
             const response = await api.post(
@@ -105,7 +105,7 @@ const EditStudentRelation = forwardRef(
             const studentInfo = response.data.studentRelationModels[0];
             formik.setValues({
               studentRelationCenter: studentInfo.studentRelationCenter,
-              StudentRelationStudentName:
+              studentRelationStudentName:
                 studentInfo.studentRelationStudentName,
               studentRelation: studentInfo.studentRelation,
               stdRelationId: studentInfo.id,
@@ -189,18 +189,18 @@ const EditStudentRelation = forwardRef(
                     <div className="col-lg-6 col-md-6 col-12">
                       <div className="text-start">
                         <label
-                          htmlFor="StudentRelationStudentName"
+                          htmlFor="studentRelationStudentName"
                           className="mb-1 fw-medium"
                         >
                           <small>Student Name</small>
                         </label>
                         <select
                           {...formik.getFieldProps(
-                            "StudentRelationStudentName"
+                            "studentRelationStudentName"
                           )}
                           className={`form-select ${
-                            formik.touched.StudentRelationStudentName &&
-                            formik.errors.StudentRelationStudentName
+                            formik.touched.studentRelationStudentName &&
+                            formik.errors.studentRelationStudentName
                               ? "is-invalid"
                               : ""
                           }`}
@@ -214,11 +214,11 @@ const EditStudentRelation = forwardRef(
                               </option>
                             ))}
                         </select>
-                        {formik.touched.StudentRelationStudentName &&
-                          formik.errors.StudentRelationStudentName && (
+                        {formik.touched.studentRelationStudentName &&
+                          formik.errors.studentRelationStudentName && (
                             <div className="text-danger">
                               <small>
-                                {formik.errors.StudentRelationStudentName}
+                                {formik.errors.studentRelationStudentName}
                               </small>
                             </div>
                           )}
