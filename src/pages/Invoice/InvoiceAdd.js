@@ -247,83 +247,134 @@ export default function InvoiceAdd() {
     formik.setFieldValue("student", studentId); // Update Formik field value
   };
 
+  // const handlePackageChange = async (event) => {
+  //   try {
+  //     // Capture the selected packageId from the dropdown change event
+  //     const packageId = event.target.value;
+  //     console.log("Selected Package ID:", packageId);
+  
+  //     // Update formik value for packageId
+  //     formik.setFieldValue("packageId", packageId);
+  
+  //     // Fetch student details to retrieve courseId
+  //     const response1 = await api.get(
+  //       `/getAllStudentById/${formik.values.student}`
+  //     );
+  //     const studentCourseDetails = response1.data.studentCourseDetailModels[0];
+  //     const courseId = studentCourseDetails.courseId;
+  
+  //     if (!courseId) {
+  //       console.error("Course ID is missing!");
+  //       return;
+  //     }
+  
+  //     // Fetch fees data for the selected packageId and courseId
+  //     const response = await api.get(
+  //       `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
+  //     );
+  //     const data = response.data;
+  
+  //     // Dynamically identify the tax and course data
+  //     const selectedTax = taxData.find(
+  //       (tax) => parseInt(data.taxType) === tax.id
+  //     );
+  //     const selectedCourse = courseData.find(
+  //       (course) => parseInt(data.courseId) === course.id
+  //     );
+  
+  //     // Determine fees based on day type
+  //     const isWeekend =
+  //       formik.values.days?.includes("SATURDAY") ||
+  //       formik.values.days?.includes("SUNDAY");
+  //     const fee = isWeekend ? data.weekendFee : data.weekdayFee || 0;
+  
+  //     // Calculate GST and pre-GST amounts
+  //     const gstRate = selectedTax ? selectedTax.rate : 0;
+  //     const gstAmount = (fee * gstRate) / 100 || 0;
+  //     const amountBeforeGST = fee - gstAmount || 0;
+  
+  //     // Add the dynamically retrieved values to invoiceItems
+  //     let invoiceItems = [];
+  //     const invoiceItem = {
+  //       item: "Course Fees",
+  //       itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+  //       taxType: data.taxType || "",
+  //       gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+  //       totalAmount: isNaN(fee) ? 0 : fee,
+  //     };
+  //     invoiceItems.push(invoiceItem);
+  
+  //     console.log("Generated Invoice Item:", invoiceItem);
+  
+  //     // Set invoice items in formik or any related state
+  //     formik.setFieldValue("invoiceItems", invoiceItems);
+  //   } catch (error) {
+  //     console.error("Error processing package change:", error);
+  //   }
+  // };
+  
   const handlePackageChange = async (event) => {
     try {
-      const response1 = await api.get(
-        `/getAllStudentById/${formik.values.student}`
-      );
-      // Get the selected packageId from the event
+      // Capture the selected packageId from the dropdown change event
       const packageId = event.target.value;
       console.log("Selected Package ID:", packageId);
-      let invoiceItems = [];
+  
       // Update formik value for packageId
       formik.setFieldValue("packageId", packageId);
-
+  
+      // Fetch student details to retrieve courseId
+      const response1 = await api.get(`/getAllStudentById/${formik.values.student}`);
       const studentCourseDetails = response1.data.studentCourseDetailModels[0];
       const courseId = studentCourseDetails.courseId;
+  
       if (!courseId) {
         console.error("Course ID is missing!");
         return;
       }
-
-      // Trigger the API call
-      console.log("Fetching data for packageId and courseId...");
+  
+      // Fetch fees data for the selected packageId and courseId
       const response = await api.get(
         `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
       );
-
-      // Extract data from API response
       const data = response.data;
-      console.log("API Response:", data);
-
-      // Find related tax and course details
-      const selectedTax = taxData.find(
-        (tax) => parseInt(data.taxTypeId) === tax.id
-      );
-      const selectedCourse = courseData.find(
-        (course) => parseInt(data.courseId) === course.id
-      );
-
-      // Define fees based on weekday or weekend
+  
+      // Identify tax data for calculation
+      const selectedTax = taxData.find((tax) => parseInt(data.taxType) === tax.id);
+  
+      // Determine fees based on day type
       const isWeekend =
-        formik.values.days?.includes("SATURDAY") ||
-        formik.values.days?.includes("SUNDAY");
+        formik.values.days?.includes("SATURDAY") || formik.values.days?.includes("SUNDAY");
       const fee = isWeekend ? data.weekendFee : data.weekdayFee || 0;
-
-      console.log("Fee based on day type:", fee);
-
-      // Calculate GST amount
+  
+      // Calculate GST and pre-GST amounts
       const gstRate = selectedTax ? selectedTax.rate : 0;
       const gstAmount = (fee * gstRate) / 100 || 0;
       const amountBeforeGST = fee - gstAmount || 0;
-
-      // Log detailed calculations
-      console.log("Selected Tax:", selectedTax);
-      console.log("Selected Course:", selectedCourse);
-      console.log("Amount Details:", {
-        fee,
-        gstRate,
-        gstAmount,
-        amountBeforeGST,
+  
+      // Update only the "Course Fee" item in invoiceItems
+      const updatedInvoiceItems = formik.values.invoiceItems.map((item) => {
+        if (item.item === "Course Fee") {
+          return {
+            ...item,
+            itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+            taxType: data.taxType || "",
+            gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+            totalAmount: isNaN(fee) ? 0 : fee,
+          };
+        }
+        return item; // Leave other items unchanged
       });
-
-      // Add to invoice items
-      const invoiceItem = {
-        item: selectedCourse ? selectedCourse.courseNames : "",
-        itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-        taxType: data.taxType,
-        gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-        totalAmount: isNaN(fee) ? 0 : fee,
-      };
-
-      console.log("Generated Invoice Item:", invoiceItem);
-      invoiceItems.push(invoiceItem);
+  
+      console.log("Updated Invoice Items:", updatedInvoiceItems);
+  
+      // Set the updated invoice items
+      formik.setFieldValue("invoiceItems", updatedInvoiceItems);
     } catch (error) {
-      // Handle any API errors
-      console.error("Error fetching course fees:", error);
+      console.error("Error processing package change:", error);
     }
   };
 
+  
   useEffect(() => {
     const fetchStudentData = async () => {
       if (!formik.values.student) return;
@@ -401,7 +452,7 @@ export default function InvoiceAdd() {
             const amountBeforeGST = amount - gstAmount || 0;
 
             invoiceItems.push({
-              item: itemsName,
+              item: "Course Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
               taxType: response2.data.taxTypeId,
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
@@ -425,14 +476,13 @@ export default function InvoiceAdd() {
             const selectedTax = taxData.find(
               (tax) => parseInt(response3.data.taxType) === tax.id
             );
-            const itemsName = "Deposit Fee";
             const gstRate = selectedTax ? selectedTax.rate : 0;
             const amount = response3.data.depositFees || 0;
             const gstAmount = (amount * gstRate) / 100 || 0;
             const amountBeforeGST = amount - gstAmount || 0;
 
             invoiceItems.push({
-              item: itemsName,
+              item: "Deposit Fee",
               itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
               taxType: response3.data.taxTypeId,
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
@@ -484,18 +534,12 @@ export default function InvoiceAdd() {
       fetchStudentData();
     }
   }, [courseData, taxData, formik.values.student, packageData]);
-  console.log("Formik is ", formik.values);
+
   useEffect(() => {
     if (studentID) {
       handleStudentChange(studentID);
     }
   }, [studentID]);
-
-  // useEffect(() => {
-  //   if (studentID) {
-  //     handlePackageChange(studentID);
-  //   }
-  // }, [studentID]);
 
   useEffect(() => {
     // Update the lessons dropdown options based on the selected package
@@ -1196,6 +1240,7 @@ export default function InvoiceAdd() {
                               }`}
                               type="text"
                               style={{ width: "80%" }}
+                              readOnly={index < 3 && formik.values.invoiceItems[index]?.item}
                             />
                             {formik.touched.invoiceItems?.[index]?.item &&
                               formik.errors.invoiceItems?.[index]?.item && (

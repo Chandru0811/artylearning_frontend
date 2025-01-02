@@ -81,7 +81,7 @@ const AddTermsAndCondition = forwardRef(
             setFormData((prv) => ({ ...prv, ...data }));
             const studentId = formData.student_id;
             navigate(`/invoice/add?studentID=${studentId}`);
-            if(!formData.LeadId){
+            if(formData.LeadId){
               try {
                 const response = await api.put(
                   `/updateLeadInfo/${formData.LeadId}`,

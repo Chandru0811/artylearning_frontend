@@ -46,23 +46,23 @@ const Country = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      {
-        accessorKey: "id",
-        header: "",
-        enableHiding: false,
-        enableSorting: false,
-        size: 20,
-        Cell: ({ cell }) => (
-          <IconButton
-            onClick={(e) => {
-              setMenuAnchor(e.currentTarget);
-              setSelectedId(cell.getValue());
-            }}
-          >
-            <MoreVertIcon />
-          </IconButton>
-        ),
-      },
+      // {
+      //   accessorKey: "id",
+      //   header: "",
+      //   enableHiding: false,
+      //   enableSorting: false,
+      //   size: 20,
+      //   Cell: ({ cell }) => (
+      //     <IconButton
+      //       onClick={(e) => {
+      //         setMenuAnchor(e.currentTarget);
+      //         setSelectedId(cell.getValue());
+      //       }}
+      //     >
+      //       <MoreVertIcon />
+      //     </IconButton>
+      //   ),
+      // },
       {
         accessorKey: "country",
         enableHiding: false,

@@ -1100,6 +1100,10 @@ table.dataTable.display > tbody > tr > th {
   color: #fff !important;
 }
 
+.css-1umw9bq-MuiSvgIcon-root{
+  color: #9f9e9e;
+}
+
 /* table */
 
 .MuiTableBody-root tr td {
