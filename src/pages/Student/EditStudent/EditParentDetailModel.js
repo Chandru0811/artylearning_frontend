@@ -32,9 +32,24 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const userName = localStorage.getItem("userName");
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => {
+  const handleClose = () => {
+    setShow(false);
+    formik.resetForm();
+  };
+  const handleShow = async () => {
     setShow(true);
+    try {
+      const response = await api.get(`/getAllStudentParentsDetailsById/${id}`);
+      const getFormData = {
+        ...response.data,
+        parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10),
+      };
+      formik.setValues(getFormData);
+      setData(response.data);
+      console.log("Student ParentsDetails Data:", getFormData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
     console.log("Id:", id);
   };
 
@@ -50,7 +65,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
       postalCode: "",
       address: "",
     },
-    // validationSchema: validationSchema,
+    validationSchema: validationSchema,
     onSubmit: async (data) => {
       console.log("Api Data:", data);
       setLoadIndicator(true);
@@ -81,7 +96,7 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
         if (response.status === 201) {
           toast.success(response.data.message);
           handleClose();
-          fetchParentData();
+          // fetchParentData();
           getData();
         } else {
           toast.error(response.data.message);
@@ -94,24 +109,13 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
     },
   });
 
-  const fetchParentData = async () => {
-    try {
-      const response = await api.get(`/getAllStudentParentsDetailsById/${id}`);
-      const getFormData = {
-        ...response.data,
-        parentDateOfBirth: response.data.parentDateOfBirth.substring(0, 10),
-      };
-      formik.setValues(getFormData);
-      setData(response.data);
-      console.log("Student ParentsDetails Data:", getFormData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  
-  useEffect(() => {
-    fetchParentData();
-  }, []);
+  // const fetchParentData = async () => {
+
+  // };
+
+  // useEffect(() => {
+  //   fetchParentData();
+  // }, []);
 
   return (
     <div className="container-fluid">

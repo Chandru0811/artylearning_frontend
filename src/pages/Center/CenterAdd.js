@@ -134,8 +134,8 @@ function CenterAdd({handleCenterChanged}) {
         });
         if (response.status === 201) {
           toast.success(response.data.message);
-          navigate("/center");
           handleCenterChanged()
+          navigate("/center");
         } else {
           toast.error(response.data.message);
         }

@@ -396,7 +396,7 @@ const Form5 = forwardRef(
                   )}
               </div> */}
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Preferred Day</label>
+                <label className="form-label">Preferred Day<span className="text-danger">*</span></label>
                 <div>
                   <div className="form-check form-check-inline">
                     <input
@@ -453,7 +453,7 @@ const Form5 = forwardRef(
                 </div>
               </div>
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Preferred Time Slot</label>
+                <label className="form-label">Preferred Time Slot<span className="text-danger">*</span></label>
                 <div>
                   <div className="form-check form-check-inline">
                     <input

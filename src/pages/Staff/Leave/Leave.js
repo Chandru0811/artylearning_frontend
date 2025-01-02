@@ -42,7 +42,7 @@ const Leave = () => {
     setLoading(true);
     try {
       const response = await api.get("/getAllLeaveSetting");
-      setDatas(response.data);
+      setLeaveTypeData(response.data);
       initializeDataTable(); // Reinitialize DataTable after successful data update
     } catch (error) {
       console.error("Error refreshing data:", error);

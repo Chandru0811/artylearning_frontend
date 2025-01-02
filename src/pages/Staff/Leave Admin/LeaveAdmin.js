@@ -272,7 +272,7 @@ const LeaveAdmin = () => {
               <MenuItem>
                 <GlobalDelete
                   path={`/deleteUserLeaveRequest/${selectedId}`}
-                  onDeleteSuccess={getData}
+                  onDeleteSuccess={fetchLeaveType}
                   onOpen={handleMenuClose}
                 />
               </MenuItem>

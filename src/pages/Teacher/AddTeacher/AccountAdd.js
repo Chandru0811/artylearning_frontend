@@ -297,7 +297,7 @@ const AccountAdd = forwardRef(
                 readOnly
               />
             </div>
-            {empRole === "freelancer" && (
+            {/* {empRole === "freelancer" && (
               <div className="col-md-6 col-12 mb-2 mt-3">
                 <label>End Date</label>
                 <input
@@ -310,7 +310,7 @@ const AccountAdd = forwardRef(
                   value={formik.values.endDate}
                 />
               </div>
-            )}
+            )} */}
             <div className="col-lg-6 col-md-6 col-12 mb-2 mt-3">
               <label>
                 Approval Required for photos / videos upload
