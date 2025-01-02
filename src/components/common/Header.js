@@ -15,9 +15,9 @@ function Header({ onLogout,centerChange }) {
   const [selectedCenter, setSelectedCenter] = useState("");
 
   const handleLogOutClick = () => {
-    // Ensure the offcanvas closes and scroll is restored
     document.body.classList.remove("offcanvas-backdrop", "modal-open");
-    document.body.style.overflow = "auto"; // Restore scrolling
+    document.body.style.overflow = "auto"; 
+    document.body.style.paddingRight = '0px';
     onLogout();
     navigate("/login");
   };
