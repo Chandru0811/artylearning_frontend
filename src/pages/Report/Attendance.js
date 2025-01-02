@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import "datatables.net-dt";
 import "datatables.net-responsive-dt";
-import $ from "jquery";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
 import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
@@ -13,7 +12,6 @@ import { Link } from "react-router-dom";
 const Attendance = () => {
   const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [centerData, setCenterData] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const getCurrentDate = () => {
@@ -53,11 +51,9 @@ const Attendance = () => {
         if (response.status === 200) {
           setDatas(response.data);
         } else {
-          // Handle unexpected response status
           toast.error("Unexpected response status: " + response.status);
         }
       } catch (error) {
-        // Handle API call error
         toast.error(error.message || "An error occurred while fetching data");
       }
     },
@@ -112,6 +108,7 @@ const Attendance = () => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -138,7 +135,7 @@ const Attendance = () => {
         onSubmit={formik.handleSubmit}
         onKeyDown={(e) => {
           if (e.key === "Enter" && !formik.isSubmitting) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault();
           }
         }}
       >

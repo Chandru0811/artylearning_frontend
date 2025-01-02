@@ -43,12 +43,12 @@ const Replacement = ({ classId, onOpen }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const { classId, startDate, userId } = values; 
+      const { classId, startDate, userId ,remark} = values; 
       setLoadIndicator(true);
       try {
         // Interpolate query parameters
         const response = await api.put(
-          `doTeacherReplacement?classId=${classId}&startDate=${startDate}&userId=${userId}`,
+          `doTeacherReplacement?classId=${classId}&startDate=${startDate}&userId=${userId}&remark=${remark}`,
           {
             headers: {
               "Content-Type": "application/json",

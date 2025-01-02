@@ -418,8 +418,8 @@ function LeadNewView() {
                     </span>
                   </li>
                   <li className="stdList">
-                    <b> Remarks</b>
-                    <span> {data.remark || "--"}</span>
+                    <b>Remarks</b>
+                    <span className="text-break"> {data.remark || "--"}</span>
                   </li>
                 </ul>
               </div>
@@ -484,7 +484,7 @@ function LeadNewView() {
                         </p>
                         <p className="m-0">
                           <b>Remark</b>
-                          <span>{arrange.remarks || "--"}</span>
+                          <span className="text-break">{arrange.remarks || "--"}</span>
                         </p>
                       </li>
                     </ul>
@@ -626,7 +626,7 @@ function LeadNewView() {
                       </li>
                       <li className="stdList">
                         <b>Remark</b>
-                        <span>
+                        <span className="text-break">
                           {arrangeassesmentData &&
                           arrangeassesmentData.assessmentArrange &&
                           arrangeassesmentData.assessmentArrange.length > 0 &&
@@ -830,8 +830,8 @@ function LeadNewView() {
                       </span>
                     </li>
                     <li className="stdList">
-                      <b> Remark</b>
-                      <span>
+                      <b>Remark</b>
+                      <span className="text-break">
                         {doassesmentData &&
                         doassesmentData.leadDoAssessmentModel &&
                         doassesmentData.leadDoAssessmentModel.length > 0 &&
@@ -911,7 +911,7 @@ function LeadNewView() {
                       <li className="stdList pt-0">
                         <p className="m-0">
                           <b> Remarks</b>
-                          <span>
+                          <span className="text-break">
                             {doassesmentData &&
                             doassesmentData.leadDoAssessmentModel &&
                             doassesmentData.leadDoAssessmentModel.length > 0 &&
@@ -3661,7 +3661,7 @@ function LeadNewView() {
                         <p className="text-sm fw-medium ">Remarks</p>
                       </div>
                       <div className="col-6">
-                        <p className="text-muted text-sm">
+                        <p className="text-muted text-sm text-break">
                           :{" "}
                           {doassesmentData &&
                           doassesmentData.leadDoAssessmentModel &&
@@ -4081,7 +4081,7 @@ function LeadNewView() {
                         <p className="text-sm fw-medium ">Remarks</p>
                       </div>
                       <div className="col-md-9 col-6">
-                        <p className="text-muted text-sm">
+                        <p className="text-muted text-sm text-break">
                           {doassesmentData &&
                           doassesmentData.leadDoAssessmentModel &&
                           doassesmentData.leadDoAssessmentModel.length > 0 &&
@@ -4644,7 +4644,7 @@ function LeadNewView() {
                         <p className="text-sm fw-medium ">Remarks</p>
                       </div>
                       <div className="col-md-9 col-6">
-                        <p className="text-muted text-sm">
+                        <p className="text-muted text-sm text-break">
                           {doassesmentData &&
                           doassesmentData.leadDoAssessmentArtyPursuers &&
                           doassesmentData.leadDoAssessmentArtyPursuers.length >
@@ -4861,7 +4861,7 @@ function LeadNewView() {
                         <p className="text-sm fw-medium ">Remarks</p>
                       </div>
                       <div className="col-md-9 col-6">
-                        <p className="text-muted text-sm">
+                        <p className="text-muted text-sm text-break">
                           {doassesmentData &&
                           doassesmentData.leadDoAssessmentArtyPursuers &&
                           doassesmentData.leadDoAssessmentArtyPursuers.length >
@@ -4909,7 +4909,7 @@ function LeadNewView() {
                         <p className="text-sm fw-medium ">Remarks</p>
                       </div>
                       <div className="col-md-9 col-6">
-                        <p className="text-muted text-sm">
+                        <p className="text-muted text-sm text-break">
                           {doassesmentData &&
                           doassesmentData.leadDoAssessmentModel &&
                           doassesmentData.leadDoAssessmentModel.length > 0 &&

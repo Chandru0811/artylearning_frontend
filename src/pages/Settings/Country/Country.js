@@ -1,12 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FaEye } from "react-icons/fa";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../../../config/URL";
-import Delete from "../../../components/common/Delete";
 import CountryAdd from "./CountryAdd";
 import CountryEdit from "./CountryEdit";
-import { MdViewColumn } from "react-icons/md";
-import { IoIosAddCircle } from "react-icons/io";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import {
   createTheme,
@@ -19,11 +15,8 @@ import { MaterialReactTable } from "material-react-table";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Country = () => {
-  const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
   const [datas, setDatas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [extraData, setExtraData] = useState(false);
-  const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(null);
   const [menuAnchor, setMenuAnchor] = useState(null);
 
@@ -121,30 +114,29 @@ const Country = () => {
           },
         },
       },
-      // Switch (Toggle button) customization
       MuiSwitch: {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0", // Track color when disabled
-              opacity: 1, // Ensures no opacity reduction
+              backgroundColor: "#f5e1d0", 
+              opacity: 1, 
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a", // Thumb (circle) color when disabled
+              color: "#eb862a",
             },
           },
           track: {
-            backgroundColor: "#e0e0e0", // Default track color
+            backgroundColor: "#e0e0e0",
           },
           thumb: {
-            color: "#eb862a", // Default thumb color
+            color: "#eb862a",
           },
           switchBase: {
             "&.Mui-checked": {
-              color: "#eb862a", // Thumb color when checked
+              color: "#eb862a",
             },
             "&.Mui-checked + .MuiSwitch-track": {
-              backgroundColor: "#eb862a", // Track color when checked
+              backgroundColor: "#eb862a",
             },
           },
         },
@@ -191,18 +183,11 @@ const Country = () => {
             </span>
           </div>
         </div>
-        <div className="d-flex justify-content-end align-items-center">
+        {/* <div className="d-flex justify-content-end align-items-center">
           <span>
             <CountryAdd onSuccess={getData} />
           </span>
-          {/* } */}
-          {/* <p>        <button className="btn btn-light border-secondary mx-2" onClick={handleDataShow}>
-
-          {extraData?"Hide":'Show'}
-          <MdViewColumn className="fs-4 text-secondary"/>
-
-        </button> </p> */}
-        </div>
+        </div> */}
         {loading ? (
           <div className="loader-container">
             <div className="loading">
@@ -244,9 +229,9 @@ const Country = () => {
             open={Boolean(menuAnchor)}
             onClose={handleMenuClose}
           >
-            <MenuItem>
+            {/* <MenuItem>
               <CountryEdit onSuccess={getData} id={selectedId} handleMenuClose={handleMenuClose}/>
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem>
               <GlobalDelete
                 path={`/deleteCountrySetting/${selectedId}`}

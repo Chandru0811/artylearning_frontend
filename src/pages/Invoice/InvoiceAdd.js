@@ -9,6 +9,7 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllPackageListByCenter from "../List/PackageListByCenter";
 import fetchAllStudentListByCenter from "../List/StudentListByCenter";
 import fetchAllCentersWithStudentList from "../List/CenterAvailableStudentLidt";
+import { ImCancelCircle } from "react-icons/im";
 
 const invoiceItemSchema = Yup.object().shape({
   item: Yup.string().required("Item name is required"),
@@ -113,7 +114,7 @@ export default function InvoiceAdd() {
             schedule: values.schedule,
             invoiceDate: values.invoiceDate,
             dueDate: values.dueDate,
-            packageId: values.packageName,
+            packageId: values.packageId,
             noOfLessons: values.noOfLessons,
             invoicePeriodFrom: values.invoicePeriodFrom,
             invoicePeriodTo: values.invoicePeriodTo,
@@ -458,8 +459,13 @@ export default function InvoiceAdd() {
           schedule: studentData?.schedules[0] || "",
           noOfLessons: noOfLessons,
           remark: studentData.remark,
-          invoiceDate: formik.values.invoiceDate,
-          dueDate: formik.values.dueDate,
+          invoiceDate:
+            formik.values.invoiceDate || new Date().toISOString().split("T")[0],
+          dueDate:
+            formik.values.dueDate ||
+            new Date(new Date().setMonth(new Date().getMonth() + 1))
+              .toISOString()
+              .split("T")[0],
           invoicePeriodTo: studentCourseDetails.endDate,
           invoicePeriodFrom: studentCourseDetails.startDate,
           receiptAmount: formik.values.receiptAmount,
@@ -1287,13 +1293,13 @@ export default function InvoiceAdd() {
                             />
                           </td>
                           <td>
-                            {index !== 0 && (
+                            {index >=3 && (
                               <button
                                 type="button"
-                                className="btn btn-sm me-2 btn-danger"
+                                className="btn btn-white border-white"
                                 onClick={() => handleRowDelete(index)}
                               >
-                                Delete
+                                <ImCancelCircle className="fs-6 fw-mideum text-danger" />
                               </button>
                             )}
                           </td>
