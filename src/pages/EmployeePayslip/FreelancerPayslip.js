@@ -32,29 +32,11 @@ const FreelancerPayslip = () => {
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
         ),
       },
-      {
-        accessorKey: "id",
-        header: "",
-        enableHiding: false,
-        enableSorting: false,
-        size: 20,
-        Cell: ({ cell }) => (
-          <IconButton
-            onClick={(e) => {
-              e.stopPropagation();
-              setMenuAnchor(e.currentTarget);
-              setSelectedId(cell.getValue());
-            }}
-          >
-            <MoreVertIcon />
-          </IconButton>
-        ),
-      },
-      { accessorKey: "centerNames", enableHiding: false, header: "Centre Name" },
+      { accessorKey: "centerName", enableHiding: false, header: "Centre Name" },
       {
         accessorKey: "employeeName",
         enableHiding: false,
-        header: "Emplopee Name",
+        header: "Employee Name",
       },
       {
         accessorKey: "netPay",

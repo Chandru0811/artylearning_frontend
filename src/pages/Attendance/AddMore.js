@@ -205,6 +205,7 @@ function AddMore({
                         {...formik.getFieldProps(
                           `items[${index}].curriculumCode`
                         )}
+                        readOnly
                       />
                       {formik.touched.items?.[index]?.curriculumCode &&
                       formik.errors.items?.[index]?.curriculumCode ? (
