@@ -62,91 +62,6 @@ const EditTermsAndCondition = forwardRef(
         updatedBy: userName,
       },
       validationSchema: validationSchema,
-      //   onSubmit: async (data) => {
-      //     setLoadIndicators(true);
-      //     try {
-      //       if (data.stdTermsAndConditionId !== null) {
-      //         const formDatas = new FormData();
-
-      //         // Generate a random number
-      //         const randomNumber = Math.floor(Math.random() * 100000);
-
-      //         // Convert URL to Blob
-      //         const apiResponse = await fetch(url);
-      //         const blob = await apiResponse.blob();
-      //         formDatas.append(
-      //           "file",
-      //           blob,
-      //           `${randomNumber}Signature.png` || null
-      //         );
-      //         formDatas.append(
-      //           "termsAndConditionSignatureDate",
-      //           data.termsAndConditionSignatureDate
-      //         );
-      //         formDatas.append("agree", data.agree);
-      //         formDatas.append(
-      //           "studentTermsAndConditionId",
-      //           data.stdTermsAndConditionId
-      //         );
-      //         const response = await api.put(
-      //           `/updateStudentTermsAndConditions/${data.stdTermsAndConditionId}`,
-      //           formDatas,
-      //           {
-      //             headers: {
-      //               "Content-Type": "multipart/form-data",
-      //             },
-      //           }
-      //         );
-      //         if (response.status === 200) {
-      //           toast.success(response.data.message);
-      //           navigate("/student");
-      //           // window.location.reload();
-      //         } else {
-      //           toast.error(response.data.message);
-      //         }
-      //       } else {
-      //         const formDatas = new FormData();
-      //         // Generate a random number
-      //         const randomNumber = Math.floor(Math.random() * 1000);
-      //         // Convert URL to Blob
-      //         const apiResponse = await fetch(url);
-      //         const blob = await apiResponse.blob();
-      //         formDatas.append("file", blob, `${randomNumber}Signature.png`);
-      //         formDatas.append("agree", data.agree);
-      //         formDatas.append(
-      //           "termsAndConditionSignatureDate",
-      //           data.termsAndConditionSignatureDate
-      //         );
-      //         formDatas.append("studentDetailId", formData.id);
-      //         const response = await api.post(
-      //           `/createStudentTermsAndConditions`,
-      //           formDatas,
-      //           {
-      //             headers: {
-      //               "Content-Type": "multipart/form-data",
-      //             },
-      //           }
-      //         );
-      //         if (response.status === 201) {
-      //           toast.success(response.data.message);
-      //           setFormData((prv) => ({ ...prv, ...data }));
-      //           navigate("/student");
-      //         } else {
-      //           toast.error(response.data.message);
-      //         }
-      //       }
-      //     } catch (error) {
-      //       toast.error(error);
-      //     } finally {
-      //       setLoadIndicators(false);
-      //     }
-      //   },
-      //   validateOnChange: false, // Enable validation on change
-      //   validateOnBlur: true, // Enable validation on blur
-      // });
-
-      // Function to scroll to the first error field
-
       onSubmit: async (data) => {
         setLoadIndicators(true);
         try {
@@ -166,7 +81,7 @@ const EditTermsAndCondition = forwardRef(
               data.stdTermsAndConditionId
             );
 
-            if (isEditing) {
+            if (!isEditing) {
               // Append the signature only if it was edited
               const randomNumber = Math.floor(Math.random() * 100000);
               const apiResponse = await fetch(url);

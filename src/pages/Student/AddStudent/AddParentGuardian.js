@@ -280,7 +280,7 @@ const AddParentGuardian = forwardRef(
                 mobileNumber: leadData.mothersMobileNumber || "",
                 address: leadData.address,
                 postalCode: leadData.postalCode || "",
-                primaryContact: primaryContactMother,
+                primaryContact: leadData.primaryContactMother === true,
               },
               {
                 parentName: leadData.fathersFullName || "",
@@ -293,9 +293,16 @@ const AddParentGuardian = forwardRef(
                 mobileNumber: leadData.fathersMobileNumber || "",
                 address: leadData.address || "",
                 postalCode: leadData.postalCode || "",
-                primaryContact: primaryContactFather,
+                primaryContact: leadData.primaryContactFather === true,
               },
             ]);
+
+            const selectedContactIndex = leadData.primaryContactMother
+            ? 0
+            : leadData.primaryContactFather
+            ? 1
+            : null;
+          setSelectedPrimaryContactIndex(selectedContactIndex);
             setRows(2);
           }
         } catch (error) {
@@ -411,30 +418,51 @@ const AddParentGuardian = forwardRef(
                     className="form-check-input ms-3"
                     name={`parentInformation[${index}].primaryContact`}
                     checked={selectedPrimaryContactIndex === index}
+                    // onChange={(e) => {
+                    //   const isChecked = e.target.checked;
+                    //   const newIndex = isChecked ? index : null;
+
+                    //   // Update the selected row's primaryContact field
+                    //   formik.setFieldValue(
+                    //     `parentInformation[${index}].primaryContact`,
+                    //     isChecked ? true : false
+                    //   );
+
+                    //   // Deselect the previously selected row if a new one is checked
+                    //   if (
+                    //     isChecked &&
+                    //     selectedPrimaryContactIndex !== null &&
+                    //     selectedPrimaryContactIndex !== index
+                    //   ) {
+                    //     formik.setFieldValue(
+                    //       `parentInformation[${selectedPrimaryContactIndex}].primaryContact`,
+                    //       false
+                    //     );
+                    //   }
+
+                    //   // Update the selectedPrimaryContactIndex
+                    //   setSelectedPrimaryContactIndex(newIndex);
+                    // }}
                     onChange={(e) => {
                       const isChecked = e.target.checked;
-                      const newIndex = isChecked ? index : null;
-
-                      // Update the selected row's primaryContact field
-                      formik.setFieldValue(
-                        `parentInformation[${index}].primaryContact`,
-                        isChecked ? true : false
-                      );
-
-                      // Deselect the previously selected row if a new one is checked
-                      if (
-                        isChecked &&
-                        selectedPrimaryContactIndex !== null &&
-                        selectedPrimaryContactIndex !== index
-                      ) {
+          
+                      if (isChecked) {
+                        // Set the clicked row as the primary contact
                         formik.setFieldValue(
-                          `parentInformation[${selectedPrimaryContactIndex}].primaryContact`,
-                          false
+                          `parentInformation[${index}].primaryContact`,
+                          true
                         );
+          
+                        // Deselect all other rows' primaryContact fields
+                        formik.values.parentInformation.forEach((_, i) => {
+                          if (i !== index) {
+                            formik.setFieldValue(`parentInformation[${i}].primaryContact`, false);
+                          }
+                        });
+          
+                        // Update the selected index
+                        setSelectedPrimaryContactIndex(index);
                       }
-
-                      // Update the selectedPrimaryContactIndex
-                      setSelectedPrimaryContactIndex(newIndex);
                     }}
                   />
                   {formik.errors.parentInformation?.[index]?.primaryContact && (
