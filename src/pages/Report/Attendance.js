@@ -70,11 +70,12 @@ const Attendance = () => {
         const defaultCenterId = centers[0].id;
         if (centerLocalId !== null && centerLocalId !== "undefined") {
           formik.setFieldValue("centerId", centerLocalId);
+          await fetchCourses(centerLocalId);
         } else if (centerData !== null && centerData.length > 0) {
           formik.setFieldValue("centerId", defaultCenterId);
+          await fetchCourses(defaultCenterId);
         }
         setCenterData(centers);
-        await fetchCourses(defaultCenterId);
       } else {
         toast.error("No centers found!");
       }
