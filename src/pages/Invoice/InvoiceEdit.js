@@ -601,23 +601,24 @@ export default function InvoiceEdit() {
                     Schedule
                   </label>
                   <br />
-                  <select
+                  <input
                     name="schedule"
                     {...formik.getFieldProps("schedule")}
-                    className={`form-select ${
+                    className={`form-control ${
                       formik.touched.schedule && formik.errors.schedule
                         ? "is-invalid"
                         : ""
                     }`}
-                  >
-                    <option value=""></option>
+                    readOnly
+                  />
+                    {/* <option value=""></option>
                     <option value="2:30 pm">2:30 pm</option>
                     <option value="3:30 pm">3:30 pm</option>
                     <option value="5:00 pm">5:00 pm</option>
                     <option value="7:00 pm">7:00 pm</option>
                     <option value="12:00 pm">12:00 pm</option>
-                    <option value="1:00 pm">1:00 pm</option>
-                  </select>
+                    <option value="1:00 pm">1:00 pm</option> */}
+                  {/* </input> */}
                   {formik.touched.schedule && formik.errors.schedule && (
                     <div className="invalid-feedback">
                       {formik.errors.schedule}

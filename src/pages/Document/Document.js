@@ -131,6 +131,16 @@ const Document = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      // const queryParams = new URLSearchParams();
+      // for (let key in filters) {
+      //   if (filters[key]) {
+      //     queryParams.append(key, filters[key]);
+      //   }
+      // }
+
+      // const response = await api.get(
+      //   `/getClassWithCustomInfo?${queryParams.toString()}`
+      // );
       const response = await api.get("/getAllDocumentFolder");
       setData(response.data);
     } catch (error) {
