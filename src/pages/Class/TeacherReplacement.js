@@ -10,7 +10,8 @@ import Button from "@mui/material/Button";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
+import getAvailableTeachersWithExclusion from "../List/getAvailableTeachersWithExclusion";
+import { error } from "jquery";
 
 const validationSchema = Yup.object({
   classId: Yup.string().required("*Class Name is required"),
@@ -22,6 +23,9 @@ const Replacement = ({ classId, onOpen }) => {
   const [open, setOpen] = useState(false);
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [classData, setClassData] = useState({});
+  const [centerID, setCenterId] = useState({});
+  console.log("CenterID:",centerID);
+  console.log("ClassID:",classId);
   const [teacherData, setTeacherData] = useState([]);
   const [availableDays, setAvailableDays] = useState([]);
 
@@ -43,7 +47,7 @@ const Replacement = ({ classId, onOpen }) => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const { classId, startDate, userId ,remark} = values; 
+      const { classId, startDate, userId, remark } = values;
       setLoadIndicator(true);
       try {
         // Interpolate query parameters
@@ -55,7 +59,7 @@ const Replacement = ({ classId, onOpen }) => {
             },
           }
         );
-        
+
         if (response.status === 200) {
           handleClose();
           toast.success(response.data.message);
@@ -70,7 +74,6 @@ const Replacement = ({ classId, onOpen }) => {
     },
     enableReinitialize: true,
   });
-  
 
   const handleRowSelect = (data = classData) => {
     if (data.startDate && data.endDate) {
@@ -114,35 +117,64 @@ const Replacement = ({ classId, onOpen }) => {
     return days;
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
+  // const fetchAvailableTeachersWithExclusion = async () => {
+  //   try {
+  //     const { startDate } = formik.values.startDate;
+  //     if (centerID && classId && startDate) {
+  //       const response = await api.get(
+  //         `getAvailableTeachersWithExclusion/${centerID}?classId=${classId}&startDate=${startDate}`
+  //       );
+  //       setTeacherData(response.data);
+  //       console.log("List Teacher:",response.data);
+  //     } else {
+  //       toast.error(error);
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error fetching teacher data.");
+  //     console.error(error);
+  //   }
+  // };
+  
+  const fetchAvailableTeachersWithExclusion = async (selectedDate) => {
+    try {
+      const startDate = selectedDate || formik.values.startDate; 
+      if (centerID && classId && startDate) {
         const response = await api.get(
-          `/getAllCourseClassListingsById/${classId}`
+          `getAvailableTeachersWithExclusion/${centerID}?classId=${classId}&startDate=${startDate}`
         );
-        if (response.status === 200) {
-          setClassData(response.data);
-          handleRowSelect(response.data);
-          formik.setFieldValue("className", classData.className);
-          formik.setFieldValue("classId", classData.id);
-        }
-      } catch (error) {
-        console.error("Error fetching data ", error);
+        setTeacherData(response.data);
+        console.log("Fetched Teachers:", response.data);
+      } else {
+        toast.error("Missing necessary parameters.");
       }
-    };
-    const fetchBatchandTeacherData = async () => {
-      try {
-        const response = await fetchAllTeacherListByCenter(classData.centerId);
-        setTeacherData(response);
-      } catch (error) {
-        toast.error(error.message);
-      }
-    };
-    if (classData.centerId) {
-      fetchBatchandTeacherData();
+    } catch (error) {
+      toast.error("Error fetching teacher data.");
+      console.error(error);
     }
-    getData();
-  }, [classId, open]);
+  };
+
+  
+  const getCourseClassLData = async () => {
+    try {
+      const response = await api.get(
+        `/getAllCourseClassListingsById/${classId}`
+      );
+      if (response.status === 200) {
+        setClassData(response.data);
+        handleRowSelect(response.data);
+        setCenterId(response.data.centerId);
+        formik.setFieldValue("className", classData.className);
+        formik.setFieldValue("classId", classData.id);
+      }
+    } catch (error) {
+      console.error("Error fetching data ", error);
+    }
+  };
+
+  useEffect(() => {
+    // fetchAvailableTeachersWithExclusion();
+    getCourseClassLData();
+  }, [open]);
 
   return (
     <div>
@@ -190,6 +222,10 @@ const Replacement = ({ classId, onOpen }) => {
                         : ""
                     }`}
                     {...formik.getFieldProps("startDate")}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                      fetchAvailableTeachersWithExclusion(e.target.value); // Call API with selected date
+                    }}
                   >
                     <option value=""></option>
                     {availableDays?.map((data, i) => (
@@ -217,7 +253,7 @@ const Replacement = ({ classId, onOpen }) => {
                   >
                     <option value=""></option>
                     {teacherData?.map((data, i) => (
-                      <option value={data.id}>{data.teacherNames}</option>
+                      <option value={data.id}>{data.teacherName}</option>
                     ))}
                   </select>
                   {formik.touched.userId && formik.errors.userId && (
@@ -229,7 +265,7 @@ const Replacement = ({ classId, onOpen }) => {
                 <div className="col-md-6 col-12 mb-2">
                   <label className="form-label">Remark</label>
                   <textarea
-                  rows={5}
+                    rows={5}
                     onKeyDown={(e) => e.stopPropagation()}
                     className={`form-control ${
                       formik.touched.remark && formik.errors.remark

@@ -88,6 +88,7 @@ export default function InvoiceAdd() {
       creditAdviceOffset: "" || 0.0,
       gst: "",
       totalAmount: "",
+      invoiceStatus:"PENDING",
       createdBy: userName,
       referralId: "",
       invoiceItems: [
@@ -123,6 +124,7 @@ export default function InvoiceAdd() {
             creditAdviceOffset: parseFloat(values.creditAdviceOffset || 0.0), // Ensure numerical values are parsed correctly
             totalAmount: parseFloat(values.totalAmount), // Ensure numerical values are parsed correctly
             remark: values.remark,
+            invoiceStatus:"PENDING",
             createdBy: userName,
             receiptAmount: parseFloat(values.receiptAmount), // Ensure numerical values are parsed correctly
           },

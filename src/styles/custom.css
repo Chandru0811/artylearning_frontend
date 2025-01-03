@@ -1101,7 +1101,7 @@ table.dataTable.display > tbody > tr > th {
 }
 
 .css-1umw9bq-MuiSvgIcon-root{
-  color: #9f9e9e;
+  color: #9f9e9e !important;
 }
 
 /* table */
