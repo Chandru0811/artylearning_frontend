@@ -100,10 +100,12 @@ function Attendances() {
         const defaultCenterId = centerData[0].id;
         if (centerLocalId !== null && centerLocalId !== "undefined") {
           setSelectedCenter(centerLocalId);
+          fetchCourses(centerLocalId);
+
         } else if (centerData !== null && centerData.length > 0) {
           setSelectedCenter(defaultCenterId);
+          fetchCourses(defaultCenterId);
         }
-        fetchCourses(defaultCenterId);
       }
     } catch (error) {
       toast.error(error.message || "Error fetching centers.");
@@ -160,9 +162,9 @@ function Attendances() {
     fetchCentreData();
   }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [selectedCenter]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [selectedCenter]);
 
   const handleAttendanceChange = (attendanceIndex, studentIndex, value) => {
     const updatedAttendanceData = [...attendanceData];

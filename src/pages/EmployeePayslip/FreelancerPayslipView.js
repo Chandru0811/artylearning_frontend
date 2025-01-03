@@ -177,8 +177,15 @@ pdf.text(String(data.netPay || ""), amountColumnX + 5, tableStartY + 7); // Tabl
                       className="img-fluid"
                     />
                   </div>
-                  <div className="col-md-8 col-12 mt-4">
+                  <div className="col-md-6 col-12 mt-4">
                     <h5 className="ms-5">{data.centerName}</h5>
+                  </div>
+                  <div className="col-md-2 col-12 mt-4">
+                    <Link to={'/freelancerPayslip'}>
+                    <button className="btn btn-border bt-sm">
+                      Back
+                    </button>
+                    </Link>
                   </div>
                 </div>
                 <div className="row mt-2">

@@ -73,11 +73,6 @@ function StaffEdit() {
           childRef.current.staffRequireEdit();
         }
         break;
-      // case "4":
-      //   if (childRef.current) {
-      //     childRef.current.staffLoginEdit();
-      //   }
-      //   break;
       case "4":
         if (childRef.current) {
           childRef.current.staffSalaryEdit();
@@ -208,17 +203,6 @@ function StaffEdit() {
                 setLoadIndicators={setLoadIndicator}
               />
             )}
-
-            {/* {activeStep === 4 && (
-              <StaffLoginEdit
-                formData={formData}
-                ref={childRef}
-                setFormData={setFormData}
-                handleNext={handleNext}
-                setLoadIndicators={setLoadIndicator}
-              />
-            )} */}
-
             {activeStep === 4 && (
               <StaffSalaryEdit
                 formData={formData}
@@ -249,7 +233,7 @@ function StaffEdit() {
             )}
 
             <div className="container-fluid p-1 d-flex align-items-center justify-content-center">
-              {activeStep > 1 && (
+              {activeStep > 0 && (
                 <button
                   className="btn btn-border btn-sm"
                   style={{ padding: "7px" }}

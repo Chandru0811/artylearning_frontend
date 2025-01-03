@@ -124,7 +124,7 @@ const Replacement = ({ classId, onOpen }) => {
         setTeacherData(response.data);
         console.log("Fetched Teachers:", response.data);
       } else {
-        toast.error("Missing necessary parameters.");
+        toast.error("Missing necessary parameters."); 
       }
     } catch (error) {
       toast.error("Error fetching teacher data.");

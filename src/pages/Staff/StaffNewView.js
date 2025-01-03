@@ -600,6 +600,16 @@ function StaffNewView() {
                       </span>
                     </p>
                     <p className="m-0">
+                      <b>Carry Forward Leave</b>
+                      <span>
+                        {data.userLeaveCreationModels &&
+                        data.userLeaveCreationModels.length > 0 &&
+                        data.userLeaveCreationModels[0].carryForwardLeave
+                          ? data.userLeaveCreationModels[0].carryForwardLeave
+                          : "--"}
+                      </span>
+                    </p>
+                    <p className="m-0">
                       <b>Other Leave</b>
                       <span>
                         {data.userLeaveCreationModels &&

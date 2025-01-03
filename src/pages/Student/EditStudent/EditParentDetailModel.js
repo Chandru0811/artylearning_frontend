@@ -219,18 +219,34 @@ const EditParentDetailModel = forwardRef(({ id, getData }) => {
                       formik.setFieldValue("file", event.target.files[0]);
                     }}
                     onBlur={formik.handleBlur}
+                    accept=".jpg, .jpeg, .png, .gif, .bmp"
                   />
-                  <div className="my-2 text-center">
-                    <img
-                      src={data.profileImage}
-                      className="img-fluid rounded"
+                  <div className="my-2">
+                    {data.profileImage ? (
+                      <img
+                        src={data.profileImage}
+                        className="img-fluid rounded"
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                        alt="Profile"
+                      />
+                    ) : (
+                      <div
                       style={{
                         width: "100px",
                         height: "100px",
-                        objectFit: "cover",
+                        backgroundColor: "#e0e0e0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
-                      alt=" "
-                    ></img>
+                    >
+                      No Image
+                    </div>
+                    )}
                   </div>
                 </div>
                 <div className="col-md-6 col-12 mb-2">

@@ -67,7 +67,7 @@ const EditEmergencyContact = forwardRef(
             formDatas.append(`contactNo[${index}]`, contact.contactNo);
             formDatas.append(
               `authorizedRelation[${index}]`,
-              contact.authorizedRelation
+              contact.authorizedRelation || ""
             );
             formDatas.append(`postalCode[${index}]`, contact.postalCode);
             formDatas.append(

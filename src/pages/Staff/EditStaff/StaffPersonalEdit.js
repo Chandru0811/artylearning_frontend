@@ -39,7 +39,6 @@ const StaffPersonalEdit = forwardRef(
         idNo: formData.idNo || "",
         photo: formData.photo || "",
         employeeType: null || null,
-        nationality: formData.nationality || "",
         citizenship: formData.citizenship || "",
         age: 0,
         shortIntroduction: formData.shortIntroduction || "",
@@ -62,7 +61,7 @@ const StaffPersonalEdit = forwardRef(
           nationalityName = nationalityData.find(
             (prv) => prv.id === parseInt(data.nationalityId)
           );
-        data.nationality = nationalityName.citizenship;
+        data.nationality = nationalityName.nationality;
 
         try {
           const response = await api.put(
@@ -325,15 +324,6 @@ const StaffPersonalEdit = forwardRef(
                   <option value="1st Year PR">1st Year PR</option>
                   <option value="2nd Year PR">2nd Year PR</option>
                   <option value="3rd Year PR">3rd Year PR</option>
-                  {/* {nationalityData &&
-                  nationalityData.map((citizenship) => (
-                    <option
-                      key={citizenship.id}
-                      value={citizenship.citizenship}
-                    >
-                      {citizenship.citizenship}
-                    </option>
-                  ))} */}
                 </select>
                 {formik.touched.citizenship && formik.errors.citizenship && (
                   <div className="error text-danger">

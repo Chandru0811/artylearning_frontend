@@ -40,7 +40,8 @@ const Attendance = () => {
         centerId: values.centerId,
         courseId: values.courseId,
         attendanceDate: selectedDate,
-        attendanceStatus: values.attendanceStatus,
+        // attendanceStatus: values.attendanceStatus,
+        ...(values.attendanceStatus && { attendanceStatus: values.attendanceStatus }), // Add only if attendanceStatus is selected
       };
       console.log("Payload:", payload);
       try {

@@ -15,7 +15,7 @@ const validationSchema = Yup.object({
   center: Yup.string().required("*Centre is required"),
   course: Yup.string().required("*Course is required"),
   userId: Yup.string().required("*Teacher is required"),
-  days: Yup.string().required("*Days is required"),
+  day: Yup.string().required("*Days is required"),
   batchTime: Yup.string().required("*Batch Time is required"),
   classListing: Yup.string().required("*Class Listing is required"),
   folderCategoryListing: Yup.string().required("*FolderCategory is required"),
@@ -42,7 +42,7 @@ function DocumentAdd() {
       userId: "",
       classListing: "",
       date: "",
-      days: "",
+      day: "",
       expiredDate: "",
       folderCategoryListing: "group",
       batchTime: "",
@@ -82,7 +82,7 @@ function DocumentAdd() {
         let requestBody = {
           centerId: values.center,
           userId: values.userId,
-          days: values.days,
+          day: values.day,
           center: selectedOptionName,
           classListing: selectedClassName,
           course: selectedCourseName,
@@ -236,11 +236,11 @@ function DocumentAdd() {
   };
 
   useEffect(() => {
-    if (formik.values.days) {
-      fetchBatchandTeacherData(formik.values.days);
+    if (formik.values.day) {
+      fetchBatchandTeacherData(formik.values.day);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values.days]);
+  }, [formik.values.day]);
 
   const formatTo12Hour = (time) => {
     const [hours, minutes] = time.split(":");
@@ -475,14 +475,14 @@ function DocumentAdd() {
                   Days<span className="text-danger">*</span>
                 </label>
                 <select
-                  {...formik.getFieldProps("days")}
+                  {...formik.getFieldProps("day")}
                   className={`form-select  ${
-                    formik.touched.days && formik.errors.days ? "is-invalid" : ""
+                    formik.touched.day && formik.errors.day ? "is-invalid" : ""
                   }`}
-                  name="days"
+                  name="day"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.days}
+                  value={formik.values.day}
                 >
                   <option></option>
                   <option value="MONDAY">Monday</option>
@@ -493,8 +493,8 @@ function DocumentAdd() {
                   <option value="SATURDAY">Saturday</option>
                   <option value="SUNDAY">Sunday</option>
                 </select>
-                {formik.touched.days && formik.errors.days && (
-                  <div className="invalid-feedback">{formik.errors.days}</div>
+                {formik.touched.day && formik.errors.day && (
+                  <div className="invalid-feedback">{formik.errors.day}</div>
                 )}
               </div>
 

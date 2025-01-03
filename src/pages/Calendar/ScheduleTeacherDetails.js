@@ -218,36 +218,23 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">Available Slot</p>
+                              <p className="">Total Available Slot</p>
                             </div>
                             <div className="col-7">
-                              <p>:&nbsp;{item.details.availableSlot || "--"}</p>
+                              <p>
+                                :&nbsp;
+                                {item.details.totalAvailableSlots || "--"}
+                              </p>
                             </div>
                           </div>
                         </div>
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">Teacher</p>
+                              <p className="">Available Slot</p>
                             </div>
                             <div className="col-7">
-                              <p className="">
-                                :&nbsp;{item.details.teacherName || "--"}
-                                {replaceedTeacher === true && (
-                                  <span
-                                    className=" p-1"
-                                    style={{
-                                      fontSize: "10px",
-                                      background: "#287f71",
-                                      color: "#fff",
-                                      borderRadius: "5px",
-                                      marginLeft:"3px"
-                                    }}
-                                  >
-                                    ReplaceTeacher
-                                  </span>
-                                )}
-                              </p>
+                              <p>:&nbsp;{item.details.availableSlot || "--"}</p>
                             </div>
                           </div>
                         </div>
@@ -278,6 +265,32 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
+                              <p className="">Teacher</p>
+                            </div>
+                            <div className="col-7">
+                              <p className="">
+                                :&nbsp;{item.details.teacherName || "--"}
+                                {replaceedTeacher === true && (
+                                  <span
+                                    className=" p-1"
+                                    style={{
+                                      fontSize: "10px",
+                                      background: "#287f71",
+                                      color: "#fff",
+                                      borderRadius: "5px",
+                                      marginLeft: "6px",
+                                    }}
+                                  >
+                                    Replace Teacher
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
                               <p className="">No of Students</p>
                             </div>
                             <div className="col-7">
@@ -285,12 +298,14 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-6 col-12 mb-2">
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12 col-12 mb-2">
                           <div className="row">
-                            <div className="col-5">
+                            <div className="col-1">
                               <p className="">Remarks</p>
                             </div>
-                            <div className="col-7">
+                            <div className="col-11">
                               <p>:&nbsp;{item.details.remarks || "--"}</p>
                             </div>
                           </div>
@@ -299,7 +314,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
                               <div className="col-5">
-                                <p className="">replacementRemarks</p>
+                                <p className="">Replacement Remarks</p>
                               </div>
                               <div className="col-7">
                                 <p>
@@ -312,12 +327,34 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         )}
                       </div>
                       <div className="row">
-                        <div className="col-12 mb-2">
-                          Students:
+                        <div className="col-md-6 col-12-12 mb-2">
+                          Student Available in this Batch:
                           <ol>
                             {item.details.students &&
                             item.details.students.length > 0 ? (
                               item.details.students.map((student) => (
+                                <li key={student.id}>
+                                  <Link
+                                    to={`/student/view/${student.id}`}
+                                    style={{
+                                      color: "inherit",
+                                    }}
+                                  >
+                                    {student.studentName} ({student.uniqueId})
+                                  </Link>
+                                </li>
+                              ))
+                            ) : (
+                              <p>No Students</p>
+                            )}
+                          </ol>
+                        </div>
+                        <div className="col-md-6 col-12-12 mb-2">
+                          Remaining Students:
+                          <ol>
+                            {item.details.nonBatchStudents &&
+                            item.details.nonBatchStudents.length > 0 ? (
+                              item.details.nonBatchStudents.map((student) => (
                                 <li key={student.id}>
                                   <Link
                                     to={`/student/view/${student.id}`}

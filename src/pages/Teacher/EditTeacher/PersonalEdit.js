@@ -28,72 +28,12 @@ const PersonalEdit = forwardRef(
     const [nationalityData, setNationalityData] = useState(null);
     const userName = localStorage.getItem("userName");
 
-    // const formik = useFormik({
-    //   initialValues: {
-    //     teacherName: formData.teacherName || "",
-    //     dateOfBirth: formData.dateOfBirth || "",
-    //     idTypeId: formData.idTypeId || "",
-    //     idNo: formData.idNo || "",
-    //     age : 0,
-    //     email: formData.email || "",
-    //     citizenship: formData.citizenship || "",
-    //     nationality: formData.nationality || "",
-    //     photo: formData.photo || "",
-    //     shortIntroduction: formData.shortIntroduction || "",
-    //     gender: formData.gender || "",
-    //   },
-    //   validationSchema: validationSchema,
-    //   onSubmit: async (data) => {
-    //     setLoadIndicators(true);
-    //     setFormData((prv) => ({ ...prv, ...data }));
-    //     try {
-    //       const formDatas = new FormData();
-    //       formDatas.append("teacherName", data.teacherName);
-    //       formDatas.append("dateOfBirth", data.dateOfBirth);
-    //       formDatas.append("idTypeId", data.idTypeId);
-    //       formDatas.append("idNo", data.idNo);
-    //       formData.append("age", 25);
-    //       formDatas.append("citizenship", data.citizenship);
-    //       formDatas.append("shortIntroduction", data.shortIntroduction);
-    //       formDatas.append("gender", data.gender);
-    //       formDatas.append("role", data.role);
-    //       formDatas.append("updatedBy", userName);
-    //       const response = await api.put(
-    //         `/updateUser/${formData.staff_id}`,
-    //         data,
-    //         {
-    //           headers: {
-    //             "Content-Type": "application/json",
-    //           },
-    //         }
-    //       );
-    //       if (response.status === 200) {
-    //         toast.success(response.data.message);
-    //         setFormData((prv) => ({ ...prv, ...data }));
-    //         handleNext();
-    //         console.log("Api Data:", formData);
-    //       } else {
-    //         toast.error(response.data.message);
-    //       }
-    //     } catch (error) {
-    //       if (error?.response?.status === 409) {
-    //         toast.warning("ID Number already exists!");
-    //       } else {
-    //         toast.error(error?.response?.data?.message);
-    //       }
-    //     } finally {
-    //       setLoadIndicators(false);
-    //     }
-    //   },
-    // });
-
     const formik = useFormik({
       initialValues: {
         teacherName: formData.teacherName || "",
         dateOfBirth: formData.dateOfBirth || "",
         idTypeId: formData.idTypeId || "",
         idNo: formData.idNo || "",
-        nationality: formData.nationality || "",
         nationalityId: formData.nationalityId || "",
         citizenship: formData.citizenship || "",
         photo: formData.photo || "",
