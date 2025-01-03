@@ -6,12 +6,9 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import Button from "@mui/material/Button";
 import * as Yup from "yup";
 import api from "../../config/URL";
 import { toast } from "react-toastify";
-import getAvailableTeachersWithExclusion from "../List/getAvailableTeachersWithExclusion";
-import { error } from "jquery";
 
 const validationSchema = Yup.object({
   classId: Yup.string().required("*Class Name is required"),
@@ -117,24 +114,6 @@ const Replacement = ({ classId, onOpen }) => {
     return days;
   };
 
-  // const fetchAvailableTeachersWithExclusion = async () => {
-  //   try {
-  //     const { startDate } = formik.values.startDate;
-  //     if (centerID && classId && startDate) {
-  //       const response = await api.get(
-  //         `getAvailableTeachersWithExclusion/${centerID}?classId=${classId}&startDate=${startDate}`
-  //       );
-  //       setTeacherData(response.data);
-  //       console.log("List Teacher:",response.data);
-  //     } else {
-  //       toast.error(error);
-  //     }
-  //   } catch (error) {
-  //     toast.error("Error fetching teacher data.");
-  //     console.error(error);
-  //   }
-  // };
-  
   const fetchAvailableTeachersWithExclusion = async (selectedDate) => {
     try {
       const startDate = selectedDate || formik.values.startDate; 
