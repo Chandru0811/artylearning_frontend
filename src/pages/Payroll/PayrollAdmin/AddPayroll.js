@@ -238,23 +238,24 @@ function AddPayroll() {
       userId: userId,
       deductionMonth: payrollMonth,
     });
-
-    try {
-      const response = await api.get(
-        `/getCurrentMonthUserDeduction?${queryParams}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setUserSalaryInfo(response.data);
-      formik.setFieldValue("deductionAmount", response.data.deductionAmount);
-      formik.setFieldValue("grossPay", response.data.basicPay);
-      formik.setFieldValue("cpfContribution", response.data.cpfContribution);
-      formik.setFieldValue("shgContribution", response.data.shgContribution);
-    } catch (error) {
-      toast.error(error);
+    if (userId && payrollMonth) {
+      try {
+        const response = await api.get(
+          `/getCurrentMonthUserDeduction?${queryParams}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setUserSalaryInfo(response.data);
+        formik.setFieldValue("deductionAmount", response.data.deductionAmount);
+        formik.setFieldValue("grossPay", response.data.basicPay);
+        formik.setFieldValue("cpfContribution", response.data.cpfContribution);
+        formik.setFieldValue("shgContribution", response.data.shgContribution);
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
 
@@ -333,18 +334,19 @@ function AddPayroll() {
       payrollType: payrollType,
       freelanceCount: freelancerCount,
     });
-
-    try {
-      const response = await api.get(`/freelancerPayment?${queryParams}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const netPay = response.data.netPay;
-      formik.setFieldValue("netPay", response.data.netPay);
-      setNetPay(netPay);
-    } catch (error) {
-      toast.error(error);
+    if (freelancerCount || payrollType) {
+      try {
+        const response = await api.get(`/freelancerPayment?${queryParams}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const netPay = response.data.netPay;
+        formik.setFieldValue("netPay", response.data.netPay);
+        setNetPay(netPay);
+      } catch (error) {
+        toast.error(error);
+      }
     }
   };
 
@@ -730,9 +732,8 @@ function AddPayroll() {
                             ? "is-invalid"
                             : ""
                         }`}
-                        aria-label="freelancerCount"
-                        aria-describedby="basic-addon1"
                         {...formik.getFieldProps("freelancerCount")}
+                        readOnly
                       />
                       {formik.touched.freelancerCount &&
                         formik.errors.freelancerCount && (

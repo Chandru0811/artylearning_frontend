@@ -373,9 +373,9 @@ const Center = ({handleCenterChanged}) => {
                 <GlobalDelete
                   path={`/deleteCenter/${selectedId}`}
                   onDeleteSuccess={fetchData}
-                  centerData={"DeleteCenter"}
-                  handleCenterChanged={handleCenterChanged}
                   onOpen={handleMenuClose}
+                  // deleteCenterData={true}
+                  handleCenterChanged={handleCenterChanged}
                 />
               </MenuItem>
             </Menu>

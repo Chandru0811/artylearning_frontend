@@ -938,6 +938,14 @@ input.searchInputG:hover {
   box-shadow: none;
 }
 
+.fc .fc-list-event-dot {
+  border: calc(var(--fc-list-event-dot-width) / 2) solid #287f71;
+  border-radius: calc(var(--fc-list-event-dot-width) / 2);
+  box-sizing: content-box;
+  display: inline-block;
+  height: 0px;
+  width: 0px;
+}
 .fc .fc-button-primary:disabled {
   background-color: #287f71;
   border-color: #18463f;
@@ -981,6 +989,7 @@ input.searchInputG:hover {
   white-space: normal;
   word-wrap: break-word;
   word-break: break-word;
+  cursor: pointer;
 }
 
 .fc-theme-standard .fc-popover {

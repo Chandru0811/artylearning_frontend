@@ -31,16 +31,19 @@ function RolesAdd() {
       subjectCreate: true,
       subjectUpdate: true,
       subjectDelete: true,
+
       curriculumIndex: true,
       curriculumRead: true,
       curriculumCreate: true,
       curriculumUpdate: true,
       curriculumDelete: true,
+
       courseFeesIndex: true,
       courseFeesRead: true,
       courseFeesCreate: true,
       courseFeesUpdate: true,
       courseFeesDelete: true,
+      
       courseDepositFeesIndex: true,
       courseDepositFeesRead: true,
       courseDepositFeesCreate: true,
@@ -499,7 +502,6 @@ function RolesAdd() {
       contactUsSettingCreate: true,
     });
   };
-
   const handleCheckAllRead = () => {
     formik.setValues({
       ...formik.values,
@@ -575,7 +577,6 @@ function RolesAdd() {
       contactUsSettingRead: true,
     });
   };
-
   const handleCheckAllUpdate = () => {
     formik.setValues({
       ...formik.values,
@@ -651,7 +652,6 @@ function RolesAdd() {
       contactUsSettingUpdate: true,
     });
   };
-
   const handleCheckAllDelete = () => {
     formik.setValues({
       ...formik.values,

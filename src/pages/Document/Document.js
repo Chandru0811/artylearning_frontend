@@ -16,6 +16,7 @@ import fetchAllCoursesWithIdsC from "../List/CourseListByCenter";
 import fetchAllTeacherListByCenter from "../List/TeacherListByCenter";
 import { toast } from "react-toastify";
 import fetchAllCentersWithIds from "../List/CenterList";
+import GlobalDelete from "../../components/common/GlobalDelete";
 
 const Document = () => {
   const [filters, setFilters] = useState({
@@ -103,7 +104,7 @@ const Document = () => {
         enableHiding: false,
         header: "Days",
       },
-      { accessorKey: "teacher", enableHiding: false, header: "Teacher" },
+      { accessorKey: "user", enableHiding: false, header: "Teacher" },
       {
         accessorKey: "folderCategory",
         enableHiding: false,
@@ -522,6 +523,13 @@ const Document = () => {
                   onSuccess={fetchData}
                   id={selectedId}
                   handleMenuClose={handleMenuClose}
+                />
+              </MenuItem>
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteDocumentFolder/${selectedId}`}
+                  onDeleteSuccess={fetchData}
+                  onOpen={handleMenuClose}
                 />
               </MenuItem>
             </Menu>

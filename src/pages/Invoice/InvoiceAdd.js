@@ -63,7 +63,6 @@ export default function InvoiceAdd() {
   const [packageData, setPackageData] = useState(null);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [schedulesData, setSchedulesData] = useState([]);
-  console.log("Schedules Data:", schedulesData);
 
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [lessonsOptions, setLessonsOptions] = useState([]);
@@ -244,7 +243,7 @@ export default function InvoiceAdd() {
   };
 
   const handleStudentChange = (studentId) => {
-    console.log("Selected Student ID:", studentId);
+    // console.log("Selected Student ID:", studentId);
     setSelectedStudentId(studentId); // Update selected student ID in state
     formik.setFieldValue("student", studentId); // Update Formik field value
   };
@@ -259,9 +258,7 @@ export default function InvoiceAdd() {
   //     formik.setFieldValue("packageId", packageId);
   
   //     // Fetch student details to retrieve courseId
-  //     const response1 = await api.get(
-  //       `/getAllStudentById/${formik.values.student}`
-  //     );
+  //     const response1 = await api.get(`/getAllStudentById/${formik.values.student}`);
   //     const studentCourseDetails = response1.data.studentCourseDetailModels[0];
   //     const courseId = studentCourseDetails.courseId;
   
@@ -275,19 +272,13 @@ export default function InvoiceAdd() {
   //       `/getActiveCourseFeesByPackageIdAndCourseId?packageId=${packageId}&courseId=${courseId}`
   //     );
   //     const data = response.data;
-  
-  //     // Dynamically identify the tax and course data
-  //     const selectedTax = taxData.find(
-  //       (tax) => parseInt(data.taxType) === tax.id
-  //     );
-  //     const selectedCourse = courseData.find(
-  //       (course) => parseInt(data.courseId) === course.id
-  //     );
+
+  //     // Identify tax data for calculation
+  //     const selectedTax = taxData.find((tax) => parseInt(data.taxType) === tax.id);
   
   //     // Determine fees based on day type
   //     const isWeekend =
-  //       formik.values.days?.includes("SATURDAY") ||
-  //       formik.values.days?.includes("SUNDAY");
+  //       formik.values.days?.includes("SATURDAY") || formik.values.days?.includes("SUNDAY");
   //     const fee = isWeekend ? data.weekendFee : data.weekdayFee || 0;
   
   //     // Calculate GST and pre-GST amounts
@@ -295,26 +286,29 @@ export default function InvoiceAdd() {
   //     const gstAmount = (fee * gstRate) / 100 || 0;
   //     const amountBeforeGST = fee - gstAmount || 0;
   
-  //     // Add the dynamically retrieved values to invoiceItems
-  //     let invoiceItems = [];
-  //     const invoiceItem = {
-  //       item: "Course Fees",
-  //       itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-  //       taxType: data.taxType || "",
-  //       gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-  //       totalAmount: isNaN(fee) ? 0 : fee,
-  //     };
-  //     invoiceItems.push(invoiceItem);
+  //     // Update only the "Course Fee" item in invoiceItems
+  //     const updatedInvoiceItems = formik.values.invoiceItems.map((item) => {
+  //       if (item.item === "Course Fee") {
+  //         return {
+  //           ...item,
+  //           itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+  //           taxType: data.taxType || "",
+  //           gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+  //           totalAmount: isNaN(fee) ? 0 : fee,
+  //         };
+  //       }
+  //       return item; // Leave other items unchanged
+  //     });
   
-  //     console.log("Generated Invoice Item:", invoiceItem);
+  //     console.log("Updated Invoice Items:", updatedInvoiceItems);
   
-  //     // Set invoice items in formik or any related state
-  //     formik.setFieldValue("invoiceItems", invoiceItems);
+  //     // Set the updated invoice items
+  //     formik.setFieldValue("invoiceItems", updatedInvoiceItems);
   //   } catch (error) {
   //     console.error("Error processing package change:", error);
   //   }
   // };
-  
+
   const handlePackageChange = async (event) => {
     try {
       // Capture the selected packageId from the dropdown change event
@@ -327,7 +321,7 @@ export default function InvoiceAdd() {
       // Fetch student details to retrieve courseId
       const response1 = await api.get(`/getAllStudentById/${formik.values.student}`);
       const studentCourseDetails = response1.data.studentCourseDetailModels[0];
-      const courseId = studentCourseDetails.courseId;
+      const courseId = studentCourseDetails?.courseId;
   
       if (!courseId) {
         console.error("Course ID is missing!");
@@ -340,34 +334,53 @@ export default function InvoiceAdd() {
       );
       const data = response.data;
   
-      // Identify tax data for calculation
-      const selectedTax = taxData.find((tax) => parseInt(data.taxType) === tax.id);
+      let updatedInvoiceItems = [...formik.values.invoiceItems];
   
-      // Determine fees based on day type
-      const isWeekend =
-        formik.values.days?.includes("SATURDAY") || formik.values.days?.includes("SUNDAY");
-      const fee = isWeekend ? data.weekendFee : data.weekdayFee || 0;
+      if (data === null) {
+        // Add a new row for "Course Fee" when data is null
+        const newRow = formik.values.invoiceItems.map((item) => {
+          if (item.item === "") {
+            return {
+              item:"Course Fee",
+              itemAmount: 0,
+              taxType: "",
+              gstAmount: 0,
+              totalAmount: 0,
+            };
+          }
+          return item; // Leave other items unchanged
+        });
+        updatedInvoiceItems = [...updatedInvoiceItems, newRow];
+        // console.log("New Invoice Items with Course Fee added:", updatedInvoiceItems);
+      } else {
+        // Identify tax data for calculation
+        const selectedTax = taxData.find((tax) => parseInt(data.taxType) === tax.id);
   
-      // Calculate GST and pre-GST amounts
-      const gstRate = selectedTax ? selectedTax.rate : 0;
-      const gstAmount = (fee * gstRate) / 100 || 0;
-      const amountBeforeGST = fee - gstAmount || 0;
+        // Determine fees based on day type
+        const isWeekend =
+          formik.values.days?.includes("SATURDAY") || formik.values.days?.includes("SUNDAY");
+        const fee = isWeekend ? data.weekendFee : data.weekdayFee || 0;
   
-      // Update only the "Course Fee" item in invoiceItems
-      const updatedInvoiceItems = formik.values.invoiceItems.map((item) => {
-        if (item.item === "Course Fee") {
-          return {
-            ...item,
-            itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
-            taxType: data.taxType || "",
-            gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
-            totalAmount: isNaN(fee) ? 0 : fee,
-          };
-        }
-        return item; // Leave other items unchanged
-      });
+        // Calculate GST and pre-GST amounts
+        const gstRate = selectedTax ? selectedTax.rate : 0;
+        const gstAmount = (fee * gstRate) / 100 || 0;
+        const amountBeforeGST = fee - gstAmount || 0;
   
-      console.log("Updated Invoice Items:", updatedInvoiceItems);
+        // Update the existing "Course Fee" row in invoiceItems
+        updatedInvoiceItems = formik.values.invoiceItems.map((item) => {
+          if (item.item === "Course Fee") {
+            return {
+              ...item,
+              itemAmount: isNaN(amountBeforeGST) ? 0 : amountBeforeGST,
+              taxType: data.taxType || "",
+              gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
+              totalAmount: isNaN(fee) ? 0 : fee,
+            };
+          }
+          return item; // Leave other items unchanged
+        });
+        // console.log("Updated Invoice Items:", updatedInvoiceItems);
+      }
   
       // Set the updated invoice items
       formik.setFieldValue("invoiceItems", updatedInvoiceItems);
@@ -435,16 +448,11 @@ export default function InvoiceAdd() {
             const selectedTax = taxData.find(
               (tax) => parseInt(response2.data.taxType) === tax.id
             );
-            // console.log("selectedTax:", selectedTax);
             const selectedCourse = courseData.find(
               (course) => parseInt(response2.data.courseId) === course.id
             );
             const weekdayFee = response2.data.weekdayFee || 0;
             const weekendFee = response2.data.weekendFee || 0;
-            console.log(
-              "studentCourseDetails Days:",
-              studentCourseDetails.days
-            );
             const days = studentCourseDetails.days;
             const isWeekend = days === "SATURDAY" || days === "SUNDAY";
             const itemsName = selectedCourse ? selectedCourse.courseNames : "";
@@ -460,7 +468,6 @@ export default function InvoiceAdd() {
               gstAmount: isNaN(gstAmount) ? 0 : gstAmount,
               totalAmount: isNaN(amount) ? 0 : amount,
             });
-            // console.log("Course Fee Function is Executed Successfully");
           } catch (error) {
             console.error("Error fetching course fees:", error);
           }
@@ -526,7 +533,8 @@ export default function InvoiceAdd() {
           totalAmount: formik.values.totalAmount || "",
         });
         formik.setFieldValue("invoiceItems", invoiceItems);
-        setRows(invoiceItems);
+        // setRows(invoiceItems);
+        setRows((prevRows) => [...prevRows, ...invoiceItems]); 
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -649,10 +657,6 @@ export default function InvoiceAdd() {
           const referralIds = referralDetails.data.referralDetails.map(
             (referral) => referral.id
           );
-
-          console.log("Referal Id is ", referralIds);
-
-          // Uncomment and update this section if you want to set values in a form
           formik.setValues({
             center: studentData.centerId || "",
             parent: studentData?.studentParentsDetails[0]?.parentName || "",
@@ -676,7 +680,7 @@ export default function InvoiceAdd() {
           fetchPackage(studentData.centerId); // Fetch courses for the selected center
           fetchStudent(studentData.centerId);
           formik.setFieldValue("center", studentData.centerId);
-          console.log("student data:", studentData);
+          // console.log("student data:", studentData);
 
           formik.setFieldValue("invoiceItems", [
             {
@@ -742,7 +746,7 @@ export default function InvoiceAdd() {
             (referral) => referral.id
           );
 
-          console.log("Referal Id is ", referralIds);
+          // console.log("Referal Id is ", referralIds);
           formik.setFieldValue("creditAdviceOffset", overAllAmount);
           formik.setFieldValue("referralId", referralIds);
         } catch (error) {
@@ -754,7 +758,7 @@ export default function InvoiceAdd() {
       }
 
       // Log the value of overAllAmount for debugging
-      console.log("Final overAllAmount used:", overAllAmount);
+      // console.log("Final overAllAmount used:", overAllAmount);
 
       // Calculate total GST
       const totalGst = formik.values.invoiceItems.reduce(
@@ -771,7 +775,7 @@ export default function InvoiceAdd() {
 
       // If overAllAmount is not valid, ensure totalAmount remains unchanged
       const CreditOffsetAmount = totalAmount - (overAllAmount || 0); // Graceful fallback
-      console.log("Credit Offset Amount:", CreditOffsetAmount);
+      // console.log("Credit Offset Amount:", CreditOffsetAmount);
 
       // Set the calculated value in Formik
       formik.setFieldValue("totalAmount", CreditOffsetAmount.toFixed(2));
@@ -1340,7 +1344,7 @@ export default function InvoiceAdd() {
                             />
                           </td>
                           <td>
-                            {index >=3 && (
+                          {index >=3 &&(
                               <button
                                 type="button"
                                 className="btn btn-white border-white"

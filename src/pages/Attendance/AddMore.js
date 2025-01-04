@@ -18,7 +18,7 @@ function AddMore({
 }) {
   const [show, setShow] = useState(false);
   const [lessonData, setLessonData] = useState([]);
-  // console.log("Selected CourseId", courseId);
+  console.log("FeedBack Data:", feedbackData);
 
   const validationSchema = Yup.object().shape({
     items: Yup.array().of(
@@ -79,6 +79,34 @@ function AddMore({
       toast.error("Error Fetching Data ", error?.response?.data?.message);
     }
   };
+
+  const handleDelete = async (id, index) => {
+    if (!id) {
+      // For new (unsaved) rows, directly remove the row from Formik values
+      const updatedItems = [...formik.values.items];
+      updatedItems.splice(index, 1);
+      formik.setFieldValue("items", updatedItems);
+      // toast.info("Unsaved feedback removed.");
+      return;
+    }
+  
+    try {
+      // API call for saved feedback
+      const response = await api.delete(`deleteFeedbackAttendance/${id}`);
+      if (response.status === 201) {
+        toast.success("Feedback removed successfully!");
+        // Update the Formik items array
+        const updatedItems = [...formik.values.items];
+        updatedItems.splice(index, 1);
+        formik.setFieldValue("items", updatedItems);
+      } else {
+        toast.error("Error removing feedback!");
+      }
+    } catch (error) {
+      toast.error("Error removing feedback ", error?.response?.data?.message);
+    }
+  };
+  
 
   useEffect(() => {
     const fetchCurriculumCodes = async () => {
@@ -149,11 +177,7 @@ function AddMore({
                           type="button"
                           className="btn mt-2"
                           style={{ marginBottom: "5.0rem" }}
-                          onClick={() => {
-                            const data = [...formik.values.items];
-                            data.splice(index, 1);
-                            formik.setFieldValue("items", data);
-                          }}
+                          onClick={() => handleDelete(item.id, index)}
                         >
                           <IoIosCloseCircleOutline
                             style={{

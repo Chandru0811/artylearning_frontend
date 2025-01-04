@@ -191,7 +191,6 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                           </div>
                         </div>
                       </div>
-
                       <div className="row">
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
@@ -206,10 +205,10 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">Lesson No</p>
+                              <p className="">Class Name</p>
                             </div>
                             <div className="col-7">
-                              <p>:&nbsp;{item.details.lessonNo || "--"}</p>
+                              <p>:&nbsp;{item.details.className || "--"}</p>
                             </div>
                           </div>
                         </div>
@@ -218,7 +217,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         <div className="col-md-6 col-12 mb-2">
                           <div className="row">
                             <div className="col-5">
-                              <p className="">Total Available Slot</p>
+                              <p className="">Total Slot</p>
                             </div>
                             <div className="col-7">
                               <p>
@@ -270,6 +269,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                             <div className="col-7">
                               <p className="">
                                 :&nbsp;{item.details.teacherName || "--"}
+                                <br/>
                                 {replaceedTeacher === true && (
                                   <span
                                     className=" p-1"
@@ -281,7 +281,7 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                                       marginLeft: "6px",
                                     }}
                                   >
-                                    Replace Teacher
+                                    Replaced Teacher
                                   </span>
                                 )}
                               </p>
@@ -300,16 +300,28 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-md-12 col-12 mb-2">
+                        <div className="col-md-6 col-12 mb-2">
                           <div className="row">
-                            <div className="col-1">
+                            <div className="col-5">
+                              <p className="">Lesson No</p>
+                            </div>
+                            <div className="col-7">
+                              <p>:&nbsp;{item.details.lessonNo || "--"}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-12 mb-2">
+                          <div className="row">
+                            <div className="col-5">
                               <p className="">Remarks</p>
                             </div>
-                            <div className="col-11">
+                            <div className="col-7">
                               <p>:&nbsp;{item.details.remarks || "--"}</p>
                             </div>
                           </div>
                         </div>
+                      </div>
+                      <div className="row">
                         {replaceedTeacher === true && (
                           <div className="col-md-6 col-12 mb-2">
                             <div className="row">
@@ -325,10 +337,11 @@ function ScheduleTeacherDetails({ showViewModal, teacherDetail, onClose }) {
                             </div>
                           </div>
                         )}
+                        <div className="col-md-6 col-12 mb-2"></div>
                       </div>
                       <div className="row">
                         <div className="col-md-6 col-12-12 mb-2">
-                          Student Available in this Batch:
+                          Students Available in this Batch:
                           <ol>
                             {item.details.students &&
                             item.details.students.length > 0 ? (

@@ -12,10 +12,9 @@ function GlobalDelete({
   path,
   onDeleteSuccess,
   onOpen,
+  // deleteCenterData,
   handleCenterChanged,
-  centerData,
 }) {
-  console.log("centerData", centerData);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // useEffect(() => {
@@ -43,13 +42,13 @@ function GlobalDelete({
       const response = await api.delete(path);
       if (response.status === 200 || response.status === 201) {
       
-        if (centerData === "DeleteCenter") {
-          handleCenterChanged();
-          console.log("handleCenterChanged",handleCenterChanged)
-        }
+        // if (deleteCenterData === true) {
+        //   handleCenterChanged();
+        // }
         toast.success(response.data.message);
         onDeleteSuccess();
         if (typeof onOpen === "function") onOpen();
+        handleCenterChanged();
       }
     } catch (error) {
       if (error?.response?.status === 409) {

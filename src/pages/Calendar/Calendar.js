@@ -306,7 +306,7 @@ function Calendar() {
               headerToolbar={{
                 start: "today,prev,next",
                 center: "title",
-                end: "customMonth,customWeek,customDay",
+                end: "customMonth,customWeek,customDay,customAgenda",
               }}
               height="90vh"
               events={events}
@@ -342,6 +342,10 @@ function Calendar() {
                 customMonth: {
                   type: "dayGridMonth",
                   buttonText: "Month",
+                },
+                customAgenda: {
+                  type: "listWeek",
+                  buttonText: "Agenda",
                 },
               }}
               eventClick={handleEventClick} // Capture event click

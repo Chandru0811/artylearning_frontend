@@ -1,226 +1,262 @@
-import React, { useEffect, useRef, useState } from "react";
-import "datatables.net-dt";
-import "datatables.net-responsive-dt";
-import $ from "jquery";
-import { Link } from "react-router-dom";
-import { FaEdit, FaEye } from "react-icons/fa";
-import fetchAllCentersWithIds from "../../List/CenterList";
-import { toast } from "react-toastify";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
-import Delete from "../../../components/common/Delete";
+import { createTheme, Menu, MenuItem, ThemeProvider } from "@mui/material";
+import { MaterialReactTable } from "material-react-table";
+import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Leave = () => {
-  const tableRef = useRef(null);
   const [datas, setDatas] = useState([]);
-  const userId = localStorage.getItem("userId");
-  // console.log("Data:", datas.employeeData);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [centerData, setCenterData] = useState(null);
-  const [leaveTypeData, setLeaveTypeData] = useState([]);
-  // console.log("centerData", centerData);
+  const [selectedId, setSelectedId] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
   const storedScreens = JSON.parse(localStorage.getItem("screens") || "{}");
+  const userId = localStorage.getItem("userId");
 
-  const fetchData = async () => {
+  const getData = async () => {
     try {
-      const centerData = await fetchAllCentersWithIds();
-      setCenterData(centerData);
+      const response = await api.get(`/getUserLeaveRequestByUserId/${userId}`);
+      setDatas(response.data);
     } catch (error) {
-      toast.error(error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
-  const fetchLeaveType = async () => {
-    try {
-      const response = await api.get(`getAllLeaveSetting`);
-      setLeaveTypeData(response.data); // Assuming response.data is an array
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const refreshData = async () => {
-    destroyDataTable();
-    setLoading(true);
-    try {
-      const response = await api.get("/getAllLeaveSetting");
-      setLeaveTypeData(response.data);
-      initializeDataTable(); // Reinitialize DataTable after successful data update
-    } catch (error) {
-      console.error("Error refreshing data:", error);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await api.get(
-          `/getUserLeaveRequestByUserId/${userId}`
-        );
-        setDatas(response.data);
-        // console.log("responsedata", response.data);
-        setLoading(false);
-      } catch (error) {
-        toast.error("Error Fetching Data : ", error);
-      }
-    };
     getData();
-    fetchData();
-    fetchLeaveType();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      initializeDataTable();
-    }
-    return () => {
-      destroyDataTable();
-    };
-  }, [loading]);
+  const columns = useMemo(
+    () => [
+      {
+        accessorFn: (row, index) => index + 1,
+        header: "S.NO",
+        enableSorting: true,
+        enableHiding: false,
+        size: 40,
+        cell: ({ cell }) => (
+          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "leaveStatus",
+        enableHiding: false,
+        header: "Leave Status",
+        Cell: ({ row }) =>
+          row.original.leaveStatus === "APPROVED" ? (
+            <span className="badge bg-success fw-light">Approved</span>
+          ) : row.original.leaveStatus === "REJECTED" ? (
+            <span className="badge bg-danger fw-light">Rejected</span>
+          ) : (
+            <span className="badge bg-warning fw-light">Pending</span>
+          ),
+      },
+      {
+        accessorKey: "fromDate",
+        enableHiding: false,
+        header: "From Date",
+        size: 20,
+      },
+      {
+        accessorKey: "toDate",
+        enableHiding: false,
+        header: "To Date",
+        size: 20,
+      },
+      {
+        accessorKey: "leaveType",
+        enableHiding: false,
+        header: "Leave Type",
+        size: 20,
+      },
+      {
+        accessorKey: "noOfDays",
+        enableHiding: false,
+        header: "No Of Days",
+        size: 20,
+      },
+      {
+        accessorKey: "createdBy",
+        header: "Created By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
+      },
+      {
+        accessorKey: "updatedAt",
+        header: "Updated At",
+        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+      },
+      {
+        accessorKey: "updatedBy",
+        header: "Updated By",
+        Cell: ({ cell }) => cell.getValue() || "",
+      },
+    ],
+    []
+  );
 
-  const initializeDataTable = () => {
-    if ($.fn.DataTable.isDataTable(tableRef.current)) {
-      // DataTable already initialized, no need to initialize again
-      return;
-    }
-    $(tableRef.current).DataTable({
-      responsive: true,
-      columnDefs: [{ orderable: false, targets: -1 }],
-    });
-  };
+  const theme = createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            color: "#535454 !important",
+            backgroundColor: "#e6edf7 !important",
+            fontWeight: "400 !important",
+            fontSize: "13px !important",
+            textAlign: "center !important",
+          },
+        },
+      },
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            "&.Mui-disabled .MuiSwitch-track": {
+              backgroundColor: "#f5e1d0",
+              opacity: 1,
+            },
+            "&.Mui-disabled .MuiSwitch-thumb": {
+              color: "#eb862a",
+            },
+          },
+          track: {
+            backgroundColor: "#e0e0e0",
+          },
+          thumb: {
+            color: "#eb862a",
+          },
+          switchBase: {
+            "&.Mui-checked": {
+              color: "#eb862a",
+            },
+            "&.Mui-checked + .MuiSwitch-track": {
+              backgroundColor: "#eb862a",
+            },
+          },
+        },
+      },
+    },
+  });
 
-  const destroyDataTable = () => {
-    const table = $(tableRef.current).DataTable();
-    if (table && $.fn.DataTable.isDataTable(tableRef.current)) {
-      table.destroy();
-    }
-  };
-  const findname = (id) => {
-    const name = leaveTypeData?.find((item) => item.id === id);
-    return name?.leaveType;
-  };
+  const handleMenuClose = () => setMenuAnchor(null);
 
   return (
-    <div className="container my-4">
-      <div className="my-5 d-flex justify-content-end">
-        {storedScreens?.leaveCreate && (
-          <Link to="/leave/add">
-            <button type="button" className="btn btn-button btn-sm">
-              Add <i class="bx bx-plus"></i>
-            </button>
+    <div className="container-fluid my-4 center">
+      <ol
+        className="breadcrumb my-3"
+        style={{ listStyle: "none", padding: 0, margin: 0 }}
+      >
+        <li>
+          <Link to="/" className="custom-breadcrumb">
+            Home
           </Link>
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li>
+          &nbsp;Staffing
+          <span className="breadcrumb-separator"> &gt; </span>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          &nbsp;Leave Request
+        </li>
+      </ol>
+      <div className="card">
+        <div
+          className="mb-3 d-flex justify-content-between align-items-center p-1"
+          style={{ background: "#f5f7f9" }}
+        >
+          <div class="d-flex align-items-center">
+            <div class="d-flex">
+              <div class="dot active"></div>
+            </div>
+            <span class="me-2 text-muted">
+              This database shows the list of{" "}
+              <span className="bold" style={{ color: "#287f71" }}>
+                Leave Request
+              </span>
+            </span>
+          </div>
+        </div>
+        <div className="d-flex justify-content-end align-items-center">
+          {storedScreens?.leaveCreate && (
+            <Link to="/leave/add">
+              <button
+                type="button"
+                className="btn btn-button btn-sm me-2"
+                style={{ fontWeight: "600px !important" }}
+              >
+                &nbsp; Add &nbsp;&nbsp; <i className="bx bx-plus"></i>
+              </button>
+            </Link>
+          )}
+        </div>
+        <div className="d-flex justify-content-center align-items-center">
+          <div className="col-md-6 col-12 p-2">
+            Employee Name &nbsp; &nbsp;: &nbsp; &nbsp;
+            {datas.employeeName}
+          </div>
+          <div className="col-md-6 col-12 p-2">
+            Leave Limit &nbsp; &nbsp;: &nbsp; &nbsp;{datas.leaveLimit}
+          </div>
+        </div>
+        {loading ? (
+          <div className="loader-container">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        ) : (
+          <>
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={datas?.employeeData}
+                enableColumnActions={false}
+                enableColumnFilters={false}
+                enableDensityToggle={false}
+                enableFullScreenToggle={false}
+                initialState={{
+                  columnVisibility: {
+                    createdBy: false,
+                    createdAt: false,
+                    updatedBy: false,
+                    updatedAt: false,
+                  },
+                }}
+                muiTableBodyRowProps={({ row }) => ({
+                  onClick: () => navigate(`/leave/view/${row.original.id}`),
+                  style: { cursor: "pointer" },
+                })}
+              />
+            </ThemeProvider>
+
+            <Menu
+              id="action-menu"
+              anchorEl={menuAnchor}
+              open={Boolean(menuAnchor)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem>
+                <GlobalDelete
+                  path={`/deleteCountrySetting/${selectedId}`}
+                  onDeleteSuccess={getData}
+                  onOpen={handleMenuClose}
+                />
+              </MenuItem>
+            </Menu>
+          </>
         )}
       </div>
-      {loading ? (
-        <div className="loader-container">
-          <div class="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <div className="row pb-3">
-            <div className="col-md-6 col-12">
-              <div className="row mt-3 mb-2">
-                <div className="col-auto">
-                  <p className="fw-medium">Employee Name :</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    {datas.employeeName || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-12">
-              <div className="row  mb-2 mt-3">
-                <div className="col-auto">
-                  <p className="fw-medium">Leave Limit :</p>
-                </div>
-                <div className="col-6">
-                  <p className="text-muted text-sm">
-                    {datas.leaveLimit || "--"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <table ref={tableRef} className="display">
-            <thead>
-              <tr>
-                <th scope="col" style={{ whiteSpace: "nowrap" }}>
-                  S No
-                </th>
-                {/* <th scope="col">Centre Name</th> */}
-                <th scope="col">From Date</th>
-                <th scope="col">To Date</th>
-                <th scope="col">Leave Type</th>
-                <th scope="col">NO Of Days</th>
-                <th scope="col">Leave Status</th>
-                <th className="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {datas?.employeeData?.map((data, index) => (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
-                  {/* <td>{data.centerName} </td> */}
-                  <td>{data.fromDate}</td>
-                  <td>{data.toDate}</td>
-                  <td>{findname(data?.leaveTypeId)}</td>
-                  <td>{data.noOfDays}</td>
-                  <td>
-                    {data.leaveStatus === "APPROVED" ? (
-                      <span className="badge badges-Green">Approved</span>
-                    ) : data.leaveStatus === "REJECTED" ? (
-                      <span className="badge badges-Red">Rejected</span>
-                    ) : (
-                      <span className="badge badges-Yellow">Pending</span>
-                    )}
-                  </td>
-                  <td>
-                    <div className="d-flex justify-content-center align-items-center ">
-                      <Link
-                        to={`/leave/view/${data.id}`}
-                        style={{ display: "inline-block" }}
-                      >
-                        <button className="btn btn-sm">
-                          <FaEye />
-                        </button>
-                      </Link>
-                      {data.leaveStatus === "PENDING" ? (
-                        <Link
-                          to={`/leave/edit/${data.id}`}
-                          style={{ display: "inline-block" }}
-                        >
-                          <button className="btn btn-sm">
-                            <FaEdit />
-                          </button>
-                        </Link>
-                      ) : (
-                        <></>
-                      )}
-
-                      {data.leaveStatus === "PENDING" ? (
-                        <Delete
-                          onSuccess={refreshData}
-                          path={`/deleteUserLeaveRequest/${data.id}`}
-                          style={{ display: "inline-block" }}
-                        />
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   );
 };
