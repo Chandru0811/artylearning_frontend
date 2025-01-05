@@ -41,7 +41,9 @@ const Attendance = () => {
         courseId: values.courseId,
         attendanceDate: selectedDate,
         // attendanceStatus: values.attendanceStatus,
-        ...(values.attendanceStatus && { attendanceStatus: values.attendanceStatus }), // Add only if attendanceStatus is selected
+        ...(values.attendanceStatus && {
+          attendanceStatus: values.attendanceStatus,
+        }), // Add only if attendanceStatus is selected
       };
       console.log("Payload:", payload);
       try {
@@ -301,8 +303,12 @@ const Attendance = () => {
                           <span className="badge badges-Orange">
                             Class Replaced
                           </span>
-                        ) : (
+                        ) : data.attendanceStatus === "absent" ? (
                           <span className="badge badges-Red">Absent</span>
+                        ) : (
+                          <span className="badge badges-Gray">
+                            Not Yet Attendance
+                          </span>
                         )}
                       </td>
                     </tr>

@@ -65,15 +65,24 @@ function DocumentFile() {
     }
   };
   const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB in bytes
-
-  const fileSchema = Yup.mixed().test(
-    "fileSize",
-    "*Each file must be less than or equal to 1GB in size",
-    (value) => {
-      return value && value.size <= MAX_FILE_SIZE;
-    }
-  );
-
+  const MAX_FILE_NAME_LENGTH = 60; // Maximum character limit for file names
+  
+  const fileSchema = Yup.mixed()
+    .test(
+      "fileSize",
+      "*Each file must be less than or equal to 1GB in size",
+      (value) => {
+        return value && value.size <= MAX_FILE_SIZE;
+      }
+    )
+    .test(
+      "fileNameLength",
+      "*File name must be less than or equal to 60 characters",
+      (value) => {
+        return value && value.name && value.name.length <= MAX_FILE_NAME_LENGTH;
+      }
+    );
+  
   const filesSchema = Yup.array()
     .of(fileSchema)
     .test(
@@ -89,6 +98,7 @@ function DocumentFile() {
     )
     .min(1, "*At least one file is required")
     .required("*Files are required");
+  
   const validationSchema = Yup.object().shape({
     centerName: Yup.string().required("*Centre is required"),
     course: Yup.string().required("*Course is required"),
@@ -96,6 +106,7 @@ function DocumentFile() {
     folder: Yup.string().required("*Folder Name is required"),
     files: filesSchema,
   });
+  
 
   const formik = useFormik({
     initialValues: {

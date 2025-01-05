@@ -1,8 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
-import { createTheme, Menu, MenuItem, ThemeProvider } from "@mui/material";
+import {
+  createTheme,
+  IconButton,
+  Menu,
+  MenuItem,
+  ThemeProvider,
+} from "@mui/material";
 import { MaterialReactTable } from "material-react-table";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import GlobalDelete from "../../../components/common/GlobalDelete";
 
 const Leave = () => {
@@ -38,6 +45,24 @@ const Leave = () => {
         size: 40,
         cell: ({ cell }) => (
           <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "",
+        enableHiding: false,
+        enableSorting: false,
+        size: 20,
+        Cell: ({ cell }) => (
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuAnchor(e.currentTarget);
+              setSelectedId(cell.getValue());
+            }}
+          >
+            <MoreVertIcon />
+          </IconButton>
         ),
       },
       {
@@ -114,29 +139,30 @@ const Leave = () => {
           },
         },
       },
+      // Switch (Toggle button) customization
       MuiSwitch: {
         styleOverrides: {
           root: {
             "&.Mui-disabled .MuiSwitch-track": {
-              backgroundColor: "#f5e1d0",
-              opacity: 1,
+              backgroundColor: "#f5e1d0", // Track color when disabled
+              opacity: 1, // Ensures no opacity reduction
             },
             "&.Mui-disabled .MuiSwitch-thumb": {
-              color: "#eb862a",
+              color: "#eb862a", // Thumb (circle) color when disabled
             },
           },
           track: {
-            backgroundColor: "#e0e0e0",
+            backgroundColor: "#e0e0e0", // Default track color
           },
           thumb: {
-            color: "#eb862a",
+            color: "#eb862a", // Default thumb color
           },
           switchBase: {
             "&.Mui-checked": {
-              color: "#eb862a",
+              color: "#eb862a", // Thumb color when checked
             },
             "&.Mui-checked + .MuiSwitch-track": {
-              backgroundColor: "#eb862a",
+              backgroundColor: "#eb862a", // Track color when checked
             },
           },
         },
@@ -245,10 +271,11 @@ const Leave = () => {
               anchorEl={menuAnchor}
               open={Boolean(menuAnchor)}
               onClose={handleMenuClose}
+              disableScrollLock
             >
               <MenuItem>
                 <GlobalDelete
-                  path={`/deleteCountrySetting/${selectedId}`}
+                  path={`/deleteUserLeaveRequest/${selectedId}`}
                   onDeleteSuccess={getData}
                   onOpen={handleMenuClose}
                 />
