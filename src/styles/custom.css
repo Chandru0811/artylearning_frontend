@@ -902,6 +902,8 @@ input.searchInputG:hover {
   color: white;
 }
 
+
+
 /* Calender CSS */
 .calendar {
   font-size: small;
@@ -1112,6 +1114,9 @@ table.dataTable.display > tbody > tr > th {
   color: #9f9e9e !important;
 }
 
+.MuiStepLabel-iconContainer .MuiSvgIcon-root {
+  color: #287f71 !important;
+}
 /* table */
 
 .MuiTableBody-root tr td {
