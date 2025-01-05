@@ -6,6 +6,7 @@ class WebSocketService {
     // this.socket = new SockJS("http://13.213.208.92:7080/ecssms/ws");
     this.socket = new SockJS("https://hrisasia.com/ecssms/ws");
     // this.socket = new SockJS("https://artylearning.com/artylearning/ws");
+    // this.socket = new SockJS("https://artylearning.com/artyprod/api/smsLogin");
     this.stompClient = Stomp.over(this.socket);
     // this.stompClient.debug = false; // Disable debug logging
     this.connected = false;

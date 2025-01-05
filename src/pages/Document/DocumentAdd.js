@@ -115,7 +115,7 @@ function DocumentAdd() {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if (error?.response?.status === 409) {
+        if (error?.response?.status === 409 || error?.response?.status === 404) {
           toast.warning(error?.response?.data?.message);
         } else {
           toast.error("Error deleting data:", error);

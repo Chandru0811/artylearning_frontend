@@ -5,6 +5,7 @@ const api = axios.create({
   // baseURL: "http://13.213.208.92:7080/ecssms/api/",
   baseURL: "https://hrisasia.com/ecssms/api/",
   // baseURL: "https://artylearning.com/artylearning/api/",
+  // baseURL: "https://artylearning.com/artyprod/api/smsLogin",
 });
 
 // Add a request interceptor
